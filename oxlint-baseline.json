@@ -748,30 +748,6 @@
     },
     {
       "filename": "src/web/components/chart/LineChart.tsx",
-      "code": "react(immutability)",
-      "message": "Cannot modify local variables after render completes",
-      "location": {
-        "line": 377,
-        "column": 10,
-        "offset": 9564
-      },
-      "sourceLine": "(svgRef as React.MutableRefObject<SVGSVGElement | null>).current = ref;",
-      "fingerprint": "src/web/components/chart/LineChart.tsx|react(immutability)|Cannot modify local variables after render completes|10|(svgRef as React.MutableRefObject<SVGSVGElement | null>).current = ref;"
-    },
-    {
-      "filename": "src/web/components/chart/LineChart.tsx",
-      "code": "react(immutability)",
-      "message": "This value cannot be modified",
-      "location": {
-        "line": 377,
-        "column": 10,
-        "offset": 9564
-      },
-      "sourceLine": "(svgRef as React.MutableRefObject<SVGSVGElement | null>).current = ref;",
-      "fingerprint": "src/web/components/chart/LineChart.tsx|react(immutability)|This value cannot be modified|10|(svgRef as React.MutableRefObject<SVGSVGElement | null>).current = ref;"
-    },
-    {
-      "filename": "src/web/components/chart/LineChart.tsx",
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
@@ -1125,7 +1101,7 @@
       "location": {
         "line": 26,
         "column": 40,
-        "offset": 631
+        "offset": 617
       },
       "sourceLine": "<span data-testid=\"renderCount\">{ref.current}</span>",
       "fingerprint": "src/web/components/form/__tests__/useFormValues.test.tsx|react(refs)|Cannot access refs during render|40|<span data-testid=\"renderCount\">{ref.current}</span>"
@@ -1891,9 +1867,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 101,
+        "line": 102,
         "column": 34,
-        "offset": 3073
+        "offset": 3074
       },
       "sourceLine": "onTagCreateClick={this.handleCreateTag}",
       "fingerprint": "src/web/entity/Tags.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|34|onTagCreateClick={this.handleCreateTag}"
@@ -1903,9 +1879,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 147,
+        "line": 148,
         "column": 41,
-        "offset": 4858
+        "offset": 4859
       },
       "sourceLine": "onClick={this.handleEditTag}",
       "fingerprint": "src/web/entity/Tags.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|41|onClick={this.handleEditTag}"
@@ -2155,9 +2131,9 @@
       "code": "typescript(no-misused-spread)",
       "message": "Using the spread operator on a function without additional properties can cause unexpected behavior.",
       "location": {
-        "line": 448,
+        "line": 433,
         "column": 7,
-        "offset": 14257
+        "offset": 13844
       },
       "sourceLine": "...alert,",
       "fingerprint": "src/web/pages/alerts/Dialog.jsx|typescript(no-misused-spread)|Using the spread operator on a function without additional properties can cause unexpected behavior.|7|...alert,"
@@ -2347,9 +2323,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 111,
+        "line": 112,
         "column": 5,
-        "offset": 3149
+        "offset": 3150
       },
       "sourceLine": "setLatest(!newEqual);",
       "fingerprint": "src/web/pages/hosts/Identifiers.jsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setLatest(!newEqual);"
@@ -3055,9 +3031,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 165,
+        "line": 166,
         "column": 30,
-        "offset": 4824
+        "offset": 4811
       },
       "sourceLine": "onSave={this.handleTriggerAlert}",
       "fingerprint": "src/web/pages/reports/details/AlertActions.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|30|onSave={this.handleTriggerAlert}"
@@ -3067,9 +3043,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 163,
+        "line": 164,
         "column": 31,
-        "offset": 4723
+        "offset": 4710
       },
       "sourceLine": "onClose={this.handleCloseTriggerAlertDialog}",
       "fingerprint": "src/web/pages/reports/details/AlertActions.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|31|onClose={this.handleCloseTriggerAlertDialog}"
@@ -3079,9 +3055,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 146,
+        "line": 147,
         "column": 33,
-        "offset": 3983
+        "offset": 3970
       },
       "sourceLine": "onClick={this.handleOpenTriggerAlertDialog}",
       "fingerprint": "src/web/pages/reports/details/AlertActions.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|33|onClick={this.handleOpenTriggerAlertDialog}"
@@ -3091,9 +3067,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 162,
+        "line": 163,
         "column": 37,
-        "offset": 4674
+        "offset": 4661
       },
       "sourceLine": "onAlertChange={this.handleAlertChange}",
       "fingerprint": "src/web/pages/reports/details/AlertActions.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|37|onAlertChange={this.handleAlertChange}"
@@ -3103,9 +3079,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 139,
+        "line": 140,
         "column": 39,
-        "offset": 3728
+        "offset": 3729
       },
       "sourceLine": "<AlertComponent onCreated={this.onAlertCreated} onError={showError}>",
       "fingerprint": "src/web/pages/reports/details/AlertActions.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|39|<AlertComponent onCreated={this.onAlertCreated} onError={showError}>"
@@ -3259,9 +3235,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 111,
+        "line": 118,
         "column": 21,
-        "offset": 2956
+        "offset": 3247
       },
       "sourceLine": "isDefined(task?.isImport) && task.isImport()",
       "fingerprint": "src/web/pages/reports/details/Summary.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|isDefined(task?.isImport) && task.isImport()"
@@ -3283,9 +3259,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 109,
+        "line": 125,
         "column": 7,
-        "offset": 3762
+        "offset": 4165
       },
       "sourceLine": "setSelectedDeltaReport(undefined);",
       "fingerprint": "src/web/pages/reports/ReportListPage.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setSelectedDeltaReport(undefined);"
@@ -3295,9 +3271,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Report[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 234,
+        "line": 251,
         "column": 44,
-        "offset": 7232
+        "offset": 7673
       },
       "sourceLine": "const reportsReloadInterval = ({entities = []}: {entities: Report[]}) =>",
       "fingerprint": "src/web/pages/reports/ReportListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Report[]` (not nullish). This default assignment will never be used.|44|const reportsReloadInterval = ({entities = []}: {entities: Report[]}) =>"
@@ -3429,7 +3405,7 @@
       "location": {
         "line": 267,
         "column": 5,
-        "offset": 7088
+        "offset": 7074
       },
       "sourceLine": "setFilteredFamilies(families ?? []);",
       "fingerprint": "src/web/pages/scanconfigs/ScanConfigEditDialog.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setFilteredFamilies(families ?? []);"
@@ -3441,7 +3417,7 @@
       "location": {
         "line": 275,
         "column": 5,
-        "offset": 7278
+        "offset": 7264
       },
       "sourceLine": "setFilteredNvtPreferences(nvtPreferences ?? []);",
       "fingerprint": "src/web/pages/scanconfigs/ScanConfigEditDialog.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setFilteredNvtPreferences(nvtPreferences ?? []);"
@@ -3453,7 +3429,7 @@
       "location": {
         "line": 271,
         "column": 5,
-        "offset": 7168
+        "offset": 7154
       },
       "sourceLine": "setFilteredScannerPreferences(scannerPreferences ?? []);",
       "fingerprint": "src/web/pages/scanconfigs/ScanConfigEditDialog.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setFilteredScannerPreferences(scannerPreferences ?? []);"
@@ -3465,7 +3441,7 @@
       "location": {
         "line": 290,
         "column": 5,
-        "offset": 7885
+        "offset": 7871
       },
       "sourceLine": "setSelectValues(currentSelect =>",
       "fingerprint": "src/web/pages/scanconfigs/ScanConfigEditDialog.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setSelectValues(currentSelect =>"
@@ -4315,9 +4291,9 @@
       "code": "typescript(no-redundant-type-constituents)",
       "message": "0 | 1 is overridden by number in this union type.",
       "location": {
-        "line": 136,
+        "line": 132,
         "column": 11,
-        "offset": 3244
+        "offset": 3196
       },
       "sourceLine": "value?: YesNo | string | number | boolean | null,",
       "fingerprint": "src/web/utils/Render.tsx|typescript(no-redundant-type-constituents)|0 | 1 is overridden by number in this union type.|11|value?: YesNo | string | number | boolean | null,"
