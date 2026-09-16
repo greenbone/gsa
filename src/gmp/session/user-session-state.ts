@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+// oxlint-disable import/no-cycle
+
 import memoizeOne from 'memoize-one';
 import date, {type Date} from 'gmp/models/date';
 import NoSessionState from 'gmp/session/no-session-state';

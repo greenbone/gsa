@@ -17,7 +17,6 @@ import TextArea from 'web/components/form/TextArea';
 import TextField from 'web/components/form/TextField';
 import {NewIcon} from 'web/components/icon';
 import useTranslation from 'web/hooks/useTranslation';
-import {VFIRE_CALL_DESCRIPTION} from 'web/pages/alerts/Dialog';
 import addPrefix from 'web/utils/add-prefix';
 import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
 
@@ -41,6 +40,21 @@ interface AlembavFireMethodPartProps {
   onNewVfireCredentialClick: (credentialTypes: CredentialType[]) => void;
   onReportFormatsChange: (value: string[], name?: string) => void;
 }
+
+const VFIRE_CALL_DESCRIPTION = `After the event $e,
+the following condition was met: $c
+
+This ticket includes reports in the following format(s):
+$r.
+
+Full details and other report formats are available on the scan engine.
+$t
+
+Note:
+This ticket was created automatically as a security scan escalation.
+Please contact your local system administrator if you think it
+was created or assigned erroneously.
+`;
 
 const VFIRE_CREDENTIAL_TYPES = [
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
