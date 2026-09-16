@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import type d3 from 'd3';
 import d3cloud, {type Word as d3Word} from 'd3-cloud';
 import {scaleLinear} from 'd3-scale';
