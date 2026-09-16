@@ -55,8 +55,11 @@ describe('loadReport function tests', () => {
     expect.assertions(7);
 
     return loadReport(gmp)(id)(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {details: true, filter: undefined});
+      expect(getState).toHaveBeenCalled();
+      expect(get).toHaveBeenCalledWith(
+        {id},
+        {details: true, filter: undefined},
+      );
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: types.ENTITY_LOADING_REQUEST,
@@ -101,8 +104,8 @@ describe('loadReport function tests', () => {
     expect.assertions(7);
 
     return loadReport(gmp)(id, {filter})(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {details: true, filter});
+      expect(getState).toHaveBeenCalled();
+      expect(get).toHaveBeenCalledWith({id}, {details: true, filter});
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: types.ENTITY_LOADING_REQUEST,
@@ -143,9 +146,9 @@ describe('loadReport function tests', () => {
     expect.assertions(3);
 
     return loadReport(gmp)(id)(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(dispatch).not.toBeCalled();
-      expect(get).not.toBeCalled();
+      expect(getState).toHaveBeenCalled();
+      expect(dispatch).not.toHaveBeenCalled();
+      expect(get).not.toHaveBeenCalled();
     });
   });
 
@@ -172,8 +175,11 @@ describe('loadReport function tests', () => {
     expect.assertions(5);
 
     return loadReport(gmp)(id)(dispatch, getState).catch(() => {
-      expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {details: true, filter: undefined});
+      expect(getState).toHaveBeenCalled();
+      expect(get).toHaveBeenCalledWith(
+        {id},
+        {details: true, filter: undefined},
+      );
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: types.ENTITY_LOADING_REQUEST,
@@ -216,8 +222,11 @@ describe('report loadReportIfNeeded function tests', () => {
     expect(isFunction(loadReportIfNeeded)).toBe(true);
 
     return loadReportIfNeeded(gmp)(id)(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {details: false, filter: undefined});
+      expect(getState).toHaveBeenCalled();
+      expect(get).toHaveBeenCalledWith(
+        {id},
+        {details: false, filter: undefined},
+      );
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: types.ENTITY_LOADING_REQUEST,
@@ -259,9 +268,9 @@ describe('report loadReportIfNeeded function tests', () => {
     expect.assertions(3);
 
     return loadReportIfNeeded(gmp)(id)(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(dispatch).not.toBeCalled();
-      expect(get).not.toBeCalled();
+      expect(getState).toHaveBeenCalled();
+      expect(dispatch).not.toHaveBeenCalled();
+      expect(get).not.toHaveBeenCalled();
     });
   });
 
@@ -293,8 +302,8 @@ describe('report loadReportIfNeeded function tests', () => {
 
     return loadReportIfNeeded(gmp)(id, {filter})(dispatch, getState).then(
       () => {
-        expect(getState).toBeCalled();
-        expect(get).toBeCalledWith({id}, {details: false, filter});
+        expect(getState).toHaveBeenCalled();
+        expect(get).toHaveBeenCalledWith({id}, {details: false, filter});
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: types.ENTITY_LOADING_REQUEST,
@@ -336,9 +345,9 @@ describe('report loadReportIfNeeded function tests', () => {
     expect.assertions(3);
 
     return loadReportIfNeeded(gmp)(id)(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(dispatch).not.toBeCalled();
-      expect(get).not.toBeCalled();
+      expect(getState).toHaveBeenCalled();
+      expect(dispatch).not.toHaveBeenCalled();
+      expect(get).not.toHaveBeenCalled();
     });
   });
 
@@ -365,8 +374,11 @@ describe('report loadReportIfNeeded function tests', () => {
     expect.assertions(5);
 
     return loadReportIfNeeded(gmp)(id)(dispatch, getState).catch(() => {
-      expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {details: false, filter: undefined});
+      expect(getState).toHaveBeenCalled();
+      expect(get).toHaveBeenCalledWith(
+        {id},
+        {details: false, filter: undefined},
+      );
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([
         {
@@ -428,8 +440,11 @@ describe('loadReportWithThreshold tests', () => {
     expect.assertions(7);
 
     return loadReportWithThreshold(gmp)(id)(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {details: false, filter: undefined});
+      expect(getState).toHaveBeenCalled();
+      expect(get).toHaveBeenCalledWith(
+        {id},
+        {details: false, filter: undefined},
+      );
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: types.ENTITY_LOADING_REQUEST,
@@ -485,7 +500,7 @@ describe('loadReportWithThreshold tests', () => {
     expect.assertions(11);
 
     return loadReportWithThreshold(gmp)(id)(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
+      expect(getState).toHaveBeenCalled();
       expect(get).toHaveBeenCalledTimes(2);
       expect(get).toHaveBeenNthCalledWith(
         1,
@@ -565,8 +580,8 @@ describe('loadReportWithThreshold tests', () => {
 
     return loadReportWithThreshold(gmp)(id, {filter})(dispatch, getState).then(
       () => {
-        expect(getState).toBeCalled();
-        expect(get).toBeCalledWith({id}, {details: false, filter});
+        expect(getState).toHaveBeenCalled();
+        expect(get).toHaveBeenCalledWith({id}, {details: false, filter});
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: types.ENTITY_LOADING_REQUEST,
@@ -627,7 +642,7 @@ describe('loadReportWithThreshold tests', () => {
 
     return loadReportWithThreshold(gmp)(id, {filter})(dispatch, getState).then(
       () => {
-        expect(getState).toBeCalled();
+        expect(getState).toHaveBeenCalled();
         expect(get).toHaveBeenCalledTimes(2);
         expect(get).toHaveBeenNthCalledWith(1, {id}, {details: false, filter});
         expect(get).toHaveBeenNthCalledWith(2, {id}, {details: true, filter});
@@ -702,7 +717,7 @@ describe('loadReportWithThreshold tests', () => {
     expect.assertions(5);
 
     return loadReportWithThreshold(gmp)(id)(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
+      expect(getState).toHaveBeenCalled();
       expect(get).not.toHaveBeenCalled();
       expect(dispatch).not.toHaveBeenCalled();
     });
@@ -750,7 +765,7 @@ describe('loadReportWithThreshold tests', () => {
 
     return loadReportWithThreshold(gmp)(id, {filter})(dispatch, getState).then(
       () => {
-        expect(getState).toBeCalled();
+        expect(getState).toHaveBeenCalled();
         expect(get).not.toHaveBeenCalled();
         expect(dispatch).not.toHaveBeenCalled();
       },
@@ -787,8 +802,12 @@ describe('loadDeltaReport function tests', () => {
     expect(isFunction(loadDeltaReport)).toBe(true);
 
     return loadDeltaReport(gmp)(id, deltaId)(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(getDelta).toBeCalledWith({id}, {id: deltaId}, {filter: undefined});
+      expect(getState).toHaveBeenCalled();
+      expect(getDelta).toHaveBeenCalledWith(
+        {id},
+        {id: deltaId},
+        {filter: undefined},
+      );
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([
         {
@@ -842,8 +861,8 @@ describe('loadDeltaReport function tests', () => {
       deltaId,
       filter,
     )(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(getDelta).toBeCalledWith({id}, {id: deltaId}, {filter});
+      expect(getState).toHaveBeenCalled();
+      expect(getDelta).toHaveBeenCalledWith({id}, {id: deltaId}, {filter});
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([
         {
@@ -886,9 +905,9 @@ describe('loadDeltaReport function tests', () => {
     };
 
     return loadDeltaReport(gmp)(id, deltaId)(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(dispatch).not.toBeCalled();
-      expect(getDelta).not.toBeCalled();
+      expect(getState).toHaveBeenCalled();
+      expect(dispatch).not.toHaveBeenCalled();
+      expect(getDelta).not.toHaveBeenCalled();
     });
   });
 
@@ -915,8 +934,12 @@ describe('loadDeltaReport function tests', () => {
     };
 
     return loadDeltaReport(gmp)(id, deltaId)(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(getDelta).toBeCalledWith({id}, {id: deltaId}, {filter: undefined});
+      expect(getState).toHaveBeenCalled();
+      expect(getDelta).toHaveBeenCalledWith(
+        {id},
+        {id: deltaId},
+        {filter: undefined},
+      );
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([
         {
@@ -965,8 +988,11 @@ describe('loadAuditReport function tests', () => {
     expect.assertions(7);
 
     return loadAuditReport(gmp)(id)(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {details: true, filter: undefined});
+      expect(getState).toHaveBeenCalled();
+      expect(get).toHaveBeenCalledWith(
+        {id},
+        {details: true, filter: undefined},
+      );
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: types.ENTITY_LOADING_REQUEST,
@@ -1011,8 +1037,8 @@ describe('loadAuditReport function tests', () => {
     expect.assertions(7);
 
     return loadAuditReport(gmp)(id, {filter})(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {details: true, filter});
+      expect(getState).toHaveBeenCalled();
+      expect(get).toHaveBeenCalledWith({id}, {details: true, filter});
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: types.ENTITY_LOADING_REQUEST,
@@ -1053,9 +1079,9 @@ describe('loadAuditReport function tests', () => {
     expect.assertions(3);
 
     return loadAuditReport(gmp)(id)(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(dispatch).not.toBeCalled();
-      expect(get).not.toBeCalled();
+      expect(getState).toHaveBeenCalled();
+      expect(dispatch).not.toHaveBeenCalled();
+      expect(get).not.toHaveBeenCalled();
     });
   });
 
@@ -1082,8 +1108,11 @@ describe('loadAuditReport function tests', () => {
     expect.assertions(5);
 
     return loadAuditReport(gmp)(id)(dispatch, getState).catch(() => {
-      expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {details: true, filter: undefined});
+      expect(getState).toHaveBeenCalled();
+      expect(get).toHaveBeenCalledWith(
+        {id},
+        {details: true, filter: undefined},
+      );
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: types.ENTITY_LOADING_REQUEST,
@@ -1126,8 +1155,11 @@ describe('report loadAuditReportIfNeeded function tests', () => {
     expect(isFunction(loadAuditReportIfNeeded)).toBe(true);
 
     return loadAuditReportIfNeeded(gmp)(id)(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {details: false, filter: undefined});
+      expect(getState).toHaveBeenCalled();
+      expect(get).toHaveBeenCalledWith(
+        {id},
+        {details: false, filter: undefined},
+      );
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: types.ENTITY_LOADING_REQUEST,
@@ -1169,9 +1201,9 @@ describe('report loadAuditReportIfNeeded function tests', () => {
     expect.assertions(3);
 
     return loadAuditReportIfNeeded(gmp)(id)(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(dispatch).not.toBeCalled();
-      expect(get).not.toBeCalled();
+      expect(getState).toHaveBeenCalled();
+      expect(dispatch).not.toHaveBeenCalled();
+      expect(get).not.toHaveBeenCalled();
     });
   });
 
@@ -1203,8 +1235,8 @@ describe('report loadAuditReportIfNeeded function tests', () => {
 
     return loadAuditReportIfNeeded(gmp)(id, {filter})(dispatch, getState).then(
       () => {
-        expect(getState).toBeCalled();
-        expect(get).toBeCalledWith({id}, {details: false, filter});
+        expect(getState).toHaveBeenCalled();
+        expect(get).toHaveBeenCalledWith({id}, {details: false, filter});
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: types.ENTITY_LOADING_REQUEST,
@@ -1246,9 +1278,9 @@ describe('report loadAuditReportIfNeeded function tests', () => {
     expect.assertions(3);
 
     return loadAuditReportIfNeeded(gmp)(id)(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(dispatch).not.toBeCalled();
-      expect(get).not.toBeCalled();
+      expect(getState).toHaveBeenCalled();
+      expect(dispatch).not.toHaveBeenCalled();
+      expect(get).not.toHaveBeenCalled();
     });
   });
 
@@ -1275,8 +1307,11 @@ describe('report loadAuditReportIfNeeded function tests', () => {
     expect.assertions(5);
 
     return loadAuditReportIfNeeded(gmp)(id)(dispatch, getState).catch(() => {
-      expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {details: false, filter: undefined});
+      expect(getState).toHaveBeenCalled();
+      expect(get).toHaveBeenCalledWith(
+        {id},
+        {details: false, filter: undefined},
+      );
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([
         {
@@ -1339,8 +1374,11 @@ describe('loadAuditReportWithThreshold tests', () => {
 
     return loadAuditReportWithThreshold(gmp)(id)(dispatch, getState).then(
       () => {
-        expect(getState).toBeCalled();
-        expect(get).toBeCalledWith({id}, {details: false, filter: undefined});
+        expect(getState).toHaveBeenCalled();
+        expect(get).toHaveBeenCalledWith(
+          {id},
+          {details: false, filter: undefined},
+        );
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: types.ENTITY_LOADING_REQUEST,
@@ -1398,7 +1436,7 @@ describe('loadAuditReportWithThreshold tests', () => {
 
     return loadAuditReportWithThreshold(gmp)(id)(dispatch, getState).then(
       () => {
-        expect(getState).toBeCalled();
+        expect(getState).toHaveBeenCalled();
         expect(get).toHaveBeenCalledTimes(2);
         expect(get).toHaveBeenNthCalledWith(
           1,
@@ -1481,8 +1519,8 @@ describe('loadAuditReportWithThreshold tests', () => {
       dispatch,
       getState,
     ).then(() => {
-      expect(getState).toBeCalled();
-      expect(get).toBeCalledWith({id}, {details: false, filter});
+      expect(getState).toHaveBeenCalled();
+      expect(get).toHaveBeenCalledWith({id}, {details: false, filter});
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
         type: types.ENTITY_LOADING_REQUEST,
@@ -1544,7 +1582,7 @@ describe('loadAuditReportWithThreshold tests', () => {
       dispatch,
       getState,
     ).then(() => {
-      expect(getState).toBeCalled();
+      expect(getState).toHaveBeenCalled();
       expect(get).toHaveBeenCalledTimes(2);
       expect(get).toHaveBeenNthCalledWith(1, {id}, {details: false, filter});
       expect(get).toHaveBeenNthCalledWith(2, {id}, {details: true, filter});
@@ -1619,7 +1657,7 @@ describe('loadAuditReportWithThreshold tests', () => {
 
     return loadAuditReportWithThreshold(gmp)(id)(dispatch, getState).then(
       () => {
-        expect(getState).toBeCalled();
+        expect(getState).toHaveBeenCalled();
         expect(get).not.toHaveBeenCalled();
         expect(dispatch).not.toHaveBeenCalled();
       },
@@ -1670,7 +1708,7 @@ describe('loadAuditReportWithThreshold tests', () => {
       dispatch,
       getState,
     ).then(() => {
-      expect(getState).toBeCalled();
+      expect(getState).toHaveBeenCalled();
       expect(get).not.toHaveBeenCalled();
       expect(dispatch).not.toHaveBeenCalled();
     });
@@ -1707,8 +1745,8 @@ describe('loadDeltaAuditReport function tests', () => {
 
     return loadDeltaAuditReport(gmp)(id, deltaId)(dispatch, getState).then(
       () => {
-        expect(getState).toBeCalled();
-        expect(getDelta).toBeCalledWith(
+        expect(getState).toHaveBeenCalled();
+        expect(getDelta).toHaveBeenCalledWith(
           {id},
           {id: deltaId},
           {filter: undefined},
@@ -1767,8 +1805,8 @@ describe('loadDeltaAuditReport function tests', () => {
       deltaId,
       filter,
     )(dispatch, getState).then(() => {
-      expect(getState).toBeCalled();
-      expect(getDelta).toBeCalledWith({id}, {id: deltaId}, {filter});
+      expect(getState).toHaveBeenCalled();
+      expect(getDelta).toHaveBeenCalledWith({id}, {id: deltaId}, {filter});
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([
         {
@@ -1812,9 +1850,9 @@ describe('loadDeltaAuditReport function tests', () => {
 
     return loadDeltaAuditReport(gmp)(id, deltaId)(dispatch, getState).then(
       () => {
-        expect(getState).toBeCalled();
-        expect(dispatch).not.toBeCalled();
-        expect(getDelta).not.toBeCalled();
+        expect(getState).toHaveBeenCalled();
+        expect(dispatch).not.toHaveBeenCalled();
+        expect(getDelta).not.toHaveBeenCalled();
       },
     );
   });
@@ -1843,8 +1881,8 @@ describe('loadDeltaAuditReport function tests', () => {
 
     return loadDeltaAuditReport(gmp)(id, deltaId)(dispatch, getState).then(
       () => {
-        expect(getState).toBeCalled();
-        expect(getDelta).toBeCalledWith(
+        expect(getState).toHaveBeenCalled();
+        expect(getDelta).toHaveBeenCalledWith(
           {id},
           {id: deltaId},
           {filter: undefined},

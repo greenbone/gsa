@@ -77,7 +77,7 @@ describe('AuthenticationCommand tests', () => {
 
     const cmd = new AuthenticationCommand(fakeHttp);
     await cmd.saveRadius({radiusEnabled: true, radiusHost, radiusKey});
-    expect(fakeHttp.request).toBeCalledWith('post', {
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
         cmd: 'save_auth',
         enable: 1,
@@ -99,7 +99,7 @@ describe('AuthenticationCommand tests', () => {
 
     const cmd = new AuthenticationCommand(fakeHttp);
     await cmd.saveRadius({radiusEnabled: false, radiusHost, radiusKey});
-    expect(fakeHttp.request).toBeCalledWith('post', {
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
       data: {
         cmd: 'save_auth',
         enable: 0,

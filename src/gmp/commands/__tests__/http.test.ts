@@ -134,7 +134,7 @@ describe('HttpCommand tests', () => {
     const http = createHttpError(rejection);
     const cmd = new HttpCommand(http, {bar: 1});
     // @ts-expect-error
-    await expect(cmd.httpGetWithTransform({foo: 'bar'})).rejects.toThrowError(
+    await expect(cmd.httpGetWithTransform({foo: 'bar'})).rejects.toThrow(
       /^Oops the server did something bad$/,
     );
   });
@@ -232,7 +232,7 @@ describe('HttpCommand tests', () => {
     const http = createHttpError(rejection);
     const cmd = new HttpCommand(http, {bar: 1});
     // @ts-expect-error
-    await expect(cmd.httpPostWithTransform({foo: 'bar'})).rejects.toThrowError(
+    await expect(cmd.httpPostWithTransform({foo: 'bar'})).rejects.toThrow(
       /^Oops the server did something bad$/,
     );
   });

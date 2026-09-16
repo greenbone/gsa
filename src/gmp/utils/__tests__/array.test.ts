@@ -132,7 +132,7 @@ describe('forEach function tests', () => {
     const callback = testing.fn();
     forEach([1, 2, 3], callback);
 
-    expect(callback).toBeCalled();
+    expect(callback).toHaveBeenCalled();
     expect(callback.mock.calls.length).toBe(3);
     expect(callback.mock.calls[0]).toEqual([1, 0, [1, 2, 3]]);
     expect(callback.mock.calls[1]).toEqual([2, 1, [1, 2, 3]]);
@@ -143,7 +143,7 @@ describe('forEach function tests', () => {
     const callback = testing.fn();
     forEach(2, callback);
 
-    expect(callback).toBeCalled();
+    expect(callback).toHaveBeenCalled();
     expect(callback.mock.calls.length).toBe(1);
     expect(callback.mock.calls[0]).toEqual([2, 0, [2]]);
   });
@@ -152,7 +152,7 @@ describe('forEach function tests', () => {
     const callback = testing.fn();
     forEach(new Set([1, 2, 3]), callback);
 
-    expect(callback).toBeCalled();
+    expect(callback).toHaveBeenCalled();
     expect(callback.mock.calls.length).toBe(3);
     expect(callback.mock.calls[0]).toEqual([1, 1, new Set([1, 2, 3])]);
     expect(callback.mock.calls[1]).toEqual([2, 2, new Set([1, 2, 3])]);

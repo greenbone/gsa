@@ -39,7 +39,7 @@ describe('settings actions tests', () => {
       expect(isFunction(loadReportComposerDefaults)).toBe(true);
 
       return loadReportComposerDefaults(gmp)()(dispatch).then(() => {
-        expect(getReportComposerDefaults).toBeCalled();
+        expect(getReportComposerDefaults).toHaveBeenCalled();
         expect(dispatch).toHaveBeenCalledWith({
           type: USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
           data,

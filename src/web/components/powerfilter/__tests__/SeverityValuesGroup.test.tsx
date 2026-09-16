@@ -87,8 +87,8 @@ describe('Severity Values Group Tests', () => {
 
     const domItems = screen.getSelectItemElements();
     fireEvent.click(domItems[3]);
-    expect(onChange).toBeCalled();
-    expect(onChange).toBeCalledWith(3, 'severity', '<');
+    expect(onChange).toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalledWith(3, 'severity', '<');
   });
 
   test('should render title', () => {

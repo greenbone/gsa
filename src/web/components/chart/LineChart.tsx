@@ -374,7 +374,7 @@ const LineChart = ({
       if (typeof svgRef === 'function') {
         svgRef(ref);
       } else if (svgRef && typeof svgRef === 'object') {
-        (svgRef as React.MutableRefObject<SVGSVGElement | null>).current = ref;
+        (svgRef as React.RefObject<SVGSVGElement | null>).current = ref;
       }
     },
     [svgRef],

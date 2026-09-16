@@ -42,7 +42,7 @@ interface SyncData {
   comment?: string;
 }
 
-type SyncDataRef = React.MutableRefObject<SyncData>;
+type SyncDataRef = React.RefObject<SyncData>;
 
 interface BasicFieldsContainerProps {
   initialName: string;
@@ -253,7 +253,7 @@ const ScanConfigEditDialog = ({
   const [filteredNvtPreferences, setFilteredNvtPreferences] = useState(
     nvtPreferences ?? [],
   );
-  const basicFieldsRef: React.MutableRefObject<SyncDataRef | null> =
+  const basicFieldsRef: React.RefObject<SyncDataRef | null> =
     useRef<SyncDataRef>(null);
 
   useEffect(() => {

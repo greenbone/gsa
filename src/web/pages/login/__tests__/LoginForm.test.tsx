@@ -142,7 +142,7 @@ describe('LoginForm tests', () => {
     const button = screen.getByTestId('login-button');
     fireEvent.click(button);
 
-    expect(handleSubmit).toBeCalledWith('foo', 'bar');
+    expect(handleSubmit).toHaveBeenCalledWith('foo', 'bar');
   });
 
   test('should not display guest login by default', () => {

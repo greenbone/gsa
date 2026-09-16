@@ -28,10 +28,7 @@ const log = logger.getLogger('web.components.form.useDownload');
  *
  * @returns Array of downloadRef and download function
  */
-const useDownload = (): [
-  React.MutableRefObject<Download | null>,
-  DownloadFunc,
-] => {
+const useDownload = (): [React.RefObject<Download | null>, DownloadFunc] => {
   const downloadRef = useRef<Download | null>(null);
 
   const download = useCallback(({filename, data, mimetype}: DownloadParams) => {

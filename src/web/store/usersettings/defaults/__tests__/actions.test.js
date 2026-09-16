@@ -79,9 +79,9 @@ describe('UserSettings Defaults action tests', () => {
       expect(isFunction(loadUserSettingDefaults)).toBe(true);
 
       return loadUserSettingDefaults(gmp)()(dispatch, getState).then(() => {
-        expect(getState).toBeCalled();
-        expect(dispatch).not.toBeCalled();
-        expect(currentSettings).not.toBeCalled();
+        expect(getState).toHaveBeenCalled();
+        expect(dispatch).not.toHaveBeenCalled();
+        expect(currentSettings).not.toHaveBeenCalled();
       });
     });
 
@@ -109,8 +109,8 @@ describe('UserSettings Defaults action tests', () => {
       expect(isFunction(loadUserSettingDefaults)).toBe(true);
 
       return loadUserSettingDefaults(gmp)()(dispatch, getState).then(() => {
-        expect(getState).toBeCalled();
-        expect(currentSettings).toBeCalled();
+        expect(getState).toHaveBeenCalled();
+        expect(currentSettings).toHaveBeenCalled();
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch.mock.calls[0]).toEqual([
           {
@@ -149,8 +149,8 @@ describe('UserSettings Defaults action tests', () => {
       expect(isFunction(loadUserSettingDefaults)).toBe(true);
 
       return loadUserSettingDefaults(gmp)()(dispatch, getState).then(() => {
-        expect(getState).toBeCalled();
-        expect(currentSettings).toBeCalled();
+        expect(getState).toHaveBeenCalled();
+        expect(currentSettings).toHaveBeenCalled();
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch.mock.calls[0]).toEqual([
           {
@@ -193,9 +193,9 @@ describe('UserSettings Defaults action tests', () => {
       expect(isFunction(loadUserSettingDefault)).toBe(true);
 
       return loadUserSettingDefault(gmp)('42')(dispatch, getState).then(() => {
-        expect(getState).toBeCalled();
-        expect(dispatch).not.toBeCalled();
-        expect(getSetting).not.toBeCalled();
+        expect(getState).toHaveBeenCalled();
+        expect(dispatch).not.toHaveBeenCalled();
+        expect(getSetting).not.toHaveBeenCalled();
       });
     });
 
@@ -221,8 +221,8 @@ describe('UserSettings Defaults action tests', () => {
 
       return loadUserSettingDefault(gmp)('123', false)(dispatch, getState).then(
         () => {
-          expect(getState).toBeCalled();
-          expect(getSetting).toBeCalled();
+          expect(getState).toHaveBeenCalled();
+          expect(getSetting).toHaveBeenCalled();
           expect(dispatch).toHaveBeenCalledTimes(2);
           expect(dispatch.mock.calls[0]).toEqual([
             {
@@ -258,8 +258,8 @@ describe('UserSettings Defaults action tests', () => {
       expect(isFunction(loadUserSettingDefault)).toBe(true);
 
       return loadUserSettingDefault(gmp)('123')(dispatch, getState).then(() => {
-        expect(getState).toBeCalled();
-        expect(getSetting).toBeCalled();
+        expect(getState).toHaveBeenCalled();
+        expect(getSetting).toHaveBeenCalled();
         expect(dispatch).toHaveBeenCalledTimes(2);
 
         expect(dispatch.mock.calls[0]).toEqual([
@@ -297,8 +297,8 @@ describe('UserSettings Defaults action tests', () => {
       expect(isFunction(loadUserSettingDefault)).toBe(true);
 
       return loadUserSettingDefault(gmp)('123')(dispatch, getState).then(() => {
-        expect(getState).toBeCalled();
-        expect(getSetting).toBeCalled();
+        expect(getState).toHaveBeenCalled();
+        expect(getSetting).toHaveBeenCalled();
         expect(dispatch).toHaveBeenCalledTimes(2);
 
         expect(dispatch.mock.calls[0]).toEqual([

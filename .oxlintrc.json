@@ -56,6 +56,7 @@
         "fixStyle": "inline-type-imports"
       }
     ],
+    "typescript/no-deprecated": "warn",
     "typescript/no-empty-interface": "warn",
     "typescript/no-explicit-any": "warn",
     "typescript/no-floating-promises": "warn",
@@ -110,6 +111,17 @@
           "warn",
           {
             "ignore": ["children", "className", "location"]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["**/*.jsx"],
+      "rules": {
+        "typescript/no-deprecated": [
+          "warn",
+          {
+            "allow": ["propTypes", "lineDataPropType"]
           }
         ]
       }

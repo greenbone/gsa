@@ -267,7 +267,7 @@ describe('FeedStatusCommand tests', () => {
     const log = logger.getLogger('gmp.commands.feedstatus');
     log.error = testing.fn();
 
-    await expect(cmd.isEnterpriseFeed()).rejects.toThrowError('Network error');
+    await expect(cmd.isEnterpriseFeed()).rejects.toThrow('Network error');
 
     expect(log.error).toHaveBeenCalledWith(
       'Error checking if feed is enterprise:',
