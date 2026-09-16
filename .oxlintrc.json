@@ -63,6 +63,7 @@
     "react/jsx-props-no-spread-multi": "error",
     "react/no-children-prop": "error",
     "react/no-danger": "error",
+    "react-hooks/no-deriving-state-in-effects": "warn",
     "typescript/no-base-to-string": "error",
     "typescript/consistent-type-exports": "warn",
     "typescript/consistent-type-imports": [
