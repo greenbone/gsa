@@ -7,6 +7,7 @@
   },
   "rules": {
     "eslint/eqeqeq": ["warn", "always"],
+    "eslint/no-alert": "error",
     "eslint/no-console": [
       "warn",
       {
@@ -40,7 +41,20 @@
     "gsa/prop-types": "off",
     "import/consistent-type-specifier-style": ["warn", "prefer-inline"],
     "import/newline-after-import": ["warn", {"considerComments": false}],
+    "import/no-amd": "error",
+    "import/no-absolute-path": "error",
+    "import/no-commonjs": "error",
     "import/no-cycle": "error",
+    "import/no-unassigned-import": [
+      "error",
+      {
+        "allow": [
+          "dayjs/**",
+          "whatwg-fetch",
+          "@testing-library/jest-dom/vitest"
+        ]
+      }
+    ],
     "react/exhaustive-deps": "warn",
     "react/immutability": "error",
     "react/jsx-fragments": ["warn", "syntax"],
@@ -86,6 +100,8 @@
         ]
       }
     ],
+    "unicorn/no-array-reverse": "warn",
+    "unicorn/no-array-sort": "warn",
     "vitest/consistent-test-it": [
       "error",
       {
@@ -95,6 +111,8 @@
     "vitest/no-commented-out-tests": "warn",
     "vitest/no-disabled-tests": "off",
     "vitest/no-focused-tests": "off",
+    "vitest/no-identical-title": "error",
+    "vitest/valid-expect": "error",
     "vitest/valid-expect-in-promise": "error"
   },
   "overrides": [

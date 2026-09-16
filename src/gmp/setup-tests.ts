@@ -3,5 +3,5 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-// eslint-disable-next-line no-restricted-imports
+// eslint-disable-next-line no-restricted-imports import/no-unassigned-import
 import '../setup-tests';
