@@ -12,7 +12,7 @@ import Axis from 'web/components/chart/base/Axis';
 import ChartWithEmptyState from 'web/components/chart/base/ChartWithEmptyState';
 import Group from 'web/components/chart/base/Group';
 import {type LegendData} from 'web/components/chart/base/Legend';
-import Svg from 'web/components/chart/base/Svg';
+import Svg, {type SvgRef} from 'web/components/chart/base/Svg';
 import ToolTip from 'web/components/chart/base/ToolTip';
 import path from 'web/components/chart/utils/Path';
 import Layout from 'web/components/layout/Layout';
@@ -47,7 +47,7 @@ interface ClonedScheduleData extends ScheduleData {
 interface ScheduleChartProps {
   data: ScheduleData[];
   height: number;
-  svgRef?: React.Ref<SVGSVGElement>;
+  svgRef?: SvgRef;
   width: number;
   yAxisLabel?: string;
   startDate?: GmpDate;

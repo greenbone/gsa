@@ -5,6 +5,8 @@
 
 import styled from 'styled-components';
 
+export type SvgRef = React.RefObject<SVGSVGElement | null>;
+
 const Svg = styled.svg`
   overflow: visible;
   & text {

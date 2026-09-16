@@ -27,7 +27,7 @@ import Legend, {
 } from 'web/components/chart/base/Legend';
 import LegendLabel from 'web/components/chart/base/LegendLabel';
 import LegendLine from 'web/components/chart/base/LegendLine';
-import Svg from 'web/components/chart/base/Svg';
+import Svg, {type SvgRef} from 'web/components/chart/base/Svg';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/constants';
 import Layout from 'web/components/layout/Layout';
 import PropTypes from 'web/utils/prop-types';
@@ -59,7 +59,7 @@ interface LineChartProps {
   height: number;
   numTicks?: number;
   showLegend?: boolean;
-  svgRef?: React.Ref<SVGSVGElement>;
+  svgRef?: SvgRef;
   timeline?: boolean;
   width: number;
   xAxisLabel?: ToString;

@@ -12,7 +12,7 @@ import Legend, {
   type LegendData,
   type LegendRef,
 } from 'web/components/chart/base/Legend';
-import Svg from 'web/components/chart/base/Svg';
+import Svg, {type SvgRef} from 'web/components/chart/base/Svg';
 import Arc2d from 'web/components/chart/donut/Arc2d';
 import Labels from 'web/components/chart/donut/Labels';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/constants';
@@ -27,7 +27,7 @@ interface DonutChartProps<TData extends DonutChartData> {
   height: number;
   data?: TData[];
   innerRadius?: number;
-  svgRef?: React.RefObject<SVGSVGElement | null>;
+  svgRef?: SvgRef;
   showLegend?: boolean;
   onDataClick?: (data: TData) => void;
   onLegendItemClick?: (item: TData) => void;

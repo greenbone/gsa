@@ -11,7 +11,7 @@ import {isDefined} from 'gmp/utils/identity';
 import ChartWithEmptyState from 'web/components/chart/base/ChartWithEmptyState';
 import Group from 'web/components/chart/base/Group';
 import {type LegendData} from 'web/components/chart/base/Legend';
-import Svg from 'web/components/chart/base/Svg';
+import Svg, {type SvgRef} from 'web/components/chart/base/Svg';
 
 interface Word extends d3Word {
   color?: string;
@@ -29,7 +29,7 @@ interface WordCloudChartProps {
   data: WordCloudChartData[];
   width: number;
   height: number;
-  svgRef?: React.RefObject<SVGSVGElement>;
+  svgRef?: SvgRef;
   onDataClick?: (filterValue: string) => void;
 }
 

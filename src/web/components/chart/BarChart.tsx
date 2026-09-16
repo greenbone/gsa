@@ -11,7 +11,7 @@ import {isDefined} from 'gmp/utils/identity';
 import Axis from 'web/components/chart/base/Axis';
 import ChartWithEmptyState from 'web/components/chart/base/ChartWithEmptyState';
 import Group from 'web/components/chart/base/Group';
-import Svg from 'web/components/chart/base/Svg';
+import Svg, {type SvgRef} from 'web/components/chart/base/Svg';
 import ToolTip from 'web/components/chart/base/ToolTip';
 import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/constants';
 import Layout from 'web/components/layout/Layout';
@@ -27,7 +27,7 @@ export interface BarChartProps<TData extends BarChartDataPoint> {
   data: TData[];
   height: number;
   horizontal?: boolean;
-  svgRef?: React.Ref<SVGSVGElement>;
+  svgRef?: SvgRef;
   width: number;
   xLabel?: string;
   yLabel?: string;

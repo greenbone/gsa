@@ -8,7 +8,7 @@ import {isDefined} from 'gmp/utils/identity';
 import ChartWithEmptyState from 'web/components/chart/base/ChartWithEmptyState';
 import Group from 'web/components/chart/base/Group';
 import {type LegendData} from 'web/components/chart/base/Legend';
-import Svg from 'web/components/chart/base/Svg';
+import Svg, {type SvgRef} from 'web/components/chart/base/Svg';
 import ToolTip from 'web/components/chart/base/ToolTip';
 
 interface BubbleChartData extends LegendData {
@@ -19,7 +19,7 @@ interface BubbleChartProps {
   data?: BubbleChartData[];
   width: number;
   height: number;
-  svgRef?: React.Ref<SVGSVGElement>;
+  svgRef?: SvgRef;
   onDataClick?: (data: BubbleChartData) => void;
 }
 
