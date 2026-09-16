@@ -47,7 +47,9 @@
     "react/jsx-key": "warn",
     "react/jsx-no-duplicate-props": "error",
     "react/jsx-props-no-spread-multi": "error",
+    "react/no-children-prop": "error",
     "react/no-danger": "error",
+    "typescript/no-base-to-string": "error",
     "typescript/consistent-type-exports": "warn",
     "typescript/consistent-type-imports": [
       "error",
@@ -90,6 +92,7 @@
         "fn": "test"
       }
     ],
+    "vitest/no-commented-out-tests": "warn",
     "vitest/no-disabled-tests": "off",
     "vitest/no-focused-tests": "off",
     "vitest/valid-expect-in-promise": "error"
