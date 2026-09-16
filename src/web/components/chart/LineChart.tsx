@@ -55,7 +55,7 @@ export interface LineProps extends LegendData {
 }
 
 interface LineChartProps {
-  data: LineData[];
+  data?: LineData[];
   height: number;
   numTicks?: number;
   showLegend?: boolean;
