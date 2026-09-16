@@ -103,7 +103,7 @@
     "@types/react-is": "19.2.0",
     "@vitejs/plugin-legacy": "^8.2.3",
     "@vitejs/plugin-react": "^6.1.1",
-    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/coverage-v8": "5.0.1",
     "globals": "^17.12.0",
     "i18next-cli": "^1.73.1",
     "jsdom": "30.0.1",
@@ -115,7 +115,7 @@
     "vite": "^8.2.2",
     "vite-plugin-checker": "0.14.5",
     "vite-plugin-svgr": "^5.2.0",
-    "vitest": "^5.0.0"
+    "vitest": "5.0.1"
   },
   "engines": {
     "node": ">=22.0",
