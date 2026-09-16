@@ -518,15 +518,8 @@ class HostsTopologyChart extends React.Component<
     const {_} = this.props;
 
     const {width, height, svgRef} = this.props;
-    const {
-      hosts = [],
-      links = [],
-      scale,
-      translateX,
-      translateY,
-      dragging,
-      hostsCount,
-    } = this.state;
+    const {hosts, links, scale, translateX, translateY, dragging, hostsCount} =
+      this.state;
     return (
       <Layout flex="column">
         {hostsCount > MAX_HOSTS && (

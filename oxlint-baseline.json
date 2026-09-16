@@ -651,30 +651,6 @@
       "fingerprint": "src/web/components/chart/DonutChart.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setChartWidth(newWidth);"
     },
     {
-      "filename": "src/web/components/chart/HostsTopologyChart.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because the property has type `Host[]` (not nullish). This default assignment will never be used.",
-      "location": {
-        "line": 522,
-        "column": 15,
-        "offset": 13089
-      },
-      "sourceLine": "hosts = [],",
-      "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Host[]` (not nullish). This default assignment will never be used.|15|hosts = [],"
-    },
-    {
-      "filename": "src/web/components/chart/HostsTopologyChart.tsx",
-      "code": "typescript(no-useless-default-assignment)",
-      "message": "Default value is useless because the property has type `Link[]` (not nullish). This default assignment will never be used.",
-      "location": {
-        "line": 523,
-        "column": 15,
-        "offset": 13107
-      },
-      "sourceLine": "links = [],",
-      "fingerprint": "src/web/components/chart/HostsTopologyChart.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Link[]` (not nullish). This default assignment will never be used.|15|links = [],"
-    },
-    {
       "filename": "src/web/components/chart/LineChart.tsx",
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
