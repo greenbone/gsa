@@ -2103,18 +2103,6 @@
       "fingerprint": "src/web/pages/hosts/__tests__/HostComponent.test.tsx|typescript(no-redundant-type-constituents)|\"\\\"SELECTION_FILTER\\\"\" | \"\\\"SELECTION_PAGE_CONTENTS\\\"\" | \"\\\"SELECTION_USER\\\"\" is overridden by string in this union type.|18|selectionType: keyof typeof SelectionType | string;"
     },
     {
-      "filename": "src/web/pages/hosts/dashboard/HostsLoaders.tsx",
-      "code": "eslint(no-unused-vars)",
-      "message": "Identifier '_' is imported but never used.",
-      "location": {
-        "line": 6,
-        "column": 8,
-        "offset": 106
-      },
-      "sourceLine": "import _ from 'gmp/locale';",
-      "fingerprint": "src/web/pages/hosts/dashboard/HostsLoaders.tsx|eslint(no-unused-vars)|Identifier '_' is imported but never used.|8|import _ from 'gmp/locale';"
-    },
-    {
       "filename": "src/web/pages/hosts/Identifiers.jsx",
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
@@ -2137,54 +2125,6 @@
       },
       "sourceLine": "void loadLdapAuthSettings();",
       "fingerprint": "src/web/pages/ldap/LdapPage.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|10|void loadLdapAuthSettings();"
-    },
-    {
-      "filename": "src/web/pages/notes/dashboard/ActiveDaysDisplay.jsx",
-      "code": "eslint(no-class-assign)",
-      "message": "Unexpected re-assignment of class NotesActiveDaysDisplay",
-      "location": {
-        "line": 95,
-        "column": 14,
-        "offset": 3059
-      },
-      "sourceLine": "export class NotesActiveDaysDisplay extends React.Component {",
-      "fingerprint": "src/web/pages/notes/dashboard/ActiveDaysDisplay.jsx|eslint(no-class-assign)|Unexpected re-assignment of class NotesActiveDaysDisplay|14|export class NotesActiveDaysDisplay extends React.Component {"
-    },
-    {
-      "filename": "src/web/pages/notes/dashboard/ActiveDaysDisplay.jsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 156,
-        "column": 53,
-        "offset": 4821
-      },
-      "sourceLine": "isDefined(onFilterChanged) ? this.handleDataClick : undefined",
-      "fingerprint": "src/web/pages/notes/dashboard/ActiveDaysDisplay.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|53|isDefined(onFilterChanged) ? this.handleDataClick : undefined"
-    },
-    {
-      "filename": "src/web/pages/notes/dashboard/WordCloudDisplay.jsx",
-      "code": "eslint(no-class-assign)",
-      "message": "Unexpected re-assignment of class NotesWordCloudDisplay",
-      "location": {
-        "line": 38,
-        "column": 14,
-        "offset": 1414
-      },
-      "sourceLine": "export class NotesWordCloudDisplay extends React.Component {",
-      "fingerprint": "src/web/pages/notes/dashboard/WordCloudDisplay.jsx|eslint(no-class-assign)|Unexpected re-assignment of class NotesWordCloudDisplay|14|export class NotesWordCloudDisplay extends React.Component {"
-    },
-    {
-      "filename": "src/web/pages/notes/dashboard/WordCloudDisplay.jsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 92,
-        "column": 53,
-        "offset": 2864
-      },
-      "sourceLine": "isDefined(onFilterChanged) ? this.handleDataClick : undefined",
-      "fingerprint": "src/web/pages/notes/dashboard/WordCloudDisplay.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|53|isDefined(onFilterChanged) ? this.handleDataClick : undefined"
     },
     {
       "filename": "src/web/pages/nvts/dashboard/FamilyDisplay.jsx",

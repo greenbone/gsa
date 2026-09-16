@@ -10,25 +10,29 @@ import CreatedDisplay from 'web/components/dashboard/display/created/CreatedDisp
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {NotesCreatedLoader} from 'web/pages/notes/dashboard/Loaders';
+import {NotesCreatedLoader} from 'web/pages/notes/dashboard/NoteLoaders';
 import Theme from 'web/utils/theme';
 
 export const NotesCreatedDisplay = createDisplay({
   loaderComponent: NotesCreatedLoader,
-  displayComponent: CreatedDisplay,
-  title: () => _('Notes by Creation Time'),
-  yAxisLabel: _l('# of Created Notes'),
-  y2AxisLabel: _l('Total Notes'),
-  xAxisLabel: _l('Time'),
-  yLine: {
-    color: Theme.darkGreenTransparent,
-    label: _l('Created Notes'),
-  },
-  y2Line: {
-    color: Theme.darkGreenTransparent,
-    dashArray: '3, 2',
-    label: _l('Total Notes'),
-  },
+  displayComponent: props => (
+    <CreatedDisplay
+      {...props}
+      title={() => _('Notes by Creation Time')}
+      xAxisLabel={_('Time')}
+      y2AxisLabel={_('Total Notes')}
+      y2Line={{
+        color: Theme.darkGreenTransparent,
+        dashArray: '3, 2',
+        label: _('Total Notes'),
+      }}
+      yAxisLabel={_('# of Created Notes')}
+      yLine={{
+        color: Theme.darkGreenTransparent,
+        label: _('Created Notes'),
+      }}
+    />
+  ),
   displayName: 'NotesCreatedDisplay',
   displayId: 'note-by-created',
   filtersFilter: NOTES_FILTER_FILTER,
@@ -36,11 +40,15 @@ export const NotesCreatedDisplay = createDisplay({
 
 export const NotesCreatedTableDisplay = createDisplay({
   loaderComponent: NotesCreatedLoader,
-  displayComponent: DataTableDisplay,
-  title: () => _('Notes by Creation Time'),
-  dataTitles: [_l('Creation Time'), _l('# of Notes'), _l('Total Notes')],
-  dataRow: row => [row.label, row.y, row.y2],
-  dataTransform: transformCreated,
+  displayComponent: props => (
+    <DataTableDisplay
+      {...props}
+      dataRow={row => [row.label ?? '', row.y, row.y2]}
+      dataTitles={[_('Creation Time'), _('# of Notes'), _('Total Notes')]}
+      dataTransform={transformCreated}
+      title={() => _('Notes by Creation Time')}
+    />
+  ),
   displayName: 'NotesCreatedTableDisplay',
   displayId: 'note-by-created-table',
   filtersFilter: NOTES_FILTER_FILTER,
