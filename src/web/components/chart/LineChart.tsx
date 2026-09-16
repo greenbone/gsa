@@ -374,6 +374,7 @@ const LineChart = ({
       if (typeof svgRef === 'function') {
         svgRef(ref);
       } else if (svgRef && typeof svgRef === 'object') {
+        // oxlint-disable-next-line react/immutability
         (svgRef as React.RefObject<SVGSVGElement | null>).current = ref;
       }
     },
