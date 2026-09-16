@@ -474,6 +474,7 @@ class DataDisplay<
                           height,
                           svgRef: this.svgRef,
                           state,
+                          // oxlint-disable-next-line typescript/unbound-method
                           setState: this.handleSetState,
                         })
                       : null}
@@ -486,12 +487,15 @@ class DataDisplay<
                 {icons &&
                   icons({
                     state,
+                    // oxlint-disable-next-line typescript/unbound-method
                     setState: this.handleSetState,
                     showFilterSelection,
                     showCsvDownload,
                     showSvgDownload,
                     showToggleLegend,
+                    // oxlint-disable-next-line typescript/unbound-method
                     onDownloadCsvClick: this.handleDownloadCsv,
+                    // oxlint-disable-next-line typescript/unbound-method
                     onDownloadSvgClick: this.handleDownloadSvg,
                     onSelectFilterClick,
                   })}

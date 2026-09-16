@@ -549,9 +549,13 @@ class HostsTopologyChart extends React.Component<
           data-testid="hosts-topology-svg"
           height={height}
           width={width}
+          // oxlint-disable-next-line typescript/unbound-method
           onMouseDown={this.handleMouseDown}
+          // oxlint-disable-next-line typescript/unbound-method
           onMouseMove={this.handleMouseMove}
+          // oxlint-disable-next-line typescript/unbound-method
           onMouseUp={this.handleMouseUp}
+          // oxlint-disable-next-line typescript/unbound-method
           onWheel={this.handleMouseWheel}
         >
           <Group left={translateX} scale={scale} top={translateY}>
