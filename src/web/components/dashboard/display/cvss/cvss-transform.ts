@@ -100,7 +100,7 @@ const transformCvssData = (
   };
 
   groups.forEach(group => {
-    const {value, count = 0} = group;
+    const {value, count} = group;
 
     const severity = parseSeverity(value);
 
