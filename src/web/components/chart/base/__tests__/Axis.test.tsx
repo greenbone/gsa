@@ -5,7 +5,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {screen, rendererWith} from 'web/testing';
-import {scaleLinear} from 'd3-scale';
+import {scaleBand, scaleLinear, scaleUtc} from 'd3-scale';
 import Axis from 'web/components/chart/base/Axis';
 
 const renderAxis = (props: React.ComponentProps<typeof Axis>) => {
@@ -59,6 +59,35 @@ describe('Axis tests', () => {
     );
   });
 
+  test.each([
+    [0, '0'],
+    [0.1, '0.1'],
+    [0.25, '0.25'],
+    [0.5, '0.5'],
+    [0.001, '0.001'],
+    [999, '999'],
+    [999.9, '999.9'],
+    [1000, '1k'],
+    [1001, '1k'],
+    [1500, '1.5k'],
+    [12000, '12k'],
+    [1250000, '1.3M'],
+    [1000000000, '1G'],
+    [-0.5, '\u22120.5'],
+    [-1500, '\u22121.5k'],
+  ])('should format numeric tick value %s as %s', (value, expected) => {
+    const scale = scaleLinear().range([0, 100]).domain([value, value]);
+    const mainContainer = renderAxis({
+      orientation: 'bottom',
+      scale,
+      tickValues: [value],
+    });
+
+    expect(mainContainer.querySelector('.tick text')).toHaveTextContent(
+      expected,
+    );
+  });
+
   test('should format large numeric tick values compactly', () => {
     const scale = scaleLinear().range([0, 100]).domain([0, 1250000]);
     const mainContainer = renderAxis({
@@ -87,6 +116,46 @@ describe('Axis tests', () => {
       '1.5',
       '2',
     ]);
+  });
+
+  test('should let a custom tick formatter override compact formatting', () => {
+    const scale = scaleLinear().range([0, 100]).domain([0, 1500]);
+    const mainContainer = renderAxis({
+      orientation: 'bottom',
+      scale,
+      tickFormat: value => `${String(value)} results`,
+      tickValues: [1500],
+    });
+
+    expect(mainContainer.querySelector('.tick text')).toHaveTextContent(
+      '1500 results',
+    );
+  });
+
+  test('should keep categorical tick values unchanged', () => {
+    const scale = scaleBand<string>().range([0, 100]).domain(['0.5', '1000']);
+    const mainContainer = renderAxis({
+      orientation: 'bottom',
+      scale,
+      tickValues: ['0.5', '1000'],
+    });
+
+    const tickTexts = Array.from(mainContainer.querySelectorAll('.tick text'));
+    expect(tickTexts.map(tick => tick.textContent)).toEqual(['0.5', '1000']);
+  });
+
+  test('should keep time tick values date-formatted', () => {
+    const start = new Date('2026-01-01T00:00:00Z');
+    const scale = scaleUtc().range([0, 100]).domain([start, start]);
+    const mainContainer = renderAxis({
+      orientation: 'bottom',
+      scale,
+      tickValues: [start],
+    });
+
+    expect(mainContainer.querySelector('.tick text')).not.toHaveTextContent(
+      'm',
+    );
   });
 
   test('should render a top axis label with the expected position', () => {

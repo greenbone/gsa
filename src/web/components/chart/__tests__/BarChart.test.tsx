@@ -155,4 +155,24 @@ describe('BarChart', () => {
     expect(horizontalXAxis).not.toHaveTextContent('one');
     expect(horizontalYAxis).not.toHaveTextContent('10');
   });
+
+  test('should render compact numeric labels on the horizontal axis', () => {
+    const {render} = rendererWith();
+    render(
+      <BarChart
+        horizontal
+        data={[
+          {color: '#008000', x: 'first', y: 0.5},
+          {color: '#0000aa', x: 'second', y: 1500},
+        ]}
+        height={300}
+        width={900}
+      />,
+    );
+
+    const horizontalXAxis = screen.getByTestId('bar-chart-x-axis');
+
+    expect(horizontalXAxis).toHaveTextContent('1k');
+    expect(horizontalXAxis).not.toHaveTextContent('m');
+  });
 });

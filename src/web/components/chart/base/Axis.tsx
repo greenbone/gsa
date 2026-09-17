@@ -59,7 +59,7 @@ const FONT_SIZE = 10;
 const DEFAULT_TICK_LENGTH = 8;
 
 const compactFormat = d3format('.2~s');
-const decimalFormat = d3format('.2~f');
+const decimalFormat = d3format('~g');
 
 const standardFormat = (value: number): string =>
   Math.abs(value) >= 1000 ? compactFormat(value) : decimalFormat(value);
