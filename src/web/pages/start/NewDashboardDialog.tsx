@@ -15,8 +15,8 @@ import {HostsModifiedDisplay} from 'web/pages/hosts/dashboard/HostModifiedDispla
 import HostsTopologyDisplay from 'web/pages/hosts/dashboard/HostsTopologyDisplay';
 import {HostsVulnScoreDisplay} from 'web/pages/hosts/dashboard/HostsVulnScoreDisplay';
 import {NvtsSeverityClassDisplay} from 'web/pages/nvts/dashboard/NvtSeverityClassDisplay';
-import {OsSeverityClassDisplay} from 'web/pages/operatingsystems/dashboard/SeverityClassDisplay';
-import {OsVulnScoreDisplay} from 'web/pages/operatingsystems/dashboard/VulnScoreDisplay';
+import {OperatingSystemSeverityClassDisplay} from 'web/pages/operatingsystems/dashboard/OperatingSystemSeverityClassDisplay';
+import {OperatingSystemVulnerabilityScoreDisplay} from 'web/pages/operatingsystems/dashboard/OperatingSystemVulnerabilityScoreDisplay';
 import {ReportsHighResultsDisplay} from 'web/pages/reports/dashboard/HighResultsDisplay';
 import {ReportsSeverityDisplay} from 'web/pages/reports/dashboard/SeverityClassDisplay';
 import {ResultsSeverityDisplay} from 'web/pages/results/dashboard/SeverityClassDisplay';
@@ -58,9 +58,12 @@ const ASSET_DEFAULT_DISPLAYS = [
   [
     HostsVulnScoreDisplay.displayId,
     HostsTopologyDisplay.displayId,
-    OsVulnScoreDisplay.displayId,
+    OperatingSystemVulnerabilityScoreDisplay.displayId,
   ],
-  [OsSeverityClassDisplay.displayId, HostsModifiedDisplay.displayId],
+  [
+    OperatingSystemSeverityClassDisplay.displayId,
+    HostsModifiedDisplay.displayId,
+  ],
 ];
 
 const SECINFO_DEFAULT_DISPLAYS = [

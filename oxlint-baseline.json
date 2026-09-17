@@ -633,7 +633,7 @@
       "location": {
         "line": 79,
         "column": 48,
-        "offset": 2127
+        "offset": 2142
       },
       "sourceLine": "const [chartWidth, setChartWidth] = useState(getWidth);",
       "fingerprint": "src/web/components/chart/DonutChart.tsx|react(refs)|Cannot access refs during render|48|const [chartWidth, setChartWidth] = useState(getWidth);"
@@ -645,7 +645,7 @@
       "location": {
         "line": 84,
         "column": 7,
-        "offset": 2233
+        "offset": 2248
       },
       "sourceLine": "setChartWidth(newWidth);",
       "fingerprint": "src/web/components/chart/DonutChart.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setChartWidth(newWidth);"
@@ -2173,30 +2173,6 @@
       },
       "sourceLine": "const {cves = [], certs = [], xrefs = []} = nvt;",
       "fingerprint": "src/web/pages/nvts/NvtReferences.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `string[]` (not nullish). This default assignment will never be used.|17|const {cves = [], certs = [], xrefs = []} = nvt;"
-    },
-    {
-      "filename": "src/web/pages/operatingsystems/dashboard/VulnScoreDisplay.jsx",
-      "code": "eslint(no-class-assign)",
-      "message": "Unexpected re-assignment of class OsVulnScoreDisplay",
-      "location": {
-        "line": 82,
-        "column": 14,
-        "offset": 2796
-      },
-      "sourceLine": "export class OsVulnScoreDisplay extends React.Component {",
-      "fingerprint": "src/web/pages/operatingsystems/dashboard/VulnScoreDisplay.jsx|eslint(no-class-assign)|Unexpected re-assignment of class OsVulnScoreDisplay|14|export class OsVulnScoreDisplay extends React.Component {"
-    },
-    {
-      "filename": "src/web/pages/operatingsystems/dashboard/VulnScoreDisplay.jsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 118,
-        "column": 35,
-        "offset": 3900
-      },
-      "sourceLine": "onDataClick={this.handleDataClick}",
-      "fingerprint": "src/web/pages/operatingsystems/dashboard/VulnScoreDisplay.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|35|onDataClick={this.handleDataClick}"
     },
     {
       "filename": "src/web/pages/overrides/dashboard/ActiveDaysDisplay.jsx",
