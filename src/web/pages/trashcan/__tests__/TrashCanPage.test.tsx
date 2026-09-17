@@ -4,8 +4,39 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, rendererWith, waitFor, fireEvent, wait} from 'web/testing';
+import {
+  screen,
+  rendererWith,
+  waitFor,
+  fireEvent,
+  wait,
+  within,
+} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
+import Features from 'gmp/capabilities/features';
+import AgentGroup from 'gmp/models/agent-group';
+import Alert from 'gmp/models/alert';
+import Audit from 'gmp/models/audit';
+import Credential from 'gmp/models/credential';
+import Filter from 'gmp/models/filter';
+import Group from 'gmp/models/group';
+import Note from 'gmp/models/note';
+import OciImageTarget from 'gmp/models/oci-image-target';
+import Override from 'gmp/models/override';
+import Permission from 'gmp/models/permission';
+import Policy from 'gmp/models/policy';
+import PortList from 'gmp/models/port-list';
+import ReportConfig from 'gmp/models/report-config';
+import ReportFormat from 'gmp/models/report-format';
+import Role from 'gmp/models/role';
+import ScanConfig, {type ScanConfigFamilies} from 'gmp/models/scan-config';
+import Scanner from 'gmp/models/scanner';
+import Schedule from 'gmp/models/schedule';
+import Tag from 'gmp/models/tag';
+import Target from 'gmp/models/target';
+import Task from 'gmp/models/task';
+import Ticket from 'gmp/models/ticket';
+import WebApplicationTarget from 'gmp/models/web-application-target';
 import TrashcanPage from 'web/pages/trashcan/TrashCanPage';
 
 /*
@@ -129,5 +160,94 @@ describe('TrashCanPage tests', () => {
     const cancelButton = screen.getByRole('button', {name: /Cancel/i});
     fireEvent.click(cancelButton);
     expect(cancelButton).not.toBeVisible();
+  });
+
+  test('should render only restore and trash delete actions in every table', async () => {
+    const trashData = {
+      alerts: [new Alert({id: 'alert'})],
+      audits: [new Audit({id: 'audit'})],
+      credentials: [new Credential({id: 'credential'})],
+      filters: [new Filter({id: 'filter'})],
+      groups: [new Group({id: 'group'})],
+      notes: [new Note({id: 'note'})],
+      overrides: [new Override({id: 'override'})],
+      permissions: [new Permission({id: 'permission', name: 'super'})],
+      policies: [new Policy({id: 'policy'})],
+      portLists: [new PortList({id: 'port-list'})],
+      reportConfigs: [
+        new ReportConfig({
+          id: 'report-config',
+          reportFormat: {id: 'report-format', name: 'XML'},
+        }),
+      ],
+      reportFormats: [
+        new ReportFormat({
+          id: 'report-format',
+          trust: {value: '1'},
+        }),
+      ],
+      roles: [new Role({id: 'role'})],
+      scanConfigs: [
+        new ScanConfig({
+          id: 'scan-config',
+          families: {} as ScanConfigFamilies,
+          nvts: {count: 0},
+        }),
+      ],
+      scanners: [new Scanner({id: 'scanner'})],
+      schedules: [new Schedule({id: 'schedule'})],
+      tags: [new Tag({id: 'tag'})],
+      targets: [new Target({id: 'target'})],
+      tasks: [new Task({id: 'task'})],
+      tickets: [new Ticket({id: 'ticket'})],
+      agentGroups: [new AgentGroup({id: 'agent-group'})],
+      ociImageTargets: [new OciImageTarget({id: 'oci-image-target'})],
+      webApplicationTargets: [
+        new WebApplicationTarget({id: 'web-application-target'}),
+      ],
+    };
+    const pageGmp = {
+      ...gmp,
+      trashcan: {
+        ...gmp.trashcan,
+        get: testing.fn().mockResolvedValue({data: trashData}),
+      },
+      session: {
+        username: 'test-user',
+        subscribeToChanges: () => () => undefined,
+      },
+    };
+    const {render} = rendererWith({
+      gmp: pageGmp,
+      capabilities,
+      features: new Features([
+        'ENABLE_AGENTS',
+        'ENABLE_CONTAINER_SCANNING',
+        'ENABLE_WEB_APPLICATION_SCANNING',
+      ]),
+      store: true,
+    });
+
+    render(<TrashcanPage />);
+    await wait();
+
+    const tables = screen.getAllByTestId('entities-table');
+    expect(tables).toHaveLength(23);
+
+    tables.forEach(table => {
+      const restoreIcon = within(table).getByTestId('restore-icon');
+      const deleteIcon = within(table).getByTestId('delete-icon');
+      const actionCell = restoreIcon.closest('td');
+
+      expect(actionCell).not.toBeNull();
+      expect(deleteIcon.closest('td')).toBe(actionCell);
+
+      const actionIconTestIds = Array.from(
+        actionCell?.querySelectorAll<HTMLElement>('[data-testid$="-icon"]') ??
+          [],
+      ).map(icon => icon.dataset.testid);
+
+      expect(actionIconTestIds).toEqual(['restore-icon', 'delete-icon']);
+    });
   });
 });
