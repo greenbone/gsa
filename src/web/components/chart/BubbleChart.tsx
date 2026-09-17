@@ -15,17 +15,25 @@ interface BubbleChartData extends LegendData {
   value: number;
 }
 
-interface BubbleChartProps {
-  data?: BubbleChartData[];
+interface BubbleChartProps<TData extends BubbleChartData = BubbleChartData> {
+  data?: TData[];
   width: number;
   height: number;
   svgRef?: SvgRef;
-  onDataClick?: (data: BubbleChartData) => void;
+  onDataClick?: (data: TData) => void;
 }
 
-interface BubbleChartHierarchyData extends BubbleChartData {
-  children: BubbleChartData[];
-}
+type BubbleChartRoot<TData extends BubbleChartData = BubbleChartData> = {
+  children: TData[];
+  color: TData['color'];
+  label: TData['label'];
+  toolTip?: TData['toolTip'];
+  value: number;
+};
+
+type BubbleChartHierarchyData<
+  TData extends BubbleChartData = BubbleChartData,
+> = TData | BubbleChartRoot<TData>;
 
 const margin = {
   top: 5,
@@ -34,29 +42,32 @@ const margin = {
   left: 5,
 } as const;
 
-const BubbleChart = ({
+const BubbleChart = <TData extends BubbleChartData = BubbleChartData>({
   data = [],
   width,
   height,
   svgRef,
   onDataClick,
-}: BubbleChartProps) => {
+}: BubbleChartProps<TData>) => {
   const maxWidth = width - margin.left - margin.right;
   const maxHeight = height - margin.top - margin.bottom;
 
   const hasBubbles = data.length > 0;
 
-  const bubbles = pack<BubbleChartHierarchyData>()
+  const bubbles = pack<BubbleChartHierarchyData<TData>>()
     .size([maxWidth, maxHeight])
     .padding(1.5);
 
-  const root = hierarchy<BubbleChartHierarchyData>({
-    children: data,
-    // dummy root node
-    color: '',
-    label: '',
-    value: 0,
-  }).sum(d => d.value);
+  const root = hierarchy<BubbleChartHierarchyData<TData>>(
+    {
+      children: data,
+      // dummy root node
+      color: '',
+      label: '',
+      value: 0,
+    },
+    d => ('children' in d ? d.children : undefined),
+  ).sum(d => d.value);
 
   const nodes = bubbles(root).leaves();
   return (
@@ -85,7 +96,7 @@ const BubbleChart = ({
                       top={y}
                       onClick={
                         isDefined(onDataClick)
-                          ? () => onDataClick(d)
+                          ? () => onDataClick(d as TData)
                           : undefined
                       }
                       onMouseEnter={show}
