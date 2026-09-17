@@ -10,7 +10,7 @@ import dayjs from 'gmp/models/date';
 import Tag from 'gmp/models/tag';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {createSession} from 'gmp/testing';
-import {Row} from 'web/pages/tags/TagTable';
+import TagTableRow from 'web/pages/tags/TagTableRow';
 
 const createTag = (id = 'tag-1') =>
   new Tag({
@@ -28,7 +28,7 @@ const createGmp = () => ({
   session: createSession({username: 'test-user'}),
 });
 
-describe('TagRow tests', () => {
+describe('TagTableRow tests', () => {
   test('should render tag in table row with action buttons', () => {
     const tag = createTag();
     const {render} = rendererWithTableBody({
@@ -36,7 +36,7 @@ describe('TagRow tests', () => {
       gmp: createGmp(),
     });
     render(
-      <Row
+      <TagTableRow
         entity={tag}
         onTagCloneClick={testing.fn()}
         onTagDeleteClick={testing.fn()}
@@ -69,7 +69,7 @@ describe('TagRow tests', () => {
       gmp: createGmp(),
     });
     render(
-      <Row
+      <TagTableRow
         entity={activeTag}
         onTagCloneClick={testing.fn()}
         onTagDeleteClick={testing.fn()}
@@ -100,7 +100,7 @@ describe('TagRow tests', () => {
       gmp: createGmp(),
     });
     render(
-      <Row
+      <TagTableRow
         entity={disabledTag}
         onTagCloneClick={testing.fn()}
         onTagDeleteClick={testing.fn()}
@@ -130,7 +130,7 @@ describe('TagRow tests', () => {
       gmp: createGmp(),
     });
     render(
-      <Row
+      <TagTableRow
         entity={tag}
         onTagCloneClick={handleClone}
         onTagDeleteClick={handleDelete}
@@ -165,7 +165,7 @@ describe('TagRow tests', () => {
       gmp: createGmp(),
     });
     render(
-      <Row
+      <TagTableRow
         entity={tag}
         onTagCloneClick={testing.fn()}
         onTagDeleteClick={testing.fn()}

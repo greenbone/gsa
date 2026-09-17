@@ -392,6 +392,7 @@ const TrashCan = () => {
           <span>
             <LinkTarget id="tag" />
             <h1>{_('Tags')}</h1>
+            {/* @ts-expect-error */}
             <TagsTable entities={trash.tags} {...tableProps} />
           </span>
         )}
