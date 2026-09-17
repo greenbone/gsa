@@ -14,7 +14,7 @@ import {CvesSeverityClassDisplay} from 'web/pages/cves/dashboard/CveSeverityClas
 import {HostsModifiedDisplay} from 'web/pages/hosts/dashboard/HostModifiedDisplay';
 import HostsTopologyDisplay from 'web/pages/hosts/dashboard/HostsTopologyDisplay';
 import {HostsVulnScoreDisplay} from 'web/pages/hosts/dashboard/HostsVulnScoreDisplay';
-import {NvtsSeverityClassDisplay} from 'web/pages/nvts/dashboard/SeverityClassDisplay';
+import {NvtsSeverityClassDisplay} from 'web/pages/nvts/dashboard/NvtSeverityClassDisplay';
 import {OsSeverityClassDisplay} from 'web/pages/operatingsystems/dashboard/SeverityClassDisplay';
 import {OsVulnScoreDisplay} from 'web/pages/operatingsystems/dashboard/VulnScoreDisplay';
 import {ReportsHighResultsDisplay} from 'web/pages/reports/dashboard/HighResultsDisplay';
