@@ -26,8 +26,8 @@ import {
 } from 'web/utils/severity';
 
 interface CvssDataGroup {
-  value?: NumberValue;
-  count?: NumberValue;
+  value: NumberValue;
+  count: number;
 }
 
 export interface CvssData {

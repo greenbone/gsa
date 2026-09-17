@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {parseSeverity, parseInt} from 'gmp/parser';
+import {parseSeverity, parseInt, type NumberValue} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {severityValue} from 'gmp/utils/number';
 import {type SeverityRating, DEFAULT_SEVERITY_RATING} from 'gmp/utils/severity';
@@ -29,7 +29,7 @@ import {
 } from 'web/utils/severity';
 
 interface SeverityDataGroup {
-  value: string | undefined;
+  value: NumberValue;
   count: number;
 }
 
