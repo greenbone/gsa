@@ -3,7 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Loader, {createLoadFunc} from 'web/components/dashboard/display/Loader';
+import {type CreatedData} from 'web/components/dashboard/display/created/created-transform';
+import Loader, {
+  createLoadFunc,
+  type DisplayLoaderProps,
+} from 'web/components/dashboard/display/Loader';
+import {type SeverityData} from 'web/components/dashboard/display/severity/severity-class-transform';
 
 export const NVTS_FAMILY = 'nvt-family';
 export const NVTS_SEVERITY = 'nvt-severity';
@@ -11,12 +16,38 @@ export const NVTS_QOD = 'nvt-qod';
 export const NVTS_QOD_TYPE = 'nvt-qod-type';
 export const NVTS_CREATED = 'nvt-created';
 
-export const nvtFamilyLoadFunc = createLoadFunc(
+interface NvtFamilyGroup {
+  count: number;
+  value: string;
+  stats: {
+    severity: {
+      mean: number;
+    };
+  };
+}
+
+export interface NvtFamilyData {
+  groups?: NvtFamilyGroup[];
+}
+
+interface NvtQodGroup {
+  count: number;
+  value: string;
+}
+
+export interface NvtQodData {
+  groups?: NvtQodGroup[];
+}
+
+const nvtFamilyLoadFunc = createLoadFunc(
   ({gmp, filter}) => gmp.nvts.getFamilyAggregates({filter}).then(r => r.data),
   NVTS_FAMILY,
 );
 
-export const NvtsFamilyLoader = ({filter, children}) => (
+export const NvtsFamilyLoader = ({
+  filter,
+  children,
+}: DisplayLoaderProps<NvtFamilyData>) => (
   <Loader
     dataId={NVTS_FAMILY}
     filter={filter}
@@ -27,12 +58,15 @@ export const NvtsFamilyLoader = ({filter, children}) => (
   </Loader>
 );
 
-export const nvtSeverityLoaderFunc = createLoadFunc(
+const nvtSeverityLoaderFunc = createLoadFunc(
   ({gmp, filter}) => gmp.nvts.getSeverityAggregates({filter}).then(r => r.data),
   NVTS_SEVERITY,
 );
 
-export const NvtsSeverityLoader = ({filter, children}) => (
+export const NvtsSeverityLoader = ({
+  filter,
+  children,
+}: DisplayLoaderProps<SeverityData>) => (
   <Loader
     dataId={NVTS_SEVERITY}
     filter={filter}
@@ -43,12 +77,15 @@ export const NvtsSeverityLoader = ({filter, children}) => (
   </Loader>
 );
 
-export const nvtQodLoaderFunc = createLoadFunc(
+const nvtQodLoaderFunc = createLoadFunc(
   ({gmp, filter}) => gmp.nvts.getQodAggregates({filter}).then(r => r.data),
   NVTS_QOD,
 );
 
-export const NvtsQodLoader = ({filter, children}) => (
+export const NvtsQodLoader = ({
+  filter,
+  children,
+}: DisplayLoaderProps<NvtQodData>) => (
   <Loader
     dataId={NVTS_QOD}
     filter={filter}
@@ -59,12 +96,15 @@ export const NvtsQodLoader = ({filter, children}) => (
   </Loader>
 );
 
-export const nvtQodTypeLoadFunc = createLoadFunc(
+const nvtQodTypeLoadFunc = createLoadFunc(
   ({gmp, filter}) => gmp.nvts.getQodTypeAggregates({filter}).then(r => r.data),
   NVTS_QOD_TYPE,
 );
 
-export const NvtsQodTypeLoader = ({filter, children}) => (
+export const NvtsQodTypeLoader = ({
+  filter,
+  children,
+}: DisplayLoaderProps<NvtQodData>) => (
   <Loader
     dataId={NVTS_QOD_TYPE}
     filter={filter}
@@ -75,12 +115,15 @@ export const NvtsQodTypeLoader = ({filter, children}) => (
   </Loader>
 );
 
-export const nvtCreatedLoadFunc = createLoadFunc(
+const nvtCreatedLoadFunc = createLoadFunc(
   ({gmp, filter}) => gmp.nvts.getCreatedAggregates({filter}).then(r => r.data),
   NVTS_CREATED,
 );
 
-export const NvtCreatedLoader = ({filter, children}) => (
+export const NvtCreatedLoader = ({
+  filter,
+  children,
+}: DisplayLoaderProps<CreatedData>) => (
   <Loader
     dataId={NVTS_CREATED}
     filter={filter}

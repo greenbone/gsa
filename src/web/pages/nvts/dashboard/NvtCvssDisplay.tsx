@@ -9,14 +9,19 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import CvssDisplay from 'web/components/dashboard/display/cvss/CvssDisplay';
 import CvssTableDisplay from 'web/components/dashboard/display/cvss/CvssTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {NvtsSeverityLoader} from 'web/pages/nvts/dashboard/Loaders';
+import {NvtsSeverityLoader} from 'web/pages/nvts/dashboard/NvtLoaders';
 
 export const NvtsCvssDisplay = createDisplay({
   loaderComponent: NvtsSeverityLoader,
-  displayComponent: CvssDisplay,
-  yLabel: _l('# of NVTs'),
-  title: ({data: tdata}) =>
-    _('NVTs by CVSS (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <CvssDisplay
+      {...props}
+      title={({data}) =>
+        _('NVTs by CVSS (Total: {{count}})', {count: data.total})
+      }
+      yLabel={_('# of NVTs')}
+    />
+  ),
   filtersFilter: NVTS_FILTER_FILTER,
   displayId: 'nvt-by-cvss',
   displayName: 'NvtsCvssDisplay',
@@ -24,10 +29,15 @@ export const NvtsCvssDisplay = createDisplay({
 
 export const NvtsCvssTableDisplay = createDisplay({
   loaderComponent: NvtsSeverityLoader,
-  displayComponent: CvssTableDisplay,
-  dataTitles: [_l('Severity'), _l('# of NVTs')],
-  title: ({data: tdata}) =>
-    _('NVTs by CVSS (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <CvssTableDisplay
+      {...props}
+      dataTitles={[_('Severity'), _('# of NVTs')]}
+      title={({data}) =>
+        _('NVTs by CVSS (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   filtersFilter: NVTS_FILTER_FILTER,
   displayId: 'nvt-by-cvss-table',
   displayName: 'NvtsCvssTableDisplay',

@@ -3,32 +3,37 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {type FilterType} from 'gmp/models/filter';
 import Dashboard from 'web/components/dashboard/Dashboard';
 import {
   NvtsCreatedDisplay,
   NvtsCreatedTableDisplay,
-} from 'web/pages/nvts/dashboard/CreatedDisplay';
+} from 'web/pages/nvts/dashboard/NvtCreatedDisplay';
 import {
   NvtsCvssDisplay,
   NvtsCvssTableDisplay,
-} from 'web/pages/nvts/dashboard/CvssDisplay';
+} from 'web/pages/nvts/dashboard/NvtCvssDisplay';
 import {
   NvtsFamilyDisplay,
   NvtsFamilyTableDisplay,
-} from 'web/pages/nvts/dashboard/FamilyDisplay';
+} from 'web/pages/nvts/dashboard/NvtFamilyDisplay';
 import {
   NvtsQodDisplay,
   NvtsQodTableDisplay,
-} from 'web/pages/nvts/dashboard/QodDisplay';
+} from 'web/pages/nvts/dashboard/NvtQodDisplay';
 import {
   NvtsQodTypeDisplay,
   NvtsQodTypeTableDisplay,
-} from 'web/pages/nvts/dashboard/QodTypeDisplay';
+} from 'web/pages/nvts/dashboard/NvtQodTypeDisplay';
 import {
   NvtsSeverityClassDisplay,
   NvtsSeverityClassTableDisplay,
-} from 'web/pages/nvts/dashboard/SeverityClassDisplay';
+} from 'web/pages/nvts/dashboard/NvtSeverityClassDisplay';
+
+interface NvtsDashboardProps {
+  filter?: FilterType;
+  onFilterChanged?: (filter: FilterType) => void;
+}
 
 export const NVTS_DASHBOARD_ID = 'f68d9369-1945-477b-968f-121c6029971b';
 
@@ -47,7 +52,7 @@ export const NVTS_DISPLAYS = [
   NvtsQodTypeTableDisplay.displayId,
 ];
 
-const NvtsDashboard = props => (
+const NvtsDashboard = (props: NvtsDashboardProps) => (
   <Dashboard
     {...props}
     defaultDisplays={[

@@ -655,9 +655,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 280,
+        "line": 290,
         "column": 7,
-        "offset": 6937
+        "offset": 7140
       },
       "sourceLine": "setChartWidth(newWidth);",
       "fingerprint": "src/web/components/chart/LineChart.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setChartWidth(newWidth);"
@@ -2125,78 +2125,6 @@
       },
       "sourceLine": "void loadLdapAuthSettings();",
       "fingerprint": "src/web/pages/ldap/LdapPage.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|10|void loadLdapAuthSettings();"
-    },
-    {
-      "filename": "src/web/pages/nvts/dashboard/FamilyDisplay.jsx",
-      "code": "eslint(no-class-assign)",
-      "message": "Unexpected re-assignment of class NvtsFamilyDisplay",
-      "location": {
-        "line": 65,
-        "column": 14,
-        "offset": 2355
-      },
-      "sourceLine": "export class NvtsFamilyDisplay extends React.Component {",
-      "fingerprint": "src/web/pages/nvts/dashboard/FamilyDisplay.jsx|eslint(no-class-assign)|Unexpected re-assignment of class NvtsFamilyDisplay|14|export class NvtsFamilyDisplay extends React.Component {"
-    },
-    {
-      "filename": "src/web/pages/nvts/dashboard/FamilyDisplay.jsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 124,
-        "column": 53,
-        "offset": 3979
-      },
-      "sourceLine": "isDefined(onFilterChanged) ? this.handleDataClick : undefined",
-      "fingerprint": "src/web/pages/nvts/dashboard/FamilyDisplay.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|53|isDefined(onFilterChanged) ? this.handleDataClick : undefined"
-    },
-    {
-      "filename": "src/web/pages/nvts/dashboard/QodDisplay.jsx",
-      "code": "eslint(no-class-assign)",
-      "message": "Unexpected re-assignment of class NvtsQodDisplay",
-      "location": {
-        "line": 50,
-        "column": 14,
-        "offset": 1635
-      },
-      "sourceLine": "export class NvtsQodDisplay extends React.Component {",
-      "fingerprint": "src/web/pages/nvts/dashboard/QodDisplay.jsx|eslint(no-class-assign)|Unexpected re-assignment of class NvtsQodDisplay|14|export class NvtsQodDisplay extends React.Component {"
-    },
-    {
-      "filename": "src/web/pages/nvts/dashboard/QodDisplay.jsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 103,
-        "column": 53,
-        "offset": 3103
-      },
-      "sourceLine": "isDefined(onFilterChanged) ? this.handleDataClick : undefined",
-      "fingerprint": "src/web/pages/nvts/dashboard/QodDisplay.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|53|isDefined(onFilterChanged) ? this.handleDataClick : undefined"
-    },
-    {
-      "filename": "src/web/pages/nvts/dashboard/QodTypeDisplay.jsx",
-      "code": "eslint(no-class-assign)",
-      "message": "Unexpected re-assignment of class NvtsQodTypeDisplay",
-      "location": {
-        "line": 49,
-        "column": 14,
-        "offset": 1619
-      },
-      "sourceLine": "export class NvtsQodTypeDisplay extends React.Component {",
-      "fingerprint": "src/web/pages/nvts/dashboard/QodTypeDisplay.jsx|eslint(no-class-assign)|Unexpected re-assignment of class NvtsQodTypeDisplay|14|export class NvtsQodTypeDisplay extends React.Component {"
-    },
-    {
-      "filename": "src/web/pages/nvts/dashboard/QodTypeDisplay.jsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 102,
-        "column": 53,
-        "offset": 3133
-      },
-      "sourceLine": "isDefined(onFilterChanged) ? this.handleDataClick : undefined",
-      "fingerprint": "src/web/pages/nvts/dashboard/QodTypeDisplay.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|53|isDefined(onFilterChanged) ? this.handleDataClick : undefined"
     },
     {
       "filename": "src/web/pages/nvts/NvtDetails.tsx",
