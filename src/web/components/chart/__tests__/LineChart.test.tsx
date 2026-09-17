@@ -54,6 +54,31 @@ describe('LineChart tests', () => {
     ).toBeInTheDocument();
   });
 
+  test('should render compact numeric labels on the y-axis', () => {
+    const {render} = rendererWith();
+
+    render(
+      <LineChart
+        data={[
+          {x: 1, y: 0.5, y2: 0.5},
+          {x: 2, y: 1500, y2: 1500},
+        ]}
+        height={300}
+        showLegend={false}
+        width={900}
+        yLine={{color: '#00aa00', label: 'First'}}
+      />,
+    );
+
+    const yAxis = screen
+      .getByTestId('main-container')
+      .querySelector('.axis-tick');
+
+    expect(screen.getByTestId('main-container')).toHaveTextContent('1k');
+    expect(yAxis).toBeInTheDocument();
+    expect(screen.getByTestId('main-container')).not.toHaveTextContent('m');
+  });
+
   test('should apply x-axis label offset and tick label rotation', () => {
     const {render} = rendererWith();
 
