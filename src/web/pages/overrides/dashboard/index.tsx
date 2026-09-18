@@ -3,20 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {type FilterType} from 'gmp/models/filter';
 import Dashboard from 'web/components/dashboard/Dashboard';
 import {
   OverridesActiveDaysDisplay,
   OverridesActiveDaysTableDisplay,
-} from 'web/pages/overrides/dashboard/ActiveDaysDisplay';
+} from 'web/pages/overrides/dashboard/OverrideActiveDaysDisplay';
 import {
   OverridesCreatedDisplay,
   OverridesCreatedTableDisplay,
-} from 'web/pages/overrides/dashboard/CreatedDisplay';
+} from 'web/pages/overrides/dashboard/OverrideCreatedDisplay';
 import {
   OverridesWordCloudDisplay,
   OverridesWordCloudTableDisplay,
-} from 'web/pages/overrides/dashboard/WordCloudDisplay';
+} from 'web/pages/overrides/dashboard/OverrideWordCloudDisplay';
+
+interface OverridesDashboardProps {
+  filter?: FilterType;
+  onFilterChanged?: (filter: FilterType) => void;
+}
 
 export const OVERRIDES_DASHBOARD_ID = '054862fe-0781-4527-b1aa-2113bcd16ce7';
 
@@ -29,7 +34,7 @@ export const OVERRIDES_DISPLAYS = [
   OverridesWordCloudTableDisplay.displayId,
 ];
 
-const OverridesDashboard = props => (
+const OverridesDashboard = (props: OverridesDashboardProps) => (
   <Dashboard
     {...props}
     defaultDisplays={[
