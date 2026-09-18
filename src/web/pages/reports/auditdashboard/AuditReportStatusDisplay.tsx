@@ -4,10 +4,12 @@
  */
 
 import {_, _l} from 'gmp/locale/lang';
-import {getTranslatableReportCompliance} from 'gmp/models/compliance';
+import {
+  type ComplianceType,
+  getTranslatableReportCompliance,
+} from 'gmp/models/compliance';
 import {AUDIT_REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
-import DataTable from 'web/components/dashboard/display/DataTable';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import StatusDisplay from 'web/components/dashboard/display/status/StatusDisplay';
 import {
@@ -16,16 +18,35 @@ import {
   percent,
 } from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {ReportComplianceLoader} from 'web/pages/reports/auditdashboard/Loaders';
+import {
+  type AuditReportStatusData,
+  ReportComplianceLoader,
+} from 'web/pages/reports/auditdashboard/AuditReportLoaders';
 
-const transformStatusData = (data = {}) => {
+interface TransformedAuditReportStatusDataItem {
+  value: number;
+  label: string;
+  toolTip: string;
+  color: string;
+  filterValue: string;
+}
+
+interface TransformedAuditReportStatusData extends Array<TransformedAuditReportStatusDataItem> {
+  total: number;
+}
+
+const transformStatusData = (
+  data: AuditReportStatusData = {},
+): TransformedAuditReportStatusData => {
   const {groups = []} = data;
 
   const sum = totalCount(groups);
 
-  const tdata = groups.map(group => {
+  const transformedData = groups.map(group => {
     const {count, value} = group;
-    const translatableValue = getTranslatableReportCompliance(value);
+    const translatableValue = getTranslatableReportCompliance(
+      value as ComplianceType,
+    );
     const perc = percent(count, sum);
     return {
       value: count,
@@ -36,35 +57,44 @@ const transformStatusData = (data = {}) => {
     };
   });
 
-  tdata.total = sum;
-
-  return tdata;
+  const result = transformedData as TransformedAuditReportStatusData;
+  result.total = sum;
+  return result;
 };
 
 export const ReportComplianceDisplay = createDisplay({
-  dataTransform: transformStatusData,
-  displayComponent: StatusDisplay,
-  filterTerm: 'compliant',
+  displayComponent: props => (
+    <StatusDisplay
+      {...props}
+      dataTransform={transformStatusData}
+      filterTerm="compliant"
+      title={({data}) =>
+        _('Audit Reports by Compliance (Total: {{count}})', {
+          count: data.total,
+        })
+      }
+    />
+  ),
   displayId: 'report-by-compliance',
-  title: ({data: tdata}) =>
-    _('Audit Reports by Compliance (Total: {{count}})', {
-      count: tdata.total,
-    }),
   filtersFilter: AUDIT_REPORTS_FILTER_FILTER,
   loaderComponent: ReportComplianceLoader,
 });
 
 export const ReportComplianceTableDisplay = createDisplay({
-  chartComponent: DataTable,
-  displayComponent: DataTableDisplay,
   loaderComponent: ReportComplianceLoader,
-  dataTransform: transformStatusData,
-  dataTitles: [_l('Status'), _l('# of Reports')],
-  dataRow: row => [row.label, row.value],
-  title: ({data: tdata}) =>
-    _('Audit Reports by Compliance (Total: {{count}})', {
-      count: tdata.total,
-    }),
+  displayComponent: props => (
+    <DataTableDisplay
+      {...props}
+      dataRow={row => [row.label, row.value]}
+      dataTitles={[_l('Status'), _l('# of Reports')]}
+      dataTransform={transformStatusData}
+      title={({data}) =>
+        _('Audit Reports by Compliance (Total: {{count}})', {
+          count: data.total,
+        })
+      }
+    />
+  ),
   displayId: 'report-by-compliance-table',
   displayName: 'ReportComplianceTableDisplay',
   filtersFilter: AUDIT_REPORTS_FILTER_FILTER,
