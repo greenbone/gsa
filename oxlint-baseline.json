@@ -2175,54 +2175,6 @@
       "fingerprint": "src/web/pages/nvts/NvtReferences.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `string[]` (not nullish). This default assignment will never be used.|17|const {cves = [], certs = [], xrefs = []} = nvt;"
     },
     {
-      "filename": "src/web/pages/overrides/dashboard/ActiveDaysDisplay.jsx",
-      "code": "eslint(no-class-assign)",
-      "message": "Unexpected re-assignment of class OverridesActiveDaysDisplay",
-      "location": {
-        "line": 94,
-        "column": 14,
-        "offset": 3043
-      },
-      "sourceLine": "export class OverridesActiveDaysDisplay extends React.Component {",
-      "fingerprint": "src/web/pages/overrides/dashboard/ActiveDaysDisplay.jsx|eslint(no-class-assign)|Unexpected re-assignment of class OverridesActiveDaysDisplay|14|export class OverridesActiveDaysDisplay extends React.Component {"
-    },
-    {
-      "filename": "src/web/pages/overrides/dashboard/ActiveDaysDisplay.jsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 155,
-        "column": 53,
-        "offset": 4817
-      },
-      "sourceLine": "isDefined(onFilterChanged) ? this.handleDataClick : undefined",
-      "fingerprint": "src/web/pages/overrides/dashboard/ActiveDaysDisplay.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|53|isDefined(onFilterChanged) ? this.handleDataClick : undefined"
-    },
-    {
-      "filename": "src/web/pages/overrides/dashboard/WordCloudDisplay.jsx",
-      "code": "eslint(no-class-assign)",
-      "message": "Unexpected re-assignment of class OverridesWordCloudDisplay",
-      "location": {
-        "line": 38,
-        "column": 14,
-        "offset": 1426
-      },
-      "sourceLine": "export class OverridesWordCloudDisplay extends React.Component {",
-      "fingerprint": "src/web/pages/overrides/dashboard/WordCloudDisplay.jsx|eslint(no-class-assign)|Unexpected re-assignment of class OverridesWordCloudDisplay|14|export class OverridesWordCloudDisplay extends React.Component {"
-    },
-    {
-      "filename": "src/web/pages/overrides/dashboard/WordCloudDisplay.jsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 92,
-        "column": 53,
-        "offset": 2888
-      },
-      "sourceLine": "isDefined(onFilterChanged) ? this.handleDataClick : undefined",
-      "fingerprint": "src/web/pages/overrides/dashboard/WordCloudDisplay.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|53|isDefined(onFilterChanged) ? this.handleDataClick : undefined"
-    },
-    {
       "filename": "src/web/pages/overrides/OverrideDialog.tsx",
       "code": "typescript(restrict-template-expressions)",
       "message": "Invalid type used in template literal expression.",

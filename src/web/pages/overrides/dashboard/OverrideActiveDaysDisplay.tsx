@@ -3,34 +3,61 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 import DonutChart from 'web/components/chart/DonutChart';
+import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
-import DataDisplay from 'web/components/dashboard/display/DataDisplay';
+import DataDisplay, {
+  type DataDisplayProps,
+} from 'web/components/dashboard/display/DataDisplay';
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {
   totalCount,
   percent,
   activeDaysColorScale,
 } from 'web/components/dashboard/display/utils';
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {OverridesActiveDaysLoader} from 'web/pages/overrides/dashboard/Loaders';
-import PropTypes from 'web/utils/prop-types';
+import {
+  type ActiveDaysData,
+  OverridesActiveDaysLoader,
+} from 'web/pages/overrides/dashboard/OverrideLoaders';
+
+interface TransformedActiveDaysDataItems {
+  value: number;
+  label: string;
+  bulked: boolean;
+  toolTip: string;
+  color: string;
+  filterValue: string;
+}
+
+interface TransformedActiveDaysData extends Array<TransformedActiveDaysDataItems> {
+  total: number;
+}
+
+type OverrideActiveDaysDataDisplayProps = DataDisplayProps<
+  ActiveDaysData,
+  TransformedActiveDaysData
+>;
+
+type OverrideActiveDaysDisplayProps = DashboardDisplayProps;
 
 const MAX_BINS = 10; // if this is changed, activeDaysColorScale needs adjustment
 
 const ACTIVE_YES_ALWAYS_VALUE = -2;
 const ACTIVE_NO_VALUE = -1;
 
-const transformActiveDaysData = (data = {}) => {
+const transformActiveDaysData = (
+  data: ActiveDaysData = {},
+): TransformedActiveDaysData => {
   const {groups = []} = data;
   const sum = totalCount(groups);
 
@@ -45,7 +72,7 @@ const transformActiveDaysData = (data = {}) => {
     const {value} = groups[groups.length - 1];
 
     const count = mostActiveDaysBin.reduce(
-      (prev, current) => prev + parseFloat(current.count),
+      (prev, current) => prev + (parseFloat(current.count) ?? 0),
       0,
     );
     const reducedMostActiveDaysBin = {
@@ -58,8 +85,8 @@ const transformActiveDaysData = (data = {}) => {
   }
 
   let colorCounter = 1;
-  const tdata = groups.map(group => {
-    const {bulked, count, value} = group;
+  const transformedData = groups.map(group => {
+    const {bulked = false, count, value} = group;
     const perc = percent(count, sum);
     let label = '';
     switch (value) {
@@ -70,11 +97,9 @@ const transformActiveDaysData = (data = {}) => {
         label = _('Inactive');
         break;
       default:
-        if (group.bulked) {
-          label = _('Active for > {{value}} days', {value});
-        } else {
-          label = _('Active for the next {{value}} days', {value});
-        }
+        label = bulked
+          ? _('Active for > {{value}} days', {value})
+          : _('Active for the next {{value}} days', {value});
         break;
     }
     return {
@@ -83,105 +108,113 @@ const transformActiveDaysData = (data = {}) => {
       bulked,
       toolTip: `${label}: ${perc}% (${count})`,
       color: activeDaysColorScale(colorCounter++),
-      filterValue: value,
-    };
+      filterValue: String(value),
+    } as TransformedActiveDaysDataItems;
   });
 
-  tdata.total = sum;
-  return tdata;
+  const result = transformedData as TransformedActiveDaysData;
+  result.total = sum;
+  return result;
 };
 
-export class OverridesActiveDaysDisplay extends React.Component {
-  constructor(...args) {
-    super(...args);
+export const OverridesActiveDaysDisplay = ({
+  filter,
+  filterId,
+  showFilterSelection,
+  onFilterChanged,
+  onFilterIdChanged,
+  ...props
+}: OverrideActiveDaysDisplayProps) => {
+  const {
+    filter: selectedFilter,
+    selectFilter,
+    filterSelectionDialog,
+  } = useFilterSelection({
+    filterId,
+    filtersFilter: OVERRIDES_FILTER_FILTER,
+    onFilterIdChanged,
+  });
 
-    this.handleDataClick = this.handleDataClick.bind(this);
-  }
+  const displayFilter = showFilterSelection ? selectedFilter : filter;
 
-  handleDataClick(data) {
-    const {onFilterChanged, filter} = this.props;
-    const {filterValue, bulked = false} = data;
-
-    if (!isDefined(onFilterChanged)) {
+  const handleDataClick = ({filterValue, bulked = false}) => {
+    if (!isDefined(onFilterChanged) || isEmpty(filterValue)) {
       return;
     }
 
-    let activeDaysTerm;
-    if (bulked) {
-      activeDaysTerm = FilterTerm.fromString(`active_days>"${filterValue}"`);
-    } else {
-      activeDaysTerm = FilterTerm.fromString(`active_days="${filterValue}"`);
-    }
+    const activeDaysTerm = bulked
+      ? FilterTerm.fromString(`active_days>"${filterValue}"`)
+      : FilterTerm.fromString(`active_days="${filterValue}"`);
 
     if (isDefined(filter) && filter.hasTerm(activeDaysTerm)) {
       return;
     }
     const activeDaysFilter = QueryFilter.fromTerm(activeDaysTerm);
 
-    const newFilter = isDefined(filter)
-      ? filter.copy().and(activeDaysFilter)
+    const newFilter = isDefined(displayFilter)
+      ? displayFilter.copy().and(activeDaysFilter)
       : activeDaysFilter;
 
     onFilterChanged(newFilter);
-  }
+  };
 
-  render() {
-    const {filter, onFilterChanged, ...props} = this.props;
-
-    return (
-      <OverridesActiveDaysLoader filter={filter}>
+  return (
+    <>
+      <OverridesActiveDaysLoader filter={displayFilter}>
         {loaderProps => (
-          <DataDisplay
+          <DataDisplay<
+            ActiveDaysData,
+            OverrideActiveDaysDataDisplayProps,
+            TransformedActiveDaysData
+          >
             {...props}
             {...loaderProps}
             dataTransform={transformActiveDaysData}
-            filter={filter}
+            filter={displayFilter}
             icons={DataDisplayIcons}
             initialState={{}}
-            title={({data: tdata}) =>
+            title={({data}) =>
               _('Overrides by Active Days (Total: {{count}})', {
-                count: tdata.total,
+                count: data.total,
               })
             }
+            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
           >
-            {({width, height, data: tdata, svgRef, state}) => (
+            {({width, height, data, svgRef, state}) => (
               <DonutChart
-                data={tdata}
+                data={data}
                 height={height}
                 showLegend={state.showLegend}
                 svgRef={svgRef}
                 width={width}
                 onDataClick={
-                  isDefined(onFilterChanged) ? this.handleDataClick : undefined
+                  isDefined(onFilterChanged) ? handleDataClick : undefined
                 }
               />
             )}
           </DataDisplay>
         )}
       </OverridesActiveDaysLoader>
-    );
-  }
-}
-
-OverridesActiveDaysDisplay.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
+      {filterSelectionDialog}
+    </>
+  );
 };
-
-OverridesActiveDaysDisplay = withFilterSelection({
-  filtersFilter: OVERRIDES_FILTER_FILTER,
-})(OverridesActiveDaysDisplay);
 
 OverridesActiveDaysDisplay.displayId = 'override-by-active-days';
 
 export const OverridesActiveDaysTableDisplay = createDisplay({
   loaderComponent: OverridesActiveDaysLoader,
-  displayComponent: DataTableDisplay,
-  dataRow: row => [row.label, row.value],
-  dataTitles: [_l('Active'), _l('# of Overrides')],
-  dataTransform: transformActiveDaysData,
-  title: ({data: tdata}) =>
-    _('Overrides by Active Days (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <DataTableDisplay
+      {...props}
+      dataRow={row => [row.label, row.value]}
+      dataTitles={[_('Active'), _('# of Overrides')]}
+      dataTransform={transformActiveDaysData}
+      title={({data}) =>
+        _('Overrides by Active Days (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   displayName: 'OverridesActiveDaysTableDisplay',
   displayId: 'override-by-active-days-table',
   filtersFilter: OVERRIDES_FILTER_FILTER,
