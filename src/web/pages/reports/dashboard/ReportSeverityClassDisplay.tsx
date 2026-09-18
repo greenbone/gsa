@@ -9,13 +9,18 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import SeverityClassDisplay from 'web/components/dashboard/display/severity/SeverityClassDisplay';
 import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/SeverityClassTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {ReportsSeverityLoader} from 'web/pages/reports/dashboard/Loaders';
+import {ReportsSeverityLoader} from 'web/pages/reports/dashboard/ReportLoaders';
 
 export const ReportsSeverityDisplay = createDisplay({
   loaderComponent: ReportsSeverityLoader,
-  displayComponent: SeverityClassDisplay,
-  title: ({data: tdata}) =>
-    _('Reports by Severity Class (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <SeverityClassDisplay
+      {...props}
+      title={({data}) =>
+        _('Reports by Severity Class (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   filtersFilter: REPORTS_FILTER_FILTER,
   displayName: 'ReportsSeverityDisplay',
   displayId: 'report-by-severity-class',
@@ -23,11 +28,16 @@ export const ReportsSeverityDisplay = createDisplay({
 
 export const ReportsSeverityTableDisplay = createDisplay({
   loaderComponent: ReportsSeverityLoader,
-  displayComponent: SeverityClassTableDisplay,
+  displayComponent: props => (
+    <SeverityClassTableDisplay
+      {...props}
+      dataTitles={[_('Severity Class'), _('# of Reports')]}
+      title={({data}) =>
+        _('Reports by Severity Class (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   filtersFilter: REPORTS_FILTER_FILTER,
-  dataTitles: [_l('Severity Class'), _l('# of Reports')],
-  title: ({data: tdata}) =>
-    _('Reports by Severity Class (Total: {{count}})', {count: tdata.total}),
   displayName: 'ReportsSeverityTableDisplay',
   displayId: 'report-by-severity-class-table',
 });
