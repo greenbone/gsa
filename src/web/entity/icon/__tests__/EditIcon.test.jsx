@@ -7,6 +7,8 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import Task from 'gmp/models/task';
+import User from 'gmp/models/user';
+import {createSession} from 'gmp/testing';
 import EditIcon from 'web/entity/icon/EditIcon';
 
 describe('Entity EditIcon component tests', () => {
@@ -17,7 +19,10 @@ describe('Entity EditIcon component tests', () => {
     });
     const clickHandler = testing.fn();
 
-    const {render} = rendererWith({capabilities: caps});
+    const {render} = rendererWith({
+      capabilities: caps,
+      gmp: {session: createSession({username: 'admin'})},
+    });
 
     const {element} = render(
       <EditIcon entity={entity} onClick={clickHandler} />,
@@ -39,7 +44,10 @@ describe('Entity EditIcon component tests', () => {
     });
     const clickHandler = testing.fn();
 
-    const {render} = rendererWith({capabilities: caps});
+    const {render} = rendererWith({
+      capabilities: caps,
+      gmp: {session: createSession({username: 'admin'})},
+    });
 
     const {element} = render(
       <EditIcon entity={entity} onClick={clickHandler} />,
@@ -60,7 +68,10 @@ describe('Entity EditIcon component tests', () => {
     });
     const clickHandler = testing.fn();
 
-    const {render} = rendererWith({capabilities: caps});
+    const {render} = rendererWith({
+      capabilities: caps,
+      gmp: {session: createSession({username: 'admin'})},
+    });
 
     const {element} = render(
       <EditIcon entity={entity} onClick={clickHandler} />,
@@ -82,7 +93,10 @@ describe('Entity EditIcon component tests', () => {
     });
     const clickHandler = testing.fn();
 
-    const {render} = rendererWith({capabilities: caps});
+    const {render} = rendererWith({
+      capabilities: caps,
+      gmp: {session: createSession({username: 'admin'})},
+    });
 
     const {element} = render(
       <EditIcon disabled={true} entity={entity} onClick={clickHandler} />,
@@ -95,5 +109,26 @@ describe('Entity EditIcon component tests', () => {
     expect(clickHandler).not.toHaveBeenCalled();
     expect(element).toHaveAttribute('disabled');
     expect(element).toHaveAttribute('data-disabled', 'true');
+  });
+
+  test('should allow the current user to edit their own account', () => {
+    const caps = new Capabilities(['modify_user']);
+    const entity = User.fromElement({
+      _id: 'user-id',
+      name: 'admin-2',
+    });
+    const clickHandler = testing.fn();
+    const gmp = {session: createSession({username: 'admin-2'})};
+
+    const {render} = rendererWith({capabilities: caps, gmp});
+
+    const {element} = render(
+      <EditIcon entity={entity} name="user" onClick={clickHandler} />,
+    );
+
+    fireEvent.click(element);
+
+    expect(clickHandler).toHaveBeenCalled();
+    expect(element).not.toHaveAttribute('disabled');
   });
 });
