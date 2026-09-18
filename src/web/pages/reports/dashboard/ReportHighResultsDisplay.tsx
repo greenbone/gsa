@@ -3,24 +3,47 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
+import {type Date} from 'gmp/models/date';
 import {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseInt, parseFloat, parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import LineChart from 'web/components/chart/LineChart';
+import LineChart, {type LineData} from 'web/components/chart/LineChart';
+import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
-import DataDisplay from 'web/components/dashboard/display/DataDisplay';
+import DataDisplay, {
+  type DataDisplayProps,
+} from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {createDateRangeFilter} from 'web/components/dashboard/display/utils';
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {ReportsHighResultsLoader} from 'web/pages/reports/dashboard/Loaders';
-import PropTypes from 'web/utils/prop-types';
+import {
+  type ReportHighResultsData,
+  ReportsHighResultsLoader,
+} from 'web/pages/reports/dashboard/ReportLoaders';
 import Theme from 'web/utils/theme';
 import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
 
-const transformHighResults = (data = {}) => {
+interface TransformedReportHighResultsDataItem {
+  label: string;
+  x: Date;
+  y: number;
+  y2: number;
+}
+
+type TransformedReportHighResultsData = TransformedReportHighResultsDataItem[];
+
+type ReportsHighResultsDataDisplayProps = DataDisplayProps<
+  ReportHighResultsData,
+  TransformedReportHighResultsData
+>;
+
+type ReportHighResultsDisplayProps = DashboardDisplayProps;
+
+const transformHighResults = (
+  data: ReportHighResultsData = {},
+): TransformedReportHighResultsData => {
   const {groups = []} = data;
   return groups.map(group => {
     const reportDate = parseDate(group.value);
@@ -29,55 +52,70 @@ const transformHighResults = (data = {}) => {
       x: reportDate,
       y: parseInt(group.stats.high.max),
       y2: parseFloat(group.stats.high_per_host.max),
-    };
+    } as TransformedReportHighResultsDataItem;
   });
 };
 
-export class ReportsHighResultsDisplay extends React.Component {
-  constructor(...args) {
-    super(...args);
+export const ReportsHighResultsDisplay = ({
+  filter,
+  filterId,
+  showFilterSelection,
+  onFilterChanged,
+  onFilterIdChanged,
+  ...props
+}: ReportHighResultsDisplayProps) => {
+  const {
+    filter: selectedFilter,
+    selectFilter,
+    filterSelectionDialog,
+  } = useFilterSelection({
+    filterId,
+    filtersFilter: REPORTS_FILTER_FILTER,
+    onFilterIdChanged,
+  });
 
-    this.handleRangeSelect = this.handleRangeSelect.bind(this);
-  }
+  const displayFilter = showFilterSelection ? selectedFilter : filter;
 
-  handleRangeSelect(start, end) {
-    const {filter, onFilterChanged} = this.props;
-
+  const handleRangeSelect = (start: LineData, end: LineData) => {
     if (!isDefined(onFilterChanged)) {
       return;
     }
 
-    const {x: startDate} = start;
-    const {x: endDate} = end;
+    const startDate = start.x as Date;
+    const endDate = end.x as Date;
     const dateFormat = 'YYYY-MM-DDTHH:mm';
 
     onFilterChanged(
       createDateRangeFilter({
         endDate,
         field: 'date',
-        filter,
+        filter: displayFilter,
         formatDate: date => date.format(dateFormat),
         startDate,
       }),
     );
-  }
+  };
 
-  render() {
-    const {filter} = this.props;
-    return (
-      <ReportsHighResultsLoader filter={filter}>
+  return (
+    <>
+      <ReportsHighResultsLoader filter={displayFilter}>
         {loaderProps => (
-          <DataDisplay
-            {...this.props}
+          <DataDisplay<
+            ReportHighResultsData,
+            ReportsHighResultsDataDisplayProps,
+            TransformedReportHighResultsData
+          >
+            {...props}
             {...loaderProps}
             dataTransform={transformHighResults}
-            filter={filter}
+            filter={displayFilter}
             title={() => _('Reports with High Results')}
+            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
           >
-            {({width, height, data: tdata, svgRef, state}) => (
+            {({width, height, data, svgRef, state}) => (
               <LineChart
                 timeline
-                data={tdata}
+                data={data}
                 height={height}
                 showLegend={state.showLegend}
                 svgRef={svgRef}
@@ -94,34 +132,31 @@ export class ReportsHighResultsDisplay extends React.Component {
                   color: Theme.darkGreenTransparent,
                   label: _('Max High'),
                 }}
-                onRangeSelected={this.handleRangeSelect}
+                onRangeSelected={handleRangeSelect}
               />
             )}
           </DataDisplay>
         )}
       </ReportsHighResultsLoader>
-    );
-  }
-}
-
-ReportsHighResultsDisplay.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
+      {filterSelectionDialog}
+    </>
+  );
 };
-ReportsHighResultsDisplay = withFilterSelection({
-  filtersFilter: REPORTS_FILTER_FILTER,
-})(ReportsHighResultsDisplay);
 
 ReportsHighResultsDisplay.displayId = 'report-by-high-results';
 
 export const ReportsHighResultsTableDisplay = createDisplay({
   loaderComponent: ReportsHighResultsLoader,
-  displayComponent: DataTableDisplay,
+  displayComponent: props => (
+    <DataTableDisplay
+      {...props}
+      dataRow={row => [row.label, row.y, row.y2]}
+      dataTitles={[_('Created Time'), _('Max High'), _('Max High per Host')]}
+      dataTransform={transformHighResults}
+      title={() => _('Reports with High Results')}
+    />
+  ),
   filtersFilter: REPORTS_FILTER_FILTER,
-  dataTransform: transformHighResults,
-  dataTitles: [_l('Created Time'), _l('Max High'), _l('Max High per Host')],
-  dataRow: row => [row.label, row.y, row.y2],
-  title: () => _('Reports with High Results'),
   displayName: 'ReportsHighResultsTableDisplay',
   displayId: 'report-by-high-results-table',
 });
