@@ -3,20 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import type FilterType from 'gmp/models/filter/filter-type';
 import Dashboard from 'web/components/dashboard/Dashboard';
 import {
   ReportsCvssDisplay,
   ReportsCvssTableDisplay,
-} from 'web/pages/reports/dashboard/CvssDisplay';
+} from 'web/pages/reports/dashboard/ReportCvssDisplay';
 import {
   ReportsHighResultsDisplay,
   ReportsHighResultsTableDisplay,
-} from 'web/pages/reports/dashboard/HighResultsDisplay';
+} from 'web/pages/reports/dashboard/ReportHighResultsDisplay';
 import {
   ReportsSeverityDisplay,
   ReportsSeverityTableDisplay,
-} from 'web/pages/reports/dashboard/SeverityClassDisplay';
+} from 'web/pages/reports/dashboard/ReportSeverityClassDisplay';
+
+interface ReportsDashboardProps {
+  filter?: FilterType;
+  onFilterChanged?: (filter: FilterType) => void;
+}
 
 export const REPORTS_DASHBOARD_ID = 'e599bb6b-b95a-4bb2-a6bb-fe8ac69bc071';
 
@@ -29,7 +34,7 @@ export const REPORTS_DISPLAYS = [
   ReportsSeverityTableDisplay.displayId,
 ];
 
-const ReportsDashboard = props => (
+const ReportsDashboard = (props: ReportsDashboardProps) => (
   <Dashboard
     {...props}
     defaultDisplays={[

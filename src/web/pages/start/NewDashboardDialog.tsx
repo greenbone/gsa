@@ -17,8 +17,8 @@ import {HostsVulnScoreDisplay} from 'web/pages/hosts/dashboard/HostsVulnScoreDis
 import {NvtsSeverityClassDisplay} from 'web/pages/nvts/dashboard/NvtSeverityClassDisplay';
 import {OperatingSystemSeverityClassDisplay} from 'web/pages/operatingsystems/dashboard/OperatingSystemSeverityClassDisplay';
 import {OperatingSystemVulnerabilityScoreDisplay} from 'web/pages/operatingsystems/dashboard/OperatingSystemVulnerabilityScoreDisplay';
-import {ReportsHighResultsDisplay} from 'web/pages/reports/dashboard/HighResultsDisplay';
-import {ReportsSeverityDisplay} from 'web/pages/reports/dashboard/SeverityClassDisplay';
+import {ReportsHighResultsDisplay} from 'web/pages/reports/dashboard/ReportHighResultsDisplay';
+import {ReportsSeverityDisplay} from 'web/pages/reports/dashboard/ReportSeverityClassDisplay';
 import {ResultsSeverityDisplay} from 'web/pages/results/dashboard/SeverityClassDisplay';
 import {TasksSeverityDisplay} from 'web/pages/tasks/dashboard/SeverityClassDisplay';
 import {TasksStatusDisplay} from 'web/pages/tasks/dashboard/StatusDisplay';
