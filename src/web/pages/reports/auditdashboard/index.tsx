@@ -3,11 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {type FilterType} from 'gmp/models/filter';
 import Dashboard from 'web/components/dashboard/Dashboard';
 import {
   ReportComplianceDisplay,
   ReportComplianceTableDisplay,
-} from 'web/pages/reports/auditdashboard/StatusDisplay';
+} from 'web/pages/reports/auditdashboard/AuditReportStatusDisplay';
+
+interface AuditReportsDashboardProps {
+  filter?: FilterType;
+  onFilterChanged?: (filter: FilterType) => void;
+}
 
 export const AUDIT_REPORTS_DASHBOARD_ID =
   '8083d77b-05bb-4b17-ab39-c81175cb512c';
@@ -17,7 +23,7 @@ export const AUDIT_REPORTS_DISPLAYS = [
   ReportComplianceTableDisplay.displayId,
 ];
 
-const AuditReportsDashboard = props => (
+const AuditReportsDashboard = (props: AuditReportsDashboardProps) => (
   <Dashboard
     {...props}
     defaultDisplays={[

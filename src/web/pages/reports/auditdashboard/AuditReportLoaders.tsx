@@ -3,17 +3,32 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Loader, {createLoadFunc} from 'web/components/dashboard/display/Loader';
+import Loader, {
+  createLoadFunc,
+  type DisplayLoaderProps,
+} from 'web/components/dashboard/display/Loader';
+
+interface AuditReportStatusGroup {
+  count: number;
+  value: string;
+}
+
+export interface AuditReportStatusData {
+  groups?: AuditReportStatusGroup[];
+}
 
 export const REPORTS_COMPLIANCE = 'reports-compliance';
 
-export const reportComplianceLoadFunc = createLoadFunc(
+const reportComplianceLoadFunc = createLoadFunc(
   ({gmp, filter}) =>
     gmp.auditreports.getComplianceAggregates({filter}).then(r => r.data),
   REPORTS_COMPLIANCE,
 );
 
-export const ReportComplianceLoader = ({children, filter}) => (
+export const ReportComplianceLoader = ({
+  children,
+  filter,
+}: DisplayLoaderProps<AuditReportStatusData>) => (
   <Loader
     dataId={REPORTS_COMPLIANCE}
     filter={filter}
