@@ -2261,7 +2261,6 @@
   "Upload file": "上传文件",
   "Upload PKCS#12 file (.p12, .pfx)  ": "上传PKCS#12文件（.p12, .pfx）",
   "Upload private key (.pem, .key)": "上传私钥（.pem, .key）",
-  "Upload report": "上传报告",
   "Upload server CA certificate (.pem, .crt)": "上传服务器CA证书（.pem, .crt）",
   "Uploading": "上传中",
   "Urgency": "紧迫性",

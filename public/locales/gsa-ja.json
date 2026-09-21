@@ -2261,7 +2261,6 @@
   "Upload file": "ファイルをアップロード",
   "Upload PKCS#12 file (.p12, .pfx)  ": "PKCS#12ファイルをアップロード (.p12, .pfx)  ",
   "Upload private key (.pem, .key)": "秘密鍵をアップロード (.pem, .key)",
-  "Upload report": "レポートをアップロード",
   "Upload server CA certificate (.pem, .crt)": "サーバーCA証明書をアップロード (.pem, .crt)",
   "Uploading": "アップロード中",
   "Urgency": "緊急度",
