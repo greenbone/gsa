@@ -13,7 +13,7 @@ import type Report from 'gmp/models/report';
 import {TASK_STATUS, isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import DashboardControlsContainer from 'web/components/dashboard/DashboardControlsContainer';
-import {ReportIcon, UploadIcon} from 'web/components/icon';
+import {ImportIcon, ReportIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -76,7 +76,7 @@ const ToolBarIcons = ({onUploadReportClick}: ToolBarIconsProps) => {
         page="reports"
         title={_('Help: Reports')}
       />
-      <UploadIcon title={_('Upload report')} onClick={onUploadReportClick} />
+      <ImportIcon title={_('Import Report')} onClick={onUploadReportClick} />
     </IconDivider>
   );
 };

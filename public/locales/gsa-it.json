@@ -2261,7 +2261,6 @@
   "Upload file": "Carica file",
   "Upload PKCS#12 file (.p12, .pfx)  ": "Carica file PKCS#12 (.p12, .pfx)",
   "Upload private key (.pem, .key)": "Carica chiave privata (.pem, .key)",
-  "Upload report": "Carica rapporto",
   "Upload server CA certificate (.pem, .crt)": "Carica CA certificate del server (.pem, .crt)",
   "Uploading": "Caricamento in corso",
   "Urgency": "Urgenza",
