@@ -489,7 +489,7 @@ describe('Nvt DetailsPage tests', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('should scroll to the summary anchor', async () => {
+  test('should not scroll when the summary anchor is unavailable', async () => {
     const gmp = createGmp();
 
     const {render, store} = rendererWith({
@@ -503,10 +503,11 @@ describe('Nvt DetailsPage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', nvt));
 
     render(<DetailsPage id="12345" />);
-    await wait();
+    await screen.findByRole('heading', {
+      name: /^summary/i,
+    });
 
-    expect(document.getElementById('summary')).toBeInTheDocument();
-    expect(scrollIntoView).toHaveBeenCalled();
+    expect(scrollIntoView).not.toHaveBeenCalled();
   });
 
   test('should render preferences tab', () => {
