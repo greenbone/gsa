@@ -1,6 +1,6 @@
 {
   "name": "gsa",
-  "version": "28.3.2-dev1",
+  "version": "28.4.0",
   "description": "Greenbone Security Assistant",
   "keywords": [
     "gmp",
@@ -10,7 +10,7 @@
     "openvas"
   ],
   "license": "AGPL-3.0+",
-  "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
+  "author": "Bj\u00f6rn Ricks <bjoern.ricks@greenbone.net>",
   "repository": {
     "type": "git",
     "url": "https://github.com/greenbone/gsa/"
