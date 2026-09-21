@@ -3,24 +3,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {type FilterType} from 'gmp/models/filter';
 import Dashboard from 'web/components/dashboard/Dashboard';
 import {
   ResultsCvssDisplay,
   ResultsCvssTableDisplay,
-} from 'web/pages/results/dashboard/CvssDisplay';
+} from 'web/pages/results/dashboard/ResultCvssDisplay';
 import {
   ResultsDescriptionWordCloudDisplay,
   ResultsDescriptionWordCloudTableDisplay,
-} from 'web/pages/results/dashboard/DescriptionWordCloudDisplay';
+} from 'web/pages/results/dashboard/ResultDescriptionWordCloudDisplay';
 import {
   ResultsSeverityDisplay,
   ResultsSeverityTableDisplay,
-} from 'web/pages/results/dashboard/SeverityClassDisplay';
+} from 'web/pages/results/dashboard/ResultSeverityClassDisplay';
 import {
   ResultsWordCloudDisplay,
   ResultsWordCloudTableDisplay,
-} from 'web/pages/results/dashboard/WordCloudDisplay';
+} from 'web/pages/results/dashboard/ResultWordCloudDisplay';
+
+interface ResultsDashboardProps {
+  filter?: FilterType;
+  onFilterChanged?: (filter: FilterType) => void;
+}
 
 export const RESULTS_DASHBOARD_ID = '0b8ae70d-d8fc-4418-8a72-e65ac8d2828e';
 
@@ -35,7 +40,7 @@ export const RESULTS_DISPLAYS = [
   ResultsWordCloudTableDisplay.displayId,
 ];
 
-const ResultsDashboard = props => (
+const ResultsDashboard = (props: ResultsDashboardProps) => (
   <Dashboard
     {...props}
     defaultDisplays={[

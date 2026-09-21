@@ -9,13 +9,18 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import SeverityClassDisplay from 'web/components/dashboard/display/severity/SeverityClassDisplay';
 import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/SeverityClassTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {ResultsSeverityLoader} from 'web/pages/results/dashboard/Loaders';
+import {ResultsSeverityLoader} from 'web/pages/results/dashboard/ResultLoaders';
 
 export const ResultsSeverityDisplay = createDisplay({
   loaderComponent: ResultsSeverityLoader,
-  displayComponent: SeverityClassDisplay,
-  title: ({data: tdata}) =>
-    _('Results by Severity Class (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <SeverityClassDisplay
+      {...props}
+      title={({data}) =>
+        _('Results by Severity Class (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   filtersFilter: RESULTS_FILTER_FILTER,
   displayId: 'result-by-severity-class',
   displayName: 'ResultsSeverityDisplay',
@@ -23,10 +28,15 @@ export const ResultsSeverityDisplay = createDisplay({
 
 export const ResultsSeverityTableDisplay = createDisplay({
   loaderComponent: ResultsSeverityLoader,
-  displayComponent: SeverityClassTableDisplay,
-  title: ({data: tdata}) =>
-    _('Results by Severity Class (Total: {{count}})', {count: tdata.total}),
-  dataTitles: [_l('Severity Class'), _l('# of Results')],
+  displayComponent: props => (
+    <SeverityClassTableDisplay
+      {...props}
+      dataTitles={[_('Severity Class'), _('# of Results')]}
+      title={({data}) =>
+        _('Results by Severity Class (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   filtersFilter: RESULTS_FILTER_FILTER,
   displayId: 'result-by-severity-class-table',
   displayName: 'ResultsSeverityTableDisplay',

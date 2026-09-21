@@ -3,7 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Loader, {createLoadFunc} from 'web/components/dashboard/display/Loader';
+import Loader, {
+  createLoadFunc,
+  type DisplayLoaderProps,
+} from 'web/components/dashboard/display/Loader';
+import {type SeverityData} from 'web/components/dashboard/display/severity/severity-class-transform';
+
+interface ResultWordCloudDataGroup {
+  count: number;
+  value: string;
+}
+
+export interface ResultWordCloudData {
+  groups?: ResultWordCloudDataGroup[];
+}
 
 export const RESULTS_DESCRIPTION_WORDCOUNT = 'results-description-wordcount';
 export const RESULTS_SEVERITY = 'results-severity';
@@ -15,7 +28,10 @@ export const resultsSeverityLoadFunc = createLoadFunc(
   RESULTS_SEVERITY,
 );
 
-export const ResultsSeverityLoader = ({filter, children}) => (
+export const ResultsSeverityLoader = ({
+  filter,
+  children,
+}: DisplayLoaderProps<SeverityData>) => (
   <Loader
     dataId={RESULTS_SEVERITY}
     filter={filter}
@@ -32,7 +48,10 @@ export const resultsWordCountLoadFunc = createLoadFunc(
   RESULTS_WORD_COUNT,
 );
 
-export const ResultsWordCountLoader = ({filter, children}) => (
+export const ResultsWordCountLoader = ({
+  filter,
+  children,
+}: DisplayLoaderProps<ResultWordCloudData>) => (
   <Loader
     dataId={RESULTS_WORD_COUNT}
     filter={filter}
@@ -49,7 +68,10 @@ export const resultsDescriptionWordCountLoadFunc = createLoadFunc(
   RESULTS_DESCRIPTION_WORDCOUNT,
 );
 
-export const ResultsDescriptionWordCountLoader = ({filter, children}) => (
+export const ResultsDescriptionWordCountLoader = ({
+  filter,
+  children,
+}: DisplayLoaderProps<ResultWordCloudData>) => (
   <Loader
     dataId={RESULTS_DESCRIPTION_WORDCOUNT}
     filter={filter}

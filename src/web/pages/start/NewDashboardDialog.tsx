@@ -19,7 +19,7 @@ import {OperatingSystemSeverityClassDisplay} from 'web/pages/operatingsystems/da
 import {OperatingSystemVulnerabilityScoreDisplay} from 'web/pages/operatingsystems/dashboard/OperatingSystemVulnerabilityScoreDisplay';
 import {ReportsHighResultsDisplay} from 'web/pages/reports/dashboard/ReportHighResultsDisplay';
 import {ReportsSeverityDisplay} from 'web/pages/reports/dashboard/ReportSeverityClassDisplay';
-import {ResultsSeverityDisplay} from 'web/pages/results/dashboard/SeverityClassDisplay';
+import {ResultsSeverityDisplay} from 'web/pages/results/dashboard/ResultSeverityClassDisplay';
 import {TasksSeverityDisplay} from 'web/pages/tasks/dashboard/SeverityClassDisplay';
 import {TasksStatusDisplay} from 'web/pages/tasks/dashboard/StatusDisplay';
 
