@@ -3,7 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  test,
+  expect,
+  testing,
+} from '@gsa/testing';
 import {rendererWith, fireEvent, screen, wait, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import QueryFilter from 'gmp/models/filter/query-filter';
@@ -14,6 +21,8 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import DetailsPage from 'web/pages/nvts/DetailsPage';
 import {entityLoadingActions} from 'web/store/entities/nvts';
+
+const scrollIntoView = testing.fn();
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -42,6 +51,10 @@ const nvt = NVT.fromElement({
       type: 'remote_banner',
     },
     tags: 'cvss_base_vector=AV:N/AC:M/Au:S/C:P/I:N/A:P|summary=This is a CVSS description|solution_type=VendorFix|insight=An Insight|impact=An Impact|vuldetect=A VulDetect|affected=It is affected',
+    tech_info: {
+      description_md:
+        '# ece_flag.nasl\n\n## Quick Summary\n\n- **Script name:** Firewall ECE-bit Bypass\n- **OID:** `1.3.6.1.4.1.25623.1.0.12118`\n\n## Detection & Scope\n\n- **Category / family:** `ACT_GATHER_INFO` / `General`',
+    },
     solution: {
       _type: 'VendorFix',
       __text: 'This is a solution description',
@@ -243,6 +256,14 @@ const createGmp = ({
 });
 
 describe('Nvt DetailsPage tests', () => {
+  beforeEach(() => {
+    Element.prototype.scrollIntoView = scrollIntoView;
+  });
+
+  afterEach(() => {
+    scrollIntoView.mockClear();
+  });
+
   test('should render full DetailsPage', async () => {
     const gmp = createGmp();
 
@@ -299,6 +320,17 @@ describe('Nvt DetailsPage tests', () => {
     expect(
       screen.getByRole('heading', {name: /^summary/i}),
     ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('heading', {name: /^technical information/i}),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', {name: /^quick summary/i}),
+    ).toBeInTheDocument();
+    expect(screen.getAllByRole('list')).toHaveLength(2);
+    expect(screen.getByText('Script name:')).toBeInTheDocument();
+    expect(screen.getByText('1.3.6.1.4.1.25623.1.0.12118')).toBeInTheDocument();
+
     expect(
       screen.getByText('This is a solution description'),
     ).toBeInTheDocument();
@@ -397,6 +429,7 @@ describe('Nvt DetailsPage tests', () => {
 
     expect(screen.getByRole('heading', {name: /^notes$/i})).toBeInTheDocument();
     const noteBox = screen.getByLabelText(/^Note/);
+
     expect(noteBox).toHaveTextContent('test_note');
     expect(noteBox).toHaveTextContent('Active until');
     expect(noteBox).toHaveTextContent(
@@ -406,6 +439,74 @@ describe('Nvt DetailsPage tests', () => {
     expect(noteBox).toHaveTextContent(
       'Thu, Jan 14, 2021 6:35 AM Coordinated Universal Time',
     );
+  });
+
+  test('should scroll to the technical information anchor', async () => {
+    const gmp = createGmp();
+
+    const {render, store} = rendererWith({
+      capabilities: true,
+      gmp,
+      route: '/nvt/12345#technical-information',
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(entityLoadingActions.success('12345', nvt));
+
+    render(<DetailsPage id="12345" />);
+    await wait();
+
+    expect(scrollIntoView).toHaveBeenCalled();
+  });
+
+  test('should hide technical information when it is unavailable', async () => {
+    const nvtWithoutTechInfo = new NVT({
+      id: '54321',
+      name: 'NVT without technical information',
+      oid: '54321',
+    });
+    const gmp = createGmp({
+      getNvt: testing.fn().mockResolvedValue({
+        data: nvtWithoutTechInfo,
+      }),
+    });
+
+    const {render, store} = rendererWith({
+      capabilities: true,
+      gmp,
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(entityLoadingActions.success('54321', nvtWithoutTechInfo));
+
+    render(<DetailsPage id="54321" />);
+    await wait();
+
+    expect(
+      screen.queryByRole('heading', {name: /^technical information/i}),
+    ).not.toBeInTheDocument();
+  });
+
+  test('should scroll to the summary anchor', async () => {
+    const gmp = createGmp();
+
+    const {render, store} = rendererWith({
+      capabilities: true,
+      gmp,
+      route: '/nvt/12345#summary',
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(entityLoadingActions.success('12345', nvt));
+
+    render(<DetailsPage id="12345" />);
+    await wait();
+
+    expect(document.getElementById('summary')).toBeInTheDocument();
+    expect(scrollIntoView).toHaveBeenCalled();
   });
 
   test('should render preferences tab', () => {
