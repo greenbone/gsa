@@ -2967,54 +2967,6 @@
       "fingerprint": "src/web/pages/reports/ReportListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Report[]` (not nullish). This default assignment will never be used.|44|const reportsReloadInterval = ({entities = []}: {entities: Report[]}) =>"
     },
     {
-      "filename": "src/web/pages/results/dashboard/DescriptionWordCloudDisplay.jsx",
-      "code": "eslint(no-class-assign)",
-      "message": "Unexpected re-assignment of class ResultsDescriptionWordCloudDisplay",
-      "location": {
-        "line": 38,
-        "column": 14,
-        "offset": 1431
-      },
-      "sourceLine": "export class ResultsDescriptionWordCloudDisplay extends React.Component {",
-      "fingerprint": "src/web/pages/results/dashboard/DescriptionWordCloudDisplay.jsx|eslint(no-class-assign)|Unexpected re-assignment of class ResultsDescriptionWordCloudDisplay|14|export class ResultsDescriptionWordCloudDisplay extends React.Component {"
-    },
-    {
-      "filename": "src/web/pages/results/dashboard/DescriptionWordCloudDisplay.jsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 91,
-        "column": 53,
-        "offset": 2885
-      },
-      "sourceLine": "isDefined(onFilterChanged) ? this.handleDataClick : undefined",
-      "fingerprint": "src/web/pages/results/dashboard/DescriptionWordCloudDisplay.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|53|isDefined(onFilterChanged) ? this.handleDataClick : undefined"
-    },
-    {
-      "filename": "src/web/pages/results/dashboard/WordCloudDisplay.jsx",
-      "code": "eslint(no-class-assign)",
-      "message": "Unexpected re-assignment of class ResultsWordCloudDisplay",
-      "location": {
-        "line": 38,
-        "column": 14,
-        "offset": 1420
-      },
-      "sourceLine": "export class ResultsWordCloudDisplay extends React.Component {",
-      "fingerprint": "src/web/pages/results/dashboard/WordCloudDisplay.jsx|eslint(no-class-assign)|Unexpected re-assignment of class ResultsWordCloudDisplay|14|export class ResultsWordCloudDisplay extends React.Component {"
-    },
-    {
-      "filename": "src/web/pages/results/dashboard/WordCloudDisplay.jsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 91,
-        "column": 53,
-        "offset": 2856
-      },
-      "sourceLine": "isDefined(onFilterChanged) ? this.handleDataClick : undefined",
-      "fingerprint": "src/web/pages/results/dashboard/WordCloudDisplay.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|53|isDefined(onFilterChanged) ? this.handleDataClick : undefined"
-    },
-    {
       "filename": "src/web/pages/results/DetailsPage.jsx",
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
