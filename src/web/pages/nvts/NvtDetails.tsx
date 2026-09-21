@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import ReactMarkdown from 'react-markdown';
 import {type default as Nvt, TAG_NA} from 'gmp/models/nvt';
 import {isDefined} from 'gmp/utils/identity';
 import Severitybar from 'web/components/bar/SeverityBar';
@@ -41,6 +42,7 @@ const NvtDetails = ({entity, links = true}: NvtDetailsProps) => {
   const {
     epss,
     tags = {},
+    techInfo,
     severity,
     qod,
     family,
@@ -58,7 +60,16 @@ const NvtDetails = ({entity, links = true}: NvtDetailsProps) => {
         </DetailsBlock>
       )}
 
-      <DetailsBlock title={_('Scoring')}>
+      {isDefined(techInfo) && techInfo !== '' && (
+        <DetailsBlock
+          id="technical-information"
+          title={_('Technical Information')}
+        >
+          <ReactMarkdown>{techInfo}</ReactMarkdown>
+        </DetailsBlock>
+      )}
+
+      <DetailsBlock id="scoring" title={_('Scoring')}>
         <h3>{_('CVSS')}</h3>
         <InfoTable>
           <NvtDetailsColGroup />
