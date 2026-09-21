@@ -39,6 +39,7 @@ describe('Nvt model tests', () => {
     expect(nvt.severityOrigin).toBeUndefined();
     expect(nvt.solution).toBeUndefined();
     expect(nvt.tags).toEqual({});
+    expect(nvt.techInfo).toBeUndefined();
     expect(nvt.timeout).toBeUndefined();
     expect(nvt.xrefs).toEqual([]);
   });
@@ -60,6 +61,7 @@ describe('Nvt model tests', () => {
     expect(nvt.severityOrigin).toBeUndefined();
     expect(nvt.solution).toBeUndefined();
     expect(nvt.tags).toEqual({});
+    expect(nvt.techInfo).toBeUndefined();
     expect(nvt.timeout).toBeUndefined();
     expect(nvt.xrefs).toEqual([]);
   });
@@ -80,6 +82,20 @@ describe('Nvt model tests', () => {
 
     expect(nvt1.tags).toEqual(res);
     expect(nvt2.tags.bv).toBeUndefined();
+  });
+
+  test('should parse technical information', () => {
+    const nvt = Nvt.fromElement({
+      _id: 'test-id',
+      nvt: {
+        _oid: '1.2.3',
+        tech_info: {
+          description_md: 'Technical details',
+        },
+      },
+    });
+
+    expect(nvt.techInfo).toEqual('Technical details');
   });
 
   test('should parse refs', () => {

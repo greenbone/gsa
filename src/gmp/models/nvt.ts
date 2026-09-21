@@ -96,6 +96,9 @@ export interface NvtNvtElement {
     _type?: string;
   };
   tags?: string;
+  tech_info?: {
+    description_md?: string;
+  };
   timeout?: string | number;
 }
 
@@ -169,6 +172,7 @@ export interface NvtProperties extends ModelProperties {
   severityOrigin?: string;
   solution?: Solution;
   tags?: Tags;
+  techInfo?: string;
   timeout?: number;
   xrefs?: Reference[];
 }
@@ -264,6 +268,7 @@ class Nvt extends Model {
   readonly severityOrigin?: string;
   readonly solution?: Solution;
   readonly tags: Tags;
+  readonly techInfo?: string;
   readonly timeout?: number;
   readonly xrefs: Reference[];
 
@@ -281,6 +286,7 @@ class Nvt extends Model {
     severityOrigin,
     solution,
     tags = {},
+    techInfo,
     timeout,
     xrefs = [],
     ...other
@@ -300,6 +306,7 @@ class Nvt extends Model {
     this.severityOrigin = severityOrigin;
     this.solution = solution;
     this.tags = tags;
+    this.techInfo = techInfo;
     this.timeout = timeout;
     this.xrefs = xrefs;
   }
@@ -316,6 +323,7 @@ class Nvt extends Model {
     ret.oid = nvtElement._oid;
     ret.id = ret.oid;
     ret.tags = parseTags(nvtElement?.tags);
+    ret.techInfo = parseText(nvtElement?.tech_info?.description_md);
     ret.family = isEmpty(nvtElement?.family)
       ? undefined
       : parseToString(nvtElement?.family);
