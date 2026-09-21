@@ -15,15 +15,17 @@ import DetailsLink from 'web/components/link/DetailsLink';
 import InfoTable from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
 import TableCol from 'web/components/table/TableCol';
-import TableData from 'web/components/table/TableData';
+import TableData, {TableDataAlignTop} from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/DetailsBlock';
+import useGetNvt from 'web/hooks/use-query/nvt';
 import useTranslation from 'web/hooks/useTranslation';
 import NvtReferences from 'web/pages/nvts/NvtReferences';
 import P from 'web/pages/nvts/Preformatted';
 import Solution from 'web/pages/nvts/Solution';
 import ResultDiff, {Added, Removed} from 'web/pages/results/ResultDiff';
 import {renderNvtName} from 'web/utils/Render';
+import Theme from 'web/utils/theme';
 
 interface DerivedDiffProps {
   deltaType?: string;
@@ -49,6 +51,36 @@ const Pre = styled.pre`
 const GrowDiv = styled.div`
   min-width: 500px;
   max-width: 1080px;
+`;
+
+const DetectionMetadata = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+`;
+
+const OidBadge = styled.code`
+  width: max-content;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: ${Theme.dialogGray};
+  color: ${Theme.darkGray};
+  font-weight: 500;
+`;
+
+const MetadataSeparator = styled.span`
+  color: ${Theme.mediumDarkGray};
+  user-select: none;
+`;
+
+const DetectionLinks = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+  font-size: 0.9em;
 `;
 
 const DerivedDiff = ({
@@ -95,6 +127,8 @@ const ResultDetails = ({
 
   const {information} = result;
   const {id: infoId, tags = {}, solution} = information as Nvt;
+  const isNvt = isDefined(infoId) && infoId.startsWith(DEFAULT_OID_VALUE);
+  const {data: nvt} = useGetNvt({id: isNvt ? infoId : undefined});
 
   const hasDetection =
     isDefined(result.detection) && isDefined(result.detection.result);
@@ -284,17 +318,33 @@ const ResultDetails = ({
             </colgroup>
             <TableBody>
               <TableRow>
-                <TableData>{_('Details: ')}</TableData>
+                <TableDataAlignTop>{_('Details OID: ')}</TableDataAlignTop>
                 <TableData>
-                  {isDefined(infoId) &&
-                    infoId.startsWith(DEFAULT_OID_VALUE) && (
-                      <span>
+                  {isNvt && (
+                    <DetectionMetadata>
+                      <OidBadge>{infoId}</OidBadge>
+                      <DetectionLinks>
                         <DetailsLink id={infoId} textOnly={!links} type="nvt">
-                          {renderNvtName(infoId, information?.name)}
-                          {' OID: ' + infoId}
+                          {_('Summary')}
                         </DetailsLink>
-                      </span>
-                    )}
+                        {!isEmpty(nvt?.techInfo) && (
+                          <>
+                            <MetadataSeparator aria-hidden="true">
+                              |
+                            </MetadataSeparator>
+                            <DetailsLink
+                              anchor="technical-information"
+                              id={infoId}
+                              textOnly={!links}
+                              type="nvt"
+                            >
+                              {_('Technical Information')}
+                            </DetailsLink>
+                          </>
+                        )}
+                      </DetectionLinks>
+                    </DetectionMetadata>
+                  )}
                   {isDefined(infoId) && infoId.startsWith('CVE-') && (
                     <span>
                       <DetailsLink id={infoId} textOnly={!links} type="cve">

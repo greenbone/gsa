@@ -8,6 +8,7 @@ import {rendererWith, fireEvent, screen, waitFor, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
 import QueryFilter from 'gmp/models/filter/query-filter';
+import Nvt from 'gmp/models/nvt';
 import Result from 'gmp/models/result';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -31,6 +32,9 @@ const result = Result.fromElement({
     _oid: '1.3.6.1.4.1.25623.1.12345',
     type: 'nvt',
     name: 'nvt1',
+    tech_info: {
+      description_md: 'Technical information for this NVT',
+    },
     tags: 'cvss_base_vector=AV:N/AC:M/Au:N/C:P/I:N/A:N|summary=This is a mock result|insight=This is just a test|affected=Affects test cases only|impact=No real impact|solution=Keep writing tests|vuldetect=This is the detection method|solution_type=Mitigation',
     epss: {
       max_severity: {
@@ -109,6 +113,13 @@ const createGmp = ({
   }),
   currentSettingsResponse = currentSettingsDefaultResponse,
   exportResultResponse = new Response({foo: 'bar'}),
+  getNvt = testing.fn().mockResolvedValue({
+    data: new Nvt({
+      id: '1.3.6.1.4.1.25623.1.12345',
+      oid: '1.3.6.1.4.1.25623.1.12345',
+      techInfo: 'Technical information for this NVT',
+    }),
+  }),
   getResult = testing.fn().mockResolvedValue(getResultResponse),
   getPermissions = testing.fn().mockResolvedValue(getPermissionsResponse),
   getUsers = testing.fn().mockResolvedValue(getUsersResponse),
@@ -118,6 +129,9 @@ const createGmp = ({
   result: {
     get: getResult,
     export: exportResult,
+  },
+  nvt: {
+    get: getNvt,
   },
   permissions: {
     get: getPermissions,
@@ -137,7 +151,7 @@ const createGmp = ({
 });
 
 describe('ResultDetailsPage tests', () => {
-  test('should render full DetailsPage', () => {
+  test('should render full DetailsPage', async () => {
     const gmp = createGmp();
     const {render, store} = rendererWith({
       gmp,
@@ -149,6 +163,11 @@ describe('ResultDetailsPage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', result));
 
     render(<DetailsPage id="12345" />);
+    await waitFor(() =>
+      expect(
+        screen.getByRole('link', {name: 'Technical Information'}),
+      ).toBeInTheDocument(),
+    );
 
     // Toolbar Icons
     expect(screen.getByTitle('Help: Results')).toBeInTheDocument();
@@ -276,8 +295,28 @@ describe('ResultDetailsPage tests', () => {
       }).parentElement,
     );
     expect(
-      detectionMethodBlock.getByRole('row', {name: /^Details/}),
-    ).toHaveTextContent('nvt1 OID: 1.3.6.1.4.1.25623.1.12345');
+      detectionMethodBlock.getByRole('row', {name: /^Details OID:/}),
+    ).toHaveTextContent(
+      'Details OID: 1.3.6.1.4.1.25623.1.12345Summary|Technical Information',
+    );
+    expect(
+      detectionMethodBlock.getAllByText('1.3.6.1.4.1.25623.1.12345', {
+        exact: true,
+      }),
+    ).toHaveLength(1);
+    expect(
+      detectionMethodBlock.getByRole('link', {
+        name: 'Summary',
+      }),
+    ).toHaveAttribute('href', '/nvt/1.3.6.1.4.1.25623.1.12345');
+    expect(
+      detectionMethodBlock.getByRole('link', {
+        name: 'Technical Information',
+      }),
+    ).toHaveAttribute(
+      'href',
+      '/nvt/1.3.6.1.4.1.25623.1.12345#technical-information',
+    );
     expect(
       detectionMethodBlock.getByRole('row', {name: /^Version used:/}),
     ).toHaveTextContent('2019-02-14T07:33:50Z');
@@ -331,6 +370,40 @@ describe('ResultDetailsPage tests', () => {
     expect(notes.getByRole('row', {name: /^Modified/})).toHaveTextContent(
       'Thu, Mar 11, 2021 2:00 PM',
     );
+  });
+
+  test('should hide technical information when the NVT has none', async () => {
+    const getNvt = testing.fn().mockResolvedValue({
+      data: new Nvt({
+        id: '1.3.6.1.4.1.25623.1.12345',
+        oid: '1.3.6.1.4.1.25623.1.12345',
+      }),
+    });
+    const gmp = createGmp({
+      getNvt,
+    });
+    const {render, store} = rendererWith({
+      capabilities: true,
+      gmp,
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(entityLoadingActions.success('12345', result));
+
+    render(<DetailsPage id="12345" />);
+    await waitFor(() => expect(getNvt).toHaveBeenCalled());
+
+    const detectionMethodBlock = within(
+      screen.getByRole('heading', {
+        name: /^Detection Method/,
+      }).parentElement,
+    );
+    expect(
+      detectionMethodBlock.queryByRole('link', {
+        name: 'Technical Information',
+      }),
+    ).not.toBeInTheDocument();
   });
 
   test('should render user tags tab', () => {
