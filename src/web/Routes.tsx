@@ -10,6 +10,7 @@ import {
   Outlet,
   redirect,
 } from 'react-router';
+import {ROUTES} from 'routePaths';
 import Authorized from 'web/Authorized';
 import Loading from 'web/components/loading/Loading';
 import SessionObserver from 'web/components/observer/SessionObserver';
@@ -17,7 +18,6 @@ import SessionTracker from 'web/components/observer/SessionTracker';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import LoginPageRoute from 'web/pages/login/LoginPageRoute';
 import Page from 'web/pages/Page';
-import {ROUTES} from '../route-paths';
 
 // Layout components
 const LoggedOutLayout = () => <Outlet />;
@@ -54,7 +54,7 @@ const loggedInRoutes = [
 
       // Agent routes
       {
-        path: 'agent-installers',
+        path: ROUTES.agentInstallers.path,
         lazy: async () => ({
           Component: (
             await import('web/pages/agent-remote-installer/AgentInstallInstructionsPage')
@@ -62,13 +62,13 @@ const loggedInRoutes = [
         }),
       },
       {
-        path: 'agents',
+        path: ROUTES.agents.path,
         lazy: async () => ({
           Component: (await import('web/pages/agents/AgentListPage')).default,
         }),
       },
       {
-        path: 'agent-groups',
+        path: ROUTES.agentGroups.path,
         lazy: async () => ({
           Component: (
             await import('web/pages/agent-groups/AgentGroupsListPage')
@@ -78,13 +78,13 @@ const loggedInRoutes = [
 
       // Alert routes
       {
-        path: 'alerts',
+        path: ROUTES.alerts.path,
         lazy: async () => ({
           Component: (await import('web/pages/alerts/ListPage')).default,
         }),
       },
       {
-        path: 'alert/:id',
+        path: ROUTES.alert.path,
         lazy: async () => ({
           Component: (await import('web/pages/alerts/DetailsPage')).default,
         }),
@@ -92,13 +92,13 @@ const loggedInRoutes = [
 
       // Audit routes
       {
-        path: 'audits',
+        path: ROUTES.audits.path,
         lazy: async () => ({
           Component: (await import('web/pages/audits/ListPage')).default,
         }),
       },
       {
-        path: 'audit/:id',
+        path: ROUTES.audit.path,
         lazy: async () => ({
           Component: (await import('web/pages/audits/DetailsPage')).default,
         }),
@@ -141,25 +141,25 @@ const loggedInRoutes = [
 
       // CERT-Bund routes
       {
-        path: 'certbunds',
+        path: ROUTES.legacy.certBundAdvisories.path,
         loader: () => {
-          throw redirect('/cert-bund-advisories');
+          throw redirect(ROUTES.certBundAdvisories.url);
         },
       },
       {
-        path: 'cert-bund-advisories',
+        path: ROUTES.certBundAdvisories.path,
         lazy: async () => ({
           Component: (await import('web/pages/certbund/ListPage')).default,
         }),
       },
       {
-        path: 'certbund/:id',
+        path: ROUTES.legacy.certBundAdvisory.path,
         loader: ({params}) => {
-          throw redirect(`/cert-bund-advisory/${params.id}`);
+          throw redirect(ROUTES.certBundAdvisory.url(params.id ?? ''));
         },
       },
       {
-        path: 'cert-bund-advisory/:id',
+        path: ROUTES.certBundAdvisory.path,
         lazy: async () => ({
           Component: (await import('web/pages/certbund/DetailsPage')).default,
         }),
@@ -167,13 +167,13 @@ const loggedInRoutes = [
 
       // Container Image Target routes
       {
-        path: 'ociimagetargets',
+        path: ROUTES.legacy.ociImageTargets.path,
         loader: () => {
-          throw redirect('/oci-image-targets');
+          throw redirect(ROUTES.ociImageTargets.url);
         },
       },
       {
-        path: 'oci-image-targets',
+        path: ROUTES.ociImageTargets.path,
         lazy: async () => ({
           Component: (
             await import('web/pages/container-image-targets/ContainerImageTargetsListPage')
@@ -182,13 +182,13 @@ const loggedInRoutes = [
       },
 
       {
-        path: 'webapplicationtargets',
+        path: ROUTES.legacy.webApplicationTargets.path,
         loader: () => {
-          throw redirect('/web-application-targets');
+          throw redirect(ROUTES.webApplicationTargets.url);
         },
       },
       {
-        path: 'web-application-targets',
+        path: ROUTES.webApplicationTargets.path,
         lazy: async () => ({
           Component: (
             await import('web/pages/web-application-targets/WebApplicationTargetsListPage')
@@ -198,13 +198,13 @@ const loggedInRoutes = [
 
       // CPE routes
       {
-        path: 'cpes',
+        path: ROUTES.cpes.path,
         lazy: async () => ({
           Component: (await import('web/pages/cpes/ListPage')).default,
         }),
       },
       {
-        path: 'cpe/:id',
+        path: ROUTES.cpe.path,
         lazy: async () => ({
           Component: (await import('web/pages/cpes/DetailsPage')).default,
         }),
@@ -212,14 +212,14 @@ const loggedInRoutes = [
 
       // Credential routes
       {
-        path: 'credentials',
+        path: ROUTES.credentials.path,
         lazy: async () => ({
           Component: (await import('web/pages/credentials/CredentialListPage'))
             .default,
         }),
       },
       {
-        path: 'credential/:id',
+        path: ROUTES.credential.path,
         lazy: async () => ({
           Component: (
             await import('web/pages/credentials/CredentialDetailsPage')
@@ -228,13 +228,13 @@ const loggedInRoutes = [
       },
 
       {
-        path: 'credentialstore',
+        path: ROUTES.legacy.credentialStore.path,
         loader: () => {
-          throw redirect('/credential-store');
+          throw redirect(ROUTES.credentialStore.url);
         },
       },
       {
-        path: 'credential-store',
+        path: ROUTES.credentialStore.path,
         lazy: async () => ({
           Component: (
             await import('web/pages/credential-store/CredentialStorePage')
@@ -244,13 +244,13 @@ const loggedInRoutes = [
 
       // CVE routes
       {
-        path: 'cves',
+        path: ROUTES.cves.path,
         lazy: async () => ({
           Component: (await import('web/pages/cves/ListPage')).default,
         }),
       },
       {
-        path: 'cve/:id',
+        path: ROUTES.cve.path,
         lazy: async () => ({
           Component: (await import('web/pages/cves/DetailsPage')).default,
         }),
@@ -258,25 +258,25 @@ const loggedInRoutes = [
 
       // DFN-CERT routes
       {
-        path: 'dfncerts',
+        path: ROUTES.legacy.dfnCertAdvisories.path,
         loader: () => {
-          throw redirect('/dfn-cert-advisories');
+          throw redirect(ROUTES.dfnCertAdvisories.url);
         },
       },
       {
-        path: 'dfn-cert-advisories',
+        path: ROUTES.dfnCertAdvisories.path,
         lazy: async () => ({
           Component: (await import('web/pages/dfncert/ListPage')).default,
         }),
       },
       {
-        path: 'dfncert/:id',
+        path: ROUTES.legacy.dfnCertAdvisory.path,
         loader: ({params}) => {
-          throw redirect(`/dfn-cert-advisory/${params.id}`);
+          throw redirect(ROUTES.dfnCertAdvisory.url(params.id ?? ''));
         },
       },
       {
-        path: 'dfn-cert-advisory/:id',
+        path: ROUTES.dfnCertAdvisory.path,
         lazy: async () => ({
           Component: (await import('web/pages/dfncert/DetailsPage')).default,
         }),
@@ -284,13 +284,13 @@ const loggedInRoutes = [
 
       // Feed Status route
       {
-        path: 'feedstatus',
+        path: ROUTES.legacy.feedStatus.path,
         loader: () => {
-          throw redirect('/feed-status');
+          throw redirect(ROUTES.feedStatus.url);
         },
       },
       {
-        path: 'feed-status',
+        path: ROUTES.feedStatus.path,
         lazy: async () => ({
           Component: (await import('web/pages/extras/FeedStatusPage')).default,
         }),
@@ -298,13 +298,13 @@ const loggedInRoutes = [
 
       // Filter routes
       {
-        path: 'filters',
+        path: ROUTES.filters.path,
         lazy: async () => ({
           Component: (await import('web/pages/filters/ListPage')).default,
         }),
       },
       {
-        path: 'filter/:id',
+        path: ROUTES.filter.path,
         lazy: async () => ({
           Component: (await import('web/pages/filters/DetailsPage')).default,
         }),
@@ -312,13 +312,13 @@ const loggedInRoutes = [
 
       // Group routes
       {
-        path: 'groups',
+        path: ROUTES.groups.path,
         lazy: async () => ({
           Component: (await import('web/pages/groups/ListPage')).default,
         }),
       },
       {
-        path: 'group/:id',
+        path: ROUTES.group.path,
         lazy: async () => ({
           Component: (await import('web/pages/groups/DetailsPage')).default,
         }),
@@ -326,13 +326,13 @@ const loggedInRoutes = [
 
       // Host routes
       {
-        path: 'hosts',
+        path: ROUTES.hosts.path,
         lazy: async () => ({
           Component: (await import('web/pages/hosts/ListPage')).default,
         }),
       },
       {
-        path: 'host/:id',
+        path: ROUTES.host.path,
         lazy: async () => ({
           Component: (await import('web/pages/hosts/DetailsPage')).default,
         }),
@@ -340,7 +340,7 @@ const loggedInRoutes = [
 
       // LDAP route
       {
-        path: 'ldap',
+        path: ROUTES.ldap.path,
         lazy: async () => ({
           Component: (await import('web/pages/ldap/LdapPage')).default,
         }),
@@ -348,13 +348,13 @@ const loggedInRoutes = [
 
       // Note routes
       {
-        path: 'notes',
+        path: ROUTES.notes.path,
         lazy: async () => ({
           Component: (await import('web/pages/notes/NoteListPage')).default,
         }),
       },
       {
-        path: 'note/:id',
+        path: ROUTES.note.path,
         lazy: async () => ({
           Component: (await import('web/pages/notes/NoteDetailsPage')).default,
         }),
@@ -362,13 +362,13 @@ const loggedInRoutes = [
 
       // NVT routes
       {
-        path: 'nvts',
+        path: ROUTES.nvts.path,
         lazy: async () => ({
           Component: (await import('web/pages/nvts/ListPage')).default,
         }),
       },
       {
-        path: 'nvt/:id',
+        path: ROUTES.nvt.path,
         lazy: async () => ({
           Component: (await import('web/pages/nvts/DetailsPage')).default,
         }),
@@ -376,26 +376,26 @@ const loggedInRoutes = [
 
       // Operating System routes
       {
-        path: 'operatingsystems',
+        path: ROUTES.legacy.operatingSystems.path,
         loader: () => {
-          throw redirect('/operating-systems');
+          throw redirect(ROUTES.operatingSystems.url);
         },
       },
       {
-        path: 'operating-systems',
+        path: ROUTES.operatingSystems.path,
         lazy: async () => ({
           Component: (await import('web/pages/operatingsystems/ListPage'))
             .default,
         }),
       },
       {
-        path: 'operatingsystem/:id',
+        path: ROUTES.legacy.operatingSystem.path,
         loader: ({params}) => {
-          throw redirect(`/operating-system/${params.id}`);
+          throw redirect(ROUTES.operatingSystem.url(params.id ?? ''));
         },
       },
       {
-        path: 'operating-system/:id',
+        path: ROUTES.operatingSystem.path,
         lazy: async () => ({
           Component: (await import('web/pages/operatingsystems/DetailsPage'))
             .default,
@@ -404,14 +404,14 @@ const loggedInRoutes = [
 
       // Override routes
       {
-        path: 'overrides',
+        path: ROUTES.overrides.path,
         lazy: async () => ({
           Component: (await import('web/pages/overrides/OverrideListPage'))
             .default,
         }),
       },
       {
-        path: 'override/:id',
+        path: ROUTES.override.path,
         lazy: async () => ({
           Component: (await import('web/pages/overrides/OverrideDetailsPage'))
             .default,
@@ -420,7 +420,7 @@ const loggedInRoutes = [
 
       // Performance route
       {
-        path: 'performance',
+        path: ROUTES.performance.path,
         lazy: async () => ({
           Component: (await import('web/pages/performance/PerformancePage'))
             .default,
@@ -429,14 +429,14 @@ const loggedInRoutes = [
 
       // Permission routes
       {
-        path: 'permissions',
+        path: ROUTES.permissions.path,
         lazy: async () => ({
           Component: (await import('web/pages/permissions/PermissionListPage'))
             .default,
         }),
       },
       {
-        path: 'permission/:id',
+        path: ROUTES.permission.path,
         lazy: async () => ({
           Component: (
             await import('web/pages/permissions/PermissionDetailsPage')
@@ -446,13 +446,13 @@ const loggedInRoutes = [
 
       // Policy routes
       {
-        path: 'policies',
+        path: ROUTES.policies.path,
         lazy: async () => ({
           Component: (await import('web/pages/policies/ListPage')).default,
         }),
       },
       {
-        path: 'policy/:id',
+        path: ROUTES.policy.path,
         lazy: async () => ({
           Component: (await import('web/pages/policies/DetailsPage')).default,
         }),
@@ -460,26 +460,26 @@ const loggedInRoutes = [
 
       // Port List routes
       {
-        path: 'portlists',
+        path: ROUTES.legacy.portLists.path,
         loader: () => {
-          throw redirect('/port-lists');
+          throw redirect(ROUTES.portLists.url);
         },
       },
       {
-        path: 'port-lists',
+        path: ROUTES.portLists.path,
         lazy: async () => ({
           Component: (await import('web/pages/portlists/PortListListPage'))
             .default,
         }),
       },
       {
-        path: 'portlist/:id',
+        path: ROUTES.legacy.portList.path,
         loader: ({params}) => {
-          throw redirect(`/port-list/${params.id}`);
+          throw redirect(ROUTES.portList.url(params.id ?? ''));
         },
       },
       {
-        path: 'port-list/:id',
+        path: ROUTES.portList.path,
         lazy: async () => ({
           Component: (await import('web/pages/portlists/PortListDetailsPage'))
             .default,
@@ -488,7 +488,7 @@ const loggedInRoutes = [
 
       // RADIUS route
       {
-        path: 'radius',
+        path: ROUTES.radius.path,
         lazy: async () => ({
           Component: (await import('web/pages/radius/RadiusPage')).default,
         }),
@@ -496,20 +496,20 @@ const loggedInRoutes = [
 
       // Report routes
       {
-        path: 'reports',
+        path: ROUTES.reports.path,
         lazy: async () => ({
           Component: (await import('web/pages/reports/ReportListPage')).default,
         }),
       },
       {
-        path: 'report/delta/:id/:deltaid',
+        path: ROUTES.reportDelta.path,
         lazy: async () => ({
           Component: (await import('web/pages/reports/DeltaDetailsPage'))
             .default,
         }),
       },
       {
-        path: 'report/:id',
+        path: ROUTES.report.path,
         lazy: async () => ({
           Component: (await import('web/pages/reports/ReportDetailsPage'))
             .default,
@@ -518,25 +518,25 @@ const loggedInRoutes = [
 
       // Report Config routes
       {
-        path: 'reportconfigs',
+        path: ROUTES.legacy.reportConfigs.path,
         loader: () => {
-          throw redirect('/report-configs');
+          throw redirect(ROUTES.reportConfigs.url);
         },
       },
       {
-        path: 'report-configs',
+        path: ROUTES.reportConfigs.path,
         lazy: async () => ({
           Component: (await import('web/pages/reportconfigs/ListPage')).default,
         }),
       },
       {
-        path: 'reportconfig/:id',
+        path: ROUTES.legacy.reportConfig.path,
         loader: ({params}) => {
-          throw redirect(`/report-config/${params.id}`);
+          throw redirect(ROUTES.reportConfig.url(params.id ?? ''));
         },
       },
       {
-        path: 'report-config/:id',
+        path: ROUTES.reportConfig.path,
         lazy: async () => ({
           Component: (await import('web/pages/reportconfigs/DetailsPage'))
             .default,
@@ -545,25 +545,25 @@ const loggedInRoutes = [
 
       // Report Format routes
       {
-        path: 'reportformats',
+        path: ROUTES.legacy.reportFormats.path,
         loader: () => {
-          throw redirect('/report-formats');
+          throw redirect(ROUTES.reportFormats.url);
         },
       },
       {
-        path: 'report-formats',
+        path: ROUTES.reportFormats.path,
         lazy: async () => ({
           Component: (await import('web/pages/reportformats/ListPage')).default,
         }),
       },
       {
-        path: 'reportformat/:id',
+        path: ROUTES.legacy.reportFormat.path,
         loader: ({params}) => {
-          throw redirect(`/report-format/${params.id}`);
+          throw redirect(ROUTES.reportFormat.url(params.id ?? ''));
         },
       },
       {
-        path: 'report-format/:id',
+        path: ROUTES.reportFormat.path,
         lazy: async () => ({
           Component: (await import('web/pages/reportformats/DetailsPage'))
             .default,
@@ -572,13 +572,13 @@ const loggedInRoutes = [
 
       // Result routes
       {
-        path: 'results',
+        path: ROUTES.results.path,
         lazy: async () => ({
           Component: (await import('web/pages/results/ListPage')).default,
         }),
       },
       {
-        path: 'result/:id',
+        path: ROUTES.result.path,
         lazy: async () => ({
           Component: (await import('web/pages/results/DetailsPage')).default,
         }),
@@ -586,13 +586,13 @@ const loggedInRoutes = [
 
       // Role routes
       {
-        path: 'roles',
+        path: ROUTES.roles.path,
         lazy: async () => ({
           Component: (await import('web/pages/roles/RoleListPage')).default,
         }),
       },
       {
-        path: 'role/:id',
+        path: ROUTES.role.path,
         lazy: async () => ({
           Component: (await import('web/pages/roles/RoleDetailsPage')).default,
         }),
@@ -600,25 +600,25 @@ const loggedInRoutes = [
 
       // Scan Config routes
       {
-        path: 'scanconfigs',
+        path: ROUTES.legacy.scanConfigs.path,
         loader: () => {
-          throw redirect('/scan-configs');
+          throw redirect(ROUTES.scanConfigs.url);
         },
       },
       {
-        path: 'scan-configs',
+        path: ROUTES.scanConfigs.path,
         lazy: async () => ({
           Component: (await import('web/pages/scanconfigs/ListPage')).default,
         }),
       },
       {
-        path: 'scanconfig/:id',
+        path: ROUTES.legacy.scanConfig.path,
         loader: ({params}) => {
-          throw redirect(`/scan-config/${params.id}`);
+          throw redirect(ROUTES.scanConfig.url(params.id ?? ''));
         },
       },
       {
-        path: 'scan-config/:id',
+        path: ROUTES.scanConfig.path,
         lazy: async () => ({
           Component: (await import('web/pages/scanconfigs/DetailsPage'))
             .default,
@@ -627,14 +627,14 @@ const loggedInRoutes = [
 
       // Scanner routes
       {
-        path: 'scanners',
+        path: ROUTES.scanners.path,
         lazy: async () => ({
           Component: (await import('web/pages/scanners/ScannerListPage'))
             .default,
         }),
       },
       {
-        path: 'scanner/:id',
+        path: ROUTES.scanner.path,
         lazy: async () => ({
           Component: (await import('web/pages/scanners/ScannerDetailsPage'))
             .default,
@@ -643,13 +643,13 @@ const loggedInRoutes = [
 
       // Schedule routes
       {
-        path: 'schedules',
+        path: ROUTES.schedules.path,
         lazy: async () => ({
           Component: (await import('web/pages/schedules/ListPage')).default,
         }),
       },
       {
-        path: 'schedule/:id',
+        path: ROUTES.schedule.path,
         lazy: async () => ({
           Component: (await import('web/pages/schedules/DetailsPage')).default,
         }),
@@ -657,13 +657,13 @@ const loggedInRoutes = [
 
       // Tag routes
       {
-        path: 'tags',
+        path: ROUTES.tags.path,
         lazy: async () => ({
           Component: (await import('web/pages/tags/TagListPage')).default,
         }),
       },
       {
-        path: 'tag/:id',
+        path: ROUTES.tag.path,
         lazy: async () => ({
           Component: (await import('web/pages/tags/TagDetailsPage')).default,
         }),
@@ -671,13 +671,13 @@ const loggedInRoutes = [
 
       // Target routes
       {
-        path: 'targets',
+        path: ROUTES.targets.path,
         lazy: async () => ({
           Component: (await import('web/pages/targets/TargetListPage')).default,
         }),
       },
       {
-        path: 'target/:id',
+        path: ROUTES.target.path,
         lazy: async () => ({
           Component: (await import('web/pages/targets/TargetDetailsPage'))
             .default,
@@ -686,13 +686,13 @@ const loggedInRoutes = [
 
       // Task routes
       {
-        path: 'tasks',
+        path: ROUTES.tasks.path,
         lazy: async () => ({
           Component: (await import('web/pages/tasks/TaskListPage')).default,
         }),
       },
       {
-        path: 'task/:id',
+        path: ROUTES.task.path,
         lazy: async () => ({
           Component: (await import('web/pages/tasks/TaskDetailsPage')).default,
         }),
@@ -700,14 +700,14 @@ const loggedInRoutes = [
 
       // Ticket routes
       {
-        path: 'tickets',
+        path: ROUTES.tickets.path,
         lazy: async () => ({
           Component: (await import('web/pages/tickets/TicketsListPage'))
             .default,
         }),
       },
       {
-        path: 'ticket/:id',
+        path: ROUTES.ticket.path,
         lazy: async () => ({
           Component: (await import('web/pages/tickets/TicketDetailsPage'))
             .default,
@@ -716,26 +716,26 @@ const loggedInRoutes = [
 
       // TLS Certificate routes
       {
-        path: 'tlscertificates',
+        path: ROUTES.legacy.tlsCertificates.path,
         loader: () => {
-          throw redirect('/tls-certificates');
+          throw redirect(ROUTES.tlsCertificates.url);
         },
       },
       {
-        path: 'tls-certificates',
+        path: ROUTES.tlsCertificates.path,
         lazy: async () => ({
           Component: (await import('web/pages/tlscertificates/ListPage'))
             .default,
         }),
       },
       {
-        path: 'tlscertificate/:id',
+        path: ROUTES.legacy.tlsCertificate.path,
         loader: ({params}) => {
-          throw redirect(`/tls-certificate/${params.id}`);
+          throw redirect(ROUTES.tlsCertificate.url(params.id ?? ''));
         },
       },
       {
-        path: 'tls-certificate/:id',
+        path: ROUTES.tlsCertificate.path,
         lazy: async () => ({
           Component: (await import('web/pages/tlscertificates/DetailsPage'))
             .default,
@@ -744,7 +744,7 @@ const loggedInRoutes = [
 
       // Trashcan route
       {
-        path: 'trashcan',
+        path: ROUTES.trashcan.path,
         lazy: async () => ({
           Component: (await import('web/pages/trashcan/TrashCanPage')).default,
         }),
@@ -752,13 +752,13 @@ const loggedInRoutes = [
 
       // User routes
       {
-        path: 'users',
+        path: ROUTES.users.path,
         lazy: async () => ({
           Component: (await import('web/pages/users/UsersListPage')).default,
         }),
       },
       {
-        path: 'user/:id',
+        path: ROUTES.user.path,
         lazy: async () => ({
           Component: (await import('web/pages/users/UserDetailsPage')).default,
         }),
@@ -766,13 +766,13 @@ const loggedInRoutes = [
 
       // User Settings route
       {
-        path: 'usersettings',
+        path: ROUTES.legacy.userSettings.path,
         loader: () => {
-          throw redirect('/user-settings');
+          throw redirect(ROUTES.userSettings.url);
         },
       },
       {
-        path: 'user-settings',
+        path: ROUTES.userSettings.path,
         lazy: async () => ({
           Component: (await import('web/pages/user-settings/UserSettingsPage'))
             .default,
@@ -781,7 +781,7 @@ const loggedInRoutes = [
 
       // Vulnerability routes
       {
-        path: 'vulnerabilities',
+        path: ROUTES.vulnerabilities.path,
         lazy: async () => ({
           Component: (
             await import('web/pages/vulnerabilities/VulnerabilitiesListPage')
@@ -791,13 +791,13 @@ const loggedInRoutes = [
 
       // CVSS Calculator route
       {
-        path: 'cvsscalculator',
+        path: ROUTES.legacy.cvssCalculator.path,
         loader: () => {
-          throw redirect('/cvss-calculator');
+          throw redirect(ROUTES.cvssCalculator.url);
         },
       },
       {
-        path: 'cvss-calculator',
+        path: ROUTES.cvssCalculator.path,
         lazy: async () => ({
           Component: (await import('web/pages/extras/CvssCalculatorPage'))
             .default,
@@ -806,7 +806,7 @@ const loggedInRoutes = [
 
       // Special routes
       {
-        path: 'notfound',
+        path: ROUTES.legacy.notFound.path,
         loader: () => {
           throw redirect(ROUTES.notFound.url);
         },

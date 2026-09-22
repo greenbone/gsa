@@ -1,5 +1,10 @@
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+import {entityListURL, entityURL, ROUTES, routeMatch} from 'routePaths';
 import {describe, expect, test} from 'vitest';
-import {ROUTES} from '../route-paths';
 
 describe('route paths', () => {
   test('keeps canonical and legacy audit paths distinct', () => {
@@ -24,5 +29,51 @@ describe('route paths', () => {
     expect(ROUTES.auditReportDelta.url('report/id', 'delta#1')).toBe(
       '/audit-report/delta/report%2Fid/delta%231',
     );
+  });
+
+  test('builds entity URLs from canonical route descriptors', () => {
+    expect(entityURL('auditreport', 'report/id')).toBe(
+      '/audit-report/report%2Fid',
+    );
+    expect(entityURL('operatingsystem', 'os-id')).toBe(
+      '/operating-system/os-id',
+    );
+    expect(entityListURL('auditreport')).toBe('/audit-reports');
+    expect(entityListURL('operatingsystem')).toBe('/operating-systems');
+  });
+
+  test('keeps every compatibility alias explicit', () => {
+    expect(Object.keys(ROUTES.legacy)).toEqual([
+      'auditReports',
+      'auditReport',
+      'certBundAdvisories',
+      'certBundAdvisory',
+      'ociImageTargets',
+      'webApplicationTargets',
+      'credentialStore',
+      'dfnCertAdvisories',
+      'dfnCertAdvisory',
+      'feedStatus',
+      'operatingSystems',
+      'operatingSystem',
+      'portLists',
+      'portList',
+      'reportConfigs',
+      'reportConfig',
+      'reportFormats',
+      'reportFormat',
+      'scanConfigs',
+      'scanConfig',
+      'tlsCertificates',
+      'tlsCertificate',
+      'userSettings',
+      'cvssCalculator',
+      'notFound',
+    ]);
+  });
+
+  test('derives menu wildcard patterns from route patterns', () => {
+    expect(routeMatch(ROUTES.report.path)).toBe('/report/*');
+    expect(routeMatch(ROUTES.reports.path)).toBe('/reports');
   });
 });
