@@ -3,20 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {type FilterType} from 'gmp/models/filter';
 import Dashboard from 'web/components/dashboard/Dashboard';
 import {
   TicketsCreatedDisplay,
   TicketsCreatedTableDisplay,
-} from 'web/pages/tickets/dashboard/CreatedDisplay';
+} from 'web/pages/tickets/dashboard/TicketCreatedDisplay';
 import {
   TicketsStatusDisplay,
   TicketsStatusTableDisplay,
-} from 'web/pages/tickets/dashboard/StatusDisplay';
+} from 'web/pages/tickets/dashboard/TicketStatusDisplay';
 import {
   TicketsAssignedUsersDisplay,
   TicketsAssignedUsersTableDisplay,
-} from 'web/pages/tickets/dashboard/UsersAssignedDisplay';
+} from 'web/pages/tickets/dashboard/TicketUsersAssignedDisplay';
+
+interface TicketsDashboardProps {
+  filter?: FilterType;
+  onFilterChanged?: (filter: FilterType) => void;
+}
 
 export const TICKETS_DASHBOARD_ID = '70b0626f-a835-478e-8194-e09f97887a15';
 
@@ -29,7 +34,7 @@ export const TICKETS_DISPLAYS = [
   TicketsStatusTableDisplay.displayId,
 ];
 
-const TicketsDashboard = props => (
+const TicketsDashboard = (props: TicketsDashboardProps) => (
   <Dashboard
     {...props}
     defaultDisplays={[

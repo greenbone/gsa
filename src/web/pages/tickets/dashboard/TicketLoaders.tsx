@@ -4,7 +4,13 @@
  */
 
 import QueryFilter from 'gmp/models/filter/query-filter';
-import Loader, {createLoadFunc} from 'web/components/dashboard/display/Loader';
+import {type default as Ticket} from 'gmp/models/ticket';
+import Loader, {
+  createLoadFunc,
+  type DisplayLoaderProps,
+} from 'web/components/dashboard/display/Loader';
+
+export type TicketData = Ticket[];
 
 const TICKETS_LIST = 'tickets-list';
 
@@ -20,7 +26,10 @@ const ticketsListLoadFunc = createLoadFunc(
   TICKETS_LIST,
 );
 
-export const TicketsListLoader = ({children, filter}) => (
+export const TicketsListLoader = ({
+  children,
+  filter,
+}: DisplayLoaderProps<TicketData>) => (
   <Loader
     dataId={TICKETS_LIST}
     filter={filter}
