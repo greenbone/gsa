@@ -17,6 +17,7 @@ import SessionTracker from 'web/components/observer/SessionTracker';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import LoginPageRoute from 'web/pages/login/LoginPageRoute';
 import Page from 'web/pages/Page';
+import {ROUTES} from '../route-paths';
 
 // Layout components
 const LoggedOutLayout = () => <Outlet />;
@@ -24,7 +25,7 @@ const LoggedOutLayout = () => <Outlet />;
 const LoggedInLayout = () => {
   const isLoggedIn = useUserIsLoggedIn();
   if (!isLoggedIn) {
-    return <Navigate replace to="/login" />;
+    return <Navigate replace to={ROUTES.login.url} />;
   }
   return (
     <Authorized>
@@ -45,7 +46,7 @@ const loggedInRoutes = [
     children: [
       // Dashboard
       {
-        path: 'dashboards',
+        path: ROUTES.dashboards.path,
         lazy: async () => ({
           Component: (await import('web/pages/start/StartPage')).default,
         }),
@@ -104,20 +105,20 @@ const loggedInRoutes = [
       },
 
       {
-        path: 'auditreports',
+        path: ROUTES.legacy.auditReports.path,
         loader: () => {
-          throw redirect('/audit-reports');
+          throw redirect(ROUTES.auditReports.url);
         },
       },
       {
-        path: 'audit-reports',
+        path: ROUTES.auditReports.path,
         lazy: async () => ({
           Component: (await import('web/pages/reports/AuditReportsListPage'))
             .default,
         }),
       },
       {
-        path: 'audit-report/delta/:id/:deltaid',
+        path: ROUTES.auditReportDelta.path,
         lazy: async () => ({
           Component: (
             await import('web/pages/reports/AuditDeltaReportDetailsPage')
@@ -125,13 +126,13 @@ const loggedInRoutes = [
         }),
       },
       {
-        path: 'auditreport/:id',
+        path: ROUTES.legacy.auditReport.path,
         loader: ({params}) => {
-          throw redirect(`/audit-report/${params.id}`);
+          throw redirect(ROUTES.auditReport.url(params.id ?? ''));
         },
       },
       {
-        path: 'audit-report/:id',
+        path: ROUTES.auditReport.path,
         lazy: async () => ({
           Component: (await import('web/pages/reports/AuditReportDetailsPage'))
             .default,
@@ -807,11 +808,11 @@ const loggedInRoutes = [
       {
         path: 'notfound',
         loader: () => {
-          throw redirect('/not-found');
+          throw redirect(ROUTES.notFound.url);
         },
       },
       {
-        path: 'not-found',
+        path: ROUTES.notFound.path,
         lazy: async () => ({
           Component: (await import('web/pages/NotFoundPage')).default,
         }),
@@ -820,7 +821,7 @@ const loggedInRoutes = [
       // Root redirect for logged-in users
       {
         index: true,
-        element: <Navigate to="/dashboards" />,
+        element: <Navigate to={ROUTES.dashboards.url} />,
       },
 
       // Catch all for logged-in users
@@ -837,9 +838,9 @@ const loggedInRoutes = [
 const AuthRedirect = () => {
   const isLoggedIn = useUserIsLoggedIn();
   return isLoggedIn ? (
-    <Navigate to="/dashboards" />
+    <Navigate to={ROUTES.dashboards.url} />
   ) : (
-    <Navigate replace to="/login" />
+    <Navigate replace to={ROUTES.login.url} />
   );
 };
 
@@ -854,11 +855,11 @@ const router = createBrowserRouter([
         element: <AuthRedirect />,
       },
       {
-        path: 'login',
+        path: ROUTES.login.path,
         element: <LoginPageRoute />,
       },
       {
-        path: 'omp',
+        path: ROUTES.omp.path,
         lazy: async () => ({
           Component: (await import('web/pages/OmpPage')).default,
         }),
