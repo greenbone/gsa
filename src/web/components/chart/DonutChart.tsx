@@ -22,7 +22,7 @@ export interface DonutChartData extends LegendData {
   value: number;
 }
 
-interface DonutChartProps<TData extends DonutChartData> {
+export interface DonutChartProps<TData extends DonutChartData> {
   width: number;
   height: number;
   data?: TData[];
