@@ -9,14 +9,19 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import CvssDisplay from 'web/components/dashboard/display/cvss/CvssDisplay';
 import CvssTableDisplay from 'web/components/dashboard/display/cvss/CvssTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {TasksSeverityLoader} from 'web/pages/tasks/dashboard/Loaders';
+import {TasksSeverityLoader} from 'web/pages/tasks/dashboard/TaskLoaders';
 
 export const TasksCvssDisplay = createDisplay({
   loaderComponent: TasksSeverityLoader,
-  displayComponent: CvssDisplay,
-  yLabel: _l('# of Tasks'),
-  title: ({data: tdata = {}}) =>
-    _('Tasks by CVSS (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <CvssDisplay
+      {...props}
+      title={({data}) =>
+        _('Tasks by CVSS (Total: {{count}})', {count: data.total})
+      }
+      yLabel={_('# of Tasks')}
+    />
+  ),
   displayId: 'task-by-cvss',
   displayName: 'TasksCvssDisplay',
   filtersFilter: TASKS_FILTER_FILTER,
@@ -24,10 +29,15 @@ export const TasksCvssDisplay = createDisplay({
 
 export const TasksCvssTableDisplay = createDisplay({
   loaderComponent: TasksSeverityLoader,
-  displayComponent: CvssTableDisplay,
-  dataTitles: [_l('Severity'), _l('# of Tasks')],
-  title: ({data: tdata = {}}) =>
-    _('Tasks by CVSS (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <CvssTableDisplay
+      {...props}
+      dataTitles={[_('Severity'), _('# of Tasks')]}
+      title={({data}) =>
+        _('Tasks by CVSS (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   filtersFilter: TASKS_FILTER_FILTER,
   displayId: 'task-by-cvss-table',
   displayName: 'TasksCvssTableDisplay',
