@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+// oxlint-disable typescript/no-useless-default-assignment
+
 import ical from 'ical.js';
 import {v4 as uuid} from 'uuid';
 import Logger from 'gmp/log';
@@ -31,7 +33,7 @@ interface WeekDaysOptions {
 
 interface EventRecurrence {
   count?: number;
-  freq: RecurrenceFrequencyType;
+  freq?: RecurrenceFrequencyType;
   interval?: number;
   monthdays?: number[];
   until?: ical.Time;
@@ -440,10 +442,11 @@ class Event {
   }
 
   getNextDates(until: Date) {
+    const dates: Date[] = [];
+
     if (this.isRecurring()) {
       const now = date();
       const it = this.event.iterator();
-      const dates: Date[] = [];
 
       while (true) {
         const next = it.next();
@@ -462,9 +465,14 @@ class Event {
           dates.push(nextDate);
         }
       }
+    } else {
+      const start = convertIcalDate(this.event.startDate, this.timezone);
+      if (start.isSameOrBefore(until)) {
+        dates.push(start);
+      }
     }
 
-    return [];
+    return dates;
   }
 
   isRecurring() {

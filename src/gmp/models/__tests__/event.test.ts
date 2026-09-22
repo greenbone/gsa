@@ -187,6 +187,47 @@ END:VCALENDAR
     expect(nextDate).toBeUndefined();
   });
 
+  test('should calculate start date in next dates for no recurrence', () => {
+    const now = date().tz('utc').minute(0).second(0).millisecond(0);
+    const startDate = now.clone().add(1, 'hour');
+    const icalendar = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 8.0.0//EN
+BEGIN:VEVENT
+UID:c35f82f1-7798-4b84-b2c4-761a33068956
+DTSTART:${startDate.format(ICAL_FORMAT)}
+DTSTAMP:${now.format(ICAL_FORMAT)}
+END:VEVENT
+END:VCALENDAR
+`;
+
+    const event = Event.fromIcal(icalendar, 'Europe/Berlin');
+
+    const nextDates = event.getNextDates(startDate);
+
+    expect(nextDates).toHaveLength(1);
+    expect(nextDates[0]?.isSame(startDate)).toEqual(true);
+  });
+
+  test('should calculate no next date for no recurrence if start date is after until', () => {
+    const now = date().tz('utc').minute(0).second(0).millisecond(0);
+    const startDate = now.clone().add(1, 'hour');
+    const icalendar = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 8.0.0//EN
+BEGIN:VEVENT
+UID:c35f82f1-7798-4b84-b2c4-761a33068956
+DTSTART:${startDate.format(ICAL_FORMAT)}
+DTSTAMP:${now.format(ICAL_FORMAT)}
+END:VEVENT
+END:VCALENDAR
+`;
+
+    const event = Event.fromIcal(icalendar, 'Europe/Berlin');
+
+    expect(event.getNextDates(now)).toEqual([]);
+  });
+
   test('should calculate next date for daily recurrence when a timezone is used', () => {
     vi.stubEnv('TZ', 'America/New_York');
 
