@@ -4,6 +4,7 @@
  */
 
 import {useEffect, useReducer, useState} from 'react';
+import {ROUTES} from 'routePaths';
 import {type ScanConfigNvtPreferenceValues} from 'gmp/commands/scan-config';
 import {type Date} from 'gmp/models/date';
 import {
@@ -257,7 +258,7 @@ const ScanConfigEditNvtDetailsDialog = ({
                       <TableData>
                         <Link
                           query={{cvssVector: nvtCvssVector}}
-                          to="cvsscalculator"
+                          to={ROUTES.legacy.cvssCalculator.path}
                         >
                           {nvtCvssVector}
                         </Link>

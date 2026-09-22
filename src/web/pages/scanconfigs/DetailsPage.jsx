@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import {ROUTES} from 'routePaths';
 import styled from 'styled-components';
 import {ScanConfigIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
@@ -84,7 +85,7 @@ export const NvtFamilies = ({entity}) => {
                         title={_('NVTs of family {{name}}', {
                           name: family.name,
                         })}
-                        to="nvts"
+                        to={ROUTES.nvts.url}
                       >
                         {family.name}
                       </Link>
@@ -231,7 +232,7 @@ const Page = ({
       onCloned={goToDetails('scanconfig', props)}
       onCreated={goToDetails('scanconfig', props)}
       onDeleteError={onError}
-      onDeleted={goToList('scanconfigs', props)}
+      onDeleted={goToList('scanconfig', props)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
       onImported={goToDetails('scanconfig', props)}

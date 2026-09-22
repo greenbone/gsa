@@ -5,6 +5,7 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
+import {ROUTES} from 'routePaths';
 import {MANUAL} from 'gmp/models/override';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
@@ -87,7 +88,7 @@ const Details = ({entity, ...props}) => {
                     <Divider>
                       <SeverityBar severity={entity.severity} />
                       {active_overrides.length > 0 && (
-                        <InnerLink to="overrides">
+                        <InnerLink to={ROUTES.overrides.url}>
                           <OverrideIcon
                             title={_('There are overrides for this result')}
                           />

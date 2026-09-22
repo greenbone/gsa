@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {ROUTES} from 'routePaths';
 import type Nvt from 'gmp/models/nvt';
 import {
   NewNoteIcon,
@@ -70,12 +71,12 @@ const NvtDetailsPageToolBarIcons = ({
 
       <IconDivider>
         {capabilities.mayAccess('result') && (
-          <Link filter={'nvt=' + entity.id} to="results">
+          <Link filter={'nvt=' + entity.id} to={ROUTES.results.url}>
             <ResultIcon title={_('Corresponding Results')} />
           </Link>
         )}
         {capabilities.mayAccess('vulnerability') && (
-          <Link filter={'uuid=' + entity.id} to="vulnerabilities">
+          <Link filter={'uuid=' + entity.id} to={ROUTES.vulnerabilities.url}>
             <VulnerabilityIcon title={_('Corresponding Vulnerabilities')} />
           </Link>
         )}

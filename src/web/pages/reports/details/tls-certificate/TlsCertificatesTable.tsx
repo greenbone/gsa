@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {ROUTES} from 'routePaths';
 import styled from 'styled-components';
 import {_, _l} from 'gmp/locale/lang';
 import type Model from 'gmp/models/model';
@@ -113,7 +114,7 @@ const getColumns = ({
           filter={'name=' + entity.ip}
           textOnly={!links}
           title={_('Show all Hosts with IP {{ip}}', {ip: entity.ip ?? ''})}
-          to="hosts"
+          to={ROUTES.hosts.url}
         >
           {entity.ip}
         </Link>

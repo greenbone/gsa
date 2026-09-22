@@ -5,6 +5,7 @@
 
 import {type ReactNode} from 'react';
 import {useNavigate} from 'react-router';
+import {ROUTES} from 'routePaths';
 import styled from 'styled-components';
 import {_, _l} from 'gmp/locale/lang';
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
@@ -112,7 +113,7 @@ const HostsVulnScoreDisplay = ({
   const gmp = useGmp();
   const navigate = useNavigate();
   const handleDataClick = (data: TransformedVulnScoreData) => {
-    void navigate(`/host/${data.id}`);
+    void navigate(ROUTES.host.url(data.id ?? ''));
   };
   const severityRating = gmp.settings.severityRating;
   const {

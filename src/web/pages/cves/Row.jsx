@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import {ROUTES} from 'routePaths';
 import {shorten} from 'gmp/utils/string';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Comment from 'web/components/comment/Comment';
@@ -41,7 +42,10 @@ const Row = ({
         <DateTime date={entity.creationTime} />
       </TableData>
       <TableData>
-        <Link query={{cvssVector: entity.cvssBaseVector}} to="cvsscalculator">
+        <Link
+          query={{cvssVector: entity.cvssBaseVector}}
+          to={ROUTES.legacy.cvssCalculator.path}
+        >
           {entity.cvssBaseVector}
         </Link>
       </TableData>

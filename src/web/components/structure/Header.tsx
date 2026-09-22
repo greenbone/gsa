@@ -6,6 +6,7 @@
 import {useCallback} from 'react';
 import {AppHeader} from '@greenbone/ui-lib';
 import {useLocation, useNavigate} from 'react-router';
+import {ROUTES} from 'routePaths';
 import {LogoutIcon, MySettingsIcon} from 'web/components/icon';
 import SessionTimer from 'web/components/session-timer/SessionTimer';
 import getLogo from 'web/components/structure/GetLogo';
@@ -32,7 +33,7 @@ const Header = () => {
   const manualURL = useManualURL();
 
   const handleSettingsClick = useCallback(async () => {
-    await navigate('/usersettings');
+    await navigate(ROUTES.legacy.userSettings.url);
   }, [navigate]);
 
   const handleLogout = useCallback(() => {
@@ -42,7 +43,7 @@ const Header = () => {
     }
 
     void gmp.doLogout().then(() => {
-      return navigate('/login?type=logout');
+      return navigate(`${ROUTES.login.url}?type=logout`);
     });
   }, [gmp, navigate, username, location]);
 
@@ -66,7 +67,7 @@ const Header = () => {
       isThemeSwitchVisible={false}
       languageSwitch={<LanguageSwitch />}
       logo={logoComponent}
-      logoLink="/dashboards"
+      logoLink={ROUTES.dashboards.url}
       manualLink={manualURL}
       menuPoints={menuPoints}
       sessionTimer={<SessionTimer />}

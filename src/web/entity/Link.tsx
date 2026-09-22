@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {ROUTES} from 'routePaths';
 import type Model from 'gmp/models/model';
 import {
   type EntityType,
@@ -30,7 +31,7 @@ const EntityLink = ({entity, textOnly, ...props}: EntityLinkProps) => {
     return (
       <span>
         {name} (<span>in </span>
-        <Link anchor={type} textOnly={textOnly} to="trashcan">
+        <Link anchor={type} textOnly={textOnly} to={ROUTES.trashcan.url}>
           {_('Trashcan')}
         </Link>
         )

@@ -123,7 +123,7 @@ const Page = ({
       onCreateError={onError}
       onCreated={goToDetails('reportconfig', props)}
       onDeleteError={onError}
-      onDeleted={goToList('reportconfigs', props)}
+      onDeleted={goToList('reportconfig', props)}
       onSaveError={onError}
       onSaved={onChanged}
     >

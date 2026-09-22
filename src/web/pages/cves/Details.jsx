@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import {ROUTES} from 'routePaths';
 import {_, _l} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
@@ -66,7 +67,7 @@ const CveDetails = ({entity}) => {
                 <TableData>
                   <Link
                     query={{cvssVector: cvssBaseVector}}
-                    to="cvsscalculator"
+                    to={ROUTES.legacy.cvssCalculator.path}
                   >
                     {cvssBaseVector}
                   </Link>

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {ROUTES} from 'routePaths';
 import type Task from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import Badge from 'web/components/badge/Badge';
@@ -165,7 +166,7 @@ export const TaskDetailsPageToolBarIcons = ({
             title={_('Total Reports for Task {{- name}}', {
               name: entity.name as string,
             })}
-            to="reports"
+            to={ROUTES.reports.url}
           >
             <Badge content={reportCount?.total ?? 0}>
               <ReportIcon />
@@ -178,7 +179,7 @@ export const TaskDetailsPageToolBarIcons = ({
           title={_('Results for Task {{- name}}', {
             name: entity.name as string,
           })}
-          to="results"
+          to={ROUTES.results.url}
         >
           <Badge content={resultCount}>
             <ResultIcon />
@@ -191,7 +192,7 @@ export const TaskDetailsPageToolBarIcons = ({
             title={_('Notes for Task {{- name}}', {
               name: entity.name as string,
             })}
-            to="notes"
+            to={ROUTES.notes.url}
           >
             <Badge content={notesCount}>
               <NoteIcon />
@@ -203,7 +204,7 @@ export const TaskDetailsPageToolBarIcons = ({
             title={_('Overrides for Task {{- name}}', {
               name: entity.name as string,
             })}
-            to="overrides"
+            to={ROUTES.overrides.url}
           >
             <Badge content={overridesCount}>
               <OverrideIcon />

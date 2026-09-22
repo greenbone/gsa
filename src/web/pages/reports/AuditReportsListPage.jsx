@@ -5,6 +5,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router';
+import {ROUTES} from 'routePaths';
 import Filter, {AUDIT_REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {isActive} from 'gmp/models/task';
@@ -31,7 +32,6 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/auditreports';
 import PropTypes from 'web/utils/prop-types';
-import {ROUTES} from '../../../route-paths';
 
 const ToolBarIcons = () => {
   const [_] = useTranslation();

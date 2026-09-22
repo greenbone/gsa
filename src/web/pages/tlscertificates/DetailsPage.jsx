@@ -204,7 +204,7 @@ const Page = ({
   return (
     <TlsCertificateComponent
       onDeleteError={onError}
-      onDeleted={goToList('tlscertificates', props)}
+      onDeleted={goToList('tlscertificate', props)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
     >

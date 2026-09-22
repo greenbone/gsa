@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import {ROUTES} from 'routePaths';
 import Badge from 'web/components/badge/Badge';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import {HostIcon, OsSvgIcon} from 'web/components/icon';
@@ -95,7 +96,7 @@ const ToolBarIcons = ({
             filter={'os_id="' + entity.id + '"'}
             textOnly={!links}
             title={_('Hosts with Operating System {{- name}}', entity)}
-            to="hosts"
+            to={ROUTES.hosts.url}
           >
             <HostIcon />
           </Link>
@@ -110,7 +111,7 @@ const ToolBarIcons = ({
               'Hosts with Operating System {{- name}} as the best match',
               entity,
             )}
-            to="hosts"
+            to={ROUTES.hosts.url}
           >
             <HostIcon />
           </Link>
@@ -192,7 +193,7 @@ const Page = ({
   return (
     <OsComponent
       onDeleteError={onError}
-      onDeleted={goToList('operatingsystems', props)}
+      onDeleted={goToList('operatingsystem', props)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
     >

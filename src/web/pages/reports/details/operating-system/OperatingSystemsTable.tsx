@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {ROUTES} from 'routePaths';
 import {_, _l} from 'gmp/locale/lang';
 import type ReportOperatingSystem from 'gmp/models/report/os';
 import ComplianceBar from 'web/components/bar/ComplianceBar';
@@ -36,7 +37,7 @@ const getColumns = (audit = false) => [
           <Link
             filter={`name=${entity.cpe}`}
             textOnly={!entity.cpe}
-            to="operatingsystems"
+            to={ROUTES.legacy.operatingSystems.path}
           >
             <IconDivider>
               <OsIcon osCpe={entity.cpe} osTxt={entity.name} />
@@ -58,7 +59,7 @@ const getColumns = (audit = false) => [
           <Link
             filter={`name=${entity.cpe}`}
             textOnly={!entity.cpe}
-            to="operatingsystems"
+            to={ROUTES.legacy.operatingSystems.path}
           >
             {entity.cpe}
           </Link>

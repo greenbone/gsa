@@ -4,6 +4,7 @@
  */
 
 import React, {useState} from 'react';
+import {ROUTES} from 'routePaths';
 import {
   NVT_FEED,
   SCAP_FEED,
@@ -141,7 +142,7 @@ const FeedStatus = ({feeds}: FeedStatusProps) => {
                   <TableData>
                     {feed.feedType === NVT_FEED && (
                       <IconDivider>
-                        <Link to="nvts">
+                        <Link to={ROUTES.nvts.url}>
                           <IconDivider align={['start', 'center']}>
                             <NvtIcon size="medium" />
                             <span>{_('NVTs')}</span>
@@ -151,13 +152,13 @@ const FeedStatus = ({feeds}: FeedStatusProps) => {
                     )}
                     {feed.feedType === SCAP_FEED && (
                       <IconDivider>
-                        <Link to="cves">
+                        <Link to={ROUTES.cves.url}>
                           <IconDivider align={['start', 'center']}>
                             <CveIcon size="medium" />
                             <span>{_('CVEs')}</span>
                           </IconDivider>
                         </Link>
-                        <Link to="cpes">
+                        <Link to={ROUTES.cpes.url}>
                           <IconDivider align={['start', 'center']}>
                             <CpeLogoIcon size="medium" />
                             <span>{_('CPEs')}</span>
@@ -167,13 +168,13 @@ const FeedStatus = ({feeds}: FeedStatusProps) => {
                     )}
                     {feed.feedType === CERT_FEED && (
                       <IconDivider>
-                        <Link to="certbunds">
+                        <Link to={ROUTES.legacy.certBundAdvisories.path}>
                           <IconDivider align={['start', 'center']}>
                             <CertBundAdvIcon size="medium" />
                             <span>{_('CERT-Bund Advisories')}</span>
                           </IconDivider>
                         </Link>
-                        <Link to="dfncerts">
+                        <Link to={ROUTES.legacy.dfnCertAdvisories.path}>
                           <IconDivider align={['start', 'center']}>
                             <DfnCertAdvIcon size="medium" />
                             <span>{_('DFN-CERT Advisories')}</span>
@@ -183,25 +184,34 @@ const FeedStatus = ({feeds}: FeedStatusProps) => {
                     )}
                     {feed.feedType === GVMD_DATA_FEED && (
                       <IconDivider>
-                        <Link filter="predefined=1" to="policies">
+                        <Link filter="predefined=1" to={ROUTES.policies.url}>
                           <IconDivider align={['start', 'center']}>
                             <PolicyIcon size="medium" />
                             <span>{_('Compliance Policies')}</span>
                           </IconDivider>
                         </Link>
-                        <Link filter="predefined=1" to="portlists">
+                        <Link
+                          filter="predefined=1"
+                          to={ROUTES.legacy.portLists.path}
+                        >
                           <IconDivider align={['start', 'center']}>
                             <PortListIcon size="medium" />
                             <span>{_('Port Lists')}</span>
                           </IconDivider>
                         </Link>
-                        <Link filter="predefined=1" to="reportformats">
+                        <Link
+                          filter="predefined=1"
+                          to={ROUTES.legacy.reportFormats.path}
+                        >
                           <IconDivider align={['start', 'center']}>
                             <ReportFormatIcon size="medium" />
                             <span>{_('Report Formats')}</span>
                           </IconDivider>
                         </Link>
-                        <Link filter="predefined=1" to="scanconfigs">
+                        <Link
+                          filter="predefined=1"
+                          to={ROUTES.legacy.scanConfigs.path}
+                        >
                           <IconDivider align={['start', 'center']}>
                             <ScanConfigIcon size="medium" />
                             <span>{_('Scan Configs')}</span>

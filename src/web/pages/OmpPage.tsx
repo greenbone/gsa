@@ -5,6 +5,7 @@
 
 import {useEffect} from 'react';
 import {useNavigate, useSearchParams} from 'react-router';
+import {ROUTES} from 'routePaths';
 
 /**
  * Component to redirect old secinfo urls like
@@ -24,30 +25,32 @@ const OmpPage = () => {
     const infoId = searchParams.get('info_id') || '';
 
     if (cmd !== 'get_info') {
-      void navigate('/notfound', {replace: true});
+      void navigate(ROUTES.legacy.notFound.url, {replace: true});
       return;
     }
 
-    const id = encodeURIComponent(infoId);
-
     switch (infoType) {
       case 'nvt':
-        void navigate(`/nvt/${id}`, {replace: true});
+        void navigate(ROUTES.nvt.url(infoId), {replace: true});
         break;
       case 'cve':
-        void navigate(`/cve/${id}`, {replace: true});
+        void navigate(ROUTES.cve.url(infoId), {replace: true});
         break;
       case 'cpe':
-        void navigate(`/cpe/${id}`, {replace: true});
+        void navigate(ROUTES.cpe.url(infoId), {replace: true});
         break;
       case 'cert_bund_adv':
-        void navigate(`/certbund/${id}`, {replace: true});
+        void navigate(ROUTES.legacy.certBundAdvisory.url(infoId), {
+          replace: true,
+        });
         break;
       case 'dfn_cert_adv':
-        void navigate(`/dfncert/${id}`, {replace: true});
+        void navigate(ROUTES.legacy.dfnCertAdvisory.url(infoId), {
+          replace: true,
+        });
         break;
       default:
-        void navigate('/notfound', {replace: true});
+        void navigate(ROUTES.legacy.notFound.url, {replace: true});
         break;
     }
   }, [navigate, searchParams]);

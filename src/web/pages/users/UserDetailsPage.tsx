@@ -143,7 +143,7 @@ const UserDetailsPage = () => {
         onCloned={handleEntityActionCompleted}
         onCreated={handleEntityActionCompleted}
         onDeleteError={onError}
-        onDeleted={goToList('users', navigate)}
+        onDeleted={goToList('user', navigate)}
         onDialogError={onError}
         onDownloadError={onError}
         onDownloaded={onDownloaded}

@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import {ROUTES} from 'routePaths';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
@@ -94,14 +95,14 @@ export const ToolBarIcons = ({
         <Link
           filter={'host=' + entity.name}
           title={_('Results for this Host')}
-          to="results"
+          to={ROUTES.results.url}
         >
           <ResultIcon />
         </Link>
         <Link
           filter={'host_id=' + entity.id}
           title={_('TLS Certificates for this Host')}
-          to="tlsCertificates"
+          to={ROUTES.legacy.tlsCertificates.path}
         >
           <TlsCertificateIcon />
         </Link>
@@ -253,7 +254,7 @@ const Page = ({
   return (
     <HostComponent
       onCreated={goto_host}
-      onDeleted={goToList('hosts', props)}
+      onDeleted={goToList('host', props)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
       onIdentifierDeleteError={onError}

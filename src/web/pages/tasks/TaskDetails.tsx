@@ -5,6 +5,7 @@
 
 import {useCallback, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
+import {ROUTES} from 'routePaths';
 import {duration} from 'gmp/models/date';
 import type ScanConfig from 'gmp/models/scan-config';
 import {scannerTypeName} from 'gmp/models/scanner';
@@ -145,7 +146,7 @@ const TaskDetails = ({entity, links = true}: TaskDetailsProps) => {
 
       {isContainerScanning && isDefined(ociImageTarget?.name) && (
         <DetailsBlock title={_('Container Image Target')}>
-          <Link textOnly={!links} to="/ociimagetargets">
+          <Link textOnly={!links} to={ROUTES.legacy.ociImageTargets.url}>
             {ociImageTarget.name}
           </Link>
         </DetailsBlock>

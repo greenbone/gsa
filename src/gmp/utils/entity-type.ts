@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {entityURL as entityRouteURL} from 'routePaths';
 import {_l, _} from 'gmp/locale/lang';
 import logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
@@ -245,24 +246,5 @@ export const resourceType = (type?: EntityType): string | undefined => {
   return apiType(type);
 };
 
-const ENTITY_URLS = {
-  agentgroup: 'agent-group',
-  agentinstaller: 'agent-installer',
-  auditreport: 'audit-report',
-  certbund: 'cert-bund-advisory',
-  dfncert: 'dfn-cert-advisory',
-  ociimagetarget: 'oci-image-target',
-  operatingsystem: 'operating-system',
-  webapplicationtarget: 'web-application-target',
-  portlist: 'port-list',
-  portrange: 'port-range',
-  reportconfig: 'report-config',
-  reportformat: 'report-format',
-  scanconfig: 'scan-config',
-  tlscertificate: 'tls-certificate',
-} as Record<EntityType, string>;
-
-export const entityURL = (type: EntityType, id: string): string => {
-  const urlType = ENTITY_URLS[type] ?? type;
-  return `/${urlType}/${encodeURIComponent(id)}`;
-};
+export const entityURL = (type: EntityType, id: string): string =>
+  entityRouteURL(type, id);
