@@ -46,6 +46,10 @@ export default defineConfig({
         replacement: path.resolve(projectRootDir, 'src', 'version.ts'),
       },
       {
+        find: 'routePaths',
+        replacement: path.resolve(projectRootDir, 'src', 'route-paths.ts'),
+      },
+      {
         find: '@gsa/testing',
         replacement: path.resolve(projectRootDir, 'src', 'testing.ts'),
       },
