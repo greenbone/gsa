@@ -18,6 +18,7 @@ export const CpesCreatedDisplay = createDisplay({
   displayComponent: props => (
     <CreatedDisplay
       {...props}
+      dataTransform={transformCreated}
       title={() => _('CPEs by Creation Time')}
       xAxisLabel={_('Time')}
       y2AxisLabel={_('Total CPEs')}

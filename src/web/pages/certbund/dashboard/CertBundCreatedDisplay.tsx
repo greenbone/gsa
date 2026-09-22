@@ -27,6 +27,7 @@ export const CertBundCreatedDisplay = createDisplay<
   displayComponent: props => (
     <CreatedDisplay
       {...props}
+      dataTransform={transformCreated}
       title={() => _('CERT-Bund Advisories by Creation Time')}
       xAxisLabel={_('Time')}
       y2AxisLabel={_('Total CERT-Bund Advisories')}

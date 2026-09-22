@@ -12,26 +12,26 @@ import LineChart, {
   type LineData,
   type LineProps,
 } from 'web/components/chart/LineChart';
-import transformCreated, {
-  type CreatedData,
-  type CreatedDataPoint,
-} from 'web/components/dashboard/display/created/created-transform';
+import {type CreatedDataPoint} from 'web/components/dashboard/display/created/created-transform';
 import DataDisplay, {
   type TransformFunc,
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import {createDateRangeFilter} from 'web/components/dashboard/display/utils';
 
-type CreatedDataDisplayProps = DataDisplayProps<
-  CreatedData,
-  CreatedDataPoint[]
->;
+type CreatedDataDisplayProps<
+  TData extends object,
+  TTransformedData extends CreatedDataPoint[],
+> = DataDisplayProps<TData, TTransformedData>;
 
-export interface CreatedDisplayProps extends Omit<
-  CreatedDataDisplayProps,
+export interface CreatedDisplayProps<
+  TData extends object,
+  TTransformedData extends CreatedDataPoint[],
+> extends Omit<
+  CreatedDataDisplayProps<TData, TTransformedData>,
   'dataTransform' | 'children'
 > {
-  dataTransform?: TransformFunc<CreatedData, CreatedDataPoint[]>;
+  dataTransform: TransformFunc<TData, TTransformedData>;
   xAxisLabel?: ToString;
   yAxisLabel?: ToString;
   y2AxisLabel?: ToString;
@@ -40,8 +40,11 @@ export interface CreatedDisplayProps extends Omit<
   onFilterChanged?: (filter: FilterType) => void;
 }
 
-const CreatedDisplay = ({
-  dataTransform = transformCreated,
+const CreatedDisplay = <
+  TData extends object,
+  TTransformedData extends CreatedDataPoint[],
+>({
+  dataTransform,
   filter,
   xAxisLabel,
   y2AxisLabel,
@@ -50,7 +53,7 @@ const CreatedDisplay = ({
   yLine,
   onFilterChanged,
   ...props
-}: CreatedDisplayProps) => {
+}: CreatedDisplayProps<TData, TTransformedData>) => {
   const handleRangeSelect = useCallback(
     (start: LineData, end: LineData) => {
       if (!isDefined(onFilterChanged)) {
@@ -75,7 +78,11 @@ const CreatedDisplay = ({
     [filter, onFilterChanged],
   );
   return (
-    <DataDisplay<CreatedData, CreatedDataDisplayProps, CreatedDataPoint[]>
+    <DataDisplay<
+      TData,
+      CreatedDataDisplayProps<TData, TTransformedData>,
+      TTransformedData
+    >
       {...props}
       dataTransform={dataTransform}
       filter={filter}

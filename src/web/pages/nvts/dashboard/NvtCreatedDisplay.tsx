@@ -18,6 +18,7 @@ export const NvtsCreatedDisplay = createDisplay({
   displayComponent: props => (
     <CreatedDisplay
       {...props}
+      dataTransform={transformCreated}
       title={() => _('NVTs by Creation Time')}
       xAxisLabel={_('Time')}
       y2AxisLabel={_('Total NVTs')}
