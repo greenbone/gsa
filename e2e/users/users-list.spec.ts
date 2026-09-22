@@ -108,7 +108,24 @@ test.describe('users page flows', () => {
     page,
   }) => {
     const userName = createUniqueUserName('e2e-multiple-assignments');
+    const groupNames = [
+      createUniqueUserName('e2e-user-group'),
+      createUniqueUserName('e2e-user-group'),
+    ];
 
+    await page.goto('/groups');
+    await expect(page).not.toHaveURL(/\/login(?:$|\?)/);
+    for (const groupName of groupNames) {
+      await page.getByTitle('New Group').click();
+      await page.locator('input[name="name"]').fill(groupName);
+      await page.getByTestId('dialog-save-button').click();
+      await expect(page.getByRole('dialog')).toHaveCount(0);
+      await expect(
+        page.getByRole('row', {name: new RegExp(groupName)}),
+      ).toBeVisible();
+    }
+
+    await gotoUsersPage(page);
     await openListCreateDialog(page);
     await createUserFromCurrentPage(page, userName);
 
@@ -117,7 +134,12 @@ test.describe('users page flows', () => {
     await expect(page.locator('input[name="name"]')).toBeVisible();
 
     const roleLabels = await selectMultipleItems(page, 'Roles', 2);
-    const groupLabels = await selectMultipleItems(page, 'Groups', 2);
+    const groupLabels = await selectMultipleItems(
+      page,
+      'Groups',
+      groupNames.length,
+      groupNames,
+    );
     await saveUserDialog(page);
 
     await applyFilter(page, `name=${userName}`);
@@ -141,6 +163,14 @@ test.describe('users page flows', () => {
 
     await closeTopDialog(page);
     await deleteSingleUserFromList(page, userName);
+    await page.goto('/groups');
+    for (const groupName of groupNames) {
+      const groupRow = page
+        .getByRole('row', {name: new RegExp(groupName)})
+        .first();
+      await groupRow.getByTitle('Move Group to trashcan').click();
+      await expect(groupRow).toHaveCount(0);
+    }
     await resetFilter(page);
   });
 
