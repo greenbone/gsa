@@ -35,7 +35,10 @@ const expandSidebarSections = async (page: Page) => {
   for (const label of topLevelMenuLabels) {
     const section = page.getByRole('link', {name: label, exact: true}).first();
     if ((await section.count()) > 0) {
-      await section.click();
+      // Top-level menu entries are placeholder links. Their parent owns the
+      // expand action, while clicking the link itself navigates and remounts
+      // the menu before its expanded state can persist.
+      await section.locator('..').click();
     }
   }
 };

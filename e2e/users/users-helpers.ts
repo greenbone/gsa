@@ -166,6 +166,7 @@ const selectMultipleItems = async (
   page: Page,
   groupTitle: string,
   numberOfItems: number,
+  expectedLabels?: string[],
 ) => {
   const formGroup = page
     .locator('[data-testid="form-group"]')
@@ -174,14 +175,16 @@ const selectMultipleItems = async (
   const input = formGroup.locator('[data-testid="multi-select"]').first();
 
   await expect(input).toBeVisible();
+  await expect(input).toBeEnabled();
   await input.click();
 
   const options = page.getByRole('option');
-  await expect(options.nth(numberOfItems - 1)).toBeVisible();
-
-  const labels: string[] = [];
-  for (let index = 0; index < numberOfItems; index += 1) {
-    labels.push(await options.nth(index).innerText());
+  const labels = expectedLabels ?? [];
+  if (labels.length === 0) {
+    await expect(options.nth(numberOfItems - 1)).toBeVisible();
+    for (let index = 0; index < numberOfItems; index += 1) {
+      labels.push(await options.nth(index).innerText());
+    }
   }
 
   for (const label of labels) {

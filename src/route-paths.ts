@@ -5,11 +5,21 @@
 
 import {type EntityType} from 'gmp/utils/entity-type';
 
+// Builds a concrete detail URL and encodes the entity ID as one URL segment.
 const appendEncodedId = (path: string, id: string) =>
   `${path}/${encodeURIComponent(id)}`;
 
+// Converts a parameterized route pattern into a React Router wildcard match.
 export const routeMatch = (path: string) =>
   `/${path.replace(/\/:([^/]+)/g, '/*')}`;
+
+/*
+ * Route descriptors keep router patterns and navigable URLs together:
+ * - path: relative React Router pattern; dynamic values use placeholders such as :id.
+ * - url: absolute URL used by links and navigation; dynamic values are encoded.
+ * - match: optional explicit active-menu pattern for routes with special matching needs.
+ * - legacy: old URL aliases kept for compatibility and redirected to canonical routes.
+ */
 
 export const ROUTES = {
   root: {path: '/', url: '/'},
@@ -43,11 +53,13 @@ export const ROUTES = {
   },
   auditReports: {
     path: 'audit-reports',
+    // Keep this explicit while the menu uses the canonical list path directly.
     match: '/audit-reports',
     url: '/audit-reports',
   },
   auditReport: {
     path: 'audit-report/:id',
+    // The detail route needs a wildcard match for active-menu state.
     match: '/audit-report/*',
     url: (id: string) => appendEncodedId('/audit-report', id),
   },
@@ -288,6 +300,7 @@ export const ROUTES = {
 
 export type RoutePaths = typeof ROUTES;
 
+// API entity type names do not always match route keys or URL segments.
 const entityRouteNames = {
   agent: 'agent',
   agentgroup: 'agentGroup',
