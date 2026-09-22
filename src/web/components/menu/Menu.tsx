@@ -22,6 +22,7 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
+import {ROUTES} from '../../../route-paths';
 
 const Menu = () => {
   const [_] = useTranslation();
@@ -87,8 +88,8 @@ const Menu = () => {
   const auditMatch = useMatch('/audit/*');
   const isAuditsActive = Boolean(auditsMatch || auditMatch);
 
-  const auditReportsMatch = useMatch('/audit-reports');
-  const auditReportMatch = useMatch('/audit-report/*');
+  const auditReportsMatch = useMatch(ROUTES.auditReports.match);
+  const auditReportMatch = useMatch(ROUTES.auditReport.match);
   const isAuditReportsActive = Boolean(auditReportsMatch || auditReportMatch);
 
   const nvtsMatch = useMatch('/nvts');

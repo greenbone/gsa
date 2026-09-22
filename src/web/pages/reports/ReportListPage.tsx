@@ -41,6 +41,7 @@ import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/reports';
+import {ROUTES} from '../../../route-paths';
 
 interface ToolBarIconsProps {
   onUploadReportClick?: () => void;
@@ -173,7 +174,7 @@ const ReportListPage = ({
     if (isDefined(selectedDeltaReport)) {
       isDefined(onFilterChanged) &&
         onFilterChanged(beforeSelectFilter as FilterType);
-      void navigate(`/report/delta/${selectedDeltaReport.id}/${report.id}`, {
+      void navigate(ROUTES.reportDelta.url(selectedDeltaReport.id, report.id), {
         replace: true,
       });
     } else {

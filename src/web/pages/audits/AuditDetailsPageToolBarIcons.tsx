@@ -23,6 +23,7 @@ import TaskScheduleIcon from 'web/pages/tasks/icons/TaskScheduleIcon';
 import TaskStartIcon from 'web/pages/tasks/icons/TaskStartIcon';
 import TaskStopIcon from 'web/pages/tasks/icons/TaskStopIcon';
 import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
+import {ROUTES} from '../../../route-paths';
 
 interface AuditDetailsPageToolBarIconsProps {
   entity: Audit;
@@ -144,7 +145,7 @@ const AuditDetailsPageToolBarIcons = ({
             title={_('Total Reports for Audit {{- name}}', {
               name: entity.name as string,
             })}
-            to="auditreports"
+            to={ROUTES.legacy.auditReports.path}
           >
             <Badge content={entity.report_count?.total}>
               <ReportIcon />

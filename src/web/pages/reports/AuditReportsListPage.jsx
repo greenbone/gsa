@@ -31,6 +31,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/auditreports';
 import PropTypes from 'web/utils/prop-types';
+import {ROUTES} from '../../../route-paths';
 
 const ToolBarIcons = () => {
   const [_] = useTranslation();
@@ -46,7 +47,7 @@ const ToolBarIcons = () => {
 };
 
 export const getAuditDeltaReportPath = (reportId, deltaReportId) =>
-  `/audit-report/delta/${reportId}/${deltaReportId}`;
+  ROUTES.auditReportDelta.url(reportId, deltaReportId);
 
 const AuditReportListPage = ({filter, onFilterChanged, onDelete, ...props}) => {
   const [selectedDeltaReport, setSelectedDeltaReport] = useState();
