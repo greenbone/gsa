@@ -18,6 +18,7 @@ export const DfnCertsCreatedDisplay = createDisplay({
   displayComponent: props => (
     <CreatedDisplay
       {...props}
+      dataTransform={transformCreated}
       title={() => _('DFN-CERT Advisories by Creation Time')}
       xAxisLabel={_('Time')}
       y2AxisLabel={_('Total DFN-CERT Advs')}

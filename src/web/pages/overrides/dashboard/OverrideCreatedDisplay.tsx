@@ -18,6 +18,7 @@ export const OverridesCreatedDisplay = createDisplay({
   displayComponent: props => (
     <CreatedDisplay
       {...props}
+      dataTransform={transformCreated}
       title={() => _('Overrides by Creation Time')}
       xAxisLabel={_('Time')}
       y2AxisLabel={_('Total Overrides')}

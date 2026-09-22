@@ -23,7 +23,9 @@ export interface CreatedDataPoint extends LineData {
   x: Date;
 }
 
-const transformCreated = (data: CreatedData = {}): CreatedDataPoint[] => {
+export const transformCreated = (
+  data: CreatedData = {},
+): CreatedDataPoint[] => {
   const {groups = []} = data;
   return groups
     .map(group => {
