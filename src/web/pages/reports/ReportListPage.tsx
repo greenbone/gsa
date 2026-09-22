@@ -5,6 +5,7 @@
 
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router';
+import {ROUTES} from 'routePaths';
 import {type TaskCommandCreateImportTaskParams} from 'gmp/commands/task';
 import {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import type FilterType from 'gmp/models/filter/filter-type';
@@ -41,7 +42,6 @@ import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/reports';
-import {ROUTES} from '../../../route-paths';
 
 interface ToolBarIconsProps {
   onUploadReportClick?: () => void;

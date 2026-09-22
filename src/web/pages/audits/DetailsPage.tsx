@@ -175,7 +175,7 @@ const AuditDetailsPage = () => {
         onCreateError={onError}
         onCreated={onChanged}
         onDeleteError={onError}
-        onDeleted={goToList('audits', navigate)}
+        onDeleted={goToList('audit', navigate)}
         onDownloadError={onError}
         onDownloaded={onDownloaded}
         onResumeError={onError}

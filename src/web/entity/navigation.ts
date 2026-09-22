@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {entityListURL, entityURL, type EntityListType} from 'routePaths';
+import {type EntityType} from 'gmp/utils/entity-type';
 import {isDefined, isFunction} from 'gmp/utils/identity';
 
 export type NavigateFunc = (path: string) => void;
@@ -31,7 +33,7 @@ export type GotoListFunc = () => void;
  * @throws {Error} - Throws an error if the navigate function is not defined.
  */
 export const goToDetails = (
-  type: string,
+  type: EntityType,
   navigate: Navigate,
 ): GotoDetailsFunc => {
   if (!isDefined(navigate)) {
@@ -45,7 +47,7 @@ export const goToDetails = (
       throw new Error('navigate function is required for goToDetails');
     }
   }
-  return ({data}) => navigate('/' + type + '/' + data.id);
+  return ({data}) => navigate(entityURL(type, String(data.id)));
 };
 
 /**
@@ -56,7 +58,10 @@ export const goToDetails = (
  * @returns {GotoListFunc} A function that, when called, navigates to the specified list page.
  * @throws {Error} If the navigate function is not provided.
  */
-export const goToList = (type: string, navigate: Navigate): GotoListFunc => {
+export const goToList = (
+  type: EntityListType,
+  navigate: Navigate,
+): GotoListFunc => {
   if (!isDefined(navigate)) {
     throw new Error('navigate function is required for goToList');
   }
@@ -68,5 +73,5 @@ export const goToList = (type: string, navigate: Navigate): GotoListFunc => {
       throw new Error('navigate function is required for goToList');
     }
   }
-  return () => navigate('/' + type);
+  return () => navigate(entityListURL(type));
 };

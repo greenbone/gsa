@@ -4,6 +4,7 @@
  */
 
 import {Navigate, useNavigation} from 'react-router';
+import {ROUTES} from 'routePaths';
 import Loading from 'web/components/loading/Loading';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import useUserName from 'web/hooks/useUserName';
@@ -23,10 +24,10 @@ const LoginPageRoute = () => {
   }
 
   if (isLoggedIn) {
-    let redirectPath = '/dashboards';
+    let redirectPath: string = ROUTES.dashboards.url;
     if (username) {
       const lastVisited = getLastVisitedPage(username);
-      if (lastVisited && lastVisited !== '/login') {
+      if (lastVisited && lastVisited !== ROUTES.login.url) {
         redirectPath = lastVisited;
         clearLastVisitedPage(username);
       }

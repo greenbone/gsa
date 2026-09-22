@@ -5,6 +5,7 @@
 
 import React, {useEffect} from 'react';
 import {useNavigate} from 'react-router';
+import {ROUTES} from 'routePaths';
 import type Gmp from 'gmp/gmp';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import type Model from 'gmp/models/model';
@@ -156,7 +157,7 @@ const TaskDetailsPage = ({
 
   useEffect(() => {
     if (isDefined(entity) && entity.usageType !== USAGE_TYPE.scan) {
-      void navigate(`/audit/${entity.id}`, {replace: true});
+      void navigate(ROUTES.audit.url(entity.id), {replace: true});
     }
   }, [entity, navigate]);
 
@@ -166,7 +167,7 @@ const TaskDetailsPage = ({
       onCloned={goToDetails('task', navigate)}
       onCreated={goToDetails('task', navigate)}
       onDeleteError={onError}
-      onDeleted={goToList('tasks', navigate)}
+      onDeleted={goToList('task', navigate)}
       onDownloadError={onError}
       onDownloaded={onDownloaded}
       onImportTaskCreated={goToDetails('task', navigate)}

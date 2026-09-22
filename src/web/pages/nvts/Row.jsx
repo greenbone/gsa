@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import {ROUTES} from 'routePaths';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
@@ -51,7 +52,7 @@ const Row = ({
           <Link
             filter={'family="' + entity.family + '"'}
             textOnly={!links}
-            to="nvts"
+            to={ROUTES.nvts.url}
             onClick={handleFilterChanged}
           >
             {entity.family}

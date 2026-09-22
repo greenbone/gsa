@@ -203,7 +203,7 @@ const TicketDetailsPage = () => {
         onCloneError={onError}
         onCloned={handleEntityActionCompleted}
         onDeleteError={onError}
-        onDeleted={goToList('tickets', navigate)}
+        onDeleted={goToList('ticket', navigate)}
         onDownloadError={onError}
         onDownloaded={onDownloaded}
         onSaved={onChanged}

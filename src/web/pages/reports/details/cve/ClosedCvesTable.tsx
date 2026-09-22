@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {ROUTES} from 'routePaths';
 import {_, _l} from 'gmp/locale/lang';
 import {type ReportClosedCve} from 'gmp/models/report/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -47,7 +48,7 @@ const getColumns = () => [
           </DetailsLink>
         </span>
       ) : (
-        <Link filter={'name=' + entity.host.ip} to="hosts">
+        <Link filter={'name=' + entity.host.ip} to={ROUTES.hosts.url}>
           {entity.host.ip}
         </Link>
       ),

@@ -5,6 +5,7 @@
 
 import {useEffect, useCallback} from 'react';
 import {useLocation} from 'react-router';
+import {ROUTES} from 'routePaths';
 import useGmp from 'web/hooks/useGmp';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import useUserName from 'web/hooks/useUserName';
@@ -22,7 +23,7 @@ const Authorized = ({children}: AuthorizedProps) => {
   const username = useUserName();
 
   const logout = useCallback(() => {
-    if (username && location.pathname !== '/login') {
+    if (username && location.pathname !== ROUTES.login.url) {
       const currentPath = `${location.pathname}${location.search ?? ''}`;
       saveLastVisitedPage(username, currentPath);
     }

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {ROUTES} from 'routePaths';
 import {type FilterType} from 'gmp/models/filter';
 import type AuditReportReport from 'gmp/models/report/audit-report';
 import type ReportReport from 'gmp/models/report/report';
@@ -118,7 +119,7 @@ const ReportDetailsToolBarIcons = ({
             <Link
               filter={'report_id=' + reportId}
               title={_('Corresponding Results')}
-              to="results"
+              to={ROUTES.results.url}
             >
               <ResultIcon />
             </Link>
@@ -126,7 +127,7 @@ const ReportDetailsToolBarIcons = ({
               <Link
                 filter={'report_id=' + reportId}
                 title={_('Corresponding Vulnerabilities')}
-                to="vulnerabilities"
+                to={ROUTES.vulnerabilities.url}
               >
                 <VulnerabilityIcon />
               </Link>
@@ -135,7 +136,7 @@ const ReportDetailsToolBarIcons = ({
               <Link
                 filter={'report_id=' + reportId}
                 title={_('Corresponding TLS Certificates')}
-                to="tlscertificates"
+                to={ROUTES.legacy.tlsCertificates.path}
               >
                 <TlsCertificateIcon />
               </Link>
@@ -155,7 +156,7 @@ const ReportDetailsToolBarIcons = ({
                   ...(isDefined(report?.slave) && {scanner: report.slave.id}),
                 }}
                 title={_('Corresponding Performance')}
-                to="performance"
+                to={ROUTES.performance.url}
               >
                 <PerformanceIcon />
               </Link>

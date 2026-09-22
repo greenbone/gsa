@@ -211,7 +211,7 @@ const Page = ({
   return (
     <ReportFormatComponent
       onDeleteError={onError}
-      onDeleted={goToList('reportformats', props)}
+      onDeleted={goToList('reportformat', props)}
       onImported={goToDetails('reportformat', props)}
       onSaved={onChanged}
     >

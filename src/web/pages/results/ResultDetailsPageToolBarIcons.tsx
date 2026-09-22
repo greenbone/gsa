@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {ROUTES} from 'routePaths';
 import type Result from 'gmp/models/result';
 import {isDefined} from 'gmp/utils/identity';
 import Badge from 'web/components/badge/Badge';
@@ -109,7 +110,7 @@ const ResultDetailsPageToolBarIcons = ({
           <Link
             filter={'result_id=' + entity.id}
             title={_('Corresponding Tickets')}
-            to="tickets"
+            to={ROUTES.tickets.url}
           >
             <Badge content={entity.tickets.length}>
               <TicketIcon />

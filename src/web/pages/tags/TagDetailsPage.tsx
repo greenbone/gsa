@@ -150,7 +150,7 @@ const TagDetailsPage = () => {
         onCloned={goToDetails('tag', navigate)}
         onCreated={goToDetails('tag', navigate)}
         onDeleteError={onError}
-        onDeleted={goToList('tags', navigate)}
+        onDeleted={goToList('tag', navigate)}
         onDisableError={onError}
         onDisabled={onChanged}
         onDownloadError={onError}

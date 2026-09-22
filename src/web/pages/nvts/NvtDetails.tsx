@@ -4,6 +4,7 @@
  */
 
 import ReactMarkdown from 'react-markdown';
+import {ROUTES} from 'routePaths';
 import {type default as Nvt, TAG_NA} from 'gmp/models/nvt';
 import {isDefined} from 'gmp/utils/identity';
 import Severitybar from 'web/components/bar/SeverityBar';
@@ -88,7 +89,7 @@ const NvtDetails = ({entity, links = true}: NvtDetailsProps) => {
                   <TableData>
                     <Link
                       query={{cvssVector: tags.cvss_base_vector}}
-                      to="cvsscalculator"
+                      to={ROUTES.legacy.cvssCalculator.path}
                     >
                       {tags.cvss_base_vector}
                     </Link>
@@ -239,7 +240,11 @@ const NvtDetails = ({entity, links = true}: NvtDetailsProps) => {
 
       {isDefined(family) && (
         <DetailsBlock title={_('Family')}>
-          <Link filter={'family="' + family + '"'} textOnly={!links} to="nvts">
+          <Link
+            filter={'family="' + family + '"'}
+            textOnly={!links}
+            to={ROUTES.nvts.url}
+          >
             {family}
           </Link>
         </DetailsBlock>

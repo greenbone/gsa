@@ -85,7 +85,7 @@ const PolicyDetailsPage = () => {
         onCloneError={onError}
         onCloned={goToDetails('policy', navigate)}
         onDeleteError={onError}
-        onDeleted={goToList('policies', navigate)}
+        onDeleted={goToList('policy', navigate)}
         onDownloadError={onError}
         onDownloaded={onDownloaded}
         onSaved={onChanged}

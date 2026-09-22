@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import {ROUTES} from 'routePaths';
 import type Vulnerability from 'gmp/models/vulnerability';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
@@ -54,7 +55,11 @@ const VulnerabilitiesTableRow = ({
       </TableData>
       <TableData>
         <span>
-          <Link filter={'nvt=' + entity.id} textOnly={!links} to="results">
+          <Link
+            filter={'nvt=' + entity.id}
+            textOnly={!links}
+            to={ROUTES.results.url}
+          >
             {results.count}
           </Link>
         </span>
