@@ -9,24 +9,34 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import SeverityClassDisplay from 'web/components/dashboard/display/severity/SeverityClassDisplay';
 import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/SeverityClassTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {TasksSeverityLoader} from 'web/pages/tasks/dashboard/Loaders';
+import {TasksSeverityLoader} from 'web/pages/tasks/dashboard/TaskLoaders';
 
 export const TasksSeverityDisplay = createDisplay({
-  displayComponent: SeverityClassDisplay,
   loaderComponent: TasksSeverityLoader,
-  title: ({data: tdata}) =>
-    _('Tasks by Severity Class (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <SeverityClassDisplay
+      {...props}
+      title={({data}) =>
+        _('Tasks by Severity Class (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   displayId: 'task-by-severity-class',
   displayName: 'TasksSeverityDisplay',
   filtersFilter: TASKS_FILTER_FILTER,
 });
 
 export const TasksSeverityTableDisplay = createDisplay({
-  displayComponent: SeverityClassTableDisplay,
   loaderComponent: TasksSeverityLoader,
-  dataTitles: [_l('Severity'), _l('# of Tasks')],
-  title: ({data: tdata}) =>
-    _('Tasks by Severity Class (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <SeverityClassTableDisplay
+      {...props}
+      dataTitles={[_('Severity'), _('# of Tasks')]}
+      title={({data}) =>
+        _('Tasks by Severity Class (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   displayId: 'task-by-severity-class-table',
   displayName: 'TasksSeverityTableDisplay',
   filtersFilter: TASKS_FILTER_FILTER,

@@ -7,15 +7,33 @@ import {interpolateHcl} from 'd3-interpolate';
 import {scaleOrdinal} from 'd3-scale';
 import {_, _l} from 'gmp/locale/lang';
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
-import {getTranslatableTaskStatus, TASK_STATUS} from 'gmp/models/task';
+import {
+  getTranslatableTaskStatus,
+  TASK_STATUS,
+  type TaskStatus,
+} from 'gmp/models/task';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
-import DataTable from 'web/components/dashboard/display/DataTable';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import StatusDisplay from 'web/components/dashboard/display/status/StatusDisplay';
 import {totalCount, percent} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {TaskStatusLoader} from 'web/pages/tasks/dashboard/Loaders';
+import {
+  type TaskStatusData,
+  TaskStatusLoader,
+} from 'web/pages/tasks/dashboard/TaskLoaders';
 import Theme from 'web/utils/theme';
+
+interface TransformedTaskStatusDataItem {
+  value: number;
+  label: string;
+  toolTip: string;
+  color: string;
+  filterValue: string;
+}
+
+interface TransformedTaskStatusData extends Array<TransformedTaskStatusDataItem> {
+  total: number;
+}
 
 const red = interpolateHcl('#d62728', '#ff9896');
 const green = interpolateHcl('#2ca02c', '#98df8a');
@@ -52,14 +70,16 @@ const taskStatusColorScale = scaleOrdinal()
     'silver',
   ]);
 
-const transformStatusData = (data = {}) => {
+const transformStatusData = (
+  data: TaskStatusData = {},
+): TransformedTaskStatusData => {
   const {groups = []} = data;
 
   const sum = totalCount(groups);
 
-  const tdata = groups.map(group => {
+  const transformedData = groups.map(group => {
     const {count, value} = group;
-    const translatableValue = getTranslatableTaskStatus(value);
+    const translatableValue = getTranslatableTaskStatus(value as TaskStatus);
     const perc = percent(count, sum);
     return {
       value: count,
@@ -67,33 +87,42 @@ const transformStatusData = (data = {}) => {
       toolTip: `${translatableValue}: ${perc}% (${count})`,
       color: taskStatusColorScale(value),
       filterValue: value,
-    };
+    } as TransformedTaskStatusDataItem;
   });
 
-  tdata.total = sum;
-
-  return tdata;
+  const result = transformedData as TransformedTaskStatusData;
+  result.total = sum;
+  return result;
 };
 
 export const TasksStatusDisplay = createDisplay({
-  dataTransform: transformStatusData,
-  displayComponent: StatusDisplay,
-  displayId: 'task-by-status',
-  title: ({data: tdata}) =>
-    _('Tasks by Status (Total: {{count}})', {count: tdata.total}),
-  filtersFilter: TASKS_FILTER_FILTER,
   loaderComponent: TaskStatusLoader,
+  displayComponent: props => (
+    <StatusDisplay
+      {...props}
+      dataTransform={transformStatusData}
+      title={({data}) =>
+        _('Tasks by Status (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
+  displayId: 'task-by-status',
+  filtersFilter: TASKS_FILTER_FILTER,
 });
 
 export const TasksStatusTableDisplay = createDisplay({
-  chartComponent: DataTable,
-  displayComponent: DataTableDisplay,
   loaderComponent: TaskStatusLoader,
-  dataTransform: transformStatusData,
-  dataTitles: [_l('Status'), _l('# of Tasks')],
-  dataRow: row => [row.label, row.value],
-  title: ({data: tdata}) =>
-    _('Tasks by Status (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <DataTableDisplay
+      {...props}
+      dataRow={row => [row.label, row.value]}
+      dataTitles={[_('Status'), _('# of Tasks')]}
+      dataTransform={transformStatusData}
+      title={({data}) =>
+        _('Tasks by Status (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   displayId: 'task-by-status-table',
   displayName: 'TasksStatusTableDisplay',
   filtersFilter: TASKS_FILTER_FILTER,

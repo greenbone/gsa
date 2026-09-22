@@ -20,8 +20,8 @@ import {OperatingSystemVulnerabilityScoreDisplay} from 'web/pages/operatingsyste
 import {ReportsHighResultsDisplay} from 'web/pages/reports/dashboard/ReportHighResultsDisplay';
 import {ReportsSeverityDisplay} from 'web/pages/reports/dashboard/ReportSeverityClassDisplay';
 import {ResultsSeverityDisplay} from 'web/pages/results/dashboard/ResultSeverityClassDisplay';
-import {TasksSeverityDisplay} from 'web/pages/tasks/dashboard/SeverityClassDisplay';
-import {TasksStatusDisplay} from 'web/pages/tasks/dashboard/StatusDisplay';
+import {TasksSeverityDisplay} from 'web/pages/tasks/dashboard/TaskSeverityClassDisplay';
+import {TasksStatusDisplay} from 'web/pages/tasks/dashboard/TaskStatusDisplay';
 
 interface NewDashboardDialogProps {
   additionalDisplayChoices: Array<{
