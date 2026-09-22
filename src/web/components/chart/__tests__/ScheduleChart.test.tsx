@@ -70,7 +70,7 @@ describe('ScheduleChart component tests', () => {
     expect(bottomAxis).toBeDefined();
   });
 
-  test('should render duration and period schedules with future-run markers', () => {
+  test('should render future-run markers only for additional or infinite runs', () => {
     const {render} = rendererWith();
 
     render(
@@ -106,7 +106,7 @@ describe('ScheduleChart component tests', () => {
     );
 
     expect(screen.getAllByTestId(/^schedule-bar-/)).toHaveLength(2);
-    expect(screen.getAllByTestId('schedule-future-run')).toHaveLength(3);
+    expect(screen.getAllByTestId('schedule-future-run')).toHaveLength(1);
     expect(screen.getByTestId('schedule-bar-0')).toHaveAttribute(
       'fill',
       Theme.lightGreen,

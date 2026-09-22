@@ -212,7 +212,7 @@ const ScheduleChart = ({
 
     const futureRun = isInfinite ? Number.POSITIVE_INFINITY : starts.length;
 
-    if (futureRun > 0) {
+    if (futureRun > 1) {
       futureRuns.push({
         label: String(label),
         futureRun,
