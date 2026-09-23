@@ -23,27 +23,21 @@ type DashboardDisplayComponentProps = Omit<
 /**
  * Props for a display component passed to the createDisplay function.
  */
-export type DisplayProps<
-  TData,
-  TChartData extends object = {},
-  TOtherProps extends object = {},
-> = {
+export type DisplayProps<TData, TChartData extends object = {}> = {
   filterTerm?: string;
   children?: (props: TChartData) => React.ReactNode;
   onSelectFilterClick?: () => void;
 } & DashboardDisplayComponentProps &
-  LoaderRenderProps<TData> &
-  TOtherProps;
+  LoaderRenderProps<TData>;
 
 /**
  * Props for the createDisplay function, including the to be used display and
  * chart components, as well as loader and filter configurations.
  */
 type CreateDisplayProps<
-  TDisplayProps extends DisplayProps<TData, TChartProps, TOtherProps>,
+  TDisplayProps extends DisplayProps<TData, TChartProps>,
   TData,
   TChartProps extends object = {},
-  TOtherProps extends object = {},
 > = {
   chartComponent?: ComponentType<TChartProps>;
   displayComponent: ComponentType<TDisplayProps>;
@@ -52,7 +46,7 @@ type CreateDisplayProps<
   filterTerm?: string;
   filtersFilter: FilterType;
   loaderComponent: ComponentType<DisplayLoaderProps<TData>>;
-} & TOtherProps;
+};
 
 /**
  * Creates a display component for the dashboard, to be rendered within a
@@ -60,10 +54,9 @@ type CreateDisplayProps<
  * and filter selection.
  */
 const createDisplay = <
-  TDisplayProps extends DisplayProps<TData, TChartProps, TOtherProps>,
+  TDisplayProps extends DisplayProps<TData, TChartProps>,
   TData,
   TChartProps extends object = {},
-  TOtherProps extends object = {},
 >({
   chartComponent: Chart,
   displayComponent: Display,
@@ -72,8 +65,7 @@ const createDisplay = <
   filtersFilter,
   filterTerm,
   loaderComponent: Loader,
-  ...other
-}: CreateDisplayProps<TDisplayProps, TData, TChartProps, TOtherProps>) => {
+}: CreateDisplayProps<TDisplayProps, TData, TChartProps>) => {
   const DisplayComponent = ({
     showFilterSelection = false,
     filter,
@@ -99,7 +91,6 @@ const createDisplay = <
             const displayProps: TDisplayProps = {
               ...props,
               ...loaderProps,
-              ...other,
               filter: displayFilter,
               filterTerm,
               showFilterSelection,
