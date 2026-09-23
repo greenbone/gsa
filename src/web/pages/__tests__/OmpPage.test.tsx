@@ -52,46 +52,46 @@ describe('OmpPage', () => {
     });
   });
 
-  test('should redirect cert_bund_adv info_type to /certbund/:id', async () => {
+  test('should redirect cert_bund_adv info_type to /cert-bund-advisory/:id', async () => {
     renderOmpPage(
       '?cmd=get_info&info_type=cert_bund_adv&info_id=CB-K21%2F0001',
     );
 
     await waitFor(() => {
       expect(screen.getByTestId('location-pathname')).toHaveTextContent(
-        '/certbund/',
+        '/cert-bund-advisory/CB-K21%2F0001',
       );
     });
   });
 
-  test('should redirect dfn_cert_adv info_type to /dfncert/:id', async () => {
+  test('should redirect dfn_cert_adv info_type to /dfn-cert-advisory/:id', async () => {
     renderOmpPage(
       '?cmd=get_info&info_type=dfn_cert_adv&info_id=DFN-CERT-2021-0001',
     );
 
     await waitFor(() => {
       expect(screen.getByTestId('location-pathname')).toHaveTextContent(
-        '/dfncert/DFN-CERT-2021-0001',
+        '/dfn-cert-advisory/DFN-CERT-2021-0001',
       );
     });
   });
 
-  test('should redirect to /notfound for an unknown info_type', async () => {
+  test('should redirect to /not-found for an unknown info_type', async () => {
     renderOmpPage('?cmd=get_info&info_type=unknown&info_id=foo');
 
     await waitFor(() => {
       expect(screen.getByTestId('location-pathname')).toHaveTextContent(
-        '/notfound',
+        '/not-found',
       );
     });
   });
 
-  test('should redirect to /notfound when cmd is not get_info', async () => {
+  test('should redirect to /not-found when cmd is not get_info', async () => {
     renderOmpPage('?cmd=other&info_type=nvt&info_id=foo');
 
     await waitFor(() => {
       expect(screen.getByTestId('location-pathname')).toHaveTextContent(
-        '/notfound',
+        '/not-found',
       );
     });
   });

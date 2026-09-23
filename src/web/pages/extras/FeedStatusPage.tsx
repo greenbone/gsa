@@ -168,13 +168,13 @@ const FeedStatus = ({feeds}: FeedStatusProps) => {
                     )}
                     {feed.feedType === CERT_FEED && (
                       <IconDivider>
-                        <Link to={ROUTES.legacy.certBundAdvisories.path}>
+                        <Link to={ROUTES.certBundAdvisories.path}>
                           <IconDivider align={['start', 'center']}>
                             <CertBundAdvIcon size="medium" />
                             <span>{_('CERT-Bund Advisories')}</span>
                           </IconDivider>
                         </Link>
-                        <Link to={ROUTES.legacy.dfnCertAdvisories.path}>
+                        <Link to={ROUTES.dfnCertAdvisories.path}>
                           <IconDivider align={['start', 'center']}>
                             <DfnCertAdvIcon size="medium" />
                             <span>{_('DFN-CERT Advisories')}</span>
@@ -190,10 +190,7 @@ const FeedStatus = ({feeds}: FeedStatusProps) => {
                             <span>{_('Compliance Policies')}</span>
                           </IconDivider>
                         </Link>
-                        <Link
-                          filter="predefined=1"
-                          to={ROUTES.legacy.portLists.path}
-                        >
+                        <Link filter="predefined=1" to={ROUTES.portLists.path}>
                           <IconDivider align={['start', 'center']}>
                             <PortListIcon size="medium" />
                             <span>{_('Port Lists')}</span>
@@ -201,7 +198,7 @@ const FeedStatus = ({feeds}: FeedStatusProps) => {
                         </Link>
                         <Link
                           filter="predefined=1"
-                          to={ROUTES.legacy.reportFormats.path}
+                          to={ROUTES.reportFormats.path}
                         >
                           <IconDivider align={['start', 'center']}>
                             <ReportFormatIcon size="medium" />
@@ -210,7 +207,7 @@ const FeedStatus = ({feeds}: FeedStatusProps) => {
                         </Link>
                         <Link
                           filter="predefined=1"
-                          to={ROUTES.legacy.scanConfigs.path}
+                          to={ROUTES.scanConfigs.path}
                         >
                           <IconDivider align={['start', 'center']}>
                             <ScanConfigIcon size="medium" />

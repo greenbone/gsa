@@ -55,7 +55,7 @@ describe('CVEv2 Row tests', () => {
 
     expect(links[0]).toHaveAttribute(
       'href',
-      '/cvsscalculator?cvssVector=AV%3AN%2FAC%3AM%2FAu%3AN%2FC%3AC%2FI%3AC%2FA%3AC',
+      '/cvss-calculator?cvssVector=AV%3AN%2FAC%3AM%2FAu%3AN%2FC%3AC%2FI%3AC%2FA%3AC',
     );
     expect(links[0]).toHaveTextContent('AV:N/AC:M/Au:N/C:C/I:C/A:C');
 
@@ -136,7 +136,7 @@ describe('CVEv3 Row tests', () => {
 
     expect(links[0]).toHaveAttribute(
       'href',
-      '/cvsscalculator?cvssVector=CVSS%3A3.1%2FAV%3AL%2FAC%3AL%2FPR%3AN%2FUI%3AR%2FS%3AU%2FC%3AN%2FI%3AH%2FA%3AH',
+      '/cvss-calculator?cvssVector=CVSS%3A3.1%2FAV%3AL%2FAC%3AL%2FPR%3AN%2FUI%3AR%2FS%3AU%2FC%3AN%2FI%3AH%2FA%3AH',
     );
     expect(links[0]).toHaveTextContent(
       'CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:H',

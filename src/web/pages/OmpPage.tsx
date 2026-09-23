@@ -25,7 +25,7 @@ const OmpPage = () => {
     const infoId = searchParams.get('info_id') || '';
 
     if (cmd !== 'get_info') {
-      void navigate(ROUTES.legacy.notFound.url, {replace: true});
+      void navigate(ROUTES.notFound.url, {replace: true});
       return;
     }
 
@@ -40,17 +40,17 @@ const OmpPage = () => {
         void navigate(ROUTES.cpe.url(infoId), {replace: true});
         break;
       case 'cert_bund_adv':
-        void navigate(ROUTES.legacy.certBundAdvisory.url(infoId), {
+        void navigate(ROUTES.certBundAdvisory.url(infoId), {
           replace: true,
         });
         break;
       case 'dfn_cert_adv':
-        void navigate(ROUTES.legacy.dfnCertAdvisory.url(infoId), {
+        void navigate(ROUTES.dfnCertAdvisory.url(infoId), {
           replace: true,
         });
         break;
       default:
-        void navigate(ROUTES.legacy.notFound.url, {replace: true});
+        void navigate(ROUTES.notFound.url, {replace: true});
         break;
     }
   }, [navigate, searchParams]);

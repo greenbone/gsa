@@ -44,7 +44,7 @@ const Row = ({
       <TableData>
         <Link
           query={{cvssVector: entity.cvssBaseVector}}
-          to={ROUTES.legacy.cvssCalculator.path}
+          to={ROUTES.cvssCalculator.path}
         >
           {entity.cvssBaseVector}
         </Link>

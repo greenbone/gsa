@@ -74,20 +74,20 @@ describe('Feed status page tests', () => {
     expect(links[1]).toHaveAttribute('href', '/nvts');
     expect(links[2]).toHaveAttribute('href', '/cves');
     expect(links[3]).toHaveAttribute('href', '/cpes');
-    expect(links[4]).toHaveAttribute('href', '/certbunds');
-    expect(links[5]).toHaveAttribute('href', '/dfncerts');
+    expect(links[4]).toHaveAttribute('href', '/cert-bund-advisories');
+    expect(links[5]).toHaveAttribute('href', '/dfn-cert-advisories');
     expect(links[6]).toHaveAttribute('href', '/policies?filter=predefined%3D1');
     expect(links[7]).toHaveAttribute(
       'href',
-      '/portlists?filter=predefined%3D1',
+      '/port-lists?filter=predefined%3D1',
     );
     expect(links[8]).toHaveAttribute(
       'href',
-      '/reportformats?filter=predefined%3D1',
+      '/report-formats?filter=predefined%3D1',
     );
     expect(links[9]).toHaveAttribute(
       'href',
-      '/scanconfigs?filter=predefined%3D1',
+      '/scan-configs?filter=predefined%3D1',
     );
 
     // Test headers

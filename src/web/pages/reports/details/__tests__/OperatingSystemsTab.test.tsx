@@ -138,12 +138,12 @@ describe('Report Operating Systems Tab tests', () => {
     expect(row1Links[0]).toHaveTextContent('Foo OS');
     expect(row1Links[0]).toHaveAttribute(
       'href',
-      '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
+      '/operating-systems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
     );
     expect(row1Links[1]).toHaveTextContent('cpe:/foo/bar');
     expect(row1Links[1]).toHaveAttribute(
       'href',
-      '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
+      '/operating-systems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
     );
 
     // Verify Row 2
@@ -154,12 +154,12 @@ describe('Report Operating Systems Tab tests', () => {
     expect(row2Links[0]).toHaveTextContent('Lorem OS');
     expect(row2Links[0]).toHaveAttribute(
       'href',
-      '/operatingsystems?filter=name%3Dcpe%3A%2Florem%2Fipsum',
+      '/operating-systems?filter=name%3Dcpe%3A%2Florem%2Fipsum',
     );
     expect(row2Links[1]).toHaveTextContent('cpe:/lorem/ipsum');
     expect(row2Links[1]).toHaveAttribute(
       'href',
-      '/operatingsystems?filter=name%3Dcpe%3A%2Florem%2Fipsum',
+      '/operating-systems?filter=name%3Dcpe%3A%2Florem%2Fipsum',
     );
   });
 
@@ -248,7 +248,7 @@ describe('Audit Report Operating Systems Tab tests', () => {
     expect(row1Links[0]).toHaveTextContent('Foo OS');
     expect(row1Links[0]).toHaveAttribute(
       'href',
-      '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
+      '/operating-systems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
     );
     expect(row1Links[1]).toHaveTextContent('cpe:/foo/bar');
     expect(bars[0]).toHaveAttribute('title', 'No');
@@ -262,7 +262,7 @@ describe('Audit Report Operating Systems Tab tests', () => {
     expect(row2Links[0]).toHaveTextContent('Lorem OS');
     expect(row2Links[0]).toHaveAttribute(
       'href',
-      '/operatingsystems?filter=name%3Dcpe%3A%2Florem%2Fipsum',
+      '/operating-systems?filter=name%3Dcpe%3A%2Florem%2Fipsum',
     );
     expect(row2Links[1]).toHaveTextContent('cpe:/lorem/ipsum');
     expect(bars[1]).toHaveAttribute('title', 'Incomplete');

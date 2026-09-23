@@ -37,7 +37,7 @@ const getColumns = (audit = false) => [
           <Link
             filter={`name=${entity.cpe}`}
             textOnly={!entity.cpe}
-            to={ROUTES.legacy.operatingSystems.path}
+            to={ROUTES.operatingSystems.path}
           >
             <IconDivider>
               <OsIcon osCpe={entity.cpe} osTxt={entity.name} />
@@ -59,7 +59,7 @@ const getColumns = (audit = false) => [
           <Link
             filter={`name=${entity.cpe}`}
             textOnly={!entity.cpe}
-            to={ROUTES.legacy.operatingSystems.path}
+            to={ROUTES.operatingSystems.path}
           >
             {entity.cpe}
           </Link>

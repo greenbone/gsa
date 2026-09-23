@@ -258,7 +258,7 @@ const ScanConfigEditNvtDetailsDialog = ({
                       <TableData>
                         <Link
                           query={{cvssVector: nvtCvssVector}}
-                          to={ROUTES.legacy.cvssCalculator.path}
+                          to={ROUTES.cvssCalculator.path}
                         >
                           {nvtCvssVector}
                         </Link>

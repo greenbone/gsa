@@ -75,7 +75,10 @@ const ReportDetailsToolBarIcons = ({
               page="compliance-and-special-scans"
               title={_('Help: Audit Reports')}
             />
-            <ListIcon page="auditreports" title={_('Audit Reports List')} />
+            <ListIcon
+              page={ROUTES.auditReports.url}
+              title={_('Audit Reports List')}
+            />
           </>
         ) : (
           <>
@@ -136,7 +139,7 @@ const ReportDetailsToolBarIcons = ({
               <Link
                 filter={'report_id=' + reportId}
                 title={_('Corresponding TLS Certificates')}
-                to={ROUTES.legacy.tlsCertificates.path}
+                to={ROUTES.tlsCertificates.path}
               >
                 <TlsCertificateIcon />
               </Link>
