@@ -75,7 +75,7 @@ describe('BubbleChart', () => {
     const secondBubble = screen.getByTestId('bubble-chart-bubble-1');
     const firstCircle = firstBubble.querySelector('circle');
     const secondCircle = secondBubble.querySelector('circle');
-    fireEvent.mouseEnter(firstBubble);
+    fireEvent.mouseOver(firstBubble);
 
     expect(firstCircle).toHaveAttribute('opacity', '1');
     expect(screen.getAllByTestId(/bubble-chart-bubble-/).at(-1)).toBe(
@@ -84,7 +84,7 @@ describe('BubbleChart', () => {
     expect(secondCircle).toHaveAttribute('opacity', '0.35');
     expect(secondCircle).toHaveAttribute('fill', '#0000aa');
 
-    fireEvent.mouseLeave(firstBubble);
+    fireEvent.mouseOut(firstBubble);
 
     expect(secondBubble.querySelector('circle')).toHaveAttribute(
       'opacity',
@@ -100,14 +100,14 @@ describe('BubbleChart', () => {
     const firstBubble = screen.getByTestId('bubble-chart-bubble-0');
     const secondBubble = screen.getByTestId('bubble-chart-bubble-1');
 
-    fireEvent.mouseEnter(firstBubble);
+    fireEvent.mouseOver(firstBubble);
     expect(screen.getAllByText('First bubble')).toHaveLength(1);
 
-    fireEvent.mouseEnter(secondBubble);
+    fireEvent.mouseOver(secondBubble);
     expect(screen.queryByText('First bubble')).not.toBeInTheDocument();
     expect(screen.getAllByText('Second bubble')).toHaveLength(1);
 
-    fireEvent.mouseLeave(secondBubble);
+    fireEvent.mouseOut(secondBubble);
     expect(screen.queryByText('First bubble')).not.toBeInTheDocument();
     expect(screen.queryByText('Second bubble')).not.toBeInTheDocument();
   });

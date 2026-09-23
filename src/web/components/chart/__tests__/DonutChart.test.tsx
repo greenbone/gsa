@@ -138,7 +138,7 @@ describe('DonutChart', () => {
     expect(firstArc).toBeDefined();
     expect(secondArc).toBeDefined();
 
-    fireEvent.mouseEnter(firstArc as HTMLElement);
+    fireEvent.mouseOver(firstArc as HTMLElement);
 
     expect(firstArc?.querySelector('path')).toHaveAttribute('fill', '#008000');
     expect(secondArc?.querySelector('path')).toHaveAttribute('fill', '#0000aa');
@@ -149,7 +149,7 @@ describe('DonutChart', () => {
       '#4C4C4C',
     );
 
-    fireEvent.mouseLeave(firstArc as HTMLElement);
+    fireEvent.mouseOut(firstArc as HTMLElement);
 
     expect(secondArc?.querySelector('path')).toHaveAttribute('fill', '#0000aa');
     expect(svg.querySelectorAll('.pie-label')[1]).toHaveAttribute(

@@ -89,14 +89,14 @@ describe('BarChart', () => {
     render(<BarChart data={data} height={300} width={900} />);
 
     const bars = screen.getByTestId('main-container').querySelectorAll('rect');
-    fireEvent.mouseEnter(bars[0]);
+    fireEvent.mouseOver(bars[0]);
 
     expect(bars[0]).toHaveAttribute('fill', '#008000');
     expect(bars[0]).toHaveAttribute('opacity', '1');
     expect(bars[1]).toHaveAttribute('fill', '#0000aa');
     expect(bars[1]).toHaveAttribute('opacity', '0.35');
 
-    fireEvent.mouseLeave(bars[0]);
+    fireEvent.mouseOut(bars[0]);
 
     expect(bars[1]).toHaveAttribute('opacity', '1');
   });
