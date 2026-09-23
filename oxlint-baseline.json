@@ -531,18 +531,6 @@
       "fingerprint": "src/web/components/bar/SeverityBar.tsx|typescript(restrict-template-expressions)|Invalid type used in template literal expression.|16|title = `${_NA}`;"
     },
     {
-      "filename": "src/web/components/chart/BarChart.tsx",
-      "code": "react(set-state-in-effect)",
-      "message": "Calling setState synchronously within an effect can trigger cascading renders",
-      "location": {
-        "line": 82,
-        "column": 5,
-        "offset": 2118
-      },
-      "sourceLine": "setChartWidth(currentWidth =>",
-      "fingerprint": "src/web/components/chart/BarChart.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setChartWidth(currentWidth =>"
-    },
-    {
       "filename": "src/web/components/chart/base/ToolTip.tsx",
       "code": "react(refs)",
       "message": "Cannot access refs during render",
@@ -565,42 +553,6 @@
       },
       "sourceLine": "const {color = Theme.lightGray, toolTip} = data;",
       "fingerprint": "src/web/components/chart/donut/Arc2d.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `ToString` (not nullish). This default assignment will never be used.|18|const {color = Theme.lightGray, toolTip} = data;"
-    },
-    {
-      "filename": "src/web/components/chart/DonutChart.tsx",
-      "code": "react(refs)",
-      "message": "Cannot access refs during render",
-      "location": {
-        "line": 79,
-        "column": 48,
-        "offset": 2149
-      },
-      "sourceLine": "const [chartWidth, setChartWidth] = useState(getWidth);",
-      "fingerprint": "src/web/components/chart/DonutChart.tsx|react(refs)|Cannot access refs during render|48|const [chartWidth, setChartWidth] = useState(getWidth);"
-    },
-    {
-      "filename": "src/web/components/chart/DonutChart.tsx",
-      "code": "react(set-state-in-effect)",
-      "message": "Calling setState synchronously within an effect can trigger cascading renders",
-      "location": {
-        "line": 84,
-        "column": 7,
-        "offset": 2255
-      },
-      "sourceLine": "setChartWidth(newWidth);",
-      "fingerprint": "src/web/components/chart/DonutChart.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setChartWidth(newWidth);"
-    },
-    {
-      "filename": "src/web/components/chart/LineChart.tsx",
-      "code": "react(set-state-in-effect)",
-      "message": "Calling setState synchronously within an effect can trigger cascading renders",
-      "location": {
-        "line": 290,
-        "column": 7,
-        "offset": 7140
-      },
-      "sourceLine": "setChartWidth(newWidth);",
-      "fingerprint": "src/web/components/chart/LineChart.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setChartWidth(newWidth);"
     },
     {
       "filename": "src/web/components/dashboard/DashboardView.tsx",
