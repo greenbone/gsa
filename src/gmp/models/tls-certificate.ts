@@ -10,7 +10,7 @@ import {parseBoolean, parseDate, parseToString, type YesNo} from 'gmp/parser';
 import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-type TimeStatus = keyof typeof TIME_STATUS;
+export type TimeStatus = keyof typeof TIME_STATUS;
 
 interface SourceElement {
   _id?: string;

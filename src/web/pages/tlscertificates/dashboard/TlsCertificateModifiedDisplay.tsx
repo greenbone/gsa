@@ -3,30 +3,55 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
+import {type Date} from 'gmp/models/date';
 import {TLS_CERTIFICATES_FILTER_FILTER} from 'gmp/models/filter';
 import {parseInt, parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
-import LineChart, {lineDataPropType} from 'web/components/chart/LineChart';
+import LineChart from 'web/components/chart/LineChart';
+import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
-import DataDisplay from 'web/components/dashboard/display/DataDisplay';
+import DataDisplay, {
+  type DataDisplayProps,
+} from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {
   createDateRangeFilter,
   totalCount,
 } from 'web/components/dashboard/display/utils';
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {TlsCertificatesModifiedLoader} from 'web/pages/tlscertificates/dashboard/Loaders';
-import PropTypes from 'web/utils/prop-types';
+import {
+  type TlsCertificateModifiedData,
+  TlsCertificatesModifiedLoader,
+} from 'web/pages/tlscertificates/dashboard/TlsCertificatesLoaders';
 import Theme from 'web/utils/theme';
 import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
 
-const transformModified = (data = {}) => {
+interface TransformedTlsCertificateModifiedDataItem {
+  x: Date;
+  label: string;
+  y: number;
+  y2: number;
+}
+
+interface TransformedTlsCertificateModifiedData extends Array<TransformedTlsCertificateModifiedDataItem> {
+  total: number;
+}
+
+type TlsCertificateModifiedDataDisplayProps = DataDisplayProps<
+  TlsCertificateModifiedData,
+  TransformedTlsCertificateModifiedData
+>;
+
+type TlsCertificateModifiedDisplayProps = DashboardDisplayProps;
+
+const transformModified = (
+  data: TlsCertificateModifiedData = {},
+): TransformedTlsCertificateModifiedData => {
   const {groups = []} = data;
   const sum = totalCount(groups);
-  const tdata = groups.map(group => {
+  const transformedData = groups.map(group => {
     const {value, count, c_count} = group;
     const modified = parseDate(value);
     return {
@@ -34,23 +59,35 @@ const transformModified = (data = {}) => {
       label: formattedUserSettingShortDate(modified),
       y: parseInt(count),
       y2: parseInt(c_count),
-    };
+    } as TransformedTlsCertificateModifiedDataItem;
   });
 
-  tdata.total = sum;
-  return tdata;
+  const result = transformedData as TransformedTlsCertificateModifiedData;
+  result.total = sum;
+  return result;
 };
 
-export class TlsCertificatesModifiedDisplay extends React.Component {
-  constructor(...args) {
-    super(...args);
+export const TlsCertificatesModifiedDisplay = ({
+  filter,
+  filterId,
+  showFilterSelection,
+  onFilterChanged,
+  onFilterIdChanged,
+  ...props
+}: TlsCertificateModifiedDisplayProps) => {
+  const {
+    filter: selectedFilter,
+    selectFilter,
+    filterSelectionDialog,
+  } = useFilterSelection({
+    filterId,
+    filtersFilter: TLS_CERTIFICATES_FILTER_FILTER,
+    onFilterIdChanged,
+  });
 
-    this.handleRangeSelect = this.handleRangeSelect.bind(this);
-  }
+  const displayFilter = showFilterSelection ? selectedFilter : filter;
 
-  handleRangeSelect(start, end) {
-    const {filter, onFilterChanged} = this.props;
-
+  const handleRangeSelect = (start, end) => {
     if (!isDefined(onFilterChanged)) {
       return;
     }
@@ -63,33 +100,37 @@ export class TlsCertificatesModifiedDisplay extends React.Component {
       createDateRangeFilter({
         endDate,
         field: 'modified',
-        filter,
+        filter: displayFilter,
         formatDate: date => date.format(dateFormat),
         startDate,
       }),
     );
-  }
+  };
 
-  render() {
-    const {filter, ...props} = this.props;
-    return (
-      <TlsCertificatesModifiedLoader filter={filter}>
+  return (
+    <>
+      <TlsCertificatesModifiedLoader filter={displayFilter}>
         {loaderProps => (
-          <DataDisplay
+          <DataDisplay<
+            TlsCertificateModifiedData,
+            TlsCertificateModifiedDataDisplayProps,
+            TransformedTlsCertificateModifiedData
+          >
             {...props}
             {...loaderProps}
             dataTransform={transformModified}
-            filter={filter}
-            title={({data: tdata}) =>
+            filter={displayFilter}
+            title={({data}) =>
               _('TLS Certificates by Modification Time (Total: {{count}})', {
-                count: tdata.total,
+                count: data.total,
               })
             }
+            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
           >
-            {({width, height, data: tdata, svgRef, state}) => (
+            {({width, height, data, svgRef, state}) => (
               <LineChart
                 timeline
-                data={tdata}
+                data={data}
                 height={height}
                 showLegend={state.showLegend}
                 svgRef={svgRef}
@@ -106,47 +147,39 @@ export class TlsCertificatesModifiedDisplay extends React.Component {
                   color: Theme.darkGreenTransparent,
                   label: _('Modified TLS Certificates'),
                 }}
-                onRangeSelected={this.handleRangeSelect}
+                onRangeSelected={handleRangeSelect}
               />
             )}
           </DataDisplay>
         )}
       </TlsCertificatesModifiedLoader>
-    );
-  }
-}
-
-TlsCertificatesModifiedDisplay.propTypes = {
-  filter: PropTypes.filter,
-  xAxisLabel: PropTypes.string,
-  y2AxisLabel: PropTypes.string,
-  y2Line: lineDataPropType,
-  yAxisLabel: PropTypes.string,
-  yLine: lineDataPropType,
-  onFilterChanged: PropTypes.func,
+      {filterSelectionDialog}
+    </>
+  );
 };
-
-TlsCertificatesModifiedDisplay = withFilterSelection({
-  filtersFilter: TLS_CERTIFICATES_FILTER_FILTER,
-})(TlsCertificatesModifiedDisplay);
 
 TlsCertificatesModifiedDisplay.displayId =
   'tls-certificates-by-modification-time';
 
 export const TlsCertificatesModifiedTableDisplay = createDisplay({
   loaderComponent: TlsCertificatesModifiedLoader,
-  displayComponent: DataTableDisplay,
-  dataTransform: transformModified,
-  title: ({data: tdata}) =>
-    _('TLS Certificates by Modification Time (Total: {{count}})', {
-      count: tdata.total,
-    }),
-  dataTitles: [
-    _l('Creation Time'),
-    _l('# of Modified Certificates'),
-    _l('Total Certificates'),
-  ],
-  dataRow: row => [row.label, row.y, row.y2],
+  displayComponent: props => (
+    <DataTableDisplay
+      {...props}
+      dataRow={row => [row.label, row.y, row.y2]}
+      dataTitles={[
+        _('Creation Time'),
+        _('# of Modified Certificates'),
+        _('Total Certificates'),
+      ]}
+      dataTransform={transformModified}
+      title={({data}) =>
+        _('TLS Certificates by Modification Time (Total: {{count}})', {
+          count: data.total,
+        })
+      }
+    />
+  ),
   filtersFilter: TLS_CERTIFICATES_FILTER_FILTER,
   displayId: 'tls-certificates-by-modification-time-table',
   displayName: 'TlsCertificatesModifiedTableDisplay',

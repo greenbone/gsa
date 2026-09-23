@@ -441,7 +441,7 @@
       "location": {
         "line": 109,
         "column": 6,
-        "offset": 2371
+        "offset": 2378
       },
       "sourceLine": "`${TIME_STATUS_TRANSLATIONS[status]}`;",
       "fingerprint": "src/gmp/models/tls-certificate.ts|typescript(restrict-template-expressions)|Invalid type used in template literal expression.|6|`${TIME_STATUS_TRANSLATIONS[status]}`;"
@@ -573,7 +573,7 @@
       "location": {
         "line": 79,
         "column": 48,
-        "offset": 2142
+        "offset": 2149
       },
       "sourceLine": "const [chartWidth, setChartWidth] = useState(getWidth);",
       "fingerprint": "src/web/components/chart/DonutChart.tsx|react(refs)|Cannot access refs during render|48|const [chartWidth, setChartWidth] = useState(getWidth);"
@@ -585,7 +585,7 @@
       "location": {
         "line": 84,
         "column": 7,
-        "offset": 2248
+        "offset": 2255
       },
       "sourceLine": "setChartWidth(newWidth);",
       "fingerprint": "src/web/components/chart/DonutChart.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setChartWidth(newWidth);"
@@ -3265,30 +3265,6 @@
       },
       "sourceLine": "selected: selectedEntities = [],",
       "fingerprint": "src/web/pages/tickets/TicketsListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Ticket[]` (not nullish). This default assignment will never be used.|34|selected: selectedEntities = [],"
-    },
-    {
-      "filename": "src/web/pages/tlscertificates/dashboard/ModifiedDisplay.jsx",
-      "code": "eslint(no-class-assign)",
-      "message": "Unexpected re-assignment of class TlsCertificatesModifiedDisplay",
-      "location": {
-        "line": 44,
-        "column": 14,
-        "offset": 1585
-      },
-      "sourceLine": "export class TlsCertificatesModifiedDisplay extends React.Component {",
-      "fingerprint": "src/web/pages/tlscertificates/dashboard/ModifiedDisplay.jsx|eslint(no-class-assign)|Unexpected re-assignment of class TlsCertificatesModifiedDisplay|14|export class TlsCertificatesModifiedDisplay extends React.Component {"
-    },
-    {
-      "filename": "src/web/pages/tlscertificates/dashboard/ModifiedDisplay.jsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 109,
-        "column": 39,
-        "offset": 3534
-      },
-      "sourceLine": "onRangeSelected={this.handleRangeSelect}",
-      "fingerprint": "src/web/pages/tlscertificates/dashboard/ModifiedDisplay.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|39|onRangeSelected={this.handleRangeSelect}"
     },
     {
       "filename": "src/web/pages/trashcan/TrashCanPage.tsx",

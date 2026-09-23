@@ -3,7 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Loader, {createLoadFunc} from 'web/components/dashboard/display/Loader';
+import type TlsCertificate from 'gmp/models/tls-certificate';
+import Loader, {
+  createLoadFunc,
+  type DisplayLoaderProps,
+} from 'web/components/dashboard/display/Loader';
+
+export type TlsCertificatesData = TlsCertificate[];
+
+interface TlsCertificatesModifiedGroup {
+  value: string;
+  count: number;
+  c_count: number;
+}
+
+export interface TlsCertificateModifiedData {
+  groups?: TlsCertificatesModifiedGroup[];
+}
 
 const TLS_CERTIFICATES_STATUS = 'tls-certificates-status';
 const TLS_CERTIFICATES_MODIFIED = 'tls-certificates-modification-time';
@@ -18,7 +34,10 @@ const tlsCertificatesStatusLoadFunc = createLoadFunc(
   TLS_CERTIFICATES_STATUS,
 );
 
-export const TlsCertificatesStatusLoader = ({children, filter}) => (
+export const TlsCertificatesStatusLoader = ({
+  children,
+  filter,
+}: DisplayLoaderProps<TlsCertificatesData>) => (
   <Loader
     dataId={TLS_CERTIFICATES_STATUS}
     filter={filter}
@@ -28,8 +47,7 @@ export const TlsCertificatesStatusLoader = ({children, filter}) => (
     {children}
   </Loader>
 );
-
-export const tlsCertificatesModifiedLoadFunc = createLoadFunc(
+const tlsCertificatesModifiedLoadFunc = createLoadFunc(
   ({gmp, filter}) =>
     gmp.tlscertificates
       .getModifiedAggregates({
@@ -39,7 +57,10 @@ export const tlsCertificatesModifiedLoadFunc = createLoadFunc(
   TLS_CERTIFICATES_MODIFIED,
 );
 
-export const TlsCertificatesModifiedLoader = ({filter, children}) => (
+export const TlsCertificatesModifiedLoader = ({
+  filter,
+  children,
+}: DisplayLoaderProps<TlsCertificateModifiedData>) => (
   <Loader
     dataId={TLS_CERTIFICATES_MODIFIED}
     filter={filter}
