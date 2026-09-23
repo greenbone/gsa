@@ -78,10 +78,7 @@ const BubbleChart = <TData extends BubbleChartData = BubbleChartData>({
     node => String(node.data.label) === hoveredLabel,
   );
   const orderedNodes = isDefined(hoveredNode)
-    ? [
-        ...nodes.filter(node => node !== hoveredNode),
-        hoveredNode,
-      ]
+    ? [...nodes.filter(node => node !== hoveredNode), hoveredNode]
     : nodes;
   return (
     <Svg ref={svgRef} height={height} width={width}>

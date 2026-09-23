@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect} from '@gsa/testing';
-import {rendererWith, screen} from 'web/testing';
+import {fireEvent, rendererWith, screen} from 'web/testing';
 import date from 'gmp/models/date';
 import ScheduleChart from 'web/components/chart/ScheduleChart';
 import Theme from 'web/utils/theme';
@@ -111,6 +111,48 @@ describe('ScheduleChart component tests', () => {
       'fill',
       Theme.lightGreen,
     );
+  });
+
+  test('should fade other schedule bars while hovering a bar', () => {
+    const {render} = rendererWith();
+
+    render(
+      <ScheduleChart
+        data={[
+          {
+            color: '#66cc66',
+            label: 'First schedule',
+            starts: [date('2026-01-01T10:00:00Z')],
+            toolTip: 'First tooltip',
+          },
+          {
+            color: '#66cc66',
+            label: 'Second schedule',
+            starts: [date('2026-01-02T10:00:00Z')],
+            toolTip: 'Second tooltip',
+          },
+        ]}
+        endDate={date('2026-01-07T00:00:00Z')}
+        height={300}
+        startDate={date('2026-01-01T00:00:00Z')}
+        width={800}
+      />,
+    );
+
+    const firstBar = screen.getByTestId('schedule-bar-0');
+    const secondBar = screen.getByTestId('schedule-bar-1');
+
+    fireEvent.mouseOver(firstBar);
+
+    expect(firstBar).toHaveAttribute('opacity', '1');
+    expect(screen.getByTestId('schedule-bar-1')).toHaveAttribute(
+      'opacity',
+      '0.35',
+    );
+
+    fireEvent.mouseOut(firstBar);
+
+    expect(secondBar).toHaveAttribute('opacity', '1');
   });
 
   test('should render no bars or future-run markers for empty data', () => {
