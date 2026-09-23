@@ -81,14 +81,13 @@ const TestDisplay = ({
 );
 
 const Display = createDisplay({
-  displayComponent: TestDisplay,
+  displayComponent: props => <TestDisplay showToggleLegend={true} {...props} />,
   displayId: 'test-display',
   displayName: 'TestDisplay',
   filterTerm: 'severity',
   filtersFilter,
   loaderComponent: TestLoader,
-  showToggleLegend: false,
-} as Parameters<typeof createDisplay>[0]);
+});
 
 const renderDisplay = (props = {}) => {
   const gmp = createGmp();
@@ -106,7 +105,7 @@ describe('createDisplay tests', () => {
     expect(screen.getByTestId('show-filter-selection')).toHaveTextContent(
       'false',
     );
-    expect(screen.getByTestId('show-toggle-legend')).toHaveTextContent('false');
+    expect(screen.getByTestId('show-toggle-legend')).toHaveTextContent('true');
     expect(Display.displayId).toBe('test-display');
     expect(Display.displayName).toBe('TestDisplay');
   });
