@@ -96,7 +96,7 @@ describe('OperatingSystemsTable', () => {
     expect(osLink.closest('a')).toHaveAttribute(
       'href',
 
-      '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
+      '/operating-systems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
     );
   });
 
@@ -121,7 +121,7 @@ describe('OperatingSystemsTable', () => {
     expect(cpeLink.closest('a')).toHaveAttribute(
       'href',
 
-      '/operatingsystems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
+      '/operating-systems?filter=name%3Dcpe%3A%2Ffoo%2Fbar',
     );
   });
 

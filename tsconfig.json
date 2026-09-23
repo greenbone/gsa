@@ -16,7 +16,6 @@
      "paths": {
       "gmp/*": ["./src/gmp/*"],
       "web/*": ["./src/web/*"],
-      "routePaths": ["./src/web/route-paths.ts"],
       "version": ["./src/version.js"],
       "@gsa/testing": ["./src/testing.js"],
       "e2e/*": ["./e2e/*"]

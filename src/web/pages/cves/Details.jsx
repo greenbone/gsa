@@ -67,7 +67,7 @@ const CveDetails = ({entity}) => {
                 <TableData>
                   <Link
                     query={{cvssVector: cvssBaseVector}}
-                    to={ROUTES.legacy.cvssCalculator.path}
+                    to={ROUTES.cvssCalculator.path}
                   >
                     {cvssBaseVector}
                   </Link>

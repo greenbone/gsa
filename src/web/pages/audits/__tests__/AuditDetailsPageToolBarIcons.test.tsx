@@ -210,7 +210,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
     const totalReports = screen.getByTitle('Total Reports for Audit foo');
     expect(totalReports).toHaveAttribute(
       'href',
-      '/auditreports?filter=task_id%3D12345',
+      '/audit-reports?filter=task_id%3D12345',
     );
     expect(within(totalReports).getByTestId('badge-icon')).toHaveTextContent(
       '0',
@@ -317,7 +317,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
     const totalReports = screen.getByTitle('Total Reports for Audit foo');
     expect(totalReports).toHaveAttribute(
       'href',
-      '/auditreports?filter=task_id%3D12345',
+      '/audit-reports?filter=task_id%3D12345',
     );
     expect(within(totalReports).getByTestId('badge-icon')).toHaveTextContent(
       '1',
@@ -423,7 +423,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
     const totalReports = screen.getByTitle('Total Reports for Audit foo');
     expect(totalReports).toHaveAttribute(
       'href',
-      '/auditreports?filter=task_id%3D12345',
+      '/audit-reports?filter=task_id%3D12345',
     );
     expect(within(totalReports).getByTestId('badge-icon')).toHaveTextContent(
       '2',
@@ -526,7 +526,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
     const totalReports = screen.getByTitle('Total Reports for Audit foo');
     expect(totalReports).toHaveAttribute(
       'href',
-      '/auditreports?filter=task_id%3D12345',
+      '/audit-reports?filter=task_id%3D12345',
     );
     expect(within(totalReports).getByTestId('badge-icon')).toHaveTextContent(
       '1',
@@ -637,7 +637,7 @@ describe('AuditDetailsPageToolBarIcons tests', () => {
     const totalReports = screen.getByTitle('Total Reports for Audit foo');
     expect(totalReports).toHaveAttribute(
       'href',
-      '/auditreports?filter=task_id%3D12345',
+      '/audit-reports?filter=task_id%3D12345',
     );
     expect(within(totalReports).getByTestId('badge-icon')).toHaveTextContent(
       '1',

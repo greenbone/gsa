@@ -89,7 +89,7 @@ const NvtDetails = ({entity, links = true}: NvtDetailsProps) => {
                   <TableData>
                     <Link
                       query={{cvssVector: tags.cvss_base_vector}}
-                      to={ROUTES.legacy.cvssCalculator.path}
+                      to={ROUTES.cvssCalculator.path}
                     >
                       {tags.cvss_base_vector}
                     </Link>

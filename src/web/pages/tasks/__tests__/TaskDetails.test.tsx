@@ -131,7 +131,7 @@ describe('TaskDetails tests', () => {
 
     const link = screen.getByText('my-container-image');
     expect(link).toBeVisible();
-    expect(link.closest('a')).toHaveAttribute('href', '/ociimagetargets');
+    expect(link.closest('a')).toHaveAttribute('href', '/oci-image-targets');
   });
 
   test('should render full task details', () => {

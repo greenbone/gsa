@@ -437,7 +437,7 @@ describe('ReportDetailsContent tests', () => {
       ).toHaveAttribute('href', '/vulnerabilities?filter=report_id%3D1234');
       expect(
         screen.getByTitle(/^Corresponding TLS Certificates/),
-      ).toHaveAttribute('href', '/tlscertificates?filter=report_id%3D1234');
+      ).toHaveAttribute('href', '/tls-certificates?filter=report_id%3D1234');
     });
 
     test('should render asset action buttons', () => {

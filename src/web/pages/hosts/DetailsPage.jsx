@@ -102,7 +102,7 @@ export const ToolBarIcons = ({
         <Link
           filter={'host_id=' + entity.id}
           title={_('TLS Certificates for this Host')}
-          to={ROUTES.legacy.tlsCertificates.path}
+          to={ROUTES.tlsCertificates.path}
         >
           <TlsCertificateIcon />
         </Link>

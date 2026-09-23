@@ -145,7 +145,7 @@ const AuditDetailsPageToolBarIcons = ({
             title={_('Total Reports for Audit {{- name}}', {
               name: entity.name as string,
             })}
-            to={ROUTES.legacy.auditReports.path}
+            to={ROUTES.auditReports.path}
           >
             <Badge content={entity.report_count?.total}>
               <ReportIcon />

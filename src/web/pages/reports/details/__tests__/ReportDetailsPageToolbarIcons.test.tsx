@@ -117,7 +117,7 @@ describe('Report Details ToolBarIcons tests', () => {
     expect(links[5]).toHaveAttribute('title', 'Corresponding TLS Certificates');
     expect(links[5]).toHaveAttribute(
       'href',
-      '/tlscertificates?filter=report_id%3D1234',
+      '/tls-certificates?filter=report_id%3D1234',
     );
 
     // Corresponding Performance Icon

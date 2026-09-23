@@ -33,7 +33,7 @@ const Header = () => {
   const manualURL = useManualURL();
 
   const handleSettingsClick = useCallback(async () => {
-    await navigate(ROUTES.legacy.userSettings.url);
+    await navigate(ROUTES.userSettings.url);
   }, [navigate]);
 
   const handleLogout = useCallback(() => {

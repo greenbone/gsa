@@ -314,7 +314,7 @@ describe('AuditReportDetailsContent tests', () => {
       );
       expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
         'href',
-        '/auditreports',
+        '/audit-reports',
       );
       expect(screen.getByTitle(/^Add to Assets/)).toBeInTheDocument();
       expect(screen.getByTitle(/^Remove from Assets/)).toBeInTheDocument();

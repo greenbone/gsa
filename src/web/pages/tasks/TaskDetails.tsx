@@ -146,7 +146,7 @@ const TaskDetails = ({entity, links = true}: TaskDetailsProps) => {
 
       {isContainerScanning && isDefined(ociImageTarget?.name) && (
         <DetailsBlock title={_('Container Image Target')}>
-          <Link textOnly={!links} to={ROUTES.legacy.ociImageTargets.url}>
+          <Link textOnly={!links} to={ROUTES.ociImageTargets.url}>
             {ociImageTarget.name}
           </Link>
         </DetailsBlock>
