@@ -147,7 +147,13 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
                       hoveredLabel !== currentArc.data.label
                     }
                     onDataClick={onDataClick}
-                    onHover={hoveredData => setHoveredLabel(hoveredData?.label)}
+                    onHover={hoveredData =>
+                      setHoveredLabel(
+                        hoveredData === undefined
+                          ? undefined
+                          : String(hoveredData.label),
+                      )
+                    }
                   />
                 );
               })}

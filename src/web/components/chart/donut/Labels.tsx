@@ -87,7 +87,7 @@ const Labels = <TData extends LabelData = LabelData>({
       {arcs.map((currentArc, index) => {
         const arcData = currentArc.data;
         const isDimmed =
-          hoveredLabel !== undefined && arcData.label !== hoveredLabel;
+          hoveredLabel !== undefined && String(arcData.label) !== hoveredLabel;
         const arc = d3arc<unknown, PieArcDatum<TData>>()
           .innerRadius(innerRadiusX ?? 0)
           .outerRadius(outerRadiusX);
