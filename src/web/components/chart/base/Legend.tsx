@@ -51,9 +51,13 @@ const StyledLegend = styled.div<StyledLegendProps>`
   margin: 10px 5px;
   display: flex;
   flex-direction: column;
+  width: max-content;
+  flex: 0 0 max-content;
+  align-self: flex-start;
   max-height: ${({$maxHeight}) => isDefined($maxHeight) && `${$maxHeight}px`};
   overflow-y: ${({$maxHeight}) => isDefined($maxHeight) && 'auto'};
   user-select: none;
+  white-space: nowrap;
   color: ${Theme.black};
   opacity: 0.75;
 `;
@@ -61,7 +65,9 @@ const StyledLegend = styled.div<StyledLegendProps>`
 export const Item = styled.div`
   display: flex;
   flex-direction: row;
+  flex-shrink: 0;
   align-items: center;
+  white-space: nowrap;
   margin: 5px 0;
   ${props =>
     isDefined(props.onClick)
