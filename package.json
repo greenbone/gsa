@@ -35,7 +35,8 @@
     "i18n-extract": "i18next-cli extract",
     "type-check": "tsc --noEmit",
     "type-check:watch": "tsc --noEmit --watch",
-    "clear:node_modules": "rm -rf node_modules && npm ci"
+    "clear:node_modules": "rm -rf node_modules && npm ci",
+    "generate:feed-key-types": "node scripts/generate-feed-key-types.ts"
   },
   "dependencies": {
     "@dnd-kit/helpers": "^0.5.0",
@@ -112,6 +113,7 @@
     "oxfmt": "0.68.0",
     "oxlint": "1.82.0",
     "oxlint-tsgolint": "7.0.2001",
+    "openapi-typescript": "^7.13.0",
     "typescript": "7.0.2",
     "vite": "^8.2.2",
     "vite-plugin-checker": "0.14.5",
