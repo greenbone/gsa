@@ -40,6 +40,11 @@ const renderWithSubscriptionContext = ({
   );
 };
 
+const expectVulnerabilitySubscriptions = (subscribe: SubscribeFunc) => {
+  expect(subscribe).toHaveBeenCalledWith('vulns.timer', expect.any(Function));
+  expect(subscribe).toHaveBeenCalledWith('vulns.changed', expect.any(Function));
+};
+
 describe('Vulnerabilities Loaders', () => {
   test('should export severity data ID', () => {
     expect(VULNS_SEVERITY).toBe('vulns-severity');
@@ -49,63 +54,59 @@ describe('Vulnerabilities Loaders', () => {
     expect(VULNS_HOSTS).toBe('vulns-hosts');
   });
 
-  test('should load severity aggregates and render them', async () => {
-    const data = [{value: 5, count: 10}];
-    const mockGetSeverityAggregates = testing.fn().mockResolvedValue({data});
-    const gmp = createGmp({getSeverityAggregates: mockGetSeverityAggregates});
-    const filter = QueryFilter.fromString('first=1 rows=10');
-    const subscribe = testing.fn().mockReturnValue(testing.fn());
-    const children = testing.fn().mockReturnValue(null);
+  describe('VulnerabilitiesSeverityLoader', () => {
+    test('should load severity aggregates and render them', async () => {
+      const data = {groups: [{value: '5.0', count: 10}]};
+      const getSeverityAggregates = testing.fn().mockResolvedValue({data});
+      const gmp = createGmp({getSeverityAggregates});
+      const filter = QueryFilter.fromString('first=1 rows=10');
+      const subscribe = testing.fn().mockReturnValue(testing.fn());
+      const children = testing.fn().mockReturnValue(null);
 
-    renderWithSubscriptionContext({
-      gmp,
-      subscribe,
-      children: (
-        <VulnerabilitiesSeverityLoader filter={filter}>
-          {children}
-        </VulnerabilitiesSeverityLoader>
-      ),
+      renderWithSubscriptionContext({
+        gmp,
+        subscribe,
+        children: (
+          <VulnerabilitiesSeverityLoader filter={filter}>
+            {children}
+          </VulnerabilitiesSeverityLoader>
+        ),
+      });
+
+      await waitFor(() => {
+        expect(getSeverityAggregates).toHaveBeenCalledWith({filter});
+        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+      });
+
+      expectVulnerabilitySubscriptions(subscribe);
     });
-
-    await waitFor(() => {
-      expect(mockGetSeverityAggregates).toHaveBeenCalledWith({filter});
-      expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
-    });
-
-    expect(subscribe).toHaveBeenCalledWith('vulns.timer', expect.any(Function));
-    expect(subscribe).toHaveBeenCalledWith(
-      'vulns.changed',
-      expect.any(Function),
-    );
   });
 
-  test('should load host aggregates and render them', async () => {
-    const data = [{value: 1, count: 5}];
-    const mockGetHostAggregates = testing.fn().mockResolvedValue({data});
-    const gmp = createGmp({getHostAggregates: mockGetHostAggregates});
-    const filter = QueryFilter.fromString('first=1 rows=10');
-    const subscribe = testing.fn().mockReturnValue(testing.fn());
-    const children = testing.fn().mockReturnValue(null);
+  describe('VulnerabilitiesHostsLoader', () => {
+    test('should load host aggregates and render them', async () => {
+      const data = {groups: [{value: 1, count: 5, c_count: 5}]};
+      const getHostAggregates = testing.fn().mockResolvedValue({data});
+      const gmp = createGmp({getHostAggregates});
+      const filter = QueryFilter.fromString('first=1 rows=10');
+      const subscribe = testing.fn().mockReturnValue(testing.fn());
+      const children = testing.fn().mockReturnValue(null);
 
-    renderWithSubscriptionContext({
-      gmp,
-      subscribe,
-      children: (
-        <VulnerabilitiesHostsLoader filter={filter}>
-          {children}
-        </VulnerabilitiesHostsLoader>
-      ),
+      renderWithSubscriptionContext({
+        gmp,
+        subscribe,
+        children: (
+          <VulnerabilitiesHostsLoader filter={filter}>
+            {children}
+          </VulnerabilitiesHostsLoader>
+        ),
+      });
+
+      await waitFor(() => {
+        expect(getHostAggregates).toHaveBeenCalledWith({filter});
+        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+      });
+
+      expectVulnerabilitySubscriptions(subscribe);
     });
-
-    await waitFor(() => {
-      expect(mockGetHostAggregates).toHaveBeenCalledWith({filter});
-      expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
-    });
-
-    expect(subscribe).toHaveBeenCalledWith('vulns.timer', expect.any(Function));
-    expect(subscribe).toHaveBeenCalledWith(
-      'vulns.changed',
-      expect.any(Function),
-    );
   });
 });

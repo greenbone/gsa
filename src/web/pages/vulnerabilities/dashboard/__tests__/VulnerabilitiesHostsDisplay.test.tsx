@@ -3,27 +3,30 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
+  SubscriptionContext,
+  type SubscribeFunc,
+} from 'web/components/provider/SubscriptionProvider';
+import {
   VulnerabilitiesHostsDisplay,
   VulnerabilitiesHostsTableDisplay,
 } from 'web/pages/vulnerabilities/dashboard/VulnerabilitiesHostsDisplay';
 
-let loaderData: {groups?: {value: number; count: number; c_count: number}[]} = {
-  groups: [],
+type LoaderData = {
+  groups?: {value: number; count: number; c_count: number}[];
 };
-
-vi.mock('web/pages/vulnerabilities/dashboard/VulnerabilitiesLoaders', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  VulnerabilitiesHostsLoader: ({children}) =>
-    children({data: loaderData, isLoading: false}),
-}));
 
 vi.mock('web/components/dashboard/display/DataDisplay', () => ({
   default: ({children, data, dataTransform, title}) => {
+    if (!data) {
+      return null;
+    }
+
     const transformedData = dataTransform ? dataTransform(data) : data;
     return (
       <div data-testid="mock-data-display">
@@ -59,29 +62,33 @@ vi.mock(
   }),
 );
 
-const createGmp = () => ({
+const createGmp = (loaderData: LoaderData) => ({
   filters: {
     get: testing.fn().mockResolvedValue({
       data: [],
-      meta: {filter: 'type=task', counts: {}},
+      meta: {filter: 'type=vulnerability', counts: {}},
     }),
   },
+  vulns: {
+    getHostAggregates: testing.fn().mockResolvedValue({data: loaderData}),
+  },
 });
+
+const renderDisplay = (component: ReactElement, loaderData: LoaderData) => {
+  const subscribe: SubscribeFunc = testing.fn().mockReturnValue(testing.fn());
+  const {render} = rendererWith({gmp: createGmp(loaderData), store: true});
+
+  return render(
+    <SubscriptionContext.Provider value={subscribe}>
+      {component}
+    </SubscriptionContext.Provider>,
+  );
+};
 
 describe('VulnerabilitiesHostsDisplay', () => {
   test('should export VulnerabilitiesHostsDisplay', () => {
     expect(VulnerabilitiesHostsDisplay).toBeDefined();
-    expect(typeof VulnerabilitiesHostsDisplay).toBe('function');
-  });
-
-  test('should have correct displayId', () => {
     expect(VulnerabilitiesHostsDisplay.displayId).toBe('vuln-by-hosts');
-  });
-
-  test('should have displayName', () => {
-    expect(VulnerabilitiesHostsDisplay.displayName).toContain(
-      'VulnerabilitiesHostsDisplay',
-    );
   });
 
   test('should be registered with the correct title', () => {
@@ -90,30 +97,38 @@ describe('VulnerabilitiesHostsDisplay', () => {
     expect(String(registered?.title)).toBe('Chart: Vulnerabilities by Hosts');
   });
 
-  test('should render the total vulnerabilities count in the title', () => {
-    loaderData = {
+  test('should render the total vulnerabilities count in the title', async () => {
+    const loaderData = {
       groups: [
         {value: 0, count: 1, c_count: 2},
         {value: 4, count: 1, c_count: 2},
       ],
     };
-    const {render} = rendererWith({gmp: createGmp()});
-    render(<VulnerabilitiesHostsDisplay />);
-    screen.getByText(/Total: 2/);
+    renderDisplay(
+      <VulnerabilitiesHostsDisplay height={200} width={200} />,
+      loaderData,
+    );
+    await screen.findByText(/Total: 2/);
   });
 
-  test('should call onFilterChanged with a range filter when clicking a bar', () => {
-    loaderData = {
+  test('should call onFilterChanged with a range filter when clicking a bar', async () => {
+    const loaderData = {
       groups: [
         {value: 0, count: 1, c_count: 2},
         {value: 4, count: 1, c_count: 2},
       ],
     };
     const onFilterChanged = testing.fn();
-    const {render} = rendererWith({gmp: createGmp()});
-    render(<VulnerabilitiesHostsDisplay onFilterChanged={onFilterChanged} />);
+    renderDisplay(
+      <VulnerabilitiesHostsDisplay
+        height={200}
+        width={200}
+        onFilterChanged={onFilterChanged}
+      />,
+      loaderData,
+    );
 
-    const bar = screen.getByRole('button', {name: 'bar-4-5'});
+    const bar = await screen.findByRole('button', {name: 'bar-4-5'});
     bar.click();
 
     expect(onFilterChanged).toHaveBeenCalledTimes(1);
@@ -122,13 +137,19 @@ describe('VulnerabilitiesHostsDisplay', () => {
     expect(newFilter.toFilterString()).toContain('hosts<6');
   });
 
-  test('should call onFilterChanged with a hosts=0 filter when clicking the zero-hosts bar', () => {
-    loaderData = {groups: [{value: 0, count: 1, c_count: 1}]};
+  test('should call onFilterChanged with a hosts=0 filter when clicking the zero-hosts bar', async () => {
+    const loaderData = {groups: [{value: 0, count: 1, c_count: 1}]};
     const onFilterChanged = testing.fn();
-    const {render} = rendererWith({gmp: createGmp()});
-    render(<VulnerabilitiesHostsDisplay onFilterChanged={onFilterChanged} />);
+    renderDisplay(
+      <VulnerabilitiesHostsDisplay
+        height={200}
+        width={200}
+        onFilterChanged={onFilterChanged}
+      />,
+      loaderData,
+    );
 
-    const bar = screen.getByRole('button', {name: 'bar-0'});
+    const bar = await screen.findByRole('button', {name: 'bar-0'});
     bar.click();
 
     expect(onFilterChanged).toHaveBeenCalledTimes(1);
@@ -136,30 +157,34 @@ describe('VulnerabilitiesHostsDisplay', () => {
     expect(newFilter.toFilterString()).toContain('hosts=0');
   });
 
-  test('should not call onFilterChanged if the filter already has the matching term', () => {
-    loaderData = {groups: [{value: 0, count: 1, c_count: 1}]};
+  test('should not call onFilterChanged if the filter already has the matching term', async () => {
+    const loaderData = {groups: [{value: 0, count: 1, c_count: 1}]};
     const onFilterChanged = testing.fn();
     const filter = QueryFilter.fromString('hosts=0');
-    const {render} = rendererWith({gmp: createGmp()});
-    render(
+    renderDisplay(
       <VulnerabilitiesHostsDisplay
         filter={filter}
+        height={200}
+        width={200}
         onFilterChanged={onFilterChanged}
       />,
+      loaderData,
     );
 
-    const bar = screen.getByRole('button', {name: 'bar-0'});
+    const bar = await screen.findByRole('button', {name: 'bar-0'});
     bar.click();
 
     expect(onFilterChanged).not.toHaveBeenCalled();
   });
 
-  test('should not throw when clicking a bar without onFilterChanged', () => {
-    loaderData = {groups: [{value: 0, count: 1, c_count: 1}]};
-    const {render} = rendererWith({gmp: createGmp()});
-    render(<VulnerabilitiesHostsDisplay />);
+  test('should not throw when clicking a bar without onFilterChanged', async () => {
+    const loaderData = {groups: [{value: 0, count: 1, c_count: 1}]};
+    renderDisplay(
+      <VulnerabilitiesHostsDisplay height={200} width={200} />,
+      loaderData,
+    );
 
-    const bar = screen.getByRole('button', {name: 'bar-0'});
+    const bar = await screen.findByRole('button', {name: 'bar-0'});
     expect(() => bar.click()).not.toThrow();
   });
 });

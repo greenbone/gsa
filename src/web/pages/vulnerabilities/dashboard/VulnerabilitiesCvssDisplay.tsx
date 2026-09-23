@@ -29,14 +29,19 @@ export const VulnerabilitiesCvssDisplay = createDisplay({
 
 export const VulnerabilitiesCvssTableDisplay = createDisplay({
   loaderComponent: VulnerabilitiesSeverityLoader,
-  displayComponent: CvssTableDisplay,
-  dataTitles: [_l('Severity'), _l('# of Vulnerabilities')],
-  title: ({data: tdata}) =>
-    _('Vulnerabilities by CVSS (Total: {{count}})', {count: tdata.total}),
+  displayComponent: props => (
+    <CvssTableDisplay
+      {...props}
+      dataTitles={[_('Severity'), _('# of Vulnerabilities')]}
+      title={({data}) =>
+        _('Vulnerabilities by CVSS (Total: {{count}})', {count: data.total})
+      }
+    />
+  ),
   displayId: 'vuln-by-cvss-table',
   displayName: 'VulnerabilitiesCvssTableDisplay',
   filtersFilter: VULNS_FILTER_FILTER,
-} as Parameters<typeof createDisplay>[0]);
+});
 
 registerDisplay(
   VulnerabilitiesCvssDisplay,
