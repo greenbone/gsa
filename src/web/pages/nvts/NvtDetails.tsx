@@ -4,7 +4,6 @@
  */
 
 import ReactMarkdown from 'react-markdown';
-import {ROUTES} from 'web/route-paths';
 import {type default as Nvt, TAG_NA} from 'gmp/models/nvt';
 import {isDefined} from 'gmp/utils/identity';
 import Severitybar from 'web/components/bar/SeverityBar';
