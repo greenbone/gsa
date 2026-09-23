@@ -7,9 +7,7 @@ import {scaleLinear} from 'd3-scale';
 import {_, _l} from 'gmp/locale/lang';
 import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
-import DonutChart, {
-  type DonutChartProps,
-} from 'web/components/chart/DonutChart';
+import DonutChart from 'web/components/chart/DonutChart';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay, {
   type DataDisplayProps,
@@ -79,9 +77,6 @@ type TicketUserAssignedDataDisplayProps = DataDisplayProps<
 >;
 
 export const TicketsAssignedUsersDisplay = createDisplay({
-  chartComponent: (
-    props: DonutChartProps<TransformedTicketUserAssignedDataItem>,
-  ) => <DonutChart {...props} showLegend={false} />,
   loaderComponent: TicketsListLoader,
   displayComponent: props => (
     <DataDisplay<
@@ -95,7 +90,9 @@ export const TicketsAssignedUsersDisplay = createDisplay({
       title={({data}) =>
         _('Tickets by Assigned User (Total: {{total}})', {total: data.total})
       }
-    />
+    >
+      {chartProps => <DonutChart {...chartProps} showLegend={false} />}
+    </DataDisplay>
   ),
   displayId: 'tickets-by-assigned-users',
   displayName: 'TicketsAssignedUsersDisplay',
