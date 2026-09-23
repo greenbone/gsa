@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {ROUTES} from 'routePaths';
 import {_, _l} from 'gmp/locale/lang';
 import {type ReportClosedCve} from 'gmp/models/report/parser';
 import {isDefined} from 'gmp/utils/identity';
@@ -16,6 +15,7 @@ import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
+import {ROUTES} from 'web/route-paths';
 import {type SortDirectionType} from 'web/utils/sort-direction';
 
 interface HeaderProps {

@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import {ROUTES} from 'routePaths';
 import {_, _l} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
@@ -17,6 +16,7 @@ import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/DetailsBlock';
 import useGmp from 'web/hooks/useGmp';
+import {ROUTES} from 'web/route-paths';
 import PropTypes from 'web/utils/prop-types';
 import {renderPercentile, renderScore} from 'web/utils/severity';
 

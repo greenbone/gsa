@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
-import {ROUTES} from 'routePaths';
+import {useState} from 'react';
 import {
   NVT_FEED,
   SCAP_FEED,
@@ -43,6 +42,7 @@ import TableHead from 'web/components/table/TableHead';
 import TableRow from 'web/components/table/TableRow';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
+import {ROUTES} from 'web/route-paths';
 
 interface FeedStatusProps {
   feeds: Feed[];

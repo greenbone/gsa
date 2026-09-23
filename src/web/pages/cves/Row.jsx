@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import {ROUTES} from 'routePaths';
 import {shorten} from 'gmp/utils/string';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Comment from 'web/components/comment/Comment';
@@ -15,6 +14,7 @@ import TableRow from 'web/components/table/TableRow';
 import EntitiesActions from 'web/entities/EntitiesActions';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import useGmp from 'web/hooks/useGmp';
+import {ROUTES} from 'web/route-paths';
 import PropTypes from 'web/utils/prop-types';
 import {renderPercentile, renderScore} from 'web/utils/severity';
 

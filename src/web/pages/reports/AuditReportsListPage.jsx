@@ -5,7 +5,6 @@
 
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router';
-import {ROUTES} from 'routePaths';
 import Filter, {AUDIT_REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {isActive} from 'gmp/models/task';
@@ -27,6 +26,7 @@ import AuditReportsDashboard, {
 } from 'web/pages/reports/auditdashboard';
 import AuditReportFilterDialog from 'web/pages/reports/AuditReportFilterDialog';
 import AuditReportsTable from 'web/pages/reports/AuditReportTable';
+import {ROUTES} from 'web/route-paths';
 import {
   loadEntities,
   selector as entitiesSelector,

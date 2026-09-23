@@ -5,7 +5,6 @@
 
 import {useCallback, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
-import {ROUTES} from 'routePaths';
 import {duration} from 'gmp/models/date';
 import type ScanConfig from 'gmp/models/scan-config';
 import {scannerTypeName} from 'gmp/models/scanner';
@@ -27,6 +26,7 @@ import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
+import {ROUTES} from 'web/route-paths';
 import {
   loadEntity as loadScanConfig,
   selector as scanConfigSelector,

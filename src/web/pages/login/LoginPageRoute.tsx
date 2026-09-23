@@ -4,11 +4,11 @@
  */
 
 import {Navigate, useNavigation} from 'react-router';
-import {ROUTES} from 'routePaths';
 import Loading from 'web/components/loading/Loading';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import useUserName from 'web/hooks/useUserName';
 import LoginPage from 'web/pages/login/LoginPage';
+import {ROUTES} from 'web/route-paths';
 import {
   getLastVisitedPage,
   clearLastVisitedPage,

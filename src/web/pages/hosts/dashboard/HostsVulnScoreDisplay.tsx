@@ -5,7 +5,6 @@
 
 import {type ReactNode} from 'react';
 import {useNavigate} from 'react-router';
-import {ROUTES} from 'routePaths';
 import styled from 'styled-components';
 import {_, _l} from 'gmp/locale/lang';
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
@@ -26,6 +25,7 @@ import {
   HostsVulnScoreLoader,
   type VulnScoreData,
 } from 'web/pages/hosts/dashboard/HostsLoaders';
+import {ROUTES} from 'web/route-paths';
 import {resultSeverityRiskFactor} from 'web/utils/severity';
 import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
 

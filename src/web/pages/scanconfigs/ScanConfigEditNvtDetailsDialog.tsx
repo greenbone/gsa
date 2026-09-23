@@ -4,7 +4,6 @@
  */
 
 import {useEffect, useReducer, useState} from 'react';
-import {ROUTES} from 'routePaths';
 import {type ScanConfigNvtPreferenceValues} from 'gmp/commands/scan-config';
 import {type Date} from 'gmp/models/date';
 import {
@@ -34,6 +33,7 @@ import TableRow from 'web/components/table/TableRow';
 import useTranslation from 'web/hooks/useTranslation';
 import NvtPreference from 'web/pages/nvts/NvtPreference';
 import Preformatted from 'web/pages/nvts/Preformatted';
+import {ROUTES} from 'web/route-paths';
 
 export interface ScanConfigEditNvtDetailsDialogData {
   configId: string;

@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {entityURL} from 'routePaths';
 import {type EntityType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import Link, {type LinkProps} from 'web/components/link/Link';
 import useCapabilities from 'web/hooks/useCapabilities';
+import {entityURL} from 'web/route-paths';
 
 export interface DetailsLinkProps extends LinkProps {
   id: string;

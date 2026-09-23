@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {ROUTES} from 'routePaths';
 import type Audit from 'gmp/models/audit';
 import {isDefined} from 'gmp/utils/identity';
 import Badge from 'web/components/badge/Badge';
@@ -23,6 +22,7 @@ import TaskResumeIcon from 'web/pages/tasks/icons/TaskResumeIcon';
 import TaskScheduleIcon from 'web/pages/tasks/icons/TaskScheduleIcon';
 import TaskStartIcon from 'web/pages/tasks/icons/TaskStartIcon';
 import TaskStopIcon from 'web/pages/tasks/icons/TaskStopIcon';
+import {ROUTES} from 'web/route-paths';
 import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
 
 interface AuditDetailsPageToolBarIconsProps {

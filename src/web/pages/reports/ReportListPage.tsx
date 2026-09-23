@@ -5,7 +5,6 @@
 
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router';
-import {ROUTES} from 'routePaths';
 import {type TaskCommandCreateImportTaskParams} from 'gmp/commands/task';
 import {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import type FilterType from 'gmp/models/filter/filter-type';
@@ -38,6 +37,7 @@ import ReportImportDialog, {
 } from 'web/pages/reports/ReportImportDialog';
 import ReportsTable from 'web/pages/reports/ReportTable';
 import ImportTaskDialog from 'web/pages/tasks/ImportTaskDialog';
+import {ROUTES} from 'web/route-paths';
 import {
   loadEntities,
   selector as entitiesSelector,
