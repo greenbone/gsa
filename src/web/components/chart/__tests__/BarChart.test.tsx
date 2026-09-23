@@ -52,6 +52,17 @@ describe('BarChart', () => {
     expect(container).toHaveTextContent('Y axis');
   });
 
+  test('should update chart width when the width changes', () => {
+    const {render} = rendererWith();
+    const rendered = render(<BarChart data={data} height={300} width={900} />);
+
+    const svg = screen.getByTestId('main-container').querySelector('svg');
+    expect(svg).toHaveAttribute('width', '874');
+
+    rendered.rerender(<BarChart data={data} height={300} width={500} />);
+    expect(svg).toHaveAttribute('width', '474');
+  });
+
   test('should call onDataClick with the clicked data point', () => {
     const onDataClick = testing.fn();
     const {render} = rendererWith();

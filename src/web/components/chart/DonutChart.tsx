@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {useCallback, useLayoutEffect, useRef, useState} from 'react';
 import {arc as d3arc, pie as d3pie, type PieArcDatum} from 'd3-shape';
 import styled from 'styled-components';
 import ChartWithEmptyState from 'web/components/chart/base/ChartWithEmptyState';
@@ -60,6 +60,14 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
 }: DonutChartProps<TData>) => {
   const legendRef: LegendRef = useRef<HTMLElement | null>(null);
 
+  const initialWidth = () => {
+    let width = propWidth - MENU_PLACEHOLDER_WIDTH;
+    if (width < MIN_WIDTH) {
+      width = MIN_WIDTH;
+    }
+    return width;
+  };
+
   const getWidth = useCallback(() => {
     let width = propWidth - MENU_PLACEHOLDER_WIDTH;
     const {current: legend} = legendRef;
@@ -76,14 +84,13 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
     return width;
   }, [propWidth, showLegend]);
 
-  const [chartWidth, setChartWidth] = useState(getWidth);
+  const [chartWidth, setChartWidth] = useState(initialWidth);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const newWidth = getWidth();
-    if (newWidth !== chartWidth) {
-      setChartWidth(newWidth);
-    }
-  }, [chartWidth, getWidth]);
+    // oxlint-disable-next-line react/set-state-in-effect
+    setChartWidth(newWidth);
+  }, [getWidth]);
 
   const horizontalMargin = margin.left + margin.right;
   const donutWidth = Math.min(chartWidth, height);
