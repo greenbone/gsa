@@ -144,14 +144,13 @@ const WordCloudChart = ({
                 fontSize={`${word.size}px`}
                 fontWeight={word.weight}
                 opacity={
-                  hoveredWordIndex !== undefined &&
-                  hoveredWordIndex !== index
+                  hoveredWordIndex !== undefined && hoveredWordIndex !== index
                     ? 0.35
                     : 1
                 }
+                style={{transition: HOVER_TRANSITION}}
                 textAnchor="middle"
                 transform={`translate(${word.x},${word.y})rotate(${word.rotate})`}
-                style={{transition: HOVER_TRANSITION}}
               >
                 {word.text}
               </text>

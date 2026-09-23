@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {scaleBand, scaleUtc} from 'd3-scale';
 import {type TranslateFunc} from 'gmp/locale';
 import date, {type Date as GmpDate} from 'gmp/models/date';
@@ -65,6 +65,7 @@ const margin = {
 } as const;
 
 const MAX_LABEL_LENGTH = 25;
+const HOVER_TRANSITION = 'opacity 180ms ease-in-out';
 
 const tickFormat = (value: string | number | Date) => {
   return shorten(String(value), MAX_LABEL_LENGTH);
@@ -172,6 +173,7 @@ const ScheduleChart = ({
   endDate,
 }: ScheduleChartProps) => {
   const [_] = useTranslation();
+  const [hoveredScheduleIndex, setHoveredScheduleIndex] = useState<number>();
 
   const resolvedEndDate = endDate ?? startDate.clone().add(7, 'days');
 
@@ -300,16 +302,29 @@ const ScheduleChart = ({
                         data-testid={`schedule-bar-${index}`}
                         fill={hasDuration ? Theme.lightGreen : fillGradientUrl}
                         height={bandwidth}
+                        opacity={
+                          hoveredScheduleIndex !== undefined &&
+                          hoveredScheduleIndex !== index
+                            ? 0.35
+                            : 1
+                        }
                         rx="4"
                         ry="4"
                         stroke={
                           hasDuration ? Theme.darkGreen : strokeGradientUrl
                         }
+                        style={{transition: HOVER_TRANSITION}}
                         width={rwidth}
                         x={startX}
                         y={yScale(String(label))}
-                        onMouseEnter={show}
-                        onMouseLeave={hide}
+                        onMouseEnter={() => {
+                          show();
+                          setHoveredScheduleIndex(index);
+                        }}
+                        onMouseLeave={() => {
+                          hide();
+                          setHoveredScheduleIndex(undefined);
+                        }}
                       />
                     )}
                   </ToolTip>
