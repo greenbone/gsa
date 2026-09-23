@@ -76,7 +76,7 @@ describe('Arc2d', () => {
     const arc = screen.getByTestId('arc-2d');
     const pathBeforeHover = arc.querySelector('path')?.getAttribute('d');
 
-    fireEvent.mouseEnter(arc);
+    fireEvent.mouseOver(arc);
 
     expect(arc.querySelector('path')).toHaveAttribute('d', pathBeforeHover);
   });

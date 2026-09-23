@@ -77,7 +77,9 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
     return width;
   }, [propWidth, showLegend]);
 
-  const [chartWidth, setChartWidth] = useState(getWidth);
+  const [chartWidth, setChartWidth] = useState(() =>
+    Math.max(propWidth - MENU_PLACEHOLDER_WIDTH, MIN_WIDTH),
+  );
   const [hoveredLabel, setHoveredLabel] = useState<ToString>();
 
   useLayoutEffect(() => {
