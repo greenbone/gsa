@@ -2318,6 +2318,7 @@
   "View list of all reports for Task {{name}}, including unfinished ones": "タスク {{name}} の未完了分を含むすべてのレポート一覧を表示",
   "Vulnerabilities": "脆弱性",
   "Vulnerabilities by CVSS (Total: {{count}})": "CVSS別脆弱性 (合計: {{count}})",
+  "Vulnerabilities by Hosts": "",
   "Vulnerabilities by Hosts (Total: {{count}})": "ホスト別脆弱性 (合計: {{count}})",
   "Vulnerabilities by Severity Class (Total: {{count}})": "深刻度クラス別脆弱性 (合計: {{count}})",
   "Vulnerabilities did not change": "脆弱性に変化なし",
