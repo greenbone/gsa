@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {ROUTES} from 'routePaths';
 import styled from 'styled-components';
 import {_, _l} from 'gmp/locale/lang';
 import type Model from 'gmp/models/model';
@@ -23,6 +22,7 @@ import {
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import withRowDetails from 'web/entities/withRowDetails';
 import TlsCertificateDetails from 'web/pages/tlscertificates/Details';
+import {ROUTES} from 'web/route-paths';
 import {type SortDirectionType} from 'web/utils/sort-direction';
 
 interface HeaderProps {

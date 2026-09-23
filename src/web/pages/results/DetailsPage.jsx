@@ -5,7 +5,6 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
-import {ROUTES} from 'routePaths';
 import {MANUAL} from 'gmp/models/override';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
@@ -43,6 +42,7 @@ import OverrideComponent from 'web/pages/overrides/OverrideComponent';
 import ResultDetails from 'web/pages/results/ResultDetails';
 import ResultDetailsPageToolBarIcons from 'web/pages/results/ResultDetailsPageToolBarIcons';
 import TicketComponent from 'web/pages/tickets/TicketComponent';
+import {ROUTES} from 'web/route-paths';
 import {loadEntity, selector} from 'web/store/entities/results';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';

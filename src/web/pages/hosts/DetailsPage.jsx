@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import {ROUTES} from 'routePaths';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
@@ -44,6 +43,7 @@ import withEntityContainer, {
 import useTranslation from 'web/hooks/useTranslation';
 import HostDetails from 'web/pages/hosts/Details';
 import HostComponent from 'web/pages/hosts/HostComponent';
+import {ROUTES} from 'web/route-paths';
 import {selector as hostsSelector, loadEntity} from 'web/store/entities/hosts';
 import {
   selector as permissionsSelector,

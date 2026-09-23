@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {ROUTES} from 'routePaths';
 import type Result from 'gmp/models/result';
 import {isDefined} from 'gmp/utils/identity';
 import Badge from 'web/components/badge/Badge';
@@ -24,6 +23,7 @@ import DetailsLink from 'web/components/link/DetailsLink';
 import Link from 'web/components/link/Link';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import {ROUTES} from 'web/route-paths';
 
 interface ResultDetailsPageToolBarIconsProps {
   entity: Result;

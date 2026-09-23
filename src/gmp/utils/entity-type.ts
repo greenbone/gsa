@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {entityURL as entityRouteURL} from 'routePaths';
 import {_l, _} from 'gmp/locale/lang';
 import logger from 'gmp/log';
 import {isDefined} from 'gmp/utils/identity';
+import {entityURL as entityRouteURL} from 'web/route-paths';
 
 export interface WithEntityType {
   entityType: EntityType;

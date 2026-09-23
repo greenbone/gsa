@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {entityListURL, entityURL, type EntityListType} from 'routePaths';
 import {type EntityType} from 'gmp/utils/entity-type';
 import {isDefined, isFunction} from 'gmp/utils/identity';
+import {entityListURL, entityURL, type EntityListType} from 'web/route-paths';
 
 export type NavigateFunc = (path: string) => void;
 

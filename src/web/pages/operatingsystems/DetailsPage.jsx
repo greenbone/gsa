@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import {ROUTES} from 'routePaths';
 import Badge from 'web/components/badge/Badge';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import {HostIcon, OsSvgIcon} from 'web/components/icon';
@@ -41,6 +40,7 @@ import withEntityContainer, {
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import OsComponent from 'web/pages/operatingsystems/Component';
+import {ROUTES} from 'web/route-paths';
 import {
   selector as osSelector,
   loadEntity,

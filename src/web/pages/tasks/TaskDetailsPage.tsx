@@ -5,7 +5,6 @@
 
 import React, {useEffect} from 'react';
 import {useNavigate} from 'react-router';
-import {ROUTES} from 'routePaths';
 import type Gmp from 'gmp/gmp';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import type Model from 'gmp/models/model';
@@ -52,6 +51,7 @@ import TaskDetailsPageToolBarIcons from 'web/pages/tasks/icons/TaskDetailsPageTo
 import TaskComponent from 'web/pages/tasks/TaskComponent';
 import TaskDetails from 'web/pages/tasks/TaskDetails';
 import TaskStatus from 'web/pages/tasks/TaskStatus';
+import {ROUTES} from 'web/route-paths';
 import {
   selector as notesSelector,
   loadEntities as loadNotes,

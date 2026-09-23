@@ -15,7 +15,6 @@ import {
   Wrench,
 } from 'lucide-react';
 import {useLocation, useMatch} from 'react-router';
-import {ROUTES, routeMatch} from 'routePaths';
 import {type EntityType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import Link from 'web/components/link/Link';
@@ -23,6 +22,7 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
+import {routeMatch, ROUTES} from 'web/route-paths';
 
 const Menu = () => {
   const [_] = useTranslation();

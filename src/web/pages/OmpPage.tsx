@@ -5,7 +5,7 @@
 
 import {useEffect} from 'react';
 import {useNavigate, useSearchParams} from 'react-router';
-import {ROUTES} from 'routePaths';
+import {ROUTES} from 'web/route-paths';
 
 /**
  * Component to redirect old secinfo urls like

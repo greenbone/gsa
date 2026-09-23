@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, expect, test} from 'vitest';
 import {entityListURL, entityURL, ROUTES, routeMatch} from 'web/route-paths';
+import {describe, expect, test} from 'vitest';
 
 describe('route paths', () => {
   test('keeps canonical and legacy audit paths distinct', () => {

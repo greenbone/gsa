@@ -4,7 +4,7 @@
  */
 
 import ReactMarkdown from 'react-markdown';
-import {ROUTES} from 'routePaths';
+import {ROUTES} from 'web/route-paths';
 import {type default as Nvt, TAG_NA} from 'gmp/models/nvt';
 import {isDefined} from 'gmp/utils/identity';
 import Severitybar from 'web/components/bar/SeverityBar';
@@ -23,6 +23,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import NvtReferences from 'web/pages/nvts/NvtReferences';
 import Pre from 'web/pages/nvts/Preformatted';
 import Solution from 'web/pages/nvts/Solution';
+import {ROUTES} from 'web/route-paths';
 import {na, getTranslatableSeverityOrigin} from 'web/utils/Render';
 import {renderPercentile, renderScore} from 'web/utils/severity';
 

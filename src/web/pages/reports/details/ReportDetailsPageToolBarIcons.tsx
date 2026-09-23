@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {ROUTES} from 'routePaths';
 import {type FilterType} from 'gmp/models/filter';
 import type AuditReportReport from 'gmp/models/report/audit-report';
 import type ReportReport from 'gmp/models/report/report';
@@ -27,6 +26,7 @@ import DetailsLink from 'web/components/link/DetailsLink';
 import Link from 'web/components/link/Link';
 import useTranslation from 'web/hooks/useTranslation';
 import AlertActions from 'web/pages/reports/details/AlertActions';
+import {ROUTES} from 'web/route-paths';
 
 interface ReportDetailsToolBarIconsProps {
   audit?: boolean;

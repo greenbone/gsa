@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {ROUTES} from 'routePaths';
 import type Nvt from 'gmp/models/nvt';
 import {
   NewNoteIcon,
@@ -19,6 +18,7 @@ import IconDivider from 'web/components/layout/IconDivider';
 import Link from 'web/components/link/Link';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
+import {ROUTES} from 'web/route-paths';
 
 interface NvtDetailsPageToolBarIconsProps {
   entity: Nvt;

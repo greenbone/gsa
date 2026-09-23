@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-import {ROUTES} from 'routePaths';
 import type Vulnerability from 'gmp/models/vulnerability';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
@@ -14,6 +12,7 @@ import Qod from 'web/components/qod/Qod';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntitiesActions from 'web/entities/EntitiesActions';
+import {ROUTES} from 'web/route-paths';
 import {type SelectionTypeType} from 'web/utils/selection-type';
 
 export interface VulnerabilitiesTableRowProps {

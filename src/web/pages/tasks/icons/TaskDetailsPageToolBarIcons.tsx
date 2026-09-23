@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {ROUTES} from 'routePaths';
 import type Task from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 import Badge from 'web/components/badge/Badge';
@@ -30,6 +29,7 @@ import TaskIconWithSync from 'web/pages/tasks/icons/TaskIconWithSync';
 import TaskImportReportIcon from 'web/pages/tasks/icons/TaskImportReportIcon';
 import TaskScheduleIcon from 'web/pages/tasks/icons/TaskScheduleIcon';
 import TaskStopIcon from 'web/pages/tasks/icons/TaskStopIcon';
+import {ROUTES} from 'web/route-paths';
 import {formattedUserSettingShortDate} from 'web/utils/user-setting-time-date-formatters';
 
 interface TaskDetailsPageToolBarIconsProps {

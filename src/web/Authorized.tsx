@@ -5,10 +5,10 @@
 
 import {useEffect, useCallback} from 'react';
 import {useLocation} from 'react-router';
-import {ROUTES} from 'routePaths';
 import useGmp from 'web/hooks/useGmp';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import useUserName from 'web/hooks/useUserName';
+import {ROUTES} from 'web/route-paths';
 import {saveLastVisitedPage} from 'web/utils/user-last-visited-page';
 
 interface AuthorizedProps {

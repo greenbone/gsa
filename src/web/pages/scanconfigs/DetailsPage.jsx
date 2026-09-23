@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import {ROUTES} from 'routePaths';
 import styled from 'styled-components';
 import {ScanConfigIcon} from 'web/components/icon';
 import Divider from 'web/components/layout/Divider';
@@ -38,6 +37,7 @@ import ScanConfigDetails from 'web/pages/scanconfigs/Details';
 import ScanConfigComponent from 'web/pages/scanconfigs/ScanConfigComponent';
 import ScanConfigDetailsPageToolBarIcons from 'web/pages/scanconfigs/ScanConfigDetailsPageToolBarIcons';
 import ScanConfigTrend from 'web/pages/scanconfigs/ScanConfigTrend';
+import {ROUTES} from 'web/route-paths';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,

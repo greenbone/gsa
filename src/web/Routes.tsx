@@ -10,7 +10,6 @@ import {
   Outlet,
   redirect,
 } from 'react-router';
-import {ROUTES} from 'routePaths';
 import Authorized from 'web/Authorized';
 import Loading from 'web/components/loading/Loading';
 import SessionObserver from 'web/components/observer/SessionObserver';
@@ -18,6 +17,7 @@ import SessionTracker from 'web/components/observer/SessionTracker';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import LoginPageRoute from 'web/pages/login/LoginPageRoute';
 import Page from 'web/pages/Page';
+import {ROUTES} from 'web/route-paths';
 
 // Layout components
 const LoggedOutLayout = () => <Outlet />;
