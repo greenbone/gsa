@@ -2318,6 +2318,7 @@
   "View list of all reports for Task {{name}}, including unfinished ones": "查看任务{{name}}的所有报告(包括未完成的报告)",
   "Vulnerabilities": "漏洞",
   "Vulnerabilities by CVSS (Total: {{count}})": "漏洞按CVSS分类（总计：{{count}}）",
+  "Vulnerabilities by Hosts": "",
   "Vulnerabilities by Hosts (Total: {{count}})": "漏洞按主机分类（总计：{{count}}）",
   "Vulnerabilities by Severity Class (Total: {{count}})": "漏洞按严重性分类（总计：{{count}}）",
   "Vulnerabilities did not change": "漏洞数量不变",

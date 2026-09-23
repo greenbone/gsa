@@ -2318,6 +2318,7 @@
   "View list of all reports for Task {{name}}, including unfinished ones": "View list of all reports for Task {{name}}, including unfinished ones",
   "Vulnerabilities": "Vulnerabilities",
   "Vulnerabilities by CVSS (Total: {{count}})": "Vulnerabilities by CVSS (Total: {{count}})",
+  "Vulnerabilities by Hosts": "Vulnerabilities by Hosts",
   "Vulnerabilities by Hosts (Total: {{count}})": "Vulnerabilities by Hosts (Total: {{count}})",
   "Vulnerabilities by Severity Class (Total: {{count}})": "Vulnerabilities by Severity Class (Total: {{count}})",
   "Vulnerabilities did not change": "Vulnerabilities did not change",

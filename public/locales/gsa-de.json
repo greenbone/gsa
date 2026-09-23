@@ -2318,6 +2318,7 @@
   "View list of all reports for Task {{name}}, including unfinished ones": "Zeige Liste aller Berichte der Aufgabe {{name}}, inklusive unvollendeter",
   "Vulnerabilities": "Schwachstellen",
   "Vulnerabilities by CVSS (Total: {{count}})": "Schwachstellen nach CVSS (Gesamt: {{count}})",
+  "Vulnerabilities by Hosts": "Schwachstellen nach Hosts",
   "Vulnerabilities by Hosts (Total: {{count}})": "Schwachstellen nach Hosts (Gesamt: {{count}})",
   "Vulnerabilities by Severity Class (Total: {{count}})": "Schwachstellen nach Schweregradklasse (Gesamt: {{count}})",
   "Vulnerabilities did not change": "Schwachstellen unverändert",
