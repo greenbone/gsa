@@ -5,12 +5,13 @@
 
 import {_} from 'gmp/locale/lang';
 import BarChart, {type BarChartProps} from 'web/components/chart/BarChart';
-import {type HostDataPoint} from 'web/pages/vulnerabilities/dashboard/hosts-transform';
+import {type TransformedVulnerabilitiesHostsDataItem} from 'web/pages/vulnerabilities/dashboard/hosts-transform';
 
-type VulnerabilitiesHostsBarChartDataPoint = HostDataPoint;
+type VulnerabilitiesHostsBarChartDataItem =
+  TransformedVulnerabilitiesHostsDataItem;
 
 type VulnerabilitiesHostsBarChartProps = Omit<
-  BarChartProps<VulnerabilitiesHostsBarChartDataPoint>,
+  BarChartProps<VulnerabilitiesHostsBarChartDataItem>,
   'xLabel' | 'yLabel' | 'showLegend' | 'onLegendItemClick'
 >;
 
@@ -21,7 +22,7 @@ const VulnerabilitiesHostsBarChart = ({
   svgRef,
   onDataClick,
 }: VulnerabilitiesHostsBarChartProps) => (
-  <BarChart<VulnerabilitiesHostsBarChartDataPoint>
+  <BarChart<VulnerabilitiesHostsBarChartDataItem>
     data={data}
     height={height}
     svgRef={svgRef}

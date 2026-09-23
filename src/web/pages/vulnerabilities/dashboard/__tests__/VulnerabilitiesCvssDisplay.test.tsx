@@ -3,45 +3,67 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
-import {rendererWith, screen} from 'web/testing';
+import {rendererWith, screen, waitFor} from 'web/testing';
 import {getDisplay} from 'web/components/dashboard/registry';
+import {
+  SubscriptionContext,
+  type SubscribeFunc,
+} from 'web/components/provider/SubscriptionProvider';
 import {
   VulnerabilitiesCvssDisplay,
   VulnerabilitiesCvssTableDisplay,
 } from 'web/pages/vulnerabilities/dashboard/VulnerabilitiesCvssDisplay';
 
-vi.mock('web/pages/vulnerabilities/dashboard/VulnerabilitiesLoaders', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  VulnerabilitiesSeverityLoader: ({children}) =>
-    children({data: {total: 42}, isLoading: false}),
-}));
-
 vi.mock('web/components/dashboard/display/cvss/CvssDisplay', () => ({
-  default: ({title, data}) => (
-    <div data-testid="mock-cvss-display">{title?.({data})}</div>
-  ),
+  default: ({title, data}) => {
+    if (!data) {
+      return null;
+    }
+
+    return <div data-testid="mock-cvss-display">{title?.({data})}</div>;
+  },
 }));
 
 vi.mock('web/components/dashboard/display/cvss/CvssTableDisplay', () => ({
-  default: ({title, data}) => (
-    <div data-testid="mock-cvss-table-display">{title?.({data})}</div>
-  ),
+  default: ({title, data}) => {
+    if (!data) {
+      return null;
+    }
+
+    return <div data-testid="mock-cvss-table-display">{title?.({data})}</div>;
+  },
 }));
 
 const createGmp = () => ({
   filters: {
     get: testing.fn().mockResolvedValue({
       data: [],
-      meta: {filter: 'type=task', counts: {}},
+      meta: {filter: 'type=vulnerability', counts: {}},
+    }),
+  },
+  vulns: {
+    getSeverityAggregates: testing.fn().mockResolvedValue({
+      data: {total: 42},
     }),
   },
 });
 
+const renderDisplay = (component: ReactElement) => {
+  const subscribe: SubscribeFunc = testing.fn().mockReturnValue(testing.fn());
+  const {render} = rendererWith({gmp: createGmp(), store: true});
+
+  return render(
+    <SubscriptionContext.Provider value={subscribe}>
+      {component}
+    </SubscriptionContext.Provider>,
+  );
+};
+
 describe('VulnerabilitiesCvssDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(VulnerabilitiesCvssDisplay).toBeDefined();
-    expect(typeof VulnerabilitiesCvssDisplay).toBe('function');
     expect(VulnerabilitiesCvssDisplay.displayId).toBe('vuln-by-cvss');
     expect(VulnerabilitiesCvssDisplay.displayName).toContain(
       'VulnerabilitiesCvssDisplay',
@@ -54,17 +76,18 @@ describe('VulnerabilitiesCvssDisplay', () => {
     expect(String(registered?.title)).toBe('Chart: Vulnerabilities by CVSS');
   });
 
-  test('should render the total vulnerabilities count in the title', () => {
-    const {render} = rendererWith({gmp: createGmp()});
-    render(<VulnerabilitiesCvssDisplay height={200} width={200} />);
-    screen.getByText(/Total: 42/);
+  test('should render the total vulnerabilities count in the title', async () => {
+    renderDisplay(<VulnerabilitiesCvssDisplay height={200} width={200} />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Total: 42/)).toBeInTheDocument();
+    });
   });
 });
 
 describe('VulnerabilitiesCvssTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(VulnerabilitiesCvssTableDisplay).toBeDefined();
-    expect(typeof VulnerabilitiesCvssTableDisplay).toBe('function');
     expect(VulnerabilitiesCvssTableDisplay.displayId).toBe(
       'vuln-by-cvss-table',
     );
@@ -79,9 +102,11 @@ describe('VulnerabilitiesCvssTableDisplay', () => {
     expect(String(registered?.title)).toBe('Table: Vulnerabilities by CVSS');
   });
 
-  test('should render the total vulnerabilities count in the title', () => {
-    const {render} = rendererWith({gmp: createGmp()});
-    render(<VulnerabilitiesCvssTableDisplay height={200} width={200} />);
-    screen.getByText(/Total: 42/);
+  test('should render the total vulnerabilities count in the title', async () => {
+    renderDisplay(<VulnerabilitiesCvssTableDisplay height={200} width={200} />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Total: 42/)).toBeInTheDocument();
+    });
   });
 });

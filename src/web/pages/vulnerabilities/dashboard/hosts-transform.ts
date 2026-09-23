@@ -17,18 +17,22 @@ interface BinConfig {
   binWidth: number;
 }
 
-interface GroupData {
-  value: number;
-  count: number;
-  c_count: number;
-}
-
 interface HostsFilterValue {
   start: number;
   end: number;
 }
 
-export interface HostDataPoint {
+interface VulnerabilitiesHostsGroup {
+  value: number;
+  count: number;
+  c_count: number;
+}
+
+export interface VulnerabilitiesHostsData {
+  groups?: VulnerabilitiesHostsGroup[];
+}
+
+export interface TransformedVulnerabilitiesHostsDataItem {
   color: string;
   filterValue: HostsFilterValue;
   id: number;
@@ -37,9 +41,8 @@ export interface HostDataPoint {
   y: number;
 }
 
-export interface HostsData {
-  groups?: GroupData[];
-}
+export type TransformedVulnerabilitiesHostsData =
+  TransformedVulnerabilitiesHostsDataItem[];
 
 const format = d3format('0.1f');
 
@@ -69,8 +72,8 @@ const calculateBins = (
 };
 
 const transformHostsData = (
-  data: HostsData | undefined = {},
-): HostDataPoint[] => {
+  data: VulnerabilitiesHostsData | undefined = {},
+): TransformedVulnerabilitiesHostsData => {
   const {groups = []} = data ?? {};
   const totalVulns =
     groups.length > 0 ? Math.max(...groups.map(val => val.c_count)) : 0;
@@ -98,7 +101,7 @@ const transformHostsData = (
       color,
       id: max,
       filterValue,
-    };
+    } as TransformedVulnerabilitiesHostsDataItem;
   });
 };
 

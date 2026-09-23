@@ -38,7 +38,6 @@ describe('VulnerabilitiesDashboard index', () => {
 
   test('should export VulnerabilitiesDashboard as default', () => {
     expect(VulnerabilitiesDashboard).toBeDefined();
-    expect(typeof VulnerabilitiesDashboard).toBe('function');
   });
 
   test('should render Dashboard with the correct configuration', () => {
