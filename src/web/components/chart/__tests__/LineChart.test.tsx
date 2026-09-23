@@ -112,7 +112,7 @@ describe('LineChart tests', () => {
     expect(xAxisTick).toHaveAttribute('text-anchor', 'end');
   });
 
-  test('should use the available width when the legend is hidden', () => {
+  test('should update chart width when the legend is toggled', () => {
     const {render} = rendererWith();
     const rendered = render(
       <LineChart

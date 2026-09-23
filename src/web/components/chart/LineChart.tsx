@@ -6,7 +6,7 @@
 import React, {
   type MouseEvent,
   useCallback,
-  useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
@@ -284,12 +284,11 @@ const LineChart = ({
     return w;
   }, [propWidth, showLegend]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const newWidth = getCalculatedWidth();
-    if (newWidth !== chartWidth) {
-      setChartWidth(newWidth);
-    }
-  }, [getCalculatedWidth, chartWidth]);
+    // oxlint-disable-next-line react/set-state-in-effect
+    setChartWidth(newWidth);
+  }, [getCalculatedWidth]);
 
   const getXValueForPixel = useCallback(
     (px: number, currentWidth: number) => {

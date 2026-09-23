@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useEffect, useState, type ReactNode} from 'react';
+import React, {useLayoutEffect, useState, type ReactNode} from 'react';
 import {scaleBand, scaleLinear} from 'd3-scale';
 import styled from 'styled-components';
 import {type ToString} from 'gmp/types';
@@ -77,12 +77,11 @@ const BarChart = <TData extends BarChartDataPoint>({
 }: BarChartProps<TData>) => {
   const [chartWidth, setChartWidth] = useState(() => getWidth(width));
 
-  useEffect(() => {
-    const nextWidth = getWidth(width);
-    setChartWidth(currentWidth =>
-      currentWidth === nextWidth ? currentWidth : nextWidth,
-    );
-  }, [data, width]);
+  useLayoutEffect(() => {
+    const newWidth = getWidth(width);
+    // oxlint-disable-next-line react/set-state-in-effect
+    setChartWidth(newWidth);
+  }, [width]);
 
   const xValues = data.map(d => String(d.x));
   const yValues = data.map(d => d.y);
