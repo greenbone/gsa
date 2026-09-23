@@ -39,9 +39,9 @@ const timeStatusColorScale = scaleOrdinal()
   .domain(Object.values(TIME_STATUS).sort())
   .range([
     Theme.warningRed, // expired
-    '#f0a519', // inactive
+    Theme.severityWarnYellow, // inactive
     Theme.lightGray, // unknown
-    '#2ca02c', // valid
+    Theme.complianceYes, // valid
   ]);
 
 const transformTimeStatusData = (
