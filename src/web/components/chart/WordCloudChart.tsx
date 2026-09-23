@@ -43,6 +43,7 @@ const margin = {
 const DEFAULT_MAX_WORDS = 50;
 const MIN_FONT_SIZE = 8;
 const MAX_FONT_SIZE = 20;
+const HOVER_TRANSITION = 'opacity 180ms ease-in-out';
 
 const createCloud = (onEnd: (words: Word[]) => void): Cloud =>
   d3cloud<Word>()
@@ -84,6 +85,7 @@ const WordCloudChart = ({
   onDataClick,
 }: WordCloudChartProps) => {
   const [words, setWords] = useState<Word[]>([]);
+  const [hoveredWordIndex, setHoveredWordIndex] = useState<number>();
   const cloudRef = useRef<Cloud | null>(null);
 
   useEffect(() => {
@@ -124,7 +126,7 @@ const WordCloudChart = ({
         width={width}
       >
         <Group left={width / 2 + margin.left} top={height / 2 + margin.top}>
-          {words.map(word => (
+          {words.map((word, index) => (
             <Group
               key={word.text}
               data-testid={`word-cloud-word-${word.text}`}
@@ -133,14 +135,23 @@ const WordCloudChart = ({
                   ? () => onDataClick(word.filterValue)
                   : undefined
               }
+              onMouseEnter={() => setHoveredWordIndex(index)}
+              onMouseLeave={() => setHoveredWordIndex(undefined)}
             >
               <text
                 fill={word.color}
                 fontFamily={word.font}
                 fontSize={`${word.size}px`}
                 fontWeight={word.weight}
+                opacity={
+                  hoveredWordIndex !== undefined &&
+                  hoveredWordIndex !== index
+                    ? 0.35
+                    : 1
+                }
                 textAnchor="middle"
                 transform={`translate(${word.x},${word.y})rotate(${word.rotate})`}
+                style={{transition: HOVER_TRANSITION}}
               >
                 {word.text}
               </text>
