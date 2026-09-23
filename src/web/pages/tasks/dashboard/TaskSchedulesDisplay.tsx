@@ -73,7 +73,6 @@ const transformScheduleData = (
 };
 
 export const TasksSchedulesDisplay = createDisplay({
-  chartComponent: ScheduleChart,
   loaderComponent: TasksSchedulesLoader,
   displayComponent: props => (
     <DataDisplay<
@@ -89,13 +88,15 @@ export const TasksSchedulesDisplay = createDisplay({
       {...props}
       dataTransform={transformScheduleData}
       endDate={week}
+      showToggleLegend={false}
       title={() => _('Next Scheduled Tasks')}
-    />
+    >
+      {chartProps => <ScheduleChart {...chartProps} />}
+    </DataDisplay>
   ),
   displayId: 'task-by-schedules',
   displayName: 'TasksScheduleDisplay',
   filtersFilter: TASKS_FILTER_FILTER,
-  showToggleLegend: false,
 });
 
 export const TasksSchedulesTableDisplay = createDisplay({

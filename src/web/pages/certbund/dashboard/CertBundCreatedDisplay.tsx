@@ -5,24 +5,15 @@
 
 import {_, _l} from 'gmp/locale/lang';
 import {CERTBUND_FILTER_FILTER} from 'gmp/models/filter';
-import transformCreated, {
-  type CreatedDataPoint,
-  type CreatedData,
-} from 'web/components/dashboard/display/created/created-transform';
+import transformCreated from 'web/components/dashboard/display/created/created-transform';
 import CreatedDisplay from 'web/components/dashboard/display/created/CreatedDisplay';
-import createDisplay, {
-  type DisplayProps,
-} from 'web/components/dashboard/display/createDisplay';
+import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import {CertBundCreatedLoader} from 'web/pages/certbund/dashboard/CertBundLoaders';
 import Theme from 'web/utils/theme';
 
-export const CertBundCreatedDisplay = createDisplay<
-  DisplayProps<CreatedData, CreatedDataPoint[]>,
-  CreatedData,
-  CreatedDataPoint[]
->({
+export const CertBundCreatedDisplay = createDisplay({
   loaderComponent: CertBundCreatedLoader,
   displayComponent: props => (
     <CreatedDisplay
