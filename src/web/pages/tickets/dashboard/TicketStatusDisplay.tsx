@@ -38,8 +38,8 @@ const ticketStatusColorScale = scaleOrdinal()
   .domain(Object.values(TICKET_STATUS).sort())
   .range([
     Theme.lightGray, // closed
-    '#f0a519', // fixed
-    '#2ca02c', // fix verified
+    Theme.severityWarnYellow, // fixed
+    Theme.complianceYes, // fix verified
     Theme.warningRed, // open
   ]);
 
