@@ -231,6 +231,7 @@ describe('DataDisplay component tests', () => {
 
     screen.getByTestId('download-csv').click();
 
+    // oxlint-disable-next-line typescript/unbound-method
     const createObjectURL = window.URL.createObjectURL as ReturnType<
       typeof testing.fn
     >;
@@ -263,6 +264,7 @@ describe('DataDisplay component tests', () => {
 
     screen.getByTestId('download-svg').click();
 
+    // oxlint-disable-next-line typescript/unbound-method
     const createObjectURL = window.URL.createObjectURL as ReturnType<
       typeof testing.fn
     >;
