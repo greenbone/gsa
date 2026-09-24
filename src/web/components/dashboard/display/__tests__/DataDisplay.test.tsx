@@ -183,13 +183,8 @@ describe('DataDisplay component tests', () => {
     expect(screen.getByText('foo=two')).toBeInTheDocument();
   });
 
-  test('should not rerender when the filter is unchanged', () => {
+  test('should rerender when the data is changed', () => {
     const firstFilter = new Filter({
-      id: 'filter-1',
-      name: 'First filter',
-      terms: parseFilterTermsFromString('foo=one'),
-    });
-    const secondFilter = new Filter({
       id: 'filter-1',
       name: 'First filter',
       terms: parseFilterTermsFromString('foo=one'),
@@ -203,15 +198,19 @@ describe('DataDisplay component tests', () => {
     );
 
     expect(children).toHaveBeenCalledTimes(1);
+    expect(screen.getByTestId('chart')).toHaveTextContent('raw-transformed');
 
     rerender(
       <DataDisplay<TestData, TestProps, TestData[], TestState>
         {...props}
-        filter={secondFilter}
+        data={{value: 'changed'}}
       />,
     );
 
-    expect(children).toHaveBeenCalledTimes(1);
+    expect(children).toHaveBeenCalledTimes(2);
+    expect(screen.getByTestId('chart')).toHaveTextContent(
+      'changed-transformed',
+    );
   });
 
   test('should create a CSV download with escaped data', async () => {

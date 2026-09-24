@@ -4,7 +4,6 @@
  */
 
 import React, {useCallback, useEffect, useRef, type ReactNode} from 'react';
-import equal from 'fast-deep-equal';
 import styled from 'styled-components';
 import {type FilterType} from 'gmp/models/filter';
 import {type ToString} from 'gmp/types';
@@ -367,45 +366,4 @@ const DataDisplay = <
   );
 };
 
-const areDataDisplayPropsEqual = <
-  TData,
-  TTransformedData extends Array<unknown>,
-  TTransformProps extends object = object,
-  TState extends DisplayState = DisplayState,
->(
-  previous: Readonly<
-    DataDisplayProps<TData, TTransformedData, TTransformProps, TState>
-  >,
-  next: Readonly<
-    DataDisplayProps<TData, TTransformedData, TTransformProps, TState>
-  >,
-) => {
-  const filterChanged = isDefined(previous.filter)
-    ? !previous.filter.equals(next.filter)
-    : isDefined(next.filter);
-
-  return (
-    equal(previous.data, next.data) &&
-    previous.height === next.height &&
-    previous.width === next.width &&
-    previous.isLoading === next.isLoading &&
-    previous.showFilterString === next.showFilterString &&
-    previous.state === next.state &&
-    !filterChanged
-  );
-};
-
-export default React.memo(DataDisplay, areDataDisplayPropsEqual) as unknown as <
-  TData,
-  TProps extends DataDisplayProps<
-    TData,
-    TTransformedData,
-    TTransformProps,
-    TState
-  >,
-  TTransformedData extends Array<unknown>,
-  TTransformProps extends object = object,
-  TState extends DisplayState = DisplayState,
->(
-  props: TProps,
-) => ReactNode;
+export default DataDisplay;
