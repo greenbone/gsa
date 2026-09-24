@@ -63,6 +63,7 @@ import ReportConfigCommand from 'gmp/commands/report-config';
 import ReportConfigsCommand from 'gmp/commands/report-configs';
 import ReportCvesCommand from 'gmp/commands/report-cves';
 import ReportsErrorsCommand from 'gmp/commands/report-errors';
+import ReportExportCommand from 'gmp/commands/report-export';
 import ReportFormatCommand from 'gmp/commands/report-format';
 import ReportFormatsCommand from 'gmp/commands/report-formats';
 import ReportHostsCommand from 'gmp/commands/report-hosts';
@@ -183,6 +184,7 @@ class Gmp {
   public readonly reportclosedcves: ReportClosedCvesCommand;
   public readonly reportcves: ReportCvesCommand;
   public readonly reporterrors: ReportsErrorsCommand;
+  public readonly reportexport: ReportExportCommand;
   public readonly reportformat: ReportFormatCommand;
   public readonly reportformats: ReportFormatsCommand;
   public readonly reporthosts: ReportHostsCommand;
@@ -307,6 +309,7 @@ class Gmp {
     this.reportclosedcves = new ReportClosedCvesCommand(this.http);
     this.reportcves = new ReportCvesCommand(this.http);
     this.reporterrors = new ReportsErrorsCommand(this.http);
+    this.reportexport = new ReportExportCommand(this.http);
     this.reportformat = new ReportFormatCommand(this.http);
     this.reportformats = new ReportFormatsCommand(this.http);
     this.reportoperatingsystems = new ReportOperatingSystemsCommand(this.http);
