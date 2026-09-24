@@ -14,7 +14,6 @@ import Scanner, {
   GREENBONE_SENSOR_SCANNER_TYPE,
   OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
-  OPENVASD_SENSOR_SCANNER_TYPE,
   WEB_APPLICATION_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import {createSession} from 'gmp/testing';
@@ -42,7 +41,6 @@ describe('ScannerComponent tests', () => {
     OPENVAS_SCANNER_TYPE,
     OPENVASD_SCANNER_TYPE,
     AGENT_CONTROLLER_SCANNER_TYPE,
-    OPENVASD_SENSOR_SCANNER_TYPE,
     CONTAINER_IMAGE_SCANNER_TYPE,
     WEB_APPLICATION_SCANNER_TYPE,
   ])(
@@ -361,7 +359,7 @@ describe('ScannerComponent tests', () => {
       host: 'localhost',
       id: undefined,
       name: 'Unnamed',
-      port: 22,
+      port: 0,
       type: GREENBONE_SENSOR_SCANNER_TYPE,
     });
     expect(handleCreated).toHaveBeenCalledWith({id: '1234'});
