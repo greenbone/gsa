@@ -6,6 +6,7 @@
 import React, {useMemo, type ReactNode} from 'react';
 import {arc as d3arc, type PieArcDatum} from 'd3-shape';
 import {type ToString} from 'gmp/types';
+import {isDefined} from 'gmp/utils/identity';
 import Group from 'web/components/chart/base/Group';
 import Label from 'web/components/chart/base/Label';
 import ToolTip from 'web/components/chart/base/ToolTip';
@@ -87,7 +88,7 @@ const Labels = <TData extends LabelData = LabelData>({
       {arcs.map((currentArc, index) => {
         const arcData = currentArc.data;
         const isDimmed =
-          hoveredLabel !== undefined && String(arcData.label) !== hoveredLabel;
+          isDefined(hoveredLabel) && String(arcData.label) !== hoveredLabel;
         const arc = d3arc<unknown, PieArcDatum<TData>>()
           .innerRadius(innerRadiusX ?? 0)
           .outerRadius(outerRadiusX);

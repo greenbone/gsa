@@ -7,6 +7,7 @@ import React, {useState} from 'react';
 import {scaleBand, scaleUtc} from 'd3-scale';
 import {type TranslateFunc} from 'gmp/locale';
 import date, {type Date as GmpDate} from 'gmp/models/date';
+import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import Axis from 'web/components/chart/base/Axis';
 import ChartWithEmptyState from 'web/components/chart/base/ChartWithEmptyState';
@@ -303,7 +304,7 @@ const ScheduleChart = ({
                         fill={hasDuration ? Theme.lightGreen : fillGradientUrl}
                         height={bandwidth}
                         opacity={
-                          hoveredScheduleIndex !== undefined &&
+                          isDefined(hoveredScheduleIndex) &&
                           hoveredScheduleIndex !== index
                             ? 0.35
                             : 1

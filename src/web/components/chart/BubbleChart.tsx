@@ -126,7 +126,7 @@ const BubbleChart = <TData extends BubbleChartData = BubbleChartData>({
                       <circle
                         fill={String(d.color)}
                         opacity={
-                          hoveredLabel !== undefined && hoveredLabel !== d.label
+                          isDefined(hoveredLabel) && hoveredLabel !== d.label
                             ? 0.35
                             : 1
                         }
