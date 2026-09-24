@@ -7,6 +7,7 @@ import {useCallback, useLayoutEffect, useRef, useState} from 'react';
 import {arc as d3arc, pie as d3pie, type PieArcDatum} from 'd3-shape';
 import styled from 'styled-components';
 import {type ToString} from 'gmp/types';
+import {isDefined} from 'gmp/utils/identity';
 import ChartWithEmptyState from 'web/components/chart/base/ChartWithEmptyState';
 import Group from 'web/components/chart/base/Group';
 import Legend, {
@@ -145,15 +146,15 @@ const DonutChart = <TData extends DonutChartData = DonutChartData>({
                     y={y}
                     {...donutProps}
                     isDimmed={
-                      hoveredLabel !== undefined &&
+                      isDefined(hoveredLabel) &&
                       hoveredLabel !== currentArc.data.label
                     }
                     onDataClick={onDataClick}
                     onHover={hoveredData =>
                       setHoveredLabel(
-                        hoveredData === undefined
-                          ? undefined
-                          : String(hoveredData.label),
+                        isDefined(hoveredData)
+                          ? String(hoveredData.label)
+                          : undefined,
                       )
                     }
                   />

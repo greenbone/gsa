@@ -180,8 +180,7 @@ const BarChart = <TData extends BarChartDataPoint>({
                           : maxHeight - yScale(d.y)
                       }
                       opacity={
-                        hoveredBarIndex !== undefined &&
-                        hoveredBarIndex !== index
+                        isDefined(hoveredBarIndex) && hoveredBarIndex !== index
                           ? 0.35
                           : 1
                       }

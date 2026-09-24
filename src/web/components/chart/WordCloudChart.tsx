@@ -144,7 +144,7 @@ const WordCloudChart = ({
                 fontSize={`${word.size}px`}
                 fontWeight={word.weight}
                 opacity={
-                  hoveredWordIndex !== undefined && hoveredWordIndex !== index
+                  isDefined(hoveredWordIndex) && hoveredWordIndex !== index
                     ? 0.35
                     : 1
                 }
