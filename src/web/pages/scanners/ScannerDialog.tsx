@@ -75,16 +75,16 @@ const isLocalConnection = (host?: string) => host?.startsWith('/') ?? false;
 const updatePort = (scannerType: ScannerType | undefined) => {
   if (
     scannerType === GREENBONE_SENSOR_SCANNER_TYPE ||
-    scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE
+    scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE ||
+    scannerType === OPENVASD_SENSOR_SCANNER_TYPE
   ) {
-    return 22;
+    return 0;
   }
   if (scannerType === AGENT_CONTROLLER_SCANNER_TYPE) {
     return 8080;
   }
   if (
     scannerType === OPENVASD_SCANNER_TYPE ||
-    scannerType === OPENVASD_SENSOR_SCANNER_TYPE ||
     scannerType === CONTAINER_IMAGE_SCANNER_TYPE ||
     scannerType === WEB_APPLICATION_SCANNER_TYPE
   ) {
@@ -98,7 +98,6 @@ export const isScannerTypeSupportingClientCertificates = (
 ) =>
   scannerType === OPENVAS_SCANNER_TYPE ||
   scannerType === OPENVASD_SCANNER_TYPE ||
-  scannerType === OPENVASD_SENSOR_SCANNER_TYPE ||
   scannerType === CONTAINER_IMAGE_SCANNER_TYPE ||
   scannerType === WEB_APPLICATION_SCANNER_TYPE ||
   scannerType === AGENT_CONTROLLER_SCANNER_TYPE;
@@ -273,15 +272,24 @@ const ScannerDialog = ({
   const isGreenboneSensorType = scannerType === GREENBONE_SENSOR_SCANNER_TYPE;
   const isAgentControllerSensorScannerType =
     scannerType === AGENT_CONTROLLER_SENSOR_SCANNER_TYPE;
+  const isOpenvasdSensorType = scannerType === OPENVASD_SENSOR_SCANNER_TYPE;
   const showScannerDetails = isDefined(scannerType);
-  const showPort = showScannerDetails && !isGreenboneSensorType;
+  const showPort =
+    showScannerDetails &&
+    !isGreenboneSensorType &&
+    !isAgentControllerSensorScannerType &&
+    !isOpenvasdSensorType;
   const isClientCertificateSupported =
     showScannerDetails &&
     isScannerTypeSupportingClientCertificates(scannerType);
 
   const localConnection = isLocalConnection(scannerHost);
 
-  if (isGreenboneSensorType || isAgentControllerSensorScannerType) {
+  if (
+    isGreenboneSensorType ||
+    isAgentControllerSensorScannerType ||
+    isOpenvasdSensorType
+  ) {
     credentialId = undefined;
   }
   return (

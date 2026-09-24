@@ -36,13 +36,13 @@ describe('ScannerDialog tests', () => {
   test.each([
     [OPENVAS_SCANNER_TYPE, true],
     [OPENVASD_SCANNER_TYPE, true],
-    [OPENVASD_SENSOR_SCANNER_TYPE, true],
     [AGENT_CONTROLLER_SCANNER_TYPE, true],
     [CONTAINER_IMAGE_SCANNER_TYPE, true],
     [WEB_APPLICATION_SCANNER_TYPE, true],
     [CVE_SCANNER_TYPE, false],
     [GREENBONE_SENSOR_SCANNER_TYPE, false],
     [AGENT_CONTROLLER_SENSOR_SCANNER_TYPE, false],
+    [OPENVASD_SENSOR_SCANNER_TYPE, false],
     [undefined, false],
   ])(
     'should report whether scanner type %s supports client certificates',
@@ -122,7 +122,7 @@ describe('ScannerDialog tests', () => {
       credentialId: undefined,
       type: GREENBONE_SENSOR_SCANNER_TYPE,
       id: undefined,
-      port: 22,
+      port: 0,
     });
   });
 
@@ -147,7 +147,7 @@ describe('ScannerDialog tests', () => {
     const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
     expect(scannerType).toHaveValue('Agent Sensor');
     expect(screen.getByName('host')).toHaveValue('localhost');
-    expect(screen.getByName('port')).toHaveValue('22');
+    expect(screen.queryByName('port')).not.toBeInTheDocument();
     expect(screen.queryByName('caCertificate')).not.toBeInTheDocument();
     expect(
       screen.queryByRole('textbox', {name: 'Credential'}),
@@ -162,7 +162,7 @@ describe('ScannerDialog tests', () => {
       credentialId: undefined,
       type: AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
       id: undefined,
-      port: 22,
+      port: 0,
     });
   });
 
@@ -452,7 +452,7 @@ describe('ScannerDialog tests', () => {
       credentialId: undefined,
       type: GREENBONE_SENSOR_SCANNER_TYPE,
       id: '1234',
-      port: 22,
+      port: 0,
     });
   });
 
