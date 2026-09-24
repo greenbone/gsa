@@ -687,18 +687,6 @@
       "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|7|if (permittedDisplaysSignatureRef.current !== permittedDisplaysSignature) {"
     },
     {
-      "filename": "src/web/components/dashboard/display/__tests__/DataDisplay.test.tsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 266,
-        "column": 40,
-        "offset": 7952
-      },
-      "sourceLine": "const createObjectURL = window.URL.createObjectURL as ReturnType<",
-      "fingerprint": "src/web/components/dashboard/display/__tests__/DataDisplay.test.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|40|const createObjectURL = window.URL.createObjectURL as ReturnType<"
-    },
-    {
       "filename": "src/web/components/dashboard/display/Loader.tsx",
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
@@ -1927,9 +1915,9 @@
       "code": "typescript(restrict-template-expressions)",
       "message": "Invalid type used in template literal expression.",
       "location": {
-        "line": 80,
+        "line": 81,
         "column": 34,
-        "offset": 3103
+        "offset": 3155
       },
       "sourceLine": "<TableData>{`${title}`}</TableData>",
       "fingerprint": "src/web/pages/cves/Details.jsx|typescript(restrict-template-expressions)|Invalid type used in template literal expression.|34|<TableData>{`${title}`}</TableData>"
@@ -2023,9 +2011,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Tags` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 44,
+        "line": 45,
         "column": 12,
-        "offset": 1535
+        "offset": 1575
       },
       "sourceLine": "tags = {},",
       "fingerprint": "src/web/pages/nvts/NvtDetails.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Tags` (not nullish). This default assignment will never be used.|12|tags = {},"
@@ -2407,9 +2395,9 @@
       "code": "react(immutability)",
       "message": "Cannot reassign variable after render completes",
       "location": {
-        "line": 77,
+        "line": 78,
         "column": 9,
-        "offset": 2723
+        "offset": 2765
       },
       "sourceLine": "filter = new Filter();",
       "fingerprint": "src/web/pages/reports/AuditReportsListPage.jsx|react(immutability)|Cannot reassign variable after render completes|9|filter = new Filter();"
@@ -2419,9 +2407,9 @@
       "code": "react(immutability)",
       "message": "This value cannot be modified",
       "location": {
-        "line": 77,
+        "line": 78,
         "column": 9,
-        "offset": 2723
+        "offset": 2765
       },
       "sourceLine": "filter = new Filter();",
       "fingerprint": "src/web/pages/reports/AuditReportsListPage.jsx|react(immutability)|This value cannot be modified|9|filter = new Filter();"
@@ -2431,9 +2419,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 64,
+        "line": 65,
         "column": 7,
-        "offset": 2342
+        "offset": 2384
       },
       "sourceLine": "setSelectedDeltaReport();",
       "fingerprint": "src/web/pages/reports/AuditReportsListPage.jsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setSelectedDeltaReport();"
@@ -2839,9 +2827,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 125,
+        "line": 126,
         "column": 7,
-        "offset": 4165
+        "offset": 4205
       },
       "sourceLine": "setSelectedDeltaReport(undefined);",
       "fingerprint": "src/web/pages/reports/ReportListPage.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setSelectedDeltaReport(undefined);"
@@ -2851,9 +2839,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Report[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 251,
+        "line": 252,
         "column": 44,
-        "offset": 7673
+        "offset": 7716
       },
       "sourceLine": "const reportsReloadInterval = ({entities = []}: {entities: Report[]}) =>",
       "fingerprint": "src/web/pages/reports/ReportListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Report[]` (not nullish). This default assignment will never be used.|44|const reportsReloadInterval = ({entities = []}: {entities: Report[]}) =>"
@@ -2863,9 +2851,9 @@
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
       "location": {
-        "line": 348,
+        "line": 349,
         "column": 49,
-        "offset": 13009
+        "offset": 13060
       },
       "sourceLine": "onResultDownloadClick={this.handleDownload}",
       "fingerprint": "src/web/pages/results/DetailsPage.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|49|onResultDownloadClick={this.handleDownload}"
@@ -3031,9 +3019,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 169,
+        "line": 170,
         "column": 5,
-        "offset": 4606
+        "offset": 4646
       },
       "sourceLine": "setControlledTimeout(timeout);",
       "fingerprint": "src/web/pages/scanconfigs/ScanConfigEditNvtDetailsDialog.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setControlledTimeout(timeout);"
@@ -3679,9 +3667,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `HostsFilterValue` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 52,
+        "line": 67,
         "column": 28,
-        "offset": 1902
+        "offset": 2375
       },
       "sourceLine": "const {filterValue = {start: undefined, end: undefined}} = clickData;",
       "fingerprint": "src/web/pages/vulnerabilities/dashboard/VulnerabilitiesHostsDisplay.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `HostsFilterValue` (not nullish). This default assignment will never be used.|28|const {filterValue = {start: undefined, end: undefined}} = clickData;"

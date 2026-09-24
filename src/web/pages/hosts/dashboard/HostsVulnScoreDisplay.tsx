@@ -58,7 +58,7 @@ const ToolTip = styled.div`
 
 const transformVulnScoreData = (
   data: VulnScoreData | undefined = {},
-  {severityRating = DEFAULT_SEVERITY_RATING}: TransformVulnScoreDataProps,
+  {severityRating = DEFAULT_SEVERITY_RATING}: TransformVulnScoreDataProps = {},
 ): TransformedVulnScoreData[] => {
   const {groups = []} = data;
   const transformedData = groups

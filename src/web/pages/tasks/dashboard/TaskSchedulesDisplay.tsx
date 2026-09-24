@@ -21,10 +21,6 @@ import {
 } from 'web/pages/tasks/dashboard/TaskLoaders';
 import {formattedUserSettingDateTimeWithTimeZone} from 'web/utils/user-setting-time-date-formatters';
 
-interface TransformScheduleDataProps {
-  endDate: Date;
-}
-
 interface TransformedTaskScheduleDataItem {
   color: string;
   label: string;
@@ -43,7 +39,6 @@ const week = today.clone().add(7, 'days');
 
 const transformScheduleData = (
   data: TaskScheduleData | undefined = [],
-  {endDate}: TransformScheduleDataProps,
 ): TransformedTaskScheduleData => {
   return data
     .filter(task => isDefined(task.schedule))
@@ -64,7 +59,7 @@ const transformScheduleData = (
         label: name,
         duration,
         nextStart: formattedUserSettingDateTimeWithTimeZone(event.nextDate),
-        starts: event.getNextDates(endDate),
+        starts: event.getNextDates(week),
         timezone,
         isInfinite: isDefined(freq),
         period,
@@ -77,17 +72,11 @@ export const TasksSchedulesDisplay = createDisplay({
   displayComponent: props => (
     <DataDisplay<
       TaskScheduleData,
-      DataDisplayProps<
-        TaskScheduleData,
-        TransformedTaskScheduleData,
-        TransformScheduleDataProps
-      >,
-      TransformedTaskScheduleData,
-      TransformScheduleDataProps
+      DataDisplayProps<TaskScheduleData, TransformedTaskScheduleData>,
+      TransformedTaskScheduleData
     >
       {...props}
       dataTransform={transformScheduleData}
-      endDate={week}
       showToggleLegend={false}
       title={() => _('Next Scheduled Tasks')}
     >

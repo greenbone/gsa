@@ -14,9 +14,9 @@ import LineChart, {
 } from 'web/components/chart/LineChart';
 import {type CreatedDataPoint} from 'web/components/dashboard/display/created/created-transform';
 import DataDisplay, {
-  type TransformFunc,
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
+import {type TransformFunc} from 'web/components/dashboard/display/useDataTransform';
 import {createDateRangeFilter} from 'web/components/dashboard/display/utils';
 
 type CreatedDataDisplayProps<
