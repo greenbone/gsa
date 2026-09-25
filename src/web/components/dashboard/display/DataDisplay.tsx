@@ -30,14 +30,14 @@ import Layout from 'web/components/layout/Layout';
 import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/theme';
 
-export type DataRowFunc<TData> = (row: TData) => ToString[];
+export type DataRowFunc<TData> = (row: TData | undefined) => Array<ToString[]>;
 export type DataTitles = ToString[];
 
 type TitleFunc<TData> = ({
   data,
   isLoading,
 }: {
-  data: TData;
+  data?: TData;
   isLoading?: boolean;
 }) => string;
 
@@ -55,24 +55,27 @@ interface DataDisplayRenderProps<TData, TState extends DisplayState> {
   width: number;
   height: number;
   svgRef: React.RefObject<SVGSVGElement | null>;
-  data: TData;
+  data: TData | undefined;
   state: TState;
   setState: DisplaySetStateFunc<TState>;
 }
 
-type DataDisplayChildren<TTransformedData, TState extends DisplayState> = (
+type DataDisplayChildren<
+  TTransformedData extends object,
+  TState extends DisplayState,
+> = (
   props: DataDisplayRenderProps<TTransformedData, TState>,
 ) => React.ReactNode;
 
 export type DataDisplayProps<
-  TData,
-  TTransformedData extends Array<unknown>,
+  TData extends object,
+  TTransformedData extends object,
   TTransformProps extends object = object,
   TState extends DisplayState = DisplayState,
   TChildren = DataDisplayChildren<TTransformedData, TState>,
 > = Omit<DisplayProps<TState>, 'children' | 'title'> & {
   data?: TData;
-  dataRow?: DataRowFunc<TTransformedData[number]>;
+  dataRow?: DataRowFunc<TTransformedData>;
   dataTitles?: DataTitles;
   dataTransform: TransformFunc<TData, TTransformedData, TTransformProps>;
   filter?: FilterType;
@@ -164,14 +167,14 @@ const createSvgUrl = (
 };
 
 const DataDisplay = <
-  TData,
+  TData extends object,
   TProps extends DataDisplayProps<
     TData,
     TTransformedData,
     TTransformProps,
     TState
   >,
-  TTransformedData extends Array<unknown>,
+  TTransformedData extends object,
   TTransformProps extends object = object,
   TState extends DisplayState = DisplayState,
 >({
@@ -269,14 +272,11 @@ const DataDisplay = <
       return;
     }
 
+    const rowData = dataRow(transformedData);
     const csvData = [
       escapeCsv(title),
       dataTitles.map(t => escapeCsv(String(t))).join(','),
-      ...transformedData.map(row =>
-        dataRow(row)
-          .map(val => escapeCsv(String(val)))
-          .join(','),
-      ),
+      ...rowData.map(row => row.map(val => escapeCsv(String(val))).join(',')),
     ].join('\n');
 
     const csvBlob = new Blob([csvData], {type: 'text/csv'});

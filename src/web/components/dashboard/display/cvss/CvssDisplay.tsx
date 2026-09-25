@@ -14,7 +14,7 @@ import BarChart from 'web/components/chart/BarChart';
 import transformCvssData, {
   type TransformedCvssData,
   type CvssData,
-  type CvssDataPoint,
+  type TransformedCvssDataItem,
   type TransformCvssDataProps,
 } from 'web/components/dashboard/display/cvss/cvss-transform';
 import DataDisplay, {
@@ -55,7 +55,7 @@ const CvssDisplay = ({
   xLabel = xLabel || _('Severity');
   const gmp = useGmp();
   const severityRating = gmp.settings.severityRating;
-  const handleDataClick = (data: CvssDataPoint) => {
+  const handleDataClick = (data: TransformedCvssDataItem) => {
     if (!isDefined(onFilterChanged)) {
       return;
     }
@@ -114,7 +114,7 @@ const CvssDisplay = ({
     >
       {({width, height, data, svgRef}) => {
         return (
-          <BarChart<CvssDataPoint>
+          <BarChart<TransformedCvssDataItem>
             data={data}
             height={height}
             svgRef={svgRef}

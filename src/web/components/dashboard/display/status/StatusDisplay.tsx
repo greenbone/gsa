@@ -20,7 +20,7 @@ interface StatusData extends DonutChartData {
 }
 
 interface StatusDisplayProps<
-  TData,
+  TData extends object,
   TTransformData extends Array<StatusData> = StatusData[],
 > extends DataDisplayProps<TData, TTransformData> {
   filter?: FilterType;
@@ -29,7 +29,7 @@ interface StatusDisplayProps<
 }
 
 const StatusDisplay = <
-  TData,
+  TData extends object,
   TTransformData extends Array<StatusData> = StatusData[],
 >({
   filter,

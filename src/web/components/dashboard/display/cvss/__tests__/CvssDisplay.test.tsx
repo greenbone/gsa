@@ -15,17 +15,17 @@ import {fireEvent, rendererWith, screen} from 'web/testing';
 import {vi} from 'vitest';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {type CvssDataPoint} from 'web/components/dashboard/display/cvss/cvss-transform';
+import {type TransformedCvssDataItem} from 'web/components/dashboard/display/cvss/cvss-transform';
 import CvssDisplay from 'web/components/dashboard/display/cvss/CvssDisplay';
 
 interface BarProbeProps {
-  data?: CvssDataPoint[];
-  onDataClick?: (data: CvssDataPoint) => void;
+  data?: TransformedCvssDataItem[];
+  onDataClick?: (data: TransformedCvssDataItem) => void;
   xLabel?: string;
   yLabel?: string;
 }
 
-let probeDataPoint: Omit<CvssDataPoint, 'filterValue'> | undefined;
+let probeDataPoint: Omit<TransformedCvssDataItem, 'filterValue'> | undefined;
 let probeValue = '7';
 
 vi.mock('web/components/chart/BarChart', () => ({
@@ -40,7 +40,7 @@ vi.mock('web/components/chart/BarChart', () => ({
           const dataPoint =
             probeDataPoint ?? data.find(({x}) => x === probeValue);
           if (dataPoint) {
-            onDataClick?.(dataPoint as CvssDataPoint);
+            onDataClick?.(dataPoint as TransformedCvssDataItem);
           }
         }}
       />

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useMemo} from 'react';
 import styled from 'styled-components';
 import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
@@ -17,7 +18,7 @@ import TableRow from 'web/components/table/TableRow';
 
 export interface DataTableProps<TData> {
   dataTitles?: ToString[];
-  data?: TData[];
+  data?: TData;
   dataRow?: DataRowFunc<TData>;
 }
 
@@ -31,32 +32,37 @@ const Margin = styled.div`
 
 const DataTable = <TData,>({
   dataTitles = [],
-  data = [],
+  data,
   dataRow: rowFunc,
-}: DataTableProps<TData>) => (
-  <Margin>
-    <Table>
-      <TableHeader>
-        <TableRow>
-          {dataTitles.map(head => (
-            <TableHead key={String(head)}>{String(head)}</TableHead>
-          ))}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.map((row, i) => {
-          const rowData = isDefined(rowFunc) ? rowFunc(row) : [];
-          return (
-            <TableRow key={i}>
-              {rowData.map((value, j) => (
-                <TableData key={j}>{String(value)}</TableData>
-              ))}
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
-  </Margin>
-);
+}: DataTableProps<TData>) => {
+  const rowData = useMemo(
+    () => (isDefined(rowFunc) ? rowFunc(data) : []),
+    [rowFunc, data],
+  );
+  return (
+    <Margin>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            {dataTitles.map(head => (
+              <TableHead key={String(head)}>{String(head)}</TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rowData.map((row, i) => {
+            return (
+              <TableRow key={i}>
+                {row.map((value, j) => (
+                  <TableData key={j}>{String(value)}</TableData>
+                ))}
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </Margin>
+  );
+};
 
 export default DataTable;

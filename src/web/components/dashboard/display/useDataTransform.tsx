@@ -6,10 +6,13 @@
 import {useMemo} from 'react';
 
 export type TransformFunc<
-  TInputData,
-  TOutputData,
+  TInputData extends object,
+  TOutputData extends object,
   TTransformProps extends object = object,
-> = (data: TInputData | undefined, props?: TTransformProps) => TOutputData;
+> = (
+  data: TInputData | undefined,
+  props?: TTransformProps,
+) => TOutputData | undefined;
 
 /**
  * Transforms input data into output data and memoizes the result.
@@ -25,14 +28,14 @@ export type TransformFunc<
  * @returns The transformed output data
  */
 const useDataTransform = <
-  TInputData,
-  TOutputData,
+  TInputData extends object,
+  TOutputData extends object,
   TTransformProps extends object = object,
 >(
   data: TInputData | undefined,
   transform: TransformFunc<TInputData, TOutputData, TTransformProps>,
   transformProps?: TTransformProps,
-): TOutputData => {
+): TOutputData | undefined => {
   return useMemo(
     () => transform(data, transformProps),
     [data, transform, transformProps],

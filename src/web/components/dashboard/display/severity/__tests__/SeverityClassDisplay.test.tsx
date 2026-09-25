@@ -8,18 +8,18 @@ import {fireEvent, rendererWith, screen} from 'web/testing';
 import {vi} from 'vitest';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {type SeverityClassData} from 'web/components/dashboard/display/severity/severity-class-transform';
+import {type TransformedSeverityClassDataItem} from 'web/components/dashboard/display/severity/severity-class-transform';
 import SeverityClassDisplay from 'web/components/dashboard/display/severity/SeverityClassDisplay';
 
 interface DonutProbeProps {
-  data?: SeverityClassData[];
-  onDataClick?: (data: SeverityClassData) => void;
+  data?: TransformedSeverityClassDataItem[];
+  onDataClick?: (data: TransformedSeverityClassDataItem) => void;
 }
 
 vi.mock('web/components/chart/DonutChart', () => ({
   default: ({data = [], onDataClick}: DonutProbeProps) => (
     <div>
-      <span data-testid="data-count">{data.length}</span>
+      <span data-testid="data-count">{data?.length ?? 0}</span>
       <button
         data-testid="data-click"
         onClick={() => {
@@ -59,7 +59,8 @@ const createProps = (overrides = {}) => ({
   showSvgDownload: false,
   showToggleLegend: true,
   state: {},
-  title: ({data}: {data: SeverityClassData[]}) => `Severity (${data.length})`,
+  title: ({data}: {data?: TransformedSeverityClassDataItem[]}) =>
+    `Severity (${data?.length ?? 0})`,
   width: 200,
   ...overrides,
 });

@@ -14,7 +14,7 @@ import DataDisplay, {
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 import transformSeverityData, {
   type TransformedSeverityClassData,
-  type SeverityClassData,
+  type TransformedSeverityClassDataItem,
   type SeverityData,
   type TransformSeverityDataProps,
 } from 'web/components/dashboard/display/severity/severity-class-transform';
@@ -46,7 +46,7 @@ const SeverityClassDisplay = ({
 }: SeverityClassDisplayProps) => {
   const gmp = useGmp();
   const severityRating = gmp.settings.severityRating;
-  const handleDataClick = (data: SeverityClassData) => {
+  const handleDataClick = (data: TransformedSeverityClassDataItem) => {
     const {filterValue} = data;
 
     if (!isDefined(onFilterChanged)) {

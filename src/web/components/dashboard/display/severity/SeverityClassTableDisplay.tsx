@@ -8,7 +8,7 @@ import DataTableDisplay, {
 } from 'web/components/dashboard/display/DataTableDisplay';
 import transformSeverityClassData, {
   type TransformedSeverityClassData,
-  type SeverityClassData,
+  type TransformedSeverityClassDataItem,
   type SeverityData,
   type TransformSeverityDataProps,
 } from 'web/components/dashboard/display/severity/severity-class-transform';
@@ -22,10 +22,11 @@ type SeverityClassTableDisplayProps = Omit<
   'dataRow' | 'dataTransform'
 >;
 
-const severityClassDataRow = ({label, value}: SeverityClassData) => [
-  label,
-  String(value),
-];
+const severityClassDataRow = (data?: TransformedSeverityClassData) =>
+  data?.map(({label, value}: TransformedSeverityClassDataItem) => [
+    label,
+    String(value),
+  ]) ?? [];
 
 const SeverityClassTableDisplay = (props: SeverityClassTableDisplayProps) => (
   <DataTableDisplay<

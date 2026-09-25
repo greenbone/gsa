@@ -17,7 +17,7 @@ interface DonutProbeProps {
 vi.mock('web/components/chart/DonutChart', () => ({
   default: ({data = [], onDataClick}: DonutProbeProps) => (
     <div>
-      <span data-testid="data-count">{data.length}</span>
+      <span data-testid="data-count">{data?.length ?? 0}</span>
       <button
         data-testid="data-click"
         onClick={() => onDataClick?.({filterValue: 'active'})}
@@ -28,7 +28,7 @@ vi.mock('web/components/chart/DonutChart', () => ({
 
 const createProps = (overrides = {}) => ({
   data: {items: ['raw']},
-  dataRow: () => ['active'],
+  dataRow: () => [['active']],
   dataTitles: ['Status'],
   dataTransform: () => [
     {color: 'green', filterValue: 'active', label: 'Active', value: 1},
@@ -45,7 +45,7 @@ const createProps = (overrides = {}) => ({
   showFilterString: false,
   showSvgDownload: false,
   showToggleLegend: true,
-  title: ({data}) => `Status (${data.length})`,
+  title: ({data}) => `Status (${data?.length ?? 0})`,
   width: 200,
   ...overrides,
 });
