@@ -5,6 +5,7 @@
 
 import React, {useCallback, useEffect, useRef, type ReactNode} from 'react';
 import styled from 'styled-components';
+import logger from 'gmp/log';
 import {type FilterType} from 'gmp/models/filter';
 import {type ToString} from 'gmp/types';
 import {hasValue, isDefined, isFunction} from 'gmp/utils/identity';
@@ -85,6 +86,8 @@ export type DataDisplayProps<
   showToggleLegend?: boolean;
   title: TitleFunc<TTransformedData>;
 } & TTransformProps;
+
+const log = logger.getLogger('web.components.dashboard.display.DataDisplay');
 
 const Download = styled.a`
   color: ${Theme.black};
@@ -260,7 +263,7 @@ const DataDisplay = <
     cleanupDownloadCsv();
 
     if (!isDefined(dataTitles) || !hasValue(dataRow)) {
-      console.warn(
+      log.warn(
         'DataDisplay: dataTitles or dataRow not defined, cannot download CSV',
       );
       return;
