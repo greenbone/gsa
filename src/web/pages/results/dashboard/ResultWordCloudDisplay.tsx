@@ -139,7 +139,9 @@ export const ResultsWordCloudTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.label, row.value]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label, row.value]) ?? []
+      }
       dataTitles={[_('Vulnerability'), _('Word Count')]}
       dataTransform={transformWordCountData}
       title={() => _('Results Vulnerability Word Cloud')}

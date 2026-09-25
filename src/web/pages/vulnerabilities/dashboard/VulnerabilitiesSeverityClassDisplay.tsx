@@ -19,7 +19,7 @@ export const VulnerabilitiesSeverityDisplay = createDisplay({
       dataTitles={[_l('Severity Class'), _l('# of Vulnerabilities')]}
       title={({data}) =>
         _('Vulnerabilities by Severity Class (Total: {{count}})', {
-          count: data.total,
+          count: data?.total ?? 0,
         })
       }
     />
@@ -37,7 +37,7 @@ export const VulnerabilitiesSeverityTableDisplay = createDisplay({
       dataTitles={[_l('Severity Class'), _l('# of Vulnerabilities')]}
       title={({data}) =>
         _('Vulnerabilities by Severity Class (Total: {{count}})', {
-          count: data.total,
+          count: data?.total ?? 0,
         })
       }
     />

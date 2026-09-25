@@ -45,7 +45,9 @@ export const CertBundCreatedTableDisplay = createDisplay({
     <DataTableDisplay
       {...props}
       {...{children: undefined}}
-      dataRow={row => [row.label ?? '', row.y, row.y2]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label ?? '', row.y, row.y2]) ?? []
+      }
       dataTitles={[
         _('Creation Time'),
         _('# of CERT-Bund Advs'),

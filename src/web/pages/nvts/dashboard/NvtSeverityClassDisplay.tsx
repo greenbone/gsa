@@ -17,7 +17,9 @@ export const NvtsSeverityClassDisplay = createDisplay({
     <SeverityClassDisplay
       {...props}
       title={({data}) =>
-        _('NVTs by Severity Class (Total: {{count}})', {count: data.total})
+        _('NVTs by Severity Class (Total: {{count}})', {
+          count: data?.total ?? 0,
+        })
       }
     />
   ),
@@ -33,7 +35,9 @@ export const NvtsSeverityClassTableDisplay = createDisplay({
       {...props}
       dataTitles={[_('Severity Class'), _('# of NVTs')]}
       title={({data}) =>
-        _('NVTs by Severity Class (Total: {{count}})', {count: data.total})
+        _('NVTs by Severity Class (Total: {{count}})', {
+          count: data?.total ?? 0,
+        })
       }
     />
   ),

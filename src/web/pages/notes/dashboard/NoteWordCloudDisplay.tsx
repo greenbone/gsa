@@ -136,7 +136,9 @@ export const NotesWordCloudTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.label ?? '', row.value]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label ?? '', row.value]) ?? []
+      }
       dataTitles={[_('Text'), _('Count')]}
       dataTransform={transformWordCountData}
       title={() => _('Notes Text Word Cloud')}

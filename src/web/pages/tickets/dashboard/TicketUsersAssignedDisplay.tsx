@@ -88,7 +88,9 @@ export const TicketsAssignedUsersDisplay = createDisplay({
       dataTransform={transformUserAssignedData}
       showToggleLegend={false}
       title={({data}) =>
-        _('Tickets by Assigned User (Total: {{total}})', {total: data.total})
+        _('Tickets by Assigned User (Total: {{total}})', {
+          total: data?.total ?? 0,
+        })
       }
     >
       {chartProps => <DonutChart {...chartProps} showLegend={false} />}
@@ -104,11 +106,15 @@ export const TicketsAssignedUsersTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.label, row.value]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label, row.value]) ?? []
+      }
       dataTitles={[_l('Assigned To'), _l('# of Tickets')]}
       dataTransform={transformUserAssignedData}
       title={({data}) =>
-        _('Tickets by Assigned User (Total: {{total}})', {total: data.total})
+        _('Tickets by Assigned User (Total: {{total}})', {
+          total: data?.total ?? 0,
+        })
       }
     />
   ),

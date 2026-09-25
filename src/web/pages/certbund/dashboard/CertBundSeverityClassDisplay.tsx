@@ -18,7 +18,7 @@ export const CertBundSeverityClassDisplay = createDisplay({
       {...props}
       title={({data}) =>
         _('CERT-Bund Advisories by Severity Class (Total: {{count}})', {
-          count: data.total,
+          count: data?.total ?? 0,
         })
       }
     />
@@ -36,7 +36,7 @@ export const CertBundSeverityClassTableDisplay = createDisplay({
       dataTitles={[_('Severity Class'), _('# of CERT-Bund Advisories')]}
       title={({data}) =>
         _('CERT-Bund Advisories by Severity Class (Total: {{count}})', {
-          count: data.total,
+          count: data?.total ?? 0,
         })
       }
     />

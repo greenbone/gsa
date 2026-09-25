@@ -102,7 +102,7 @@ export const TasksStatusDisplay = createDisplay({
       {...props}
       dataTransform={transformStatusData}
       title={({data}) =>
-        _('Tasks by Status (Total: {{count}})', {count: data.total})
+        _('Tasks by Status (Total: {{count}})', {count: data?.total ?? 0})
       }
     />
   ),
@@ -115,11 +115,13 @@ export const TasksStatusTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.label, row.value]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label, row.value]) ?? []
+      }
       dataTitles={[_('Status'), _('# of Tasks')]}
       dataTransform={transformStatusData}
       title={({data}) =>
-        _('Tasks by Status (Total: {{count}})', {count: data.total})
+        _('Tasks by Status (Total: {{count}})', {count: data?.total ?? 0})
       }
     />
   ),

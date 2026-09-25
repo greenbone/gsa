@@ -17,7 +17,7 @@ export const CpesCvssDisplay = createDisplay({
     <CvssDisplay
       {...props}
       title={({data}) =>
-        _('CPEs by CVSS (Total: {{count}})', {count: data.total})
+        _('CPEs by CVSS (Total: {{count}})', {count: data?.total ?? 0})
       }
       yLabel={_('# of CPEs')}
     />
@@ -34,7 +34,7 @@ export const CpesCvssTableDisplay = createDisplay({
       {...props}
       dataTitles={[_('Severity'), _('# of CPEs')]}
       title={({data}) =>
-        _('CPEs by CVSS (Total: {{count}})', {count: data.total})
+        _('CPEs by CVSS (Total: {{count}})', {count: data?.total ?? 0})
       }
     />
   ),

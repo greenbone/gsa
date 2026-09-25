@@ -126,7 +126,7 @@ export const NvtsQodDisplay = ({
             icons={DataDisplayIcons}
             initialState={{}}
             title={({data}) =>
-              _('NVTs by QoD (Total: {{count}})', {count: data.total})
+              _('NVTs by QoD (Total: {{count}})', {count: data?.total ?? 0})
             }
             onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
           >
@@ -157,11 +157,13 @@ export const NvtsQodTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.label ?? '', row.value]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label ?? '', row.value]) ?? []
+      }
       dataTitles={[_('QoD'), _('# of NVTs')]}
       dataTransform={transformQodData}
       title={({data}) =>
-        _('NVTs by QoD (Total: {{count}})', {count: data.total})
+        _('NVTs by QoD (Total: {{count}})', {count: data?.total ?? 0})
       }
     />
   ),

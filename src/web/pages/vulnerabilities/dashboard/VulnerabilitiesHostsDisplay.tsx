@@ -167,7 +167,9 @@ export const VulnerabilitiesHostsTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.x, String(row.y)]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.x, String(row.y)]) ?? []
+      }
       dataTitles={[_('# of Hosts'), _('# of Vulnerabilities')]}
       dataTransform={transformHostsData}
       title={() => _('Vulnerabilities by Hosts')}

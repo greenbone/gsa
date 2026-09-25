@@ -44,7 +44,9 @@ export const NvtsCreatedTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.label ?? '', row.y, row.y2]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label ?? '', row.y, row.y2]) ?? []
+      }
       dataTitles={[_('Creation Time'), _('# of NVTs'), _('Total NVTs')]}
       dataTransform={transformCreated}
       title={() => _('NVTs by Creation Time')}

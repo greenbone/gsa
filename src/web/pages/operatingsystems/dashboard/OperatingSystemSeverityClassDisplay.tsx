@@ -18,7 +18,7 @@ export const OperatingSystemSeverityClassDisplay = createDisplay({
       {...props}
       title={({data}) =>
         _('Operating Systems by Severity Class (Total: {{count}})', {
-          count: data.total,
+          count: data?.total ?? 0,
         })
       }
     />
@@ -36,7 +36,7 @@ export const OperatingSystemSeverityClassTableDisplay = createDisplay({
       dataTitles={[_('Severity Class'), _('# of Operating Systems')]}
       title={({data}) =>
         _('Operating Systems by Severity Class (Total: {{count}})', {
-          count: data.total,
+          count: data?.total ?? 0,
         })
       }
     />

@@ -150,7 +150,9 @@ export const ReportsHighResultsTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.label, row.y, row.y2]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label, row.y, row.y2]) ?? []
+      }
       dataTitles={[_('Created Time'), _('Max High'), _('Max High per Host')]}
       dataTransform={transformHighResults}
       title={() => _('Reports with High Results')}

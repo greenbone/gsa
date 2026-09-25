@@ -173,7 +173,9 @@ export const HostsVulnScoreTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.x, row.y]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.x, row.y]) ?? []
+      }
       dataTitles={[_('Host Name'), _('Max. average Severity Score')]}
       dataTransform={transformVulnScoreData}
       title={() => _('Most Vulnerable Hosts')}

@@ -29,7 +29,7 @@ const createProps = (overrides = {}) => ({
   showSvgDownload: true,
   showToggleLegend: true,
   state: {},
-  title: ({data}) => data?.[0]?.foo ?? 'empty',
+  title: ({data}: {data?: TestData[]}) => data?.[0]?.foo ?? 'empty',
   width: 200,
   ...overrides,
 });

@@ -80,7 +80,7 @@ export const TicketsStatusDisplay = createDisplay({
       {...props}
       dataTransform={transformStatusData}
       title={({data}) =>
-        _('Tickets by Status (Total: {{count}})', {count: data.total})
+        _('Tickets by Status (Total: {{count}})', {count: data?.total ?? 0})
       }
     />
   ),
@@ -93,11 +93,13 @@ export const TicketsStatusTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.label, row.value]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label, row.value]) ?? []
+      }
       dataTitles={[_('Status'), _('# of Tickets')]}
       dataTransform={transformStatusData}
       title={({data}) =>
-        _('Tickets by Status (Total: {{count}})', {count: data.total})
+        _('Tickets by Status (Total: {{count}})', {count: data?.total ?? 0})
       }
     />
   ),

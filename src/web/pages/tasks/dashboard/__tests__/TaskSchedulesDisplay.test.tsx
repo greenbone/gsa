@@ -6,6 +6,7 @@
 import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor} from 'web/testing';
+import {isFunction} from 'gmp/utils/identity';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
   SubscriptionContext,
@@ -39,8 +40,10 @@ vi.mock('web/components/dashboard/display/DataDisplay', () => ({
 
     return (
       <div data-testid="mock-data-display">
-        <span data-testid="title">{title?.()}</span>
-        {typeof children === 'function'
+        <span data-testid="title">
+          {isFunction(title) ? title({data: transformedData}) : title}
+        </span>
+        {isFunction(children)
           ? children({
               width: 400,
               height: 300,
@@ -61,11 +64,13 @@ vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
 
     return (
       <div data-testid="mock-data-table-display">
-        <span data-testid="title">{title?.()}</span>
+        <span data-testid="title">
+          {isFunction(title) ? title({data: transformedData}) : title}
+        </span>
         <span data-testid="data-titles">{dataTitles?.join('|')}</span>
         {transformedData?.map((row, index) => (
           <span key={index} data-testid={`data-row-${index}`}>
-            {dataRow(row).join('|')}
+            {dataRow(transformedData)?.[index]?.join('|')}
           </span>
         ))}
       </div>

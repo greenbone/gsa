@@ -81,15 +81,19 @@ export const TicketsCreatedTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay<TicketData, TransformedTicketCreatedData>
       {...props}
-      dataRow={row => [
-        row.y,
-        row.y2,
-        formattedUserSettingShortDate(row.x) as string,
-      ]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [
+          row.y,
+          row.y2,
+          formattedUserSettingShortDate(row.x) as string,
+        ]) ?? []
+      }
       dataTitles={[_l('Created Tickets'), _l('Total Tickets'), _l('Time')]}
       dataTransform={transformTicketCreated}
       title={({data}) =>
-        _('Tickets by Creation Time (Total: {{count}})', {count: data.length})
+        _('Tickets by Creation Time (Total: {{count}})', {
+          count: data?.length ?? 0,
+        })
       }
     />
   ),
