@@ -78,6 +78,16 @@ describe('DataDisplay component tests', () => {
     expect(screen.getByTestId('icons')).toBeInTheDocument();
   });
 
+  test('should render a string title', () => {
+    render(
+      <DataDisplay<TestData, TestProps, TestData[], TestState>
+        {...createProps({title: 'Static title'})}
+      />,
+    );
+
+    expect(screen.getByText('Static title')).toBeInTheDocument();
+  });
+
   test('should not render chart children while loading', () => {
     const children = testing.fn(() => <div data-testid="chart" />);
     const props = createProps({

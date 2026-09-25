@@ -87,7 +87,7 @@ export type DataDisplayProps<
   showFilterString?: boolean;
   showSvgDownload?: boolean;
   showToggleLegend?: boolean;
-  title: TitleFunc<TTransformedData>;
+  title: ToString | TitleFunc<TTransformedData>;
 } & TTransformProps;
 
 const log = logger.getLogger('web.components.dashboard.display.DataDisplay');
@@ -208,7 +208,9 @@ const DataDisplay = <
 
   const originalData = data;
   const transformedData = useDataTransform(originalData, dataTransform);
-  const title = titleFunc({data: transformedData, isLoading});
+  const title = isFunction(titleFunc)
+    ? titleFunc({data: transformedData, isLoading})
+    : String(titleFunc);
 
   const getCurrentState = (newState: TState | undefined = state): TState => {
     return {
