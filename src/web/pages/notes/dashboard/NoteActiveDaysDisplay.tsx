@@ -183,7 +183,7 @@ export const NotesActiveDaysDisplay = ({
             initialState={{}}
             title={({data}) =>
               _('Notes by Active Days (Total: {{count}})', {
-                count: data.total,
+                count: data?.total ?? 0,
               })
             }
             onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
@@ -215,11 +215,13 @@ export const NotesActiveDaysTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.label ?? '', row.value]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label ?? '', row.value]) ?? []
+      }
       dataTitles={[_('Active'), _('# of Notes')]}
       dataTransform={transformActiveDaysData}
       title={({data}) =>
-        _('Notes by Active Days (Total: {{count}})', {count: data.total})
+        _('Notes by Active Days (Total: {{count}})', {count: data?.total ?? 0})
       }
     />
   ),

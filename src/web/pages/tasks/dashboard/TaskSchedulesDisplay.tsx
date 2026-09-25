@@ -93,10 +93,12 @@ export const TasksSchedulesTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [
-        row.label,
-        isDefined(row.nextStart) ? row.nextStart : '-',
-      ]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [
+          row.label,
+          isDefined(row.nextStart) ? row.nextStart : '-',
+        ]) ?? []
+      }
       dataTitles={[_('Task Name'), _('Next Schedule Time')]}
       dataTransform={transformScheduleData}
       endDate={week}

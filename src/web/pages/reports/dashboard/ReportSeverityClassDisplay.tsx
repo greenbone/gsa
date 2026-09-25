@@ -17,7 +17,9 @@ export const ReportsSeverityDisplay = createDisplay({
     <SeverityClassDisplay
       {...props}
       title={({data}) =>
-        _('Reports by Severity Class (Total: {{count}})', {count: data.total})
+        _('Reports by Severity Class (Total: {{count}})', {
+          count: data?.total ?? 0,
+        })
       }
     />
   ),
@@ -33,7 +35,9 @@ export const ReportsSeverityTableDisplay = createDisplay({
       {...props}
       dataTitles={[_('Severity Class'), _('# of Reports')]}
       title={({data}) =>
-        _('Reports by Severity Class (Total: {{count}})', {count: data.total})
+        _('Reports by Severity Class (Total: {{count}})', {
+          count: data?.total ?? 0,
+        })
       }
     />
   ),

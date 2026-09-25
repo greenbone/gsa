@@ -70,7 +70,7 @@ export const ReportComplianceDisplay = createDisplay({
       filterTerm="compliant"
       title={({data}) =>
         _('Audit Reports by Compliance (Total: {{count}})', {
-          count: data.total,
+          count: data?.total ?? 0,
         })
       }
     />
@@ -85,12 +85,14 @@ export const ReportComplianceTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.label, row.value]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label, row.value]) ?? []
+      }
       dataTitles={[_l('Status'), _l('# of Reports')]}
       dataTransform={transformStatusData}
       title={({data}) =>
         _('Audit Reports by Compliance (Total: {{count}})', {
-          count: data.total,
+          count: data?.total ?? 0,
         })
       }
     />

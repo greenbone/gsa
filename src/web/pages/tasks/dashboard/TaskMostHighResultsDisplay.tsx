@@ -122,7 +122,9 @@ export const TasksMostHighResultsDisplay = ({
           >
             {...props}
             {...loaderProps}
-            dataRow={row => [row.x, row.y]}
+            dataRow={transformedData =>
+              transformedData?.map(row => [row.x, row.y]) ?? []
+            }
             dataTitles={[_('Task Name'), _('Max. High per Host')]}
             dataTransform={transformHighResultsData}
             filter={displayFilter}
@@ -157,7 +159,9 @@ export const TasksMostHighResultsTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.x, row.y]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.x, row.y]) ?? []
+      }
       dataTitles={[_('Task Name'), _('Max. High per Host')]}
       dataTransform={transformHighResultsData}
       title={() => _('Tasks with most High Results per Host')}

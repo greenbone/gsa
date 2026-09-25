@@ -126,7 +126,9 @@ export const NvtsQodTypeDisplay = ({
             icons={DataDisplayIcons}
             initialState={{}}
             title={({data}) =>
-              _('NVTs by QoD-Type (Total: {{count}})', {count: data.total})
+              _('NVTs by QoD-Type (Total: {{count}})', {
+                count: data?.total ?? 0,
+              })
             }
             onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
           >
@@ -157,11 +159,13 @@ export const NvtsQodTypeTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.label ?? '', row.value]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label ?? '', row.value]) ?? []
+      }
       dataTitles={[_('QoD-Type'), _('# of NVTs')]}
       dataTransform={transformQodTypeData}
       title={({data}) =>
-        _('NVTs by QoD-Type (Total: {{count}})', {count: data.total})
+        _('NVTs by QoD-Type (Total: {{count}})', {count: data?.total ?? 0})
       }
     />
   ),

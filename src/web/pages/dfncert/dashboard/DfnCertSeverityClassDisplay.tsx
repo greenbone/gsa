@@ -18,7 +18,7 @@ export const DfnCertSeverityClassDisplay = createDisplay({
       {...props}
       title={({data}) =>
         _('DFN-CERT Advisories by Severity Class (Total: {{count}})', {
-          count: data.total,
+          count: data?.total ?? 0,
         })
       }
     />
@@ -36,7 +36,7 @@ export const DfnCertSeverityClassTableDisplay = createDisplay({
       dataTitles={[_('Severity Class'), _('# of DFN-CERT Advs')]}
       title={({data}) =>
         _('DFN-CERT Advisories by Severity Class (Total: {{count}})', {
-          count: data.total,
+          count: data?.total ?? 0,
         })
       }
     />

@@ -51,7 +51,7 @@ vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
         <span data-testid="data-titles">{dataTitles?.join('|')}</span>
         {transformedData?.map((row, index) => (
           <span key={index} data-testid={`data-row-${index}`}>
-            {dataRow(row).join('|')}
+            {dataRow(transformedData)?.[index]?.join('|')}
           </span>
         ))}
       </div>

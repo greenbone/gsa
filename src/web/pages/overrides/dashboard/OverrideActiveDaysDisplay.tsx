@@ -175,7 +175,7 @@ export const OverridesActiveDaysDisplay = ({
             initialState={{}}
             title={({data}) =>
               _('Overrides by Active Days (Total: {{count}})', {
-                count: data.total,
+                count: data?.total ?? 0,
               })
             }
             onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
@@ -207,11 +207,15 @@ export const OverridesActiveDaysTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.label, row.value]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label, row.value]) ?? []
+      }
       dataTitles={[_('Active'), _('# of Overrides')]}
       dataTransform={transformActiveDaysData}
       title={({data}) =>
-        _('Overrides by Active Days (Total: {{count}})', {count: data.total})
+        _('Overrides by Active Days (Total: {{count}})', {
+          count: data?.total ?? 0,
+        })
       }
     />
   ),

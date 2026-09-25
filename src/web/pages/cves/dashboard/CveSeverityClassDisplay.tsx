@@ -17,7 +17,9 @@ export const CvesSeverityClassDisplay = createDisplay({
     <SeverityClassDisplay
       {...props}
       title={({data}) =>
-        _('CVEs by Severity Class (Total: {{count}})', {count: data.total})
+        _('CVEs by Severity Class (Total: {{count}})', {
+          count: data?.total ?? 0,
+        })
       }
     />
   ),
@@ -33,7 +35,9 @@ export const CvesSeverityClassTableDisplay = createDisplay({
       {...props}
       dataTitles={[_('Severity Class'), _('# of CVEs')]}
       title={({data}) =>
-        _('CVEs by Severity Class (Total: {{count}})', {count: data.total})
+        _('CVEs by Severity Class (Total: {{count}})', {
+          count: data?.total ?? 0,
+        })
       }
     />
   ),

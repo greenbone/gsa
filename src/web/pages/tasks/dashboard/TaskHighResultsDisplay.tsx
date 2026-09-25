@@ -159,7 +159,9 @@ export const TasksHighResultsTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.label, row.value, row.severity]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label, row.value, row.severity]) ?? []
+      }
       dataTitles={[_('Task Name'), _('High per Host'), _('Severity')]}
       dataTransform={transformHighResultsData}
       title={() => _('Tasks by High Results per Host')}

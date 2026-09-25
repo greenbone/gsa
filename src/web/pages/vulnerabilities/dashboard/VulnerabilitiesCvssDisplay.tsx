@@ -17,7 +17,9 @@ export const VulnerabilitiesCvssDisplay = createDisplay({
     <CvssDisplay
       {...props}
       title={({data}) =>
-        _('Vulnerabilities by CVSS (Total: {{count}})', {count: data.total})
+        _('Vulnerabilities by CVSS (Total: {{count}})', {
+          count: data?.total ?? 0,
+        })
       }
       yLabel={_l('# of Vulnerabilities')}
     />
@@ -34,7 +36,9 @@ export const VulnerabilitiesCvssTableDisplay = createDisplay({
       {...props}
       dataTitles={[_('Severity'), _('# of Vulnerabilities')]}
       title={({data}) =>
-        _('Vulnerabilities by CVSS (Total: {{count}})', {count: data.total})
+        _('Vulnerabilities by CVSS (Total: {{count}})', {
+          count: data?.total ?? 0,
+        })
       }
     />
   ),

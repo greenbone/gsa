@@ -45,7 +45,16 @@ const createProps = (overrides = {}) => ({
   showFilterString: false,
   showSvgDownload: false,
   showToggleLegend: true,
-  title: ({data}) => `Status (${data?.length ?? 0})`,
+  title: ({
+    data,
+  }: {
+    data?: Array<{
+      color: string;
+      filterValue: string;
+      label: string;
+      value: number;
+    }>;
+  }) => `Status (${data?.length ?? 0})`,
   width: 200,
   ...overrides,
 });

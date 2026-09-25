@@ -149,7 +149,7 @@ export const NvtsFamilyDisplay = ({
             severityRating={severityRating}
             showToggleLegend={false}
             title={({data}) =>
-              _('NVTs by Family (Total: {{count}})', {count: data.total})
+              _('NVTs by Family (Total: {{count}})', {count: data?.total ?? 0})
             }
             onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
           >
@@ -179,11 +179,13 @@ export const NvtsFamilyTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.label, row.value, row.severity]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label, row.value, row.severity]) ?? []
+      }
       dataTitles={[_('NVT Family'), _('# of NVTs'), _('Severity')]}
       dataTransform={transformFamilyData}
       title={({data}) =>
-        _('NVTs by Family (Total: {{count}})', {count: data.total})
+        _('NVTs by Family (Total: {{count}})', {count: data?.total ?? 0})
       }
     />
   ),

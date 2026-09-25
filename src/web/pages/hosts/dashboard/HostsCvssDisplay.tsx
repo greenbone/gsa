@@ -17,7 +17,7 @@ export const HostsCvssDisplay = createDisplay({
     <CvssDisplay
       {...props}
       title={({data}) =>
-        _('Hosts by CVSS (Total: {{count}})', {count: data.total})
+        _('Hosts by CVSS (Total: {{count}})', {count: data?.total ?? 0})
       }
       yLabel={_('# of Hosts')}
     />
@@ -34,7 +34,7 @@ export const HostsCvssTableDisplay = createDisplay({
       {...props}
       dataTitles={[_('Severity'), _('# of Hosts')]}
       title={({data}) =>
-        _('Hosts by CVSS (Total: {{count}})', {count: data.total})
+        _('Hosts by CVSS (Total: {{count}})', {count: data?.total ?? 0})
       }
     />
   ),

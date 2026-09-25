@@ -17,7 +17,9 @@ export const OperatingSystemCvssDisplay = createDisplay({
     <CvssDisplay
       {...props}
       title={({data}) =>
-        _('Operating Systems by CVSS (Total: {{count}})', {count: data.total})
+        _('Operating Systems by CVSS (Total: {{count}})', {
+          count: data?.total ?? 0,
+        })
       }
       yLabel={_('# of Vulnerabilities')}
     />
@@ -34,7 +36,9 @@ export const OperatingSystemCvssTableDisplay = createDisplay({
       {...props}
       dataTitles={[_('Severity'), _('# of Operating Systems')]}
       title={({data}) =>
-        _('Operating Systems by CVSS (Total: {{count}})', {count: data.total})
+        _('Operating Systems by CVSS (Total: {{count}})', {
+          count: data?.total ?? 0,
+        })
       }
     />
   ),

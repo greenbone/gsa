@@ -18,7 +18,7 @@ export const DfnCertCvssDisplay = createDisplay({
       {...props}
       title={({data}) =>
         _('DFN-CERT Advisories by CVSS (Total: {{count}})', {
-          count: data.total,
+          count: data?.total ?? 0,
         })
       }
       yLabel={_('# of DFN-CERT Advs')}
@@ -36,7 +36,9 @@ export const DfnCertCvssTableDisplay = createDisplay({
       {...props}
       dataTitles={[_('Severity'), _('# of DFN-CERT Advisories')]}
       title={({data}) =>
-        _('DFN-CERT Advisories by CVSS (Total: {{count}})', {count: data.total})
+        _('DFN-CERT Advisories by CVSS (Total: {{count}})', {
+          count: data?.total ?? 0,
+        })
       }
     />
   ),

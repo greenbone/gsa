@@ -18,7 +18,7 @@ export const CertBundCvssDisplay = createDisplay({
       {...props}
       title={({data}) =>
         _('CERT-Bund Advisories by CVSS (Total: {{count}})', {
-          count: data.total,
+          count: data?.total ?? 0,
         })
       }
       yLabel={_('# of CERT-Bund Advs')}
@@ -37,7 +37,7 @@ export const CertBundCvssTableDisplay = createDisplay({
       dataTitles={[_('Severity'), _('# of CERT-Bund Advisories')]}
       title={({data}) =>
         _('CERT-Bund Advisories by CVSS (Total: {{count}})', {
-          count: data.total,
+          count: data?.total ?? 0,
         })
       }
     />

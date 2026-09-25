@@ -84,7 +84,9 @@ export const TlsCertificateTimeStatusDisplay = createDisplay({
       {...props}
       dataTransform={transformTimeStatusData}
       title={({data}) =>
-        _('TLS Certificates by Status (Total: {{count}})', {count: data.total})
+        _('TLS Certificates by Status (Total: {{count}})', {
+          count: data?.total ?? 0,
+        })
       }
     />
   ),
@@ -98,11 +100,15 @@ export const TlsCertificateTimeStatusTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.label, row.value]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label, row.value]) ?? []
+      }
       dataTitles={[_('Status'), _('# of Certificates')]}
       dataTransform={transformTimeStatusData}
       title={({data}) =>
-        _('TLS Certificates by Status (Total: {{count}})', {count: data.total})
+        _('TLS Certificates by Status (Total: {{count}})', {
+          count: data?.total ?? 0,
+        })
       }
     />
   ),

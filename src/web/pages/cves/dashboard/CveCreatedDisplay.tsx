@@ -44,7 +44,9 @@ export const CvesCreatedTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.label ?? '', row.y, row.y2]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label ?? '', row.y, row.y2]) ?? []
+      }
       dataTitles={[_l('Creation Time'), _l('# of CVEs'), _l('Total CVEs')]}
       dataTransform={transformCreated}
       title={() => _('CVEs by Creation Time')}

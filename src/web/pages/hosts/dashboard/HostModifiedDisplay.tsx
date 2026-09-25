@@ -116,7 +116,7 @@ export const HostsModifiedDisplay = ({
             filter={displayFilter}
             title={({data}) =>
               _('Hosts by Modification Time (Total: {{count}})', {
-                count: data.total,
+                count: data?.total ?? 0,
               })
             }
             onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
@@ -161,7 +161,9 @@ export const HostsModifiedTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.label ?? '', row.y, row.y2]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label ?? '', row.y, row.y2]) ?? []
+      }
       dataTitles={[
         _('Creation Time'),
         _('# of Modified Hosts'),
@@ -169,7 +171,9 @@ export const HostsModifiedTableDisplay = createDisplay({
       ]}
       dataTransform={transformModified}
       title={({data}) =>
-        _('Hosts by Modification Time (Total: {{count}})', {count: data.total})
+        _('Hosts by Modification Time (Total: {{count}})', {
+          count: data?.total ?? 0,
+        })
       }
     />
   ),

@@ -122,7 +122,7 @@ export const TlsCertificatesModifiedDisplay = ({
             filter={displayFilter}
             title={({data}) =>
               _('TLS Certificates by Modification Time (Total: {{count}})', {
-                count: data.total,
+                count: data?.total ?? 0,
               })
             }
             onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
@@ -166,7 +166,9 @@ export const TlsCertificatesModifiedTableDisplay = createDisplay({
   displayComponent: props => (
     <DataTableDisplay
       {...props}
-      dataRow={row => [row.label, row.y, row.y2]}
+      dataRow={transformedData =>
+        transformedData?.map(row => [row.label, row.y, row.y2]) ?? []
+      }
       dataTitles={[
         _('Creation Time'),
         _('# of Modified Certificates'),
@@ -175,7 +177,7 @@ export const TlsCertificatesModifiedTableDisplay = createDisplay({
       dataTransform={transformModified}
       title={({data}) =>
         _('TLS Certificates by Modification Time (Total: {{count}})', {
-          count: data.total,
+          count: data?.total ?? 0,
         })
       }
     />
