@@ -49,12 +49,12 @@ interface SeverityFilterValue {
   end?: string;
 }
 
-export interface SeverityClassData extends LegendData {
+export interface TransformedSeverityClassDataItem extends LegendData {
   value: number;
   filterValue: SeverityFilterValue;
 }
 
-export interface TransformedSeverityClassData extends Array<SeverityClassData> {
+export interface TransformedSeverityClassData extends Array<TransformedSeverityClassDataItem> {
   total: number;
 }
 

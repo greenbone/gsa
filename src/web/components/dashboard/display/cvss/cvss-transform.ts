@@ -39,13 +39,13 @@ interface CvssFilterValue {
   end?: string;
 }
 
-export interface CvssDataPoint extends LegendData {
+export interface TransformedCvssDataItem extends LegendData {
   x: string;
   y: number;
   filterValue?: CvssFilterValue;
 }
 
-export interface TransformedCvssData extends Array<CvssDataPoint> {
+export interface TransformedCvssData extends Array<TransformedCvssDataItem> {
   total: number;
 }
 
@@ -53,10 +53,9 @@ export interface TransformCvssDataProps {
   severityRating?: SeverityRating;
 }
 
-export const cvssDataRow = ({x, y}: CvssDataPoint): [string, string] => [
-  x,
-  String(y),
-];
+export const cvssDataRow = (data?: TransformedCvssData) =>
+  data?.map(({x, y}: TransformedCvssDataItem) => [x ?? '', String(y ?? '')]) ??
+  [];
 
 const format = (value: number): string => value.toFixed(1);
 

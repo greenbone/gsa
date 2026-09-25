@@ -38,7 +38,7 @@ const createProps = (overrides: Partial<TestProps> = {}): TestProps => ({
     <div data-testid="chart">{data[0].value}</div>
   )),
   data: {value: 'raw'},
-  dataRow: (row: TestData) => [row.value],
+  dataRow: rows => rows?.map(row => [row.value]) ?? [],
   dataTitles: ['Value'],
   dataTransform: data => [{value: `${data?.value}-transformed`}],
   height: 100,
@@ -51,7 +51,7 @@ const createProps = (overrides: Partial<TestProps> = {}): TestProps => ({
   showSvgDownload: true,
   showToggleLegend: true,
   state: {showLegend: false},
-  title: ({data}) => `chart-1: ${data[0]?.value ?? 'empty'}`,
+  title: ({data}) => `chart-1: ${data?.[0]?.value ?? 'empty'}`,
   width: 200,
   ...overrides,
 });
@@ -219,7 +219,7 @@ describe('DataDisplay component tests', () => {
     ));
     const props = createProps({
       data: {value: 'raw, "value"'},
-      dataRow: row => [row.value, 'second'],
+      dataRow: rows => rows?.map(row => [row.value, 'second']) ?? [],
       dataTitles: ['Value', 'Other'],
       icons,
     });

@@ -13,7 +13,9 @@ describe('DataTable component tests', () => {
       {id: '1', name: 'Alpha', count: 3},
       {id: '2', name: 'Beta', count: 7},
     ];
-    const dataRow = testing.fn(row => [row.name, row.count]);
+    const dataRow = testing.fn(
+      data => data?.map(row => [row.name, row.count]) ?? [],
+    );
 
     render(
       <DataTable
@@ -29,8 +31,7 @@ describe('DataTable component tests', () => {
     expect(screen.getByRole('cell', {name: '3'})).toBeVisible();
     expect(screen.getByRole('cell', {name: 'Beta'})).toBeVisible();
     expect(screen.getByRole('cell', {name: '7'})).toBeVisible();
-    expect(dataRow).toHaveBeenNthCalledWith(1, data[0]);
-    expect(dataRow).toHaveBeenNthCalledWith(2, data[1]);
+    expect(dataRow).toHaveBeenCalledWith(data);
   });
 
   test('should stringify row values before rendering', () => {
@@ -41,7 +42,7 @@ describe('DataTable component tests', () => {
     render(
       <DataTable
         data={[{value: customValue, count: 42}]}
-        dataRow={row => [row.value, row.count]}
+        dataRow={data => data?.map(row => [row.value, row.count]) ?? []}
         dataTitles={['Value', 'Count']}
       />,
     );
@@ -50,8 +51,105 @@ describe('DataTable component tests', () => {
     expect(screen.getByRole('cell', {name: '42'})).toBeVisible();
   });
 
+  test('should rerender when dataRow changes', () => {
+    const data = [{name: 'Alpha', count: 3}];
+    const initialDataRow = testing.fn(
+      rows => rows?.map(row => [row.name, row.count]) ?? [],
+    );
+    const updatedDataRow = testing.fn(
+      rows => rows?.map(row => [row.name.toUpperCase(), row.count * 2]) ?? [],
+    );
+
+    const {rerender} = render(
+      <DataTable
+        data={data}
+        dataRow={initialDataRow}
+        dataTitles={['Name', 'Count']}
+      />,
+    );
+
+    expect(screen.getByRole('cell', {name: 'Alpha'})).toBeVisible();
+    expect(screen.getByRole('cell', {name: '3'})).toBeVisible();
+
+    rerender(
+      <DataTable
+        data={data}
+        dataRow={updatedDataRow}
+        dataTitles={['Name', 'Count']}
+      />,
+    );
+
+    expect(screen.queryByRole('cell', {name: 'Alpha'})).not.toBeInTheDocument();
+    expect(screen.queryByRole('cell', {name: '3'})).not.toBeInTheDocument();
+    expect(screen.getByRole('cell', {name: 'ALPHA'})).toBeVisible();
+    expect(screen.getByRole('cell', {name: '6'})).toBeVisible();
+    expect(initialDataRow).toHaveBeenCalledWith(data);
+    expect(updatedDataRow).toHaveBeenCalledWith(data);
+  });
+
+  test('should rerender when data changes', () => {
+    const initialData = [{name: 'Alpha', count: 3}];
+    const updatedData = [{name: 'Beta', count: 7}];
+    const dataRow = testing.fn(
+      rows => rows?.map(row => [row.name, row.count]) ?? [],
+    );
+
+    const {rerender} = render(
+      <DataTable
+        data={initialData}
+        dataRow={dataRow}
+        dataTitles={['Name', 'Count']}
+      />,
+    );
+
+    expect(screen.getByRole('cell', {name: 'Alpha'})).toBeVisible();
+    expect(screen.getByRole('cell', {name: '3'})).toBeVisible();
+
+    rerender(
+      <DataTable
+        data={updatedData}
+        dataRow={dataRow}
+        dataTitles={['Name', 'Count']}
+      />,
+    );
+
+    expect(screen.queryByRole('cell', {name: 'Alpha'})).not.toBeInTheDocument();
+    expect(screen.queryByRole('cell', {name: '3'})).not.toBeInTheDocument();
+    expect(screen.getByRole('cell', {name: 'Beta'})).toBeVisible();
+    expect(screen.getByRole('cell', {name: '7'})).toBeVisible();
+    expect(dataRow).toHaveBeenCalledWith(initialData);
+    expect(dataRow).toHaveBeenCalledWith(updatedData);
+  });
+
+  test('should not recalculate rows when data and dataRow are unchanged', () => {
+    const data = [{name: 'Alpha', count: 3}];
+    const dataRow = testing.fn(
+      rows => rows?.map(row => [row.name, row.count]) ?? [],
+    );
+
+    const {rerender} = render(
+      <DataTable
+        data={data}
+        dataRow={dataRow}
+        dataTitles={['Name', 'Count']}
+      />,
+    );
+
+    rerender(
+      <DataTable
+        data={data}
+        dataRow={dataRow}
+        dataTitles={['Name', 'Count']}
+      />,
+    );
+
+    expect(dataRow).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole('cell', {name: 'Alpha'})).toBeVisible();
+    expect(screen.getByRole('cell', {name: '3'})).toBeVisible();
+  });
+
   test('should render no body rows for empty data', () => {
-    const dataRow = testing.fn();
+    const dataRow = testing.fn(() => []);
 
     render(
       <DataTable data={[]} dataRow={dataRow} dataTitles={['Only Header']} />,
@@ -61,16 +159,16 @@ describe('DataTable component tests', () => {
       screen.getByRole('columnheader', {name: 'Only Header'}),
     ).toBeVisible();
     expect(screen.queryByRole('cell')).not.toBeInTheDocument();
-    expect(dataRow).not.toHaveBeenCalled();
+    expect(dataRow).toHaveBeenCalledWith([]);
   });
 
   test('should use empty defaults when data and titles are omitted', () => {
-    const dataRow = testing.fn();
+    const dataRow = testing.fn(() => []);
 
     render(<DataTable dataRow={dataRow} />);
 
     expect(screen.queryByRole('columnheader')).not.toBeInTheDocument();
     expect(screen.queryByRole('cell')).not.toBeInTheDocument();
-    expect(dataRow).not.toHaveBeenCalled();
+    expect(dataRow).toHaveBeenCalledWith(undefined);
   });
 });

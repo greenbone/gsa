@@ -12,18 +12,18 @@ import DataTable, {
   type DataTableProps,
 } from 'web/components/dashboard/display/DataTable';
 
-type DataTableDisplayRenderProps<TTransformedData extends Array<unknown>> =
-  DataTableProps<TTransformedData[number]> & {
+type DataTableDisplayRenderProps<TTransformedData extends object> =
+  DataTableProps<TTransformedData> & {
     data?: TTransformedData;
   };
 
-type DataTableDisplayChildren<TTransformedData extends Array<unknown>> = (
+type DataTableDisplayChildren<TTransformedData extends object> = (
   props: DataTableDisplayRenderProps<TTransformedData>,
 ) => React.ReactNode;
 
 export type DataTableDisplayProps<
-  TData,
-  TTransformedData extends Array<unknown>,
+  TData extends object,
+  TTransformedData extends object,
   TTransformProps extends object = object,
   TState extends DisplayState = DisplayState,
 > = DataDisplayProps<
@@ -35,16 +35,16 @@ export type DataTableDisplayProps<
 >;
 
 type DataTableDisplayComponentProps<
-  TData,
-  TTransformedData extends Array<unknown>,
+  TData extends object,
+  TTransformedData extends object,
   TTransformProps extends object,
   TState extends DisplayState,
 > = DataTableDisplayProps<TData, TTransformedData, TTransformProps, TState> &
   TTransformProps;
 
 const DataTableDisplay = <
-  TData,
-  TTransformedData extends Array<unknown> = TData[],
+  TData extends object,
+  TTransformedData extends object,
   TTransformProps extends object = object,
   TState extends DisplayState = DisplayState,
 >(

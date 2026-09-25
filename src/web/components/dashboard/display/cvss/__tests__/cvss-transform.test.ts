@@ -19,16 +19,21 @@ import {
 
 describe('cvssDataRow', () => {
   test('should return the x and y values', () => {
-    const data = {
-      color: '#000000',
-      filterValue: {},
-      label: 'Low',
-      toolTip: 'Low',
-      x: '1',
-      y: 2,
-    };
+    const data = Object.assign(
+      [
+        {
+          color: '#000000',
+          filterValue: {},
+          label: 'Low',
+          toolTip: 'Low',
+          x: '1',
+          y: 2,
+        },
+      ],
+      {total: 2},
+    );
 
-    expect(cvssDataRow(data)).toEqual(['1', '2']);
+    expect(cvssDataRow(data)).toEqual([['1', '2']]);
   });
 });
 

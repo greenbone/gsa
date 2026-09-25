@@ -13,7 +13,7 @@ interface TestData {
 
 const createProps = (overrides = {}) => ({
   data: {foo: 'raw'},
-  dataRow: row => [row.foo],
+  dataRow: rows => rows?.map(row => [row.foo]) ?? [],
   dataTitles: ['Foo'],
   dataTransform: data => [{foo: `${data.foo}-transformed`}],
   height: 100,
@@ -29,7 +29,7 @@ const createProps = (overrides = {}) => ({
   showSvgDownload: true,
   showToggleLegend: true,
   state: {},
-  title: ({data}) => data[0]?.foo ?? 'empty',
+  title: ({data}) => data?.[0]?.foo ?? 'empty',
   width: 200,
   ...overrides,
 });
@@ -37,7 +37,7 @@ const createProps = (overrides = {}) => ({
 describe('DataTableDisplay component tests', () => {
   test('should render DataTable fallback when children is not a function', () => {
     render(
-      <DataTableDisplay<TestData> {...createProps()}>
+      <DataTableDisplay<TestData, TestData[]> {...createProps()}>
         {/* @ts-expect-error testing children as not a function */}
         <span>not a function</span>
       </DataTableDisplay>,
@@ -55,7 +55,7 @@ describe('DataTableDisplay component tests', () => {
       ));
 
     render(
-      <DataTableDisplay<TestData> {...createProps()}>
+      <DataTableDisplay<TestData, TestData[]> {...createProps()}>
         {childFn}
       </DataTableDisplay>,
     );
@@ -77,7 +77,9 @@ describe('DataTableDisplay component tests', () => {
   test('should disable SVG and legend icons', () => {
     const icons = testing.fn(() => null);
 
-    render(<DataTableDisplay<TestData> {...createProps({icons})} />);
+    render(
+      <DataTableDisplay<TestData, TestData[]> {...createProps({icons})} />,
+    );
 
     expect(icons).toHaveBeenCalledWith(
       expect.objectContaining({
