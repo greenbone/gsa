@@ -83,6 +83,7 @@ describe('TasksStatusDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(TasksStatusDisplay).toBeDefined();
     expect(TasksStatusDisplay.displayId).toBe('task-by-status');
+    expect(TasksStatusDisplay.displayName).toBe('TasksStatusDisplay');
   });
 
   test('should be registered with the correct title', () => {

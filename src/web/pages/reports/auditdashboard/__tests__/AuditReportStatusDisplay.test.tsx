@@ -83,6 +83,7 @@ describe('ReportComplianceDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(ReportComplianceDisplay).toBeDefined();
     expect(ReportComplianceDisplay.displayId).toBe('report-by-compliance');
+    expect(ReportComplianceDisplay.displayName).toBe('ReportComplianceDisplay');
   });
 
   test('should be registered with the correct title', () => {

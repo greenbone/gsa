@@ -64,6 +64,7 @@ const transformStatusData = (
 };
 
 export const ReportComplianceDisplay = createDisplay({
+  loaderComponent: ReportComplianceLoader,
   displayComponent: ({data, ...props}) => {
     const transformedData = useDataTransform(data, transformStatusData);
     return (
@@ -80,8 +81,8 @@ export const ReportComplianceDisplay = createDisplay({
     );
   },
   displayId: 'report-by-compliance',
+  displayName: 'ReportComplianceDisplay',
   filtersFilter: AUDIT_REPORTS_FILTER_FILTER,
-  loaderComponent: ReportComplianceLoader,
 });
 
 export const ReportComplianceTableDisplay = createDisplay({

@@ -75,7 +75,6 @@ const renderDisplay = (component: ReactElement) => {
 describe('NotesCreatedDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(NotesCreatedDisplay).toBeDefined();
-    expect(typeof NotesCreatedDisplay).toBe('function');
     expect(NotesCreatedDisplay.displayId).toBe('note-by-created');
     expect(NotesCreatedDisplay.displayName).toBe('NotesCreatedDisplay');
   });
@@ -108,7 +107,6 @@ describe('NotesCreatedDisplay', () => {
 describe('NotesCreatedTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(NotesCreatedTableDisplay).toBeDefined();
-    expect(typeof NotesCreatedTableDisplay).toBe('function');
     expect(NotesCreatedTableDisplay.displayId).toBe('note-by-created-table');
     expect(NotesCreatedTableDisplay.displayName).toBe(
       'NotesCreatedTableDisplay',

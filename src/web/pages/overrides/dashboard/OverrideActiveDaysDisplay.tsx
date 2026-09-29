@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useCallback} from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
@@ -11,7 +12,6 @@ import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import DonutChart from 'web/components/chart/DonutChart';
-import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay, {
   type DataDisplayProps,
@@ -19,7 +19,6 @@ import DataDisplay, {
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import useDataTransform from 'web/components/dashboard/display/useDataTransform';
-import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {
   totalCount,
   percent,
@@ -46,8 +45,6 @@ interface TransformedActiveDaysData extends Array<TransformedActiveDaysDataItems
 
 type OverrideActiveDaysDataDisplayProps =
   DataDisplayProps<TransformedActiveDaysData>;
-
-type OverrideActiveDaysDisplayProps = DashboardDisplayProps;
 
 const MAX_BINS = 10; // if this is changed, activeDaysColorScale needs adjustment
 
@@ -116,94 +113,68 @@ const transformActiveDaysData = (
   return result;
 };
 
-export const OverridesActiveDaysDisplay = ({
-  filter,
-  filterId,
-  showFilterSelection,
-  onFilterChanged,
-  onFilterIdChanged,
-  ...props
-}: OverrideActiveDaysDisplayProps) => {
-  const {
-    filter: selectedFilter,
-    selectFilter,
-    filterSelectionDialog,
-  } = useFilterSelection({
-    filterId,
-    filtersFilter: OVERRIDES_FILTER_FILTER,
-    onFilterIdChanged,
-  });
+export const OverridesActiveDaysDisplay = createDisplay({
+  loaderComponent: OverridesActiveDaysLoader,
+  displayComponent: ({data, filter, onFilterChanged, ...props}) => {
+    const transformedData = useDataTransform(data, transformActiveDaysData);
+    const handleDataClick = useCallback(
+      ({filterValue, bulked = false}) => {
+        if (!isDefined(onFilterChanged) || isEmpty(filterValue)) {
+          return;
+        }
 
-  const displayFilter = showFilterSelection ? selectedFilter : filter;
+        const activeDaysTerm = bulked
+          ? FilterTerm.fromString(`active_days>"${filterValue}"`)
+          : FilterTerm.fromString(`active_days="${filterValue}"`);
 
-  const handleDataClick = ({filterValue, bulked = false}) => {
-    if (!isDefined(onFilterChanged) || isEmpty(filterValue)) {
-      return;
-    }
+        if (isDefined(filter) && filter.hasTerm(activeDaysTerm)) {
+          return;
+        }
+        const activeDaysFilter = QueryFilter.fromTerm(activeDaysTerm);
 
-    const activeDaysTerm = bulked
-      ? FilterTerm.fromString(`active_days>"${filterValue}"`)
-      : FilterTerm.fromString(`active_days="${filterValue}"`);
+        const newFilter = isDefined(filter)
+          ? filter.and(activeDaysFilter)
+          : activeDaysFilter;
 
-    if (isDefined(filter) && filter.hasTerm(activeDaysTerm)) {
-      return;
-    }
-    const activeDaysFilter = QueryFilter.fromTerm(activeDaysTerm);
-
-    const newFilter = isDefined(displayFilter)
-      ? displayFilter.copy().and(activeDaysFilter)
-      : activeDaysFilter;
-
-    onFilterChanged(newFilter);
-  };
-
-  return (
-    <>
-      <OverridesActiveDaysLoader filter={displayFilter}>
-        {({data, ...loaderProps}) => {
-          const transformedData = transformActiveDaysData(data);
-          return (
-            <DataDisplay<
-              TransformedActiveDaysData,
-              OverrideActiveDaysDataDisplayProps
-            >
-              {...props}
-              {...loaderProps}
-              data={transformedData}
-              filter={displayFilter}
-              icons={DataDisplayIcons}
-              initialState={{}}
-              title={({data}) =>
-                _('Overrides by Active Days (Total: {{count}})', {
-                  count: data?.total ?? 0,
-                })
-              }
-              onSelectFilterClick={
-                showFilterSelection ? selectFilter : undefined
-              }
-            >
-              {({width, height, data, svgRef, state}) => (
-                <DonutChart
-                  data={data}
-                  height={height}
-                  showLegend={state.showLegend}
-                  svgRef={svgRef}
-                  width={width}
-                  onDataClick={
-                    isDefined(onFilterChanged) ? handleDataClick : undefined
-                  }
-                />
-              )}
-            </DataDisplay>
-          );
-        }}
-      </OverridesActiveDaysLoader>
-      {filterSelectionDialog}
-    </>
-  );
-};
-
-OverridesActiveDaysDisplay.displayId = 'override-by-active-days';
+        onFilterChanged(newFilter);
+      },
+      [filter, onFilterChanged],
+    );
+    return (
+      <DataDisplay<
+        TransformedActiveDaysData,
+        OverrideActiveDaysDataDisplayProps
+      >
+        {...props}
+        data={transformedData}
+        filter={filter}
+        icons={DataDisplayIcons}
+        initialState={{}}
+        title={({data}) =>
+          _('Overrides by Active Days (Total: {{count}})', {
+            count: data?.total ?? 0,
+          })
+        }
+      >
+        {({width, height, data, svgRef, state}) => (
+          <DonutChart
+            data={data}
+            height={height}
+            showLegend={state.showLegend}
+            svgRef={svgRef}
+            width={width}
+            onDataClick={
+              isDefined(onFilterChanged) ? handleDataClick : undefined
+            }
+          />
+        )}
+      </DataDisplay>
+    );
+  },
+  filtersFilter: OVERRIDES_FILTER_FILTER,
+  displayId: 'override-by-active-days',
+  displayName: 'OverridesActiveDaysDisplay',
+});
 
 export const OverridesActiveDaysTableDisplay = createDisplay({
   loaderComponent: OverridesActiveDaysLoader,

@@ -104,6 +104,7 @@ describe('HostsModifiedDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(HostsModifiedDisplay).toBeDefined();
     expect(HostsModifiedDisplay.displayId).toBe('host-by-modification-time');
+    expect(HostsModifiedDisplay.displayName).toBe('HostsModifiedDisplay');
   });
 
   test('should be registered with the correct title', () => {

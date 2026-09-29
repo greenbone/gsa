@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type ReactNode} from 'react';
+import {useCallback, type ReactNode} from 'react';
 import {useNavigate} from 'react-router';
 import styled from 'styled-components';
 import {_, _l} from 'gmp/locale/lang';
@@ -11,19 +11,17 @@ import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseFloat, parseSeverity} from 'gmp/parser';
 import {DEFAULT_SEVERITY_RATING, type SeverityRating} from 'gmp/utils/severity';
 import BarChart from 'web/components/chart/BarChart';
-import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import useDataTransform from 'web/components/dashboard/display/useDataTransform';
-import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import useGmp from 'web/hooks/useGmp';
 import {
-  HostsVulnScoreLoader,
+  HostsVulnerabilityScoreLoader,
   type VulnScoreData,
 } from 'web/pages/hosts/dashboard/HostsLoaders';
 import {ROUTES} from 'web/route-paths';
@@ -46,8 +44,6 @@ export interface TransformVulnScoreDataProps {
 }
 
 type HostVulnScoreDataDisplayProps = DataDisplayProps<TransformedVulnScoreData>;
-
-type HostVulnCoreDisplayProps = DashboardDisplayProps;
 
 const ToolTip = styled.div`
   font-weight: normal;
@@ -102,78 +98,53 @@ const transformVulnScoreData = (
   return transformedData.reverse();
 };
 
-const HostsVulnScoreDisplay = ({
-  filterId,
-  filter,
-  showFilterSelection,
-  onFilterIdChanged,
-  ...props
-}: HostVulnCoreDisplayProps) => {
-  const gmp = useGmp();
-  const navigate = useNavigate();
-  const handleDataClick = (data: TransformedVulnScoreDataItem) => {
-    void navigate(ROUTES.host.url(data.id ?? ''));
-  };
-  const {
-    filter: selectedFilter,
-    selectFilter,
-    filterSelectionDialog,
-  } = useFilterSelection({
-    filterId,
-    filtersFilter: HOSTS_FILTER_FILTER,
-    onFilterIdChanged,
-  });
-  const displayFilter = showFilterSelection ? selectedFilter : filter;
-  return (
-    <>
-      <HostsVulnScoreLoader filter={displayFilter}>
-        {({data, isLoading}) => {
-          const transformedData = transformVulnScoreData(data, {
-            severityRating: gmp.settings.severityRating,
-          });
-          return (
-            <DataDisplay<
-              TransformedVulnScoreData,
-              HostVulnScoreDataDisplayProps
-            >
-              {...props}
-              data={transformedData}
-              filter={displayFilter}
-              isLoading={isLoading}
-              showToggleLegend={false}
-              title={() => _('Most Vulnerable Hosts')}
-              onSelectFilterClick={
-                showFilterSelection ? selectFilter : undefined
-              }
-            >
-              {({width, height, data, svgRef}) => (
-                <BarChart
-                  horizontal
-                  data={data}
-                  height={height}
-                  svgRef={svgRef}
-                  width={width}
-                  xLabel={_('Vulnerability (Severity) Score')}
-                  onDataClick={handleDataClick}
-                />
-              )}
-            </DataDisplay>
-          );
-        }}
-      </HostsVulnScoreLoader>
-      {filterSelectionDialog}
-    </>
-  );
-};
-
-HostsVulnScoreDisplay.displayId = 'host-by-most-vulnerable';
-
-export {HostsVulnScoreDisplay};
-
-export const HostsVulnScoreTableDisplay = createDisplay({
-  loaderComponent: HostsVulnScoreLoader,
+export const HostsVulnerabilityScoreDisplay = createDisplay({
+  loaderComponent: HostsVulnerabilityScoreLoader,
   displayComponent: ({data, ...props}) => {
-    const transformedData = useDataTransform(data, transformVulnScoreData);
+    const gmp = useGmp();
+    const navigate = useNavigate();
+    const transformedData = useDataTransform(data, transformVulnScoreData, {
+      severityRating: gmp.settings.severityRating,
+    });
+    const handleDataClick = useCallback(
+      (data: TransformedVulnScoreDataItem) => {
+        void navigate(ROUTES.host.url(data.id ?? ''));
+      },
+      [navigate],
+    );
+    return (
+      <DataDisplay<TransformedVulnScoreData, HostVulnScoreDataDisplayProps>
+        {...props}
+        data={transformedData}
+        showToggleLegend={false}
+        title={() => _('Most Vulnerable Hosts')}
+      >
+        {({width, height, data, svgRef}) => (
+          <BarChart
+            horizontal
+            data={data}
+            height={height}
+            svgRef={svgRef}
+            width={width}
+            xLabel={_('Vulnerability (Severity) Score')}
+            onDataClick={handleDataClick}
+          />
+        )}
+      </DataDisplay>
+    );
+  },
+  filtersFilter: HOSTS_FILTER_FILTER,
+  displayId: 'host-by-most-vulnerable',
+  displayName: 'HostsVulnScoreDisplay',
+});
+
+export const HostsVulnerabilityScoreTableDisplay = createDisplay({
+  loaderComponent: HostsVulnerabilityScoreLoader,
+  displayComponent: ({data, ...props}) => {
+    const gmp = useGmp();
+    const transformedData = useDataTransform(data, transformVulnScoreData, {
+      severityRating: gmp.settings.severityRating,
+    });
     return (
       <DataTableDisplay
         {...props}
@@ -187,16 +158,16 @@ export const HostsVulnScoreTableDisplay = createDisplay({
     );
   },
   filtersFilter: HOSTS_FILTER_FILTER,
-  displayId: 'HostsVulnScoreTableDisplay',
-  displayName: 'host-by-most-vulnerable-table',
+  displayName: 'HostsVulnScoreTableDisplay',
+  displayId: 'host-by-most-vulnerable-table',
 });
 
 registerDisplay(
-  HostsVulnScoreDisplay,
+  HostsVulnerabilityScoreDisplay,
   _l('Chart: Hosts by Vulnerability Score'),
 );
 
 registerDisplay(
-  HostsVulnScoreTableDisplay,
+  HostsVulnerabilityScoreTableDisplay,
   _l('Table: Hosts by Vulnerability Score'),
 );

@@ -116,6 +116,9 @@ describe('TasksMostHighResultsDisplay', () => {
     expect(TasksMostHighResultsDisplay.displayId).toBe(
       'task-by-most-high-results',
     );
+    expect(TasksMostHighResultsDisplay.displayName).toBe(
+      'TasksMostHighResultsDisplay',
+    );
   });
 
   test('should be registered with the correct title', () => {

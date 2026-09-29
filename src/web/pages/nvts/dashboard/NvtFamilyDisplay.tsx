@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useCallback} from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
@@ -12,14 +13,12 @@ import {isDefined} from 'gmp/utils/identity';
 import {DEFAULT_SEVERITY_RATING, type SeverityRating} from 'gmp/utils/severity';
 import {isEmpty} from 'gmp/utils/string';
 import BubbleChart from 'web/components/chart/BubbleChart';
-import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import useDataTransform from 'web/components/dashboard/display/useDataTransform';
-import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import useGmp from 'web/hooks/useGmp';
@@ -48,8 +47,6 @@ interface TransformFamilyDataProps {
 }
 
 type NvtFamilyDataDisplayProps = DataDisplayProps<TransformedNvtFamilyData>;
-
-type NvtsFamilyDisplayProps = DashboardDisplayProps;
 
 const transformFamilyData = (
   data: NvtFamilyData = {},
@@ -87,94 +84,72 @@ const transformFamilyData = (
   return result;
 };
 
-export const NvtsFamilyDisplay = ({
-  filter,
-  filterId,
-  showFilterSelection,
-  onFilterIdChanged,
-  onFilterChanged,
-  ...props
-}: NvtsFamilyDisplayProps) => {
-  const gmp = useGmp();
-  const {
-    filter: selectedFilter,
-    selectFilter,
-    filterSelectionDialog,
-  } = useFilterSelection({
-    filterId,
-    filtersFilter: NVTS_FILTER_FILTER,
-    onFilterIdChanged,
-  });
-  const displayFilter = showFilterSelection ? selectedFilter : filter;
+export const NvtsFamilyDisplay = createDisplay({
+  loaderComponent: NvtsFamilyLoader,
+  displayComponent: ({data, filter, onFilterChanged, ...props}) => {
+    const gmp = useGmp();
+    const transformedData = useDataTransform(data, transformFamilyData, {
+      severityRating: gmp.settings.severityRating,
+    });
+    const handleDataClick = useCallback(
+      ({filterValue}: TransformedNvtFamilyDataItem) => {
+        if (!isDefined(onFilterChanged) || isEmpty(filterValue)) {
+          return;
+        }
 
-  const handleDataClick = ({filterValue}: TransformedNvtFamilyDataItem) => {
-    if (!isDefined(onFilterChanged) || isEmpty(filterValue)) {
-      return;
-    }
+        const familyTerm = FilterTerm.fromString(`family="${filterValue}"`);
 
-    const familyTerm = FilterTerm.fromString(`family="${filterValue}"`);
+        if (isDefined(filter) && filter.hasTerm(familyTerm)) {
+          return;
+        }
+        const familyFilter = QueryFilter.fromTerm(familyTerm);
 
-    if (isDefined(displayFilter) && displayFilter.hasTerm(familyTerm)) {
-      return;
-    }
-    const familyFilter = QueryFilter.fromTerm(familyTerm);
+        const newFilter = isDefined(filter)
+          ? filter.and(familyFilter)
+          : familyFilter;
 
-    const newFilter = isDefined(displayFilter)
-      ? displayFilter.and(familyFilter)
-      : familyFilter;
-
-    onFilterChanged(newFilter);
-  };
-
-  return (
-    <>
-      <NvtsFamilyLoader filter={displayFilter}>
-        {({data, ...loaderProps}) => {
-          const transformedData = transformFamilyData(data, {
-            severityRating: gmp.settings.severityRating,
-          });
-          return (
-            <DataDisplay<TransformedNvtFamilyData, NvtFamilyDataDisplayProps>
-              {...props}
-              {...loaderProps}
-              data={transformedData}
-              filter={displayFilter}
-              showToggleLegend={false}
-              title={({data}) =>
-                _('NVTs by Family (Total: {{count}})', {
-                  count: data?.total ?? 0,
-                })
-              }
-              onSelectFilterClick={
-                showFilterSelection ? selectFilter : undefined
-              }
-            >
-              {({width, height, data, svgRef}) => (
-                <BubbleChart<TransformedNvtFamilyDataItem>
-                  data={data}
-                  height={height}
-                  svgRef={svgRef}
-                  width={width}
-                  onDataClick={
-                    isDefined(onFilterChanged) ? handleDataClick : undefined
-                  }
-                />
-              )}
-            </DataDisplay>
-          );
-        }}
-      </NvtsFamilyLoader>
-      {filterSelectionDialog}
-    </>
-  );
-};
-
-NvtsFamilyDisplay.displayId = 'nvt-by-family';
+        onFilterChanged(newFilter);
+      },
+      [filter, onFilterChanged],
+    );
+    return (
+      <DataDisplay<TransformedNvtFamilyData, NvtFamilyDataDisplayProps>
+        {...props}
+        data={transformedData}
+        filter={filter}
+        showToggleLegend={false}
+        title={({data}) =>
+          _('NVTs by Family (Total: {{count}})', {
+            count: data?.total ?? 0,
+          })
+        }
+      >
+        {({width, height, data, svgRef}) => (
+          <BubbleChart<TransformedNvtFamilyDataItem>
+            data={data}
+            height={height}
+            svgRef={svgRef}
+            width={width}
+            onDataClick={
+              isDefined(onFilterChanged) ? handleDataClick : undefined
+            }
+          />
+        )}
+      </DataDisplay>
+    );
+  },
+  displayId: 'nvt-by-family',
+  displayName: 'NvtsFamilyDisplay',
+  filtersFilter: NVTS_FILTER_FILTER,
+});
 
 export const NvtsFamilyTableDisplay = createDisplay({
   loaderComponent: NvtsFamilyLoader,
   displayComponent: ({data, ...props}) => {
-    const transformedData = useDataTransform(data, transformFamilyData);
+    const gmp = useGmp();
+    const transformedData = useDataTransform(data, transformFamilyData, {
+      severityRating: gmp.settings.severityRating,
+    });
     return (
       <DataTableDisplay
         {...props}

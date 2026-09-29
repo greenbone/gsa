@@ -87,6 +87,9 @@ describe('TlsCertificateTimeStatusDisplay', () => {
     expect(TlsCertificateTimeStatusDisplay.displayId).toBe(
       'tls-certificates-by-status',
     );
+    expect(TlsCertificateTimeStatusDisplay.displayName).toBe(
+      'TlsCertificateTimeStatusDisplay',
+    );
   });
 
   test('should be registered with the correct title', () => {

@@ -103,6 +103,9 @@ describe('ResultsDescriptionWordCloudDisplay', () => {
     expect(ResultsDescriptionWordCloudDisplay.displayId).toBe(
       'result-by-desc-words',
     );
+    expect(ResultsDescriptionWordCloudDisplay.displayName).toBe(
+      'ResultsDescriptionWordCloudDisplay',
+    );
   });
 
   test('should be registered with the correct title', () => {

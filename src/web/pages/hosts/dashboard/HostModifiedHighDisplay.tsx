@@ -9,14 +9,12 @@ import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseInt, parseDate} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import LineChart, {type LineData} from 'web/components/chart/LineChart';
-import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import useDataTransform from 'web/components/dashboard/display/useDataTransform';
-import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {
   createDateRangeFilter,
   totalCount,
@@ -37,8 +35,6 @@ interface TransformedHostHighModifiedData extends Array<HostModifiedHighDataPoin
 
 type HostModifiedHighDataDisplayProps =
   DataDisplayProps<TransformedHostHighModifiedData>;
-
-type HostModifiedHighDisplayProps = DashboardDisplayProps;
 
 const transformModified = (
   data: HostModifiedData | undefined = {},
@@ -62,101 +58,73 @@ const transformModified = (
   return result;
 };
 
-export const HostsModifiedHighDisplay = ({
-  filter,
-  filterId,
-  showFilterSelection,
-  onFilterChanged,
-  onFilterIdChanged,
-  ...props
-}: HostModifiedHighDisplayProps) => {
-  const {
-    filter: selectedFilter,
-    selectFilter,
-    filterSelectionDialog,
-  } = useFilterSelection({
-    filterId,
-    filtersFilter: HOSTS_FILTER_FILTER,
-    onFilterIdChanged,
-  });
-  const displayFilter = showFilterSelection ? selectedFilter : filter;
+export const HostsModifiedHighDisplay = createDisplay({
+  loaderComponent: HostsModifiedLoader,
+  displayComponent: ({data, onFilterChanged, filter, ...props}) => {
+    const transformedData = useDataTransform(data, transformModified);
+    const handleRangeSelect = (start: LineData, end: LineData) => {
+      if (!isDefined(onFilterChanged)) {
+        return;
+      }
 
-  const handleRangeSelect = (start: LineData, end: LineData) => {
-    if (!isDefined(onFilterChanged)) {
-      return;
-    }
+      const startDate = start.x as Date;
+      const endDate = end.x as Date;
+      const dateFormat = 'YYYY-MM-DDTHH:mm';
 
-    const startDate = start.x as Date;
-    const endDate = end.x as Date;
-    const dateFormat = 'YYYY-MM-DDTHH:mm';
-
-    onFilterChanged(
-      createDateRangeFilter({
-        endDate,
-        field: 'modified',
-        filter: displayFilter,
-        formatDate: date => date.format(dateFormat),
-        startDate,
-      }),
+      onFilterChanged(
+        createDateRangeFilter({
+          endDate,
+          field: 'modified',
+          filter,
+          formatDate: date => date.format(dateFormat),
+          startDate,
+        }),
+      );
+    };
+    return (
+      <DataDisplay<
+        TransformedHostHighModifiedData,
+        HostModifiedHighDataDisplayProps
+      >
+        {...props}
+        data={transformedData}
+        filter={filter}
+        title={({data}) =>
+          _('Hosts (High) by Modification Time (Total: {{count}})', {
+            count: data?.total ?? 0,
+          })
+        }
+      >
+        {({width, height, data, svgRef, state}) => (
+          <LineChart
+            timeline
+            data={data}
+            height={height}
+            showLegend={state.showLegend}
+            svgRef={svgRef}
+            width={width}
+            xAxisLabel={_('Time')}
+            y2AxisLabel={_('Total Hosts (High)')}
+            y2Line={{
+              color: Theme.darkGreenTransparent,
+              dashArray: '3, 2',
+              label: _('Total Hosts (High)'),
+            }}
+            yAxisLabel={_('# of Modified Hosts (High)')}
+            yLine={{
+              color: Theme.darkGreenTransparent,
+              label: _('Modified Hosts (High)'),
+            }}
+            onRangeSelected={handleRangeSelect}
+          />
+        )}
+      </DataDisplay>
     );
-  };
-
-  return (
-    <>
-      <HostsModifiedLoader filter={filter}>
-        {({data, isLoading}) => {
-          const transformedData = transformModified(data);
-          return (
-            <DataDisplay<
-              TransformedHostHighModifiedData,
-              HostModifiedHighDataDisplayProps
-            >
-              {...props}
-              data={transformedData}
-              filter={displayFilter}
-              isLoading={isLoading}
-              title={({data}) =>
-                _('Hosts (High) by Modification Time (Total: {{count}})', {
-                  count: data?.total ?? 0,
-                })
-              }
-              onSelectFilterClick={
-                showFilterSelection ? selectFilter : undefined
-              }
-            >
-              {({width, height, data, svgRef, state}) => (
-                <LineChart
-                  timeline
-                  data={data}
-                  height={height}
-                  showLegend={state.showLegend}
-                  svgRef={svgRef}
-                  width={width}
-                  xAxisLabel={_('Time')}
-                  y2AxisLabel={_('Total Hosts (High)')}
-                  y2Line={{
-                    color: Theme.darkGreenTransparent,
-                    dashArray: '3, 2',
-                    label: _('Total Hosts (High)'),
-                  }}
-                  yAxisLabel={_('# of Modified Hosts (High)')}
-                  yLine={{
-                    color: Theme.darkGreenTransparent,
-                    label: _('Modified Hosts (High)'),
-                  }}
-                  onRangeSelected={handleRangeSelect}
-                />
-              )}
-            </DataDisplay>
-          );
-        }}
-      </HostsModifiedLoader>
-      {filterSelectionDialog}
-    </>
-  );
-};
-
-HostsModifiedHighDisplay.displayId = 'host-by-high-modification-time';
+  },
+  filtersFilter: HOSTS_FILTER_FILTER,
+  displayId: 'host-by-high-modification-time',
+  displayName: 'HostsModifiedHighDisplay',
+});
 
 export const HostsModifiedHighTableDisplay = createDisplay({
   loaderComponent: HostsModifiedLoader,

@@ -102,6 +102,7 @@ describe('NvtsFamilyDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(NvtsFamilyDisplay).toBeDefined();
     expect(NvtsFamilyDisplay.displayId).toBe('nvt-by-family');
+    expect(NvtsFamilyDisplay.displayName).toBe('NvtsFamilyDisplay');
   });
 
   test('should be registered with the correct title', () => {

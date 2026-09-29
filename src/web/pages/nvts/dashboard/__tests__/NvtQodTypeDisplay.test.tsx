@@ -99,6 +99,7 @@ describe('NvtsQodTypeDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(NvtsQodTypeDisplay).toBeDefined();
     expect(NvtsQodTypeDisplay.displayId).toBe('nvt-by-qod_type');
+    expect(NvtsQodTypeDisplay.displayName).toBe('NvtsQodTypeDisplay');
   });
 
   test('should be registered with the correct title', () => {

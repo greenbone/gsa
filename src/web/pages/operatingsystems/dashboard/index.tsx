@@ -15,7 +15,7 @@ import {
 } from 'web/pages/operatingsystems/dashboard/OperatingSystemSeverityClassDisplay';
 import {
   OperatingSystemVulnerabilityScoreDisplay,
-  OsVulnScoreTableDisplay,
+  OperatingSystemVulnerabilityScoreTableDisplay,
 } from 'web/pages/operatingsystems/dashboard/OperatingSystemVulnerabilityScoreDisplay';
 
 export const OS_DASHBOARD_ID = 'e93b51ed-5881-40e0-bc4f-7d3268a36177';
@@ -26,7 +26,7 @@ export const OS_DISPLAYS = [
   OperatingSystemSeverityClassDisplay.displayId,
   OperatingSystemSeverityClassTableDisplay.displayId,
   OperatingSystemVulnerabilityScoreDisplay.displayId,
-  OsVulnScoreTableDisplay.displayId,
+  OperatingSystemVulnerabilityScoreTableDisplay.displayId,
 ];
 
 const OsDashboard = props => (

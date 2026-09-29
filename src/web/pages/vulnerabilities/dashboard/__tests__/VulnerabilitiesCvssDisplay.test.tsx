@@ -66,7 +66,7 @@ describe('VulnerabilitiesCvssDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(VulnerabilitiesCvssDisplay).toBeDefined();
     expect(VulnerabilitiesCvssDisplay.displayId).toBe('vuln-by-cvss');
-    expect(VulnerabilitiesCvssDisplay.displayName).toContain(
+    expect(VulnerabilitiesCvssDisplay.displayName).toBe(
       'VulnerabilitiesCvssDisplay',
     );
   });
@@ -92,7 +92,7 @@ describe('VulnerabilitiesCvssTableDisplay', () => {
     expect(VulnerabilitiesCvssTableDisplay.displayId).toBe(
       'vuln-by-cvss-table',
     );
-    expect(VulnerabilitiesCvssTableDisplay.displayName).toContain(
+    expect(VulnerabilitiesCvssTableDisplay.displayName).toBe(
       'VulnerabilitiesCvssTableDisplay',
     );
   });

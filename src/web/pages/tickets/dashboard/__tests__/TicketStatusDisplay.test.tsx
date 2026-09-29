@@ -84,6 +84,7 @@ describe('TicketsStatusDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(TicketsStatusDisplay).toBeDefined();
     expect(TicketsStatusDisplay.displayId).toBe('tickets-by-status');
+    expect(TicketsStatusDisplay.displayName).toBe('TicketsStatusDisplay');
   });
 
   test('should be registered with the correct title', () => {

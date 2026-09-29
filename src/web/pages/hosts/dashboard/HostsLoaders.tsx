@@ -125,7 +125,7 @@ const hostsVulnScoreLoadFunc = createLoadFunc(
   HOSTS_VULN_SCORE,
 );
 
-export const HostsVulnScoreLoader = ({
+export const HostsVulnerabilityScoreLoader = ({
   children,
   filter,
 }: DisplayLoaderProps<VulnScoreData>) => (

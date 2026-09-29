@@ -103,7 +103,6 @@ describe('CvesSeverityClassDisplay', () => {
 describe('CvesSeverityClassTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(CvesSeverityClassTableDisplay).toBeDefined();
-    expect(typeof CvesSeverityClassTableDisplay).toBe('function');
     expect(CvesSeverityClassTableDisplay.displayId).toBe(
       'cve-by-severity-table',
     );

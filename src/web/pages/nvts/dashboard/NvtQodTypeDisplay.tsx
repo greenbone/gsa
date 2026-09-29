@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useCallback} from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
@@ -10,7 +11,6 @@ import QueryFilter from 'gmp/models/filter/query-filter';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import DonutChart from 'web/components/chart/DonutChart';
-import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay, {
   type DataDisplayProps,
@@ -18,7 +18,6 @@ import DataDisplay, {
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import useDataTransform from 'web/components/dashboard/display/useDataTransform';
-import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {
   totalCount,
   percent,
@@ -45,8 +44,6 @@ interface TransformedNvtQodTypeData extends Array<TransformedNvtQodTypeDataItem>
 
 type NvtQodTypeDataDisplayProps = DataDisplayProps<TransformedNvtQodTypeData>;
 
-type NvtsQodTypeDisplayProps = DashboardDisplayProps;
-
 const transformQodTypeData = (
   data: NvtQodData = {},
 ): TransformedNvtQodTypeData => {
@@ -71,87 +68,63 @@ const transformQodTypeData = (
   return result;
 };
 
-export const NvtsQodTypeDisplay = ({
-  filter,
-  filterId,
-  showFilterSelection,
-  onFilterIdChanged,
-  onFilterChanged,
-  ...props
-}: NvtsQodTypeDisplayProps) => {
-  const {
-    filter: selectedFilter,
-    selectFilter,
-    filterSelectionDialog,
-  } = useFilterSelection({
-    filterId,
-    filtersFilter: NVTS_FILTER_FILTER,
-    onFilterIdChanged,
-  });
-  const displayFilter = showFilterSelection ? selectedFilter : filter;
+export const NvtsQodTypeDisplay = createDisplay({
+  loaderComponent: NvtsQodTypeLoader,
+  displayComponent: ({data, filter, onFilterChanged, ...props}) => {
+    const transformedData = useDataTransform(data, transformQodTypeData);
+    const handleDataClick = useCallback(
+      ({filterValue}) => {
+        if (!isDefined(onFilterChanged) || isEmpty(filterValue)) {
+          return;
+        }
 
-  const handleDataClick = ({filterValue}) => {
-    if (!isDefined(onFilterChanged) || isEmpty(filterValue)) {
-      return;
-    }
+        const qodTypeTerm = FilterTerm.fromString(`qod_type="${filterValue}"`);
 
-    const qodTypeTerm = FilterTerm.fromString(`qod_type="${filterValue}"`);
+        if (isDefined(filter) && filter.hasTerm(qodTypeTerm)) {
+          return;
+        }
+        const qodTypeFilter = QueryFilter.fromTerm(qodTypeTerm);
 
-    if (isDefined(displayFilter) && displayFilter.hasTerm(qodTypeTerm)) {
-      return;
-    }
-    const qodTypeFilter = QueryFilter.fromTerm(qodTypeTerm);
+        const newFilter = isDefined(filter)
+          ? filter.and(qodTypeFilter)
+          : qodTypeFilter;
 
-    const newFilter = isDefined(displayFilter)
-      ? displayFilter.copy().and(qodTypeFilter)
-      : qodTypeFilter;
-
-    onFilterChanged(newFilter);
-  };
-
-  return (
-    <>
-      <NvtsQodTypeLoader filter={displayFilter}>
-        {({data, ...loaderProps}) => {
-          const transformedData = transformQodTypeData(data);
-          return (
-            <DataDisplay<TransformedNvtQodTypeData, NvtQodTypeDataDisplayProps>
-              {...props}
-              {...loaderProps}
-              data={transformedData}
-              icons={DataDisplayIcons}
-              initialState={{}}
-              title={({data}) =>
-                _('NVTs by QoD-Type (Total: {{count}})', {
-                  count: data?.total ?? 0,
-                })
-              }
-              onSelectFilterClick={
-                showFilterSelection ? selectFilter : undefined
-              }
-            >
-              {({width, height, data, svgRef, state}) => (
-                <DonutChart
-                  data={data}
-                  height={height}
-                  showLegend={state.showLegend}
-                  svgRef={svgRef}
-                  width={width}
-                  onDataClick={
-                    isDefined(onFilterChanged) ? handleDataClick : undefined
-                  }
-                />
-              )}
-            </DataDisplay>
-          );
-        }}
-      </NvtsQodTypeLoader>
-      {filterSelectionDialog}
-    </>
-  );
-};
-
-NvtsQodTypeDisplay.displayId = 'nvt-by-qod_type';
+        onFilterChanged(newFilter);
+      },
+      [filter, onFilterChanged],
+    );
+    return (
+      <DataDisplay<TransformedNvtQodTypeData, NvtQodTypeDataDisplayProps>
+        {...props}
+        data={transformedData}
+        filter={filter}
+        icons={DataDisplayIcons}
+        initialState={{}}
+        title={({data}) =>
+          _('NVTs by QoD-Type (Total: {{count}})', {
+            count: data?.total ?? 0,
+          })
+        }
+      >
+        {({width, height, data, svgRef, state}) => (
+          <DonutChart
+            data={data}
+            height={height}
+            showLegend={state.showLegend}
+            svgRef={svgRef}
+            width={width}
+            onDataClick={
+              isDefined(onFilterChanged) ? handleDataClick : undefined
+            }
+          />
+        )}
+      </DataDisplay>
+    );
+  },
+  filtersFilter: NVTS_FILTER_FILTER,
+  displayId: 'nvt-by-qod_type',
+  displayName: 'NvtsQodTypeDisplay',
+});
 
 export const NvtsQodTypeTableDisplay = createDisplay({
   loaderComponent: NvtsQodTypeLoader,
