@@ -5,35 +5,41 @@
 
 import {_, _l} from 'gmp/locale/lang';
 import {CERTBUND_FILTER_FILTER} from 'gmp/models/filter';
-import transformCreated from 'web/components/dashboard/display/created/created-transform';
+import transformCreated, {
+  type TransformCreatedData,
+} from 'web/components/dashboard/display/created/created-transform';
 import CreatedDisplay from 'web/components/dashboard/display/created/CreatedDisplay';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import {CertBundCreatedLoader} from 'web/pages/certbund/dashboard/CertBundLoaders';
 import Theme from 'web/utils/theme';
 
 export const CertBundCreatedDisplay = createDisplay({
   loaderComponent: CertBundCreatedLoader,
-  displayComponent: props => (
-    <CreatedDisplay
-      {...props}
-      dataTransform={transformCreated}
-      title={() => _('CERT-Bund Advisories by Creation Time')}
-      xAxisLabel={_('Time')}
-      y2AxisLabel={_('Total CERT-Bund Advisories')}
-      y2Line={{
-        color: Theme.darkGreenTransparent,
-        dashArray: '3, 2',
-        label: _('Total CERT-Bund Advs'),
-      }}
-      yAxisLabel={_('# of created CERT-Bund Advisories')}
-      yLine={{
-        color: Theme.darkGreenTransparent,
-        label: _('Created CERT-Bund Advs'),
-      }}
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformCreated);
+    return (
+      <CreatedDisplay<TransformCreatedData>
+        {...props}
+        data={transformedData}
+        title={_('CERT-Bund Advisories by Creation Time')}
+        xAxisLabel={_('Time')}
+        y2AxisLabel={_('Total CERT-Bund Advisories')}
+        y2Line={{
+          color: Theme.darkGreenTransparent,
+          dashArray: '3, 2',
+          label: _('Total CERT-Bund Advs'),
+        }}
+        yAxisLabel={_('# of created CERT-Bund Advisories')}
+        yLine={{
+          color: Theme.darkGreenTransparent,
+          label: _('Created CERT-Bund Advs'),
+        }}
+      />
+    );
+  },
   displayId: 'cert_bund_adv-by-created',
   displayName: 'CertBundCreatedDisplay',
   filtersFilter: CERTBUND_FILTER_FILTER,
@@ -41,22 +47,24 @@ export const CertBundCreatedDisplay = createDisplay({
 
 export const CertBundCreatedTableDisplay = createDisplay({
   loaderComponent: CertBundCreatedLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      {...{children: undefined}}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label ?? '', row.y, row.y2]) ?? []
-      }
-      dataTitles={[
-        _('Creation Time'),
-        _('# of CERT-Bund Advs'),
-        _('Total CERT-Bund Advs'),
-      ]}
-      dataTransform={transformCreated}
-      title={() => _('CERT-Bund Advisories by Creation Time')}
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformCreated);
+    return (
+      <DataTableDisplay<TransformCreatedData>
+        {...props}
+        data={transformedData}
+        dataRow={data =>
+          data?.map(row => [row.label ?? '', row.y, row.y2]) ?? []
+        }
+        dataTitles={[
+          _('Creation Time'),
+          _('# of CERT-Bund Advs'),
+          _('Total CERT-Bund Advs'),
+        ]}
+        title={_('CERT-Bund Advisories by Creation Time')}
+      />
+    );
+  },
   displayId: 'cert_bund_adv-by-created-table',
   displayName: 'CertBundCreatedTableDisplay',
   filtersFilter: CERTBUND_FILTER_FILTER,

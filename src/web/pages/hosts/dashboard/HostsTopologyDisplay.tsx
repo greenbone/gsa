@@ -21,16 +21,13 @@ import {registerDisplay} from 'web/components/dashboard/registry';
 import useGmp from 'web/hooks/useGmp';
 import {HostsTopologyLoader} from 'web/pages/hosts/dashboard/HostsLoaders';
 
-type HostsTopologyDataDisplayProps = DataDisplayProps<
-  Host[],
-  HostsTopologyChartData[]
->;
+type HostsTopologyDataDisplayProps = DataDisplayProps<HostsTopologyChartData>;
 
 type HostTopologyDisplayProps = DashboardDisplayProps;
 
 const transformTopologyData = (
   data: Host[] | undefined = [],
-): HostsTopologyChartData[] => {
+): HostsTopologyChartData => {
   const hostsObject: Record<string, HostsTopologyChartHost> = {};
   const routes = new Set();
   const links: HostsTopologyChartLink[] = [];
@@ -105,7 +102,7 @@ const transformTopologyData = (
   });
 
   const hosts = Object.values(hostsObject);
-  return [{hosts, links}];
+  return {hosts, links};
 };
 
 const HostsTopologyDisplay = ({
@@ -130,31 +127,32 @@ const HostsTopologyDisplay = ({
   return (
     <>
       <HostsTopologyLoader filter={filter}>
-        {loaderProps => (
-          <DataDisplay<
-            Host[],
-            HostsTopologyDataDisplayProps,
-            HostsTopologyChartData[]
-          >
-            {...props}
-            {...loaderProps}
-            dataTransform={transformTopologyData}
-            filter={displayFilter}
-            showToggleLegend={false}
-            title={() => _('Hosts Topology')}
-            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
-          >
-            {({width, height, data, svgRef}) => (
-              <HostsTopologyChart
-                data={data?.[0]}
-                height={height}
-                severityRating={severityRating}
-                svgRef={svgRef}
-                width={width}
-              />
-            )}
-          </DataDisplay>
-        )}
+        {({data, isLoading}) => {
+          const transformedData = transformTopologyData(data);
+          return (
+            <DataDisplay<HostsTopologyChartData, HostsTopologyDataDisplayProps>
+              {...props}
+              data={transformedData}
+              filter={displayFilter}
+              isLoading={isLoading}
+              showToggleLegend={false}
+              title={() => _('Hosts Topology')}
+              onSelectFilterClick={
+                showFilterSelection ? selectFilter : undefined
+              }
+            >
+              {({width, height, data, svgRef}) => (
+                <HostsTopologyChart
+                  data={data}
+                  height={height}
+                  severityRating={severityRating}
+                  svgRef={svgRef}
+                  width={width}
+                />
+              )}
+            </DataDisplay>
+          );
+        }}
       </HostsTopologyLoader>
       {filterSelectionDialog}
     </>

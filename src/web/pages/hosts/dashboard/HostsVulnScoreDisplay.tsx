@@ -17,6 +17,7 @@ import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
@@ -29,15 +30,7 @@ import {ROUTES} from 'web/route-paths';
 import {resultSeverityRiskFactor} from 'web/utils/severity';
 import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
 
-type HostVulnScoreDataDisplayProps = DataDisplayProps<
-  VulnScoreData,
-  TransformedVulnScoreData[],
-  TransformVulnScoreDataProps
->;
-
-type HostVulnCoreDisplayProps = DashboardDisplayProps;
-
-export interface TransformedVulnScoreData {
+export interface TransformedVulnScoreDataItem {
   y: number;
   x: string;
   label: string;
@@ -46,9 +39,15 @@ export interface TransformedVulnScoreData {
   id?: string;
 }
 
+type TransformedVulnScoreData = TransformedVulnScoreDataItem[];
+
 export interface TransformVulnScoreDataProps {
   severityRating?: SeverityRating;
 }
+
+type HostVulnScoreDataDisplayProps = DataDisplayProps<TransformedVulnScoreData>;
+
+type HostVulnCoreDisplayProps = DashboardDisplayProps;
 
 const ToolTip = styled.div`
   font-weight: normal;
@@ -59,7 +58,7 @@ const ToolTip = styled.div`
 const transformVulnScoreData = (
   data: VulnScoreData | undefined = {},
   {severityRating = DEFAULT_SEVERITY_RATING}: TransformVulnScoreDataProps = {},
-): TransformedVulnScoreData[] => {
+): TransformedVulnScoreDataItem[] => {
   const {groups = []} = data;
   const transformedData = groups
     .filter(group => {
@@ -112,10 +111,9 @@ const HostsVulnScoreDisplay = ({
 }: HostVulnCoreDisplayProps) => {
   const gmp = useGmp();
   const navigate = useNavigate();
-  const handleDataClick = (data: TransformedVulnScoreData) => {
+  const handleDataClick = (data: TransformedVulnScoreDataItem) => {
     void navigate(ROUTES.host.url(data.id ?? ''));
   };
-  const severityRating = gmp.settings.severityRating;
   const {
     filter: selectedFilter,
     selectFilter,
@@ -129,35 +127,39 @@ const HostsVulnScoreDisplay = ({
   return (
     <>
       <HostsVulnScoreLoader filter={displayFilter}>
-        {loaderProps => (
-          <DataDisplay<
-            VulnScoreData,
-            HostVulnScoreDataDisplayProps,
-            TransformedVulnScoreData[],
-            TransformVulnScoreDataProps
-          >
-            {...props}
-            {...loaderProps}
-            dataTransform={transformVulnScoreData}
-            filter={displayFilter}
-            severityRating={severityRating}
-            showToggleLegend={false}
-            title={() => _('Most Vulnerable Hosts')}
-            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
-          >
-            {({width, height, data, svgRef}) => (
-              <BarChart
-                horizontal
-                data={data}
-                height={height}
-                svgRef={svgRef}
-                width={width}
-                xLabel={_('Vulnerability (Severity) Score')}
-                onDataClick={handleDataClick}
-              />
-            )}
-          </DataDisplay>
-        )}
+        {({data, isLoading}) => {
+          const transformedData = transformVulnScoreData(data, {
+            severityRating: gmp.settings.severityRating,
+          });
+          return (
+            <DataDisplay<
+              TransformedVulnScoreData,
+              HostVulnScoreDataDisplayProps
+            >
+              {...props}
+              data={transformedData}
+              filter={displayFilter}
+              isLoading={isLoading}
+              showToggleLegend={false}
+              title={() => _('Most Vulnerable Hosts')}
+              onSelectFilterClick={
+                showFilterSelection ? selectFilter : undefined
+              }
+            >
+              {({width, height, data, svgRef}) => (
+                <BarChart
+                  horizontal
+                  data={data}
+                  height={height}
+                  svgRef={svgRef}
+                  width={width}
+                  xLabel={_('Vulnerability (Severity) Score')}
+                  onDataClick={handleDataClick}
+                />
+              )}
+            </DataDisplay>
+          );
+        }}
       </HostsVulnScoreLoader>
       {filterSelectionDialog}
     </>
@@ -170,17 +172,20 @@ export {HostsVulnScoreDisplay};
 
 export const HostsVulnScoreTableDisplay = createDisplay({
   loaderComponent: HostsVulnScoreLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.x, row.y]) ?? []
-      }
-      dataTitles={[_('Host Name'), _('Max. average Severity Score')]}
-      dataTransform={transformVulnScoreData}
-      title={() => _('Most Vulnerable Hosts')}
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformVulnScoreData);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.x, row.y]) ?? []
+        }
+        dataTitles={[_('Host Name'), _('Max. average Severity Score')]}
+        title={() => _('Most Vulnerable Hosts')}
+      />
+    );
+  },
   filtersFilter: HOSTS_FILTER_FILTER,
   displayId: 'HostsVulnScoreTableDisplay',
   displayName: 'host-by-most-vulnerable-table',

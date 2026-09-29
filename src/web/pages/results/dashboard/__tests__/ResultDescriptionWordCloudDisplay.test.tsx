@@ -44,16 +44,15 @@ vi.mock('web/components/dashboard/display/DataDisplay', () => ({
 }));
 
 vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
-  default: ({data, dataRow, dataTitles, dataTransform, title}) => {
-    const transformedData = dataTransform ? dataTransform(data) : data;
-
+  default: ({data, dataRow, dataTitles, title}) => {
+    const rowData = dataRow(data);
     return (
       <div data-testid="mock-data-table-display">
-        <span data-testid="title">{title?.()}</span>
+        <span data-testid="title">{title?.(data)}</span>
         <span data-testid="data-titles">{dataTitles?.join('|')}</span>
-        {transformedData?.map((row, index) => (
+        {rowData?.map((row, index) => (
           <span key={index} data-testid={`data-row-${index}`}>
-            {dataRow(transformedData)?.[index]?.join('|')}
+            {row?.join('|')}
           </span>
         ))}
       </div>
@@ -101,7 +100,6 @@ const renderDisplay = (component: ReactElement) => {
 describe('ResultsDescriptionWordCloudDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(ResultsDescriptionWordCloudDisplay).toBeDefined();
-    expect(typeof ResultsDescriptionWordCloudDisplay).toBe('function');
     expect(ResultsDescriptionWordCloudDisplay.displayId).toBe(
       'result-by-desc-words',
     );
@@ -138,7 +136,6 @@ describe('ResultsDescriptionWordCloudDisplay', () => {
 describe('ResultsDescriptionWordCloudTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(ResultsDescriptionWordCloudTableDisplay).toBeDefined();
-    expect(typeof ResultsDescriptionWordCloudTableDisplay).toBe('function');
     expect(ResultsDescriptionWordCloudTableDisplay.displayId).toBe(
       'result-by-desc-words-table',
     );

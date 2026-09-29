@@ -22,6 +22,7 @@ import DataDisplay, {
 } from 'web/components/dashboard/display/DataDisplay';
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {
   totalCount,
@@ -47,10 +48,8 @@ interface TransformedNotesActiveDaysData extends Array<TransformedNotesActiveDay
   total: number;
 }
 
-type NotesActiveDaysDataDisplayProps = DataDisplayProps<
-  NotesActiveDaysData,
-  TransformedNotesActiveDaysData
->;
+type NotesActiveDaysDataDisplayProps =
+  DataDisplayProps<TransformedNotesActiveDaysData>;
 
 type NotesActiveDaysDisplayProps = DashboardDisplayProps;
 
@@ -169,39 +168,43 @@ export const NotesActiveDaysDisplay = ({
   return (
     <>
       <NotesActiveDaysLoader filter={displayFilter}>
-        {loaderProps => (
-          <DataDisplay<
-            NotesActiveDaysData,
-            NotesActiveDaysDataDisplayProps,
-            TransformedNotesActiveDaysData
-          >
-            {...props}
-            {...loaderProps}
-            dataTransform={transformActiveDaysData}
-            filter={displayFilter}
-            icons={DataDisplayIcons}
-            initialState={{}}
-            title={({data}) =>
-              _('Notes by Active Days (Total: {{count}})', {
-                count: data?.total ?? 0,
-              })
-            }
-            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
-          >
-            {({width, height, data, svgRef, state}) => (
-              <DonutChart
-                data={data}
-                height={height}
-                showLegend={state.showLegend}
-                svgRef={svgRef}
-                width={width}
-                onDataClick={
-                  isDefined(onFilterChanged) ? handleDataClick : undefined
-                }
-              />
-            )}
-          </DataDisplay>
-        )}
+        {({data, ...loaderProps}) => {
+          const transformedData = transformActiveDaysData(data);
+          return (
+            <DataDisplay<
+              TransformedNotesActiveDaysData,
+              NotesActiveDaysDataDisplayProps
+            >
+              {...props}
+              {...loaderProps}
+              data={transformedData}
+              filter={displayFilter}
+              icons={DataDisplayIcons}
+              initialState={{}}
+              title={({data}) =>
+                _('Notes by Active Days (Total: {{count}})', {
+                  count: data?.total ?? 0,
+                })
+              }
+              onSelectFilterClick={
+                showFilterSelection ? selectFilter : undefined
+              }
+            >
+              {({width, height, data, svgRef, state}) => (
+                <DonutChart
+                  data={data}
+                  height={height}
+                  showLegend={state.showLegend}
+                  svgRef={svgRef}
+                  width={width}
+                  onDataClick={
+                    isDefined(onFilterChanged) ? handleDataClick : undefined
+                  }
+                />
+              )}
+            </DataDisplay>
+          );
+        }}
       </NotesActiveDaysLoader>
       {filterSelectionDialog}
     </>
@@ -212,19 +215,24 @@ NotesActiveDaysDisplay.displayId = 'note-by-active-days';
 
 export const NotesActiveDaysTableDisplay = createDisplay({
   loaderComponent: NotesActiveDaysLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label ?? '', row.value]) ?? []
-      }
-      dataTitles={[_('Active'), _('# of Notes')]}
-      dataTransform={transformActiveDaysData}
-      title={({data}) =>
-        _('Notes by Active Days (Total: {{count}})', {count: data?.total ?? 0})
-      }
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformActiveDaysData);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.label ?? '', row.value]) ?? []
+        }
+        dataTitles={[_('Active'), _('# of Notes')]}
+        title={({data}) =>
+          _('Notes by Active Days (Total: {{count}})', {
+            count: data?.total ?? 0,
+          })
+        }
+      />
+    );
+  },
   displayId: 'note-by-active-days-table',
   displayName: 'NotesActiveDaysTableDisplay',
   filtersFilter: NOTES_FILTER_FILTER,

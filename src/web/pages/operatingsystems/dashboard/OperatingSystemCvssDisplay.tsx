@@ -6,24 +6,34 @@
 import {_, _l} from 'gmp/locale/lang';
 import {OS_FILTER_FILTER} from 'gmp/models/filter';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
+import transformCvssData from 'web/components/dashboard/display/cvss/cvss-transform';
 import CvssDisplay from 'web/components/dashboard/display/cvss/CvssDisplay';
 import CvssTableDisplay from 'web/components/dashboard/display/cvss/CvssTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import {registerDisplay} from 'web/components/dashboard/registry';
+import useGmp from 'web/hooks/useGmp';
 import {OperatingSystemAverageSeverityLoader} from 'web/pages/operatingsystems/dashboard/OperatingSystemLoaders';
 
 export const OperatingSystemCvssDisplay = createDisplay({
   loaderComponent: OperatingSystemAverageSeverityLoader,
-  displayComponent: props => (
-    <CvssDisplay
-      {...props}
-      title={({data}) =>
-        _('Operating Systems by CVSS (Total: {{count}})', {
-          count: data?.total ?? 0,
-        })
-      }
-      yLabel={_('# of Vulnerabilities')}
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const gmp = useGmp();
+    const transformedData = useDataTransform(data, transformCvssData, {
+      severityRating: gmp.settings.severityRating,
+    });
+    return (
+      <CvssDisplay
+        {...props}
+        data={transformedData}
+        title={({data}) =>
+          _('Operating Systems by CVSS (Total: {{count}})', {
+            count: data?.total ?? 0,
+          })
+        }
+        yLabel={_('# of Vulnerabilities')}
+      />
+    );
+  },
   filtersFilter: OS_FILTER_FILTER,
   displayId: 'os-by-cvss',
   displayName: 'OsCvssDisplay',
@@ -31,17 +41,24 @@ export const OperatingSystemCvssDisplay = createDisplay({
 
 export const OperatingSystemCvssTableDisplay = createDisplay({
   loaderComponent: OperatingSystemAverageSeverityLoader,
-  displayComponent: props => (
-    <CvssTableDisplay
-      {...props}
-      dataTitles={[_('Severity'), _('# of Operating Systems')]}
-      title={({data}) =>
-        _('Operating Systems by CVSS (Total: {{count}})', {
-          count: data?.total ?? 0,
-        })
-      }
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const gmp = useGmp();
+    const transformedData = useDataTransform(data, transformCvssData, {
+      severityRating: gmp.settings.severityRating,
+    });
+    return (
+      <CvssTableDisplay
+        {...props}
+        data={transformedData}
+        dataTitles={[_('Severity'), _('# of Operating Systems')]}
+        title={({data}) =>
+          _('Operating Systems by CVSS (Total: {{count}})', {
+            count: data?.total ?? 0,
+          })
+        }
+      />
+    );
+  },
   filtersFilter: OS_FILTER_FILTER,
   displayId: 'os-by-cvss-table',
   displayName: 'OsCvssTableDisplay',

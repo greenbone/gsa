@@ -24,9 +24,7 @@ const loaderData = {
 };
 
 vi.mock('web/components/dashboard/display/DataDisplay', () => ({
-  default: ({children, data, dataTransform, title}) => {
-    const transformedData = dataTransform ? dataTransform(data) : data;
-
+  default: ({children, data, title}) => {
     return (
       <div data-testid="mock-data-display">
         <span data-testid="title">{title?.()}</span>
@@ -34,7 +32,7 @@ vi.mock('web/components/dashboard/display/DataDisplay', () => ({
           ? children({
               width: 400,
               height: 300,
-              data: transformedData,
+              data,
               svgRef: {current: null},
             })
           : children}
@@ -44,16 +42,15 @@ vi.mock('web/components/dashboard/display/DataDisplay', () => ({
 }));
 
 vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
-  default: ({data, dataRow, dataTitles, dataTransform, title}) => {
-    const transformedData = dataTransform ? dataTransform(data) : data;
-
+  default: ({data, dataRow, dataTitles, title}) => {
+    const rowData = dataRow(data);
     return (
       <div data-testid="mock-data-table-display">
         <span data-testid="title">{title?.()}</span>
         <span data-testid="data-titles">{dataTitles?.join('|')}</span>
-        {transformedData?.map((row, index) => (
+        {rowData?.map((row, index) => (
           <span key={index} data-testid={`data-row-${index}`}>
-            {dataRow(transformedData)?.[index]?.join('|')}
+            {row?.join('|')}
           </span>
         ))}
       </div>
@@ -99,7 +96,6 @@ const renderDisplay = (component: ReactElement) => {
 describe('ResultsWordCloudDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(ResultsWordCloudDisplay).toBeDefined();
-    expect(typeof ResultsWordCloudDisplay).toBe('function');
     expect(ResultsWordCloudDisplay.displayId).toBe('result-by-vuln-words');
   });
 
@@ -132,7 +128,6 @@ describe('ResultsWordCloudDisplay', () => {
 describe('ResultsWordCloudTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(ResultsWordCloudTableDisplay).toBeDefined();
-    expect(typeof ResultsWordCloudTableDisplay).toBe('function');
     expect(ResultsWordCloudTableDisplay.displayId).toBe(
       'result-by-vuln-words-table',
     );

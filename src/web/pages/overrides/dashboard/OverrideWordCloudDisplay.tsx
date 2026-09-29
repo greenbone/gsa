@@ -17,6 +17,7 @@ import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {randomColor} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
@@ -34,10 +35,8 @@ interface TransformedWordCloudDataItem {
 
 type TransformedWordCloudData = TransformedWordCloudDataItem[];
 
-type OverrideWordCloudDataDisplayProps = DataDisplayProps<
-  OverrideWordCloudData,
-  TransformedWordCloudData
->;
+type OverrideWordCloudDataDisplayProps =
+  DataDisplayProps<TransformedWordCloudData>;
 
 type OverrideWordCloudDisplayProps = DashboardDisplayProps;
 
@@ -98,33 +97,37 @@ export const OverridesWordCloudDisplay = ({
   return (
     <>
       <OverridesWordCountLoader filter={displayFilter}>
-        {loaderProps => (
-          <DataDisplay<
-            OverrideWordCloudData,
-            OverrideWordCloudDataDisplayProps,
-            TransformedWordCloudData
-          >
-            {...props}
-            {...loaderProps}
-            dataTransform={transformWordCountData}
-            filter={displayFilter}
-            showToggleLegend={false}
-            title={() => _('Overrides Text Word Cloud')}
-            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
-          >
-            {({width, height, data, svgRef}) => (
-              <WordCloudChart
-                data={data}
-                height={height}
-                svgRef={svgRef}
-                width={width}
-                onDataClick={
-                  isDefined(onFilterChanged) ? handleDataClick : undefined
-                }
-              />
-            )}
-          </DataDisplay>
-        )}
+        {({data, ...loaderProps}) => {
+          const transformedData = transformWordCountData(data);
+          return (
+            <DataDisplay<
+              TransformedWordCloudData,
+              OverrideWordCloudDataDisplayProps
+            >
+              {...props}
+              {...loaderProps}
+              data={transformedData}
+              filter={displayFilter}
+              showToggleLegend={false}
+              title={() => _('Overrides Text Word Cloud')}
+              onSelectFilterClick={
+                showFilterSelection ? selectFilter : undefined
+              }
+            >
+              {({width, height, data, svgRef}) => (
+                <WordCloudChart
+                  data={data}
+                  height={height}
+                  svgRef={svgRef}
+                  width={width}
+                  onDataClick={
+                    isDefined(onFilterChanged) ? handleDataClick : undefined
+                  }
+                />
+              )}
+            </DataDisplay>
+          );
+        }}
       </OverridesWordCountLoader>
       {filterSelectionDialog}
     </>
@@ -135,17 +138,20 @@ OverridesWordCloudDisplay.displayId = 'override-by-text-words';
 
 export const OverridesWordCloudTableDisplay = createDisplay({
   loaderComponent: OverridesWordCountLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label, row.value]) ?? []
-      }
-      dataTitles={[_('Text'), _('Count')]}
-      dataTransform={transformWordCountData}
-      title={() => _('Overrides Text Word Cloud')}
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformWordCountData);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.label, row.value]) ?? []
+        }
+        dataTitles={[_('Text'), _('Count')]}
+        title={() => _('Overrides Text Word Cloud')}
+      />
+    );
+  },
 
   displayId: 'override-by-text-words-table',
   displayName: 'OverridesWordCloudTableDisplay',

@@ -15,6 +15,7 @@ import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {createDateRangeFilter} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
@@ -34,10 +35,8 @@ interface TransformedReportHighResultsDataItem {
 
 type TransformedReportHighResultsData = TransformedReportHighResultsDataItem[];
 
-type ReportsHighResultsDataDisplayProps = DataDisplayProps<
-  ReportHighResultsData,
-  TransformedReportHighResultsData
->;
+type ReportsHighResultsDataDisplayProps =
+  DataDisplayProps<TransformedReportHighResultsData>;
 
 type ReportHighResultsDisplayProps = DashboardDisplayProps;
 
@@ -99,44 +98,48 @@ export const ReportsHighResultsDisplay = ({
   return (
     <>
       <ReportsHighResultsLoader filter={displayFilter}>
-        {loaderProps => (
-          <DataDisplay<
-            ReportHighResultsData,
-            ReportsHighResultsDataDisplayProps,
-            TransformedReportHighResultsData
-          >
-            {...props}
-            {...loaderProps}
-            dataTransform={transformHighResults}
-            filter={displayFilter}
-            title={() => _('Reports with High Results')}
-            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
-          >
-            {({width, height, data, svgRef, state}) => (
-              <LineChart
-                timeline
-                data={data}
-                height={height}
-                showLegend={state.showLegend}
-                svgRef={svgRef}
-                width={width}
-                xAxisLabel={_('Time')}
-                y2AxisLabel={_('Max High per Host')}
-                y2Line={{
-                  color: Theme.darkGreenTransparent,
-                  dashArray: '3, 2',
-                  label: _('Max High per Host'),
-                }}
-                yAxisLabel={_('Max High')}
-                yLine={{
-                  color: Theme.darkGreenTransparent,
-                  label: _('Max High'),
-                }}
-                onRangeSelected={handleRangeSelect}
-              />
-            )}
-          </DataDisplay>
-        )}
+        {({data, ...loaderProps}) => {
+          const transformedData = transformHighResults(data);
+          return (
+            <DataDisplay<
+              TransformedReportHighResultsData,
+              ReportsHighResultsDataDisplayProps
+            >
+              {...props}
+              {...loaderProps}
+              data={transformedData}
+              filter={displayFilter}
+              title={() => _('Reports with High Results')}
+              onSelectFilterClick={
+                showFilterSelection ? selectFilter : undefined
+              }
+            >
+              {({width, height, data, svgRef, state}) => (
+                <LineChart
+                  timeline
+                  data={data}
+                  height={height}
+                  showLegend={state.showLegend}
+                  svgRef={svgRef}
+                  width={width}
+                  xAxisLabel={_('Time')}
+                  y2AxisLabel={_('Max High per Host')}
+                  y2Line={{
+                    color: Theme.darkGreenTransparent,
+                    dashArray: '3, 2',
+                    label: _('Max High per Host'),
+                  }}
+                  yAxisLabel={_('Max High')}
+                  yLine={{
+                    color: Theme.darkGreenTransparent,
+                    label: _('Max High'),
+                  }}
+                  onRangeSelected={handleRangeSelect}
+                />
+              )}
+            </DataDisplay>
+          );
+        }}
       </ReportsHighResultsLoader>
       {filterSelectionDialog}
     </>
@@ -147,17 +150,20 @@ ReportsHighResultsDisplay.displayId = 'report-by-high-results';
 
 export const ReportsHighResultsTableDisplay = createDisplay({
   loaderComponent: ReportsHighResultsLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label, row.y, row.y2]) ?? []
-      }
-      dataTitles={[_('Created Time'), _('Max High'), _('Max High per Host')]}
-      dataTransform={transformHighResults}
-      title={() => _('Reports with High Results')}
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformHighResults);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.label, row.y, row.y2]) ?? []
+        }
+        dataTitles={[_('Created Time'), _('Max High'), _('Max High per Host')]}
+        title={() => _('Reports with High Results')}
+      />
+    );
+  },
   filtersFilter: REPORTS_FILTER_FILTER,
   displayName: 'ReportsHighResultsTableDisplay',
   displayId: 'report-by-high-results-table',

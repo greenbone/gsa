@@ -13,6 +13,7 @@ import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import {
   type TicketData,
@@ -71,31 +72,28 @@ const transformUserAssignedData = (
   return result;
 };
 
-type TicketUserAssignedDataDisplayProps = DataDisplayProps<
-  TicketData,
-  TransformedTicketUserAssignedData
->;
-
 export const TicketsAssignedUsersDisplay = createDisplay({
   loaderComponent: TicketsListLoader,
-  displayComponent: props => (
-    <DataDisplay<
-      TicketData,
-      TicketUserAssignedDataDisplayProps,
-      TransformedTicketUserAssignedData
-    >
-      {...props}
-      dataTransform={transformUserAssignedData}
-      showToggleLegend={false}
-      title={({data}) =>
-        _('Tickets by Assigned User (Total: {{total}})', {
-          total: data?.total ?? 0,
-        })
-      }
-    >
-      {chartProps => <DonutChart {...chartProps} showLegend={false} />}
-    </DataDisplay>
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformUserAssignedData);
+    return (
+      <DataDisplay<
+        TransformedTicketUserAssignedData,
+        DataDisplayProps<TransformedTicketUserAssignedData>
+      >
+        {...props}
+        data={transformedData}
+        showToggleLegend={false}
+        title={({data}) =>
+          _('Tickets by Assigned User (Total: {{total}})', {
+            total: data?.total ?? 0,
+          })
+        }
+      >
+        {chartProps => <DonutChart {...chartProps} showLegend={false} />}
+      </DataDisplay>
+    );
+  },
   displayId: 'tickets-by-assigned-users',
   displayName: 'TicketsAssignedUsersDisplay',
   filtersFilter: TICKETS_FILTER_FILTER,
@@ -103,21 +101,24 @@ export const TicketsAssignedUsersDisplay = createDisplay({
 
 export const TicketsAssignedUsersTableDisplay = createDisplay({
   loaderComponent: TicketsListLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label, row.value]) ?? []
-      }
-      dataTitles={[_l('Assigned To'), _l('# of Tickets')]}
-      dataTransform={transformUserAssignedData}
-      title={({data}) =>
-        _('Tickets by Assigned User (Total: {{total}})', {
-          total: data?.total ?? 0,
-        })
-      }
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformUserAssignedData);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.label, row.value]) ?? []
+        }
+        dataTitles={[_l('Assigned To'), _l('# of Tickets')]}
+        title={({data}) =>
+          _('Tickets by Assigned User (Total: {{total}})', {
+            total: data?.total ?? 0,
+          })
+        }
+      />
+    );
+  },
   displayId: 'tickets-by-assigned-users-table',
   displayName: 'TicketsAssignedUsersTableDisplay',
   filtersFilter: TICKETS_FILTER_FILTER,

@@ -32,16 +32,15 @@ vi.mock('web/components/dashboard/display/created/CreatedDisplay', () => ({
 }));
 
 vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
-  default: ({data, dataRow, dataTitles, dataTransform, title}) => {
-    const transformedData = dataTransform ? dataTransform(data) : data;
-
+  default: ({data, dataRow, dataTitles, title}) => {
+    const rowData = dataRow(data);
     return (
       <div data-testid="mock-data-table-display">
-        <span data-testid="title">{title?.()}</span>
+        <span data-testid="title">{title?.({data})}</span>
         <span data-testid="data-titles">{dataTitles?.join('|')}</span>
-        {transformedData.map((row, index) => (
+        {rowData.map((row, index) => (
           <span key={index} data-testid={`data-row-${index}`}>
-            {dataRow(transformedData)?.[index]?.join('|')}
+            {row?.join('|')}
           </span>
         ))}
       </div>
@@ -75,7 +74,6 @@ const renderDisplay = (component: ReactElement) => {
 describe('CpesCreatedDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(CpesCreatedDisplay).toBeDefined();
-    expect(typeof CpesCreatedDisplay).toBe('function');
     expect(CpesCreatedDisplay.displayId).toBe('cpe-by-created');
     expect(CpesCreatedDisplay.displayName).toBe('CpeCreatedDisplay');
   });
@@ -108,7 +106,6 @@ describe('CpesCreatedDisplay', () => {
 describe('CpesCreatedTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(CpesCreatedTableDisplay).toBeDefined();
-    expect(typeof CpesCreatedTableDisplay).toBe('function');
     expect(CpesCreatedTableDisplay.displayId).toBe('cpe-by-created-table');
     expect(CpesCreatedTableDisplay.displayName).toBe('CpeCreatedTableDisplay');
   });

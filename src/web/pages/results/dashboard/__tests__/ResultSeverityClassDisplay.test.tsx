@@ -6,6 +6,7 @@
 import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor} from 'web/testing';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
   SubscriptionContext,
@@ -27,14 +28,7 @@ vi.mock(
   'web/components/dashboard/display/severity/SeverityClassDisplay',
   () => ({
     default: ({data, title}) => {
-      const total =
-        data?.groups?.reduce((sum, group) => sum + Number(group.count), 0) ?? 0;
-
-      return (
-        <div data-testid="mock-severity-display">
-          {title?.({data: {total}})}
-        </div>
-      );
+      return <div data-testid="mock-severity-display">{title?.({data})}</div>;
     },
   }),
 );
@@ -43,12 +37,9 @@ vi.mock(
   'web/components/dashboard/display/severity/SeverityClassTableDisplay',
   () => ({
     default: ({data, dataTitles, title}) => {
-      const total =
-        data?.groups?.reduce((sum, group) => sum + Number(group.count), 0) ?? 0;
-
       return (
         <div data-testid="mock-severity-table-display">
-          <span data-testid="title">{title?.({data: {total}})}</span>
+          <span data-testid="title">{title?.({data})}</span>
           <span data-testid="data-titles">{dataTitles?.join('|')}</span>
         </div>
       );
@@ -57,6 +48,9 @@ vi.mock(
 );
 
 const createGmp = () => ({
+  settings: {
+    severityRating: SEVERITY_RATING_CVSS_3,
+  },
   filters: {
     get: testing.fn().mockResolvedValue({
       data: [],
@@ -82,7 +76,6 @@ const renderDisplay = (component: ReactElement) => {
 describe('ResultsSeverityDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(ResultsSeverityDisplay).toBeDefined();
-    expect(typeof ResultsSeverityDisplay).toBe('function');
     expect(ResultsSeverityDisplay.displayId).toBe('result-by-severity-class');
     expect(ResultsSeverityDisplay.displayName).toBe('ResultsSeverityDisplay');
   });
@@ -108,7 +101,6 @@ describe('ResultsSeverityDisplay', () => {
 describe('ResultsSeverityTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(ResultsSeverityTableDisplay).toBeDefined();
-    expect(typeof ResultsSeverityTableDisplay).toBe('function');
     expect(ResultsSeverityTableDisplay.displayId).toBe(
       'result-by-severity-class-table',
     );

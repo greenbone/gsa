@@ -17,6 +17,7 @@ import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {randomColor} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
@@ -25,23 +26,23 @@ import {
   type WordCloudData,
 } from 'web/pages/notes/dashboard/NoteLoaders';
 
-interface TransformedWordCloudData {
+interface TransformedWordCloudDataItem {
   value: number;
   label: string;
   color: string;
   filterValue: string;
 }
 
-type NotesWordCloudDataDisplayProps = DataDisplayProps<
-  WordCloudData,
-  TransformedWordCloudData[]
->;
+type TransformedWordCloudData = TransformedWordCloudDataItem[];
+
+type NotesWordCloudDataDisplayProps =
+  DataDisplayProps<TransformedWordCloudData>;
 
 type NotesWordCloudDisplayProps = DashboardDisplayProps;
 
 const transformWordCountData = (
   data: WordCloudData | undefined = {},
-): TransformedWordCloudData[] => {
+): TransformedWordCloudDataItem[] => {
   const {groups = []} = data;
   const transformData = groups.map(group => {
     const {count, value} = group;
@@ -96,33 +97,37 @@ export const NotesWordCloudDisplay = ({
   return (
     <>
       <NotesWordCountLoader filter={displayFilter}>
-        {loaderProps => (
-          <DataDisplay<
-            WordCloudData,
-            NotesWordCloudDataDisplayProps,
-            TransformedWordCloudData[]
-          >
-            {...props}
-            {...loaderProps}
-            dataTransform={transformWordCountData}
-            filter={displayFilter}
-            showToggleLegend={false}
-            title={() => _('Notes Text Word Cloud')}
-            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
-          >
-            {({width, height, data, svgRef}) => (
-              <WordCloudChart
-                data={data}
-                height={height}
-                svgRef={svgRef}
-                width={width}
-                onDataClick={
-                  isDefined(onFilterChanged) ? handleDataClick : undefined
-                }
-              />
-            )}
-          </DataDisplay>
-        )}
+        {({data, ...loaderProps}) => {
+          const transformedData = transformWordCountData(data);
+          return (
+            <DataDisplay<
+              TransformedWordCloudData,
+              NotesWordCloudDataDisplayProps
+            >
+              {...props}
+              {...loaderProps}
+              data={transformedData}
+              filter={displayFilter}
+              showToggleLegend={false}
+              title={() => _('Notes Text Word Cloud')}
+              onSelectFilterClick={
+                showFilterSelection ? selectFilter : undefined
+              }
+            >
+              {({width, height, data, svgRef}) => (
+                <WordCloudChart
+                  data={data}
+                  height={height}
+                  svgRef={svgRef}
+                  width={width}
+                  onDataClick={
+                    isDefined(onFilterChanged) ? handleDataClick : undefined
+                  }
+                />
+              )}
+            </DataDisplay>
+          );
+        }}
       </NotesWordCountLoader>
       {filterSelectionDialog}
     </>
@@ -133,17 +138,20 @@ NotesWordCloudDisplay.displayId = 'note-by-text-words';
 
 export const NotesWordCloudTableDisplay = createDisplay({
   loaderComponent: NotesWordCountLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label ?? '', row.value]) ?? []
-      }
-      dataTitles={[_('Text'), _('Count')]}
-      dataTransform={transformWordCountData}
-      title={() => _('Notes Text Word Cloud')}
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformWordCountData);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.label ?? '', row.value]) ?? []
+        }
+        dataTitles={[_('Text'), _('Count')]}
+        title={() => _('Notes Text Word Cloud')}
+      />
+    );
+  },
   displayId: 'note-by-text-words-table',
   displayName: 'NotesWordCloudTableDisplay',
   filtersFilter: NOTES_FILTER_FILTER,

@@ -15,6 +15,7 @@ import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import transformHostsData, {
@@ -25,10 +26,8 @@ import transformHostsData, {
 import VulnerabilitiesHostsBarChart from 'web/pages/vulnerabilities/dashboard/VulnerabilitiesHostsBarChart';
 import {VulnerabilitiesHostsLoader} from 'web/pages/vulnerabilities/dashboard/VulnerabilitiesLoaders';
 
-type VulnerabilitiesHostsDataDisplayProps = DataDisplayProps<
-  VulnerabilitiesHostsData,
-  TransformedVulnerabilitiesHostsData
->;
+type VulnerabilitiesHostsDataDisplayProps =
+  DataDisplayProps<TransformedVulnerabilitiesHostsData>;
 
 type VulnerabilitiesHostsDisplayProps = DashboardDisplayProps;
 
@@ -64,7 +63,7 @@ export const VulnerabilitiesHostsDisplay = ({
       if (!isDefined(onFilterChanged)) {
         return;
       }
-      const {filterValue = {start: undefined, end: undefined}} = clickData;
+      const {filterValue} = clickData;
       const {start, end} = filterValue;
       let hostFilter: QueryFilter | undefined;
 
@@ -116,44 +115,44 @@ export const VulnerabilitiesHostsDisplay = ({
     totalRef.current = computeTotal(data);
     return transformHostsData(data);
   }, []);
-
   return (
     <>
       <VulnerabilitiesHostsLoader filter={displayFilter}>
-        {loaderProps => (
-          <DataDisplay<
-            VulnerabilitiesHostsData,
-            VulnerabilitiesHostsDataDisplayProps,
-            TransformedVulnerabilitiesHostsData
-          >
-            {...props}
-            {...(loaderProps as {
-              data: VulnerabilitiesHostsData;
-              isLoading: boolean;
-            })}
-            dataTransform={handleTransform}
-            filter={displayFilter}
-            showToggleLegend={false}
-            title={() =>
-              _('Vulnerabilities by Hosts (Total: {{count}})', {
-                count: totalRef.current,
-              })
-            }
-            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
-          >
-            {({width, height, data, svgRef}) => (
-              <VulnerabilitiesHostsBarChart
-                data={data}
-                height={height}
-                svgRef={svgRef}
-                width={width}
-                onDataClick={
-                  isDefined(onFilterChanged) ? handleDataClick : undefined
-                }
-              />
-            )}
-          </DataDisplay>
-        )}
+        {({data, isLoading}) => {
+          const transformedData = handleTransform(data);
+          return (
+            <DataDisplay<
+              TransformedVulnerabilitiesHostsData,
+              VulnerabilitiesHostsDataDisplayProps
+            >
+              {...props}
+              data={transformedData}
+              filter={displayFilter}
+              isLoading={isLoading}
+              showToggleLegend={false}
+              title={() =>
+                _('Vulnerabilities by Hosts (Total: {{count}})', {
+                  count: totalRef.current,
+                })
+              }
+              onSelectFilterClick={
+                showFilterSelection ? selectFilter : undefined
+              }
+            >
+              {({width, height, data, svgRef}) => (
+                <VulnerabilitiesHostsBarChart
+                  data={data}
+                  height={height}
+                  svgRef={svgRef}
+                  width={width}
+                  onDataClick={
+                    isDefined(onFilterChanged) ? handleDataClick : undefined
+                  }
+                />
+              )}
+            </DataDisplay>
+          );
+        }}
       </VulnerabilitiesHostsLoader>
       {filterSelectionDialog}
     </>
@@ -164,17 +163,20 @@ VulnerabilitiesHostsDisplay.displayId = 'vuln-by-hosts';
 
 export const VulnerabilitiesHostsTableDisplay = createDisplay({
   loaderComponent: VulnerabilitiesHostsLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.x, String(row.y)]) ?? []
-      }
-      dataTitles={[_('# of Hosts'), _('# of Vulnerabilities')]}
-      dataTransform={transformHostsData}
-      title={() => _('Vulnerabilities by Hosts')}
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformHostsData);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.x, String(row.y)]) ?? []
+        }
+        dataTitles={[_('# of Hosts'), _('# of Vulnerabilities')]}
+        title={_('Vulnerabilities by Hosts')}
+      />
+    );
+  },
   displayId: 'vuln-by-hosts-table',
   displayName: 'VulnerabilitiesHostsTableDisplay',
   filtersFilter: VULNS_FILTER_FILTER,

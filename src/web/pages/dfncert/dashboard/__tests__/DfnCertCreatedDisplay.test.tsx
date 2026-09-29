@@ -32,16 +32,15 @@ vi.mock('web/components/dashboard/display/created/CreatedDisplay', () => ({
 }));
 
 vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
-  default: ({data, dataRow, dataTitles, dataTransform, title}) => {
-    const transformedData = dataTransform ? dataTransform(data) : data;
-
+  default: ({data, dataRow, dataTitles, title}) => {
+    const rowData = dataRow(data);
     return (
       <div data-testid="mock-data-table-display">
         <span data-testid="title">{title?.()}</span>
         <span data-testid="data-titles">{dataTitles?.join('|')}</span>
-        {transformedData.map((row, index) => (
+        {rowData.map((row, index) => (
           <span key={index} data-testid={`data-row-${index}`}>
-            {dataRow(transformedData)?.[index]?.join('|')}
+            {row?.join('|')}
           </span>
         ))}
       </div>
@@ -75,7 +74,6 @@ const renderDisplay = (component: ReactElement) => {
 describe('DfnCertsCreatedDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(DfnCertsCreatedDisplay).toBeDefined();
-    expect(typeof DfnCertsCreatedDisplay).toBe('function');
     expect(DfnCertsCreatedDisplay.displayId).toBe('dfn_cert_adv-by-created');
     expect(DfnCertsCreatedDisplay.displayName).toBe('DfnCertsCreatedDisplay');
   });
@@ -110,7 +108,6 @@ describe('DfnCertsCreatedDisplay', () => {
 describe('DfnCertsCreatedTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(DfnCertsCreatedTableDisplay).toBeDefined();
-    expect(typeof DfnCertsCreatedTableDisplay).toBe('function');
     expect(DfnCertsCreatedTableDisplay.displayId).toBe(
       'dfn_cert_adv-by-created-table',
     );

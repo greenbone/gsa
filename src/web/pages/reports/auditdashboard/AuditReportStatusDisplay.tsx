@@ -12,6 +12,7 @@ import {AUDIT_REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import StatusDisplay from 'web/components/dashboard/display/status/StatusDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import {
   complianceColorScale,
   totalCount,
@@ -63,18 +64,21 @@ const transformStatusData = (
 };
 
 export const ReportComplianceDisplay = createDisplay({
-  displayComponent: props => (
-    <StatusDisplay
-      {...props}
-      dataTransform={transformStatusData}
-      filterTerm="compliant"
-      title={({data}) =>
-        _('Audit Reports by Compliance (Total: {{count}})', {
-          count: data?.total ?? 0,
-        })
-      }
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformStatusData);
+    return (
+      <StatusDisplay
+        {...props}
+        data={transformedData}
+        filterTerm="compliant"
+        title={({data}) =>
+          _('Audit Reports by Compliance (Total: {{count}})', {
+            count: data?.total ?? 0,
+          })
+        }
+      />
+    );
+  },
   displayId: 'report-by-compliance',
   filtersFilter: AUDIT_REPORTS_FILTER_FILTER,
   loaderComponent: ReportComplianceLoader,
@@ -82,21 +86,24 @@ export const ReportComplianceDisplay = createDisplay({
 
 export const ReportComplianceTableDisplay = createDisplay({
   loaderComponent: ReportComplianceLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label, row.value]) ?? []
-      }
-      dataTitles={[_l('Status'), _l('# of Reports')]}
-      dataTransform={transformStatusData}
-      title={({data}) =>
-        _('Audit Reports by Compliance (Total: {{count}})', {
-          count: data?.total ?? 0,
-        })
-      }
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformStatusData);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.label, row.value]) ?? []
+        }
+        dataTitles={[_l('Status'), _l('# of Reports')]}
+        title={({data}) =>
+          _('Audit Reports by Compliance (Total: {{count}})', {
+            count: data?.total ?? 0,
+          })
+        }
+      />
+    );
+  },
   displayId: 'report-by-compliance-table',
   displayName: 'ReportComplianceTableDisplay',
   filtersFilter: AUDIT_REPORTS_FILTER_FILTER,

@@ -6,6 +6,7 @@
 import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor} from 'web/testing';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
   SubscriptionContext,
@@ -23,17 +24,15 @@ const loaderData = [
 ];
 
 vi.mock('web/components/dashboard/display/DataDisplay', () => ({
-  default: ({children, data, dataTransform, title}) => {
-    const transformedData = dataTransform ? dataTransform(data) : data;
-
+  default: ({children, data, title}) => {
     return (
       <div data-testid="mock-data-display">
-        <span data-testid="title">{title?.({data: transformedData})}</span>
+        <span data-testid="title">{title?.({data})}</span>
         {typeof children === 'function'
           ? children({
               width: 400,
               height: 300,
-              data: transformedData,
+              data,
               svgRef: {current: null},
             })
           : children}
@@ -59,7 +58,9 @@ vi.mock('web/components/chart/HostsTopologyChart', () => ({
 }));
 
 const createGmp = () => ({
-  settings: {severityRating: 'CVSSv3'},
+  settings: {
+    severityRating: SEVERITY_RATING_CVSS_3,
+  },
   filters: {
     get: testing.fn().mockResolvedValue({
       data: [],
@@ -89,7 +90,6 @@ const renderDisplay = (component: ReactElement) => {
 describe('HostsTopologyDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(HostsTopologyDisplay).toBeDefined();
-    expect(typeof HostsTopologyDisplay).toBe('function');
     expect(HostsTopologyDisplay.displayId).toBe('host-by-topology');
   });
 

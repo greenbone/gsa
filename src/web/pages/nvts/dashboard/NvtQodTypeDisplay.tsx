@@ -17,6 +17,7 @@ import DataDisplay, {
 } from 'web/components/dashboard/display/DataDisplay';
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {
   totalCount,
@@ -42,10 +43,7 @@ interface TransformedNvtQodTypeData extends Array<TransformedNvtQodTypeDataItem>
   total: number;
 }
 
-type NvtQodTypeDataDisplayProps = DataDisplayProps<
-  NvtQodData,
-  TransformedNvtQodTypeData
->;
+type NvtQodTypeDataDisplayProps = DataDisplayProps<TransformedNvtQodTypeData>;
 
 type NvtsQodTypeDisplayProps = DashboardDisplayProps;
 
@@ -114,38 +112,39 @@ export const NvtsQodTypeDisplay = ({
   return (
     <>
       <NvtsQodTypeLoader filter={displayFilter}>
-        {loaderProps => (
-          <DataDisplay<
-            NvtQodData,
-            NvtQodTypeDataDisplayProps,
-            TransformedNvtQodTypeData
-          >
-            {...props}
-            {...loaderProps}
-            dataTransform={transformQodTypeData}
-            icons={DataDisplayIcons}
-            initialState={{}}
-            title={({data}) =>
-              _('NVTs by QoD-Type (Total: {{count}})', {
-                count: data?.total ?? 0,
-              })
-            }
-            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
-          >
-            {({width, height, data, svgRef, state}) => (
-              <DonutChart
-                data={data}
-                height={height}
-                showLegend={state.showLegend}
-                svgRef={svgRef}
-                width={width}
-                onDataClick={
-                  isDefined(onFilterChanged) ? handleDataClick : undefined
-                }
-              />
-            )}
-          </DataDisplay>
-        )}
+        {({data, ...loaderProps}) => {
+          const transformedData = transformQodTypeData(data);
+          return (
+            <DataDisplay<TransformedNvtQodTypeData, NvtQodTypeDataDisplayProps>
+              {...props}
+              {...loaderProps}
+              data={transformedData}
+              icons={DataDisplayIcons}
+              initialState={{}}
+              title={({data}) =>
+                _('NVTs by QoD-Type (Total: {{count}})', {
+                  count: data?.total ?? 0,
+                })
+              }
+              onSelectFilterClick={
+                showFilterSelection ? selectFilter : undefined
+              }
+            >
+              {({width, height, data, svgRef, state}) => (
+                <DonutChart
+                  data={data}
+                  height={height}
+                  showLegend={state.showLegend}
+                  svgRef={svgRef}
+                  width={width}
+                  onDataClick={
+                    isDefined(onFilterChanged) ? handleDataClick : undefined
+                  }
+                />
+              )}
+            </DataDisplay>
+          );
+        }}
       </NvtsQodTypeLoader>
       {filterSelectionDialog}
     </>
@@ -156,19 +155,22 @@ NvtsQodTypeDisplay.displayId = 'nvt-by-qod_type';
 
 export const NvtsQodTypeTableDisplay = createDisplay({
   loaderComponent: NvtsQodTypeLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label ?? '', row.value]) ?? []
-      }
-      dataTitles={[_('QoD-Type'), _('# of NVTs')]}
-      dataTransform={transformQodTypeData}
-      title={({data}) =>
-        _('NVTs by QoD-Type (Total: {{count}})', {count: data?.total ?? 0})
-      }
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformQodTypeData);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.label ?? '', row.value]) ?? []
+        }
+        dataTitles={[_('QoD-Type'), _('# of NVTs')]}
+        title={({data}) =>
+          _('NVTs by QoD-Type (Total: {{count}})', {count: data?.total ?? 0})
+        }
+      />
+    );
+  },
   displayId: 'nvt-by-qod-type-table',
   displayName: 'NvtsQodTypeTableDisplay',
   filtersFilter: NVTS_FILTER_FILTER,

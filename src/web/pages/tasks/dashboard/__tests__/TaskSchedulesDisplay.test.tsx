@@ -33,21 +33,17 @@ const scheduledTask = {
 const loaderData = [scheduledTask, {name: 'Task Without Schedule'}];
 
 vi.mock('web/components/dashboard/display/DataDisplay', () => ({
-  default: ({children, data, dataTransform, endDate, title}) => {
-    const transformedData = dataTransform
-      ? dataTransform(data, {endDate})
-      : data;
-
+  default: ({children, data, title}) => {
     return (
       <div data-testid="mock-data-display">
         <span data-testid="title">
-          {isFunction(title) ? title({data: transformedData}) : title}
+          {isFunction(title) ? title({data}) : title}
         </span>
         {isFunction(children)
           ? children({
               width: 400,
               height: 300,
-              data: transformedData,
+              data,
               svgRef: {current: null},
             })
           : children}
@@ -57,20 +53,17 @@ vi.mock('web/components/dashboard/display/DataDisplay', () => ({
 }));
 
 vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
-  default: ({data, dataRow, dataTitles, dataTransform, endDate, title}) => {
-    const transformedData = dataTransform
-      ? dataTransform(data, {endDate})
-      : data;
-
+  default: ({data, dataRow, dataTitles, title}) => {
+    const rowData = dataRow(data);
     return (
       <div data-testid="mock-data-table-display">
         <span data-testid="title">
-          {isFunction(title) ? title({data: transformedData}) : title}
+          {isFunction(title) ? title({data}) : title}
         </span>
         <span data-testid="data-titles">{dataTitles?.join('|')}</span>
-        {transformedData?.map((row, index) => (
+        {rowData?.map((row, index) => (
           <span key={index} data-testid={`data-row-${index}`}>
-            {dataRow(transformedData)?.[index]?.join('|')}
+            {row?.join('|')}
           </span>
         ))}
       </div>
@@ -116,7 +109,6 @@ const renderDisplay = (component: ReactElement) => {
 describe('TasksSchedulesDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(TasksSchedulesDisplay).toBeDefined();
-    expect(typeof TasksSchedulesDisplay).toBe('function');
     expect(TasksSchedulesDisplay.displayId).toBe('task-by-schedules');
     expect(TasksSchedulesDisplay.displayName).toBe('TasksScheduleDisplay');
   });
@@ -146,7 +138,6 @@ describe('TasksSchedulesDisplay', () => {
 describe('TasksSchedulesTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(TasksSchedulesTableDisplay).toBeDefined();
-    expect(typeof TasksSchedulesTableDisplay).toBe('function');
     expect(TasksSchedulesTableDisplay.displayId).toBe(
       'task-by-schedules-table',
     );

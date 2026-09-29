@@ -16,6 +16,7 @@ import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
@@ -41,11 +42,8 @@ interface TransformedTaskHighResultsDataItem {
 
 type TransformedTaskHighResultsData = TransformedTaskHighResultsDataItem[];
 
-type TaskMostHighResultsDataDisplayProps = DataDisplayProps<
-  TaskHighResultsData,
-  TransformedTaskHighResultsData,
-  TransformTasksMostHighResultsProps
->;
+type TaskMostHighResultsDataDisplayProps =
+  DataDisplayProps<TransformedTaskHighResultsData>;
 
 type TaskMostHighResultsDisplayProps = DashboardDisplayProps;
 
@@ -108,44 +106,46 @@ export const TasksMostHighResultsDisplay = ({
   const handleDataClick = (data: TransformedTaskHighResultsDataItem) => {
     void navigate(`/task/${data.id}`);
   };
-
-  const severityRating = gmp.settings.severityRating;
   return (
     <>
       <TasksHighResultsLoader filter={displayFilter}>
-        {loaderProps => (
-          <DataDisplay<
-            TaskHighResultsData,
-            TaskMostHighResultsDataDisplayProps,
-            TransformedTaskHighResultsData,
-            TransformTasksMostHighResultsProps
-          >
-            {...props}
-            {...loaderProps}
-            dataRow={transformedData =>
-              transformedData?.map(row => [row.x, row.y]) ?? []
-            }
-            dataTitles={[_('Task Name'), _('Max. High per Host')]}
-            dataTransform={transformHighResultsData}
-            filter={displayFilter}
-            severityRating={severityRating}
-            showToggleLegend={false}
-            title={() => _('Tasks with most High Results per Host')}
-            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
-          >
-            {({width, height, data, svgRef}) => (
-              <BarChart
-                horizontal
-                data={data}
-                height={height}
-                svgRef={svgRef}
-                width={width}
-                xLabel={_('Results per Host')}
-                onDataClick={handleDataClick}
-              />
-            )}
-          </DataDisplay>
-        )}
+        {({data, isLoading}) => {
+          const transformedData = transformHighResultsData(data, {
+            severityRating: gmp.settings.severityRating,
+          });
+          return (
+            <DataDisplay<
+              TransformedTaskHighResultsData,
+              TaskMostHighResultsDataDisplayProps
+            >
+              {...props}
+              data={transformedData}
+              dataRow={transformedData =>
+                transformedData?.map(row => [row.x, row.y]) ?? []
+              }
+              dataTitles={[_('Task Name'), _('Max. High per Host')]}
+              filter={displayFilter}
+              isLoading={isLoading}
+              showToggleLegend={false}
+              title={() => _('Tasks with most High Results per Host')}
+              onSelectFilterClick={
+                showFilterSelection ? selectFilter : undefined
+              }
+            >
+              {({width, height, data, svgRef}) => (
+                <BarChart
+                  horizontal
+                  data={data}
+                  height={height}
+                  svgRef={svgRef}
+                  width={width}
+                  xLabel={_('Results per Host')}
+                  onDataClick={handleDataClick}
+                />
+              )}
+            </DataDisplay>
+          );
+        }}
       </TasksHighResultsLoader>
       {filterSelectionDialog}
     </>
@@ -156,17 +156,20 @@ TasksMostHighResultsDisplay.displayId = 'task-by-most-high-results';
 
 export const TasksMostHighResultsTableDisplay = createDisplay({
   loaderComponent: TasksHighResultsLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.x, row.y]) ?? []
-      }
-      dataTitles={[_('Task Name'), _('Max. High per Host')]}
-      dataTransform={transformHighResultsData}
-      title={() => _('Tasks with most High Results per Host')}
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformHighResultsData);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.x, row.y]) ?? []
+        }
+        dataTitles={[_('Task Name'), _('Max. High per Host')]}
+        title={() => _('Tasks with most High Results per Host')}
+      />
+    );
+  },
   displayId: 'task-by-most-high-results-table',
   displayName: 'TasksMostHighResultsTableDisplay',
   filtersFilter: TASKS_FILTER_FILTER,

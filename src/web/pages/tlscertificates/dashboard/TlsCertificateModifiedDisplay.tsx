@@ -15,6 +15,7 @@ import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {
   createDateRangeFilter,
@@ -39,10 +40,8 @@ interface TransformedTlsCertificateModifiedData extends Array<TransformedTlsCert
   total: number;
 }
 
-type TlsCertificateModifiedDataDisplayProps = DataDisplayProps<
-  TlsCertificateModifiedData,
-  TransformedTlsCertificateModifiedData
->;
+type TlsCertificateModifiedDataDisplayProps =
+  DataDisplayProps<TransformedTlsCertificateModifiedData>;
 
 type TlsCertificateModifiedDisplayProps = DashboardDisplayProps;
 
@@ -110,48 +109,52 @@ export const TlsCertificatesModifiedDisplay = ({
   return (
     <>
       <TlsCertificatesModifiedLoader filter={displayFilter}>
-        {loaderProps => (
-          <DataDisplay<
-            TlsCertificateModifiedData,
-            TlsCertificateModifiedDataDisplayProps,
-            TransformedTlsCertificateModifiedData
-          >
-            {...props}
-            {...loaderProps}
-            dataTransform={transformModified}
-            filter={displayFilter}
-            title={({data}) =>
-              _('TLS Certificates by Modification Time (Total: {{count}})', {
-                count: data?.total ?? 0,
-              })
-            }
-            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
-          >
-            {({width, height, data, svgRef, state}) => (
-              <LineChart
-                timeline
-                data={data}
-                height={height}
-                showLegend={state.showLegend}
-                svgRef={svgRef}
-                width={width}
-                xAxisLabel={_('Time')}
-                y2AxisLabel={_('Total TLS Certificates')}
-                y2Line={{
-                  color: Theme.darkGreenTransparent,
-                  dashArray: '3, 2',
-                  label: _('Total TLS Certificates'),
-                }}
-                yAxisLabel={_('# of Modified TLS Certificates')}
-                yLine={{
-                  color: Theme.darkGreenTransparent,
-                  label: _('Modified TLS Certificates'),
-                }}
-                onRangeSelected={handleRangeSelect}
-              />
-            )}
-          </DataDisplay>
-        )}
+        {({data, isLoading}) => {
+          const transformedData = transformModified(data);
+          return (
+            <DataDisplay<
+              TransformedTlsCertificateModifiedData,
+              TlsCertificateModifiedDataDisplayProps
+            >
+              {...props}
+              data={transformedData}
+              filter={displayFilter}
+              isLoading={isLoading}
+              title={({data}) =>
+                _('TLS Certificates by Modification Time (Total: {{count}})', {
+                  count: data?.total ?? 0,
+                })
+              }
+              onSelectFilterClick={
+                showFilterSelection ? selectFilter : undefined
+              }
+            >
+              {({width, height, data, svgRef, state}) => (
+                <LineChart
+                  timeline
+                  data={data}
+                  height={height}
+                  showLegend={state.showLegend}
+                  svgRef={svgRef}
+                  width={width}
+                  xAxisLabel={_('Time')}
+                  y2AxisLabel={_('Total TLS Certificates')}
+                  y2Line={{
+                    color: Theme.darkGreenTransparent,
+                    dashArray: '3, 2',
+                    label: _('Total TLS Certificates'),
+                  }}
+                  yAxisLabel={_('# of Modified TLS Certificates')}
+                  yLine={{
+                    color: Theme.darkGreenTransparent,
+                    label: _('Modified TLS Certificates'),
+                  }}
+                  onRangeSelected={handleRangeSelect}
+                />
+              )}
+            </DataDisplay>
+          );
+        }}
       </TlsCertificatesModifiedLoader>
       {filterSelectionDialog}
     </>
@@ -163,25 +166,28 @@ TlsCertificatesModifiedDisplay.displayId =
 
 export const TlsCertificatesModifiedTableDisplay = createDisplay({
   loaderComponent: TlsCertificatesModifiedLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label, row.y, row.y2]) ?? []
-      }
-      dataTitles={[
-        _('Creation Time'),
-        _('# of Modified Certificates'),
-        _('Total Certificates'),
-      ]}
-      dataTransform={transformModified}
-      title={({data}) =>
-        _('TLS Certificates by Modification Time (Total: {{count}})', {
-          count: data?.total ?? 0,
-        })
-      }
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformModified);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.label, row.y, row.y2]) ?? []
+        }
+        dataTitles={[
+          _('Creation Time'),
+          _('# of Modified Certificates'),
+          _('Total Certificates'),
+        ]}
+        title={({data}) =>
+          _('TLS Certificates by Modification Time (Total: {{count}})', {
+            count: data?.total ?? 0,
+          })
+        }
+      />
+    );
+  },
   filtersFilter: TLS_CERTIFICATES_FILTER_FILTER,
   displayId: 'tls-certificates-by-modification-time-table',
   displayName: 'TlsCertificatesModifiedTableDisplay',

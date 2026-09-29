@@ -14,6 +14,7 @@ import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import {
   type TaskScheduleData,
@@ -69,20 +70,22 @@ const transformScheduleData = (
 
 export const TasksSchedulesDisplay = createDisplay({
   loaderComponent: TasksSchedulesLoader,
-  displayComponent: props => (
-    <DataDisplay<
-      TaskScheduleData,
-      DataDisplayProps<TaskScheduleData, TransformedTaskScheduleData>,
-      TransformedTaskScheduleData
-    >
-      {...props}
-      dataTransform={transformScheduleData}
-      showToggleLegend={false}
-      title={() => _('Next Scheduled Tasks')}
-    >
-      {chartProps => <ScheduleChart {...chartProps} />}
-    </DataDisplay>
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformScheduleData);
+    return (
+      <DataDisplay<
+        TransformedTaskScheduleData,
+        DataDisplayProps<TransformedTaskScheduleData>
+      >
+        {...props}
+        data={transformedData}
+        showToggleLegend={false}
+        title={_('Next Scheduled Tasks')}
+      >
+        {chartProps => <ScheduleChart {...chartProps} />}
+      </DataDisplay>
+    );
+  },
   displayId: 'task-by-schedules',
   displayName: 'TasksScheduleDisplay',
   filtersFilter: TASKS_FILTER_FILTER,
@@ -90,21 +93,23 @@ export const TasksSchedulesDisplay = createDisplay({
 
 export const TasksSchedulesTableDisplay = createDisplay({
   loaderComponent: TasksSchedulesLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [
-          row.label,
-          isDefined(row.nextStart) ? row.nextStart : '-',
-        ]) ?? []
-      }
-      dataTitles={[_('Task Name'), _('Next Schedule Time')]}
-      dataTransform={transformScheduleData}
-      endDate={week}
-      title={() => _('Next Scheduled Tasks')}
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformScheduleData);
+    return (
+      <DataTableDisplay<TransformedTaskScheduleData>
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [
+            row.label,
+            isDefined(row.nextStart) ? row.nextStart : '-',
+          ]) ?? []
+        }
+        dataTitles={[_('Task Name'), _('Next Schedule Time')]}
+        title={_('Next Scheduled Tasks')}
+      />
+    );
+  },
   displayId: 'task-by-schedules-table',
   displayName: 'TasksSchedulesTableDisplay',
   filtersFilter: TASKS_FILTER_FILTER,

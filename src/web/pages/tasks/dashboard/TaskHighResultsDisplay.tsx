@@ -17,6 +17,7 @@ import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
@@ -43,11 +44,8 @@ interface TransformedTaskHighResultsDataItem {
 
 type TransformedTaskHighResultsData = TransformedTaskHighResultsDataItem[];
 
-type TaskHighResultsDataDisplayProps = DataDisplayProps<
-  TaskHighResultsData,
-  TransformedTaskHighResultsData,
-  TransformTaskHighResultsDataProps
->;
+type TaskHighResultsDataDisplayProps =
+  DataDisplayProps<TransformedTaskHighResultsData>;
 
 type TaskHighResultsDisplayProps = DashboardDisplayProps;
 
@@ -119,33 +117,37 @@ export const TasksHighResultsDisplay = ({
   return (
     <>
       <TasksHighResultsLoader filter={displayFilter}>
-        {loaderProps => (
-          <DataDisplay<
-            TaskHighResultsData,
-            TaskHighResultsDataDisplayProps,
-            TransformedTaskHighResultsData,
-            TransformTaskHighResultsDataProps
-          >
-            {...props}
-            {...loaderProps}
-            dataTransform={transformHighResultsData}
-            filter={displayFilter}
-            severityRating={severityRating}
-            showToggleLegend={false}
-            title={() => _('Tasks by High Results per Host')}
-            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
-          >
-            {({width, height, data, svgRef}) => (
-              <BubbleChart
-                data={data}
-                height={height}
-                svgRef={svgRef}
-                width={width}
-                onDataClick={handleDataClick}
-              />
-            )}
-          </DataDisplay>
-        )}
+        {({data, ...loaderProps}) => {
+          const transformedData = transformHighResultsData(data, {
+            severityRating,
+          });
+          return (
+            <DataDisplay<
+              TransformedTaskHighResultsData,
+              TaskHighResultsDataDisplayProps
+            >
+              {...props}
+              {...loaderProps}
+              data={transformedData}
+              filter={displayFilter}
+              showToggleLegend={false}
+              title={() => _('Tasks by High Results per Host')}
+              onSelectFilterClick={
+                showFilterSelection ? selectFilter : undefined
+              }
+            >
+              {({width, height, data, svgRef}) => (
+                <BubbleChart
+                  data={data}
+                  height={height}
+                  svgRef={svgRef}
+                  width={width}
+                  onDataClick={handleDataClick}
+                />
+              )}
+            </DataDisplay>
+          );
+        }}
       </TasksHighResultsLoader>
       {filterSelectionDialog}
     </>
@@ -156,17 +158,21 @@ TasksHighResultsDisplay.displayId = 'task-by-high-results';
 
 export const TasksHighResultsTableDisplay = createDisplay({
   loaderComponent: TasksHighResultsLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label, row.value, row.severity]) ?? []
-      }
-      dataTitles={[_('Task Name'), _('High per Host'), _('Severity')]}
-      dataTransform={transformHighResultsData}
-      title={() => _('Tasks by High Results per Host')}
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformHighResultsData);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.label, row.value, row.severity]) ??
+          []
+        }
+        dataTitles={[_('Task Name'), _('High per Host'), _('Severity')]}
+        title={() => _('Tasks by High Results per Host')}
+      />
+    );
+  },
   displayId: 'task-by-high-results-table',
   displayName: 'TasksHighResultsTableDisplay',
   filtersFilter: TASKS_FILTER_FILTER,

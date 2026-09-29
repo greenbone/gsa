@@ -15,6 +15,7 @@ import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {
   createDateRangeFilter,
@@ -34,10 +35,8 @@ interface TransformedHostHighModifiedData extends Array<HostModifiedHighDataPoin
   total: number;
 }
 
-type HostModifiedHighDataDisplayProps = DataDisplayProps<
-  HostModifiedData,
-  TransformedHostHighModifiedData
->;
+type HostModifiedHighDataDisplayProps =
+  DataDisplayProps<TransformedHostHighModifiedData>;
 
 type HostModifiedHighDisplayProps = DashboardDisplayProps;
 
@@ -105,48 +104,52 @@ export const HostsModifiedHighDisplay = ({
   return (
     <>
       <HostsModifiedLoader filter={filter}>
-        {loaderProps => (
-          <DataDisplay<
-            HostModifiedData,
-            HostModifiedHighDataDisplayProps,
-            TransformedHostHighModifiedData
-          >
-            {...props}
-            {...loaderProps}
-            dataTransform={transformModified}
-            filter={displayFilter}
-            title={({data}) =>
-              _('Hosts (High) by Modification Time (Total: {{count}})', {
-                count: data?.total ?? 0,
-              })
-            }
-            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
-          >
-            {({width, height, data, svgRef, state}) => (
-              <LineChart
-                timeline
-                data={data}
-                height={height}
-                showLegend={state.showLegend}
-                svgRef={svgRef}
-                width={width}
-                xAxisLabel={_('Time')}
-                y2AxisLabel={_('Total Hosts (High)')}
-                y2Line={{
-                  color: Theme.darkGreenTransparent,
-                  dashArray: '3, 2',
-                  label: _('Total Hosts (High)'),
-                }}
-                yAxisLabel={_('# of Modified Hosts (High)')}
-                yLine={{
-                  color: Theme.darkGreenTransparent,
-                  label: _('Modified Hosts (High)'),
-                }}
-                onRangeSelected={handleRangeSelect}
-              />
-            )}
-          </DataDisplay>
-        )}
+        {({data, isLoading}) => {
+          const transformedData = transformModified(data);
+          return (
+            <DataDisplay<
+              TransformedHostHighModifiedData,
+              HostModifiedHighDataDisplayProps
+            >
+              {...props}
+              data={transformedData}
+              filter={displayFilter}
+              isLoading={isLoading}
+              title={({data}) =>
+                _('Hosts (High) by Modification Time (Total: {{count}})', {
+                  count: data?.total ?? 0,
+                })
+              }
+              onSelectFilterClick={
+                showFilterSelection ? selectFilter : undefined
+              }
+            >
+              {({width, height, data, svgRef, state}) => (
+                <LineChart
+                  timeline
+                  data={data}
+                  height={height}
+                  showLegend={state.showLegend}
+                  svgRef={svgRef}
+                  width={width}
+                  xAxisLabel={_('Time')}
+                  y2AxisLabel={_('Total Hosts (High)')}
+                  y2Line={{
+                    color: Theme.darkGreenTransparent,
+                    dashArray: '3, 2',
+                    label: _('Total Hosts (High)'),
+                  }}
+                  yAxisLabel={_('# of Modified Hosts (High)')}
+                  yLine={{
+                    color: Theme.darkGreenTransparent,
+                    label: _('Modified Hosts (High)'),
+                  }}
+                  onRangeSelected={handleRangeSelect}
+                />
+              )}
+            </DataDisplay>
+          );
+        }}
       </HostsModifiedLoader>
       {filterSelectionDialog}
     </>
@@ -157,25 +160,28 @@ HostsModifiedHighDisplay.displayId = 'host-by-high-modification-time';
 
 export const HostsModifiedHighTableDisplay = createDisplay({
   loaderComponent: HostsModifiedLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label ?? '', row.y, row.y2]) ?? []
-      }
-      dataTitles={[
-        _('Creation Time'),
-        _('# of Modified Hosts (High)'),
-        _('Total Hosts (High)'),
-      ]}
-      dataTransform={transformModified}
-      title={({data}) =>
-        _('Hosts (High) by Modification Time (Total: {{count}})', {
-          count: data?.total ?? 0,
-        })
-      }
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformModified);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.label ?? '', row.y, row.y2]) ?? []
+        }
+        dataTitles={[
+          _('Creation Time'),
+          _('# of Modified Hosts (High)'),
+          _('Total Hosts (High)'),
+        ]}
+        title={({data}) =>
+          _('Hosts (High) by Modification Time (Total: {{count}})', {
+            count: data?.total ?? 0,
+          })
+        }
+      />
+    );
+  },
   filtersFilter: HOSTS_FILTER_FILTER,
   displayId: 'host-by-high-modification-time-table',
   displayName: 'HostsModifiedHighTableDisplay',

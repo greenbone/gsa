@@ -25,13 +25,11 @@ const loaderData = {
 };
 
 vi.mock('web/components/dashboard/display/status/StatusDisplay', () => ({
-  default: ({data, dataTransform, title}) => {
-    const transformedData = dataTransform ? dataTransform(data) : data;
-
+  default: ({data, title}) => {
     return (
       <div data-testid="mock-status-display">
-        <span data-testid="title">{title?.({data: transformedData})}</span>
-        {transformedData?.map((row, index) => (
+        <span data-testid="title">{title?.({data})}</span>
+        {data?.map((row, index) => (
           <span key={index} data-testid={`data-point-${index}`}>
             {row.label}|{row.value}|{row.filterValue}
           </span>
@@ -42,16 +40,15 @@ vi.mock('web/components/dashboard/display/status/StatusDisplay', () => ({
 }));
 
 vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
-  default: ({data, dataRow, dataTitles, dataTransform, title}) => {
-    const transformedData = dataTransform ? dataTransform(data) : data;
-
+  default: ({data, dataRow, dataTitles, title}) => {
+    const rowData = dataRow(data);
     return (
       <div data-testid="mock-data-table-display">
-        <span data-testid="title">{title?.({data: transformedData})}</span>
+        <span data-testid="title">{title?.({data})}</span>
         <span data-testid="data-titles">{dataTitles?.join('|')}</span>
-        {transformedData?.map((row, index) => (
+        {rowData?.map((row, index) => (
           <span key={index} data-testid={`data-row-${index}`}>
-            {dataRow(transformedData)?.[index]?.join('|')}
+            {row?.join('|')}
           </span>
         ))}
       </div>
@@ -85,7 +82,6 @@ const renderDisplay = (component: ReactElement) => {
 describe('ReportComplianceDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(ReportComplianceDisplay).toBeDefined();
-    expect(typeof ReportComplianceDisplay).toBe('function');
     expect(ReportComplianceDisplay.displayId).toBe('report-by-compliance');
   });
 
@@ -117,7 +113,6 @@ describe('ReportComplianceDisplay', () => {
 describe('ReportComplianceTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(ReportComplianceTableDisplay).toBeDefined();
-    expect(typeof ReportComplianceTableDisplay).toBe('function');
     expect(ReportComplianceTableDisplay.displayId).toBe(
       'report-by-compliance-table',
     );

@@ -21,9 +21,9 @@ const loaderData = {
 };
 
 vi.mock('web/components/dashboard/display/created/CreatedDisplay', () => ({
-  default: ({title, xAxisLabel, yAxisLabel, y2AxisLabel}) => (
+  default: ({title, xAxisLabel, yAxisLabel, y2AxisLabel, data}) => (
     <div data-testid="mock-created-display">
-      <span data-testid="title">{title?.()}</span>
+      <span data-testid="title">{title?.(data)}</span>
       <span data-testid="x-axis-label">{xAxisLabel}</span>
       <span data-testid="y-axis-label">{yAxisLabel}</span>
       <span data-testid="y2-axis-label">{y2AxisLabel}</span>
@@ -32,16 +32,15 @@ vi.mock('web/components/dashboard/display/created/CreatedDisplay', () => ({
 }));
 
 vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
-  default: ({data, dataRow, dataTitles, dataTransform, title}) => {
-    const transformedData = dataTransform ? dataTransform(data) : data;
-
+  default: ({data, dataRow, dataTitles, title}) => {
+    const rowData = dataRow(data);
     return (
       <div data-testid="mock-data-table-display">
-        <span data-testid="title">{title?.()}</span>
+        <span data-testid="title">{title?.(data)}</span>
         <span data-testid="data-titles">{dataTitles?.join('|')}</span>
-        {transformedData?.map((row, index) => (
+        {rowData?.map((row, index) => (
           <span key={index} data-testid={`data-row-${index}`}>
-            {dataRow(transformedData)?.[index]?.join('|')}
+            {row?.join('|')}
           </span>
         ))}
       </div>
@@ -75,7 +74,6 @@ const renderDisplay = (component: ReactElement) => {
 describe('OverridesCreatedDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(OverridesCreatedDisplay).toBeDefined();
-    expect(typeof OverridesCreatedDisplay).toBe('function');
     expect(OverridesCreatedDisplay.displayId).toBe('override-by-created');
     expect(OverridesCreatedDisplay.displayName).toBe('OverridesCreatedDisplay');
   });
@@ -108,7 +106,6 @@ describe('OverridesCreatedDisplay', () => {
 describe('OverridesCreatedTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(OverridesCreatedTableDisplay).toBeDefined();
-    expect(typeof OverridesCreatedTableDisplay).toBe('function');
     expect(OverridesCreatedTableDisplay.displayId).toBe(
       'override-by-created-table',
     );

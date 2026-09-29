@@ -6,6 +6,7 @@
 import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor} from 'web/testing';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
   SubscriptionContext,
@@ -34,19 +35,15 @@ const loaderData = {
 };
 
 vi.mock('web/components/dashboard/display/DataDisplay', () => ({
-  default: ({children, data, dataTransform, severityRating, title}) => {
-    const transformedData = dataTransform
-      ? dataTransform(data, {severityRating})
-      : data;
-
+  default: ({children, data, title}) => {
     return (
       <div data-testid="mock-data-display">
-        <span data-testid="title">{title?.()}</span>
+        <span data-testid="title">{title?.(data)}</span>
         {typeof children === 'function'
           ? children({
               width: 400,
               height: 300,
-              data: transformedData,
+              data,
               svgRef: {current: null},
             })
           : children}
@@ -57,15 +54,14 @@ vi.mock('web/components/dashboard/display/DataDisplay', () => ({
 
 vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
   default: ({data, dataRow, dataTitles, dataTransform, title}) => {
-    const transformedData = dataTransform ? dataTransform(data) : data;
-
+    const rowData = dataRow(data);
     return (
       <div data-testid="mock-data-table-display">
-        <span data-testid="title">{title?.()}</span>
+        <span data-testid="title">{title?.(data)}</span>
         <span data-testid="data-titles">{dataTitles?.join('|')}</span>
-        {transformedData?.map((row, index) => (
+        {rowData?.map((row, index) => (
           <span key={index} data-testid={`data-row-${index}`}>
-            {dataRow(transformedData)?.[index]?.join('|')}
+            {row?.join('|')}
           </span>
         ))}
       </div>
@@ -87,13 +83,15 @@ vi.mock('web/components/chart/BarChart', () => ({
 }));
 
 const createGmp = () => ({
+  settings: {
+    severityRating: SEVERITY_RATING_CVSS_3,
+  },
   filters: {
     get: testing.fn().mockResolvedValue({
       data: [],
       meta: {filter: 'type=task', counts: {}},
     }),
   },
-  settings: {severityRating: 'CVSSv3'},
   tasks: {
     getHighResultsAggregates: testing
       .fn()
@@ -115,7 +113,6 @@ const renderDisplay = (component: ReactElement) => {
 describe('TasksMostHighResultsDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(TasksMostHighResultsDisplay).toBeDefined();
-    expect(typeof TasksMostHighResultsDisplay).toBe('function');
     expect(TasksMostHighResultsDisplay.displayId).toBe(
       'task-by-most-high-results',
     );
@@ -154,7 +151,6 @@ describe('TasksMostHighResultsDisplay', () => {
 describe('TasksMostHighResultsTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(TasksMostHighResultsTableDisplay).toBeDefined();
-    expect(typeof TasksMostHighResultsTableDisplay).toBe('function');
     expect(TasksMostHighResultsTableDisplay.displayId).toBe(
       'task-by-most-high-results-table',
     );

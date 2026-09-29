@@ -25,17 +25,15 @@ const loaderData = {
 };
 
 vi.mock('web/components/dashboard/display/DataDisplay', () => ({
-  default: ({children, data, dataTransform, title}) => {
-    const transformedData = dataTransform ? dataTransform(data) : data;
-
+  default: ({children, data, title}) => {
     return (
       <div data-testid="mock-data-display">
-        <span data-testid="title">{title?.({data: transformedData})}</span>
+        <span data-testid="title">{title?.({data})}</span>
         {typeof children === 'function'
           ? children({
               width: 400,
               height: 300,
-              data: transformedData,
+              data,
               state: {showLegend: true},
               svgRef: {current: null},
             })
@@ -46,16 +44,15 @@ vi.mock('web/components/dashboard/display/DataDisplay', () => ({
 }));
 
 vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
-  default: ({data, dataRow, dataTitles, dataTransform, title}) => {
-    const transformedData = dataTransform ? dataTransform(data) : data;
-
+  default: ({data, dataRow, dataTitles, title}) => {
+    const rowData = dataRow(data);
     return (
       <div data-testid="mock-data-table-display">
-        <span data-testid="title">{title?.({data: transformedData})}</span>
+        <span data-testid="title">{title?.({data})}</span>
         <span data-testid="data-titles">{dataTitles?.join('|')}</span>
-        {transformedData?.map((row, index) => (
+        {rowData?.map((row, index) => (
           <span key={index} data-testid={`data-row-${index}`}>
-            {dataRow(transformedData)?.[index]?.join('|')}
+            {row?.join('|')}
           </span>
         ))}
       </div>
@@ -101,7 +98,6 @@ const renderDisplay = (component: ReactElement) => {
 describe('NvtsQodTypeDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(NvtsQodTypeDisplay).toBeDefined();
-    expect(typeof NvtsQodTypeDisplay).toBe('function');
     expect(NvtsQodTypeDisplay.displayId).toBe('nvt-by-qod_type');
   });
 
@@ -165,7 +161,6 @@ describe('NvtsQodTypeDisplay', () => {
 describe('NvtsQodTypeTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(NvtsQodTypeTableDisplay).toBeDefined();
-    expect(typeof NvtsQodTypeTableDisplay).toBe('function');
     expect(NvtsQodTypeTableDisplay.displayId).toBe('nvt-by-qod-type-table');
     expect(NvtsQodTypeTableDisplay.displayName).toBe('NvtsQodTypeTableDisplay');
   });

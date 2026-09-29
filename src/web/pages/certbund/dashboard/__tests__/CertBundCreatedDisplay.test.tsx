@@ -6,6 +6,8 @@
 import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor} from 'web/testing';
+import {isFunction} from 'gmp/utils/identity';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
   SubscriptionContext,
@@ -21,27 +23,30 @@ const loaderData = {
 };
 
 vi.mock('web/components/dashboard/display/created/CreatedDisplay', () => ({
-  default: ({title, xAxisLabel, yAxisLabel, y2AxisLabel}) => (
-    <div data-testid="mock-created-display">
-      <span data-testid="title">{title?.()}</span>
-      <span data-testid="x-axis-label">{xAxisLabel}</span>
-      <span data-testid="y-axis-label">{yAxisLabel}</span>
-      <span data-testid="y2-axis-label">{y2AxisLabel}</span>
-    </div>
-  ),
+  default: ({data, title, xAxisLabel, yAxisLabel, y2AxisLabel}) => {
+    const renderedTitle = isFunction(title) ? title({data}) : title;
+    return (
+      <div data-testid="mock-created-display">
+        <span data-testid="title">{renderedTitle}</span>
+        <span data-testid="x-axis-label">{xAxisLabel}</span>
+        <span data-testid="y-axis-label">{yAxisLabel}</span>
+        <span data-testid="y2-axis-label">{y2AxisLabel}</span>
+      </div>
+    );
+  },
 }));
 
 vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
-  default: ({data, dataRow, dataTitles, dataTransform, title}) => {
-    const transformedData = dataTransform ? dataTransform(data) : data;
-
+  default: ({data, dataRow, dataTitles, title}) => {
+    const renderedTitle = isFunction(title) ? title({data}) : title;
+    const rows = dataRow(data);
     return (
       <div data-testid="mock-data-table-display">
-        <span data-testid="title">{title?.()}</span>
+        <span data-testid="title">{renderedTitle}</span>
         <span data-testid="data-titles">{dataTitles?.join('|')}</span>
-        {transformedData.map((row, index) => (
+        {rows.map((row, index) => (
           <span key={index} data-testid={`data-row-${index}`}>
-            {dataRow(transformedData)?.[index]?.join('|')}
+            {row?.join('|')}
           </span>
         ))}
       </div>
@@ -50,6 +55,9 @@ vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
 }));
 
 const createGmp = () => ({
+  settings: {
+    severityRating: SEVERITY_RATING_CVSS_3,
+  },
   certbunds: {
     getCreatedAggregates: testing.fn().mockResolvedValue({data: loaderData}),
   },
@@ -75,7 +83,6 @@ const renderDisplay = (component: ReactElement) => {
 describe('CertBundCreatedDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(CertBundCreatedDisplay).toBeDefined();
-    expect(typeof CertBundCreatedDisplay).toBe('function');
     expect(CertBundCreatedDisplay.displayId).toBe('cert_bund_adv-by-created');
     expect(CertBundCreatedDisplay.displayName).toBe('CertBundCreatedDisplay');
   });
@@ -110,7 +117,6 @@ describe('CertBundCreatedDisplay', () => {
 describe('CertBundCreatedTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(CertBundCreatedTableDisplay).toBeDefined();
-    expect(typeof CertBundCreatedTableDisplay).toBe('function');
     expect(CertBundCreatedTableDisplay.displayId).toBe(
       'cert_bund_adv-by-created-table',
     );

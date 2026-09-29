@@ -15,6 +15,7 @@ import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {
   createDateRangeFilter,
@@ -34,10 +35,8 @@ interface TransformedHostModifiedData extends Array<HostModifiedDataPoint> {
   total: number;
 }
 
-type HostModifiedDataDisplayProps = DataDisplayProps<
-  HostModifiedData,
-  TransformedHostModifiedData
->;
+type HostModifiedDataDisplayProps =
+  DataDisplayProps<TransformedHostModifiedData>;
 
 type HostModifiedDisplayProps = DashboardDisplayProps;
 
@@ -103,51 +102,55 @@ export const HostsModifiedDisplay = ({
 
   return (
     <>
-      <HostsModifiedLoader filter={filter}>
-        {loaderProps => (
-          <DataDisplay<
-            HostModifiedData,
-            HostModifiedDataDisplayProps,
-            TransformedHostModifiedData
-          >
-            {...props}
-            {...loaderProps}
-            dataTransform={transformModified}
-            filter={displayFilter}
-            title={({data}) =>
-              _('Hosts by Modification Time (Total: {{count}})', {
-                count: data?.total ?? 0,
-              })
-            }
-            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
-          >
-            {({width, height, data, svgRef, state}) => (
-              <LineChart
-                timeline
-                data={data}
-                height={height}
-                showLegend={state.showLegend}
-                svgRef={svgRef}
-                width={width}
-                xAxisLabel={_('Time')}
-                xAxisLabelOffset={30}
-                xAxisLabelRotation={-20}
-                y2AxisLabel={_('Total Hosts')}
-                y2Line={{
-                  color: Theme.darkGreenTransparent,
-                  dashArray: '3, 2',
-                  label: _('Total Hosts'),
-                }}
-                yAxisLabel={_('# of Modified Hosts')}
-                yLine={{
-                  color: Theme.darkGreenTransparent,
-                  label: _('Modified Hosts'),
-                }}
-                onRangeSelected={handleRangeSelect}
-              />
-            )}
-          </DataDisplay>
-        )}
+      <HostsModifiedLoader filter={displayFilter}>
+        {({data, isLoading}) => {
+          const transformedData = transformModified(data);
+          return (
+            <DataDisplay<
+              TransformedHostModifiedData,
+              HostModifiedDataDisplayProps
+            >
+              {...props}
+              data={transformedData}
+              filter={displayFilter}
+              isLoading={isLoading}
+              title={({data}) =>
+                _('Hosts by Modification Time (Total: {{count}})', {
+                  count: data?.total ?? 0,
+                })
+              }
+              onSelectFilterClick={
+                showFilterSelection ? selectFilter : undefined
+              }
+            >
+              {({width, height, data, svgRef, state}) => (
+                <LineChart
+                  timeline
+                  data={data}
+                  height={height}
+                  showLegend={state.showLegend}
+                  svgRef={svgRef}
+                  width={width}
+                  xAxisLabel={_('Time')}
+                  xAxisLabelOffset={30}
+                  xAxisLabelRotation={-20}
+                  y2AxisLabel={_('Total Hosts')}
+                  y2Line={{
+                    color: Theme.darkGreenTransparent,
+                    dashArray: '3, 2',
+                    label: _('Total Hosts'),
+                  }}
+                  yAxisLabel={_('# of Modified Hosts')}
+                  yLine={{
+                    color: Theme.darkGreenTransparent,
+                    label: _('Modified Hosts'),
+                  }}
+                  onRangeSelected={handleRangeSelect}
+                />
+              )}
+            </DataDisplay>
+          );
+        }}
       </HostsModifiedLoader>
       {filterSelectionDialog}
     </>
@@ -158,25 +161,28 @@ HostsModifiedDisplay.displayId = 'host-by-modification-time';
 
 export const HostsModifiedTableDisplay = createDisplay({
   loaderComponent: HostsModifiedLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label ?? '', row.y, row.y2]) ?? []
-      }
-      dataTitles={[
-        _('Creation Time'),
-        _('# of Modified Hosts'),
-        _('Total Hosts'),
-      ]}
-      dataTransform={transformModified}
-      title={({data}) =>
-        _('Hosts by Modification Time (Total: {{count}})', {
-          count: data?.total ?? 0,
-        })
-      }
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformModified);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.label ?? '', row.y, row.y2]) ?? []
+        }
+        dataTitles={[
+          _('Creation Time'),
+          _('# of Modified Hosts'),
+          _('Total Hosts'),
+        ]}
+        title={({data}) =>
+          _('Hosts by Modification Time (Total: {{count}})', {
+            count: data?.total ?? 0,
+          })
+        }
+      />
+    );
+  },
   filtersFilter: HOSTS_FILTER_FILTER,
   displayId: 'host-by-modification-time-table',
   displayName: 'HostsModifiedTableDisplay',

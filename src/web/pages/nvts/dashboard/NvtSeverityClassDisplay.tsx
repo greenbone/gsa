@@ -6,23 +6,33 @@
 import {_, _l} from 'gmp/locale/lang';
 import {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
+import transformSeverityData from 'web/components/dashboard/display/severity/severity-class-transform';
 import SeverityClassDisplay from 'web/components/dashboard/display/severity/SeverityClassDisplay';
 import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/SeverityClassTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import {registerDisplay} from 'web/components/dashboard/registry';
+import useGmp from 'web/hooks/useGmp';
 import {NvtsSeverityLoader} from 'web/pages/nvts/dashboard/NvtLoaders';
 
 export const NvtsSeverityClassDisplay = createDisplay({
   loaderComponent: NvtsSeverityLoader,
-  displayComponent: props => (
-    <SeverityClassDisplay
-      {...props}
-      title={({data}) =>
-        _('NVTs by Severity Class (Total: {{count}})', {
-          count: data?.total ?? 0,
-        })
-      }
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const gmp = useGmp();
+    const transformedData = useDataTransform(data, transformSeverityData, {
+      severityRating: gmp.settings.severityRating,
+    });
+    return (
+      <SeverityClassDisplay
+        {...props}
+        data={transformedData}
+        title={({data}) =>
+          _('NVTs by Severity Class (Total: {{count}})', {
+            count: data?.total ?? 0,
+          })
+        }
+      />
+    );
+  },
   displayId: 'nvt-by-severity-class',
   displayName: 'NvtsSeverityClassDisplay',
   filtersFilter: NVTS_FILTER_FILTER,
@@ -30,17 +40,24 @@ export const NvtsSeverityClassDisplay = createDisplay({
 
 export const NvtsSeverityClassTableDisplay = createDisplay({
   loaderComponent: NvtsSeverityLoader,
-  displayComponent: props => (
-    <SeverityClassTableDisplay
-      {...props}
-      dataTitles={[_('Severity Class'), _('# of NVTs')]}
-      title={({data}) =>
-        _('NVTs by Severity Class (Total: {{count}})', {
-          count: data?.total ?? 0,
-        })
-      }
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const gmp = useGmp();
+    const transformedData = useDataTransform(data, transformSeverityData, {
+      severityRating: gmp.settings.severityRating,
+    });
+    return (
+      <SeverityClassTableDisplay
+        {...props}
+        data={transformedData}
+        dataTitles={[_('Severity Class'), _('# of NVTs')]}
+        title={({data}) =>
+          _('NVTs by Severity Class (Total: {{count}})', {
+            count: data?.total ?? 0,
+          })
+        }
+      />
+    );
+  },
   displayId: 'nvt-by-severity-table',
   displayName: 'NvtsSeverityClassTableDisplay',
   filtersFilter: NVTS_FILTER_FILTER,
