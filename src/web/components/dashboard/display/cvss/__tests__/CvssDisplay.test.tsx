@@ -15,7 +15,10 @@ import {fireEvent, rendererWith, screen} from 'web/testing';
 import {vi} from 'vitest';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {type TransformedCvssDataItem} from 'web/components/dashboard/display/cvss/cvss-transform';
+import {
+  type TransformedCvssData,
+  type TransformedCvssDataItem,
+} from 'web/components/dashboard/display/cvss/cvss-transform';
 import CvssDisplay from 'web/components/dashboard/display/cvss/CvssDisplay';
 
 interface BarProbeProps {
@@ -54,13 +57,27 @@ const createGmp = () => ({
   },
 });
 
+const baseCvssDataPoint: TransformedCvssDataItem = {
+  color: 'blue',
+  filterValue: {end: '8.0', start: '6.9'},
+  label: '7',
+  toolTip: '7: 1',
+  x: '7',
+  y: 1,
+};
+
+const defaultCvssData = Object.assign(
+  Array.from({length: 13}, (_, index) => ({
+    ...baseCvssDataPoint,
+    x: String(index),
+  })),
+  {total: 1},
+) as TransformedCvssData;
+
 const createProps = (overrides = {}) => ({
-  data: {
-    groups: [{value: '7.5', count: 1}],
-  },
+  data: defaultCvssData,
   dataRow: () => [],
   dataTitles: ['CVSS', 'Count'],
-  dataTransform: () => [],
   height: 100,
   icons: () => null,
   id: 'cvss-display',
@@ -144,7 +161,10 @@ describe('CvssDisplay', () => {
     render(
       <CvssDisplay
         {...createProps({
-          data: {groups: [{value: '10', count: 1}]},
+          data: Object.assign(
+            [{...baseCvssDataPoint, filterValue: {start: '10'}, x: '10'}],
+            {total: 1},
+          ) as TransformedCvssData,
           onFilterChanged,
         })}
       />,

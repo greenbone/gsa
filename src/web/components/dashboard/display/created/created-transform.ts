@@ -19,13 +19,15 @@ export interface CreatedData {
   groups?: CreatedDataGroup[];
 }
 
-export interface CreatedDataPoint extends LineData {
+export interface TransformCreatedDataItem extends LineData {
   x: Date;
 }
 
+export type TransformCreatedData = TransformCreatedDataItem[];
+
 export const transformCreated = (
   data: CreatedData = {},
-): CreatedDataPoint[] => {
+): TransformCreatedData => {
   const {groups = []} = data;
   return groups
     .map(group => {
@@ -40,7 +42,7 @@ export const transformCreated = (
     })
     .filter(
       ({x, y, y2}) => isDefined(x) && isDefined(y) && isDefined(y2),
-    ) as CreatedDataPoint[];
+    ) as TransformCreatedDataItem[];
 };
 
 export default transformCreated;

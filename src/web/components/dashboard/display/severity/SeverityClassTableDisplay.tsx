@@ -6,20 +6,14 @@
 import DataTableDisplay, {
   type DataTableDisplayProps,
 } from 'web/components/dashboard/display/DataTableDisplay';
-import transformSeverityClassData, {
+import {
   type TransformedSeverityClassData,
   type TransformedSeverityClassDataItem,
-  type SeverityData,
-  type TransformSeverityDataProps,
 } from 'web/components/dashboard/display/severity/severity-class-transform';
 
 type SeverityClassTableDisplayProps = Omit<
-  DataTableDisplayProps<
-    SeverityData,
-    TransformedSeverityClassData,
-    TransformSeverityDataProps
-  >,
-  'dataRow' | 'dataTransform'
+  DataTableDisplayProps<TransformedSeverityClassData>,
+  'dataRow' | 'children'
 >;
 
 const severityClassDataRow = (data?: TransformedSeverityClassData) =>
@@ -28,16 +22,13 @@ const severityClassDataRow = (data?: TransformedSeverityClassData) =>
     String(value),
   ]) ?? [];
 
-const SeverityClassTableDisplay = (props: SeverityClassTableDisplayProps) => (
-  <DataTableDisplay<
-    SeverityData,
-    TransformedSeverityClassData,
-    TransformSeverityDataProps
-  >
-    {...props}
-    dataRow={severityClassDataRow}
-    dataTransform={transformSeverityClassData}
-  />
-);
+const SeverityClassTableDisplay = (props: SeverityClassTableDisplayProps) => {
+  return (
+    <DataTableDisplay<TransformedSeverityClassData>
+      {...props}
+      dataRow={severityClassDataRow}
+    />
+  );
+};
 
 export default SeverityClassTableDisplay;

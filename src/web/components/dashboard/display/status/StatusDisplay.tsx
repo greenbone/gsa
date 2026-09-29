@@ -20,25 +20,21 @@ interface StatusData extends DonutChartData {
 }
 
 interface StatusDisplayProps<
-  TData extends object,
-  TTransformData extends Array<StatusData> = StatusData[],
-> extends DataDisplayProps<TData, TTransformData> {
+  TData extends Array<StatusData> = StatusData[],
+> extends DataDisplayProps<TData> {
   filter?: FilterType;
   filterTerm?: string;
   onFilterChanged?: (filter: FilterType) => void;
 }
 
-const StatusDisplay = <
-  TData extends object,
-  TTransformData extends Array<StatusData> = StatusData[],
->({
+const StatusDisplay = <TData extends Array<StatusData> = StatusData[]>({
   filter,
   filterTerm = 'status',
   onFilterChanged,
   ...props
-}: StatusDisplayProps<TData, TTransformData>) => {
+}: StatusDisplayProps<TData>) => {
   const handleDataClick = useCallback(
-    ({filterValue}: TTransformData[number]) => {
+    ({filterValue}: TData[number]) => {
       if (isEmpty(filterValue) || !isDefined(onFilterChanged)) {
         return;
       }
@@ -60,18 +56,14 @@ const StatusDisplay = <
     [filter, filterTerm, onFilterChanged],
   );
   return (
-    <DataDisplay<
-      TData,
-      StatusDisplayProps<TData, TTransformData>,
-      TTransformData
-    >
+    <DataDisplay<TData, StatusDisplayProps<TData>>
       {...props}
       filter={filter}
       icons={DataDisplayIcons}
       initialState={{}}
     >
       {({width, height, data, svgRef, state}) => (
-        <DonutChart<TTransformData[number]>
+        <DonutChart<TData[number]>
           data={data}
           height={height}
           showLegend={state.showLegend}

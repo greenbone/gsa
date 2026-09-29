@@ -16,13 +16,14 @@ import {vi} from 'vitest';
 import date from 'gmp/models/date';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {type LineData} from 'web/components/chart/LineChart';
-import transformCreated, {
-  type CreatedDataPoint,
+import {
+  type TransformCreatedData,
+  type TransformCreatedDataItem,
 } from 'web/components/dashboard/display/created/created-transform';
 import CreatedDisplay from 'web/components/dashboard/display/created/CreatedDisplay';
 
 interface LineProbeProps {
-  data?: CreatedDataPoint[];
+  data?: TransformCreatedDataItem[];
   onRangeSelected?: (start: LineData, end: LineData) => void;
   xAxisLabel?: string;
   yAxisLabel?: string;
@@ -60,16 +61,25 @@ vi.mock('web/components/chart/LineChart', () => ({
   ),
 }));
 
-const createProps = (overrides = {}) => ({
-  data: {
-    groups: [
-      {value: '2024-01-15T12:00:00Z', count: '4', c_count: '6'},
-      {value: '2024-01-16T12:00:00Z', count: '2', c_count: '3'},
-    ],
+const createdData: TransformCreatedData = [
+  {
+    label: '01/15/2024',
+    x: startDate,
+    y: 4,
+    y2: 6,
   },
+  {
+    label: '01/16/2024',
+    x: endDate,
+    y: 2,
+    y2: 3,
+  },
+];
+
+const createProps = (overrides = {}) => ({
+  data: createdData,
   dataRow: () => [],
   dataTitles: ['Created', 'Count'],
-  dataTransform: transformCreated,
   height: 100,
   icons: () => null,
   id: 'created-display',

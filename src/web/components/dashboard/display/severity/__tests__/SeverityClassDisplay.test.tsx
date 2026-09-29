@@ -8,7 +8,10 @@ import {fireEvent, rendererWith, screen} from 'web/testing';
 import {vi} from 'vitest';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
-import {type TransformedSeverityClassDataItem} from 'web/components/dashboard/display/severity/severity-class-transform';
+import {
+  type TransformedSeverityClassData,
+  type TransformedSeverityClassDataItem,
+} from 'web/components/dashboard/display/severity/severity-class-transform';
 import SeverityClassDisplay from 'web/components/dashboard/display/severity/SeverityClassDisplay';
 
 interface DonutProbeProps {
@@ -39,13 +42,28 @@ const createGmp = () => ({
   },
 });
 
+const highSeverityData: TransformedSeverityClassDataItem = {
+  color: 'green',
+  filterValue: {end: '8.9', start: '7.0'},
+  label: 'High',
+  value: 1,
+};
+
+const createTransformedData = (
+  data: TransformedSeverityClassDataItem,
+): TransformedSeverityClassData => Object.assign([data], {total: 1});
+
+const logSeverityData: TransformedSeverityClassDataItem = {
+  color: 'gray',
+  filterValue: {start: '0'},
+  label: 'Log',
+  value: 1,
+};
+
 const createProps = (overrides = {}) => ({
-  data: {
-    groups: [{value: '7.5', count: 1}],
-  },
+  data: createTransformedData(highSeverityData),
   dataRow: () => [],
   dataTitles: ['Severity'],
-  dataTransform: () => [],
   height: 100,
   icons: () => null,
   id: 'severity-display',
@@ -93,7 +111,7 @@ describe('SeverityClassDisplay', () => {
     render(
       <SeverityClassDisplay
         {...createProps({
-          data: {groups: [{value: '0', count: 1}]},
+          data: createTransformedData(logSeverityData),
           onFilterChanged,
         })}
       />,

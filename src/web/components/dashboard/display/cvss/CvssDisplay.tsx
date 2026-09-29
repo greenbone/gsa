@@ -9,41 +9,28 @@ import QueryFilter from 'gmp/models/filter/query-filter';
 import {parseFloat} from 'gmp/parser';
 import {type ToString} from 'gmp/types';
 import {isDefined} from 'gmp/utils/identity';
-import {type SeverityRating} from 'gmp/utils/severity';
 import BarChart from 'web/components/chart/BarChart';
-import transformCvssData, {
+import {
   type TransformedCvssData,
-  type CvssData,
   type TransformedCvssDataItem,
-  type TransformCvssDataProps,
 } from 'web/components/dashboard/display/cvss/cvss-transform';
 import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
-import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 
-type CvssDataDisplayBaseProps = DataDisplayProps<
-  CvssData,
-  TransformedCvssData,
-  TransformCvssDataProps
->;
+type CvssDataDisplayBaseProps = DataDisplayProps<TransformedCvssData>;
 
-interface CvssDisplayProps extends Omit<
-  CvssDataDisplayBaseProps,
-  'dataTransform'
-> {
-  filter?: FilterType;
+interface CvssDisplayProps extends CvssDataDisplayBaseProps {
   onFilterChanged?: (filter: FilterType) => void;
   xLabel?: ToString;
   yLabel?: ToString;
 }
 
-interface CvssDataDisplayProps extends CvssDataDisplayBaseProps {
-  severityRating: SeverityRating;
-}
-
 const CvssDisplay = ({
+  data,
+  dataRow,
+  children,
   filter,
   title,
   yLabel,
@@ -53,8 +40,7 @@ const CvssDisplay = ({
 }: CvssDisplayProps) => {
   const [_] = useTranslation();
   xLabel = xLabel || _('Severity');
-  const gmp = useGmp();
-  const severityRating = gmp.settings.severityRating;
+
   const handleDataClick = (data: TransformedCvssDataItem) => {
     if (!isDefined(onFilterChanged)) {
       return;
@@ -100,15 +86,9 @@ const CvssDisplay = ({
     onFilterChanged(newFilter);
   };
   return (
-    <DataDisplay<
-      CvssData,
-      CvssDataDisplayProps,
-      TransformedCvssData,
-      TransformCvssDataProps
-    >
+    <DataDisplay<TransformedCvssData, DataDisplayProps<TransformedCvssData>>
       {...props}
-      dataTransform={transformCvssData}
-      severityRating={severityRating}
+      data={data}
       showToggleLegend={false}
       title={title}
     >

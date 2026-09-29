@@ -6,6 +6,7 @@
 import {describe, expect, test} from '@gsa/testing';
 import {rendererWith, screen} from 'web/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
+import transformCvssData from 'web/components/dashboard/display/cvss/cvss-transform';
 import CvssTableDisplay from 'web/components/dashboard/display/cvss/CvssTableDisplay';
 
 const createGmp = () => ({
@@ -15,12 +16,12 @@ const createGmp = () => ({
 });
 
 const createProps = (overrides = {}) => ({
-  data: {
+  data: transformCvssData({
     groups: [
       {value: '0.2', count: 20},
       {value: '7.5', count: 30},
     ],
-  },
+  }),
   dataTitles: ['CVSS', 'Count'],
   height: 100,
   icons: () => null,
@@ -54,7 +55,11 @@ describe('CvssTableDisplay', () => {
 
   test('should render an empty table when there is no CVSS data', () => {
     const {render} = rendererWith({gmp: createGmp()});
-    render(<CvssTableDisplay {...createProps({data: {groups: []}})} />);
+    render(
+      <CvssTableDisplay
+        {...createProps({data: transformCvssData({groups: []})})}
+      />,
+    );
 
     expect(screen.getByRole('columnheader', {name: 'CVSS'})).toBeVisible();
     expect(screen.getByRole('columnheader', {name: 'Count'})).toBeVisible();
