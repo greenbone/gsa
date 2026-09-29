@@ -73,7 +73,11 @@ describe('Report loaders', () => {
 
       await waitFor(() => {
         expect(getSeverityAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectReportSubscriptions(subscribe);
@@ -111,7 +115,11 @@ describe('Report loaders', () => {
 
       await waitFor(() => {
         expect(getHighResultsAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectReportSubscriptions(subscribe);

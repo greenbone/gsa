@@ -75,7 +75,11 @@ describe('Vulnerabilities Loaders', () => {
 
       await waitFor(() => {
         expect(getSeverityAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectVulnerabilitySubscriptions(subscribe);
@@ -103,7 +107,11 @@ describe('Vulnerabilities Loaders', () => {
 
       await waitFor(() => {
         expect(getHostAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectVulnerabilitySubscriptions(subscribe);

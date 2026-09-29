@@ -73,7 +73,11 @@ describe('Note loaders', () => {
 
       await waitFor(() => {
         expect(getActiveDaysAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectNoteSubscriptions(subscribe);
@@ -101,7 +105,11 @@ describe('Note loaders', () => {
 
       await waitFor(() => {
         expect(getCreatedAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectNoteSubscriptions(subscribe);
@@ -129,7 +137,11 @@ describe('Note loaders', () => {
 
       await waitFor(() => {
         expect(getWordCountsAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectNoteSubscriptions(subscribe);

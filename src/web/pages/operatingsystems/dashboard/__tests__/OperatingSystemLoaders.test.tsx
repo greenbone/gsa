@@ -80,7 +80,11 @@ describe('Operating System loaders', () => {
 
       await waitFor(() => {
         expect(getAverageSeverityAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectOperatingSystemSubscriptions(subscribe);
@@ -108,7 +112,11 @@ describe('Operating System loaders', () => {
 
       await waitFor(() => {
         expect(getVulnScoreAggregates).toHaveBeenCalledWith({filter, max: 10});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectOperatingSystemSubscriptions(subscribe);

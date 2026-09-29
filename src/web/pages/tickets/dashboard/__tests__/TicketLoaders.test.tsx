@@ -52,7 +52,11 @@ describe('TicketsListLoader', () => {
 
     await waitFor(() => {
       expect(getAll).toHaveBeenCalledWith({filter});
-      expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+      expect(children).toHaveBeenLastCalledWith({
+        data,
+        isLoading: false,
+        isFetching: false,
+      });
     });
 
     expect(subscribe).toHaveBeenCalledWith(
