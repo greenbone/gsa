@@ -6,46 +6,32 @@
 import {type FilterType} from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {isDefined} from 'gmp/utils/identity';
-import {type SeverityRating} from 'gmp/utils/severity';
 import DonutChart from 'web/components/chart/DonutChart';
 import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
-import transformSeverityData, {
+import {
   type TransformedSeverityClassData,
   type TransformedSeverityClassDataItem,
-  type SeverityData,
-  type TransformSeverityDataProps,
 } from 'web/components/dashboard/display/severity/severity-class-transform';
 import {filterValueToFilterTerms} from 'web/components/dashboard/display/severity/utils';
-import useGmp from 'web/hooks/useGmp';
 
-type SeverityClassDisplayBaseProps = DataDisplayProps<
-  SeverityData,
-  TransformedSeverityClassData,
-  TransformSeverityDataProps
->;
+type SeverityClassDisplayBaseProps =
+  DataDisplayProps<TransformedSeverityClassData>;
 
-interface SeverityClassDisplayProps extends Omit<
-  SeverityClassDisplayBaseProps,
-  'dataTransform'
-> {
+interface SeverityClassDisplayProps extends SeverityClassDisplayBaseProps {
   filter?: FilterType;
   onFilterChanged?: (filter: FilterType) => void;
 }
 
-interface SeverityClassDataDisplayProps extends SeverityClassDisplayBaseProps {
-  severityRating: SeverityRating;
-}
+type SeverityClassDataDisplayProps = SeverityClassDisplayBaseProps;
 
 const SeverityClassDisplay = ({
   onFilterChanged,
   filter,
   ...props
 }: SeverityClassDisplayProps) => {
-  const gmp = useGmp();
-  const severityRating = gmp.settings.severityRating;
   const handleDataClick = (data: TransformedSeverityClassDataItem) => {
     const {filterValue} = data;
 
@@ -86,18 +72,11 @@ const SeverityClassDisplay = ({
     onFilterChanged(newFilter);
   };
   return (
-    <DataDisplay<
-      SeverityData,
-      SeverityClassDataDisplayProps,
-      TransformedSeverityClassData,
-      TransformSeverityDataProps
-    >
+    <DataDisplay<TransformedSeverityClassData, SeverityClassDataDisplayProps>
       {...props}
-      dataTransform={transformSeverityData}
       filter={filter}
       icons={DataDisplayIcons}
       initialState={{}}
-      severityRating={severityRating}
     >
       {({width, height, data, svgRef, state}) => (
         <DonutChart

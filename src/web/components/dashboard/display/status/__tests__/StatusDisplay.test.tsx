@@ -27,12 +27,9 @@ vi.mock('web/components/chart/DonutChart', () => ({
 }));
 
 const createProps = (overrides = {}) => ({
-  data: {items: ['raw']},
+  data: [{color: 'green', filterValue: 'active', label: 'Active', value: 1}],
   dataRow: () => [['active']],
   dataTitles: ['Status'],
-  dataTransform: () => [
-    {color: 'green', filterValue: 'active', label: 'Active', value: 1},
-  ],
   height: 100,
   icons: () => null,
   id: 'status-display',

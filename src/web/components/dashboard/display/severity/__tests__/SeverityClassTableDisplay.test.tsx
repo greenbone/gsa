@@ -5,15 +5,16 @@
 
 import {describe, expect, test} from '@gsa/testing';
 import {render, screen} from 'web/testing';
+import transformSeverityData from 'web/components/dashboard/display/severity/severity-class-transform';
 import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/SeverityClassTableDisplay';
 
 const createProps = (overrides = {}) => ({
-  data: {
+  data: transformSeverityData({
     groups: [
       {value: '0.1', count: 2},
       {value: '7.5', count: 3},
     ],
-  },
+  }),
   dataTitles: ['Severity', 'Count'],
   height: 100,
   icons: () => null,
@@ -46,7 +47,9 @@ describe('SeverityClassTableDisplay', () => {
 
   test('should render an empty table when there is no severity data', () => {
     render(
-      <SeverityClassTableDisplay {...createProps({data: {groups: []}})} />,
+      <SeverityClassTableDisplay
+        {...createProps({data: transformSeverityData({groups: []})})}
+      />,
     );
 
     expect(screen.getByRole('columnheader', {name: 'Severity'})).toBeVisible();
