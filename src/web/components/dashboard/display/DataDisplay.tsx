@@ -285,8 +285,6 @@ const DataDisplay = <
   height = height - DISPLAY_HEADER_HEIGHT;
   width = width - DISPLAY_BORDER_WIDTH;
 
-  isLoading = isLoading && !isDefined(data);
-
   const showCsvDownload = isDefined(dataRow) && isDefined(dataTitles);
 
   showFilterString = showFilterString && isDefined(filter);

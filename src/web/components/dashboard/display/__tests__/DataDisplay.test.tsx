@@ -100,6 +100,17 @@ describe('DataDisplay component tests', () => {
     expect(screen.queryByTestId('chart')).not.toBeInTheDocument();
   });
 
+  test('should not render chart children while loading when data is available', () => {
+    const children = testing.fn(() => <div data-testid="chart" />);
+    const props = createProps({children, isLoading: true});
+
+    render(<DataDisplay<TestData[], TestProps, TestState> {...props} />);
+
+    expect(children).not.toHaveBeenCalled();
+    expect(screen.getByTestId('loading')).toBeVisible();
+    expect(screen.queryByTestId('chart')).not.toBeInTheDocument();
+  });
+
   test('should update the chart when loading state changes', () => {
     const children = testing.fn(() => <div data-testid="chart" />);
     const props = createProps({
