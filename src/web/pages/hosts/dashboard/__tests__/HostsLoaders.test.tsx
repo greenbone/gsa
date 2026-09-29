@@ -19,7 +19,7 @@ import {
   HostsModifiedLoader,
   HostsSeverityLoader,
   HostsTopologyLoader,
-  HostsVulnScoreLoader,
+  HostsVulnerabilityScoreLoader,
 } from 'web/pages/hosts/dashboard/HostsLoaders';
 
 const createGmp = (hosts: Record<string, unknown>) => ({hosts});
@@ -160,7 +160,9 @@ describe('Hosts loaders', () => {
       gmp,
       subscribe,
       children: (
-        <HostsVulnScoreLoader filter={filter}>{children}</HostsVulnScoreLoader>
+        <HostsVulnerabilityScoreLoader filter={filter}>
+          {children}
+        </HostsVulnerabilityScoreLoader>
       ),
     });
 

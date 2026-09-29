@@ -76,7 +76,7 @@ describe('VulnerabilitiesSeverityDisplay', () => {
     expect(VulnerabilitiesSeverityDisplay.displayId).toBe(
       'vuln-by-severity-class',
     );
-    expect(VulnerabilitiesSeverityDisplay.displayName).toContain(
+    expect(VulnerabilitiesSeverityDisplay.displayName).toBe(
       'VulnerabilitiesSeverityDisplay',
     );
   });
@@ -103,7 +103,7 @@ describe('VulnerabilitiesSeverityTableDisplay', () => {
     expect(VulnerabilitiesSeverityTableDisplay.displayId).toBe(
       'vuln-by-severity-class-table',
     );
-    expect(VulnerabilitiesSeverityTableDisplay.displayName).toContain(
+    expect(VulnerabilitiesSeverityTableDisplay.displayName).toBe(
       'VulnerabilitiesSeverityTableDisplay',
     );
   });

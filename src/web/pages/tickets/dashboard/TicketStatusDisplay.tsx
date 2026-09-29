@@ -90,6 +90,7 @@ export const TicketsStatusDisplay = createDisplay({
   },
   filtersFilter: TICKETS_FILTER_FILTER,
   displayId: 'tickets-by-status',
+  displayName: 'TicketsStatusDisplay',
 });
 
 export const TicketsStatusTableDisplay = createDisplay({

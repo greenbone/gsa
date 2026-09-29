@@ -104,6 +104,9 @@ describe('TlsCertificatesModifiedDisplay', () => {
     expect(TlsCertificatesModifiedDisplay.displayId).toBe(
       'tls-certificates-by-modification-time',
     );
+    expect(TlsCertificatesModifiedDisplay.displayName).toBe(
+      'TlsCertificatesModifiedDisplay',
+    );
   });
 
   test('should be registered with the correct title', () => {
@@ -142,7 +145,6 @@ describe('TlsCertificatesModifiedDisplay', () => {
 describe('TlsCertificatesModifiedTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(TlsCertificatesModifiedTableDisplay).toBeDefined();
-    expect(typeof TlsCertificatesModifiedTableDisplay).toBe('function');
     expect(TlsCertificatesModifiedTableDisplay.displayId).toBe(
       'tls-certificates-by-modification-time-table',
     );

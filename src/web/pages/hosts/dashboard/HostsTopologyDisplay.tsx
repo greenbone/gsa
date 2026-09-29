@@ -12,18 +12,16 @@ import HostsTopologyChart, {
   type HostsTopologyChartData,
   type HostsTopologyChartLink,
 } from 'web/components/chart/HostsTopologyChart';
-import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
+import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
-import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import useGmp from 'web/hooks/useGmp';
 import {HostsTopologyLoader} from 'web/pages/hosts/dashboard/HostsLoaders';
 
 type HostsTopologyDataDisplayProps = DataDisplayProps<HostsTopologyChartData>;
-
-type HostTopologyDisplayProps = DashboardDisplayProps;
 
 const transformTopologyData = (
   data: Host[] | undefined = [],
@@ -105,61 +103,35 @@ const transformTopologyData = (
   return {hosts, links};
 };
 
-const HostsTopologyDisplay = ({
-  filter,
-  filterId,
-  showFilterSelection,
-  onFilterIdChanged,
-  ...props
-}: HostTopologyDisplayProps) => {
-  const gmp = useGmp();
-  const severityRating = gmp.settings.severityRating;
-  const {
-    filter: selectedFilter,
-    selectFilter,
-    filterSelectionDialog,
-  } = useFilterSelection({
-    filterId,
-    filtersFilter: HOSTS_FILTER_FILTER,
-    onFilterIdChanged,
-  });
-  const displayFilter = showFilterSelection ? selectedFilter : filter;
-  return (
-    <>
-      <HostsTopologyLoader filter={filter}>
-        {({data, isLoading}) => {
-          const transformedData = transformTopologyData(data);
-          return (
-            <DataDisplay<HostsTopologyChartData, HostsTopologyDataDisplayProps>
-              {...props}
-              data={transformedData}
-              filter={displayFilter}
-              isLoading={isLoading}
-              showToggleLegend={false}
-              title={() => _('Hosts Topology')}
-              onSelectFilterClick={
-                showFilterSelection ? selectFilter : undefined
-              }
-            >
-              {({width, height, data, svgRef}) => (
-                <HostsTopologyChart
-                  data={data}
-                  height={height}
-                  severityRating={severityRating}
-                  svgRef={svgRef}
-                  width={width}
-                />
-              )}
-            </DataDisplay>
-          );
-        }}
-      </HostsTopologyLoader>
-      {filterSelectionDialog}
-    </>
-  );
-};
-
-HostsTopologyDisplay.displayId = 'host-by-topology';
+export const HostsTopologyDisplay = createDisplay({
+  loaderComponent: HostsTopologyLoader,
+  displayComponent: ({data, ...props}) => {
+    const gmp = useGmp();
+    const severityRating = gmp.settings.severityRating;
+    const transformedData = useDataTransform(data, transformTopologyData);
+    return (
+      <DataDisplay<HostsTopologyChartData, HostsTopologyDataDisplayProps>
+        {...props}
+        data={transformedData}
+        showToggleLegend={false}
+        title={() => _('Hosts Topology')}
+      >
+        {({width, height, data, svgRef}) => (
+          <HostsTopologyChart
+            data={data}
+            height={height}
+            severityRating={severityRating}
+            svgRef={svgRef}
+            width={width}
+          />
+        )}
+      </DataDisplay>
+    );
+  },
+  filtersFilter: HOSTS_FILTER_FILTER,
+  displayId: 'host-by-topology',
+  displayName: 'HostsTopologyDisplay',
+});
 
 registerDisplay(HostsTopologyDisplay, _l('Chart: Hosts Topology'));
 

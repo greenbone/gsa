@@ -3,25 +3,22 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useRef} from 'react';
+import {useCallback} from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {VULNS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {isDefined} from 'gmp/utils/identity';
-import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import useDataTransform from 'web/components/dashboard/display/useDataTransform';
-import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import transformHostsData, {
   type TransformedVulnerabilitiesHostsDataItem,
   type TransformedVulnerabilitiesHostsData,
-  type VulnerabilitiesHostsData,
 } from 'web/pages/vulnerabilities/dashboard/hosts-transform';
 import VulnerabilitiesHostsBarChart from 'web/pages/vulnerabilities/dashboard/VulnerabilitiesHostsBarChart';
 import {VulnerabilitiesHostsLoader} from 'web/pages/vulnerabilities/dashboard/VulnerabilitiesLoaders';
@@ -29,137 +26,95 @@ import {VulnerabilitiesHostsLoader} from 'web/pages/vulnerabilities/dashboard/Vu
 type VulnerabilitiesHostsDataDisplayProps =
   DataDisplayProps<TransformedVulnerabilitiesHostsData>;
 
-type VulnerabilitiesHostsDisplayProps = DashboardDisplayProps;
-
-const computeTotal = (data: VulnerabilitiesHostsData = {}): number => {
-  const {groups = []} = data;
-  return groups.length > 0 ? Math.max(...groups.map(val => val.c_count)) : 0;
-};
-
-export const VulnerabilitiesHostsDisplay = ({
-  filter,
-  filterId,
-  showFilterSelection,
-  onFilterChanged,
-  onFilterIdChanged,
-  ...props
-}: VulnerabilitiesHostsDisplayProps) => {
-  const totalRef = useRef(0);
-
-  const {
-    filter: selectedFilter,
-    selectFilter,
-    filterSelectionDialog,
-  } = useFilterSelection({
-    filterId,
-    filtersFilter: VULNS_FILTER_FILTER,
-    onFilterIdChanged,
-  });
-
-  const displayFilter = showFilterSelection ? selectedFilter : filter;
-
-  const handleDataClick = useCallback(
-    (clickData: TransformedVulnerabilitiesHostsDataItem) => {
-      if (!isDefined(onFilterChanged)) {
-        return;
-      }
-      const {filterValue} = clickData;
-      const {start, end} = filterValue;
-      let hostFilter: QueryFilter | undefined;
-
-      if (isDefined(start) && start > 0) {
-        const startTerm = FilterTerm.fromString(`hosts>${start - 1}`);
-        const endTerm = FilterTerm.fromString(`hosts<${(end ?? 0) + 1}`);
-        if (
-          isDefined(displayFilter) &&
-          displayFilter.hasTerm(startTerm) &&
-          displayFilter.hasTerm(endTerm)
-        ) {
+export const VulnerabilitiesHostsDisplay = createDisplay({
+  loaderComponent: VulnerabilitiesHostsLoader,
+  displayComponent: ({data, onFilterChanged, filter, ...props}) => {
+    const transformedData = useDataTransform(data, transformHostsData);
+    const handleDataClick = useCallback(
+      (clickData: TransformedVulnerabilitiesHostsDataItem) => {
+        if (!isDefined(onFilterChanged)) {
           return;
         }
-        hostFilter = QueryFilter.fromTerm(startTerm).and(
-          QueryFilter.fromTerm(endTerm),
-        );
-      } else {
-        let hostTerm: FilterTerm | undefined;
-        if (isDefined(start) && start === 0) {
-          hostTerm = FilterTerm.fromString(`hosts=${start}`);
-        } else if (!isDefined(start)) {
-          hostTerm = FilterTerm.fromString(`hosts=""`);
-        }
-        if (
-          isDefined(hostTerm) &&
-          isDefined(displayFilter) &&
-          displayFilter.hasTerm(hostTerm)
-        ) {
-          return;
-        }
-        if (isDefined(hostTerm)) {
-          hostFilter = QueryFilter.fromTerm(hostTerm);
-        }
-      }
+        const {filterValue} = clickData;
+        const {start, end} = filterValue;
+        let hostFilter: QueryFilter | undefined;
 
-      if (!isDefined(hostFilter)) {
-        return;
-      }
-
-      const newFilter = isDefined(displayFilter)
-        ? displayFilter.and(hostFilter)
-        : hostFilter;
-      onFilterChanged(newFilter);
-    },
-    [displayFilter, onFilterChanged],
-  );
-
-  const handleTransform = useCallback((data?: VulnerabilitiesHostsData) => {
-    totalRef.current = computeTotal(data);
-    return transformHostsData(data);
-  }, []);
-  return (
-    <>
-      <VulnerabilitiesHostsLoader filter={displayFilter}>
-        {({data, isLoading}) => {
-          const transformedData = handleTransform(data);
-          return (
-            <DataDisplay<
-              TransformedVulnerabilitiesHostsData,
-              VulnerabilitiesHostsDataDisplayProps
-            >
-              {...props}
-              data={transformedData}
-              filter={displayFilter}
-              isLoading={isLoading}
-              showToggleLegend={false}
-              title={() =>
-                _('Vulnerabilities by Hosts (Total: {{count}})', {
-                  count: totalRef.current,
-                })
-              }
-              onSelectFilterClick={
-                showFilterSelection ? selectFilter : undefined
-              }
-            >
-              {({width, height, data, svgRef}) => (
-                <VulnerabilitiesHostsBarChart
-                  data={data}
-                  height={height}
-                  svgRef={svgRef}
-                  width={width}
-                  onDataClick={
-                    isDefined(onFilterChanged) ? handleDataClick : undefined
-                  }
-                />
-              )}
-            </DataDisplay>
+        if (isDefined(start) && start > 0) {
+          const startTerm = FilterTerm.fromString(`hosts>${start - 1}`);
+          const endTerm = FilterTerm.fromString(`hosts<${(end ?? 0) + 1}`);
+          if (
+            isDefined(filter) &&
+            filter.hasTerm(startTerm) &&
+            filter.hasTerm(endTerm)
+          ) {
+            return;
+          }
+          hostFilter = QueryFilter.fromTerm(startTerm).and(
+            QueryFilter.fromTerm(endTerm),
           );
-        }}
-      </VulnerabilitiesHostsLoader>
-      {filterSelectionDialog}
-    </>
-  );
-};
+        } else {
+          let hostTerm: FilterTerm | undefined;
+          if (isDefined(start) && start === 0) {
+            hostTerm = FilterTerm.fromString(`hosts=${start}`);
+          } else if (!isDefined(start)) {
+            hostTerm = FilterTerm.fromString(`hosts=""`);
+          }
+          if (
+            isDefined(hostTerm) &&
+            isDefined(filter) &&
+            filter.hasTerm(hostTerm)
+          ) {
+            return;
+          }
+          if (isDefined(hostTerm)) {
+            hostFilter = QueryFilter.fromTerm(hostTerm);
+          }
+        }
 
-VulnerabilitiesHostsDisplay.displayId = 'vuln-by-hosts';
+        if (!isDefined(hostFilter)) {
+          return;
+        }
+
+        const newFilter = isDefined(filter)
+          ? filter.and(hostFilter)
+          : hostFilter;
+        onFilterChanged(newFilter);
+      },
+      [filter, onFilterChanged],
+    );
+    return (
+      <DataDisplay<
+        TransformedVulnerabilitiesHostsData,
+        VulnerabilitiesHostsDataDisplayProps
+      >
+        {...props}
+        data={transformedData}
+        filter={filter}
+        showToggleLegend={false}
+        title={({data}) =>
+          _('Vulnerabilities by Hosts (Total: {{count}})', {
+            count: data?.total ?? 0,
+          })
+        }
+      >
+        {({width, height, data, svgRef}) => (
+          <VulnerabilitiesHostsBarChart
+            data={data}
+            height={height}
+            svgRef={svgRef}
+            width={width}
+            onDataClick={
+              isDefined(onFilterChanged) ? handleDataClick : undefined
+            }
+          />
+        )}
+      </DataDisplay>
+    );
+  },
+  displayId: 'vuln-by-hosts',
+  displayName: 'VulnerabilitiesHostsDisplay',
+  filtersFilter: VULNS_FILTER_FILTER,
+});
 
 export const VulnerabilitiesHostsTableDisplay = createDisplay({
   loaderComponent: VulnerabilitiesHostsLoader,

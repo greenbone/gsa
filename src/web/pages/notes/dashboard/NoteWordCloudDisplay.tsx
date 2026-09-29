@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useCallback} from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {NOTES_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
@@ -11,14 +12,12 @@ import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import WordCloudChart from 'web/components/chart/WordCloudChart';
-import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import useDataTransform from 'web/components/dashboard/display/useDataTransform';
-import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {randomColor} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import {
@@ -38,8 +37,6 @@ type TransformedWordCloudData = TransformedWordCloudDataItem[];
 type NotesWordCloudDataDisplayProps =
   DataDisplayProps<TransformedWordCloudData>;
 
-type NotesWordCloudDisplayProps = DashboardDisplayProps;
-
 const transformWordCountData = (
   data: WordCloudData | undefined = {},
 ): TransformedWordCloudDataItem[] => {
@@ -56,85 +53,57 @@ const transformWordCountData = (
   return transformData;
 };
 
-export const NotesWordCloudDisplay = ({
-  filter,
-  filterId,
-  showFilterSelection,
-  onFilterIdChanged,
-  onFilterChanged,
-  ...props
-}: NotesWordCloudDisplayProps) => {
-  const {
-    filter: selectedFilter,
-    selectFilter,
-    filterSelectionDialog,
-  } = useFilterSelection({
-    filterId,
-    filtersFilter: NOTES_FILTER_FILTER,
-    onFilterIdChanged,
-  });
-  const displayFilter = showFilterSelection ? selectedFilter : filter;
+export const NotesWordCloudDisplay = createDisplay({
+  loaderComponent: NotesWordCountLoader,
+  displayComponent: ({data, onFilterChanged, filter, ...props}) => {
+    const transformedData = useDataTransform(data, transformWordCountData);
+    const handleDataClick = useCallback(
+      (filterValue: string) => {
+        if (!isDefined(onFilterChanged) || isEmpty(filterValue)) {
+          return;
+        }
 
-  const handleDataClick = (filterValue: string) => {
-    if (!isDefined(onFilterChanged) || isEmpty(filterValue)) {
-      return;
-    }
+        const wordTerm = FilterTerm.fromString(`text~"${filterValue}"`);
 
-    const wordTerm = FilterTerm.fromString(`text~"${filterValue}"`);
+        if (isDefined(filter) && filter.hasTerm(wordTerm)) {
+          return;
+        }
+        const wordFilter = QueryFilter.fromTerm(wordTerm);
 
-    if (isDefined(displayFilter) && displayFilter.hasTerm(wordTerm)) {
-      return;
-    }
-    const wordFilter = QueryFilter.fromTerm(wordTerm);
+        const newFilter = isDefined(filter)
+          ? filter.and(wordFilter)
+          : wordFilter;
 
-    const newFilter = isDefined(displayFilter)
-      ? displayFilter.and(wordFilter)
-      : wordFilter;
-
-    onFilterChanged(newFilter);
-  };
-
-  return (
-    <>
-      <NotesWordCountLoader filter={displayFilter}>
-        {({data, ...loaderProps}) => {
-          const transformedData = transformWordCountData(data);
-          return (
-            <DataDisplay<
-              TransformedWordCloudData,
-              NotesWordCloudDataDisplayProps
-            >
-              {...props}
-              {...loaderProps}
-              data={transformedData}
-              filter={displayFilter}
-              showToggleLegend={false}
-              title={() => _('Notes Text Word Cloud')}
-              onSelectFilterClick={
-                showFilterSelection ? selectFilter : undefined
-              }
-            >
-              {({width, height, data, svgRef}) => (
-                <WordCloudChart
-                  data={data}
-                  height={height}
-                  svgRef={svgRef}
-                  width={width}
-                  onDataClick={
-                    isDefined(onFilterChanged) ? handleDataClick : undefined
-                  }
-                />
-              )}
-            </DataDisplay>
-          );
-        }}
-      </NotesWordCountLoader>
-      {filterSelectionDialog}
-    </>
-  );
-};
-
-NotesWordCloudDisplay.displayId = 'note-by-text-words';
+        onFilterChanged(newFilter);
+      },
+      [onFilterChanged, filter],
+    );
+    return (
+      <DataDisplay<TransformedWordCloudData, NotesWordCloudDataDisplayProps>
+        {...props}
+        data={transformedData}
+        filter={filter}
+        showToggleLegend={false}
+        title={() => _('Notes Text Word Cloud')}
+      >
+        {({width, height, data, svgRef}) => (
+          <WordCloudChart
+            data={data}
+            height={height}
+            svgRef={svgRef}
+            width={width}
+            onDataClick={
+              isDefined(onFilterChanged) ? handleDataClick : undefined
+            }
+          />
+        )}
+      </DataDisplay>
+    );
+  },
+  displayId: 'note-by-text-words',
+  displayName: 'NotesWordCloudDisplay',
+  filtersFilter: NOTES_FILTER_FILTER,
+});
 
 export const NotesWordCloudTableDisplay = createDisplay({
   loaderComponent: NotesWordCountLoader,

@@ -91,6 +91,7 @@ describe('HostsTopologyDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(HostsTopologyDisplay).toBeDefined();
     expect(HostsTopologyDisplay.displayId).toBe('host-by-topology');
+    expect(HostsTopologyDisplay.displayName).toBe('HostsTopologyDisplay');
   });
 
   test('should be registered with the correct title', () => {

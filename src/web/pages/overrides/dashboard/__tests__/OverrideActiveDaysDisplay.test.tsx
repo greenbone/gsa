@@ -101,6 +101,9 @@ describe('OverridesActiveDaysDisplay', () => {
     expect(OverridesActiveDaysDisplay.displayId).toBe(
       'override-by-active-days',
     );
+    expect(OverridesActiveDaysDisplay.displayName).toBe(
+      'OverridesActiveDaysDisplay',
+    );
   });
 
   test('should be registered with the correct title', () => {

@@ -111,6 +111,7 @@ export const TasksStatusDisplay = createDisplay({
     );
   },
   displayId: 'task-by-status',
+  displayName: 'TasksStatusDisplay',
   filtersFilter: TASKS_FILTER_FILTER,
 });
 

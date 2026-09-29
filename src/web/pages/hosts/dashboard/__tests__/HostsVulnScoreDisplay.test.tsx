@@ -13,8 +13,8 @@ import {
   type SubscribeFunc,
 } from 'web/components/provider/SubscriptionProvider';
 import {
-  HostsVulnScoreDisplay,
-  HostsVulnScoreTableDisplay,
+  HostsVulnerabilityScoreDisplay,
+  HostsVulnerabilityScoreTableDisplay,
 } from 'web/pages/hosts/dashboard/HostsVulnScoreDisplay';
 
 const loaderData = {
@@ -126,21 +126,26 @@ const renderDisplay = (component: ReactElement) => {
 
 describe('HostsVulnScoreDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
-    expect(HostsVulnScoreDisplay).toBeDefined();
-    expect(HostsVulnScoreDisplay.displayId).toBe('host-by-most-vulnerable');
+    expect(HostsVulnerabilityScoreDisplay).toBeDefined();
+    expect(HostsVulnerabilityScoreDisplay.displayId).toBe(
+      'host-by-most-vulnerable',
+    );
+    expect(HostsVulnerabilityScoreDisplay.displayName).toBe(
+      'HostsVulnScoreDisplay',
+    );
   });
 
   test('should be registered with the correct title', () => {
-    const registered = getDisplay(HostsVulnScoreDisplay.displayId);
+    const registered = getDisplay(HostsVulnerabilityScoreDisplay.displayId);
 
-    expect(registered?.component).toBe(HostsVulnScoreDisplay);
+    expect(registered?.component).toBe(HostsVulnerabilityScoreDisplay);
     expect(String(registered?.title)).toBe(
       'Chart: Hosts by Vulnerability Score',
     );
   });
 
   test('should render only scored hosts in reverse score order', async () => {
-    renderDisplay(<HostsVulnScoreDisplay height={200} width={200} />);
+    renderDisplay(<HostsVulnerabilityScoreDisplay height={200} width={200} />);
 
     await waitFor(() => {
       expect(screen.getByTestId('title')).toHaveTextContent(
@@ -159,7 +164,7 @@ describe('HostsVulnScoreDisplay', () => {
     const {render} = rendererWith({gmp: createGmp(), showLocation: true});
     render(
       <SubscriptionContext.Provider value={subscribe}>
-        <HostsVulnScoreDisplay height={200} width={200} />
+        <HostsVulnerabilityScoreDisplay height={200} width={200} />
       </SubscriptionContext.Provider>,
     );
 
@@ -178,26 +183,30 @@ describe('HostsVulnScoreDisplay', () => {
 
 describe('HostsVulnScoreTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
-    expect(HostsVulnScoreTableDisplay).toBeDefined();
-    expect(HostsVulnScoreTableDisplay.displayId).toBe(
+    expect(HostsVulnerabilityScoreTableDisplay).toBeDefined();
+    expect(HostsVulnerabilityScoreTableDisplay.displayName).toBe(
       'HostsVulnScoreTableDisplay',
     );
-    expect(HostsVulnScoreTableDisplay.displayName).toBe(
+    expect(HostsVulnerabilityScoreTableDisplay.displayId).toBe(
       'host-by-most-vulnerable-table',
     );
   });
 
   test('should be registered with the correct title', () => {
-    const registered = getDisplay(HostsVulnScoreTableDisplay.displayId);
+    const registered = getDisplay(
+      HostsVulnerabilityScoreTableDisplay.displayId,
+    );
 
-    expect(registered?.component).toBe(HostsVulnScoreTableDisplay);
+    expect(registered?.component).toBe(HostsVulnerabilityScoreTableDisplay);
     expect(String(registered?.title)).toBe(
       'Table: Hosts by Vulnerability Score',
     );
   });
 
   test('should render the configured table data', async () => {
-    renderDisplay(<HostsVulnScoreTableDisplay height={200} width={200} />);
+    renderDisplay(
+      <HostsVulnerabilityScoreTableDisplay height={200} width={200} />,
+    );
 
     await waitFor(() => {
       expect(screen.getByTestId('title')).toHaveTextContent(

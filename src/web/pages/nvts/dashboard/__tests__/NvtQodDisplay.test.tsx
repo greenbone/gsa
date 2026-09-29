@@ -101,6 +101,7 @@ describe('NvtsQodDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(NvtsQodDisplay).toBeDefined();
     expect(NvtsQodDisplay.displayId).toBe('nvt-by-qod');
+    expect(NvtsQodDisplay.displayName).toBe('NvtsQodDisplay');
   });
 
   test('should be registered with the correct title', () => {

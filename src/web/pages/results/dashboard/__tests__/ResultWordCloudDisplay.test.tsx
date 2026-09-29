@@ -97,6 +97,7 @@ describe('ResultsWordCloudDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(ResultsWordCloudDisplay).toBeDefined();
     expect(ResultsWordCloudDisplay.displayId).toBe('result-by-vuln-words');
+    expect(ResultsWordCloudDisplay.displayName).toBe('ResultsWordCloudDisplay');
   });
 
   test('should be registered with the correct title', () => {

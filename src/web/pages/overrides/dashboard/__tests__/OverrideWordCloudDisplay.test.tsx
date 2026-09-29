@@ -97,6 +97,9 @@ describe('OverridesWordCloudDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(OverridesWordCloudDisplay).toBeDefined();
     expect(OverridesWordCloudDisplay.displayId).toBe('override-by-text-words');
+    expect(OverridesWordCloudDisplay.displayName).toBe(
+      'OverridesWordCloudDisplay',
+    );
   });
 
   test('should be registered with the correct title', () => {

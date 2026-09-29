@@ -96,8 +96,8 @@ const renderDisplay = (component: ReactElement) => {
 describe('NotesWordCloudDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(NotesWordCloudDisplay).toBeDefined();
-    expect(typeof NotesWordCloudDisplay).toBe('function');
     expect(NotesWordCloudDisplay.displayId).toBe('note-by-text-words');
+    expect(NotesWordCloudDisplay.displayName).toBe('NotesWordCloudDisplay');
   });
 
   test('should be registered with the correct title', () => {
@@ -127,7 +127,6 @@ describe('NotesWordCloudDisplay', () => {
 describe('NotesWordCloudTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(NotesWordCloudTableDisplay).toBeDefined();
-    expect(typeof NotesWordCloudTableDisplay).toBe('function');
     expect(NotesWordCloudTableDisplay.displayId).toBe(
       'note-by-text-words-table',
     );

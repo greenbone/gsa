@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import {useCallback} from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {NOTES_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
@@ -15,7 +15,6 @@ import {
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import DonutChart from 'web/components/chart/DonutChart';
-import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay, {
   type DataDisplayProps,
@@ -23,7 +22,6 @@ import DataDisplay, {
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import useDataTransform from 'web/components/dashboard/display/useDataTransform';
-import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {
   totalCount,
   percent,
@@ -35,7 +33,7 @@ import {
   NotesActiveDaysLoader,
 } from 'web/pages/notes/dashboard/NoteLoaders';
 
-interface TransformedNotesActiveDaysGroup {
+interface TransformedNotesActiveDaysDataItem {
   bulked?: boolean;
   color: string;
   filterValue: string;
@@ -44,14 +42,12 @@ interface TransformedNotesActiveDaysGroup {
   value: number;
 }
 
-interface TransformedNotesActiveDaysData extends Array<TransformedNotesActiveDaysGroup> {
+interface TransformedNotesActiveDaysData extends Array<TransformedNotesActiveDaysDataItem> {
   total: number;
 }
 
 type NotesActiveDaysDataDisplayProps =
   DataDisplayProps<TransformedNotesActiveDaysData>;
-
-type NotesActiveDaysDisplayProps = DashboardDisplayProps;
 
 const MAX_BINS = 10; // if this is changed, activeDaysColorScale needs adjustment
 
@@ -111,7 +107,7 @@ const transformActiveDaysData = (
       toolTip: `${label}: ${perc}% (${count})`,
       color: activeDaysColorScale(colorCounter++),
       filterValue: String(value),
-    } as TransformedNotesActiveDaysGroup;
+    } as TransformedNotesActiveDaysDataItem;
   });
 
   const result = transformedData as unknown as TransformedNotesActiveDaysData;
@@ -119,99 +115,68 @@ const transformActiveDaysData = (
   return result;
 };
 
-export const NotesActiveDaysDisplay = ({
-  filter,
-  filterId,
-  showFilterSelection,
-  onFilterIdChanged,
-  onFilterChanged,
-  ...props
-}: NotesActiveDaysDisplayProps) => {
-  const {
-    filter: selectedFilter,
-    selectFilter,
-    filterSelectionDialog,
-  } = useFilterSelection({
-    filterId,
-    filtersFilter: NOTES_FILTER_FILTER,
-    onFilterIdChanged,
-  });
+export const NotesActiveDaysDisplay = createDisplay({
+  loaderComponent: NotesActiveDaysLoader,
+  displayComponent: ({data, onFilterChanged, filter, ...props}) => {
+    const transformedData = useDataTransform(data, transformActiveDaysData);
+    const handleDataClick = useCallback(
+      ({filterValue, bulked = false}: TransformedNotesActiveDaysDataItem) => {
+        if (!isDefined(onFilterChanged)) {
+          return;
+        }
 
-  const displayFilter = showFilterSelection ? selectedFilter : filter;
+        const activeDaysTerm = bulked
+          ? FilterTerm.fromString(`active_days>"${filterValue}"`)
+          : FilterTerm.fromString(`active_days="${filterValue}"`);
 
-  const handleDataClick = data => {
-    const {filterValue, bulked = false} = data;
+        if (isDefined(filter) && filter.hasTerm(activeDaysTerm)) {
+          return;
+        }
+        const activeDaysFilter = QueryFilter.fromTerm(activeDaysTerm);
 
-    if (!isDefined(onFilterChanged)) {
-      return;
-    }
+        const newFilter = isDefined(filter)
+          ? filter.and(activeDaysFilter)
+          : activeDaysFilter;
 
-    let activeDaysTerm;
-    if (bulked) {
-      activeDaysTerm = FilterTerm.fromString(`active_days>"${filterValue}"`);
-    } else {
-      activeDaysTerm = FilterTerm.fromString(`active_days="${filterValue}"`);
-    }
-
-    if (isDefined(filter) && filter.hasTerm(activeDaysTerm)) {
-      return;
-    }
-    const activeDaysFilter = QueryFilter.fromTerm(activeDaysTerm);
-
-    const newFilter = isDefined(filter)
-      ? filter.copy().and(activeDaysFilter)
-      : activeDaysFilter;
-
-    onFilterChanged(newFilter);
-  };
-
-  return (
-    <>
-      <NotesActiveDaysLoader filter={displayFilter}>
-        {({data, ...loaderProps}) => {
-          const transformedData = transformActiveDaysData(data);
-          return (
-            <DataDisplay<
-              TransformedNotesActiveDaysData,
-              NotesActiveDaysDataDisplayProps
-            >
-              {...props}
-              {...loaderProps}
-              data={transformedData}
-              filter={displayFilter}
-              icons={DataDisplayIcons}
-              initialState={{}}
-              title={({data}) =>
-                _('Notes by Active Days (Total: {{count}})', {
-                  count: data?.total ?? 0,
-                })
-              }
-              onSelectFilterClick={
-                showFilterSelection ? selectFilter : undefined
-              }
-            >
-              {({width, height, data, svgRef, state}) => (
-                <DonutChart
-                  data={data}
-                  height={height}
-                  showLegend={state.showLegend}
-                  svgRef={svgRef}
-                  width={width}
-                  onDataClick={
-                    isDefined(onFilterChanged) ? handleDataClick : undefined
-                  }
-                />
-              )}
-            </DataDisplay>
-          );
-        }}
-      </NotesActiveDaysLoader>
-      {filterSelectionDialog}
-    </>
-  );
-};
-
-NotesActiveDaysDisplay.displayId = 'note-by-active-days';
+        onFilterChanged(newFilter);
+      },
+      [onFilterChanged, filter],
+    );
+    return (
+      <DataDisplay<
+        TransformedNotesActiveDaysData,
+        NotesActiveDaysDataDisplayProps
+      >
+        {...props}
+        data={transformedData}
+        filter={filter}
+        icons={DataDisplayIcons}
+        initialState={{}}
+        title={({data}) =>
+          _('Notes by Active Days (Total: {{count}})', {
+            count: data?.total ?? 0,
+          })
+        }
+      >
+        {({width, height, data, svgRef, state}) => (
+          <DonutChart
+            data={data}
+            height={height}
+            showLegend={state.showLegend}
+            svgRef={svgRef}
+            width={width}
+            onDataClick={
+              isDefined(onFilterChanged) ? handleDataClick : undefined
+            }
+          />
+        )}
+      </DataDisplay>
+    );
+  },
+  filtersFilter: NOTES_FILTER_FILTER,
+  displayId: 'note-by-active-days',
+  displayName: 'NotesActiveDaysDisplay',
+});
 
 export const NotesActiveDaysTableDisplay = createDisplay({
   loaderComponent: NotesActiveDaysLoader,

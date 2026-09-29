@@ -95,6 +95,7 @@ export const TlsCertificateTimeStatusDisplay = createDisplay({
     );
   },
   displayId: 'tls-certificates-by-status',
+  displayName: 'TlsCertificateTimeStatusDisplay',
   filtersFilter: TLS_CERTIFICATES_FILTER_FILTER,
   filterTerm: 'time_status',
 });

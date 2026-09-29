@@ -115,6 +115,9 @@ describe('ReportsHighResultsDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(ReportsHighResultsDisplay).toBeDefined();
     expect(ReportsHighResultsDisplay.displayId).toBe('report-by-high-results');
+    expect(ReportsHighResultsDisplay.displayName).toBe(
+      'ReportsHighResultsDisplay',
+    );
   });
 
   test('should be registered with the correct title', () => {

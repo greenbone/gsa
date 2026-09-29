@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useCallback} from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
@@ -11,14 +12,12 @@ import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import WordCloudChart from 'web/components/chart/WordCloudChart';
-import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import useDataTransform from 'web/components/dashboard/display/useDataTransform';
-import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {randomColor} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import {
@@ -38,8 +37,6 @@ type TransformedResultWordCloudData = TransformedResultWordCloudDataItem[];
 type ResultWordCloudDataDisplayProps =
   DataDisplayProps<TransformedResultWordCloudData>;
 
-type ResultWordCloudDisplayProps = DashboardDisplayProps;
-
 const transformWordCountData = (
   data: ResultWordCloudData = {},
 ): TransformedResultWordCloudData => {
@@ -56,86 +53,62 @@ const transformWordCountData = (
   return transformedData;
 };
 
-export const ResultsWordCloudDisplay = ({
-  filter,
-  filterId,
-  showFilterSelection,
-  onFilterIdChanged,
-  onFilterChanged,
-  ...props
-}: ResultWordCloudDisplayProps) => {
-  const {
-    filter: selectedFilter,
-    selectFilter,
-    filterSelectionDialog,
-  } = useFilterSelection({
-    filterId,
-    filtersFilter: RESULTS_FILTER_FILTER,
-    onFilterIdChanged,
-  });
+export const ResultsWordCloudDisplay = createDisplay({
+  loaderComponent: ResultsWordCountLoader,
+  displayComponent: ({data, filter, onFilterChanged, ...props}) => {
+    const transformedData = useDataTransform(data, transformWordCountData);
+    const handleDataClick = useCallback(
+      (filterValue: string) => {
+        if (!isDefined(onFilterChanged) || isEmpty(filterValue)) {
+          return;
+        }
 
-  const displayFilter = showFilterSelection ? selectedFilter : filter;
+        const wordTerm = FilterTerm.fromString(
+          `vulnerability~"${filterValue}"`,
+        );
 
-  const handleDataClick = (filterValue: string) => {
-    if (!isDefined(onFilterChanged) || isEmpty(filterValue)) {
-      return;
-    }
+        if (isDefined(filter) && filter.hasTerm(wordTerm)) {
+          return;
+        }
+        const wordFilter = QueryFilter.fromTerm(wordTerm);
 
-    const wordTerm = FilterTerm.fromString(`vulnerability~"${filterValue}"`);
+        const newFilter = isDefined(filter)
+          ? filter.and(wordFilter)
+          : wordFilter;
 
-    if (isDefined(filter) && filter.hasTerm(wordTerm)) {
-      return;
-    }
-    const wordFilter = QueryFilter.fromTerm(wordTerm);
-
-    const newFilter = isDefined(displayFilter)
-      ? displayFilter.and(wordFilter)
-      : wordFilter;
-
-    onFilterChanged(newFilter);
-  };
-
-  return (
-    <>
-      <ResultsWordCountLoader filter={displayFilter}>
-        {({data, isLoading}) => {
-          const transformedData = transformWordCountData(data);
-          return (
-            <DataDisplay<
-              TransformedResultWordCloudData,
-              ResultWordCloudDataDisplayProps
-            >
-              {...props}
-              data={transformedData}
-              filter={displayFilter}
-              isLoading={isLoading}
-              showToggleLegend={false}
-              title={() => _('Results Vulnerability Word Cloud')}
-              onSelectFilterClick={
-                showFilterSelection ? selectFilter : undefined
-              }
-            >
-              {({width, height, data, svgRef}) => (
-                <WordCloudChart
-                  data={data}
-                  height={height}
-                  svgRef={svgRef}
-                  width={width}
-                  onDataClick={
-                    isDefined(onFilterChanged) ? handleDataClick : undefined
-                  }
-                />
-              )}
-            </DataDisplay>
-          );
-        }}
-      </ResultsWordCountLoader>
-      {filterSelectionDialog}
-    </>
-  );
-};
-
-ResultsWordCloudDisplay.displayId = 'result-by-vuln-words';
+        onFilterChanged(newFilter);
+      },
+      [filter, onFilterChanged],
+    );
+    return (
+      <DataDisplay<
+        TransformedResultWordCloudData,
+        ResultWordCloudDataDisplayProps
+      >
+        {...props}
+        data={transformedData}
+        filter={filter}
+        showToggleLegend={false}
+        title={() => _('Results Vulnerability Word Cloud')}
+      >
+        {({width, height, data, svgRef}) => (
+          <WordCloudChart
+            data={data}
+            height={height}
+            svgRef={svgRef}
+            width={width}
+            onDataClick={
+              isDefined(onFilterChanged) ? handleDataClick : undefined
+            }
+          />
+        )}
+      </DataDisplay>
+    );
+  },
+  filtersFilter: RESULTS_FILTER_FILTER,
+  displayId: 'result-by-vuln-words',
+  displayName: 'ResultsWordCloudDisplay',
+});
 
 export const ResultsWordCloudTableDisplay = createDisplay({
   loaderComponent: ResultsWordCountLoader,

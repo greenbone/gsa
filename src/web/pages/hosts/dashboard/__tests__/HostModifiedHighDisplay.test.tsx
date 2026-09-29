@@ -118,9 +118,11 @@ const renderDisplay = (component: ReactElement) => {
 describe('HostsModifiedHighDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(HostsModifiedHighDisplay).toBeDefined();
-    expect(typeof HostsModifiedHighDisplay).toBe('function');
     expect(HostsModifiedHighDisplay.displayId).toBe(
       'host-by-high-modification-time',
+    );
+    expect(HostsModifiedHighDisplay.displayName).toBe(
+      'HostsModifiedHighDisplay',
     );
   });
 
@@ -157,7 +159,6 @@ describe('HostsModifiedHighDisplay', () => {
 describe('HostsModifiedHighTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(HostsModifiedHighTableDisplay).toBeDefined();
-    expect(typeof HostsModifiedHighTableDisplay).toBe('function');
     expect(HostsModifiedHighTableDisplay.displayId).toBe(
       'host-by-high-modification-time-table',
     );

@@ -113,6 +113,7 @@ describe('TasksHighResultsDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(TasksHighResultsDisplay).toBeDefined();
     expect(TasksHighResultsDisplay.displayId).toBe('task-by-high-results');
+    expect(TasksHighResultsDisplay.displayName).toBe('TasksHighResultsDisplay');
   });
 
   test('should be registered with the correct title', () => {

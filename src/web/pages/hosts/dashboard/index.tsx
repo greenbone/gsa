@@ -23,8 +23,8 @@ import {
 } from 'web/pages/hosts/dashboard/HostSeverityClassDisplay';
 import HostsTopologyDisplay from 'web/pages/hosts/dashboard/HostsTopologyDisplay';
 import {
-  HostsVulnScoreDisplay,
-  HostsVulnScoreTableDisplay,
+  HostsVulnerabilityScoreDisplay,
+  HostsVulnerabilityScoreTableDisplay,
 } from 'web/pages/hosts/dashboard/HostsVulnScoreDisplay';
 
 interface HostsDashboardProps {
@@ -40,12 +40,12 @@ export const HOSTS_DISPLAYS = [
   HostsModifiedHighDisplay.displayId,
   HostsSeverityClassDisplay.displayId,
   HostsTopologyDisplay.displayId,
-  HostsVulnScoreDisplay.displayId,
+  HostsVulnerabilityScoreDisplay.displayId,
   HostsCvssTableDisplay.displayId,
   HostsSeverityClassTableDisplay.displayId,
   HostsModifiedTableDisplay.displayId,
   HostsModifiedHighTableDisplay.displayId,
-  HostsVulnScoreTableDisplay.displayId,
+  HostsVulnerabilityScoreTableDisplay.displayId,
 ];
 
 const HostsDashboard = (props: HostsDashboardProps) => (

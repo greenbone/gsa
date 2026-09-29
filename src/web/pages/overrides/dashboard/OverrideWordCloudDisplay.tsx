@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useCallback} from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filter-term';
@@ -11,14 +12,12 @@ import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import WordCloudChart from 'web/components/chart/WordCloudChart';
-import {type DashboardDisplayProps} from 'web/components/dashboard/DashboardView';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import useDataTransform from 'web/components/dashboard/display/useDataTransform';
-import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {randomColor} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import {
@@ -38,8 +37,6 @@ type TransformedWordCloudData = TransformedWordCloudDataItem[];
 type OverrideWordCloudDataDisplayProps =
   DataDisplayProps<TransformedWordCloudData>;
 
-type OverrideWordCloudDisplayProps = DashboardDisplayProps;
-
 const transformWordCountData = (
   data: OverrideWordCloudData = {},
 ): TransformedWordCloudData => {
@@ -56,85 +53,56 @@ const transformWordCountData = (
   return transformedData;
 };
 
-export const OverridesWordCloudDisplay = ({
-  filter,
-  filterId,
-  showFilterSelection,
-  onFilterChanged,
-  onFilterIdChanged,
-  ...props
-}: OverrideWordCloudDisplayProps) => {
-  const {
-    filter: selectedFilter,
-    selectFilter,
-    filterSelectionDialog,
-  } = useFilterSelection({
-    filterId,
-    filtersFilter: OVERRIDES_FILTER_FILTER,
-    onFilterIdChanged,
-  });
+export const OverridesWordCloudDisplay = createDisplay({
+  loaderComponent: OverridesWordCountLoader,
+  displayComponent: ({data, filter, onFilterChanged, ...props}) => {
+    const transformedData = useDataTransform(data, transformWordCountData);
+    const handleDataClick = useCallback(
+      (filterValue: string) => {
+        if (!isDefined(onFilterChanged) || isEmpty(filterValue)) {
+          return;
+        }
 
-  const displayFilter = showFilterSelection ? selectedFilter : filter;
+        const wordTerm = FilterTerm.fromString(`text~"${filterValue}"`);
 
-  const handleDataClick = (filterValue: string) => {
-    if (!isDefined(onFilterChanged) || isEmpty(filterValue)) {
-      return;
-    }
+        if (isDefined(filter) && filter.hasTerm(wordTerm)) {
+          return;
+        }
+        const wordFilter = QueryFilter.fromTerm(wordTerm);
+        const newFilter = isDefined(filter)
+          ? filter.and(wordFilter)
+          : wordFilter;
 
-    const wordTerm = FilterTerm.fromString(`text~"${filterValue}"`);
-
-    if (isDefined(filter) && filter.hasTerm(wordTerm)) {
-      return;
-    }
-    const wordFilter = QueryFilter.fromTerm(wordTerm);
-    const newFilter = isDefined(displayFilter)
-      ? displayFilter.and(wordFilter)
-      : wordFilter;
-
-    onFilterChanged(newFilter);
-  };
-
-  return (
-    <>
-      <OverridesWordCountLoader filter={displayFilter}>
-        {({data, ...loaderProps}) => {
-          const transformedData = transformWordCountData(data);
-          return (
-            <DataDisplay<
-              TransformedWordCloudData,
-              OverrideWordCloudDataDisplayProps
-            >
-              {...props}
-              {...loaderProps}
-              data={transformedData}
-              filter={displayFilter}
-              showToggleLegend={false}
-              title={() => _('Overrides Text Word Cloud')}
-              onSelectFilterClick={
-                showFilterSelection ? selectFilter : undefined
-              }
-            >
-              {({width, height, data, svgRef}) => (
-                <WordCloudChart
-                  data={data}
-                  height={height}
-                  svgRef={svgRef}
-                  width={width}
-                  onDataClick={
-                    isDefined(onFilterChanged) ? handleDataClick : undefined
-                  }
-                />
-              )}
-            </DataDisplay>
-          );
-        }}
-      </OverridesWordCountLoader>
-      {filterSelectionDialog}
-    </>
-  );
-};
-
-OverridesWordCloudDisplay.displayId = 'override-by-text-words';
+        onFilterChanged(newFilter);
+      },
+      [filter, onFilterChanged],
+    );
+    return (
+      <DataDisplay<TransformedWordCloudData, OverrideWordCloudDataDisplayProps>
+        {...props}
+        data={transformedData}
+        filter={filter}
+        showToggleLegend={false}
+        title={() => _('Overrides Text Word Cloud')}
+      >
+        {({width, height, data, svgRef}) => (
+          <WordCloudChart
+            data={data}
+            height={height}
+            svgRef={svgRef}
+            width={width}
+            onDataClick={
+              isDefined(onFilterChanged) ? handleDataClick : undefined
+            }
+          />
+        )}
+      </DataDisplay>
+    );
+  },
+  displayId: 'override-by-text-words',
+  displayName: 'OverridesWordCloudDisplay',
+  filtersFilter: OVERRIDES_FILTER_FILTER,
+});
 
 export const OverridesWordCloudTableDisplay = createDisplay({
   loaderComponent: OverridesWordCountLoader,

@@ -41,8 +41,9 @@ export interface TransformedVulnerabilitiesHostsDataItem {
   y: number;
 }
 
-export type TransformedVulnerabilitiesHostsData =
-  TransformedVulnerabilitiesHostsDataItem[];
+export interface TransformedVulnerabilitiesHostsData extends Array<TransformedVulnerabilitiesHostsDataItem> {
+  total: number;
+}
 
 const format = d3format('0.1f');
 
@@ -82,7 +83,7 @@ const transformHostsData = (
   const maxHosts =
     groups.length > 0 ? Math.max(...groups.map(val => val.value)) : 0;
   const bins = calculateBins(minHosts, maxHosts, totalVulns);
-  return bins.map(bin => {
+  const transformedData = bins.map(bin => {
     const {min, max, color, binWidth} = bin;
     const binWithAllMembers = groups.filter(
       group => group.value >= min && group.value <= max,
@@ -103,6 +104,10 @@ const transformHostsData = (
       filterValue,
     } as TransformedVulnerabilitiesHostsDataItem;
   });
+
+  const result = transformedData as TransformedVulnerabilitiesHostsData;
+  result.total = totalVulns;
+  return result;
 };
 
 export default transformHostsData;

@@ -13,7 +13,7 @@ import {CvesCreatedDisplay} from 'web/pages/cves/dashboard/CveCreatedDisplay';
 import {CvesSeverityClassDisplay} from 'web/pages/cves/dashboard/CveSeverityClassDisplay';
 import {HostsModifiedDisplay} from 'web/pages/hosts/dashboard/HostModifiedDisplay';
 import HostsTopologyDisplay from 'web/pages/hosts/dashboard/HostsTopologyDisplay';
-import {HostsVulnScoreDisplay} from 'web/pages/hosts/dashboard/HostsVulnScoreDisplay';
+import {HostsVulnerabilityScoreDisplay} from 'web/pages/hosts/dashboard/HostsVulnScoreDisplay';
 import {NvtsSeverityClassDisplay} from 'web/pages/nvts/dashboard/NvtSeverityClassDisplay';
 import {OperatingSystemSeverityClassDisplay} from 'web/pages/operatingsystems/dashboard/OperatingSystemSeverityClassDisplay';
 import {OperatingSystemVulnerabilityScoreDisplay} from 'web/pages/operatingsystems/dashboard/OperatingSystemVulnerabilityScoreDisplay';
@@ -56,7 +56,7 @@ const SCAN_DEFAULT_DISPLAYS = [
 
 const ASSET_DEFAULT_DISPLAYS = [
   [
-    HostsVulnScoreDisplay.displayId,
+    HostsVulnerabilityScoreDisplay.displayId,
     HostsTopologyDisplay.displayId,
     OperatingSystemVulnerabilityScoreDisplay.displayId,
   ],

@@ -99,6 +99,7 @@ describe('NotesActiveDaysDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(NotesActiveDaysDisplay).toBeDefined();
     expect(NotesActiveDaysDisplay.displayId).toBe('note-by-active-days');
+    expect(NotesActiveDaysDisplay.displayName).toBe('NotesActiveDaysDisplay');
   });
 
   test('should be registered with the correct title', () => {

@@ -84,6 +84,9 @@ describe('VulnerabilitiesHostsDisplay', () => {
   test('should export VulnerabilitiesHostsDisplay', () => {
     expect(VulnerabilitiesHostsDisplay).toBeDefined();
     expect(VulnerabilitiesHostsDisplay.displayId).toBe('vuln-by-hosts');
+    expect(VulnerabilitiesHostsDisplay.displayName).toBe(
+      'VulnerabilitiesHostsDisplay',
+    );
   });
 
   test('should be registered with the correct title', () => {
@@ -187,16 +190,10 @@ describe('VulnerabilitiesHostsDisplay', () => {
 describe('VulnerabilitiesHostsTableDisplay', () => {
   test('should export VulnerabilitiesHostsTableDisplay', () => {
     expect(VulnerabilitiesHostsTableDisplay).toBeDefined();
-  });
-
-  test('should have correct displayId', () => {
     expect(VulnerabilitiesHostsTableDisplay.displayId).toBe(
       'vuln-by-hosts-table',
     );
-  });
-
-  test('should have displayName', () => {
-    expect(VulnerabilitiesHostsTableDisplay.displayName).toContain(
+    expect(VulnerabilitiesHostsTableDisplay.displayName).toBe(
       'VulnerabilitiesHostsTableDisplay',
     );
   });
