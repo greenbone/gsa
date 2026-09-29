@@ -12,63 +12,34 @@ import DataTable, {
   type DataTableProps,
 } from 'web/components/dashboard/display/DataTable';
 
-type DataTableDisplayRenderProps<TTransformedData extends object> =
-  DataTableProps<TTransformedData> & {
-    data?: TTransformedData;
+type DataTableDisplayRenderProps<TData extends object> =
+  DataTableProps<TData> & {
+    data?: TData;
   };
 
-type DataTableDisplayChildren<TTransformedData extends object> = (
-  props: DataTableDisplayRenderProps<TTransformedData>,
+type DataTableDisplayChildren<TData extends object> = (
+  props: DataTableDisplayRenderProps<TData>,
 ) => React.ReactNode;
 
 export type DataTableDisplayProps<
   TData extends object,
-  TTransformedData extends object,
-  TTransformProps extends object = object,
   TState extends DisplayState = DisplayState,
-> = DataDisplayProps<
-  TData,
-  TTransformedData,
-  TTransformProps,
-  TState,
-  DataTableDisplayChildren<TTransformedData>
->;
+> = DataDisplayProps<TData, TState, DataTableDisplayChildren<TData>>;
 
 type DataTableDisplayComponentProps<
   TData extends object,
-  TTransformedData extends object,
-  TTransformProps extends object,
   TState extends DisplayState,
-> = DataTableDisplayProps<TData, TTransformedData, TTransformProps, TState> &
-  TTransformProps;
+> = DataTableDisplayProps<TData, TState>;
 
 const DataTableDisplay = <
   TData extends object,
-  TTransformedData extends object,
-  TTransformProps extends object = object,
   TState extends DisplayState = DisplayState,
 >(
-  props: DataTableDisplayComponentProps<
-    TData,
-    TTransformedData,
-    TTransformProps,
-    TState
-  >,
+  props: DataTableDisplayComponentProps<TData, TState>,
 ) => {
   const {children, dataRow, dataTitles} = props;
   return (
-    <DataDisplay<
-      TData,
-      DataTableDisplayComponentProps<
-        TData,
-        TTransformedData,
-        TTransformProps,
-        TState
-      >,
-      TTransformedData,
-      TTransformProps,
-      TState
-    >
+    <DataDisplay<TData, DataTableDisplayComponentProps<TData, TState>, TState>
       {...props}
       showSvgDownload={false}
       showToggleLegend={false}

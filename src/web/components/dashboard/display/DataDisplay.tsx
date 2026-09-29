@@ -22,9 +22,6 @@ import DisplayContainer, {
   DISPLAY_HEADER_HEIGHT,
   DISPLAY_BORDER_WIDTH,
 } from 'web/components/dashboard/display/DisplayContainer';
-import useDataTransform, {
-  type TransformFunc,
-} from 'web/components/dashboard/display/useDataTransform';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import useTranslation from 'web/hooks/useTranslation';
@@ -69,15 +66,12 @@ type DataDisplayChildren<
 
 export type DataDisplayProps<
   TData extends object,
-  TTransformedData extends object,
-  TTransformProps extends object = object,
   TState extends DisplayState = DisplayState,
-  TChildren = DataDisplayChildren<TTransformedData, TState>,
+  TChildren = DataDisplayChildren<TData, TState>,
 > = Omit<DisplayProps<TState>, 'children' | 'title'> & {
-  data?: TData;
-  dataRow?: DataRowFunc<TTransformedData>;
+  data: TData | undefined;
+  dataRow?: DataRowFunc<TData>;
   dataTitles?: DataTitles;
-  dataTransform: TransformFunc<TData, TTransformedData, TTransformProps>;
   filter?: FilterType;
   icons?: IconsRenderFunc<TState>;
   children?: TChildren;
@@ -87,8 +81,8 @@ export type DataDisplayProps<
   showFilterString?: boolean;
   showSvgDownload?: boolean;
   showToggleLegend?: boolean;
-  title: ToString | TitleFunc<TTransformedData>;
-} & TTransformProps;
+  title: ToString | TitleFunc<TData>;
+};
 
 const log = logger.getLogger('web.components.dashboard.display.DataDisplay');
 
@@ -168,21 +162,13 @@ const createSvgUrl = (
 
 const DataDisplay = <
   TData extends object,
-  TProps extends DataDisplayProps<
-    TData,
-    TTransformedData,
-    TTransformProps,
-    TState
-  >,
-  TTransformedData extends object,
-  TTransformProps extends object = object,
+  TProps extends DataDisplayProps<TData, TState>,
   TState extends DisplayState = DisplayState,
 >({
   children,
   data,
   dataRow,
   dataTitles,
-  dataTransform,
   dragHandleRef,
   filter,
   height,
@@ -206,10 +192,8 @@ const DataDisplay = <
   const downloadSvgUrlRef = useRef<string | undefined>(undefined);
   const downloadCsvUrlRef = useRef<string | undefined>(undefined);
 
-  const originalData = data;
-  const transformedData = useDataTransform(originalData, dataTransform);
   const title = isFunction(titleFunc)
-    ? titleFunc({data: transformedData, isLoading})
+    ? titleFunc({data, isLoading})
     : String(titleFunc);
 
   const getCurrentState = (newState: TState | undefined = state): TState => {
@@ -274,7 +258,7 @@ const DataDisplay = <
       return;
     }
 
-    const rowData = dataRow(transformedData);
+    const rowData = dataRow(data);
     const csvData = [
       escapeCsv(title),
       dataTitles.map(t => escapeCsv(String(t))).join(','),
@@ -301,7 +285,7 @@ const DataDisplay = <
   height = height - DISPLAY_HEADER_HEIGHT;
   width = width - DISPLAY_BORDER_WIDTH;
 
-  isLoading = isLoading && !isDefined(originalData);
+  isLoading = isLoading && !isDefined(data);
 
   const showCsvDownload = isDefined(dataRow) && isDefined(dataTitles);
 
@@ -328,7 +312,7 @@ const DataDisplay = <
                   {isFunction(children)
                     ? // oxlint-disable-next-line react/refs
                       children({
-                        data: transformedData,
+                        data,
                         width,
                         height,
                         svgRef,

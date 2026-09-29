@@ -30,17 +30,16 @@ interface TestState extends DisplayState {
   showLegend?: boolean;
 }
 
-type TestProps = DataDisplayProps<TestData, TestData[], {}, TestState> &
+type TestProps = DataDisplayProps<TestData[], TestState> &
   Pick<DisplayProps, 'isLoading' | 'onRemoveClick'>;
 
 const createProps = (overrides: Partial<TestProps> = {}): TestProps => ({
   children: testing.fn(({data}) => (
-    <div data-testid="chart">{data[0].value}</div>
+    <div data-testid="chart">{data?.[0]?.value ?? 'empty'}</div>
   )),
-  data: {value: 'raw'},
+  data: [{value: 'raw'}],
   dataRow: rows => rows?.map(row => [row.value]) ?? [],
   dataTitles: ['Value'],
-  dataTransform: data => [{value: `${data?.value}-transformed`}],
   height: 100,
   icons: () => <div data-testid="icons" />,
   initialState: {showLegend: false},
@@ -66,21 +65,19 @@ describe('DataDisplay component tests', () => {
     testing.restoreAllMocks();
   });
 
-  test('should transform data and render the chart with its title', () => {
+  test('should render the data and chart with its title', () => {
     const props = createProps();
 
-    render(
-      <DataDisplay<TestData, TestProps, TestData[], TestState> {...props} />,
-    );
+    render(<DataDisplay<TestData[], TestProps, TestState> {...props} />);
 
-    expect(screen.getByText('chart-1: raw-transformed')).toBeInTheDocument();
-    expect(screen.getByTestId('chart')).toHaveTextContent('raw-transformed');
+    expect(screen.getByText('chart-1: raw')).toBeInTheDocument();
+    expect(screen.getByTestId('chart')).toHaveTextContent('raw');
     expect(screen.getByTestId('icons')).toBeInTheDocument();
   });
 
   test('should render a string title', () => {
     render(
-      <DataDisplay<TestData, TestProps, TestData[], TestState>
+      <DataDisplay<TestData[], TestProps, TestState>
         {...createProps({title: 'Static title'})}
       />,
     );
@@ -92,14 +89,11 @@ describe('DataDisplay component tests', () => {
     const children = testing.fn(() => <div data-testid="chart" />);
     const props = createProps({
       children,
-      data: undefined as unknown as TestData,
-      dataTransform: () => [],
+      data: undefined,
       isLoading: true,
     });
 
-    render(
-      <DataDisplay<TestData, TestProps, TestData[], TestState> {...props} />,
-    );
+    render(<DataDisplay<TestData[], TestProps, TestState> {...props} />);
 
     expect(children).not.toHaveBeenCalled();
     expect(screen.getByTestId('loading')).toBeVisible();
@@ -110,17 +104,16 @@ describe('DataDisplay component tests', () => {
     const children = testing.fn(() => <div data-testid="chart" />);
     const props = createProps({
       children,
-      data: undefined as unknown as TestData,
-      dataTransform: () => [],
+      data: undefined,
     });
     const {rerender} = render(
-      <DataDisplay<TestData, TestProps, TestData[], TestState> {...props} />,
+      <DataDisplay<TestData[], TestProps, TestState> {...props} />,
     );
 
     expect(screen.getByTestId('chart')).toBeInTheDocument();
 
     rerender(
-      <DataDisplay<TestData, TestProps, TestData[], TestState>
+      <DataDisplay<TestData[], TestProps, TestState>
         {...props}
         isLoading={true}
       />,
@@ -139,9 +132,7 @@ describe('DataDisplay component tests', () => {
       showToggleLegend: false,
     });
 
-    render(
-      <DataDisplay<TestData, TestProps, TestData[], TestState> {...props} />,
-    );
+    render(<DataDisplay<TestData[], TestProps, TestState> {...props} />);
 
     expect(icons).toHaveBeenCalledTimes(1);
     expect(icons).toHaveBeenCalledWith(
@@ -175,14 +166,14 @@ describe('DataDisplay component tests', () => {
       showFilterString: true,
     });
     const {rerender} = render(
-      <DataDisplay<TestData, TestProps, TestData[], TestState> {...props} />,
+      <DataDisplay<TestData[], TestProps, TestState> {...props} />,
     );
 
     expect(screen.getByText('First filter')).toBeInTheDocument();
     expect(screen.getByText('foo=one')).toBeInTheDocument();
 
     rerender(
-      <DataDisplay<TestData, TestProps, TestData[], TestState>
+      <DataDisplay<TestData[], TestProps, TestState>
         {...props}
         filter={secondFilter}
         showFilterString={true}
@@ -200,27 +191,25 @@ describe('DataDisplay component tests', () => {
       terms: parseFilterTermsFromString('foo=one'),
     });
     const children = testing.fn(({data}) => (
-      <div data-testid="chart">{data[0].value}</div>
+      <div data-testid="chart">{data?.[0]?.value ?? 'empty'}</div>
     ));
     const props = createProps({children, filter: firstFilter});
     const {rerender} = render(
-      <DataDisplay<TestData, TestProps, TestData[], TestState> {...props} />,
+      <DataDisplay<TestData[], TestProps, TestState> {...props} />,
     );
 
     expect(children).toHaveBeenCalledTimes(1);
-    expect(screen.getByTestId('chart')).toHaveTextContent('raw-transformed');
+    expect(screen.getByTestId('chart')).toHaveTextContent('raw');
 
     rerender(
-      <DataDisplay<TestData, TestProps, TestData[], TestState>
+      <DataDisplay<TestData[], TestProps, TestState>
         {...props}
-        data={{value: 'changed'}}
+        data={[{value: 'changed'}]}
       />,
     );
 
     expect(children).toHaveBeenCalledTimes(2);
-    expect(screen.getByTestId('chart')).toHaveTextContent(
-      'changed-transformed',
-    );
+    expect(screen.getByTestId('chart')).toHaveTextContent('changed');
   });
 
   test('should create a CSV download with escaped data', async () => {
@@ -228,15 +217,13 @@ describe('DataDisplay component tests', () => {
       <button data-testid="download-csv" onClick={onDownloadCsvClick} />
     ));
     const props = createProps({
-      data: {value: 'raw, "value"'},
+      data: [{value: 'raw, "value"'}],
       dataRow: rows => rows?.map(row => [row.value, 'second']) ?? [],
       dataTitles: ['Value', 'Other'],
       icons,
     });
 
-    render(
-      <DataDisplay<TestData, TestProps, TestData[], TestState> {...props} />,
-    );
+    render(<DataDisplay<TestData[], TestProps, TestState> {...props} />);
 
     screen.getByTestId('download-csv').click();
 
@@ -247,7 +234,7 @@ describe('DataDisplay component tests', () => {
     expect(createObjectURL).toHaveBeenCalled();
     const csvBlob = createObjectURL.mock.calls.at(-1)?.[0] as Blob;
     expect(await csvBlob.text()).toBe(
-      '"chart-1: raw, ""value""-transformed"\n"Value","Other"\n"raw, ""value""-transformed","second"',
+      '"chart-1: raw, ""value"""\n"Value","Other"\n"raw, ""value""","second"',
     );
     const download = document.querySelector('a');
     expect(download).toHaveAttribute('download', 'data.csv');
@@ -267,9 +254,7 @@ describe('DataDisplay component tests', () => {
       icons,
     });
 
-    render(
-      <DataDisplay<TestData, TestProps, TestData[], TestState> {...props} />,
-    );
+    render(<DataDisplay<TestData[], TestProps, TestState> {...props} />);
 
     screen.getByTestId('download-svg').click();
 
