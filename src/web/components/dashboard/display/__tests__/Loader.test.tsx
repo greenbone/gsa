@@ -57,6 +57,7 @@ describe('Loader component tests', () => {
     expect(children).toHaveBeenCalledWith({
       data: undefined,
       isLoading: true,
+      isFetching: true,
     });
     expect(container.textContent).toContain('loading');
   });
@@ -97,7 +98,11 @@ describe('Loader component tests', () => {
     );
 
     expect(load).not.toHaveBeenCalled();
-    expect(children).toHaveBeenCalledWith({data, isLoading: false});
+    expect(children).toHaveBeenCalledWith({
+      data,
+      isLoading: false,
+      isFetching: false,
+    });
   });
 
   test('should register and clean up multiple subscriptions', () => {
@@ -224,7 +229,7 @@ describe('Loader component tests', () => {
     expect(load).toHaveBeenCalledTimes(1);
   });
 
-  test('should keep the latest data when the next data is undefined', () => {
+  test('should keep the latest data and report fetching when the next data is undefined', () => {
     const children = testing.fn().mockReturnValue(null);
     const {render} = rendererWith({store: true});
     const data = {foo: 'bar'};
@@ -253,7 +258,11 @@ describe('Loader component tests', () => {
       </Loader>,
     );
 
-    expect(children).toHaveBeenLastCalledWith({data, isLoading: true});
+    expect(children).toHaveBeenLastCalledWith({
+      data,
+      isLoading: false,
+      isFetching: true,
+    });
   });
 });
 

@@ -15,6 +15,7 @@ import Filter from 'gmp/models/filter';
 import type FilterType from 'gmp/models/filter/filter-type';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
+import {type DisplayLoaderProps} from 'web/components/dashboard/display/Loader';
 import {types} from 'web/store/entities/utils/actions';
 
 interface TestDisplayProps {
@@ -28,10 +29,7 @@ interface TestDisplayProps {
   showToggleLegend?: boolean;
 }
 
-interface TestLoaderProps {
-  children?: (props: {data: string; isLoading: boolean}) => React.ReactNode;
-  filter?: FilterType;
-}
+type TestLoaderProps = DisplayLoaderProps<string>;
 
 const filtersFilter = QueryFilter.fromString('type=task');
 
@@ -52,7 +50,7 @@ const createGmp = () => ({
 const TestLoader = ({children, filter}: TestLoaderProps) => (
   <>
     <span data-testid="loader-filter">{filter?.name ?? 'none'}</span>
-    {children?.({data: 'test data', isLoading: false})}
+    {children?.({data: 'test data', isLoading: false, isFetching: false})}
   </>
 );
 

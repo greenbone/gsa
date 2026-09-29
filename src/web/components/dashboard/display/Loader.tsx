@@ -22,6 +22,7 @@ import withSubscription from 'web/utils/withSubscription';
 export interface LoaderRenderProps<TData> {
   data?: TData;
   isLoading: boolean;
+  isFetching: boolean;
 }
 
 export interface DisplayLoaderProps<TData> {
@@ -144,6 +145,7 @@ export class Loader<TData> extends React.Component<
     }
 
     for (const subscription of subscriptions) {
+      // oxlint-disable-next-line typescript/unbound-method
       this.subscriptions.push(subscribe(subscription, this.load));
     }
   }
@@ -167,7 +169,13 @@ export class Loader<TData> extends React.Component<
   render() {
     const {children, isLoading} = this.props;
     const {data} = this.state;
-    return isDefined(children) ? children({data, isLoading}) : null;
+    return isDefined(children)
+      ? children({
+          data,
+          isLoading: !isDefined(data) && isLoading,
+          isFetching: isLoading,
+        })
+      : null;
   }
 }
 
