@@ -68,7 +68,11 @@ describe('Hosts loaders', () => {
 
     await waitFor(() => {
       expect(getModifiedAggregates).toHaveBeenCalledWith({filter});
-      expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+      expect(children).toHaveBeenLastCalledWith({
+        data,
+        isLoading: false,
+        isFetching: false,
+      });
     });
 
     expect(subscribe).toHaveBeenCalledWith('hosts.timer', expect.any(Function));
@@ -96,7 +100,11 @@ describe('Hosts loaders', () => {
 
     await waitFor(() => {
       expect(getSeverityAggregates).toHaveBeenCalledWith({filter});
-      expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+      expect(children).toHaveBeenLastCalledWith({
+        data,
+        isLoading: false,
+        isFetching: false,
+      });
     });
 
     expect(subscribe).toHaveBeenCalledWith('hosts.timer', expect.any(Function));
@@ -126,7 +134,11 @@ describe('Hosts loaders', () => {
       expect(get).toHaveBeenCalledWith({
         filter: QueryFilter.fromString('first=1 rows=1000'),
       });
-      expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+      expect(children).toHaveBeenLastCalledWith({
+        data,
+        isLoading: false,
+        isFetching: false,
+      });
     });
 
     expect(subscribe).toHaveBeenCalledWith('hosts.timer', expect.any(Function));
@@ -154,7 +166,11 @@ describe('Hosts loaders', () => {
 
     await waitFor(() => {
       expect(getVulnScoreAggregates).toHaveBeenCalledWith({filter, max: 10});
-      expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+      expect(children).toHaveBeenLastCalledWith({
+        data,
+        isLoading: false,
+        isFetching: false,
+      });
     });
 
     expect(subscribe).toHaveBeenCalledWith('hosts.timer', expect.any(Function));

@@ -70,7 +70,11 @@ describe('TlsCertificatesStatusLoader', () => {
 
     await waitFor(() => {
       expect(getAll).toHaveBeenCalledWith({filter});
-      expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+      expect(children).toHaveBeenLastCalledWith({
+        data,
+        isLoading: false,
+        isFetching: false,
+      });
     });
 
     expectTlsCertificateSubscriptions(subscribe);
@@ -100,7 +104,11 @@ describe('TlsCertificatesModifiedLoader', () => {
 
     await waitFor(() => {
       expect(getModifiedAggregates).toHaveBeenCalledWith({filter});
-      expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+      expect(children).toHaveBeenLastCalledWith({
+        data,
+        isLoading: false,
+        isFetching: false,
+      });
     });
 
     expectTlsCertificateSubscriptions(subscribe);

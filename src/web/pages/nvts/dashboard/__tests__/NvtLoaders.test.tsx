@@ -79,7 +79,11 @@ describe('NVT loaders', () => {
 
       await waitFor(() => {
         expect(getFamilyAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectNvtSubscriptions(subscribe);
@@ -105,7 +109,11 @@ describe('NVT loaders', () => {
 
       await waitFor(() => {
         expect(getSeverityAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectNvtSubscriptions(subscribe);
@@ -129,7 +137,11 @@ describe('NVT loaders', () => {
 
       await waitFor(() => {
         expect(getQodAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectNvtSubscriptions(subscribe);
@@ -155,7 +167,11 @@ describe('NVT loaders', () => {
 
       await waitFor(() => {
         expect(getQodTypeAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectNvtSubscriptions(subscribe);
@@ -183,7 +199,11 @@ describe('NVT loaders', () => {
 
       await waitFor(() => {
         expect(getCreatedAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectNvtSubscriptions(subscribe);

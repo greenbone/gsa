@@ -69,7 +69,11 @@ describe('Report loaders', () => {
 
       await waitFor(() => {
         expect(getComplianceAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expect(subscribe).toHaveBeenCalledWith(

@@ -76,7 +76,11 @@ describe('Result loaders', () => {
 
       await waitFor(() => {
         expect(getSeverityAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectResultSubscriptions(subscribe);
@@ -104,7 +108,11 @@ describe('Result loaders', () => {
 
       await waitFor(() => {
         expect(getWordCountsAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectResultSubscriptions(subscribe);
@@ -136,7 +144,11 @@ describe('Result loaders', () => {
         expect(getDescriptionWordCountsAggregates).toHaveBeenCalledWith({
           filter,
         });
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectResultSubscriptions(subscribe);

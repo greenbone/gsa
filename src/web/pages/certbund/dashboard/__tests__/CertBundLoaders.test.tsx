@@ -72,7 +72,11 @@ describe('CertBund Loaders', () => {
 
       await waitFor(() => {
         expect(mockGetCreatedAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expect(subscribe).toHaveBeenCalledWith(
@@ -107,7 +111,11 @@ describe('CertBund Loaders', () => {
 
       await waitFor(() => {
         expect(mockGetSeverityAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expect(subscribe).toHaveBeenCalledWith(

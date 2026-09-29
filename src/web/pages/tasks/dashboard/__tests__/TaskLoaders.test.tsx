@@ -74,7 +74,11 @@ describe('Task loaders', () => {
 
       await waitFor(() => {
         expect(getStatusAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectTaskSubscriptions(subscribe);
@@ -100,7 +104,11 @@ describe('Task loaders', () => {
 
       await waitFor(() => {
         expect(getSeverityAggregates).toHaveBeenCalledWith({filter});
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectTaskSubscriptions(subscribe);
@@ -133,7 +141,11 @@ describe('Task loaders', () => {
           no_filter_history: 1,
           schedules_only: 1,
         });
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectTaskSubscriptions(subscribe);
@@ -171,7 +183,11 @@ describe('Task loaders', () => {
           filter,
           max: 10,
         });
-        expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+        expect(children).toHaveBeenLastCalledWith({
+          data,
+          isLoading: false,
+          isFetching: false,
+        });
       });
 
       expectTaskSubscriptions(subscribe);

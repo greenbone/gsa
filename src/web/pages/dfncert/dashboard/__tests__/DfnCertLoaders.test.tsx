@@ -65,7 +65,11 @@ describe('DfnCertsCreatedLoader', () => {
 
     await waitFor(() => {
       expect(mockGetCreatedAggregates).toHaveBeenCalledWith({filter});
-      expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+      expect(children).toHaveBeenLastCalledWith({
+        data,
+        isLoading: false,
+        isFetching: false,
+      });
     });
 
     expect(subscribe).toHaveBeenCalledWith(
@@ -104,7 +108,11 @@ describe('DfnCertSeverityLoader', () => {
 
     await waitFor(() => {
       expect(mockGetSeverityAggregates).toHaveBeenCalledWith({filter});
-      expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+      expect(children).toHaveBeenLastCalledWith({
+        data,
+        isLoading: false,
+        isFetching: false,
+      });
     });
 
     expect(subscribe).toHaveBeenCalledWith(

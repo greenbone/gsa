@@ -63,7 +63,11 @@ describe('CvesCreatedLoader', () => {
 
     await waitFor(() => {
       expect(mockGetCreatedAggregates).toHaveBeenCalledWith({filter});
-      expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+      expect(children).toHaveBeenLastCalledWith({
+        data,
+        isLoading: false,
+        isFetching: false,
+      });
     });
 
     expect(subscribe).toHaveBeenCalledWith('cves.timer', expect.any(Function));
@@ -97,7 +101,11 @@ describe('CvesSeverityLoader', () => {
 
     await waitFor(() => {
       expect(mockGetSeverityAggregates).toHaveBeenCalledWith({filter});
-      expect(children).toHaveBeenLastCalledWith({data, isLoading: false});
+      expect(children).toHaveBeenLastCalledWith({
+        data,
+        isLoading: false,
+        isFetching: false,
+      });
     });
 
     expect(subscribe).toHaveBeenCalledWith('cves.timer', expect.any(Function));
