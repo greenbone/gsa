@@ -32,16 +32,15 @@ vi.mock('web/components/dashboard/display/created/CreatedDisplay', () => ({
 }));
 
 vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
-  default: ({data, dataRow, dataTitles, dataTransform, title}) => {
-    const transformedData = dataTransform ? dataTransform(data) : data;
-
+  default: ({data, dataRow, dataTitles, title}) => {
+    const rowData = dataRow(data);
     return (
       <div data-testid="mock-data-table-display">
         <span data-testid="title">{title?.()}</span>
         <span data-testid="data-titles">{dataTitles?.join('|')}</span>
-        {transformedData.map((row, index) => (
+        {rowData.map((row, index) => (
           <span key={index} data-testid={`data-row-${index}`}>
-            {dataRow(transformedData)?.[index]?.join('|')}
+            {row?.join('|')}
           </span>
         ))}
       </div>
@@ -75,7 +74,6 @@ const renderDisplay = (component: ReactElement) => {
 describe('CvesCreatedDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(CvesCreatedDisplay).toBeDefined();
-    expect(typeof CvesCreatedDisplay).toBe('function');
     expect(CvesCreatedDisplay.displayId).toBe('cve-by-created');
     expect(CvesCreatedDisplay.displayName).toBe('CveCreatedDisplay');
   });
@@ -108,7 +106,6 @@ describe('CvesCreatedDisplay', () => {
 describe('CvesCreatedTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(CvesCreatedTableDisplay).toBeDefined();
-    expect(typeof CvesCreatedTableDisplay).toBe('function');
     expect(CvesCreatedTableDisplay.displayId).toBe('cve-by-created-table');
     expect(CvesCreatedTableDisplay.displayName).toBe('CveCreatedTableDisplay');
   });

@@ -6,6 +6,7 @@
 import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor} from 'web/testing';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
   SubscriptionContext,
@@ -25,12 +26,9 @@ const loaderData = {
 
 vi.mock('web/components/dashboard/display/cvss/CvssDisplay', () => ({
   default: ({data, title, yLabel}) => {
-    const total =
-      data?.groups?.reduce((sum, group) => sum + Number(group.count), 0) ?? 0;
-
     return (
       <div data-testid="mock-cvss-display">
-        <span data-testid="title">{title?.({data: {total}})}</span>
+        <span data-testid="title">{title?.({data})}</span>
         <span data-testid="y-label">{yLabel}</span>
       </div>
     );
@@ -39,12 +37,9 @@ vi.mock('web/components/dashboard/display/cvss/CvssDisplay', () => ({
 
 vi.mock('web/components/dashboard/display/cvss/CvssTableDisplay', () => ({
   default: ({data, dataTitles, title}) => {
-    const total =
-      data?.groups?.reduce((sum, group) => sum + Number(group.count), 0) ?? 0;
-
     return (
       <div data-testid="mock-cvss-table-display">
-        <span data-testid="title">{title?.({data: {total}})}</span>
+        <span data-testid="title">{title?.({data})}</span>
         <span data-testid="data-titles">{dataTitles?.join('|')}</span>
       </div>
     );
@@ -52,7 +47,9 @@ vi.mock('web/components/dashboard/display/cvss/CvssTableDisplay', () => ({
 }));
 
 const createGmp = () => ({
-  settings: {severityRating: 'CVSSv3'},
+  settings: {
+    severityRating: SEVERITY_RATING_CVSS_3,
+  },
   filters: {
     get: testing.fn().mockResolvedValue({
       data: [],
@@ -78,7 +75,6 @@ const renderDisplay = (component: ReactElement) => {
 describe('HostsCvssDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(HostsCvssDisplay).toBeDefined();
-    expect(typeof HostsCvssDisplay).toBe('function');
     expect(HostsCvssDisplay.displayId).toBe('host-by-cvss');
     expect(HostsCvssDisplay.displayName).toBe('HostsCvssDisplay');
   });
@@ -105,7 +101,6 @@ describe('HostsCvssDisplay', () => {
 describe('HostsCvssTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(HostsCvssTableDisplay).toBeDefined();
-    expect(typeof HostsCvssTableDisplay).toBe('function');
     expect(HostsCvssTableDisplay.displayId).toBe('host-by-cvss-table');
     expect(HostsCvssTableDisplay.displayName).toBe('HostsCvssTableDisplay');
   });

@@ -18,6 +18,7 @@ import DataDisplay, {
 } from 'web/components/dashboard/display/DataDisplay';
 import DataDisplayIcons from 'web/components/dashboard/display/DataDisplayIcons';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {
   totalCount,
@@ -42,10 +43,7 @@ interface TransformedNvtQodData extends Array<TransformedNvtQodDataItem> {
   total: number;
 }
 
-type NvtQodDataDisplayProps = DataDisplayProps<
-  NvtQodData,
-  TransformedNvtQodData
->;
+type NvtQodDataDisplayProps = DataDisplayProps<TransformedNvtQodData>;
 
 type NvtsQodDisplayProps = DashboardDisplayProps;
 
@@ -114,36 +112,37 @@ export const NvtsQodDisplay = ({
   return (
     <>
       <NvtsQodLoader filter={displayFilter}>
-        {loaderProps => (
-          <DataDisplay<
-            NvtQodData,
-            NvtQodDataDisplayProps,
-            TransformedNvtQodData
-          >
-            {...props}
-            {...loaderProps}
-            dataTransform={transformQodData}
-            icons={DataDisplayIcons}
-            initialState={{}}
-            title={({data}) =>
-              _('NVTs by QoD (Total: {{count}})', {count: data?.total ?? 0})
-            }
-            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
-          >
-            {({width, height, data, svgRef, state}) => (
-              <DonutChart
-                data={data}
-                height={height}
-                showLegend={state.showLegend}
-                svgRef={svgRef}
-                width={width}
-                onDataClick={
-                  isDefined(onFilterChanged) ? handleDataClick : undefined
-                }
-              />
-            )}
-          </DataDisplay>
-        )}
+        {({data, ...loaderProps}) => {
+          const transformedData = transformQodData(data);
+          return (
+            <DataDisplay<TransformedNvtQodData, NvtQodDataDisplayProps>
+              {...props}
+              {...loaderProps}
+              data={transformedData}
+              icons={DataDisplayIcons}
+              initialState={{}}
+              title={({data}) =>
+                _('NVTs by QoD (Total: {{count}})', {count: data?.total ?? 0})
+              }
+              onSelectFilterClick={
+                showFilterSelection ? selectFilter : undefined
+              }
+            >
+              {({width, height, data, svgRef, state}) => (
+                <DonutChart
+                  data={data}
+                  height={height}
+                  showLegend={state.showLegend}
+                  svgRef={svgRef}
+                  width={width}
+                  onDataClick={
+                    isDefined(onFilterChanged) ? handleDataClick : undefined
+                  }
+                />
+              )}
+            </DataDisplay>
+          );
+        }}
       </NvtsQodLoader>
       {filterSelectionDialog}
     </>
@@ -154,19 +153,22 @@ NvtsQodDisplay.displayId = 'nvt-by-qod';
 
 export const NvtsQodTableDisplay = createDisplay({
   loaderComponent: NvtsQodLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label ?? '', row.value]) ?? []
-      }
-      dataTitles={[_('QoD'), _('# of NVTs')]}
-      dataTransform={transformQodData}
-      title={({data}) =>
-        _('NVTs by QoD (Total: {{count}})', {count: data?.total ?? 0})
-      }
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformQodData);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.label ?? '', row.value]) ?? []
+        }
+        dataTitles={[_('QoD'), _('# of NVTs')]}
+        title={({data}) =>
+          _('NVTs by QoD (Total: {{count}})', {count: data?.total ?? 0})
+        }
+      />
+    );
+  },
   displayId: 'nvt-by-qod-table',
   displayName: 'NvtsQodTableDisplay',
   filtersFilter: NVTS_FILTER_FILTER,

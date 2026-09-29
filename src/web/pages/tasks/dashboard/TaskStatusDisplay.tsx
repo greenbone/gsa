@@ -15,6 +15,7 @@ import {
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import StatusDisplay from 'web/components/dashboard/display/status/StatusDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import {totalCount, percent} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import {
@@ -97,34 +98,40 @@ const transformStatusData = (
 
 export const TasksStatusDisplay = createDisplay({
   loaderComponent: TaskStatusLoader,
-  displayComponent: props => (
-    <StatusDisplay
-      {...props}
-      dataTransform={transformStatusData}
-      title={({data}) =>
-        _('Tasks by Status (Total: {{count}})', {count: data?.total ?? 0})
-      }
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformStatusData);
+    return (
+      <StatusDisplay
+        {...props}
+        data={transformedData}
+        title={({data}) =>
+          _('Tasks by Status (Total: {{count}})', {count: data?.total ?? 0})
+        }
+      />
+    );
+  },
   displayId: 'task-by-status',
   filtersFilter: TASKS_FILTER_FILTER,
 });
 
 export const TasksStatusTableDisplay = createDisplay({
   loaderComponent: TaskStatusLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label, row.value]) ?? []
-      }
-      dataTitles={[_('Status'), _('# of Tasks')]}
-      dataTransform={transformStatusData}
-      title={({data}) =>
-        _('Tasks by Status (Total: {{count}})', {count: data?.total ?? 0})
-      }
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformStatusData);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.label, row.value]) ?? []
+        }
+        dataTitles={[_('Status'), _('# of Tasks')]}
+        title={({data}) =>
+          _('Tasks by Status (Total: {{count}})', {count: data?.total ?? 0})
+        }
+      />
+    );
+  },
   displayId: 'task-by-status-table',
   displayName: 'TasksStatusTableDisplay',
   filtersFilter: TASKS_FILTER_FILTER,

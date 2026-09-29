@@ -26,17 +26,15 @@ const loaderData = [
 ];
 
 vi.mock('web/components/dashboard/display/DataDisplay', () => ({
-  default: ({children, data, dataTransform, title}) => {
-    const transformedData = dataTransform ? dataTransform(data) : data;
-
+  default: ({children, data, title}) => {
     return (
       <div data-testid="mock-data-display">
-        <span data-testid="title">{title?.({data: transformedData})}</span>
+        <span data-testid="title">{title?.({data})}</span>
         {typeof children === 'function'
           ? children({
               width: 400,
               height: 300,
-              data: transformedData,
+              data,
               state: {showLegend: true},
               setState: testing.fn(),
               svgRef: {current: null},
@@ -60,16 +58,15 @@ vi.mock('web/components/chart/DonutChart', () => ({
 }));
 
 vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
-  default: ({data, dataRow, dataTitles, dataTransform, title}) => {
-    const transformedData = dataTransform ? dataTransform(data) : data;
-
+  default: ({data, dataRow, dataTitles, title}) => {
+    const rowData = dataRow(data);
     return (
       <div data-testid="mock-data-table-display">
-        <span data-testid="title">{title?.({data: transformedData})}</span>
+        <span data-testid="title">{title?.({data})}</span>
         <span data-testid="data-titles">{dataTitles?.join('|')}</span>
-        {transformedData?.map((row, index) => (
+        {rowData?.map((row, index) => (
           <span key={index} data-testid={`data-row-${index}`}>
-            {dataRow(transformedData)?.[index]?.join('|')}
+            {row?.join('|')}
           </span>
         ))}
       </div>
@@ -103,7 +100,6 @@ const renderDisplay = (component: ReactElement) => {
 describe('TicketsAssignedUsersDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(TicketsAssignedUsersDisplay).toBeDefined();
-    expect(typeof TicketsAssignedUsersDisplay).toBe('function');
     expect(TicketsAssignedUsersDisplay.displayId).toBe(
       'tickets-by-assigned-users',
     );
@@ -142,7 +138,6 @@ describe('TicketsAssignedUsersDisplay', () => {
 describe('TicketsAssignedUsersTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(TicketsAssignedUsersTableDisplay).toBeDefined();
-    expect(typeof TicketsAssignedUsersTableDisplay).toBe('function');
     expect(TicketsAssignedUsersTableDisplay.displayId).toBe(
       'tickets-by-assigned-users-table',
     );

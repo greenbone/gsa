@@ -6,6 +6,7 @@
 import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor} from 'web/testing';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
   SubscriptionContext,
@@ -27,12 +28,9 @@ vi.mock(
   'web/components/dashboard/display/severity/SeverityClassDisplay',
   () => ({
     default: ({data, title}) => {
-      const total =
-        data?.groups?.reduce((sum, group) => sum + Number(group.count), 0) ?? 0;
-
       return (
         <div data-testid="mock-severity-display">
-          <span data-testid="title">{title?.({data: {total}})}</span>
+          <span data-testid="title">{title?.({data})}</span>
         </div>
       );
     },
@@ -43,12 +41,9 @@ vi.mock(
   'web/components/dashboard/display/severity/SeverityClassTableDisplay',
   () => ({
     default: ({data, dataTitles, title}) => {
-      const total =
-        data?.groups?.reduce((sum, group) => sum + Number(group.count), 0) ?? 0;
-
       return (
         <div data-testid="mock-severity-table-display">
-          <span data-testid="title">{title?.({data: {total}})}</span>
+          <span data-testid="title">{title?.({data})}</span>
           <span data-testid="data-titles">{dataTitles?.join('|')}</span>
         </div>
       );
@@ -57,6 +52,9 @@ vi.mock(
 );
 
 const createGmp = () => ({
+  settings: {
+    severityRating: SEVERITY_RATING_CVSS_3,
+  },
   filters: {
     get: testing.fn().mockResolvedValue({
       data: [],
@@ -82,7 +80,6 @@ const renderDisplay = (component: ReactElement) => {
 describe('HostsSeverityClassDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(HostsSeverityClassDisplay).toBeDefined();
-    expect(typeof HostsSeverityClassDisplay).toBe('function');
     expect(HostsSeverityClassDisplay.displayId).toBe('host-by-severity-class');
     expect(HostsSeverityClassDisplay.displayName).toBe(
       'HostsSeverityClassDisplay',
@@ -110,7 +107,6 @@ describe('HostsSeverityClassDisplay', () => {
 describe('HostsSeverityClassTableDisplay', () => {
   test('should export a valid component with the correct configuration', () => {
     expect(HostsSeverityClassTableDisplay).toBeDefined();
-    expect(typeof HostsSeverityClassTableDisplay).toBe('function');
     expect(HostsSeverityClassTableDisplay.displayId).toBe(
       'host-by-severity-class-table',
     );

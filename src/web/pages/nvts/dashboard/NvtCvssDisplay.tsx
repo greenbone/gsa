@@ -6,22 +6,32 @@
 import {_, _l} from 'gmp/locale/lang';
 import {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
+import transformCvssData from 'web/components/dashboard/display/cvss/cvss-transform';
 import CvssDisplay from 'web/components/dashboard/display/cvss/CvssDisplay';
 import CvssTableDisplay from 'web/components/dashboard/display/cvss/CvssTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import {registerDisplay} from 'web/components/dashboard/registry';
+import useGmp from 'web/hooks/useGmp';
 import {NvtsSeverityLoader} from 'web/pages/nvts/dashboard/NvtLoaders';
 
 export const NvtsCvssDisplay = createDisplay({
   loaderComponent: NvtsSeverityLoader,
-  displayComponent: props => (
-    <CvssDisplay
-      {...props}
-      title={({data}) =>
-        _('NVTs by CVSS (Total: {{count}})', {count: data?.total ?? 0})
-      }
-      yLabel={_('# of NVTs')}
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const gmp = useGmp();
+    const transformedData = useDataTransform(data, transformCvssData, {
+      severityRating: gmp.settings.severityRating,
+    });
+    return (
+      <CvssDisplay
+        {...props}
+        data={transformedData}
+        title={({data}) =>
+          _('NVTs by CVSS (Total: {{count}})', {count: data?.total ?? 0})
+        }
+        yLabel={_('# of NVTs')}
+      />
+    );
+  },
   filtersFilter: NVTS_FILTER_FILTER,
   displayId: 'nvt-by-cvss',
   displayName: 'NvtsCvssDisplay',
@@ -29,15 +39,22 @@ export const NvtsCvssDisplay = createDisplay({
 
 export const NvtsCvssTableDisplay = createDisplay({
   loaderComponent: NvtsSeverityLoader,
-  displayComponent: props => (
-    <CvssTableDisplay
-      {...props}
-      dataTitles={[_('Severity'), _('# of NVTs')]}
-      title={({data}) =>
-        _('NVTs by CVSS (Total: {{count}})', {count: data?.total ?? 0})
-      }
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const gmp = useGmp();
+    const transformedData = useDataTransform(data, transformCvssData, {
+      severityRating: gmp.settings.severityRating,
+    });
+    return (
+      <CvssTableDisplay
+        {...props}
+        data={transformedData}
+        dataTitles={[_('Severity'), _('# of NVTs')]}
+        title={({data}) =>
+          _('NVTs by CVSS (Total: {{count}})', {count: data?.total ?? 0})
+        }
+      />
+    );
+  },
   filtersFilter: NVTS_FILTER_FILTER,
   displayId: 'nvt-by-cvss-table',
   displayName: 'NvtsCvssTableDisplay',

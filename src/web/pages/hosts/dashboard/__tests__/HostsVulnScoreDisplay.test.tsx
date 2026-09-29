@@ -6,6 +6,7 @@
 import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor} from 'web/testing';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
   SubscriptionContext,
@@ -98,7 +99,9 @@ vi.mock('web/components/chart/BarChart', () => ({
 }));
 
 const createGmp = () => ({
-  settings: {severityRating: 'CVSSv3'},
+  settings: {
+    severityRating: SEVERITY_RATING_CVSS_3,
+  },
   filters: {
     get: testing.fn().mockResolvedValue({
       data: [],

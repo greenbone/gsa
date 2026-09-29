@@ -9,31 +9,35 @@ import transformCreated from 'web/components/dashboard/display/created/created-t
 import CreatedDisplay from 'web/components/dashboard/display/created/CreatedDisplay';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import {CvesCreatedLoader} from 'web/pages/cves/dashboard/CveLoaders';
 import Theme from 'web/utils/theme';
 
 export const CvesCreatedDisplay = createDisplay({
   loaderComponent: CvesCreatedLoader,
-  displayComponent: props => (
-    <CreatedDisplay
-      {...props}
-      dataTransform={transformCreated}
-      title={() => _('CVEs by Creation Time')}
-      xAxisLabel={_('Time')}
-      y2AxisLabel={_('Total CVEs')}
-      y2Line={{
-        color: Theme.darkGreenTransparent,
-        dashArray: '3, 2',
-        label: _('Total CVEs'),
-      }}
-      yAxisLabel={_('# of created CVEs')}
-      yLine={{
-        color: Theme.darkGreenTransparent,
-        label: _('Created CVEs'),
-      }}
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformCreated);
+    return (
+      <CreatedDisplay
+        {...props}
+        data={transformedData}
+        title={() => _('CVEs by Creation Time')}
+        xAxisLabel={_('Time')}
+        y2AxisLabel={_('Total CVEs')}
+        y2Line={{
+          color: Theme.darkGreenTransparent,
+          dashArray: '3, 2',
+          label: _('Total CVEs'),
+        }}
+        yAxisLabel={_('# of created CVEs')}
+        yLine={{
+          color: Theme.darkGreenTransparent,
+          label: _('Created CVEs'),
+        }}
+      />
+    );
+  },
   displayId: 'cve-by-created',
   displayName: 'CveCreatedDisplay',
   filtersFilter: CVES_FILTER_FILTER,
@@ -41,17 +45,20 @@ export const CvesCreatedDisplay = createDisplay({
 
 export const CvesCreatedTableDisplay = createDisplay({
   loaderComponent: CvesCreatedLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label ?? '', row.y, row.y2]) ?? []
-      }
-      dataTitles={[_l('Creation Time'), _l('# of CVEs'), _l('Total CVEs')]}
-      dataTransform={transformCreated}
-      title={() => _('CVEs by Creation Time')}
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformCreated);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.label ?? '', row.y, row.y2]) ?? []
+        }
+        dataTitles={[_l('Creation Time'), _l('# of CVEs'), _l('Total CVEs')]}
+        title={() => _('CVEs by Creation Time')}
+      />
+    );
+  },
   displayId: 'cve-by-created-table',
   displayName: 'CveCreatedTableDisplay',
   filtersFilter: CVES_FILTER_FILTER,

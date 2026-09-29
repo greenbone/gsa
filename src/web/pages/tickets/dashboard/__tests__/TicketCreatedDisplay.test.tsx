@@ -24,27 +24,14 @@ const loaderData = [
 ];
 
 vi.mock('web/components/dashboard/display/created/CreatedDisplay', () => ({
-  default: ({
-    data,
-    dataTransform,
-    title,
-    xAxisLabel,
-    yAxisLabel,
-    y2AxisLabel,
-  }) => {
-    if (!data) {
-      return null;
-    }
-
-    const transformedData = dataTransform ? dataTransform(data) : data;
-
+  default: ({data, title, xAxisLabel, yAxisLabel, y2AxisLabel}) => {
     return (
       <div data-testid="mock-created-display">
         <span data-testid="title">{title?.()}</span>
         <span data-testid="x-axis-label">{xAxisLabel}</span>
         <span data-testid="y-axis-label">{yAxisLabel}</span>
         <span data-testid="y2-axis-label">{y2AxisLabel}</span>
-        {transformedData?.map((row, index) => (
+        {data?.map((row, index) => (
           <span key={index} data-testid={`data-row-${index}`}>
             {row.y}|{row.y2}
           </span>
@@ -55,20 +42,15 @@ vi.mock('web/components/dashboard/display/created/CreatedDisplay', () => ({
 }));
 
 vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
-  default: ({data, dataRow, dataTitles, dataTransform, title}) => {
-    if (!data) {
-      return null;
-    }
-
-    const transformedData = dataTransform ? dataTransform(data) : data;
-
+  default: ({data, dataRow, dataTitles, title}) => {
+    const rowData = dataRow(data);
     return (
       <div data-testid="mock-data-table-display">
         <span data-testid="title">{title?.({data})}</span>
         <span data-testid="data-titles">{dataTitles?.join('|')}</span>
-        {transformedData?.map((row, index) => (
+        {rowData?.map((row, index) => (
           <span key={index} data-testid={`data-row-${index}`}>
-            {dataRow(transformedData)?.[index]?.join('|')}
+            {row?.join('|')}
           </span>
         ))}
       </div>
@@ -156,7 +138,7 @@ describe('TicketsCreatedTableDisplay', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('title')).toHaveTextContent(
-        'Tickets by Creation Time (Total: 3)',
+        'Tickets by Creation Time (Total: 2)',
       );
       expect(screen.getByTestId('data-titles')).toHaveTextContent(
         'Created Tickets|Total Tickets|Time',

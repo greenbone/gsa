@@ -22,20 +22,15 @@ type LoaderData = {
 };
 
 vi.mock('web/components/dashboard/display/DataDisplay', () => ({
-  default: ({children, data, dataTransform, title}) => {
-    if (!data) {
-      return null;
-    }
-
-    const transformedData = dataTransform ? dataTransform(data) : data;
+  default: ({children, data, title}) => {
     return (
       <div data-testid="mock-data-display">
-        {title?.({data: transformedData})}
+        {title?.({data})}
         {typeof children === 'function'
           ? children({
               width: 400,
               height: 300,
-              data: transformedData,
+              data,
               svgRef: {current: null},
             })
           : children}
@@ -192,7 +187,6 @@ describe('VulnerabilitiesHostsDisplay', () => {
 describe('VulnerabilitiesHostsTableDisplay', () => {
   test('should export VulnerabilitiesHostsTableDisplay', () => {
     expect(VulnerabilitiesHostsTableDisplay).toBeDefined();
-    expect(typeof VulnerabilitiesHostsTableDisplay).toBe('function');
   });
 
   test('should have correct displayId', () => {

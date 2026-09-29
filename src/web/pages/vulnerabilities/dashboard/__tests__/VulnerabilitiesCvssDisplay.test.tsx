@@ -6,6 +6,7 @@
 import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor} from 'web/testing';
+import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
   SubscriptionContext,
@@ -18,25 +19,20 @@ import {
 
 vi.mock('web/components/dashboard/display/cvss/CvssDisplay', () => ({
   default: ({title, data}) => {
-    if (!data) {
-      return null;
-    }
-
     return <div data-testid="mock-cvss-display">{title?.({data})}</div>;
   },
 }));
 
 vi.mock('web/components/dashboard/display/cvss/CvssTableDisplay', () => ({
   default: ({title, data}) => {
-    if (!data) {
-      return null;
-    }
-
     return <div data-testid="mock-cvss-table-display">{title?.({data})}</div>;
   },
 }));
 
 const createGmp = () => ({
+  settings: {
+    severityRating: SEVERITY_RATING_CVSS_3,
+  },
   filters: {
     get: testing.fn().mockResolvedValue({
       data: [],
@@ -45,7 +41,12 @@ const createGmp = () => ({
   },
   vulns: {
     getSeverityAggregates: testing.fn().mockResolvedValue({
-      data: {total: 42},
+      data: {
+        groups: [
+          {value: '2.0', count: 12},
+          {value: '7.5', count: 30},
+        ],
+      },
     }),
   },
 });

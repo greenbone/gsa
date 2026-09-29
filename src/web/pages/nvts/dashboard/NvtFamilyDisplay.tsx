@@ -18,6 +18,7 @@ import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
@@ -46,11 +47,7 @@ interface TransformFamilyDataProps {
   severityRating?: SeverityRating;
 }
 
-type NvtFamilyDataDisplayProps = DataDisplayProps<
-  NvtFamilyData,
-  TransformedNvtFamilyData,
-  TransformFamilyDataProps
->;
+type NvtFamilyDataDisplayProps = DataDisplayProps<TransformedNvtFamilyData>;
 
 type NvtsFamilyDisplayProps = DashboardDisplayProps;
 
@@ -99,7 +96,6 @@ export const NvtsFamilyDisplay = ({
   ...props
 }: NvtsFamilyDisplayProps) => {
   const gmp = useGmp();
-
   const {
     filter: selectedFilter,
     selectFilter,
@@ -130,42 +126,43 @@ export const NvtsFamilyDisplay = ({
     onFilterChanged(newFilter);
   };
 
-  const severityRating = gmp.settings.severityRating;
-
   return (
     <>
       <NvtsFamilyLoader filter={displayFilter}>
-        {loaderProps => (
-          <DataDisplay<
-            NvtFamilyData,
-            NvtFamilyDataDisplayProps,
-            TransformedNvtFamilyData,
-            TransformFamilyDataProps
-          >
-            {...props}
-            {...loaderProps}
-            dataTransform={transformFamilyData}
-            filter={displayFilter}
-            severityRating={severityRating}
-            showToggleLegend={false}
-            title={({data}) =>
-              _('NVTs by Family (Total: {{count}})', {count: data?.total ?? 0})
-            }
-            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
-          >
-            {({width, height, data, svgRef}) => (
-              <BubbleChart<TransformedNvtFamilyDataItem>
-                data={data}
-                height={height}
-                svgRef={svgRef}
-                width={width}
-                onDataClick={
-                  isDefined(onFilterChanged) ? handleDataClick : undefined
-                }
-              />
-            )}
-          </DataDisplay>
-        )}
+        {({data, ...loaderProps}) => {
+          const transformedData = transformFamilyData(data, {
+            severityRating: gmp.settings.severityRating,
+          });
+          return (
+            <DataDisplay<TransformedNvtFamilyData, NvtFamilyDataDisplayProps>
+              {...props}
+              {...loaderProps}
+              data={transformedData}
+              filter={displayFilter}
+              showToggleLegend={false}
+              title={({data}) =>
+                _('NVTs by Family (Total: {{count}})', {
+                  count: data?.total ?? 0,
+                })
+              }
+              onSelectFilterClick={
+                showFilterSelection ? selectFilter : undefined
+              }
+            >
+              {({width, height, data, svgRef}) => (
+                <BubbleChart<TransformedNvtFamilyDataItem>
+                  data={data}
+                  height={height}
+                  svgRef={svgRef}
+                  width={width}
+                  onDataClick={
+                    isDefined(onFilterChanged) ? handleDataClick : undefined
+                  }
+                />
+              )}
+            </DataDisplay>
+          );
+        }}
       </NvtsFamilyLoader>
       {filterSelectionDialog}
     </>
@@ -176,19 +173,23 @@ NvtsFamilyDisplay.displayId = 'nvt-by-family';
 
 export const NvtsFamilyTableDisplay = createDisplay({
   loaderComponent: NvtsFamilyLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label, row.value, row.severity]) ?? []
-      }
-      dataTitles={[_('NVT Family'), _('# of NVTs'), _('Severity')]}
-      dataTransform={transformFamilyData}
-      title={({data}) =>
-        _('NVTs by Family (Total: {{count}})', {count: data?.total ?? 0})
-      }
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformFamilyData);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.label, row.value, row.severity]) ??
+          []
+        }
+        dataTitles={[_('NVT Family'), _('# of NVTs'), _('Severity')]}
+        title={({data}) =>
+          _('NVTs by Family (Total: {{count}})', {count: data?.total ?? 0})
+        }
+      />
+    );
+  },
   displayId: 'nvt-by-family-table',
   displayName: 'NvtsFamilyTableDisplay',
   filtersFilter: NVTS_FILTER_FILTER,

@@ -17,6 +17,7 @@ import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {randomColor} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
@@ -34,10 +35,8 @@ interface TransformedResultWordCloudDataItem {
 
 type TransformedResultWordCloudData = TransformedResultWordCloudDataItem[];
 
-type ResultWordCloudDataDisplayProps = DataDisplayProps<
-  ResultWordCloudData,
-  TransformedResultWordCloudData
->;
+type ResultWordCloudDataDisplayProps =
+  DataDisplayProps<TransformedResultWordCloudData>;
 
 type ResultWordCloudDisplayProps = DashboardDisplayProps;
 
@@ -99,33 +98,37 @@ export const ResultsWordCloudDisplay = ({
   return (
     <>
       <ResultsWordCountLoader filter={displayFilter}>
-        {loaderProps => (
-          <DataDisplay<
-            ResultWordCloudData,
-            ResultWordCloudDataDisplayProps,
-            TransformedResultWordCloudData
-          >
-            {...props}
-            {...loaderProps}
-            dataTransform={transformWordCountData}
-            filter={displayFilter}
-            showToggleLegend={false}
-            title={() => _('Results Vulnerability Word Cloud')}
-            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
-          >
-            {({width, height, data, svgRef}) => (
-              <WordCloudChart
-                data={data}
-                height={height}
-                svgRef={svgRef}
-                width={width}
-                onDataClick={
-                  isDefined(onFilterChanged) ? handleDataClick : undefined
-                }
-              />
-            )}
-          </DataDisplay>
-        )}
+        {({data, isLoading}) => {
+          const transformedData = transformWordCountData(data);
+          return (
+            <DataDisplay<
+              TransformedResultWordCloudData,
+              ResultWordCloudDataDisplayProps
+            >
+              {...props}
+              data={transformedData}
+              filter={displayFilter}
+              isLoading={isLoading}
+              showToggleLegend={false}
+              title={() => _('Results Vulnerability Word Cloud')}
+              onSelectFilterClick={
+                showFilterSelection ? selectFilter : undefined
+              }
+            >
+              {({width, height, data, svgRef}) => (
+                <WordCloudChart
+                  data={data}
+                  height={height}
+                  svgRef={svgRef}
+                  width={width}
+                  onDataClick={
+                    isDefined(onFilterChanged) ? handleDataClick : undefined
+                  }
+                />
+              )}
+            </DataDisplay>
+          );
+        }}
       </ResultsWordCountLoader>
       {filterSelectionDialog}
     </>
@@ -136,17 +139,20 @@ ResultsWordCloudDisplay.displayId = 'result-by-vuln-words';
 
 export const ResultsWordCloudTableDisplay = createDisplay({
   loaderComponent: ResultsWordCountLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label, row.value]) ?? []
-      }
-      dataTitles={[_('Vulnerability'), _('Word Count')]}
-      dataTransform={transformWordCountData}
-      title={() => _('Results Vulnerability Word Cloud')}
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformWordCountData);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.label, row.value]) ?? []
+        }
+        dataTitles={[_('Vulnerability'), _('Word Count')]}
+        title={() => _('Results Vulnerability Word Cloud')}
+      />
+    );
+  },
   filtersFilter: RESULTS_FILTER_FILTER,
   displayId: 'result-by-vuln-words-table',
   displayName: 'ResultsWordCloudTableDisplay',

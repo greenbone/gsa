@@ -15,6 +15,7 @@ import {isDefined} from 'gmp/utils/identity';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
 import StatusDisplay from 'web/components/dashboard/display/status/StatusDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import {percent} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import {
@@ -79,17 +80,20 @@ const transformTimeStatusData = (
 
 export const TlsCertificateTimeStatusDisplay = createDisplay({
   loaderComponent: TlsCertificatesStatusLoader,
-  displayComponent: props => (
-    <StatusDisplay
-      {...props}
-      dataTransform={transformTimeStatusData}
-      title={({data}) =>
-        _('TLS Certificates by Status (Total: {{count}})', {
-          count: data?.total ?? 0,
-        })
-      }
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformTimeStatusData);
+    return (
+      <StatusDisplay
+        {...props}
+        data={transformedData}
+        title={({data}) =>
+          _('TLS Certificates by Status (Total: {{count}})', {
+            count: data?.total ?? 0,
+          })
+        }
+      />
+    );
+  },
   displayId: 'tls-certificates-by-status',
   filtersFilter: TLS_CERTIFICATES_FILTER_FILTER,
   filterTerm: 'time_status',
@@ -97,21 +101,24 @@ export const TlsCertificateTimeStatusDisplay = createDisplay({
 
 export const TlsCertificateTimeStatusTableDisplay = createDisplay({
   loaderComponent: TlsCertificatesStatusLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label, row.value]) ?? []
-      }
-      dataTitles={[_('Status'), _('# of Certificates')]}
-      dataTransform={transformTimeStatusData}
-      title={({data}) =>
-        _('TLS Certificates by Status (Total: {{count}})', {
-          count: data?.total ?? 0,
-        })
-      }
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformTimeStatusData);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.label, row.value]) ?? []
+        }
+        dataTitles={[_('Status'), _('# of Certificates')]}
+        title={({data}) =>
+          _('TLS Certificates by Status (Total: {{count}})', {
+            count: data?.total ?? 0,
+          })
+        }
+      />
+    );
+  },
   displayId: 'tls-certificates-by-status-table',
   displayName: 'TlsCertificateTimeStatusTableDisplay',
   filtersFilter: TLS_CERTIFICATES_FILTER_FILTER,

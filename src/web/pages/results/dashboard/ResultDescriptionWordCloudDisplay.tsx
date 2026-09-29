@@ -17,6 +17,7 @@ import DataDisplay, {
   type DataDisplayProps,
 } from 'web/components/dashboard/display/DataDisplay';
 import DataTableDisplay from 'web/components/dashboard/display/DataTableDisplay';
+import useDataTransform from 'web/components/dashboard/display/useDataTransform';
 import useFilterSelection from 'web/components/dashboard/display/useFilterSelection';
 import {randomColor} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
@@ -34,10 +35,8 @@ interface TransformResultWordCountDataItem {
 
 type TransformResultWordCountData = TransformResultWordCountDataItem[];
 
-type ResultWordCountDataDisplayProps = DataDisplayProps<
-  ResultWordCloudData,
-  TransformResultWordCountData
->;
+type ResultWordCountDataDisplayProps =
+  DataDisplayProps<TransformResultWordCountData>;
 
 type ResultWordCountDisplayProps = DashboardDisplayProps;
 
@@ -99,33 +98,37 @@ export const ResultsDescriptionWordCloudDisplay = ({
   return (
     <>
       <ResultsDescriptionWordCountLoader filter={displayFilter}>
-        {loaderProps => (
-          <DataDisplay<
-            ResultWordCloudData,
-            ResultWordCountDataDisplayProps,
-            TransformResultWordCountData
-          >
-            {...props}
-            {...loaderProps}
-            dataTransform={transformWordCountData}
-            filter={displayFilter}
-            showToggleLegend={false}
-            title={() => _('Results Description Word Cloud')}
-            onSelectFilterClick={showFilterSelection ? selectFilter : undefined}
-          >
-            {({width, height, data, svgRef}) => (
-              <WordCloudChart
-                data={data}
-                height={height}
-                svgRef={svgRef}
-                width={width}
-                onDataClick={
-                  isDefined(onFilterChanged) ? handleDataClick : undefined
-                }
-              />
-            )}
-          </DataDisplay>
-        )}
+        {({data, isLoading}) => {
+          const transformedData = transformWordCountData(data);
+          return (
+            <DataDisplay<
+              TransformResultWordCountData,
+              ResultWordCountDataDisplayProps
+            >
+              {...props}
+              data={transformedData}
+              filter={displayFilter}
+              isLoading={isLoading}
+              showToggleLegend={false}
+              title={() => _('Results Description Word Cloud')}
+              onSelectFilterClick={
+                showFilterSelection ? selectFilter : undefined
+              }
+            >
+              {({width, height, data, svgRef}) => (
+                <WordCloudChart
+                  data={data}
+                  height={height}
+                  svgRef={svgRef}
+                  width={width}
+                  onDataClick={
+                    isDefined(onFilterChanged) ? handleDataClick : undefined
+                  }
+                />
+              )}
+            </DataDisplay>
+          );
+        }}
       </ResultsDescriptionWordCountLoader>
       {filterSelectionDialog}
     </>
@@ -136,17 +139,20 @@ ResultsDescriptionWordCloudDisplay.displayId = 'result-by-desc-words';
 
 export const ResultsDescriptionWordCloudTableDisplay = createDisplay({
   loaderComponent: ResultsDescriptionWordCountLoader,
-  displayComponent: props => (
-    <DataTableDisplay
-      {...props}
-      dataRow={transformedData =>
-        transformedData?.map(row => [row.label, row.value]) ?? []
-      }
-      dataTitles={[_('Description'), _('Word Count')]}
-      dataTransform={transformWordCountData}
-      title={() => _('Results Description Word Cloud')}
-    />
-  ),
+  displayComponent: ({data, ...props}) => {
+    const transformedData = useDataTransform(data, transformWordCountData);
+    return (
+      <DataTableDisplay
+        {...props}
+        data={transformedData}
+        dataRow={transformedData =>
+          transformedData?.map(row => [row.label, row.value]) ?? []
+        }
+        dataTitles={[_('Description'), _('Word Count')]}
+        title={() => _('Results Description Word Cloud')}
+      />
+    );
+  },
   displayId: 'result-by-desc-words-table',
   displayName: 'ResultsDescriptionWordCloudTableDisplay',
   filtersFilter: RESULTS_FILTER_FILTER,
