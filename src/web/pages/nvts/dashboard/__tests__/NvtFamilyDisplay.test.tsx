@@ -5,7 +5,7 @@
 
 import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
-import {rendererWith, screen, waitFor} from 'web/testing';
+import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getDisplay} from 'web/components/dashboard/registry';
@@ -26,10 +26,11 @@ const loaderData = {
 };
 
 vi.mock('web/components/dashboard/display/DataDisplay', () => ({
-  default: ({children, data, title}) => {
+  default: ({children, data, showToggleLegend, title}) => {
     return (
       <div data-testid="mock-data-display">
         <span data-testid="title">{title?.({data})}</span>
+        <span data-testid="show-toggle-legend">{String(showToggleLegend)}</span>
         {typeof children === 'function'
           ? children({
               width: 400,
@@ -121,6 +122,9 @@ describe('NvtsFamilyDisplay', () => {
       );
       expect(screen.getByRole('button', {name: 'Linux'})).toBeInTheDocument();
       expect(screen.getByRole('button', {name: 'Windows'})).toBeInTheDocument();
+      expect(screen.getByTestId('show-toggle-legend')).toHaveTextContent(
+        'false',
+      );
     });
   });
 
@@ -135,7 +139,7 @@ describe('NvtsFamilyDisplay', () => {
     );
 
     const family = await screen.findByRole('button', {name: 'Linux'});
-    family.click();
+    fireEvent.click(family);
 
     expect(onFilterChanged).toHaveBeenCalledTimes(1);
     expect(onFilterChanged.mock.calls[0][0].toFilterString()).toBe(
@@ -155,9 +159,16 @@ describe('NvtsFamilyDisplay', () => {
     );
 
     const family = await screen.findByRole('button', {name: 'Linux'});
-    family.click();
+    fireEvent.click(family);
 
     expect(onFilterChanged).not.toHaveBeenCalled();
+  });
+
+  test('should not throw when clicking a family without onFilterChanged', async () => {
+    renderDisplay(<NvtsFamilyDisplay height={200} width={200} />);
+
+    const family = await screen.findByRole('button', {name: 'Linux'});
+    expect(() => fireEvent.click(family)).not.toThrow();
   });
 });
 

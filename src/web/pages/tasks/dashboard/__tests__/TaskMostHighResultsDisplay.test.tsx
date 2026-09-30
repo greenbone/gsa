@@ -5,7 +5,7 @@
 
 import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
-import {rendererWith, screen, waitFor} from 'web/testing';
+import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
@@ -35,10 +35,11 @@ const loaderData = {
 };
 
 vi.mock('web/components/dashboard/display/DataDisplay', () => ({
-  default: ({children, data, title}) => {
+  default: ({children, data, showToggleLegend, title}) => {
     return (
       <div data-testid="mock-data-display">
         <span data-testid="title">{title?.(data)}</span>
+        <span data-testid="show-toggle-legend">{String(showToggleLegend)}</span>
         {typeof children === 'function'
           ? children({
               width: 400,
@@ -70,13 +71,17 @@ vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
 }));
 
 vi.mock('web/components/chart/BarChart', () => ({
-  default: ({data, xLabel}) => (
+  default: ({data, onDataClick, xLabel}) => (
     <div data-testid="mock-bar-chart">
       <span data-testid="x-label">{xLabel}</span>
       {data.map((row, index) => (
-        <span key={index} data-testid={`data-point-${index}`}>
+        <button
+          key={index}
+          data-testid={`data-point-${index}`}
+          onClick={() => onDataClick?.(row)}
+        >
           {row.x}|{row.y}
-        </span>
+        </button>
       ))}
     </div>
   ),
@@ -99,9 +104,16 @@ const createGmp = () => ({
   },
 });
 
-const renderDisplay = (component: ReactElement) => {
+const renderDisplay = (
+  component: ReactElement,
+  {showLocation}: {showLocation?: boolean} = {},
+) => {
   const subscribe: SubscribeFunc = testing.fn().mockReturnValue(testing.fn());
-  const {render} = rendererWith({gmp: createGmp(), store: true});
+  const {render} = rendererWith({
+    gmp: createGmp(),
+    showLocation,
+    store: true,
+  });
 
   return render(
     <SubscriptionContext.Provider value={subscribe}>
@@ -148,6 +160,29 @@ describe('TasksMostHighResultsDisplay', () => {
       );
       expect(screen.queryByText(/Task Three/)).toBeNull();
     });
+  });
+
+  test('should show the legend toggle as disabled', async () => {
+    renderDisplay(<TasksMostHighResultsDisplay height={200} width={200} />);
+
+    expect(await screen.findByTestId('show-toggle-legend')).toHaveTextContent(
+      'false',
+    );
+  });
+
+  test('should navigate to the selected task', async () => {
+    renderDisplay(<TasksMostHighResultsDisplay height={200} width={200} />, {
+      showLocation: true,
+    });
+
+    const button = await screen.findByRole('button', {name: /Task One/});
+    fireEvent.click(button);
+
+    await waitFor(() =>
+      expect(screen.getByTestId('location-pathname')).toHaveTextContent(
+        '/task/task-1',
+      ),
+    );
   });
 });
 

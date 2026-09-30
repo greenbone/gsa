@@ -5,7 +5,7 @@
 
 import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
-import {rendererWith, screen, waitFor} from 'web/testing';
+import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
@@ -133,7 +133,7 @@ describe('NvtsQodTypeDisplay', () => {
     );
 
     const qodType = await screen.findByRole('button', {name: 'General note'});
-    qodType.click();
+    fireEvent.click(qodType);
 
     expect(onFilterChanged).toHaveBeenCalledTimes(1);
     expect(onFilterChanged.mock.calls[0][0].toFilterString()).toBe(
@@ -153,9 +153,16 @@ describe('NvtsQodTypeDisplay', () => {
     );
 
     const qodType = await screen.findByRole('button', {name: 'General note'});
-    qodType.click();
+    fireEvent.click(qodType);
 
     expect(onFilterChanged).not.toHaveBeenCalled();
+  });
+
+  test('should not throw when clicking a QoD-type without onFilterChanged', async () => {
+    renderDisplay(<NvtsQodTypeDisplay height={200} width={200} />);
+
+    const qodType = await screen.findByRole('button', {name: 'General note'});
+    expect(() => fireEvent.click(qodType)).not.toThrow();
   });
 });
 

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useCallback} from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {type Date} from 'gmp/models/date';
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
@@ -62,25 +63,28 @@ export const HostsModifiedHighDisplay = createDisplay({
   loaderComponent: HostsModifiedLoader,
   displayComponent: ({data, onFilterChanged, filter, ...props}) => {
     const transformedData = useDataTransform(data, transformModified);
-    const handleRangeSelect = (start: LineData, end: LineData) => {
-      if (!isDefined(onFilterChanged)) {
-        return;
-      }
+    const handleRangeSelect = useCallback(
+      (start: LineData, end: LineData) => {
+        if (!isDefined(onFilterChanged)) {
+          return;
+        }
 
-      const startDate = start.x as Date;
-      const endDate = end.x as Date;
-      const dateFormat = 'YYYY-MM-DDTHH:mm';
+        const startDate = start.x as Date;
+        const endDate = end.x as Date;
+        const dateFormat = 'YYYY-MM-DDTHH:mm';
 
-      onFilterChanged(
-        createDateRangeFilter({
-          endDate,
-          field: 'modified',
-          filter,
-          formatDate: date => date.format(dateFormat),
-          startDate,
-        }),
-      );
-    };
+        onFilterChanged(
+          createDateRangeFilter({
+            endDate,
+            field: 'modified',
+            filter,
+            formatDate: date => date.format(dateFormat),
+            startDate,
+          }),
+        );
+      },
+      [onFilterChanged, filter],
+    );
     return (
       <DataDisplay<
         TransformedHostHighModifiedData,

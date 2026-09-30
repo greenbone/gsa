@@ -5,7 +5,8 @@
 
 import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
-import {rendererWith, screen, waitFor} from 'web/testing';
+import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
   SubscriptionContext,
@@ -24,10 +25,11 @@ const loaderData = {
 };
 
 vi.mock('web/components/dashboard/display/DataDisplay', () => ({
-  default: ({children, data, title}) => {
+  default: ({children, data, showToggleLegend, title}) => {
     return (
       <div data-testid="mock-data-display">
         <span data-testid="title">{title?.(data)}</span>
+        <span data-testid="show-toggle-legend">{String(showToggleLegend)}</span>
         {typeof children === 'function'
           ? children({
               width: 400,
@@ -59,13 +61,20 @@ vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
 }));
 
 vi.mock('web/components/chart/WordCloudChart', () => ({
-  default: ({data}) => (
+  default: ({data, onDataClick}) => (
     <div data-testid="mock-word-cloud-chart">
       {data.map((row, index) => (
-        <span key={index} data-testid={`data-word-${index}`}>
+        <button
+          key={index}
+          data-testid={`data-word-${index}`}
+          onClick={() => onDataClick?.(row.filterValue)}
+        >
           {row.label}|{row.value}|{row.filterValue}
-        </span>
+        </button>
       ))}
+      <button data-testid="empty-filter-value" onClick={() => onDataClick?.()}>
+        empty
+      </button>
     </div>
   ),
 }));
@@ -123,6 +132,81 @@ describe('OverridesWordCloudDisplay', () => {
         'network|3|network',
       );
     });
+  });
+
+  test('should set showToggleLegend to false', async () => {
+    renderDisplay(<OverridesWordCloudDisplay height={200} width={200} />);
+
+    expect(await screen.findByTestId('show-toggle-legend')).toHaveTextContent(
+      'false',
+    );
+  });
+
+  test('should call onFilterChanged with a text filter when clicking a word', async () => {
+    const onFilterChanged = testing.fn();
+
+    renderDisplay(
+      <OverridesWordCloudDisplay
+        height={200}
+        width={200}
+        onFilterChanged={onFilterChanged}
+      />,
+    );
+
+    const wordButton = await screen.findByRole('button', {
+      name: /security\|5\|security/,
+    });
+    fireEvent.click(wordButton);
+
+    expect(onFilterChanged).toHaveBeenCalledTimes(1);
+    expect(onFilterChanged.mock.calls[0][0].toFilterString()).toBe(
+      'text~"security"',
+    );
+  });
+
+  test('should not call onFilterChanged when the filter already has the word term', async () => {
+    const onFilterChanged = testing.fn();
+
+    renderDisplay(
+      <OverridesWordCloudDisplay
+        filter={QueryFilter.fromString('text~"security"')}
+        height={200}
+        width={200}
+        onFilterChanged={onFilterChanged}
+      />,
+    );
+
+    const wordButton = await screen.findByRole('button', {
+      name: /security\|5\|security/,
+    });
+    fireEvent.click(wordButton);
+
+    expect(onFilterChanged).not.toHaveBeenCalled();
+  });
+
+  test('should not call onFilterChanged when the word is empty', async () => {
+    const onFilterChanged = testing.fn();
+
+    renderDisplay(
+      <OverridesWordCloudDisplay
+        height={200}
+        width={200}
+        onFilterChanged={onFilterChanged}
+      />,
+    );
+
+    fireEvent.click(await screen.findByTestId('empty-filter-value'));
+
+    expect(onFilterChanged).not.toHaveBeenCalled();
+  });
+
+  test('should not throw when clicking a word without onFilterChanged', async () => {
+    renderDisplay(<OverridesWordCloudDisplay height={200} width={200} />);
+
+    const wordButton = await screen.findByRole('button', {
+      name: /security\|5\|security/,
+    });
+    expect(() => fireEvent.click(wordButton)).not.toThrow();
   });
 });
 

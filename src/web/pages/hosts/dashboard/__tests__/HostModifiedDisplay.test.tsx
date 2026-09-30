@@ -5,7 +5,8 @@
 
 import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
-import {rendererWith, screen, waitFor} from 'web/testing';
+import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
   SubscriptionContext,
@@ -131,6 +132,37 @@ describe('HostsModifiedDisplay', () => {
       expect(screen.getByTestId('data-point-0')).toHaveTextContent('5|10');
       expect(screen.getByTestId('data-point-1')).toHaveTextContent('7|12');
     });
+  });
+
+  test('should call onFilterChanged with a modification date range filter', async () => {
+    const onFilterChanged = testing.fn();
+    const filter = QueryFilter.fromString('severity=high');
+
+    renderDisplay(
+      <HostsModifiedDisplay
+        filter={filter}
+        height={200}
+        width={200}
+        onFilterChanged={onFilterChanged}
+      />,
+    );
+
+    const button = await screen.findByRole('button', {name: 'select-range'});
+    fireEvent.click(button);
+
+    expect(onFilterChanged).toHaveBeenCalledTimes(1);
+    const newFilter = onFilterChanged.mock.calls[0][0];
+    expect(newFilter.toFilterString()).toContain('severity=high');
+    expect(newFilter.toFilterString()).toContain('modified>2026-01-01t00:00');
+    expect(newFilter.toFilterString()).toContain('modified<2026-01-02t00:00');
+  });
+
+  test('should not throw when selecting a range without onFilterChanged', async () => {
+    renderDisplay(<HostsModifiedDisplay height={200} width={200} />);
+
+    const button = await screen.findByRole('button', {name: 'select-range'});
+
+    expect(() => fireEvent.click(button)).not.toThrow();
   });
 });
 
