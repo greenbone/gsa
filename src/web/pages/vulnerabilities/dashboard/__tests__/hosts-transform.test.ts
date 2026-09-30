@@ -8,11 +8,17 @@ import transformHostsData from 'web/pages/vulnerabilities/dashboard/hosts-transf
 
 describe('transformHostsData', () => {
   test('should return an empty array when no data is provided', () => {
-    expect(transformHostsData()).toEqual([]);
+    const result = transformHostsData();
+
+    expect(result).toHaveLength(0);
+    expect(result.total).toBe(0);
   });
 
   test('should return no data for empty groups', () => {
-    expect(transformHostsData({groups: []})).toEqual([]);
+    const result = transformHostsData({groups: []});
+
+    expect(result).toHaveLength(0);
+    expect(result.total).toBe(0);
   });
 
   test('should create a zero-host bucket for a single group', () => {
@@ -21,6 +27,7 @@ describe('transformHostsData', () => {
     });
 
     expect(result).toHaveLength(1);
+    expect(result.total).toBe(4);
     expect(result[0]).toMatchObject({
       x: '0',
       y: 4,
@@ -40,6 +47,7 @@ describe('transformHostsData', () => {
     });
 
     expect(result).toHaveLength(3);
+    expect(result.total).toBe(5);
     expect(result.map(({x, y}) => ({x, y}))).toEqual([
       {x: '0-1', y: 2},
       {x: '2-3', y: 0},
@@ -60,6 +68,7 @@ describe('transformHostsData', () => {
       ],
     });
 
+    expect(result.total).toBe(10);
     expect(result.map(({toolTip}) => toolTip)).toEqual([
       '0 - 0: 2 (20.0%)',
       '1 - 1: 0 (0.0%)',
