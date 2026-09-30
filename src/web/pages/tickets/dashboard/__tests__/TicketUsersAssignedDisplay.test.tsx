@@ -26,10 +26,11 @@ const loaderData = [
 ];
 
 vi.mock('web/components/dashboard/display/DataDisplay', () => ({
-  default: ({children, data, title}) => {
+  default: ({children, data, showToggleLegend, title}) => {
     return (
       <div data-testid="mock-data-display">
         <span data-testid="title">{title?.({data})}</span>
+        <span data-testid="show-toggle-legend">{String(showToggleLegend)}</span>
         {typeof children === 'function'
           ? children({
               width: 400,
@@ -121,6 +122,9 @@ describe('TicketsAssignedUsersDisplay', () => {
     await waitFor(() => {
       expect(screen.getByTestId('title')).toHaveTextContent(
         'Tickets by Assigned User (Total: 6)',
+      );
+      expect(screen.getByTestId('show-toggle-legend')).toHaveTextContent(
+        'false',
       );
       expect(screen.getByTestId('data-point-Alice')).toHaveTextContent(
         'Alice|2|Alice',

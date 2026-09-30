@@ -5,7 +5,8 @@
 
 import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
-import {rendererWith, screen, waitFor} from 'web/testing';
+import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
   SubscriptionContext,
@@ -61,13 +62,23 @@ vi.mock('web/components/dashboard/display/DataTableDisplay', () => ({
 }));
 
 vi.mock('web/components/chart/DonutChart', () => ({
-  default: ({data}) => (
+  default: ({data, onDataClick}) => (
     <div data-testid="mock-donut-chart">
       {data.map((row, index) => (
-        <span key={index} data-testid={`data-point-${index}`}>
+        <button
+          key={index}
+          data-testid={`data-point-${index}`}
+          onClick={() => onDataClick?.(row)}
+        >
           {row.label}|{row.value}|{row.filterValue}
-        </span>
+        </button>
       ))}
+      <button
+        data-testid="empty-filter-value"
+        onClick={() => onDataClick?.({filterValue: ''})}
+      >
+        empty
+      </button>
     </div>
   ),
 }));
@@ -130,6 +141,74 @@ describe('OverridesActiveDaysDisplay', () => {
         'Active for the next 1 days|5|1',
       );
     });
+  });
+
+  test('should call onFilterChanged with an active-days filter', async () => {
+    const onFilterChanged = testing.fn();
+
+    renderDisplay(
+      <OverridesActiveDaysDisplay
+        height={200}
+        width={200}
+        onFilterChanged={onFilterChanged}
+      />,
+    );
+
+    const activeDaysButton = await screen.findByRole('button', {
+      name: /Active \(unlimited\)/,
+    });
+    fireEvent.click(activeDaysButton);
+
+    expect(onFilterChanged).toHaveBeenCalledTimes(1);
+    expect(onFilterChanged.mock.calls[0][0].toFilterString()).toBe(
+      'active_days="-2"',
+    );
+  });
+
+  test('should not throw when clicking a data item without onFilterChanged', async () => {
+    renderDisplay(<OverridesActiveDaysDisplay height={200} width={200} />);
+
+    const activeDaysButton = await screen.findByRole('button', {
+      name: /Active \(unlimited\)/,
+    });
+    expect(() => fireEvent.click(activeDaysButton)).not.toThrow();
+  });
+
+  test('should not call onFilterChanged when the filter value is empty', async () => {
+    const onFilterChanged = testing.fn();
+
+    renderDisplay(
+      <OverridesActiveDaysDisplay
+        height={200}
+        width={200}
+        onFilterChanged={onFilterChanged}
+      />,
+    );
+
+    const emptyItem = await screen.findByTestId('empty-filter-value');
+    fireEvent.click(emptyItem);
+
+    expect(onFilterChanged).not.toHaveBeenCalled();
+  });
+
+  test('should not call onFilterChanged when the filter already has the active-days term', async () => {
+    const onFilterChanged = testing.fn();
+
+    renderDisplay(
+      <OverridesActiveDaysDisplay
+        filter={QueryFilter.fromString('active_days="-2"')}
+        height={200}
+        width={200}
+        onFilterChanged={onFilterChanged}
+      />,
+    );
+
+    const activeDaysButton = await screen.findByRole('button', {
+      name: /Active \(unlimited\)/,
+    });
+    fireEvent.click(activeDaysButton);
+
+    expect(onFilterChanged).not.toHaveBeenCalled();
   });
 });
 

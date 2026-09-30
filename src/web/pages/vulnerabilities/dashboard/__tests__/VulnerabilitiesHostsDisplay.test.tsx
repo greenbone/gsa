@@ -5,7 +5,7 @@
 
 import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
-import {rendererWith, screen} from 'web/testing';
+import {fireEvent, rendererWith, screen} from 'web/testing';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
@@ -127,7 +127,7 @@ describe('VulnerabilitiesHostsDisplay', () => {
     );
 
     const bar = await screen.findByRole('button', {name: 'bar-4-5'});
-    bar.click();
+    fireEvent.click(bar);
 
     expect(onFilterChanged).toHaveBeenCalledTimes(1);
     const newFilter = onFilterChanged.mock.calls[0][0];
@@ -148,7 +148,7 @@ describe('VulnerabilitiesHostsDisplay', () => {
     );
 
     const bar = await screen.findByRole('button', {name: 'bar-0'});
-    bar.click();
+    fireEvent.click(bar);
 
     expect(onFilterChanged).toHaveBeenCalledTimes(1);
     const newFilter = onFilterChanged.mock.calls[0][0];
@@ -170,7 +170,7 @@ describe('VulnerabilitiesHostsDisplay', () => {
     );
 
     const bar = await screen.findByRole('button', {name: 'bar-0'});
-    bar.click();
+    fireEvent.click(bar);
 
     expect(onFilterChanged).not.toHaveBeenCalled();
   });
@@ -183,7 +183,7 @@ describe('VulnerabilitiesHostsDisplay', () => {
     );
 
     const bar = await screen.findByRole('button', {name: 'bar-0'});
-    expect(() => bar.click()).not.toThrow();
+    expect(() => fireEvent.click(bar)).not.toThrow();
   });
 });
 

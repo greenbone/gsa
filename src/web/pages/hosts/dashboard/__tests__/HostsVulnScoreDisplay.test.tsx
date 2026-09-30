@@ -5,7 +5,7 @@
 
 import {type ReactElement} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
-import {rendererWith, screen, waitFor} from 'web/testing';
+import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {getDisplay} from 'web/components/dashboard/registry';
 import {
@@ -38,7 +38,14 @@ const loaderData = {
 };
 
 vi.mock('web/components/dashboard/display/DataDisplay', () => ({
-  default: ({children, data, dataTransform, severityRating, title}) => {
+  default: ({
+    children,
+    data,
+    dataTransform,
+    severityRating,
+    showToggleLegend,
+    title,
+  }) => {
     const transformedData = dataTransform
       ? dataTransform(data, {severityRating})
       : data;
@@ -46,6 +53,7 @@ vi.mock('web/components/dashboard/display/DataDisplay', () => ({
     return (
       <div data-testid="mock-data-display">
         <span data-testid="title">{title?.({data: transformedData})}</span>
+        <span data-testid="show-toggle-legend">{String(showToggleLegend)}</span>
         {typeof children === 'function'
           ? children({
               width: 400,
@@ -113,9 +121,12 @@ const createGmp = () => ({
   },
 });
 
-const renderDisplay = (component: ReactElement) => {
+const renderDisplay = (
+  component: ReactElement,
+  {showLocation}: {showLocation?: boolean} = {},
+) => {
   const subscribe: SubscribeFunc = testing.fn().mockReturnValue(testing.fn());
-  const {render} = rendererWith({gmp: createGmp()});
+  const {render} = rendererWith({gmp: createGmp(), showLocation});
 
   return render(
     <SubscriptionContext.Provider value={subscribe}>
@@ -151,6 +162,9 @@ describe('HostsVulnScoreDisplay', () => {
       expect(screen.getByTestId('title')).toHaveTextContent(
         'Most Vulnerable Hosts',
       );
+      expect(screen.getByTestId('show-toggle-legend')).toHaveTextContent(
+        'false',
+      );
       expect(
         screen.getByRole('button', {name: 'bar-Host Three'}),
       ).toBeVisible();
@@ -160,18 +174,12 @@ describe('HostsVulnScoreDisplay', () => {
   });
 
   test('should navigate to the selected host', async () => {
-    const subscribe: SubscribeFunc = testing.fn().mockReturnValue(testing.fn());
-    const {render} = rendererWith({gmp: createGmp(), showLocation: true});
-    render(
-      <SubscriptionContext.Provider value={subscribe}>
-        <HostsVulnerabilityScoreDisplay height={200} width={200} />
-      </SubscriptionContext.Provider>,
-    );
+    renderDisplay(<HostsVulnerabilityScoreDisplay height={200} width={200} />, {
+      showLocation: true,
+    });
 
-    await waitFor(() =>
-      expect(screen.getByRole('button', {name: 'bar-Host One'})).toBeVisible(),
-    );
-    screen.getByRole('button', {name: 'bar-Host One'}).click();
+    const button = await screen.findByRole('button', {name: 'bar-Host One'});
+    fireEvent.click(button);
 
     await waitFor(() =>
       expect(screen.getByTestId('location-pathname')).toHaveTextContent(

@@ -33,12 +33,13 @@ const scheduledTask = {
 const loaderData = [scheduledTask, {name: 'Task Without Schedule'}];
 
 vi.mock('web/components/dashboard/display/DataDisplay', () => ({
-  default: ({children, data, title}) => {
+  default: ({children, data, showToggleLegend, title}) => {
     return (
       <div data-testid="mock-data-display">
         <span data-testid="title">
           {isFunction(title) ? title({data}) : title}
         </span>
+        <span data-testid="show-toggle-legend">{String(showToggleLegend)}</span>
         {isFunction(children)
           ? children({
               width: 400,
@@ -126,6 +127,9 @@ describe('TasksSchedulesDisplay', () => {
     await waitFor(() => {
       expect(screen.getByTestId('title')).toHaveTextContent(
         'Next Scheduled Tasks',
+      );
+      expect(screen.getByTestId('show-toggle-legend')).toHaveTextContent(
+        'false',
       );
       expect(screen.getByTestId('data-point-0')).toHaveTextContent(
         'Scheduled Task|3600|0',
