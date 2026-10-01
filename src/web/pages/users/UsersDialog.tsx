@@ -45,12 +45,10 @@ interface UserDialogDefaultValues {
   authMethod: string;
   comment: string;
   groupIds: string[];
-  groups?: Model[];
   hostsAllow: string;
   name: string;
   oldName?: string;
   password: string;
-  roles?: Model[];
 }
 
 export type UserDialogSaveData = ControlledDialogValues &
@@ -168,8 +166,7 @@ const UsersDialog = ({
   const isEdit = isDefined(user);
 
   const data: UserDialogDefaultValues = {
-    // oxlint-disable-next-line typescript/no-misused-spread
-    ...user,
+    id: user?.id,
     accessHosts,
     authMethod:
       isEdit && isDefined(user.authMethod)
@@ -177,12 +174,10 @@ const UsersDialog = ({
         : AUTH_METHOD_PASSWORD,
     comment,
     groupIds,
-    groups,
     hostsAllow,
     name: dialogName,
     oldName,
     password,
-    roles,
   };
 
   const controlledValues: ControlledDialogValues = {
