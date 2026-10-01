@@ -9,14 +9,14 @@ import {createSession} from 'gmp/testing';
 import {useCreateUser, useSaveUser} from 'web/hooks/use-query/users';
 
 const userData = {
-  access_hosts: ['localhost', '127.0.0.1'],
-  auth_method: 'password',
+  accessHosts: ['localhost', '127.0.0.1'],
+  authMethod: 'password',
   comment: 'comment',
-  group_ids: ['group-id'],
-  hosts_allow: '0',
+  groupIds: ['group-id'],
+  hostsAllow: '0',
   name: 'user',
   password: 'password',
-  role_ids: ['role-id'],
+  roleIds: ['role-id'],
 };
 
 const createGmp = (user: Record<string, unknown>) => ({
@@ -85,7 +85,7 @@ describe('useCreateUser', () => {
 });
 
 describe('useSaveUser', () => {
-  test('forwards access_hosts arrays and derives old_name when saving', async () => {
+  test('forwards accessHosts arrays and derives oldName when saving', async () => {
     const save = testing.fn().mockResolvedValue({data: {id: 'saved'}});
     const gmp = createGmp({save});
     const {render} = rendererWith({gmp, router: true});
@@ -106,12 +106,12 @@ describe('useSaveUser', () => {
       expect(save).toHaveBeenCalledWith({
         ...userData,
         id: 'user-id',
-        old_name: userData.name,
+        oldName: userData.name,
       });
     });
   });
 
-  test('preserves an explicit old_name when saving', async () => {
+  test('preserves an explicit oldName when saving', async () => {
     const save = testing.fn().mockResolvedValue({data: {id: 'saved'}});
     const gmp = createGmp({save});
     const {render} = rendererWith({gmp, router: true});
@@ -124,7 +124,7 @@ describe('useSaveUser', () => {
             mutation.mutate({
               ...userData,
               id: 'user-id',
-              old_name: 'previous-user',
+              oldName: 'previous-user',
             })
           }
         >
@@ -140,7 +140,7 @@ describe('useSaveUser', () => {
       expect(save).toHaveBeenCalledWith({
         ...userData,
         id: 'user-id',
-        old_name: 'previous-user',
+        oldName: 'previous-user',
       });
     });
   });

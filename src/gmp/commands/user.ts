@@ -93,19 +93,19 @@ interface AuthSettingsValues {
 }
 
 interface CreateArguments {
-  access_hosts: string[];
-  auth_method: string;
+  accessHosts: string[];
+  authMethod: string;
   comment: string;
-  group_ids: string[];
-  hosts_allow: string;
+  groupIds: string[];
+  hostsAllow: string;
   name: string;
   password: string;
-  role_ids: string[];
+  roleIds: string[];
 }
 
 interface SaveArguments extends CreateArguments {
   id: string;
-  old_name: string;
+  oldName: string;
 }
 
 interface DeleteArguments {
@@ -298,37 +298,32 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   }
 
   create({
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    access_hosts,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    auth_method,
+    accessHosts,
+    authMethod,
     comment,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    group_ids,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    hosts_allow,
+    groupIds,
+    hostsAllow,
     name,
     password,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    role_ids,
+    roleIds,
   }: CreateArguments) {
-    if (auth_method === AUTH_METHOD_LDAP) {
-      auth_method = '1';
-    } else if (auth_method === AUTH_METHOD_RADIUS) {
-      auth_method = '2';
+    if (authMethod === AUTH_METHOD_LDAP) {
+      authMethod = '1';
+    } else if (authMethod === AUTH_METHOD_RADIUS) {
+      authMethod = '2';
     } else {
-      auth_method = '0';
+      authMethod = '0';
     }
     const data = {
       cmd: 'create_user',
-      access_hosts: access_hosts.join(','),
-      auth_method,
+      access_hosts: accessHosts.join(','),
+      auth_method: authMethod,
       comment,
-      'group_ids:': group_ids,
-      hosts_allow,
+      'group_ids:': groupIds,
+      hosts_allow: hostsAllow,
       login: name,
       password,
-      'role_ids:': role_ids,
+      'role_ids:': roleIds,
     };
     log.debug('Creating new user', data);
     return this.action(data);
@@ -336,43 +331,37 @@ class UserCommand extends EntityCommand<User, PortListElement> {
 
   save({
     id,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    access_hosts,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    auth_method,
+    accessHosts,
+    authMethod,
     comment,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    group_ids,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    hosts_allow,
+    groupIds,
+    hostsAllow,
     name,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    old_name,
+    oldName,
     password, // needs to be included in httpPost, should be optional in gsad
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    role_ids,
+    roleIds,
   }: SaveArguments) {
-    if (auth_method === AUTH_METHOD_LDAP) {
-      auth_method = '2';
-    } else if (auth_method === AUTH_METHOD_RADIUS) {
-      auth_method = '3';
-    } else if (auth_method === AUTH_METHOD_NEW_PASSWORD) {
-      auth_method = '1';
+    if (authMethod === AUTH_METHOD_LDAP) {
+      authMethod = '2';
+    } else if (authMethod === AUTH_METHOD_RADIUS) {
+      authMethod = '3';
+    } else if (authMethod === AUTH_METHOD_NEW_PASSWORD) {
+      authMethod = '1';
     } else {
-      auth_method = '0';
+      authMethod = '0';
     }
     const data = {
       cmd: 'save_user',
-      access_hosts: access_hosts.join(','),
+      access_hosts: accessHosts.join(','),
       comment,
-      'group_ids:': group_ids,
-      hosts_allow,
+      'group_ids:': groupIds,
+      hosts_allow: hostsAllow,
       id,
       login: name,
-      modify_password: auth_method,
-      old_login: old_name,
+      modify_password: authMethod,
+      old_login: oldName,
       password,
-      'role_ids:': role_ids,
+      'role_ids:': roleIds,
     };
     log.debug('Saving user', data);
     return this.action(data);

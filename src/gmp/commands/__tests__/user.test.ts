@@ -192,15 +192,16 @@ describe('UserCommand tests', () => {
 });
 
 describe('UserCommand user lifecycle actions', () => {
-  const user = {
-    access_hosts: ['localhost', '127.0.0.1'],
+  const userData = {
+    accessHosts: ['localhost', '127.0.0.1'],
+    authMethod: 'password',
     comment: 'comment',
-    group_ids: ['group-id'],
-    hosts_allow: '127.0.0.1',
+    groupIds: ['group-id'],
+    hostsAllow: '127.0.0.1',
     name: 'user',
-    old_name: 'old-user',
+    oldName: 'old-user',
     password: 'password',
-    role_ids: ['role-id'],
+    roleIds: ['role-id'],
   };
 
   test.each([
@@ -213,16 +214,16 @@ describe('UserCommand user lifecycle actions', () => {
       const fakeHttp = createHttp(createActionResultResponse());
       const cmd = new UserCommand(fakeHttp);
 
-      await cmd.create({...user, auth_method: authMethod});
+      await cmd.create({...userData, authMethod});
 
       expect(fakeHttp.request).toHaveBeenCalledWith('post', {
         data: expect.objectContaining({
           cmd: 'create_user',
-          access_hosts: user.access_hosts.join(','),
+          access_hosts: userData.accessHosts.join(','),
           auth_method: expected,
-          login: user.name,
-          'group_ids:': user.group_ids,
-          'role_ids:': user.role_ids,
+          login: userData.name,
+          'group_ids:': userData.groupIds,
+          'role_ids:': userData.roleIds,
         }),
       });
     },
@@ -239,15 +240,15 @@ describe('UserCommand user lifecycle actions', () => {
       const fakeHttp = createHttp(createActionResultResponse());
       const cmd = new UserCommand(fakeHttp);
 
-      await cmd.save({id: 'user-id', ...user, auth_method: authMethod});
+      await cmd.save({id: 'user-id', ...userData, authMethod});
 
       expect(fakeHttp.request).toHaveBeenCalledWith('post', {
         data: expect.objectContaining({
           cmd: 'save_user',
-          access_hosts: user.access_hosts.join(','),
+          access_hosts: userData.accessHosts.join(','),
           user_id: 'user-id',
           modify_password: expected,
-          old_login: user.old_name,
+          old_login: userData.oldName,
         }),
       });
     },
