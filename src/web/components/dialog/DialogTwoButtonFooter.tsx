@@ -15,6 +15,7 @@ interface DialogTwoButtonFooterProps {
   isLoading?: boolean;
   isSaving?: boolean;
   rightButtonAction?: typeof DELETE_ACTION;
+  rightButtonDisabled?: boolean;
 }
 
 export const DELETE_ACTION = 'delete';
@@ -27,6 +28,7 @@ const DialogTwoButtonFooter = ({
   isLoading = false,
   isSaving = false,
   rightButtonAction,
+  rightButtonDisabled = false,
 }: DialogTwoButtonFooterProps) => {
   const [_] = useTranslation();
   leftButtonTitle = leftButtonTitle || _('Cancel');
@@ -43,6 +45,7 @@ const DialogTwoButtonFooter = ({
       </Button>
       <Button
         data-testid="dialog-save-button"
+        disabled={rightButtonDisabled}
         isLoading={isSaving || isLoading}
         variant={isRightButtonAction ? 'danger' : 'filled'}
         onClick={onRightButtonClick}
