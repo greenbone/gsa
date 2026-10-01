@@ -193,7 +193,7 @@ describe('UserCommand tests', () => {
 
 describe('UserCommand user lifecycle actions', () => {
   const user = {
-    access_hosts: 'localhost',
+    access_hosts: ['localhost', '127.0.0.1'],
     comment: 'comment',
     group_ids: ['group-id'],
     hosts_allow: '127.0.0.1',
@@ -218,6 +218,7 @@ describe('UserCommand user lifecycle actions', () => {
       expect(fakeHttp.request).toHaveBeenCalledWith('post', {
         data: expect.objectContaining({
           cmd: 'create_user',
+          access_hosts: user.access_hosts.join(','),
           auth_method: expected,
           login: user.name,
           'group_ids:': user.group_ids,
@@ -243,6 +244,7 @@ describe('UserCommand user lifecycle actions', () => {
       expect(fakeHttp.request).toHaveBeenCalledWith('post', {
         data: expect.objectContaining({
           cmd: 'save_user',
+          access_hosts: user.access_hosts.join(','),
           user_id: 'user-id',
           modify_password: expected,
           old_login: user.old_name,

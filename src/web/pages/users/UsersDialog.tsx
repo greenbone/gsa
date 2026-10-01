@@ -22,6 +22,7 @@ import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import MultiSelect from 'web/components/form/MultiSelect';
+import MultiValueTextField from 'web/components/form/MultiValueTextField';
 import PasswordField from 'web/components/form/PasswordField';
 import Radio from 'web/components/form/Radio';
 import TextField from 'web/components/form/TextField';
@@ -40,7 +41,7 @@ interface ControlledDialogValues {
 
 interface UserDialogDefaultValues {
   id?: string;
-  access_hosts: string;
+  access_hosts: string[];
   auth_method: string;
   comment: string;
   group_ids: string[];
@@ -57,7 +58,7 @@ export type UserDialogSaveData = ControlledDialogValues &
 
 interface UserDialogProps {
   roleIds?: string[];
-  accessHosts?: string;
+  accessHosts?: string[];
   comment?: string;
   groups?: Model[];
   groupIds?: string[];
@@ -75,7 +76,7 @@ interface UserDialogProps {
 
 const UsersDialog = ({
   roleIds: initialRoleIds = [],
-  accessHosts = '',
+  accessHosts = [],
   comment = '',
   groups,
   groupIds = [],
@@ -353,8 +354,7 @@ const UsersDialog = ({
                 onChange={onValueChange}
               />
             </Row>
-            <TextField
-              grow="1"
+            <MultiValueTextField
               name="access_hosts"
               value={state.access_hosts}
               onChange={onValueChange}

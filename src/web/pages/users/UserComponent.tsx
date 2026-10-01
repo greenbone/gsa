@@ -64,7 +64,7 @@ const UserComponent = ({
   const [_] = useTranslation();
 
   const [dialogVisible, setDialogVisible] = useState(false);
-  const [accessHosts, setAccessHosts] = useState<string>();
+  const [accessHosts, setAccessHosts] = useState<string[]>([]);
   const [comment, setComment] = useState<string>();
   const [groupIds, setGroupIds] = useState<string[]>();
   const [groups, setGroups] = useState<Model[]>();
@@ -131,7 +131,7 @@ const UserComponent = ({
         const newGroupIds = user.groups.map(group => group.id);
         const newRoleIds = user.roles.map(role => role.id);
 
-        setAccessHosts(user.hosts?.addresses.join(', ') ?? '');
+        setAccessHosts(user.hosts?.addresses ?? []);
         setComment(user.comment);
         setGroupIds(newGroupIds);
         setHostsAllow(user.hosts?.allow);
@@ -141,7 +141,7 @@ const UserComponent = ({
         setTitle(_('Edit User {{- name}}', {name: user.name ?? ''}));
         setUser(user);
       } else {
-        setAccessHosts(undefined);
+        setAccessHosts([]);
         setComment(undefined);
         setGroupIds(undefined);
         setHostsAllow(undefined);

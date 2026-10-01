@@ -93,7 +93,7 @@ interface AuthSettingsValues {
 }
 
 interface CreateArguments {
-  access_hosts: string;
+  access_hosts: string[];
   auth_method: string;
   comment: string;
   group_ids: string[];
@@ -103,17 +103,9 @@ interface CreateArguments {
   role_ids: string[];
 }
 
-interface SaveArguments {
+interface SaveArguments extends CreateArguments {
   id: string;
-  access_hosts: string;
-  auth_method: string;
-  comment: string;
-  group_ids: string[];
-  hosts_allow: string;
-  name: string;
   old_name: string;
-  password: string;
-  role_ids: string[];
 }
 
 interface DeleteArguments {
@@ -329,7 +321,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
     }
     const data = {
       cmd: 'create_user',
-      access_hosts,
+      access_hosts: access_hosts.join(','),
       auth_method,
       comment,
       'group_ids:': group_ids,
@@ -345,10 +337,10 @@ class UserCommand extends EntityCommand<User, PortListElement> {
   save({
     id,
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    access_hosts = '',
+    access_hosts,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     auth_method,
-    comment = '',
+    comment,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     group_ids,
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -356,7 +348,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
     name,
     // eslint-disable-next-line @typescript-eslint/naming-convention
     old_name,
-    password = '', // needs to be included in httpPost, should be optional in gsad
+    password, // needs to be included in httpPost, should be optional in gsad
     // eslint-disable-next-line @typescript-eslint/naming-convention
     role_ids,
   }: SaveArguments) {
@@ -371,7 +363,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
     }
     const data = {
       cmd: 'save_user',
-      access_hosts,
+      access_hosts: access_hosts.join(','),
       comment,
       'group_ids:': group_ids,
       hosts_allow,

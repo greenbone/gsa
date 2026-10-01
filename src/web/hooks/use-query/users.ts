@@ -30,7 +30,7 @@ interface UseUserMutationCallbacks<TResponse> {
 }
 
 interface UserCreateInput {
-  access_hosts: string;
+  access_hosts: string[];
   auth_method: string;
   comment: string;
   group_ids: string[];
