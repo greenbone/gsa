@@ -30,19 +30,19 @@ interface UseUserMutationCallbacks<TResponse> {
 }
 
 interface UserCreateInput {
-  access_hosts: string[];
-  auth_method: string;
+  accessHosts: string[];
+  authMethod: string;
   comment: string;
-  group_ids: string[];
-  hosts_allow: string;
+  groupIds: string[];
+  hostsAllow: string;
   name: string;
   password: string;
-  role_ids: string[];
+  roleIds: string[];
 }
 
 interface UserSaveInput extends UserCreateInput {
   id: string;
-  old_name?: string;
+  oldName?: string;
 }
 
 interface BulkDeleteUsersInput {
@@ -83,11 +83,7 @@ export const useCreateUser = ({
   const gmp = useGmp();
   return useGmpMutation<UserCreateInput, EntityActionData>({
     gmpMethod: async data => {
-      const response = await gmp.user.create({
-        ...data,
-        group_ids: data.group_ids,
-        role_ids: data.role_ids,
-      });
+      const response = await gmp.user.create(data);
       return response.data;
     },
     invalidateQueryIds: ['get_users'],
@@ -105,9 +101,7 @@ export const useSaveUser = ({
     gmpMethod: async data => {
       const response = await gmp.user.save({
         ...data,
-        old_name: data.old_name ?? data.name,
-        group_ids: data.group_ids,
-        role_ids: data.role_ids,
+        oldName: data.oldName ?? data.name,
       });
       return response.data;
     },

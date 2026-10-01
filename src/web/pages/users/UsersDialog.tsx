@@ -36,19 +36,19 @@ interface AuthMethodSetting {
 }
 
 interface ControlledDialogValues {
-  role_ids: string[];
+  roleIds: string[];
 }
 
 interface UserDialogDefaultValues {
   id?: string;
-  access_hosts: string[];
-  auth_method: string;
+  accessHosts: string[];
+  authMethod: string;
   comment: string;
-  group_ids: string[];
+  groupIds: string[];
   groups?: Model[];
-  hosts_allow: string;
+  hostsAllow: string;
   name: string;
-  old_name?: string;
+  oldName?: string;
   password: string;
   roles?: Model[];
 }
@@ -168,24 +168,25 @@ const UsersDialog = ({
   const isEdit = isDefined(user);
 
   const data: UserDialogDefaultValues = {
+    // oxlint-disable-next-line typescript/no-misused-spread
     ...user,
-    access_hosts: accessHosts,
-    auth_method:
+    accessHosts,
+    authMethod:
       isEdit && isDefined(user.authMethod)
         ? user.authMethod
         : AUTH_METHOD_PASSWORD,
     comment,
-    group_ids: groupIds,
+    groupIds,
     groups,
-    hosts_allow: hostsAllow,
+    hostsAllow,
     name: dialogName,
-    old_name: oldName,
+    oldName,
     password,
     roles,
   };
 
   const controlledValues: ControlledDialogValues = {
-    role_ids: roleIds,
+    roleIds,
   };
 
   const rolesOptions = map(roles, role => ({
@@ -234,8 +235,8 @@ const UsersDialog = ({
             <FormGroup direction="column" title={_('Authentication')}>
               <Row>
                 <Radio
-                  checked={state.auth_method === AUTH_METHOD_PASSWORD}
-                  name="auth_method"
+                  checked={state.authMethod === AUTH_METHOD_PASSWORD}
+                  name="authMethod"
                   title={_('Password')}
                   value={AUTH_METHOD_PASSWORD}
                   onChange={onValueChange}
@@ -250,8 +251,8 @@ const UsersDialog = ({
               </Row>
               {hasLdapEnabled && (
                 <Radio
-                  checked={state.auth_method === AUTH_METHOD_LDAP}
-                  name="auth_method"
+                  checked={state.authMethod === AUTH_METHOD_LDAP}
+                  name="authMethod"
                   title={_('LDAP Authentication Only')}
                   value={AUTH_METHOD_LDAP}
                   onChange={onValueChange}
@@ -259,8 +260,8 @@ const UsersDialog = ({
               )}
               {hasRadiusEnabled && (
                 <Radio
-                  checked={state.auth_method === AUTH_METHOD_RADIUS}
-                  name="auth_method"
+                  checked={state.authMethod === AUTH_METHOD_RADIUS}
+                  name="authMethod"
                   title={_('RADIUS Authentication Only')}
                   value={AUTH_METHOD_RADIUS}
                   onChange={onValueChange}
@@ -272,23 +273,23 @@ const UsersDialog = ({
           {isEdit && (
             <FormGroup title={_('Authentication')}>
               <Radio
-                checked={state.auth_method === AUTH_METHOD_PASSWORD}
-                name="auth_method"
+                checked={state.authMethod === AUTH_METHOD_PASSWORD}
+                name="authMethod"
                 title={_('Password: Use existing Password')}
                 value={AUTH_METHOD_PASSWORD}
                 onChange={onValueChange}
               />
               <Row>
                 <Radio
-                  checked={state.auth_method === AUTH_METHOD_NEW_PASSWORD}
-                  name="auth_method"
+                  checked={state.authMethod === AUTH_METHOD_NEW_PASSWORD}
+                  name="authMethod"
                   title={_('New Password')}
                   value={AUTH_METHOD_NEW_PASSWORD}
                   onChange={onValueChange}
                 />
                 <PasswordField
                   autoComplete="new-password"
-                  disabled={state.auth_method !== AUTH_METHOD_NEW_PASSWORD}
+                  disabled={state.authMethod !== AUTH_METHOD_NEW_PASSWORD}
                   grow="1"
                   name="password"
                   value={state.password}
@@ -297,8 +298,8 @@ const UsersDialog = ({
               </Row>
               {hasLdapEnabled && (
                 <Radio
-                  checked={state.auth_method === AUTH_METHOD_LDAP}
-                  name="auth_method"
+                  checked={state.authMethod === AUTH_METHOD_LDAP}
+                  name="authMethod"
                   title={_('LDAP Authentication Only')}
                   value={AUTH_METHOD_LDAP}
                   onChange={onValueChange}
@@ -306,8 +307,8 @@ const UsersDialog = ({
               )}
               {hasRadiusEnabled && (
                 <Radio
-                  checked={state.auth_method === AUTH_METHOD_RADIUS}
-                  name="auth_method"
+                  checked={state.authMethod === AUTH_METHOD_RADIUS}
+                  name="authMethod"
                   title={_('RADIUS Authentication Only')}
                   value={AUTH_METHOD_RADIUS}
                   onChange={onValueChange}
@@ -319,7 +320,7 @@ const UsersDialog = ({
             <FormGroup title={_('Roles')}>
               <MultiSelect
                 items={rolesOptions}
-                name="role_ids"
+                name="roleIds"
                 value={roleIds}
                 onChange={handleRoleIdsChange}
               />
@@ -330,8 +331,8 @@ const UsersDialog = ({
             <FormGroup title={_('Groups')}>
               <MultiSelect
                 items={groupsOptions}
-                name="group_ids"
-                value={state.group_ids}
+                name="groupIds"
+                value={state.groupIds}
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -340,23 +341,23 @@ const UsersDialog = ({
           <FormGroup title={_('Host Access')}>
             <Row>
               <Radio
-                checked={state.hosts_allow === ACCESS_ALLOW_ALL}
-                name="hosts_allow"
+                checked={state.hostsAllow === ACCESS_ALLOW_ALL}
+                name="hostsAllow"
                 title={_('Allow all and deny')}
                 value={ACCESS_ALLOW_ALL}
                 onChange={onValueChange}
               />
               <Radio
-                checked={state.hosts_allow === ACCESS_DENY_ALL}
-                name="hosts_allow"
+                checked={state.hostsAllow === ACCESS_DENY_ALL}
+                name="hostsAllow"
                 title={_('Deny all and allow')}
                 value={ACCESS_DENY_ALL}
                 onChange={onValueChange}
               />
             </Row>
             <MultiValueTextField
-              name="access_hosts"
-              value={state.access_hosts}
+              name="accessHosts"
+              value={state.accessHosts}
               onChange={onValueChange}
             />
           </FormGroup>

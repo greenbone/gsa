@@ -82,15 +82,15 @@ describe('UsersDialog tests', () => {
     fireEvent.click(screen.getDialogSaveButton());
 
     expect(onSave).toHaveBeenCalledWith({
-      access_hosts: [],
-      auth_method: 'password',
+      accessHosts: [],
+      authMethod: 'password',
       comment: '',
-      group_ids: [],
-      hosts_allow: '0',
+      groupIds: [],
+      hostsAllow: '0',
       name: 'Unnamed',
-      old_name: undefined,
+      oldName: undefined,
       password: '',
-      role_ids: [],
+      roleIds: [],
       roles: undefined,
       groups: undefined,
     });
@@ -138,7 +138,7 @@ describe('UsersDialog tests', () => {
     fireEvent.click(screen.getDialogSaveButton());
 
     expect(onSave).toHaveBeenCalledWith(
-      expect.objectContaining({role_ids: ['role-1'], group_ids: ['group-1']}),
+      expect.objectContaining({roleIds: ['role-1'], groupIds: ['group-1']}),
     );
   });
 
@@ -158,9 +158,7 @@ describe('UsersDialog tests', () => {
 
     fireEvent.click(screen.getDialogSaveButton());
 
-    expect(onSave).toHaveBeenCalledWith(
-      expect.objectContaining({role_ids: []}),
-    );
+    expect(onSave).toHaveBeenCalledWith(expect.objectContaining({roleIds: []}));
   });
 
   test('renders edit fields and saves changed password settings', () => {
@@ -196,10 +194,10 @@ describe('UsersDialog tests', () => {
     expect(onSave).toHaveBeenCalledWith(
       expect.objectContaining({
         id: 'user-1',
-        auth_method: AUTH_METHOD_NEW_PASSWORD,
+        authMethod: AUTH_METHOD_NEW_PASSWORD,
         password: 'new-secret',
-        hosts_allow: ACCESS_DENY_ALL,
-        access_hosts: ['10.0.0.1'],
+        hostsAllow: ACCESS_DENY_ALL,
+        accessHosts: ['10.0.0.1'],
       }),
     );
   });
