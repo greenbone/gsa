@@ -17,15 +17,13 @@ import {
 } from 'web/components/dashboard/display/severity/severity-class-transform';
 import {filterValueToFilterTerms} from 'web/components/dashboard/display/severity/utils';
 
-type SeverityClassDisplayBaseProps =
+type SeverityClassDataDisplayProps =
   DataDisplayProps<TransformedSeverityClassData>;
 
-interface SeverityClassDisplayProps extends SeverityClassDisplayBaseProps {
+interface SeverityClassDisplayProps extends SeverityClassDataDisplayProps {
   filter?: FilterType;
   onFilterChanged?: (filter: FilterType) => void;
 }
-
-type SeverityClassDataDisplayProps = SeverityClassDisplayBaseProps;
 
 const SeverityClassDisplay = ({
   onFilterChanged,
