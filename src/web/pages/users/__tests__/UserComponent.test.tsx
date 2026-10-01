@@ -8,7 +8,7 @@ import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
 import Group from 'gmp/models/group';
 import Role from 'gmp/models/role';
 import Settings from 'gmp/models/settings';
-import User from 'gmp/models/user';
+import User, {ACCESS_ALLOW_ALL, AUTH_METHOD_PASSWORD} from 'gmp/models/user';
 import {createSession} from 'gmp/testing';
 import Button from 'web/components/form/Button';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -124,13 +124,18 @@ describe('UserComponent', () => {
 
     fireEvent.click(screen.getDialogSaveButton());
     await waitFor(() => {
-      expect(gmp.user.save).toHaveBeenCalled();
-      expect(gmp.user.save).toHaveBeenCalledWith(
-        expect.objectContaining({
-          group_ids: ['group1'],
-          role_ids: ['role1'],
-        }),
-      );
+      expect(gmp.user.save).toHaveBeenCalledWith({
+        groupIds: ['group1'],
+        roleIds: ['role1'],
+        accessHosts: ['192.168.1.1'],
+        authMethod: AUTH_METHOD_PASSWORD,
+        comment: '',
+        hostsAllow: ACCESS_ALLOW_ALL,
+        id: '1234',
+        name: 'user 1',
+        oldName: 'user 1',
+        password: '',
+      });
       expect(onSaved).toHaveBeenCalledWith({id: 'saved'});
     });
   });
@@ -156,12 +161,18 @@ describe('UserComponent', () => {
 
     fireEvent.click(screen.getDialogSaveButton());
     await waitFor(() => {
-      expect(gmp.user.save).toHaveBeenCalledWith(
-        expect.objectContaining({
-          group_ids: ['group1', 'group2'],
-          role_ids: ['role1', 'role2'],
-        }),
-      );
+      expect(gmp.user.save).toHaveBeenCalledWith({
+        accessHosts: [],
+        authMethod: AUTH_METHOD_PASSWORD,
+        comment: '',
+        hostsAllow: ACCESS_ALLOW_ALL,
+        id: '5678',
+        name: 'user 2',
+        oldName: 'user 2',
+        password: '',
+        groupIds: ['group1', 'group2'],
+        roleIds: ['role1', 'role2'],
+      });
       expect(onSaved).toHaveBeenCalledWith({id: 'saved'});
     });
   });

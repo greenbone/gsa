@@ -174,8 +174,6 @@ describe('UsersDialog tests', () => {
       settings: createSettings({ldap: true}),
       user,
       name: user.name,
-      roles,
-      groups,
       roleIds: ['role-1'],
       groupIds: ['group-1'],
       accessHosts: ['10.0.0.1'],
@@ -191,15 +189,17 @@ describe('UsersDialog tests', () => {
     changeInputValue(screen.getByName('password'), 'new-secret');
     fireEvent.click(screen.getDialogSaveButton());
 
-    expect(onSave).toHaveBeenCalledWith(
-      expect.objectContaining({
-        id: 'user-1',
-        authMethod: AUTH_METHOD_NEW_PASSWORD,
-        password: 'new-secret',
-        hostsAllow: ACCESS_DENY_ALL,
-        accessHosts: ['10.0.0.1'],
-      }),
-    );
+    expect(onSave).toHaveBeenCalledWith({
+      id: 'user-1',
+      authMethod: AUTH_METHOD_NEW_PASSWORD,
+      comment: '',
+      name: 'existing-user',
+      groupIds: ['group-1'],
+      password: 'new-secret',
+      hostsAllow: ACCESS_DENY_ALL,
+      accessHosts: ['10.0.0.1'],
+      roleIds: ['role-1'],
+    });
   });
 
   test('confirms saving changes to the current Super Admin user', () => {
