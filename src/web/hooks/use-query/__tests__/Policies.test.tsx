@@ -54,7 +54,9 @@ const SinglePolicyComponent = ({id}: {id: string}) => {
 };
 
 const PolicyListComponent = ({filter}: {filter?: FilterType}) => {
-  const {data, isLoading, isError} = useGetPolicies({filter});
+  const {data, isLoading, isError} = useGetPolicies(
+    filter ? {filter} : undefined,
+  );
 
   if (isLoading) {
     return <div data-testid="loading">Loading...</div>;
@@ -77,8 +79,8 @@ const PolicyListComponent = ({filter}: {filter?: FilterType}) => {
   );
 };
 
-const createGmp = () => ({
-  session: createSession({token: 'test-token'}),
+const createGmp = ({token}: {token?: string} = {token: 'test-token'}) => ({
+  session: createSession({token}),
   settings: {},
   policy: {
     get: testing.fn().mockResolvedValue({data: policy}),
@@ -117,6 +119,37 @@ describe('useGetPolicy', () => {
 
     expect(screen.getByTestId('loading')).toBeInTheDocument();
   });
+
+  test('should not fetch a policy when the ID is empty', () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, router: true});
+
+    render(<SinglePolicyComponent id="" />);
+
+    expect(screen.getByTestId('no-data')).toBeInTheDocument();
+    expect(gmp.policy.get).not.toHaveBeenCalled();
+  });
+
+  test('should not fetch a policy without a session token', () => {
+    const gmp = createGmp({token: undefined});
+    const {render} = rendererWith({gmp, router: true});
+
+    render(<SinglePolicyComponent id="policy-1" />);
+
+    expect(gmp.policy.get).not.toHaveBeenCalled();
+  });
+
+  test('should show an error when fetching a policy fails', async () => {
+    const gmp = createGmp();
+    gmp.policy.get.mockRejectedValue(new Error('Request failed'));
+    const {render} = rendererWith({gmp, router: true});
+
+    render(<SinglePolicyComponent id="policy-1" />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('error')).toBeInTheDocument();
+    });
+  });
 });
 
 describe('useGetPolicies', () => {
@@ -129,8 +162,42 @@ describe('useGetPolicies', () => {
       expect(screen.getAllByTestId('policy-item')).toHaveLength(2);
     });
 
-    expect(gmp.policies.get).toHaveBeenCalled();
+    expect(gmp.policies.get).toHaveBeenCalledWith({filter});
     expect(screen.getByText('Test Policy')).toBeInTheDocument();
     expect(screen.getByText('Test Policy 2')).toBeInTheDocument();
+  });
+
+  test('should fetch policies without a filter', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, router: true});
+
+    render(<PolicyListComponent />);
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('policy-item')).toHaveLength(2);
+    });
+
+    expect(gmp.policies.get).toHaveBeenCalledWith({filter: undefined});
+  });
+
+  test('should not fetch policies without a session token', () => {
+    const gmp = createGmp({token: undefined});
+    const {render} = rendererWith({gmp, router: true});
+
+    render(<PolicyListComponent filter={filter} />);
+
+    expect(gmp.policies.get).not.toHaveBeenCalled();
+  });
+
+  test('should show an error when fetching policies fails', async () => {
+    const gmp = createGmp();
+    gmp.policies.get.mockRejectedValue(new Error('Request failed'));
+    const {render} = rendererWith({gmp, router: true});
+
+    render(<PolicyListComponent filter={filter} />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('error')).toBeInTheDocument();
+    });
   });
 });

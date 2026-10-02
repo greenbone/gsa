@@ -60,8 +60,8 @@ const TestComponent = ({
   );
 };
 
-const createGmp = () => ({
-  session: createSession({token: 'test-token'}),
+const createGmp = ({token}: {token?: string} = {token: 'test-token'}) => ({
+  session: createSession({token}),
   settings: {severityRating: SEVERITY_RATING_CVSS_3},
   reportoperatingsystems: {
     get: testing.fn().mockResolvedValue({
@@ -85,9 +85,10 @@ describe('useGetReportOperatingSystems', () => {
       expect(screen.getAllByTestId('os-entity')).toHaveLength(2);
     });
 
-    expect(gmp.reportoperatingsystems.get).toHaveBeenCalledWith(
-      expect.objectContaining({report_id: '1234'}),
-    );
+    expect(gmp.reportoperatingsystems.get).toHaveBeenCalledWith({
+      report_id: '1234',
+      filter,
+    });
     expect(screen.getByText('Foo OS')).toBeInTheDocument();
     expect(screen.getByText('Lorem OS')).toBeInTheDocument();
   });
@@ -114,5 +115,28 @@ describe('useGetReportOperatingSystems', () => {
     // Query is disabled when reportId is empty — no fetch is triggered
     expect(screen.getByTestId('no-data')).toBeInTheDocument();
     expect(gmp.reportoperatingsystems.get).not.toHaveBeenCalled();
+  });
+
+  test('should not fetch without a session token', () => {
+    const gmp = createGmp({token: undefined});
+    const {render} = rendererWith({gmp, router: true});
+
+    render(<TestComponent filter={filter} reportId="1234" />);
+
+    expect(gmp.reportoperatingsystems.get).not.toHaveBeenCalled();
+  });
+
+  test('should show an error when fetching operating systems fails', async () => {
+    const gmp = createGmp();
+    gmp.reportoperatingsystems.get.mockRejectedValue(
+      new Error('Request failed'),
+    );
+    const {render} = rendererWith({gmp, router: true});
+
+    render(<TestComponent filter={filter} reportId="1234" />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('error')).toBeInTheDocument();
+    });
   });
 });

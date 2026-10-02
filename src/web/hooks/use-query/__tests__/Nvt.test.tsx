@@ -16,13 +16,17 @@ const nvt = new Nvt({
 });
 
 const NvtComponent = ({id}: {id?: string}) => {
-  const {data} = useGetNvt({id});
+  const {data, isError} = useGetNvt({id});
+
+  if (isError) {
+    return <div data-testid="error">Error</div>;
+  }
 
   return <div data-testid="nvt">{data?.techInfo}</div>;
 };
 
-const createGmp = () => ({
-  session: createSession({token: 'test-token'}),
+const createGmp = ({token}: {token?: string} = {token: 'test-token'}) => ({
+  session: createSession({token}),
   settings: {},
   nvt: {
     get: testing.fn().mockResolvedValue({data: nvt}),
@@ -52,5 +56,26 @@ describe('useGetNvt', () => {
     render(<NvtComponent />);
 
     expect(gmp.nvt.get).not.toHaveBeenCalled();
+  });
+
+  test('should not fetch without a session token', () => {
+    const gmp = createGmp({token: undefined});
+    const {render} = rendererWith({gmp, router: true});
+
+    render(<NvtComponent id={nvt.id} />);
+
+    expect(gmp.nvt.get).not.toHaveBeenCalled();
+  });
+
+  test('should show an error when fetching an NVT fails', async () => {
+    const gmp = createGmp();
+    gmp.nvt.get.mockRejectedValue(new Error('Request failed'));
+    const {render} = rendererWith({gmp, router: true});
+
+    render(<NvtComponent id={nvt.id} />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('error')).toBeInTheDocument();
+    });
   });
 });
