@@ -5,7 +5,6 @@
 
 import {type ReactNode, useState} from 'react';
 import {type EntityActionData} from 'gmp/commands/entity';
-import type Model from 'gmp/models/model';
 import type Settings from 'gmp/models/settings';
 import type User from 'gmp/models/user';
 import {isDefined} from 'gmp/utils/identity';
@@ -67,12 +66,10 @@ const UserComponent = ({
   const [accessHosts, setAccessHosts] = useState<string[]>([]);
   const [comment, setComment] = useState<string>();
   const [groupIds, setGroupIds] = useState<string[]>();
-  const [groups, setGroups] = useState<Model[]>();
   const [hostsAllow, setHostsAllow] = useState<string>();
   const [name, setName] = useState<string>();
   const [oldName, setOldName] = useState<string>();
   const [roleIds, setRoleIds] = useState<string[]>();
-  const [roles, setRoles] = useState<Model[]>();
   const [settings, setSettings] = useState<Settings>();
   const [title, setTitle] = useState<string>();
   const [user, setUser] = useState<User>();
@@ -111,17 +108,9 @@ const UserComponent = ({
 
   const openUserDialog = async (user?: User) => {
     try {
-      const [groupsResponse, rolesResponse, authSettingsResponse] =
-        await Promise.all([
-          gmp.groups.getAll({
-            filter: 'permission=modify_group', //  list only groups current user may modify
-          }),
-          gmp.roles.getAll(),
-          gmp.user.currentAuthSettings(),
-        ]);
-
-      setGroups(groupsResponse.data);
-      setRoles(rolesResponse.data);
+      const [authSettingsResponse] = await Promise.all([
+        gmp.user.currentAuthSettings(),
+      ]);
 
       const settings = authSettingsResponse.data;
       setSettings(settings);
@@ -200,12 +189,10 @@ const UserComponent = ({
           accessHosts={accessHosts}
           comment={comment}
           groupIds={groupIds}
-          groups={groups}
           hostsAllow={hostsAllow}
           name={name}
           oldName={oldName}
           roleIds={roleIds}
-          roles={roles}
           settings={settings}
           title={title}
           user={user}

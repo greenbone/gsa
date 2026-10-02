@@ -5,6 +5,7 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Group from 'gmp/models/group';
 import Role from 'gmp/models/role';
 import Settings from 'gmp/models/settings';
@@ -47,15 +48,20 @@ authSettings.set('method:ldap_connect', {enabled: false});
 authSettings.set('method:radius_connect', {enabled: false});
 
 const groups = [
-  Group.fromElement({_id: 'group1', name: 'Group 1'}),
-  Group.fromElement({_id: 'group2', name: 'Group 2'}),
+  new Group({id: 'group1', name: 'Group 1'}),
+  new Group({id: 'group2', name: 'Group 2'}),
 ];
 const roles = [
-  Role.fromElement({_id: 'role1', name: 'Admin'}),
-  Role.fromElement({_id: 'role2', name: 'User'}),
+  new Role({id: 'role1', name: 'Admin'}),
+  new Role({id: 'role2', name: 'User'}),
 ];
 
 const createGmp = () => ({
+  settings: {
+    reloadInterval: 0,
+    reloadIntervalActive: 0,
+    reloadIntervalInactive: 0,
+  },
   user: {
     create: testing.fn().mockResolvedValue({data: {id: 'created'}}),
     save: testing.fn().mockResolvedValue({data: {id: 'saved'}}),
@@ -68,12 +74,24 @@ const createGmp = () => ({
       .mockResolvedValue(currentSettingsDefaultResponse),
   },
   groups: {
-    getAll: testing.fn().mockResolvedValue({data: groups}),
+    getAll: testing.fn().mockResolvedValue({
+      data: groups,
+      meta: {
+        filter: undefined,
+        counts: new CollectionCounts({all: groups.length}),
+      },
+    }),
   },
   roles: {
-    getAll: testing.fn().mockResolvedValue({data: roles}),
+    getAll: testing.fn().mockResolvedValue({
+      data: roles,
+      meta: {
+        filter: undefined,
+        counts: new CollectionCounts({all: roles.length}),
+      },
+    }),
   },
-  session: createSession({username: 'admin'}),
+  session: createSession({username: 'admin', token: 'test-token'}),
 });
 
 describe('UserComponent', () => {
@@ -88,8 +106,9 @@ describe('UserComponent', () => {
   });
 
   test('should open and close user dialog', async () => {
+    const gmp = createGmp();
     const {render} = rendererWith({
-      gmp: createGmp(),
+      gmp,
       capabilities: true,
       store: true,
     });
@@ -101,6 +120,10 @@ describe('UserComponent', () => {
 
     fireEvent.click(screen.getByTestId('open'));
     await screen.findByText('New User');
+    await waitFor(() => {
+      expect(gmp.groups.getAll).toHaveBeenCalled();
+      expect(gmp.roles.getAll).toHaveBeenCalled();
+    });
 
     fireEvent.click(screen.getDialogCloseButton());
     await waitFor(() => {
@@ -121,6 +144,10 @@ describe('UserComponent', () => {
 
     fireEvent.click(screen.getByTestId('open'));
     await screen.findByText('Edit User user 1');
+    await waitFor(() => {
+      expect(gmp.groups.getAll).toHaveBeenCalled();
+      expect(gmp.roles.getAll).toHaveBeenCalled();
+    });
 
     fireEvent.click(screen.getDialogSaveButton());
     await waitFor(() => {
@@ -158,6 +185,10 @@ describe('UserComponent', () => {
 
     fireEvent.click(screen.getByTestId('open'));
     await screen.findByText('Edit User user 2');
+    await waitFor(() => {
+      expect(gmp.groups.getAll).toHaveBeenCalled();
+      expect(gmp.roles.getAll).toHaveBeenCalled();
+    });
 
     fireEvent.click(screen.getDialogSaveButton());
     await waitFor(() => {
@@ -181,6 +212,7 @@ describe('UserComponent', () => {
     const gmp = createGmp();
     const error = new Error('Unable to load authentication settings');
     gmp.user.currentAuthSettings.mockRejectedValue(error);
+    testing.spyOn(console, 'error').mockImplementation(() => {});
     const onDialogError = testing.fn();
     const {render} = rendererWith({gmp, capabilities: true, store: true});
 

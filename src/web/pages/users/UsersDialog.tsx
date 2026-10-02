@@ -4,7 +4,7 @@
  */
 
 import {useState} from 'react';
-import type Model from 'gmp/models/model';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import type Settings from 'gmp/models/settings';
 import {
   ACCESS_ALLOW_ALL,
@@ -27,6 +27,8 @@ import PasswordField from 'web/components/form/PasswordField';
 import Radio from 'web/components/form/Radio';
 import TextField from 'web/components/form/TextField';
 import Row from 'web/components/layout/Row';
+import {useGetAllGroups} from 'web/hooks/use-query/groups';
+import {useGetAllRoles} from 'web/hooks/use-query/roles';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
@@ -58,13 +60,11 @@ interface UserDialogProps {
   roleIds?: string[];
   accessHosts?: string[];
   comment?: string;
-  groups?: Model[];
   groupIds?: string[];
   hostsAllow?: string;
   name?: string;
   oldName?: string;
   password?: string;
-  roles?: Model[];
   settings: Settings;
   title?: string;
   user?: User;
@@ -76,13 +76,11 @@ const UsersDialog = ({
   roleIds: initialRoleIds = [],
   accessHosts = [],
   comment = '',
-  groups,
   groupIds = [],
   hostsAllow = ACCESS_ALLOW_ALL,
   name,
   oldName,
   password = '',
-  roles,
   settings,
   title,
   user,
@@ -103,6 +101,12 @@ const UsersDialog = ({
     UserDialogSaveData | undefined
   >(undefined);
   const [roleIds, setRoleIds] = useState(initialRoleIds);
+
+  const groupsQuery = useGetAllGroups({
+    filter: QueryFilter.fromString('permission=modify_group'), //  list only groups current user may modify
+  });
+
+  const rolesQuery = useGetAllRoles();
 
   const dialogName = name || _('Unnamed');
   const dialogTitle = title || _('New User');
@@ -184,12 +188,12 @@ const UsersDialog = ({
     roleIds,
   };
 
-  const rolesOptions = map(roles, role => ({
+  const rolesOptions = map(rolesQuery.data?.entities ?? [], role => ({
     label: role.name ?? '',
     value: role.id ?? '',
   }));
 
-  const groupsOptions = map(groups, group => ({
+  const groupsOptions = map(groupsQuery.data?.entities ?? [], group => ({
     label: group.name ?? '',
     value: group.id ?? '',
   }));
@@ -314,6 +318,7 @@ const UsersDialog = ({
           {capabilities.mayAccess('role') && (
             <FormGroup title={_('Roles')}>
               <MultiSelect
+                isLoading={rolesQuery.isLoading}
                 items={rolesOptions}
                 name="roleIds"
                 value={roleIds}
@@ -325,6 +330,7 @@ const UsersDialog = ({
           {capabilities.mayAccess('group') && (
             <FormGroup title={_('Groups')}>
               <MultiSelect
+                isLoading={groupsQuery.isLoading}
                 items={groupsOptions}
                 name="groupIds"
                 value={state.groupIds}
