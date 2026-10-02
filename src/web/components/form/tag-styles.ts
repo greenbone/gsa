@@ -5,7 +5,14 @@
 
 import Theme from 'web/utils/theme';
 
-const tagStyles = {
+type TagStyle = {
+  bg: string;
+  color: string;
+};
+
+export type TagStyleName = 'green' | 'red' | 'blue' | 'gray';
+
+const tagStyles: Record<TagStyleName, TagStyle> = {
   green: {
     bg: Theme.lightGreen,
     color: Theme.darkGreen,
