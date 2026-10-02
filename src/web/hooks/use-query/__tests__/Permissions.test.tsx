@@ -28,8 +28,14 @@ const permission2 = Permission.fromElement({
 
 const filter = QueryFilter.fromString('resource_uuid=task-1').all();
 
-const TestComponent = ({filter}: {filter?: FilterType}) => {
-  const {data, isLoading, isError} = useGetPermissions({filter});
+const TestComponent = ({
+  filter,
+  enabled = true,
+}: {
+  filter?: FilterType;
+  enabled?: boolean;
+}) => {
+  const {data, isLoading, isError} = useGetPermissions({filter, enabled});
 
   if (isLoading) {
     return <div data-testid="loading">Loading...</div>;
@@ -52,8 +58,8 @@ const TestComponent = ({filter}: {filter?: FilterType}) => {
   );
 };
 
-const createGmp = () => ({
-  session: createSession({token: 'test-token'}),
+const createGmp = ({token}: {token?: string} = {token: 'test-token'}) => ({
+  session: createSession({token}),
   settings: {},
   permissions: {
     get: testing.fn().mockResolvedValue({
@@ -77,7 +83,7 @@ describe('useGetPermissions', () => {
       expect(screen.getAllByTestId('permission')).toHaveLength(2);
     });
 
-    expect(gmp.permissions.get).toHaveBeenCalled();
+    expect(gmp.permissions.get).toHaveBeenCalledWith({filter});
     expect(screen.getByText('get_tasks')).toBeInTheDocument();
     expect(screen.getByText('modify_task')).toBeInTheDocument();
   });
@@ -89,5 +95,35 @@ describe('useGetPermissions', () => {
     render(<TestComponent />);
 
     expect(screen.getByTestId('loading')).toBeInTheDocument();
+  });
+
+  test('should not fetch when disabled', () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, router: true});
+
+    render(<TestComponent enabled={false} />);
+
+    expect(gmp.permissions.get).not.toHaveBeenCalled();
+  });
+
+  test('should not fetch without a session token', () => {
+    const gmp = createGmp({token: undefined});
+    const {render} = rendererWith({gmp, router: true});
+
+    render(<TestComponent />);
+
+    expect(gmp.permissions.get).not.toHaveBeenCalled();
+  });
+
+  test('should show an error when fetching permissions fails', async () => {
+    const gmp = createGmp();
+    gmp.permissions.get.mockRejectedValue(new Error('Request failed'));
+    const {render} = rendererWith({gmp, router: true});
+
+    render(<TestComponent />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('error')).toBeInTheDocument();
+    });
   });
 });

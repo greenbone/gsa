@@ -16,7 +16,11 @@ const filter = QueryFilter.fromString('id=task-1');
 const task = Task.fromElement({_id: 'task-1', name: 'Task 1'});
 
 const TestComponent = ({enabled = true}: {enabled?: boolean}) => {
-  const {data} = useGetTasks({enabled, filter, staleTime: 30_000});
+  const {data, isError} = useGetTasks({enabled, filter, staleTime: 30_000});
+
+  if (isError) {
+    return <div data-testid="error" />;
+  }
 
   if (!data) {
     return <div data-testid="no-data" />;
@@ -25,8 +29,8 @@ const TestComponent = ({enabled = true}: {enabled?: boolean}) => {
   return <div data-testid="task">{data.entities[0]?.name}</div>;
 };
 
-const createGmp = () => ({
-  session: createSession({token: 'test-token'}),
+const createGmp = ({token}: {token?: string} = {token: 'test-token'}) => ({
+  session: createSession({token}),
   settings: {severityRating: SEVERITY_RATING_CVSS_3},
   tasks: {
     get: testing.fn().mockResolvedValue({
@@ -61,5 +65,26 @@ describe('useGetTasks', () => {
 
     expect(screen.getByTestId('no-data')).toBeInTheDocument();
     expect(gmp.tasks.get).not.toHaveBeenCalled();
+  });
+
+  test('should not fetch without a session token', () => {
+    const gmp = createGmp({token: undefined});
+    const {render} = rendererWith({gmp, router: true});
+
+    render(<TestComponent />);
+
+    expect(gmp.tasks.get).not.toHaveBeenCalled();
+  });
+
+  test('should show an error when fetching tasks fails', async () => {
+    const gmp = createGmp();
+    gmp.tasks.get.mockRejectedValue(new Error('Request failed'));
+    const {render} = rendererWith({gmp, router: true});
+
+    render(<TestComponent />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('error')).toBeInTheDocument();
+    });
   });
 });
