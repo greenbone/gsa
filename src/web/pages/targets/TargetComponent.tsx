@@ -143,10 +143,8 @@ const TargetComponent = ({
   >(undefined);
   const [name, setName] = useState<string | undefined>(undefined);
   const [inUse, setInUse] = useState<boolean>(false);
-  const [excludeHosts, setExcludeHosts] = useState<string | undefined>(
-    undefined,
-  );
-  const [hosts, setHosts] = useState<string | undefined>(undefined);
+  const [excludeHosts, setExcludeHosts] = useState<string[]>([]);
+  const [hosts, setHosts] = useState<string[]>([]);
   const [reverseLookupOnly, setReverseLookupOnly] = useState<
     boolean | undefined
   >(undefined);
@@ -230,8 +228,8 @@ const TargetComponent = ({
       setPortListId(entity.portList?.id);
       setName(entity.name);
       setInUse(entity.isInUse());
-      setExcludeHosts(entity.excludeHosts?.join(', '));
-      setHosts(entity.hosts.join(', '));
+      setExcludeHosts(entity.excludeHosts ?? []);
+      setHosts(entity.hosts ?? []);
       setReverseLookupOnly(entity.reverseLookupOnly);
       setReverseLookupUnify(entity.reverseLookupUnify);
       setTargetSource('manual');
@@ -252,8 +250,8 @@ const TargetComponent = ({
       setSshElevateCredentialId(undefined);
       setPortListId(DEFAULT_PORT_LIST_ID);
       setInUse(false);
-      setExcludeHosts(undefined);
-      setHosts(undefined);
+      setExcludeHosts([]);
+      setHosts([]);
       setReverseLookupOnly(undefined);
       setReverseLookupUnify(undefined);
       setTargetSource(targetSource);

@@ -22,9 +22,9 @@ interface TargetCommandCreateParams {
   comment?: string;
   esxiCredentialId?: string;
   excludeFile?: File;
-  excludeHosts?: string;
+  excludeHosts?: string[];
   file?: File;
-  hosts?: string;
+  hosts?: string[];
   hostsFilter?: FilterType | string;
   krb5CredentialId?: string;
   name: string;
@@ -54,8 +54,8 @@ class TargetCommand extends EntityCommand<Target> {
     comment = '',
     targetSource,
     targetExcludeSource,
-    hosts,
-    excludeHosts,
+    hosts = [],
+    excludeHosts = [],
     reverseLookupOnly,
     reverseLookupUnify,
     portListId,
@@ -82,8 +82,8 @@ class TargetCommand extends EntityCommand<Target> {
           : undefined,
         target_source: targetSource,
         target_exclude_source: targetExcludeSource,
-        hosts,
-        exclude_hosts: excludeHosts,
+        hosts: hosts.join(','),
+        exclude_hosts: excludeHosts.join(','),
         reverse_lookup_only: isDefined(reverseLookupOnly)
           ? parseYesNo(reverseLookupOnly)
           : undefined,
@@ -146,10 +146,12 @@ class TargetCommand extends EntityCommand<Target> {
           : undefined,
         comment,
         esxi_credential_id: esxiCredentialId,
-        exclude_hosts: excludeHosts,
+        exclude_hosts: isDefined(excludeHosts)
+          ? excludeHosts.join(',')
+          : undefined,
         file,
         exclude_file: excludeFile,
-        hosts,
+        hosts: isDefined(hosts) ? hosts.join(',') : undefined,
         name,
         port,
         port_list_id: portListId,

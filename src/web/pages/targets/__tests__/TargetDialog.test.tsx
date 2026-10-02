@@ -186,8 +186,8 @@ describe('TargetDialog tests', () => {
         allowSimultaneousIPs={false}
         comment="hello world"
         credentials={credentials}
-        excludeHosts={''}
-        hosts="123.455.67.434"
+        excludeHosts={[]}
+        hosts={['123.455.67.434']}
         inUse={false}
         name="target"
         reverseLookupOnly={false}
@@ -292,8 +292,8 @@ describe('TargetDialog tests', () => {
         allowSimultaneousIPs={false}
         comment="hello world"
         credentials={credentials}
-        excludeHosts=""
-        hosts="123.455.67.434"
+        excludeHosts={[]}
+        hosts={['123.455.67.434']}
         inUse={false}
         name="target"
         reverseLookupOnly={false}
@@ -328,8 +328,8 @@ describe('TargetDialog tests', () => {
       allowSimultaneousIPs: true,
       comment: 'hello world',
       esxiCredentialId: undefined,
-      excludeHosts: '',
-      hosts: '123.455.67.434',
+      excludeHosts: [],
+      hosts: ['123.455.67.434'],
       hostsCount: undefined,
       inUse: false,
       name: 'ross',
@@ -360,8 +360,8 @@ describe('TargetDialog tests', () => {
         allowSimultaneousIPs={false}
         comment="hello world"
         credentials={credentials}
-        excludeHosts=""
-        hosts="123.455.67.434"
+        excludeHosts={[]}
+        hosts={['123.455.67.434']}
         inUse={false}
         name="target"
         reverseLookupOnly={false}
@@ -400,8 +400,8 @@ describe('TargetDialog tests', () => {
         allowSimultaneousIPs={false}
         comment="hello world"
         credentials={credentials}
-        excludeHosts=""
-        hosts="123.455.67.434"
+        excludeHosts={[]}
+        hosts={['123.455.67.434']}
         inUse={false}
         name="target"
         reverseLookupOnly={false}
@@ -473,8 +473,8 @@ describe('TargetDialog tests', () => {
           allowSimultaneousIPs={false}
           comment="hello world"
           credentials={credentials}
-          excludeHosts=""
-          hosts="123.455.67.434"
+          excludeHosts={[]}
+          hosts={['123.455.67.434']}
           inUse={false}
           krb5CredentialId="2345"
           name="target"
@@ -518,8 +518,8 @@ describe('TargetDialog tests', () => {
         allowSimultaneousIPs={false}
         comment="hello world"
         credentials={credentials}
-        excludeHosts=""
-        hosts="123.455.67.434"
+        excludeHosts={[]}
+        hosts={['123.455.67.434']}
         inUse={false}
         name="target"
         reverseLookupOnly={false}
@@ -560,8 +560,8 @@ describe('TargetDialog tests', () => {
         allowSimultaneousIPs={false}
         comment="hello world"
         credentials={credentials}
-        excludeHosts=""
-        hosts="123.455.67.434"
+        excludeHosts={[]}
+        hosts={['123.455.67.434']}
         inUse={true}
         name="target"
         reverseLookupOnly={false}
@@ -659,8 +659,8 @@ describe('TargetDialog tests', () => {
       allowSimultaneousIPs: true,
       comment: '',
       esxiCredentialId: undefined,
-      excludeHosts: '',
-      hosts: '',
+      excludeHosts: [],
+      hosts: [],
       hostsCount: 10,
       hostsFilter,
       id: undefined,
@@ -782,5 +782,29 @@ describe('TargetDialog tests', () => {
     expect(aliveTestsRadios[1]).not.toBeChecked();
     expect(aliveTestsRadios[2]).toHaveAttribute('value', 'custom');
     expect(aliveTestsRadios[2]).toBeChecked();
+  });
+
+  test('should update alive tests when selecting custom and base options', () => {
+    const handleSave = testing.fn();
+
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(<TargetDialog onSave={handleSave} />);
+
+    fireEvent.click(screen.getByRole('radio', {name: 'Custom'}));
+    fireEvent.click(screen.getDialogSaveButton());
+
+    expect(handleSave).toHaveBeenLastCalledWith(
+      expect.objectContaining({aliveTests: []}),
+    );
+
+    fireEvent.click(
+      screen.getByRole('radio', {name: 'Consider Hosts as Alive'}),
+    );
+    fireEvent.click(screen.getDialogSaveButton());
+
+    expect(handleSave).toHaveBeenLastCalledWith(
+      expect.objectContaining({aliveTests: [CONSIDER_ALIVE]}),
+    );
   });
 });

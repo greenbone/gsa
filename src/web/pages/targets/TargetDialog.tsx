@@ -41,6 +41,7 @@ import SaveDialog from 'web/components/dialog/SaveDialog';
 import FileField from 'web/components/form/FileField';
 import FormGroup from 'web/components/form/FormGroup';
 import MultiSelect from 'web/components/form/MultiSelect';
+import MultiValueTextField from 'web/components/form/MultiValueTextField';
 import NumberField from 'web/components/form/NumberField';
 import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
@@ -90,9 +91,9 @@ interface TargetDialogDefaultValues {
   allowSimultaneousIPs: boolean;
   comment: string;
   excludeFile?: File;
-  excludeHosts: string;
+  excludeHosts: string[];
   file?: File;
-  hosts: string;
+  hosts: string[];
   hostsCount?: number;
   hostsFilter?: Filter;
   inUse: boolean;
@@ -112,8 +113,8 @@ interface TargetDialogProps {
   comment?: string;
   credentials?: Credential[];
   esxiCredentialId?: string;
-  excludeHosts?: string;
-  hosts?: string;
+  excludeHosts?: string[];
+  hosts?: string[];
   hostsCount?: number;
   hostsFilter?: Filter;
   id?: string;
@@ -166,8 +167,8 @@ const TargetDialog = ({
   comment = '',
   credentials = [],
   esxiCredentialId,
-  excludeHosts = '',
-  hosts = '',
+  excludeHosts = [],
+  hosts = [],
   hostsCount,
   hostsFilter,
   id,
@@ -441,7 +442,8 @@ const TargetDialog = ({
                   value="manual"
                   onChange={onValueChange}
                 />
-                <TextField
+                <MultiValueTextField
+                  color="gray"
                   disabled={inUse || state.targetSource !== 'manual'}
                   grow="1"
                   name="hosts"
@@ -493,7 +495,8 @@ const TargetDialog = ({
                   value="manual"
                   onChange={onValueChange}
                 />
-                <TextField
+                <MultiValueTextField
+                  color="gray"
                   disabled={inUse || state.targetExcludeSource !== 'manual'}
                   grow="1"
                   name="excludeHosts"
