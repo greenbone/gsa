@@ -351,6 +351,7 @@ const UsersDialog = ({
               />
             </Row>
             <MultiValueTextField
+              color="gray"
               name="accessHosts"
               value={state.accessHosts}
               onChange={onValueChange}
