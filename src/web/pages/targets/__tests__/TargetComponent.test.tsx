@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {fireEvent, rendererWith, screen, wait} from 'web/testing';
+import {fireEvent, rendererWith, screen, wait, within} from 'web/testing';
 import {createActionResultResponse} from 'gmp/commands/testing';
 import Response from 'gmp/http/response';
 import type Model from 'gmp/models/model';
@@ -15,10 +15,33 @@ import Button from 'web/components/form/Button';
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import {DEFAULT_PORT_LIST_ID} from 'web/pages/targets/TargetDialog';
 
+type CreateGmpParams = {
+  credentials?: Model[];
+  portlists?: Model[];
+  create?: ReturnType<typeof testing.fn>;
+  save?: ReturnType<typeof testing.fn>;
+  clone?: ReturnType<typeof testing.fn>;
+  delete?: ReturnType<typeof testing.fn>;
+  createCredential?: ReturnType<typeof testing.fn>;
+  createPortList?: ReturnType<typeof testing.fn>;
+};
+
 const createGmp = ({
   credentials = [],
   portlists = [],
-}: {credentials?: Model[]; portlists?: Model[]} = {}) => {
+  create = testing
+    .fn()
+    .mockResolvedValue(createActionResultResponse({id: 'new-id'})),
+  save = testing
+    .fn()
+    .mockResolvedValue(createActionResultResponse({id: 'saved-id'})),
+  clone = testing
+    .fn()
+    .mockResolvedValue(createActionResultResponse({id: 'cloned-id'})),
+  delete: deleteTarget = testing.fn().mockResolvedValue(undefined),
+  createCredential = testing.fn().mockResolvedValue({data: {id: 'cred-id'}}),
+  createPortList = testing.fn().mockResolvedValue({data: {id: 'port-list-id'}}),
+}: CreateGmpParams = {}) => {
   return {
     settings: {
       enableGreenboneSensor: true,
@@ -36,6 +59,12 @@ const createGmp = ({
         }),
       ),
     },
+    credential: {
+      create: createCredential,
+    },
+    portlist: {
+      create: createPortList,
+    },
     credentials: {
       getAll: testing.fn().mockResolvedValue(new Response(credentials)),
     },
@@ -43,15 +72,10 @@ const createGmp = ({
       getAll: testing.fn().mockResolvedValue(new Response(portlists)),
     },
     target: {
-      create: testing
-        .fn()
-        .mockResolvedValue(createActionResultResponse({id: 'new-id'})),
-      save: testing
-        .fn()
-        .mockResolvedValue(createActionResultResponse({id: 'saved-id'})),
-      clone: testing
-        .fn()
-        .mockResolvedValue(createActionResultResponse({id: 'cloned-id'})),
+      create,
+      save,
+      clone,
+      delete: deleteTarget,
       export: testing.fn().mockResolvedValue(new Response('some-data')),
     },
   };
@@ -95,8 +119,8 @@ describe('TargetComponent tests', () => {
       allowSimultaneousIPs: true,
       comment: '',
       esxiCredentialId: undefined,
-      excludeHosts: '',
-      hosts: '',
+      excludeHosts: [],
+      hosts: [],
       hostsCount: undefined,
       hostsFilter: undefined,
       id: undefined,
@@ -130,9 +154,37 @@ describe('TargetComponent tests', () => {
     );
   });
 
+  test('should report target creation errors', async () => {
+    const error = new Error('Create failed');
+    const create = testing.fn().mockRejectedValue(error);
+    const gmp = createGmp({create});
+    const onCreateError = testing.fn();
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(
+      <TargetComponent onCreateError={onCreateError}>
+        {({create: openCreate}) => (
+          <Button data-testid="open" onClick={() => openCreate()} />
+        )}
+      </TargetComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open'));
+    await wait();
+    fireEvent.click(screen.getDialogSaveButton());
+    await wait();
+
+    expect(onCreateError).toHaveBeenCalledWith(error);
+  });
+
   test('should allow to edit an existing target', async () => {
     const gmp = createGmp();
-    const target = new Target({name: 'My Target', id: '1234'});
+    const target = new Target({
+      name: 'My Target',
+      id: '1234',
+      hosts: ['192.168.1.1', '192.168.1.2'],
+      excludeHosts: ['192.168.1.3'],
+    });
     const onSaved = testing.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
@@ -158,8 +210,8 @@ describe('TargetComponent tests', () => {
       allowSimultaneousIPs: false,
       comment: '',
       esxiCredentialId: undefined,
-      excludeHosts: '',
-      hosts: '',
+      excludeHosts: ['192.168.1.3'],
+      hosts: ['192.168.1.1', '192.168.1.2'],
       hostsCount: undefined,
       hostsFilter: undefined,
       id: '1234',
@@ -191,6 +243,60 @@ describe('TargetComponent tests', () => {
         },
       }),
     );
+  });
+
+  test('should report target save errors', async () => {
+    const error = new Error('Save failed');
+    const save = testing.fn().mockRejectedValue(error);
+    const gmp = createGmp({save});
+    const onSaveError = testing.fn();
+    const target = new Target({name: 'My Target', id: '1234'});
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(
+      <TargetComponent onSaveError={onSaveError}>
+        {({edit}) => <Button data-testid="open" onClick={() => edit(target)} />}
+      </TargetComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open'));
+    await wait();
+    fireEvent.click(screen.getDialogSaveButton());
+    await wait();
+
+    expect(onSaveError).toHaveBeenCalledWith(error);
+  });
+
+  test('only saves editable fields for a target in use', async () => {
+    const gmp = createGmp();
+    const target = new Target({
+      name: 'In-use Target',
+      id: '1234',
+      comment: 'Existing comment',
+      inUse: true,
+      aliveTests: [SCAN_CONFIG_DEFAULT],
+    });
+
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(
+      <TargetComponent>
+        {({edit}) => (
+          <Button data-testid="button" onClick={() => edit(target)} />
+        )}
+      </TargetComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('button'));
+    await wait();
+    fireEvent.click(screen.getDialogSaveButton());
+
+    expect(gmp.target.save).toHaveBeenCalledWith({
+      id: '1234',
+      comment: 'Existing comment',
+      aliveTests: [SCAN_CONFIG_DEFAULT],
+      name: 'In-use Target',
+    });
   });
 
   test('should allow to clone an existing target', async () => {
@@ -258,5 +364,97 @@ describe('TargetComponent tests', () => {
       data: 'some-data',
       filename: 'target-1234.xml',
     });
+  });
+
+  test('should handle deleting a target', async () => {
+    const gmp = createGmp();
+    const onDeleted = testing.fn();
+    let actions: {delete: (target: Target) => Promise<void>} | undefined;
+    const {render} = rendererWith({gmp});
+
+    render(
+      <TargetComponent onDeleted={onDeleted}>
+        {props => {
+          actions = props;
+          return null;
+        }}
+      </TargetComponent>,
+    );
+
+    await actions?.delete(new Target({id: 'target-id', name: 'Target'}));
+
+    expect(gmp.target.delete).toHaveBeenCalledWith({id: 'target-id'});
+    expect(onDeleted).toHaveBeenCalled();
+  });
+
+  test('should report delete errors', async () => {
+    const error = new Error('Delete failed');
+    const deleteTarget = testing.fn().mockRejectedValue(error);
+    const gmp = createGmp({delete: deleteTarget});
+    const onDeleteError = testing.fn();
+    let actions: {delete: (target: Target) => Promise<void>} | undefined;
+    const {render} = rendererWith({gmp});
+
+    render(
+      <TargetComponent onDeleteError={onDeleteError}>
+        {props => {
+          actions = props;
+          return null;
+        }}
+      </TargetComponent>,
+    );
+
+    await actions?.delete(new Target({id: 'target-id', name: 'Target'}));
+    expect(onDeleteError).toHaveBeenCalledWith(error);
+  });
+
+  test('should create a credential from the target dialog', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(
+      <TargetComponent>
+        {({create}) => <Button data-testid="open" onClick={() => create()} />}
+      </TargetComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open'));
+    fireEvent.click(await screen.findByTestId('new-icon-ssh'));
+
+    const dialogs = await screen.findAllByRole('dialog');
+    const credentialDialog = within(dialogs[1]);
+    fireEvent.change(credentialDialog.getByName('name'), {
+      target: {value: 'new-credential'},
+    });
+    fireEvent.click(credentialDialog.getDialogSaveButton());
+    await wait();
+
+    expect(gmp.credential.create).toHaveBeenCalled();
+    expect(gmp.credentials.getAll).toHaveBeenCalledTimes(2);
+  });
+
+  test('should create a port list from the target dialog', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, capabilities: true});
+
+    render(
+      <TargetComponent>
+        {({create}) => <Button data-testid="open" onClick={() => create()} />}
+      </TargetComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open'));
+    fireEvent.click(await screen.findByTitle('Create a new port list'));
+
+    const dialogs = await screen.findAllByRole('dialog');
+    const portListDialog = within(dialogs[1]);
+    fireEvent.change(portListDialog.getByName('name'), {
+      target: {value: 'new-port-list'},
+    });
+    fireEvent.click(portListDialog.getDialogSaveButton());
+    await wait();
+
+    expect(gmp.portlist.create).toHaveBeenCalled();
+    expect(gmp.portlists.getAll).toHaveBeenCalledTimes(2);
   });
 });
