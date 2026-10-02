@@ -9,8 +9,11 @@ import {
   fireEvent,
   rendererWith,
   screen,
+  waitFor,
   within,
+  type RendererOptions,
 } from 'web/testing';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import Group from 'gmp/models/group';
 import Role from 'gmp/models/role';
 import Settings from 'gmp/models/settings';
@@ -34,15 +37,42 @@ const createSettings = ({ldap = false, radius = false} = {}) => {
   return settings;
 };
 
-const renderDialog = (props = {}, options = {}) => {
+const createGmp = () => ({
+  session: createSession({username: 'admin', token: 'test-token'}),
+  settings: {
+    reloadInterval: 0,
+    reloadIntervalActive: 0,
+    reloadIntervalInactive: 0,
+  },
+  groups: {
+    getAll: testing.fn().mockResolvedValue({
+      data: groups,
+      meta: {
+        filter: undefined,
+        counts: new CollectionCounts({all: groups.length}),
+      },
+    }),
+  },
+  roles: {
+    getAll: testing.fn().mockResolvedValue({
+      data: roles,
+      meta: {
+        filter: undefined,
+        counts: new CollectionCounts({all: roles.length}),
+      },
+    }),
+  },
+});
+
+const renderDialog = (props = {}, options: RendererOptions = {}) => {
   const onClose = testing.fn();
   const onSave = testing.fn();
+  const gmp = createGmp();
+  const {gmp: optionGmp, ...rendererOptions} = options;
   const {render} = rendererWith({
-    capabilities: true,
-    gmp: {
-      session: createSession({username: 'admin'}),
-    },
-    ...options,
+    ...rendererOptions,
+    capabilities: options.capabilities ?? true,
+    gmp: {...gmp, ...optionGmp},
   });
 
   render(
@@ -54,7 +84,7 @@ const renderDialog = (props = {}, options = {}) => {
     />,
   );
 
-  return {onClose, onSave};
+  return {gmp, onClose, onSave};
 };
 
 describe('UsersDialog tests', () => {
@@ -91,8 +121,6 @@ describe('UsersDialog tests', () => {
       oldName: undefined,
       password: '',
       roleIds: [],
-      roles: undefined,
-      groups: undefined,
     });
   });
 
@@ -125,15 +153,34 @@ describe('UsersDialog tests', () => {
     ).toBeInTheDocument();
   });
 
-  test('saves a user after selecting a role and group', () => {
-    const {onSave} = renderDialog({roles, groups});
+  test('saves a user after selecting a role and group', async () => {
+    const {gmp, onSave} = renderDialog();
     const dialog = within(screen.getDialog());
 
+    await waitFor(() => {
+      expect(gmp.roles.getAll).toHaveBeenCalled();
+      expect(gmp.groups.getAll).toHaveBeenCalled();
+    });
+    await waitFor(() => {
+      const selects = dialog.getAllByTestId('multi-select');
+      expect(selects[0]).not.toBeDisabled();
+      expect(selects[1]).not.toBeDisabled();
+    });
     const selects = dialog.getAllByTestId('multi-select');
     fireEvent.click(selects[0]);
-    fireEvent.click(screen.getByRole('option', {name: 'Administrator'}));
+    const roleOptions = screen.getSelectItemElementsForMultiSelect();
+    fireEvent.click(
+      roleOptions.find(
+        option => option.textContent === 'Administrator',
+      ) as HTMLElement,
+    );
     fireEvent.click(selects[1]);
-    fireEvent.click(screen.getByRole('option', {name: 'Security'}));
+    const groupOptions = screen.getSelectItemElementsForMultiSelect();
+    fireEvent.click(
+      groupOptions.find(
+        option => option.textContent === 'Security',
+      ) as HTMLElement,
+    );
 
     fireEvent.click(screen.getDialogSaveButton());
 
@@ -204,10 +251,7 @@ describe('UsersDialog tests', () => {
 
   test('confirms saving changes to the current Super Admin user', () => {
     const user = new User({id: 'admin-id', name: 'admin'});
-    const {onSave} = renderDialog(
-      {user, name: 'admin', roleIds: ['role-1']},
-      {gmp: {session: createSession({username: 'admin'})}},
-    );
+    const {onSave} = renderDialog({user, name: 'admin', roleIds: ['role-1']});
 
     fireEvent.click(screen.getDialogSaveButton());
     expect(screen.getByText('Save Super Admin User')).toBeInTheDocument();
@@ -225,7 +269,7 @@ describe('UsersDialog tests', () => {
   });
 
   test('hides role and group fields without capabilities', () => {
-    renderDialog({roles, groups}, {capabilities: false});
+    renderDialog({}, {capabilities: false});
 
     expect(screen.queryByText('Roles')).toBeNull();
     expect(screen.queryByText('Groups')).toBeNull();
