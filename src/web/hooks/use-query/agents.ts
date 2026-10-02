@@ -13,7 +13,7 @@ import type FilterType from 'gmp/models/filter/filter-type';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {isFilterType} from 'gmp/models/filter/utils';
 import {parseYesNo} from 'gmp/parser';
-import {isDefined} from 'gmp/utils/identity';
+import {isArray, isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import useDeleteMutation from 'web/queries/useDeleteMutation';
@@ -88,9 +88,7 @@ export const useModifyAgent = ({
         const key = q.queryKey as unknown as string[];
         return (
           key?.includes?.('get_agents') ||
-          (Array.isArray(key) &&
-            key[0] === 'get_entities' &&
-            key.includes('agent'))
+          (isArray(key) && key[0] === 'get_entities' && key.includes('agent'))
         );
       },
     });
