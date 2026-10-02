@@ -58,7 +58,23 @@ describe('MultiValueTextField', () => {
     const input = screen.getByTestId('form-multi-input');
     await userEvent.type(input, 'invalid host{enter}');
 
-    expect(onChange).not.toHaveBeenCalledWith(['duplicate'], 'kdcs');
+    expect(onChange).toHaveBeenCalledWith([], 'kdcs');
+  });
+
+  test('should render a disabled field', () => {
+    render(
+      <MultiValueTextField
+        disabled
+        grow={1}
+        name="hosts"
+        value={['127.0.0.1']}
+        onChange={testing.fn()}
+      />,
+    );
+
+    const input = screen.getByTestId('form-multi-input');
+    expect(input).toBeDisabled();
+    expect(screen.getByText('127.0.0.1')).toBeVisible();
   });
 
   test('should not add duplicate values', async () => {

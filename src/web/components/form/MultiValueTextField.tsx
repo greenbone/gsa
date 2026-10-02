@@ -9,6 +9,7 @@ import Theme from 'web/utils/theme';
 
 interface MultiValueTextFieldProps {
   color?: TagStyleName;
+  grow?: number | string;
   name?: string;
   title?: string;
   placeholder?: string;
@@ -25,8 +26,9 @@ const MultiValueTextField = ({
   placeholder,
   value = [],
   disabled,
-  onChange,
+  grow,
   validate,
+  onChange,
 }: MultiValueTextFieldProps) => {
   const resolvedColor = tagStyles[color] ?? tagStyles.green;
 
@@ -47,6 +49,9 @@ const MultiValueTextField = ({
           backgroundColor: 'white',
           border: `1px solid ${Theme.inputBorderGray}`,
           borderRadius: 4,
+        },
+        root: {
+          flexGrow: grow,
         },
         pill: {
           backgroundColor: resolvedColor.bg,
