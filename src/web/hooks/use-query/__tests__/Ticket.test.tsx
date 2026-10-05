@@ -151,12 +151,48 @@ describe('ticket mutation hooks', () => {
     });
   });
 
-  test('should clone a ticket', async () => {
+  test('should clone a ticket with its name and call onSuccess', async () => {
     const gmp = createGmp();
+    const onSuccess = testing.fn();
     const {render} = rendererWith({gmp, router: true});
 
     const TestComponent = () => {
-      const mutation = useCloneTicket();
+      const mutation = useCloneTicket({onSuccess});
+      return (
+        <button
+          onClick={() =>
+            mutation.mutate({id: 'ticket-1', name: 'Cloned Ticket'})
+          }
+        >
+          Clone
+        </button>
+      );
+    };
+
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Clone'}));
+
+    await waitFor(() => {
+      expect(gmp.ticket.clone).toHaveBeenCalledWith({
+        id: 'ticket-1',
+        name: 'Cloned Ticket',
+      });
+      expect(onSuccess).toHaveBeenCalledWith({id: 'ticket-3'});
+      expect(
+        screen.getByText('Cloned Ticket cloned successfully.'),
+      ).toBeInTheDocument();
+    });
+  });
+
+  test('should call onError when cloning a ticket fails', async () => {
+    const error = new Error('Clone failed');
+    const gmp = createGmp();
+    gmp.ticket.clone.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+
+    const TestComponent = () => {
+      const mutation = useCloneTicket({onError});
       return (
         <button onClick={() => mutation.mutate({id: 'ticket-1'})}>Clone</button>
       );
@@ -165,17 +201,51 @@ describe('ticket mutation hooks', () => {
     render(<TestComponent />);
     fireEvent.click(screen.getByRole('button', {name: 'Clone'}));
 
-    await waitFor(() => {
-      expect(gmp.ticket.clone).toHaveBeenCalledWith({id: 'ticket-1'});
-    });
+    await waitFor(() => expect(onError.mock.calls[0][0]).toBe(error));
   });
 
-  test('should delete a ticket', async () => {
+  test('should delete a ticket with its name and call onSuccess', async () => {
     const gmp = createGmp();
+    const onSuccess = testing.fn();
     const {render} = rendererWith({gmp, router: true});
 
     const TestComponent = () => {
-      const mutation = useDeleteTicket();
+      const mutation = useDeleteTicket({onSuccess});
+      return (
+        <button
+          onClick={() =>
+            mutation.mutate({id: 'ticket-1', name: 'Deleted Ticket'})
+          }
+        >
+          Delete
+        </button>
+      );
+    };
+
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
+
+    await waitFor(() => {
+      expect(gmp.ticket.delete).toHaveBeenCalledWith({
+        id: 'ticket-1',
+        name: 'Deleted Ticket',
+      });
+      expect(onSuccess).toHaveBeenCalledWith(undefined);
+      expect(
+        screen.getByText('Deleted Ticket deleted successfully.'),
+      ).toBeInTheDocument();
+    });
+  });
+
+  test('should call onError when deleting a ticket fails', async () => {
+    const error = new Error('Delete failed');
+    const gmp = createGmp();
+    gmp.ticket.delete.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+
+    const TestComponent = () => {
+      const mutation = useDeleteTicket({onError});
       return (
         <button onClick={() => mutation.mutate({id: 'ticket-1'})}>
           Delete
@@ -186,9 +256,7 @@ describe('ticket mutation hooks', () => {
     render(<TestComponent />);
     fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
 
-    await waitFor(() => {
-      expect(gmp.ticket.delete).toHaveBeenCalledWith({id: 'ticket-1'});
-    });
+    await waitFor(() => expect(onError.mock.calls[0][0]).toBe(error));
   });
 
   test('should download a ticket', async () => {
