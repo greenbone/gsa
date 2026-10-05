@@ -7,11 +7,12 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import QueryFilter from 'gmp/models/filter/query-filter';
+import Group from 'gmp/models/group';
 import {createSession} from 'gmp/testing';
 import {useGetAllGroups, useGetGroups} from 'web/hooks/use-query/groups';
 
 const filter = QueryFilter.fromString('name~group');
-const groups = [{id: 'group-1', name: 'Group 1'}];
+const groups = [new Group({id: 'group-1', name: 'Group 1'})];
 
 const createGmp = () => {
   const response = {
@@ -32,7 +33,7 @@ const createGmp = () => {
   };
 };
 
-describe('group query hooks', () => {
+describe('useGetGroups', () => {
   test('should fetch groups with a filter', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
@@ -52,6 +53,37 @@ describe('group query hooks', () => {
     expect(gmp.groups.getAll).not.toHaveBeenCalled();
   });
 
+  test('should not fetch groups when disabled', () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, router: true});
+
+    const TestComponent = () => {
+      useGetGroups({enabled: false});
+      return <div />;
+    };
+
+    render(<TestComponent />);
+
+    expect(gmp.groups.get).not.toHaveBeenCalled();
+  });
+
+  test('should not fetch groups without a session token', () => {
+    const gmp = createGmp();
+    gmp.session.token = undefined;
+    const {render} = rendererWith({gmp, router: true});
+
+    const TestComponent = () => {
+      useGetGroups({filter});
+      return <div />;
+    };
+
+    render(<TestComponent />);
+
+    expect(gmp.groups.get).not.toHaveBeenCalled();
+  });
+});
+
+describe('useGetAllGroups', () => {
   test('should fetch all groups with a filter', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
@@ -76,14 +108,12 @@ describe('group query hooks', () => {
     const {render} = rendererWith({gmp, router: true});
 
     const TestComponent = () => {
-      useGetGroups({enabled: false});
       useGetAllGroups({enabled: false});
       return <div />;
     };
 
     render(<TestComponent />);
 
-    expect(gmp.groups.get).not.toHaveBeenCalled();
     expect(gmp.groups.getAll).not.toHaveBeenCalled();
   });
 
@@ -93,14 +123,12 @@ describe('group query hooks', () => {
     const {render} = rendererWith({gmp, router: true});
 
     const TestComponent = () => {
-      useGetGroups({filter});
       useGetAllGroups({filter});
       return <div />;
     };
 
     render(<TestComponent />);
 
-    expect(gmp.groups.get).not.toHaveBeenCalled();
     expect(gmp.groups.getAll).not.toHaveBeenCalled();
   });
 });
