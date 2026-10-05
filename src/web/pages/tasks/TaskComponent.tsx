@@ -5,6 +5,7 @@
 
 import React, {useState, useEffect, useCallback} from 'react';
 import {useDispatch} from 'react-redux';
+import {type EntityActionData} from 'gmp/commands/entity';
 import type Rejection from 'gmp/http/rejection';
 import type AgentGroup from 'gmp/models/agent-group';
 import date, {type Date} from 'gmp/models/date';
@@ -486,9 +487,7 @@ const TaskComponent = ({
     setScheduleId(data.id);
   };
 
-  const handleTargetCreated = (resp: {data: {id?: string}}) => {
-    const {data} = resp;
-
+  const handleTargetCreated = (data: EntityActionData) => {
     fetchTargets();
 
     setTargetId(data.id);
