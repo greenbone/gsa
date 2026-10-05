@@ -7,21 +7,23 @@ import {type EntityType} from 'gmp/utils/entity-type';
 import {isDefined, isFunction} from 'gmp/utils/identity';
 import {entityListURL, entityURL, type EntityListType} from 'web/route-paths';
 
-export type NavigateFunc = (path: string) => void;
+type NavigateFunc = (path: string) => void;
 
-export interface NavigateObj {
+interface NavigateObj {
   navigate: NavigateFunc;
 }
 
-export type Navigate = NavigateFunc | NavigateObj;
+type Navigate = NavigateFunc | NavigateObj;
 
-export interface GotoDetailsObj {
-  data: {
-    id: string;
-  };
+interface GotoDetailsData {
+  id: string;
 }
 
-export type GotoDetailsFunc = ({data}: GotoDetailsObj) => void;
+interface GotoDetailsObj {
+  data: GotoDetailsData;
+}
+
+export type GotoDetailsFunc = (data: GotoDetailsObj | GotoDetailsData) => void;
 export type GotoListFunc = () => void;
 
 /**
@@ -47,7 +49,8 @@ export const goToDetails = (
       throw new Error('navigate function is required for goToDetails');
     }
   }
-  return ({data}) => navigate(entityURL(type, String(data.id)));
+  return data =>
+    navigate(entityURL(type, String('id' in data ? data.id : data.data.id)));
 };
 
 /**
