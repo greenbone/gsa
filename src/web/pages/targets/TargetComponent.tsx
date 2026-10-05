@@ -4,6 +4,7 @@
  */
 
 import {useState, useRef} from 'react';
+import {type EntityActionData} from 'gmp/commands/entity';
 import {
   type TargetCommandSaveParams,
   type TargetExcludeSource,
@@ -22,19 +23,15 @@ import {
 } from 'gmp/models/target';
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-import useEntityClone, {
-  type EntityCloneResponse,
-} from 'web/entity/hooks/useEntityClone';
-import useEntityCreate, {
-  type EntityCreateResponse,
-} from 'web/entity/hooks/useEntityCreate';
-import useEntityDelete from 'web/entity/hooks/useEntityDelete';
 import useEntityDownload, {
   type OnDownloadedFunc,
 } from 'web/entity/hooks/useEntityDownload';
-import useEntitySave, {
-  type EntitySaveResponse,
-} from 'web/entity/hooks/useEntitySave';
+import {
+  useCloneTarget,
+  useCreateTarget,
+  useDeleteTarget,
+  useSaveTarget,
+} from 'web/hooks/use-query/target';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import CredentialDialog, {
@@ -66,15 +63,15 @@ interface TargetComponentRenderProps {
 
 interface TargetComponentProps {
   children: (props: TargetComponentRenderProps) => React.ReactNode;
-  onCloned?: (response: EntityCloneResponse) => void;
+  onCloned?: (data: EntityActionData) => void;
   onCloneError?: (error: Error) => void;
-  onCreated?: (response: EntityCreateResponse) => void;
+  onCreated?: (data: EntityActionData) => void;
   onCreateError?: (error: Error) => void;
   onDeleted?: () => void;
   onDeleteError?: (error: Error) => void;
   onDownloaded?: OnDownloadedFunc;
   onDownloadError?: (error: Error) => void;
-  onSaved?: (response: EntitySaveResponse) => void;
+  onSaved?: (data: EntityActionData) => void;
   onSaveError?: (error: Error) => void;
 }
 
@@ -339,33 +336,45 @@ const TargetComponent = ({
     setKrb5CredentialId(krb5CredentialId ?? UNSET_VALUE);
   };
 
-  const handleEntityClone = useEntityClone<Target>(
-    entity => gmp.target.clone(entity),
-    {
-      onCloned,
-      onCloneError,
-    },
-  );
+  const cloneTarget = useCloneTarget({
+    onSuccess: onCloned,
+    onError: onCloneError,
+  });
 
-  const handleEntitySave = useEntitySave<TargetCommandSaveParams>(
-    data => gmp.target.save(data),
-    {
-      onSaved,
-      onSaveError,
-    },
-  );
+  const handleTargetClone = async (entity: Target) => {
+    await cloneTarget.mutateAsync(entity);
+  };
 
-  const handleEntityCreate = useEntityCreate<TargetDialogData>(
-    data => gmp.target.create(data),
-    {
-      onCreated,
-      onCreateError,
-    },
-  );
+  const saveTarget = useSaveTarget({
+    onSuccess: onSaved,
+    onError: onSaveError,
+  });
+
+  const handleTargetSave = async (data: TargetCommandSaveParams) => {
+    await saveTarget.mutateAsync(data);
+  };
+
+  const createTarget = useCreateTarget({
+    onSuccess: onCreated,
+    onError: onCreateError,
+  });
+
+  const handleTargetCreate = async (data: TargetDialogData) => {
+    await createTarget.mutateAsync(data);
+  };
+
+  const deleteTarget = useDeleteTarget({
+    onSuccess: onDeleted,
+    onError: onDeleteError,
+  });
+
+  const handleTargetDelete = async (entity: Target) => {
+    await deleteTarget.mutateAsync(entity);
+  };
 
   const handleSaveClick = async (data: TargetDialogData) => {
     const promise = isDefined(data.id)
-      ? handleEntitySave(
+      ? handleTargetSave(
           data.inUse
             ? {
                 id: data.id as string,
@@ -378,7 +387,7 @@ const TargetComponent = ({
                 id: data.id as string,
               },
         )
-      : handleEntityCreate(data);
+      : handleTargetCreate(data);
     await promise;
     closeTargetDialog();
   };
@@ -391,20 +400,12 @@ const TargetComponent = ({
     },
   );
 
-  const handleEntityDelete = useEntityDelete<Target>(
-    entity => gmp.target.delete(entity),
-    {
-      onDeleted,
-      onDeleteError,
-    },
-  );
-
   return (
     <>
       {children({
-        clone: handleEntityClone,
+        clone: handleTargetClone,
         create: openCreateTargetDialog,
-        delete: handleEntityDelete,
+        delete: handleTargetDelete,
         download: handleEntityDownload,
         edit: openTargetDialog,
       })}

@@ -5,6 +5,7 @@
 
 import React, {useState, useCallback, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
+import {type EntityActionData} from 'gmp/commands/entity';
 import {type NvtFamily} from 'gmp/commands/nvt-families';
 import {
   type ScanConfigFamilyNvt,
@@ -285,7 +286,7 @@ const PolicyComponent = ({
     setScheduleId(data.id);
   };
 
-  const handleTargetCreated = ({data}) => {
+  const handleTargetCreated = (data: EntityActionData) => {
     fetchTargets();
     setTargetId(data.id);
   };
