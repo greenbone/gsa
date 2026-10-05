@@ -21,7 +21,7 @@ import {
   useCreateTicket,
   useDeleteTicket,
   useSaveTicket,
-} from 'web/hooks/use-query/tickets';
+} from 'web/hooks/use-query/ticket';
 import {useGetUsers} from 'web/hooks/use-query/users';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';

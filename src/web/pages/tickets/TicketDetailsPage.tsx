@@ -45,7 +45,7 @@ import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
-import {useGetTicket} from 'web/hooks/use-query/tickets';
+import {useGetTicket} from 'web/hooks/use-query/ticket';
 import useTranslation from 'web/hooks/useTranslation';
 import TicketComponent from 'web/pages/tickets/TicketComponent';
 import TicketDetails from 'web/pages/tickets/TicketDetails';
