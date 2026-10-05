@@ -5,6 +5,7 @@
 
 import {type EntityActionData} from 'gmp/commands/entity';
 import type Response from 'gmp/http/response';
+import _ from 'gmp/locale';
 import type User from 'gmp/models/user';
 import useGmp from 'web/hooks/useGmp';
 import {type RefetchIntervalFn} from 'web/queries/helpers';
@@ -14,6 +15,15 @@ import useGmpMutation from 'web/queries/useGmpMutation';
 interface UseGetUserParams {
   id: string;
   refetchInterval?: RefetchIntervalFn<User>;
+}
+
+interface UseModifyUserParams {
+  id: string;
+  name?: string;
+}
+
+interface UseDeleteUserParams extends UseModifyUserParams {
+  inheritorId?: string;
 }
 
 interface UseUserMutationCallbacks<TResponse> {
@@ -87,12 +97,16 @@ export const useCloneUser = ({
   onError,
 }: UseUserMutationCallbacks<EntityActionData> = {}) => {
   const gmp = useGmp();
-  return useGmpMutation<{id: string}, EntityActionData>({
-    gmpMethod: async ({id}: {id: string}) => {
+  return useGmpMutation<UseModifyUserParams, EntityActionData>({
+    gmpMethod: async ({id}: UseModifyUserParams) => {
       const response = await gmp.user.clone({id});
       return response.data;
     },
     invalidateQueryIds: ['get_users'],
+    successMessage: (_data, entity) =>
+      _('{{- name}} cloned successfully.', {
+        name: entity.name as string,
+      }),
     onSuccess,
     onError,
   });
@@ -103,10 +117,14 @@ export const useDeleteUser = ({
   onError,
 }: UseUserMutationCallbacks<void> = {}) => {
   const gmp = useGmp();
-  return useGmpMutation<{id: string; inheritorId?: string}, void>({
-    gmpMethod: ({id, inheritorId}: {id: string; inheritorId?: string}) =>
+  return useGmpMutation<UseDeleteUserParams, void>({
+    gmpMethod: ({id, inheritorId}: UseDeleteUserParams) =>
       gmp.user.delete({id, inheritorId: inheritorId ?? ''}),
     invalidateQueryIds: ['get_users', 'get_user'],
+    successMessage: (_data, entity) =>
+      _('{{- name}} deleted successfully.', {
+        name: entity.name as string,
+      }),
     onSuccess,
     onError,
   });
