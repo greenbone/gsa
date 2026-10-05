@@ -38,7 +38,7 @@ import EditIcon from 'web/entity/icon/EditIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
 import {useGetPermissions} from 'web/hooks/use-query/permissions';
-import {useGetUser} from 'web/hooks/use-query/users';
+import {useGetUser} from 'web/hooks/use-query/user';
 import useTranslation from 'web/hooks/useTranslation';
 import UserComponent from 'web/pages/users/UserComponent';
 import UserDetails from 'web/pages/users/UserDetails';

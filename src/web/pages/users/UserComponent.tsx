@@ -16,7 +16,7 @@ import {
   useCreateUser,
   useDeleteUser,
   useSaveUser,
-} from 'web/hooks/use-query/users';
+} from 'web/hooks/use-query/user';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import UserDialog, {type UserDialogSaveData} from 'web/pages/users/UsersDialog';
