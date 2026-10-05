@@ -16,7 +16,7 @@ import {UNSET_VALUE} from 'web/utils/Render';
 export type TargetSource = 'manual' | 'file' | 'asset_hosts';
 export type TargetExcludeSource = 'manual' | 'file';
 
-interface TargetCommandCreateParams {
+export interface TargetCommandCreateParams {
   aliveTests?: AliveTest[];
   allowSimultaneousIPs?: boolean;
   comment?: string;
