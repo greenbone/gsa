@@ -208,11 +208,45 @@ describe('useSaveUser', () => {
 });
 
 describe('remaining user mutation hooks', () => {
-  test('should clone a user', async () => {
+  test('should clone a user with its name and call onSuccess', async () => {
     const gmp = createGmp();
+    const onSuccess = testing.fn();
     const {render} = rendererWith({gmp, router: true});
     const TestComponent = () => {
-      const mutation = useCloneUser();
+      const mutation = useCloneUser({onSuccess});
+      return (
+        <button
+          onClick={() =>
+            mutation.mutate({
+              id: 'user-id',
+              name: 'Cloned User',
+            })
+          }
+        >
+          Clone
+        </button>
+      );
+    };
+
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Clone'}));
+
+    await waitFor(() => {
+      expect(gmp.user.clone).toHaveBeenCalledWith({id: 'user-id'});
+      expect(onSuccess).toHaveBeenCalledWith({id: 'cloned'});
+      expect(
+        screen.getByText('Cloned User cloned successfully.'),
+      ).toBeInTheDocument();
+    });
+  });
+
+  test('should call onError when cloning a user fails', async () => {
+    const error = new Error('Clone failed');
+    const gmp = createGmp({clone: testing.fn().mockRejectedValue(error)});
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useCloneUser({onError});
       return (
         <button onClick={() => mutation.mutate({id: 'user-id'})}>Clone</button>
       );
@@ -220,23 +254,57 @@ describe('remaining user mutation hooks', () => {
 
     render(<TestComponent />);
     fireEvent.click(screen.getByRole('button', {name: 'Clone'}));
-    await waitFor(() =>
-      expect(gmp.user.clone).toHaveBeenCalledWith({id: 'user-id'}),
-    );
+
+    await waitFor(() => expect(onError.mock.calls[0][0]).toBe(error));
   });
 
-  test('should delete a user and forward the inheritor ID', async () => {
+  test('should delete a user with its name and forward the inheritor ID', async () => {
     const gmp = createGmp();
+    const onSuccess = testing.fn();
     const {render} = rendererWith({gmp, router: true});
-    const input = {id: 'user-id', inheritorId: 'inheritor-id'};
+    const input = {
+      id: 'user-id',
+      name: 'Deleted User',
+      inheritorId: 'inheritor-id',
+    };
     const TestComponent = () => {
-      const mutation = useDeleteUser();
+      const mutation = useDeleteUser({onSuccess});
       return <button onClick={() => mutation.mutate(input)}>Delete</button>;
     };
 
     render(<TestComponent />);
     fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
-    await waitFor(() => expect(gmp.user.delete).toHaveBeenCalledWith(input));
+
+    await waitFor(() => {
+      expect(gmp.user.delete).toHaveBeenCalledWith({
+        id: 'user-id',
+        inheritorId: 'inheritor-id',
+      });
+      expect(onSuccess).toHaveBeenCalledWith(undefined);
+      expect(
+        screen.getByText('Deleted User deleted successfully.'),
+      ).toBeInTheDocument();
+    });
+  });
+
+  test('should call onError when deleting a user fails', async () => {
+    const error = new Error('Delete failed');
+    const gmp = createGmp({
+      delete: testing.fn().mockRejectedValue(error),
+    });
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useDeleteUser({onError});
+      return (
+        <button onClick={() => mutation.mutate({id: 'user-id'})}>Delete</button>
+      );
+    };
+
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
+
+    await waitFor(() => expect(onError.mock.calls[0][0]).toBe(error));
   });
 
   test('should download a user', async () => {
