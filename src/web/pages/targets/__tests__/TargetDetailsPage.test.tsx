@@ -311,7 +311,8 @@ describe('TargetDetailsPage tests', () => {
 
     const cloneIcon = screen.getByTitle('Clone Target');
     fireEvent.click(cloneIcon);
-    expect(gmp.target.clone).toHaveBeenCalledWith(target);
+    await wait();
+    expect(gmp.target.clone).toHaveBeenCalledWith({id: target.id});
 
     const exportIcon = screen.getByTitle('Export Target as XML');
     fireEvent.click(exportIcon);
@@ -319,6 +320,7 @@ describe('TargetDetailsPage tests', () => {
 
     const deleteIcon = screen.getByTitle('Move Target to trashcan');
     fireEvent.click(deleteIcon);
+    await wait();
     expect(gmp.target.delete).toHaveBeenCalledWith({id: target.id});
   });
 });
