@@ -35,9 +35,11 @@ import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import Page from 'web/pages/reports/AuditReportDetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
-import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
+import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
+import isPdfReportFormat from 'web/pages/reports/isPdfReportFormat';
 import TargetComponent from 'web/pages/targets/TargetComponent';
+import {ROUTES} from 'web/route-paths';
 import {createPEMCertificate} from 'web/utils/certificates';
 import {generateFilename} from 'web/utils/Render';
 
@@ -119,7 +121,10 @@ const AuditReportDetailsPage = () => {
     useState(false);
   const [reportComposerDefaults, setReportComposerDefaults] =
     useState<ReportComposerDefaults>({});
-  const {start: startReportExport} = useReportExportManager();
+  const {
+    start: startReportExport,
+    startDirect: startDirectReportDownload,
+  } = useReportExportManager();
 
   // Filter management
   const [pageFilter, , {changeFilter}] = usePageFilter(
@@ -324,8 +329,7 @@ const AuditReportDetailsPage = () => {
         const reportFormat = reportFormats?.find(
           format => format.id === reportFormatId,
         );
-        await startReportExport({
-          kind: 'audit',
+        const request = {
           filename: generateFilename({
             creationTime: entity.creationTime,
             extension: reportFormat?.extension ?? 'unknown',
@@ -338,12 +342,18 @@ const AuditReportDetailsPage = () => {
             username,
           }),
           reportTitle: entity.task?.name ?? _('Report'),
+          reportUrl: ROUTES.auditReport.url(reportId),
           payload: {
             report_id: entity.id,
             format_id: reportFormatId,
             filter: newFilter,
           },
-        });
+        };
+        if (isPdfReportFormat(reportFormat)) {
+          await startReportExport({kind: 'audit', ...request});
+        } else {
+          startDirectReportDownload({kind: 'audit', ...request});
+        }
         setShowDownloadReportDialog(false);
       } catch (error) {
         log.error(error);
@@ -355,6 +365,7 @@ const AuditReportDetailsPage = () => {
       auditreport,
       gmp.user,
       handleDownload,
+      reportId,
       reportComposerDefaults,
       reportExportFileName,
       reportFilter,
@@ -362,6 +373,7 @@ const AuditReportDetailsPage = () => {
       reportExportFileName,
       showError,
       startReportExport,
+      startDirectReportDownload,
       username,
       _,
     ],

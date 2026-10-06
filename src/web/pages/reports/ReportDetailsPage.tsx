@@ -36,10 +36,12 @@ import usePageFilter from 'web/hooks/usePageFilter';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
-import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
 import ReportDetailsContent from 'web/pages/reports/ReportDetailsContent';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
+import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
+import isPdfReportFormat from 'web/pages/reports/isPdfReportFormat';
 import TargetComponent from 'web/pages/targets/TargetComponent';
+import {ROUTES} from 'web/route-paths';
 import {createPEMCertificate} from 'web/utils/certificates';
 import {generateFilename} from 'web/utils/Render';
 
@@ -112,7 +114,10 @@ const ReportDetailsPage = () => {
     useState(false);
   const [reportComposerDefaults, setReportComposerDefaults] =
     useState<ReportComposerDefaults>({});
-  const {start: startReportExport} = useReportExportManager();
+  const {
+    start: startReportExport,
+    startDirect: startDirectReportDownload,
+  } = useReportExportManager();
 
   // Filter management
   const [pageFilter, , {changeFilter}] = usePageFilter(
@@ -334,8 +339,7 @@ const ReportDetailsPage = () => {
         const reportFormat = reportFormats?.find(
           format => format.id === reportFormatId,
         );
-        await startReportExport({
-          kind: 'scan',
+        const request = {
           filename: generateFilename({
             creationTime: entity.creationTime,
             extension: reportFormat?.extension ?? 'unknown',
@@ -348,13 +352,19 @@ const ReportDetailsPage = () => {
             username,
           }),
           reportTitle: entity.task?.name ?? _('Report'),
+          reportUrl: ROUTES.report.url(reportId),
           payload: {
-          report_id: entity.id as string,
-          format_id: reportFormatId,
-          config_id: reportConfigId || undefined,
-          filter: newFilter,
+            report_id: entity.id as string,
+            format_id: reportFormatId,
+            config_id: reportConfigId || undefined,
+            filter: newFilter,
           },
-        });
+        };
+        if (isPdfReportFormat(reportFormat)) {
+          await startReportExport({kind: 'scan', ...request});
+        } else {
+          startDirectReportDownload({kind: 'scan', ...request});
+        }
         setShowDownloadReportDialog(false);
       } catch (error) {
         log.error(error);
@@ -364,11 +374,13 @@ const ReportDetailsPage = () => {
     [
       entity,
       gmp,
+      reportId,
       reportComposerDefaults,
       reportExportFileName,
       reportFilter,
       reportFormats,
       startReportExport,
+      startDirectReportDownload,
       showError,
       username,
       _,

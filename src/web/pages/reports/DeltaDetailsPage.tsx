@@ -36,9 +36,11 @@ import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import DeltaReportDetailsContent from 'web/pages/reports/DeltaReportDetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
-import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
+import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
+import isPdfReportFormat from 'web/pages/reports/isPdfReportFormat';
 import TargetComponent from 'web/pages/targets/TargetComponent';
+import {ROUTES} from 'web/route-paths';
 import {
   loadAllEntities as loadFilters,
   selector as filterSelector,
@@ -276,7 +278,10 @@ const DeltaReportDetails = () => {
   );
 
   const [startTimer, clearTimer] = useReload(memoizedReloadFn, timeoutFunc);
-  const {start: startReportExport} = useReportExportManager();
+  const {
+    start: startReportExport,
+    startDirect: startDirectReportDownload,
+  } = useReportExportManager();
 
   const {
     dialogState,
@@ -437,8 +442,7 @@ const DeltaReportDetails = () => {
       const reportFormat = reportFormats.find(
         format => format.id === chosenFormatId,
       );
-      await startReportExport({
-        kind: 'delta_scan',
+      const request = {
         filename: generateFilename({
           creationTime: entity.creationTime,
           extension: reportFormat?.extension ?? 'unknown',
@@ -451,6 +455,9 @@ const DeltaReportDetails = () => {
           username,
         }),
         reportTitle: entity.task?.name ?? _('Report'),
+        reportUrl: deltaReportId
+          ? ROUTES.reportDelta.url(reportId, deltaReportId)
+          : undefined,
         payload: {
           report_id: entity.id,
           format_id: chosenFormatId,
@@ -458,7 +465,12 @@ const DeltaReportDetails = () => {
           delta_report_id: deltaReportId,
           filter: newFilter,
         },
-      });
+      };
+      if (isPdfReportFormat(reportFormat)) {
+        await startReportExport({kind: 'delta_scan', ...request});
+      } else {
+        startDirectReportDownload({kind: 'delta_scan', ...request});
+      }
       setShowDownloadReportDialog(false);
     } catch (error) {
       handleError(error as Error);

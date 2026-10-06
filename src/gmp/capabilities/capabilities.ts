@@ -20,6 +20,7 @@ const CAPABILITY_NAMES = [
   // the list may not be complete yet
   'everything',
   'authenticate',
+  'cancel_report_export',
   'create_agent_group',
   'create_alert',
   'create_asset',
