@@ -15,18 +15,7 @@ import {
   useGetUsers,
 } from 'web/hooks/use-query/users';
 
-const userData = {
-  accessHosts: ['localhost', '127.0.0.1'],
-  authMethod: 'password',
-  comment: 'comment',
-  groupIds: ['group-id'],
-  hostsAllow: '0',
-  name: 'user',
-  password: 'password',
-  roleIds: ['role-id'],
-};
-
-const user = User.fromElement({_id: 'user-id', name: 'user'});
+const user = new User({id: 'user-id', name: 'user'});
 const userFilter = QueryFilter.fromString('name~user');
 
 const createGmp = (
@@ -82,7 +71,9 @@ describe('useGetUsers', () => {
 
     expect(gmp.users.get).not.toHaveBeenCalled();
   });
+});
 
+describe('useBulkDeleteUsers', () => {
   test('should bulk delete users with options', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
@@ -103,7 +94,9 @@ describe('useGetUsers', () => {
       expect(gmp.users.delete).toHaveBeenCalledWith(input.users, input.options);
     });
   });
+});
 
+describe('useBulkExportUsers', () => {
   test('should bulk export users by entity list and filter', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
