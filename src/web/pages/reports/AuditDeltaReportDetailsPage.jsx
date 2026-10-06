@@ -26,9 +26,9 @@ import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import DeltaReportDetailsContent from 'web/pages/reports/DeltaReportDetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
+import isPdfReportFormat from 'web/pages/reports/is-pdf-report-format';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
-import isPdfReportFormat from 'web/pages/reports/isPdfReportFormat';
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import {ROUTES} from 'web/route-paths';
 import {
@@ -74,6 +74,9 @@ const getTarget = (entity = {}) => {
 };
 
 const AuditDeltaReportDetails = props => {
+  const params = useParams();
+  const {id: reportId, deltaid: deltaReportId} = params;
+
   const [showFilterDialog, setShowFilterDialog] = useState(false);
   const [showDownloadReportDialog, setShowDownloadReportDialog] =
     useState(false);
@@ -101,8 +104,6 @@ const AuditDeltaReportDetails = props => {
   const [_] = useTranslation();
   const gmp = useGmp();
   const dispatch = useDispatch();
-  const params = useParams();
-  const {id: reportId, deltaid: deltaReportId} = params;
 
   const reportFormatsSel = useSelector(reportFormatsSelector);
   const reportConfigsSel = useSelector(reportConfigsSelector);
@@ -133,10 +134,8 @@ const AuditDeltaReportDetails = props => {
   });
   const isLoading = !isDefined(entity);
 
-  const {
-    start: startReportExport,
-    startDirect: startDirectReportDownload,
-  } = useReportExportManager();
+  const {start: startReportExport, startDirect: startDirectReportDownload} =
+    useReportExportManager();
 
   useEffect(() => {
     dispatch(loadUserSettingDefaults(gmp)());

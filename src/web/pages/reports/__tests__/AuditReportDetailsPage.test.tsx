@@ -10,6 +10,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/user';
 import type FilterType from 'gmp/models/filter/filter-type';
 import QueryFilter from 'gmp/models/filter/query-filter';
+import ReportFormat from 'gmp/models/report-format';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
@@ -89,6 +90,17 @@ const createGmp = () => ({
   },
   reportformats: {
     get: testing.fn().mockResolvedValue(emptyCollectionResponse),
+  },
+  reportexport: {
+    exportAuditReport: testing
+      .fn()
+      .mockResolvedValue({data: {id: 'export-uuid'}}),
+    getReportExports: testing.fn().mockResolvedValue({
+      data: [{id: 'export-uuid', status: 'running', progress: 'generating'}],
+    }),
+    downloadReportExport: testing
+      .fn()
+      .mockResolvedValue({data: new ArrayBuffer(8)}),
   },
   auditreport: {
     get: testing.fn().mockResolvedValue({data: entity}),
@@ -393,6 +405,17 @@ describe('AuditReportDetailsPage', () => {
   describe('Report download flow', () => {
     test('should call auditreport download when download dialog OK is clicked', async () => {
       const gmp = createGmp();
+      gmp.reportformats.get.mockResolvedValue({
+        data: [
+          new ReportFormat({
+            id: 'xml-format',
+            name: 'XML',
+            extension: 'xml',
+            content_type: 'text/xml',
+          }),
+        ],
+        meta: emptyCollectionResponse.meta,
+      });
 
       const {render} = setupRenderer(gmp);
       renderPage(render);
@@ -407,8 +430,46 @@ describe('AuditReportDetailsPage', () => {
       fireEvent.click(screen.getByRole('button', {name: 'OK'}));
 
       await waitFor(() => {
-        expect(gmp.auditreport.download).toHaveBeenCalled();
+        expect(gmp.auditreport.download).toHaveBeenCalledWith(
+          {id: entity.id},
+          expect.objectContaining({reportFormatId: 'xml-format'}),
+        );
       });
+      expect(gmp.reportexport.exportAuditReport).not.toHaveBeenCalled();
+    });
+
+    test('uses async export for a PDF audit report format', async () => {
+      const gmp = createGmp();
+      gmp.reportformats.get.mockResolvedValue({
+        data: [
+          new ReportFormat({
+            id: 'pdf-format',
+            name: 'PDF',
+            extension: 'pdf',
+            content_type: 'application/pdf',
+          }),
+        ],
+        meta: emptyCollectionResponse.meta,
+      });
+
+      const {render} = setupRenderer(gmp);
+      renderPage(render);
+      await screen.findByTitle(/^Download filtered Report/);
+      fireEvent.click(screen.getByTitle(/^Download filtered Report/));
+      await screen.findByRole('heading', {
+        name: /Compose Content for Compliance Report/,
+      });
+      fireEvent.click(screen.getByRole('button', {name: 'OK'}));
+
+      await waitFor(() => {
+        expect(gmp.reportexport.exportAuditReport).toHaveBeenCalledWith(
+          expect.objectContaining({
+            report_id: entity.id,
+            format_id: 'pdf-format',
+          }),
+        );
+      });
+      expect(gmp.auditreport.download).not.toHaveBeenCalled();
     });
 
     test('should close download dialog after successful download', async () => {

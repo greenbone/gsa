@@ -31,6 +31,12 @@ const createGmp = (exports: ReturnType<typeof exportData>[]) => {
   return {
     session: createSession({token: 'test-token'}),
     settings: {},
+    report: {
+      download: testing.fn().mockResolvedValue({data: new ArrayBuffer(8)}),
+    },
+    auditreport: {
+      download: testing.fn().mockResolvedValue({data: new ArrayBuffer(8)}),
+    },
     reportexport: {
       exportScanReport: testing
         .fn()
@@ -97,6 +103,55 @@ describe('useReportExport', () => {
     const remount = renderHook(() => useReportExport({onDownload}));
     expect(remount.result.current.jobs).toHaveLength(0);
     expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(1);
+  });
+
+  test('dispatches direct downloads to synchronous GMP commands without polling', async () => {
+    const gmp = createGmp([]);
+    const onDownload = testing.fn();
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() => useReportExport({onDownload}));
+    const directPayload = {
+      report_id: 'report-uuid',
+      format_id: 'format-uuid',
+      config_id: 'config-uuid',
+      delta_report_id: 'delta-uuid',
+    };
+    const kinds = ['scan', 'delta_scan', 'audit', 'delta_audit'] as const;
+
+    for (const [index, kind] of kinds.entries()) {
+      act(() => {
+        expect(
+          result.current.startDirect({
+            kind,
+            payload: directPayload,
+            filename: `report-${index}.xml`,
+            reportTitle: 'Test report',
+          }),
+        ).toBe(true);
+      });
+      await waitFor(() => expect(onDownload).toHaveBeenCalledTimes(index + 1));
+    }
+
+    expect(gmp.report.download).toHaveBeenCalledTimes(2);
+    expect(gmp.report.download).toHaveBeenCalledWith(
+      {id: 'report-uuid'},
+      {
+        reportFormatId: 'format-uuid',
+        reportConfigId: 'config-uuid',
+        deltaReportId: 'delta-uuid',
+        filter: undefined,
+      },
+    );
+    expect(gmp.auditreport.download).toHaveBeenCalledTimes(2);
+    expect(gmp.auditreport.download).toHaveBeenCalledWith(
+      {id: 'report-uuid'},
+      {
+        reportFormatId: 'format-uuid',
+        deltaReportId: 'delta-uuid',
+        filter: undefined,
+      },
+    );
+    expect(gmp.reportexport.getReportExports).not.toHaveBeenCalled();
   });
 
   test('retries the download when the export file is not ready yet', async () => {
