@@ -90,7 +90,7 @@ describe('useGetTarget', () => {
   });
 });
 
-describe('target mutation hooks', () => {
+describe('useCloneTarget', () => {
   test('should clone a target with its name and call onSuccess', async () => {
     const gmp = createGmp();
     const onSuccess = testing.fn();
@@ -133,7 +133,13 @@ describe('target mutation hooks', () => {
     const TestComponent = () => {
       const mutation = useCloneTarget({onError});
       return (
-        <button onClick={() => mutation.mutate({id: 'target-1'})}>Clone</button>
+        <button
+          onClick={() =>
+            mutation.mutate({id: 'target-1', name: 'Cloned Target'})
+          }
+        >
+          Clone
+        </button>
       );
     };
 
@@ -142,7 +148,9 @@ describe('target mutation hooks', () => {
 
     await waitFor(() => expect(onError.mock.calls[0][0]).toBe(error));
   });
+});
 
+describe('useDeleteTarget', () => {
   test('should delete a target with its name and call onSuccess', async () => {
     const gmp = createGmp();
     const onSuccess = testing.fn();
@@ -170,7 +178,7 @@ describe('target mutation hooks', () => {
       });
       expect(onSuccess).toHaveBeenCalledWith(undefined);
       expect(
-        screen.getByText('Deleted Target deleted successfully.'),
+        screen.getByText('Target Deleted Target successfully deleted'),
       ).toBeInTheDocument();
     });
   });
@@ -185,7 +193,11 @@ describe('target mutation hooks', () => {
     const TestComponent = () => {
       const mutation = useDeleteTarget({onError});
       return (
-        <button onClick={() => mutation.mutate({id: 'target-1'})}>
+        <button
+          onClick={() =>
+            mutation.mutate({id: 'target-1', name: 'Deleted Target'})
+          }
+        >
           Delete
         </button>
       );

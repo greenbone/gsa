@@ -4,28 +4,20 @@
  */
 
 import {type EntityActionData} from 'gmp/commands/entity';
+import {type UserCommandDeleteParams} from 'gmp/commands/user';
 import type Response from 'gmp/http/response';
-import _ from 'gmp/locale';
 import type User from 'gmp/models/user';
 import useGmp from 'web/hooks/useGmp';
 import {type RefetchIntervalFn} from 'web/queries/helpers';
 import useCloneMutation from 'web/queries/useCloneMutation';
 import useCreateMutation from 'web/queries/useCreateMutation';
+import useDeleteMutation from 'web/queries/useDeleteMutation';
 import useGetEntity from 'web/queries/useGetEntity';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
 interface UseGetUserParams {
   id: string;
   refetchInterval?: RefetchIntervalFn<User>;
-}
-
-interface UseModifyUserParams {
-  id: string;
-  name?: string;
-}
-
-interface UseDeleteUserParams extends UseModifyUserParams {
-  inheritorId?: string;
 }
 
 interface UseUserMutationCallbacks<TResponse> {
@@ -47,6 +39,10 @@ interface UserCreateInput {
 interface UserSaveInput extends UserCreateInput {
   id: string;
   oldName?: string;
+}
+
+interface UserDeleteInput extends UserCommandDeleteParams {
+  name: string | undefined;
 }
 
 export const useGetUser = ({id, refetchInterval}: UseGetUserParams) => {
@@ -117,14 +113,11 @@ export const useDeleteUser = ({
   onError,
 }: UseUserMutationCallbacks<void> = {}) => {
   const gmp = useGmp();
-  return useGmpMutation<UseDeleteUserParams, void>({
-    gmpMethod: ({id, inheritorId}: UseDeleteUserParams) =>
-      gmp.user.delete({id, inheritorId: inheritorId ?? ''}),
+  return useDeleteMutation<UserDeleteInput>({
+    gmpMethod: ({id, inheritorId}: UserDeleteInput) =>
+      gmp.user.delete({id, inheritorId}),
+    entityType: 'user',
     invalidateQueryIds: ['get_users', 'get_user'],
-    successMessage: (_data, entity) =>
-      _('{{- name}} deleted successfully.', {
-        name: entity.name as string,
-      }),
     onSuccess,
     onError,
   });

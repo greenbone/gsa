@@ -96,7 +96,7 @@ describe('useGetAgents', () => {
   });
 });
 
-describe('agent mutation hooks', () => {
+describe('useModifyAgent', () => {
   test('should save an agent', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
@@ -127,7 +127,9 @@ describe('agent mutation hooks', () => {
       });
     });
   });
+});
 
+describe('useDeleteAgent', () => {
   test('should delete an agent', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
@@ -135,7 +137,13 @@ describe('agent mutation hooks', () => {
     const TestComponent = () => {
       const mutation = useDeleteAgent({});
       return (
-        <button onClick={() => mutation.mutate({id: 'agent-1'})}>Delete</button>
+        <button
+          onClick={() =>
+            mutation.mutate({id: 'agent-1', name: 'Deleted Agent'})
+          }
+        >
+          Delete
+        </button>
       );
     };
 
@@ -143,10 +151,14 @@ describe('agent mutation hooks', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
 
     await waitFor(() => {
-      expect(gmp.agent.delete).toHaveBeenCalledWith({id: 'agent-1'});
+      expect(gmp.agent.delete).toHaveBeenCalledWith({
+        id: 'agent-1',
+      });
     });
   });
+});
 
+describe('useBulkDeleteAgents', () => {
   test('should delete agents by entity list and filter', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
@@ -172,7 +184,9 @@ describe('agent mutation hooks', () => {
       expect(gmp.agents.deleteByFilter).toHaveBeenCalledWith(filter);
     });
   });
+});
 
+describe('bulk agent mutation hooks', () => {
   test.each([
     ['authorize', useBulkAuthorizeAgents, 'authorize', 'authorizeByFilter'],
     ['revoke', useBulkRevokeAgents, 'revoke', 'revokeByFilter'],
@@ -214,7 +228,9 @@ describe('agent mutation hooks', () => {
       });
     },
   );
+});
 
+describe('useSyncAgents', () => {
   test('should sync agents', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
@@ -231,7 +247,9 @@ describe('agent mutation hooks', () => {
       expect(gmp.agents.sync).toHaveBeenCalledWith();
     });
   });
+});
 
+describe('useDownloadAgentSupportBundle', () => {
   test('should download an agent support bundle', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});

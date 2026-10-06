@@ -48,7 +48,7 @@ describe('useCloneAgentGroup', () => {
   test('should clone an agent group', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
-    const input = {id: 'group-1'};
+    const input = {id: 'group-1', name: 'Cloned Group'};
 
     const TestComponent = () => {
       const mutation = useCloneAgentGroup({});
@@ -59,7 +59,7 @@ describe('useCloneAgentGroup', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Run'}));
 
     await waitFor(() => {
-      expect(gmp.agentgroup.clone).toHaveBeenCalledWith(input);
+      expect(gmp.agentgroup.clone).toHaveBeenCalledWith({id: 'group-1'});
     });
   });
 });
@@ -88,7 +88,7 @@ describe('useDeleteAgentGroup', () => {
   test('should delete an agent group', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
-    const input = {id: 'group-1'};
+    const input = {id: 'group-1', name: 'Deleted Group'};
 
     const TestComponent = () => {
       const mutation = useDeleteAgentGroup({});
@@ -99,7 +99,7 @@ describe('useDeleteAgentGroup', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Run'}));
 
     await waitFor(() => {
-      expect(gmp.agentgroup.delete).toHaveBeenCalledWith(input);
+      expect(gmp.agentgroup.delete).toHaveBeenCalledWith({id: 'group-1'});
     });
   });
 });

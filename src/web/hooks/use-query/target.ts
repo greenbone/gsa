@@ -8,11 +8,11 @@ import {
   type TargetCommandCreateParams,
   type TargetCommandSaveParams,
 } from 'gmp/commands/target';
-import _ from 'gmp/locale';
 import type Target from 'gmp/models/target';
 import useGmp from 'web/hooks/useGmp';
 import useCloneMutation from 'web/queries/useCloneMutation';
 import useCreateMutation from 'web/queries/useCreateMutation';
+import useDeleteMutation from 'web/queries/useDeleteMutation';
 import useGetEntity from 'web/queries/useGetEntity';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
@@ -23,10 +23,6 @@ interface UseTargetMutationCallbacks<TResponse> {
 
 interface UseGetTargetParams {
   id: string;
-}
-
-interface UseModifyTargetParams extends UseGetTargetParams {
-  name?: string;
 }
 
 export const useGetTarget = ({id}: UseGetTargetParams) => {
@@ -93,13 +89,10 @@ export const useDeleteTarget = ({
   onError,
 }: UseTargetMutationCallbacks<void> = {}) => {
   const gmp = useGmp();
-  return useGmpMutation<UseModifyTargetParams, void>({
-    gmpMethod: ({id}: UseModifyTargetParams) => gmp.target.delete({id}),
+  return useDeleteMutation({
+    gmpMethod: ({id}) => gmp.target.delete({id}),
+    entityType: 'target',
     invalidateQueryIds: ['get_targets', 'get_target'],
-    successMessage: (_data, entity) =>
-      _('{{- name}} deleted successfully.', {
-        name: entity.name as string,
-      }),
     onSuccess,
     onError,
   });

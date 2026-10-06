@@ -67,7 +67,7 @@ export const useGetTag = ({id, refetchInterval}: UseGetTagParams) => {
 
 export const useDeleteTag = ({onError, onSuccess}: UseMutationCallbacks) => {
   const gmp = useGmp();
-  return useDeleteMutation<void, Rejection>({
+  return useDeleteMutation({
     entityType: 'tag',
     gmpMethod: ({id}) => gmp.tag.delete({id}),
     invalidateQueryIds: ['get_tags'],

@@ -5,7 +5,6 @@
 
 import {type EntityActionData} from 'gmp/commands/entity';
 import type Response from 'gmp/http/response';
-import _ from 'gmp/locale';
 import {
   type default as Ticket,
   type TicketStatusValue,
@@ -13,15 +12,12 @@ import {
 import useGmp from 'web/hooks/useGmp';
 import useCloneMutation from 'web/queries/useCloneMutation';
 import useCreateMutation from 'web/queries/useCreateMutation';
+import useDeleteMutation from 'web/queries/useDeleteMutation';
 import useGetEntity from 'web/queries/useGetEntity';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
 interface UseGetTicketParams {
   id: string;
-}
-
-interface UseModifyTicketParams extends UseGetTicketParams {
-  name?: string;
 }
 
 interface UseTicketMutationCallbacks<TResponse> {
@@ -108,13 +104,10 @@ export const useDeleteTicket = ({
   onError,
 }: UseTicketMutationCallbacks<void> = {}) => {
   const gmp = useGmp();
-  return useGmpMutation<UseModifyTicketParams, void>({
-    gmpMethod: data => gmp.ticket.delete(data),
+  return useDeleteMutation({
+    gmpMethod: ({id}) => gmp.ticket.delete({id}),
+    entityType: 'ticket',
     invalidateQueryIds: ['get_tickets', 'get_ticket'],
-    successMessage: (_data, entity) =>
-      _('{{- name}} deleted successfully.', {
-        name: entity.name as string,
-      }),
     onSuccess,
     onError,
   });

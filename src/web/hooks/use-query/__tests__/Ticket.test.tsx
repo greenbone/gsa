@@ -109,7 +109,7 @@ describe('useGetTicket', () => {
   });
 });
 
-describe('ticket mutation hooks', () => {
+describe('useCreateTicket', () => {
   test('should create a ticket', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
@@ -127,7 +127,9 @@ describe('ticket mutation hooks', () => {
       expect(gmp.ticket.create).toHaveBeenCalledWith(input);
     });
   });
+});
 
+describe('useSaveTicket', () => {
   test('should save a ticket', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
@@ -150,7 +152,9 @@ describe('ticket mutation hooks', () => {
       expect(gmp.ticket.save).toHaveBeenCalledWith(input);
     });
   });
+});
 
+describe('useCloneTicket', () => {
   test('should clone a ticket with its name and call onSuccess', async () => {
     const gmp = createGmp();
     const onSuccess = testing.fn();
@@ -193,7 +197,13 @@ describe('ticket mutation hooks', () => {
     const TestComponent = () => {
       const mutation = useCloneTicket({onError});
       return (
-        <button onClick={() => mutation.mutate({id: 'ticket-1'})}>Clone</button>
+        <button
+          onClick={() =>
+            mutation.mutate({id: 'ticket-1', name: 'Cloned Ticket'})
+          }
+        >
+          Clone
+        </button>
       );
     };
 
@@ -202,7 +212,9 @@ describe('ticket mutation hooks', () => {
 
     await waitFor(() => expect(onError.mock.calls[0][0]).toBe(error));
   });
+});
 
+describe('useDeleteTicket', () => {
   test('should delete a ticket with its name and call onSuccess', async () => {
     const gmp = createGmp();
     const onSuccess = testing.fn();
@@ -227,11 +239,10 @@ describe('ticket mutation hooks', () => {
     await waitFor(() => {
       expect(gmp.ticket.delete).toHaveBeenCalledWith({
         id: 'ticket-1',
-        name: 'Deleted Ticket',
       });
       expect(onSuccess).toHaveBeenCalledWith(undefined);
       expect(
-        screen.getByText('Deleted Ticket deleted successfully.'),
+        screen.getByText('Ticket Deleted Ticket successfully deleted'),
       ).toBeInTheDocument();
     });
   });
@@ -246,7 +257,11 @@ describe('ticket mutation hooks', () => {
     const TestComponent = () => {
       const mutation = useDeleteTicket({onError});
       return (
-        <button onClick={() => mutation.mutate({id: 'ticket-1'})}>
+        <button
+          onClick={() =>
+            mutation.mutate({id: 'ticket-1', name: 'Deleted Ticket'})
+          }
+        >
           Delete
         </button>
       );
@@ -257,7 +272,9 @@ describe('ticket mutation hooks', () => {
 
     await waitFor(() => expect(onError.mock.calls[0][0]).toBe(error));
   });
+});
 
+describe('useDownloadTicket', () => {
   test('should download a ticket', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
