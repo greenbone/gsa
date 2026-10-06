@@ -10,12 +10,9 @@ import {
   type TargetExcludeSource,
   type TargetSource,
 } from 'gmp/commands/target';
-import {
-  type default as Credential,
-  type CredentialType,
-} from 'gmp/models/credential';
+import {type CredentialType} from 'gmp/models/credential';
 import type Filter from 'gmp/models/filter';
-import type PortList from 'gmp/models/port-list';
+import {type PortRange} from 'gmp/models/port-list';
 import {
   type default as Target,
   type AliveTest,
@@ -26,6 +23,8 @@ import {isDefined} from 'gmp/utils/identity';
 import useEntityDownload, {
   type OnDownloadedFunc,
 } from 'web/entity/hooks/useEntityDownload';
+import {useCreateCredential} from 'web/hooks/use-query/credential';
+import {useCreatePortList} from 'web/hooks/use-query/port-list';
 import {
   useCloneTarget,
   useCreateTarget,
@@ -37,7 +36,9 @@ import useTranslation from 'web/hooks/useTranslation';
 import CredentialDialog, {
   type CredentialDialogState,
 } from 'web/pages/credentials/CredentialDialog';
-import PortListDialog from 'web/pages/portlists/PortListDialog';
+import PortListDialog, {
+  type PortListDialogSaveData,
+} from 'web/pages/portlists/PortListDialog';
 import TargetDialog, {
   DEFAULT_PORT_LIST_ID,
   type NewCredentialData,
@@ -104,14 +105,12 @@ const TargetComponent = ({
     useState(false);
   const [credentialsTitle, setCredentialsTitle] = useState('');
   const [credentialTypes, setCredentialTypes] = useState<CredentialType[]>([]);
-  const [credentials, setCredentials] = useState<Credential[]>([]);
   const [portListDialogVisible, setPortListDialogVisible] = useState(false);
   const [targetDialogVisible, setTargetDialogVisible] = useState(false);
   const [targetTitle, setTargetTitle] = useState('');
   const [portListId, setPortListId] = useState<string | undefined>(
     DEFAULT_PORT_LIST_ID,
   );
-  const [portLists, setPortLists] = useState<PortList[]>([]);
   const [portListsTitle, setPortListsTitle] = useState('');
   const [port, setPort] = useState<number | undefined>(undefined);
   const [aliveTests, setAliveTests] = useState<AliveTest[]>([
@@ -158,19 +157,8 @@ const TargetComponent = ({
   const [hostsCount, setHostsCount] = useState<number | undefined>(undefined);
   const [hostsFilter, setHostsFilter] = useState<Filter | undefined>(undefined);
 
-  const loadCredentials = async () => {
-    const response = await gmp.credentials.getAll();
-    setCredentials(response.data);
-  };
-
-  const loadPortLists = async () => {
-    const response = await gmp.portlists.getAll();
-    setPortLists(response.data);
-  };
-
-  const loadAll = async () => {
-    await Promise.all([loadCredentials(), loadPortLists()]);
-  };
+  const createPortListMutation = useCreatePortList();
+  const createCredentialMutation = useCreateCredential();
 
   const openCredentialsDialog = ({
     idField,
@@ -257,7 +245,6 @@ const TargetComponent = ({
     }
     setHostsCount(hostsCount);
     setHostsFilter(hostsFilter);
-    await loadAll();
     setTargetDialogVisible(true);
   };
 
@@ -274,10 +261,9 @@ const TargetComponent = ({
   };
 
   const handleCreateCredential = async (data: CredentialDialogState) => {
-    const response = await gmp.credential.create(data);
-    const credentialId = response.data.id;
+    const response = await createCredentialMutation.mutateAsync(data);
+    const credentialId = response.id;
     closeCredentialsDialog();
-    await loadCredentials();
     if (idFieldRef.current === 'sshElevateCredentialId') {
       setSshElevateCredentialId(credentialId);
     } else if (idFieldRef.current === 'sshCredentialId') {
@@ -293,11 +279,12 @@ const TargetComponent = ({
     }
   };
 
-  const handleCreatePortList = async data => {
-    const response = await gmp.portlist.create(data);
-    setPortListId(response.data.id);
+  const handleCreatePortList = async (
+    data: PortListDialogSaveData<PortRange>,
+  ) => {
+    const response = await createPortListMutation.mutateAsync(data);
+    setPortListId(response.id);
     closePortListDialog();
-    await loadPortLists();
   };
 
   const handlePortListChange = (portListId: string | undefined) => {
@@ -336,45 +323,43 @@ const TargetComponent = ({
     setKrb5CredentialId(krb5CredentialId ?? UNSET_VALUE);
   };
 
-  const cloneTarget = useCloneTarget({
+  const cloneTargetMutation = useCloneTarget({
     onSuccess: onCloned,
     onError: onCloneError,
   });
 
-  const handleTargetClone = async (entity: Target) => {
-    await cloneTarget.mutateAsync(entity);
+  const cloneTarget = async (entity: Target) => {
+    await cloneTargetMutation.mutateAsync(entity);
   };
 
-  const saveTarget = useSaveTarget({
+  const saveTargetMutation = useSaveTarget({
     onSuccess: onSaved,
     onError: onSaveError,
   });
-
-  const handleTargetSave = async (data: TargetCommandSaveParams) => {
-    await saveTarget.mutateAsync(data);
+  const saveTarget = async (data: TargetCommandSaveParams) => {
+    await saveTargetMutation.mutateAsync(data);
   };
 
-  const createTarget = useCreateTarget({
+  const createTargetMutation = useCreateTarget({
     onSuccess: onCreated,
     onError: onCreateError,
   });
-
-  const handleTargetCreate = async (data: TargetDialogData) => {
-    await createTarget.mutateAsync(data);
+  const createTarget = async (data: TargetDialogData) => {
+    await createTargetMutation.mutateAsync(data);
   };
 
-  const deleteTarget = useDeleteTarget({
+  const deleteTargetMutation = useDeleteTarget({
     onSuccess: onDeleted,
     onError: onDeleteError,
   });
 
-  const handleTargetDelete = async (entity: Target) => {
-    await deleteTarget.mutateAsync(entity);
+  const deleteTarget = async (entity: Target) => {
+    await deleteTargetMutation.mutateAsync(entity);
   };
 
   const handleSaveClick = async (data: TargetDialogData) => {
     const promise = isDefined(data.id)
-      ? handleTargetSave(
+      ? saveTarget(
           data.inUse
             ? {
                 id: data.id as string,
@@ -387,7 +372,7 @@ const TargetComponent = ({
                 id: data.id as string,
               },
         )
-      : handleTargetCreate(data);
+      : createTarget(data);
     await promise;
     closeTargetDialog();
   };
@@ -403,9 +388,9 @@ const TargetComponent = ({
   return (
     <>
       {children({
-        clone: handleTargetClone,
+        clone: cloneTarget,
         create: openCreateTargetDialog,
-        delete: handleTargetDelete,
+        delete: deleteTarget,
         download: handleEntityDownload,
         edit: openTargetDialog,
       })}
@@ -414,7 +399,6 @@ const TargetComponent = ({
           aliveTests={aliveTests}
           allowSimultaneousIPs={allowSimultaneousIPs}
           comment={comment}
-          credentials={credentials}
           esxiCredentialId={esxiCredentialId}
           excludeHosts={excludeHosts}
           hosts={hosts}
@@ -426,7 +410,6 @@ const TargetComponent = ({
           name={name}
           port={port}
           portListId={portListId}
-          portLists={portLists}
           reverseLookupOnly={reverseLookupOnly}
           reverseLookupUnify={reverseLookupUnify}
           smbCredentialId={smbCredentialId}

@@ -49,6 +49,8 @@ import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
 import {InfoIcon, NewIcon} from 'web/components/icon';
 import Row from 'web/components/layout/Row';
+import {useGetAllCredentials} from 'web/hooks/use-query/credentials';
+import {useGetAllPortLists} from 'web/hooks/use-query/port-lists';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
@@ -111,7 +113,6 @@ interface TargetDialogProps {
   aliveTests?: AliveTest[];
   allowSimultaneousIPs?: boolean;
   comment?: string;
-  credentials?: Credential[];
   esxiCredentialId?: string;
   excludeHosts?: string[];
   hosts?: string[];
@@ -122,7 +123,6 @@ interface TargetDialogProps {
   name?: string;
   port?: number;
   portListId?: string;
-  portLists?: PortList[];
   reverseLookupOnly?: boolean;
   reverseLookupUnify?: boolean;
   smbCredentialId?: string;
@@ -165,7 +165,6 @@ const TargetDialog = ({
   aliveTests: initialAliveTests = [SCAN_CONFIG_DEFAULT],
   allowSimultaneousIPs = true,
   comment = '',
-  credentials = [],
   esxiCredentialId,
   excludeHosts = [],
   hosts = [],
@@ -176,7 +175,6 @@ const TargetDialog = ({
   name,
   port = DEFAULT_PORT,
   portListId = DEFAULT_PORT_LIST_ID,
-  portLists = DEFAULT_PORT_LISTS,
   reverseLookupOnly = false,
   reverseLookupUnify = false,
   smbCredentialId,
@@ -206,6 +204,11 @@ const TargetDialog = ({
   const enableKrb5 = gmp.settings.enableKrb5;
   const hasPermissionToCreateCredential = capabilities.mayCreate('credential');
   const [aliveTests, setAliveTests] = useState<AliveTest[]>(initialAliveTests);
+  const portListQuery = useGetAllPortLists();
+  const credentialsQuery = useGetAllCredentials();
+
+  const portLists = portListQuery.data?.entities ?? DEFAULT_PORT_LISTS;
+  const credentials = credentialsQuery.data?.entities ?? [];
 
   // Feature flag configuration
   const isCredentialStoresEnabled = features.featureEnabled(
@@ -544,6 +547,7 @@ const TargetDialog = ({
                 <Select
                   disabled={inUse}
                   grow="1"
+                  isLoading={portListQuery.isLoading}
                   items={renderSelectItems(
                     portLists as RenderSelectItemProps[],
                   )}
