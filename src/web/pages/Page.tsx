@@ -20,6 +20,7 @@ import useGmp from 'web/hooks/useGmp';
 import useLoadCapabilities from 'web/hooks/useLoadCapabilities';
 import useLoadFeatures from 'web/hooks/useLoadFeatures';
 import useTranslation from 'web/hooks/useTranslation';
+import ReportExportManager from 'web/pages/reports/ReportExportManager';
 import Theme from 'web/utils/theme';
 
 interface PageProps {
@@ -70,31 +71,33 @@ const Page = ({children}: PageProps) => {
   return (
     <CapabilitiesContext.Provider value={capabilities}>
       <FeaturesContext.Provider value={features}>
-        <Header />
-        <StyledLayout align={['start', 'stretch']} flex="row">
-          <ScrollableMenuContainer>
-            <MenuWrapper>
-              <Menu />
-              <Text data-testid={'version'}>
-                {isDefined(gmp.settings.vendorVersion)
-                  ? gmp.settings.vendorVersion
-                  : _('Version {{version}}', {version: GSA_VERSION})}
-              </Text>
-            </MenuWrapper>
-          </ScrollableMenuContainer>
-          <Main>
-            <Container>
-              <FeedSyncNotification />
-              <ErrorBoundary
-                key={location.pathname}
-                message={_('An error occurred on this page.')}
-              >
-                {children}
-              </ErrorBoundary>
-            </Container>
-            <Footer />
-          </Main>
-        </StyledLayout>
+        <ReportExportManager>
+          <Header />
+          <StyledLayout align={['start', 'stretch']} flex="row">
+            <ScrollableMenuContainer>
+              <MenuWrapper>
+                <Menu />
+                <Text data-testid={'version'}>
+                  {isDefined(gmp.settings.vendorVersion)
+                    ? gmp.settings.vendorVersion
+                    : _('Version {{version}}', {version: GSA_VERSION})}
+                </Text>
+              </MenuWrapper>
+            </ScrollableMenuContainer>
+            <Main>
+              <Container>
+                <FeedSyncNotification />
+                <ErrorBoundary
+                  key={location.pathname}
+                  message={_('An error occurred on this page.')}
+                >
+                  {children}
+                </ErrorBoundary>
+              </Container>
+              <Footer />
+            </Main>
+          </StyledLayout>
+        </ReportExportManager>
       </FeaturesContext.Provider>
     </CapabilitiesContext.Provider>
   );

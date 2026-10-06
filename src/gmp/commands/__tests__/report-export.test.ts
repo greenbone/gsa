@@ -66,6 +66,26 @@ describe('ReportExportCommand tests', () => {
     expect(response.data).toEqual({id: 'export-uuid'});
   });
 
+  test('should parse the export id from the command response attribute', async () => {
+    const fakeHttp = createHttp(
+      createResponse({
+        export_scan_report: {
+          export_scan_report_response: {
+            _id: 'export-uuid',
+          },
+        },
+      }),
+    );
+    const exportCommand = new ReportExportCommand(fakeHttp);
+
+    const response = await exportCommand.exportScanReport({
+      report_id: 'report-uuid',
+      format_id: 'format-uuid',
+    });
+
+    expect(response.data).toEqual({id: 'export-uuid'});
+  });
+
   test('should parse report export status and metadata', async () => {
     const fakeHttp = createHttp(
       createResponse({

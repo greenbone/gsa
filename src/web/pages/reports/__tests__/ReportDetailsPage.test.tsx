@@ -17,6 +17,7 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import ReportDetailsPage from 'web/pages/reports/ReportDetailsPage';
+import ReportExportManager from 'web/pages/reports/ReportExportManager';
 
 interface CollectionResponse {
   data: unknown[];
@@ -154,9 +155,11 @@ const setupRenderer = (gmp = createGmp()) => {
 
 const renderPage = (render: ReturnType<typeof setupRenderer>['render']) =>
   render(
-    <Routes>
-      <Route element={<ReportDetailsPage />} path="/report/:id" />
-    </Routes>,
+    <ReportExportManager>
+      <Routes>
+        <Route element={<ReportDetailsPage />} path="/report/:id" />
+      </Routes>
+    </ReportExportManager>,
   );
 
 describe('ReportDetailsPage tests', () => {

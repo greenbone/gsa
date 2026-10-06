@@ -16,7 +16,6 @@ import QueryFilter from 'gmp/models/filter/query-filter';
 import {isActive} from 'gmp/models/task';
 import {first} from 'gmp/utils/array';
 import {isDefined, hasValue} from 'gmp/utils/identity';
-import withDownload from 'web/components/form/withDownload';
 import Reload, {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
@@ -27,6 +26,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import DeltaReportDetailsContent from 'web/pages/reports/DeltaReportDetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
+import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import {
@@ -79,7 +79,7 @@ const AuditDeltaReportDetails = props => {
   const [isUpdating, setIsUpdating] = useState(false);
   // storeAsDefault is set in SaveDialogContent
   // eslint-disable-next-line no-unused-vars
-  const [storeAsDefault, setStoreAsDefault] = useState();
+  const [storeAsDefault] = useState();
 
   const [sorting, setSorting] = useState({
     results: {
@@ -126,6 +126,8 @@ const AuditDeltaReportDetails = props => {
     ];
   });
   const isLoading = !isDefined(entity);
+
+  const {start: startReportExport} = useReportExportManager();
 
   useEffect(() => {
     dispatch(loadUserSettingDefaults(gmp)());
@@ -258,7 +260,7 @@ const AuditDeltaReportDetails = props => {
   };
 
   const handleReportDownload = state => {
-    const {reportFilter, onDownload} = props;
+    const {reportFilter} = props;
 
     const {includeNotes, includeOverrides, reportFormatId, storeAsDefault} =
       state;
@@ -277,37 +279,33 @@ const AuditDeltaReportDetails = props => {
       dispatch(saveReportComposerDefaults(gmp)(defaults));
     }
 
-    const report_format = reportFormats
-      ? reportFormats.find(format => reportFormatId === format.id)
+    const reportFormat = reportFormats
+      ? reportFormats.find(format => format.id === reportFormatId)
       : undefined;
 
-    const extension = isDefined(report_format)
-      ? report_format.extension
-      : 'unknown'; // unknown should never happen but we should be save here
-
-    return gmp.auditreport
-      .download(entity, {
-        reportFormatId,
-        deltaReportId,
+    return startReportExport({
+      kind: 'delta_audit',
+      filename: generateFilename({
+        creationTime: entity.creationTime,
+        extension: reportFormat?.extension || 'unknown',
+        fileNameFormat: reportExportFileName,
+        id: entity.id,
+        modificationTime: entity.modificationTime,
+        reportFormat: reportFormat?.name,
+        resourceName: entity.task?.name,
+        resourceType: 'report',
+        username,
+      }),
+      reportTitle: entity.task?.name || _('Report'),
+      payload: {
+        report_id: entity.id,
+        format_id: reportFormatId,
+        delta_report_id: deltaReportId,
         filter: newFilter,
-      })
-      .then(response => {
-        setShowDownloadReportDialog(false);
-        const {data} = response;
-        const filename = generateFilename({
-          creationTime: entity.creationTime,
-          extension,
-          fileNameFormat: reportExportFileName,
-          id: entity.id,
-          modificationTime: entity.modificationTime,
-          reportFormat: report_format?.name,
-          resourceName: entity.task.name,
-          resourceType: 'report',
-          username,
-        });
-
-        onDownload({filename, data});
-      }, handleError);
+      },
+    }).then(started => {
+      if (started) setShowDownloadReportDialog(false);
+    });
   };
 
   const handleFilterCreated = filter => {
@@ -425,7 +423,6 @@ AuditDeltaReportDetails.propTypes = {
   showSuccessMessage: PropTypes.func.isRequired,
   target: PropTypes.model,
   username: PropTypes.string,
-  onDownload: PropTypes.func.isRequired,
 };
 
 const reloadInterval = report =>
@@ -512,7 +509,4 @@ DeltaAuditReportDetailsWrapper.propTypes = {
   defaultFilter: PropTypes.filter,
 };
 
-export default compose(
-  withDialogNotification,
-  withDownload,
-)(DeltaAuditReportDetailsWrapper);
+export default compose(withDialogNotification)(DeltaAuditReportDetailsWrapper);
