@@ -5,7 +5,7 @@
 
 import React, {useState} from 'react';
 import {
-  type EntityActionResponse,
+  type EntityActionData,
   type EntityCommandParams,
 } from 'gmp/commands/entity';
 import {
@@ -19,23 +19,22 @@ import {
 } from 'gmp/models/port-list';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import useEntityClone, {
-  type EntityCloneResponse,
-} from 'web/entity/hooks/useEntityClone';
-import useEntityCreate, {
-  type EntityCreateResponse,
-} from 'web/entity/hooks/useEntityCreate';
-import useEntityDelete from 'web/entity/hooks/useEntityDelete';
 import useEntityDownload, {
   type OnDownloadedFunc,
 } from 'web/entity/hooks/useEntityDownload';
-import useEntitySave, {
-  type EntitySaveResponse,
-} from 'web/entity/hooks/useEntitySave';
+import {
+  useClonePortList,
+  useCreatePortList,
+  useCreatePortRange,
+  useDeletePortList,
+  useDeletePortRange,
+  useImportPortList,
+  useSavePortList,
+} from 'web/hooks/use-query/port-list';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import PortListsDialog, {
-  type SavePortListData,
+  type PortListDialogSaveData,
 } from 'web/pages/portlists/PortListDialog';
 import ImportPortListDialog, {
   type PortListImportDialogState,
@@ -65,17 +64,17 @@ interface PortListComponentRenderProps {
 interface PortListComponentProps {
   children: (props: PortListComponentRenderProps) => React.ReactNode;
   onCloneError?: (error: Error) => void;
-  onCloned?: (response: EntityCloneResponse) => void;
+  onCloned?: (response: EntityActionData) => void;
   onCreateError?: (error: Error) => void;
-  onCreated?: (response: EntityCreateResponse) => void;
+  onCreated?: (response: EntityActionData) => void;
   onDeleteError?: (error: Error) => void;
   onDeleted?: () => void;
   onDownloadError?: (error: Error) => void;
   onDownloaded?: OnDownloadedFunc;
   onImportError?: (error: Error) => void;
-  onImported?: (response: EntityActionResponse) => void;
+  onImported?: (response: EntityActionData) => void;
   onSaveError?: (error: Error) => void;
-  onSaved?: (response: EntitySaveResponse) => void;
+  onSaved?: (response: EntityActionData) => void;
 }
 
 const PortListComponent = ({
@@ -106,39 +105,48 @@ const PortListComponent = ({
   const [createdPortRanges, setCreatedPortRanges] = useState<PortRange[]>([]);
   const [deletedPortRanges, setDeletedPortRanges] = useState<PortRange[]>([]);
 
-  const handleSave = useEntitySave<PortListCommandSaveParams>(
-    data => gmp.portlist.save(data),
-    {
-      onSaveError,
-      onSaved,
-    },
-  );
-  const handleCreate = useEntityCreate<PortListCommandCreateParams>(
-    data => gmp.portlist.create(data),
-    {
-      onCreated,
-      onCreateError,
-    },
-  );
-  const handleClone = useEntityClone<PortList>(
-    entity => gmp.portlist.clone(entity),
-    {
-      onCloned,
-      onCloneError,
-    },
-  );
+  const savePortListMutation = useSavePortList({
+    onSuccess: onSaved,
+    onError: onSaveError,
+  });
+  const savePortList = async (data: PortListCommandSaveParams) =>
+    await savePortListMutation.mutateAsync(data);
+
+  const createPortListMutation = useCreatePortList({
+    onSuccess: onCreated,
+    onError: onCreateError,
+  });
+  const createPortList = async (data: PortListCommandCreateParams) =>
+    await createPortListMutation.mutateAsync(data);
+
+  const clonePortListMutation = useClonePortList({
+    onSuccess: onCloned,
+    onError: onCloneError,
+  });
+  const clonePortList = async (data: PortList) =>
+    await clonePortListMutation.mutateAsync(data);
+
+  const deletePortListMutation = useDeletePortList({
+    onSuccess: onDeleted,
+    onError: onDeleteError,
+  });
+  const deletePortList = async (data: PortList) =>
+    await deletePortListMutation.mutateAsync(data);
+
+  const importPortListMutation = useImportPortList({
+    onSuccess: onImported,
+    onError: onImportError,
+  });
+
+  const createPortRangeMutation = useCreatePortRange();
+
+  const deletePortRangeMutation = useDeletePortRange();
+
   const handleDownload = useEntityDownload<PortList>(
     entity => gmp.portlist.export(entity),
     {
       onDownloadError,
       onDownloaded,
-    },
-  );
-  const handleDelete = useEntityDelete<PortList>(
-    entity => gmp.portlist.delete(entity),
-    {
-      onDeleteError,
-      onDeleted,
     },
   );
 
@@ -199,9 +207,8 @@ const PortListComponent = ({
   };
 
   const handleDeletePortRange = async (range: PortRange) => {
-    await gmp.portlist.deletePortRange({
+    await deletePortRangeMutation.mutateAsync({
       id: range.id as string,
-      portListId: range.portListId,
     });
   };
 
@@ -211,13 +218,13 @@ const PortListComponent = ({
     portRangeEnd: number;
     portType: ProtocolType;
   }) => {
-    const response = await gmp.portlist.createPortRange(data);
-    return response.data.id;
+    const response = await createPortRangeMutation.mutateAsync(data);
+    return response.id;
   };
 
   const handleImportPortList = async (data: PortListImportDialogState) => {
     try {
-      const response = await gmp.portlist.import(data);
+      const response = await importPortListMutation.mutateAsync(data);
       if (isDefined(onImported)) {
         onImported(response);
       }
@@ -229,7 +236,9 @@ const PortListComponent = ({
     }
   };
 
-  const handleSavePortList = async (data: SavePortListData<PortRange>) => {
+  const handleSavePortList = async (
+    data: PortListDialogSaveData<PortRange>,
+  ) => {
     if (isDefined(data.id)) {
       // save existing port list
       try {
@@ -270,13 +279,13 @@ const PortListComponent = ({
         }
         throw error;
       }
-      await handleSave({
+      await savePortList({
         id: data.id,
         name: data.name,
         comment: data.comment,
       });
     } else {
-      await handleCreate(data);
+      await createPortList(data);
     }
     closePortListDialog();
   };
@@ -360,9 +369,9 @@ const PortListComponent = ({
   return (
     <>
       {children({
-        clone: handleClone,
+        clone: clonePortList,
         download: handleDownload,
-        delete: handleDelete,
+        delete: deletePortList,
         create: openPortListDialog,
         edit: openPortListDialog,
         import: openImportDialog,

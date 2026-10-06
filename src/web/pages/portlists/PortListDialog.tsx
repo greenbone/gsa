@@ -20,7 +20,7 @@ import PortRangesTable, {
   type PortRange,
 } from 'web/pages/portlists/PortRangesTable';
 
-export interface SavePortListData<TPortRange extends PortRange> {
+export interface PortListDialogSaveData<TPortRange extends PortRange> {
   id?: string;
   comment: string;
   file?: File;
@@ -41,7 +41,7 @@ interface PortListsDialogProps<TPortRange extends PortRange> {
   title?: string;
   onClose?: () => void;
   onNewPortRangeClick?: () => void;
-  onSave?: (data: SavePortListData<TPortRange>) => void | Promise<void>;
+  onSave?: (data: PortListDialogSaveData<TPortRange>) => void | Promise<void>;
   onTmpDeletePortRange?: (portRange: TPortRange) => void;
 }
 
