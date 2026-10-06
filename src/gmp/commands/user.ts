@@ -108,9 +108,9 @@ interface SaveArguments extends CreateArguments {
   oldName: string;
 }
 
-interface DeleteArguments {
+export interface UserCommandDeleteParams {
   id: string;
-  inheritorId: string;
+  inheritorId?: string;
 }
 
 const log = logger.getLogger('gmp.commands.users');
@@ -367,7 +367,7 @@ class UserCommand extends EntityCommand<User, PortListElement> {
     return this.action(data);
   }
 
-  async delete({id, inheritorId}: DeleteArguments) {
+  async delete({id, inheritorId}: UserCommandDeleteParams) {
     const data = {
       cmd: 'delete_user',
       id,
