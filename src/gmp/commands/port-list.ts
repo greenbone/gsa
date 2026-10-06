@@ -26,19 +26,18 @@ export interface PortListCommandSaveParams {
   comment?: string;
 }
 
-interface PortListCommandCreatePortRangeParams {
+export interface PortListCommandCreatePortRangeParams {
   portListId: string;
   portRangeStart: number;
   portRangeEnd: number;
   portType: string;
 }
 
-interface PortListCommandDeletePortRangeParams {
+export interface PortListCommandDeletePortRangeParams {
   id: string;
-  portListId: string;
 }
 
-interface PortListCommandImportParams {
+export interface PortListCommandImportParams {
   xmlFile?: File;
 }
 
@@ -101,16 +100,12 @@ class PortListCommand extends EntityCommand<PortList, PortListElement> {
     });
   }
 
-  async deletePortRange({
-    id,
-    portListId,
-  }: PortListCommandDeletePortRangeParams) {
-    await this.httpPostWithTransform({
+  async deletePortRange({id}: PortListCommandDeletePortRangeParams) {
+    await this.action({
       cmd: 'delete_port_range',
       port_range_id: id,
       no_redirect: 1,
     });
-    return await this.get({id: portListId});
   }
 
   import({xmlFile}: PortListCommandImportParams) {

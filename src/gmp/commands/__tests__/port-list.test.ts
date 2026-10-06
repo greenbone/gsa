@@ -8,7 +8,6 @@ import PortListCommand, {FROM_FILE} from 'gmp/commands/port-list';
 import {
   createHttp,
   createActionResultResponse,
-  createHttpMany,
   createEntityResponse,
 } from 'gmp/commands/testing';
 
@@ -95,14 +94,13 @@ describe('PortListCommand tests', () => {
       action: 'delete_port_range',
       id: '12345',
     });
-    const entityResponse = createEntityResponse('port_list', {id: '324'});
-    const http = createHttpMany([response, entityResponse]);
+    const http = createHttp(response);
     const command = new PortListCommand(http);
     const result = await command.deletePortRange({
       id: '12345',
-      portListId: '67890',
     });
-    expect(result.data.id).toEqual('324');
+    expect(result).toBeUndefined();
+    expect(http.request).toHaveBeenCalledTimes(1);
   });
 
   test('should allow to get a port list', async () => {
