@@ -7,6 +7,10 @@ import {type EntityType, typeName} from 'gmp/utils/entity-type';
 import useTranslation from 'web/hooks/useTranslation';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
+export interface CreateMutationInput {
+  name: string | undefined;
+}
+
 interface UseCreateMutationParams<TInput, TOutput, TError> {
   gmpMethod: (input: TInput) => Promise<TOutput>;
   entityType: EntityType;
@@ -16,7 +20,7 @@ interface UseCreateMutationParams<TInput, TOutput, TError> {
 }
 
 const useCreateMutation = <
-  TInput = unknown,
+  TInput extends object = CreateMutationInput,
   TOutput = unknown,
   TError = Error,
 >({
@@ -31,11 +35,10 @@ const useCreateMutation = <
     gmpMethod,
     invalidateQueryIds,
     successMessage: (_data, variables) => {
-      const name = (variables as Record<string, unknown>)?.name;
-      return typeof name === 'string' && name
+      return 'name' in variables && variables.name
         ? _('{{entity}} {{- name}} successfully created', {
             entity: typeName(entityType),
-            name,
+            name: variables.name as string,
           })
         : _('{{entity}} successfully created', {
             entity: typeName(entityType),
