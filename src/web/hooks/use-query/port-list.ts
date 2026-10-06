@@ -14,6 +14,7 @@ import {
 import _ from 'gmp/locale';
 import useGmp from 'web/hooks/useGmp';
 import useCloneMutation from 'web/queries/useCloneMutation';
+import useCreateMutation from 'web/queries/useCreateMutation';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
 interface UsePortListMutationCallbacks<TResponse> {
@@ -34,11 +35,16 @@ export const useCreatePortList = ({
   onError,
 }: UsePortListMutationCallbacks<EntityActionData> = {}) => {
   const gmp = useGmp();
-  return useGmpMutation<PortListCommandCreateParams, EntityActionData>({
+  return useCreateMutation<
+    PortListCommandCreateParams,
+    EntityActionData,
+    Error
+  >({
     gmpMethod: async data => {
       const response = await gmp.portlist.create(data);
       return response.data;
     },
+    entityType: 'portlist',
     invalidateQueryIds: ['get_port_lists'],
     onSuccess,
     onError,

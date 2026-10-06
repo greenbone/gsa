@@ -12,6 +12,7 @@ import _ from 'gmp/locale';
 import type Target from 'gmp/models/target';
 import useGmp from 'web/hooks/useGmp';
 import useCloneMutation from 'web/queries/useCloneMutation';
+import useCreateMutation from 'web/queries/useCreateMutation';
 import useGetEntity from 'web/queries/useGetEntity';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
@@ -42,11 +43,12 @@ export const useCreateTarget = ({
   onError,
 }: UseTargetMutationCallbacks<EntityActionData> = {}) => {
   const gmp = useGmp();
-  return useGmpMutation<TargetCommandCreateParams, EntityActionData>({
+  return useCreateMutation<TargetCommandCreateParams, EntityActionData, Error>({
     gmpMethod: async data => {
       const response = await gmp.target.create(data);
       return response.data;
     },
+    entityType: 'target',
     invalidateQueryIds: ['get_targets'],
     onSuccess,
     onError,
