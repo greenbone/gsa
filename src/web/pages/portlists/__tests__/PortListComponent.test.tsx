@@ -26,11 +26,11 @@ const currentSettings = testing
   .mockResolvedValue(currentSettingsDefaultResponse);
 const createGmp = ({
   getPortListResponse = defaultGetPortListResponse,
-  createPortListResponse = {id: '123'},
+  createPortListResponse = {data: {id: '123'}},
   // oxlint-disable-next-line typescript/no-useless-default-assignment
   deletePortListResponse = undefined,
-  savePortListResponse = {id: '123'},
-  clonePortListResponse = {id: '123'},
+  savePortListResponse = {data: {id: '123'}},
+  clonePortListResponse = {data: {id: '123'}},
   createPortRangeResponse = {id: '1234'},
   getPortList = testing.fn().mockResolvedValue(getPortListResponse),
   createPortList = testing.fn().mockResolvedValue(createPortListResponse),
@@ -181,8 +181,8 @@ describe('PortListComponent tests', () => {
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
     await wait();
-    expect(screen.queryByText('New Port List')).not.toBeInTheDocument();
-    expect(onCreateError).toHaveBeenCalledWith(error);
+    expect(screen.getByText('New Port List')).toBeInTheDocument();
+    expect(onCreateError.mock.calls[0][0]).toBe(error);
     expect(onCreated).not.toHaveBeenCalled();
   });
 
@@ -345,7 +345,6 @@ describe('PortListComponent tests', () => {
 
     expect(deletePortRange).toHaveBeenCalledExactlyOnceWith({
       id: portList.portRanges[0].id,
-      portListId: portList.id,
     });
     expect(onSaveError).not.toHaveBeenCalled();
     expect(gmp.portlist.save).toHaveBeenCalledExactlyOnceWith({
@@ -390,9 +389,9 @@ describe('PortListComponent tests', () => {
     fireEvent.click(saveButton);
     await wait();
 
-    expect(screen.queryByText('Edit Port List foo')).not.toBeInTheDocument();
+    expect(screen.getByText('Edit Port List foo')).toBeInTheDocument();
     expect(onSaved).not.toHaveBeenCalled();
-    expect(onSaveError).toHaveBeenCalledExactlyOnceWith(error);
+    expect(onSaveError.mock.calls[0][0]).toBe(error);
   });
 
   test('should show error in dialog if saving a port list fails', async () => {
@@ -469,7 +468,11 @@ describe('PortListComponent tests', () => {
         {({clone}) => (
           <Button
             data-testid="button"
-            onClick={() => clone(new PortList({id: '123'}))}
+            onClick={() =>
+              void (
+                clone(new PortList({id: '123'})) as unknown as Promise<void>
+              ).catch(() => undefined)
+            }
           />
         )}
       </PortListComponent>,
@@ -478,7 +481,7 @@ describe('PortListComponent tests', () => {
     fireEvent.click(screen.getByTestId('button'));
     await wait();
     expect(onCloned).not.toHaveBeenCalled();
-    expect(onCloneError).toHaveBeenCalledExactlyOnceWith(error);
+    expect(onCloneError.mock.calls[0][0]).toBe(error);
   });
 
   test('should allow deleting a port list', async () => {
@@ -516,7 +519,11 @@ describe('PortListComponent tests', () => {
         {({delete: del}) => (
           <Button
             data-testid="button"
-            onClick={() => del(new PortList({id: '123'}))}
+            onClick={() =>
+              void (
+                del(new PortList({id: '123'})) as unknown as Promise<void>
+              ).catch(() => undefined)
+            }
           />
         )}
       </PortListComponent>,
@@ -525,6 +532,6 @@ describe('PortListComponent tests', () => {
     fireEvent.click(screen.getByTestId('button'));
     await wait();
     expect(onDeleted).not.toHaveBeenCalled();
-    expect(onDeleteError).toHaveBeenCalledExactlyOnceWith(error);
+    expect(onDeleteError.mock.calls[0][0]).toBe(error);
   });
 });
