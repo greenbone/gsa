@@ -153,11 +153,11 @@ const UserComponent = ({
   };
 
   const cloneUser = async (entity: User) => {
-    await cloneMutation.mutateAsync({id: entity.id});
+    await cloneMutation.mutateAsync({id: entity.id, name: entity.name});
   };
 
   const deleteUser = async (entity: User) => {
-    await deleteMutation.mutateAsync({id: entity.id});
+    await deleteMutation.mutateAsync({id: entity.id, name: entity.name});
   };
 
   const downloadUserEntity = async (entity: User) => {

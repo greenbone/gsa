@@ -4,7 +4,6 @@
  */
 
 import React, {useState} from 'react';
-import type Rejection from 'gmp/http/rejection';
 import type Agent from 'gmp/models/agent';
 import {useDeleteAgent, useModifyAgent} from 'web/hooks/use-query/agents';
 import useTranslation from 'web/hooks/useTranslation';
@@ -19,9 +18,9 @@ interface AgentComponentRenderProps {
 interface AgentComponentProps {
   children: (actions: AgentComponentRenderProps) => React.ReactNode;
   onDeleted?: () => void;
-  onDeleteError?: (error: Rejection) => void;
+  onDeleteError?: (error: Error) => void;
   onSaved?: () => void;
-  onSaveError?: (error: Rejection) => void;
+  onSaveError?: (error: Error) => void;
 }
 
 const AgentComponent = ({

@@ -167,11 +167,11 @@ const TicketComponent = ({
   };
 
   const cloneTicket = async (entity: Ticket) => {
-    await cloneMutation.mutateAsync({id: entity.id});
+    await cloneMutation.mutateAsync({id: entity.id, name: entity.name});
   };
 
   const deleteTicket = async (entity: Ticket) => {
-    await deleteMutation.mutateAsync({id: entity.id});
+    await deleteMutation.mutateAsync({id: entity.id, name: entity.name});
   };
 
   const downloadTicketEntity = async (entity: Ticket) => {

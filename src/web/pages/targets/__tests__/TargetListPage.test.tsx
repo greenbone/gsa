@@ -105,6 +105,9 @@ const createGmp = ({
     delete: deleteByIds,
     export: exportByIds,
   },
+  target: {
+    delete: testing.fn().mockResolvedValue(undefined),
+  },
   filters: {
     get: getFilters,
   },

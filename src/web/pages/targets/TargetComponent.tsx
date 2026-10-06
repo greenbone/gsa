@@ -329,7 +329,7 @@ const TargetComponent = ({
   });
 
   const cloneTarget = async (entity: Target) => {
-    await cloneTargetMutation.mutateAsync(entity);
+    await cloneTargetMutation.mutateAsync({id: entity.id, name: entity.name});
   };
 
   const saveTargetMutation = useSaveTarget({
@@ -354,7 +354,7 @@ const TargetComponent = ({
   });
 
   const deleteTarget = async (entity: Target) => {
-    await deleteTargetMutation.mutateAsync(entity);
+    await deleteTargetMutation.mutateAsync({id: entity.id, name: entity.name});
   };
 
   const handleSaveClick = async (data: TargetDialogData) => {
