@@ -9,27 +9,35 @@ import useTranslation from 'web/hooks/useTranslation';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
 export interface DeleteMutationInput extends EntityCommandParams {
-  name?: string;
+  name: string | undefined;
 }
 
-interface UseDeleteMutationParams<TOutput, TError> {
+interface UseDeleteMutationParams<
+  TOutput,
+  TError,
+  TInput extends DeleteMutationInput,
+> {
   entityType: EntityType;
-  gmpMethod: (input: EntityCommandParams) => Promise<TOutput>;
+  gmpMethod: (input: TInput) => Promise<TOutput>;
   invalidateQueryIds?: string[];
   onSuccess?: (data: TOutput) => void;
   onError?: (error: TError) => void;
 }
 
-const useDeleteMutation = <TOutput = void, TError = Error>({
+const useDeleteMutation = <
+  TOutput = void,
+  TError = Error,
+  TInput extends DeleteMutationInput = DeleteMutationInput,
+>({
   gmpMethod,
   entityType,
   invalidateQueryIds,
   onSuccess,
   onError,
-}: UseDeleteMutationParams<TOutput, TError>) => {
+}: UseDeleteMutationParams<TOutput, TError, TInput>) => {
   const [_] = useTranslation();
-  return useGmpMutation<DeleteMutationInput, TOutput, TError>({
-    gmpMethod: ({id}) => gmpMethod({id}),
+  return useGmpMutation<TInput, TOutput, TError>({
+    gmpMethod: (data: TInput) => gmpMethod(data),
     invalidateQueryIds,
     successMessage: (_data, variables) =>
       variables.name
