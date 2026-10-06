@@ -135,9 +135,23 @@ class ReportExportCommand extends HttpCommand {
     response: Response<XmlResponseData, XmlMeta>,
   ): Response<ReportExportIdResponse, XmlMeta> {
     const data = response.data as Record<string, unknown>;
+    const responseIds = [
+      'export_scan_report',
+      'export_audit_report',
+      'export_delta_scan_report',
+      'export_delta_audit_report',
+    ].map(command => {
+      const commandData = data[command];
+      if (!commandData || typeof commandData !== 'object') return undefined;
+      const responseData = (commandData as Record<string, unknown>)[
+        `${command}_response`
+      ];
+      return getAttribute(responseData, 'id');
+    });
     const reportExportId =
       getValue(data.action_result, 'report_export_id') ??
-      getValue(data, 'report_export_id');
+      getValue(data, 'report_export_id') ??
+      responseIds.find(isDefined);
     if (!reportExportId) {
       throw new Error('Invalid response: report_export_id not found');
     }

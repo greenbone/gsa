@@ -40,5 +40,40 @@ test.describe('report export', () => {
     const downloadPath = await download.path();
     expect(download.suggestedFilename()).toBeTruthy();
     expect(downloadPath).toBeTruthy();
+
+    const activityButton = page.getByTestId('report-export-activity-button');
+    await expect(activityButton).toBeVisible();
+    await expect(activityButton).toHaveAttribute('aria-expanded', 'true');
+    await expect(
+      page.getByTestId('report-export-activity-popover'),
+    ).toContainText('Download started');
+
+    await page.getByRole('link', {name: 'Dashboards'}).click();
+    await expect(page).toHaveURL(/\/dashboards/);
+    await expect(activityButton).toBeVisible();
+    if ((await activityButton.getAttribute('aria-expanded')) !== 'true') {
+      await activityButton.click();
+    }
+    await expect(activityButton).toHaveAttribute('aria-expanded', 'true');
+    await expect(
+      page.getByTestId('report-export-activity-popover'),
+    ).toBeVisible();
+    await expect(
+      page.getByTestId('report-export-activity-popover'),
+    ).toContainText('Download started');
+
+    const activityPopover = page.getByTestId('report-export-activity-popover');
+    const popoverBounds = await activityPopover.boundingBox();
+    const dismissButtonBounds = await activityPopover
+      .getByRole('button', {name: 'Dismiss'})
+      .boundingBox();
+    if (!popoverBounds || !dismissButtonBounds) {
+      throw new Error('Report export activity controls have no visible bounds');
+    }
+
+    expect(dismissButtonBounds.x).toBeGreaterThanOrEqual(popoverBounds.x);
+    expect(
+      dismissButtonBounds.x + dismissButtonBounds.width,
+    ).toBeLessThanOrEqual(popoverBounds.x + popoverBounds.width);
   });
 });

@@ -36,6 +36,7 @@ import usePageFilter from 'web/hooks/usePageFilter';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
+import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
 import ReportDetailsContent from 'web/pages/reports/ReportDetailsContent';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import TargetComponent from 'web/pages/targets/TargetComponent';
@@ -111,6 +112,7 @@ const ReportDetailsPage = () => {
     useState(false);
   const [reportComposerDefaults, setReportComposerDefaults] =
     useState<ReportComposerDefaults>({});
+  const {start: startReportExport} = useReportExportManager();
 
   // Filter management
   const [pageFilter, , {changeFilter}] = usePageFilter(
@@ -327,41 +329,33 @@ const ReportDetailsPage = () => {
         }
       }
 
-      const reportFormat = reportFormats?.find(
-        format => reportFormatId === format.id,
-      );
-
-      const extension = isDefined(reportFormat)
-        ? reportFormat.extension
-        : 'unknown';
-
       try {
-        const [response, reportExportFileName] = await Promise.all([
-          gmp.report.download(
-            {id: entity.id as string},
-            {
-              reportConfigId,
-              reportFormatId,
-              filter: newFilter,
-            },
-          ),
-          reportExportFileNameQuery(),
-        ]);
-        setShowDownloadReportDialog(false);
-        const {data} = response;
-        const filename = generateFilename({
-          creationTime: entity.creationTime,
-          extension,
-          fileNameFormat: reportExportFileName,
-          id: entity.id as string,
-          modificationTime: entity.modificationTime,
-          reportFormat: reportFormat?.name,
-          resourceName: entity.task?.name,
-          resourceType: 'report',
-          username,
+        const reportFormat = reportFormats?.find(
+          format => format.id === reportFormatId,
+        );
+        const reportExportFileName = await reportExportFileNameQuery();
+        await startReportExport({
+          kind: 'scan',
+          filename: generateFilename({
+            creationTime: entity.creationTime,
+            extension: reportFormat?.extension ?? 'unknown',
+            fileNameFormat: reportExportFileName,
+            id: entity.id as string,
+            modificationTime: entity.modificationTime,
+            reportFormat: reportFormat?.name,
+            resourceName: entity.task?.name,
+            resourceType: 'report',
+            username,
+          }),
+          reportTitle: entity.task?.name ?? _('Report'),
+          payload: {
+            report_id: entity.id as string,
+            format_id: reportFormatId,
+            config_id: reportConfigId || undefined,
+            filter: newFilter,
+          },
         });
-
-        handleDownload({filename, data});
+        setShowDownloadReportDialog(false);
       } catch (error) {
         log.error(error);
         showError(error as Error);
@@ -370,13 +364,14 @@ const ReportDetailsPage = () => {
     [
       entity,
       gmp,
-      handleDownload,
       reportComposerDefaults,
       reportExportFileNameQuery,
       reportFilter,
       reportFormats,
+      startReportExport,
       showError,
       username,
+      _,
     ],
   );
 
