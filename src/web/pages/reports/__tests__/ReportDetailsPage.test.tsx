@@ -11,6 +11,7 @@ import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/user';
 import type FilterType from 'gmp/models/filter/filter-type';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import Report from 'gmp/models/report';
+import ReportFormat from 'gmp/models/report-format';
 import {OPENVASD_SCANNER_TYPE} from 'gmp/models/scanner';
 import {TASK_STATUS} from 'gmp/models/task';
 import {createSession} from 'gmp/testing';
@@ -91,6 +92,17 @@ const createGmp = () => ({
   },
   reportformats: {
     get: testing.fn().mockResolvedValue(emptyCollectionResponse),
+  },
+  reportexport: {
+    exportScanReport: testing
+      .fn()
+      .mockResolvedValue({data: {id: 'export-uuid'}}),
+    getReportExports: testing.fn().mockResolvedValue({
+      data: [{id: 'export-uuid', status: 'running', progress: 'generating'}],
+    }),
+    downloadReportExport: testing
+      .fn()
+      .mockResolvedValue({data: new ArrayBuffer(8)}),
   },
   report: {
     get: testing.fn().mockResolvedValue({data: entity}),
@@ -456,6 +468,17 @@ describe('ReportDetailsPage tests', () => {
   describe('Report download flow', () => {
     test('should call report download when download dialog OK is clicked', async () => {
       const gmp = createGmp();
+      gmp.reportformats.get.mockResolvedValue({
+        data: [
+          new ReportFormat({
+            id: 'xml-format',
+            name: 'XML',
+            extension: 'xml',
+            content_type: 'text/xml',
+          }),
+        ],
+        meta: emptyCollectionResponse.meta,
+      });
 
       const {render} = setupRenderer(gmp);
       renderPage(render);
@@ -470,8 +493,49 @@ describe('ReportDetailsPage tests', () => {
       fireEvent.click(screen.getByRole('button', {name: 'OK'}));
 
       await waitFor(() => {
-        expect(gmp.report.download).toHaveBeenCalled();
+        expect(gmp.report.download).toHaveBeenCalledWith(
+          {id: entity.id},
+          expect.objectContaining({
+            reportFormatId: 'xml-format',
+            reportConfigId: '',
+          }),
+        );
       });
+      expect(gmp.reportexport.exportScanReport).not.toHaveBeenCalled();
+    });
+
+    test('uses async export for a PDF report format', async () => {
+      const gmp = createGmp();
+      gmp.reportformats.get.mockResolvedValue({
+        data: [
+          new ReportFormat({
+            id: 'pdf-format',
+            name: 'PDF',
+            extension: 'pdf',
+            content_type: 'application/pdf; charset=binary',
+          }),
+        ],
+        meta: emptyCollectionResponse.meta,
+      });
+
+      const {render} = setupRenderer(gmp);
+      renderPage(render);
+      await screen.findByTitle(/^Download filtered Report/);
+      fireEvent.click(screen.getByTitle(/^Download filtered Report/));
+      await screen.findByRole('heading', {
+        name: /Compose Content for Scan Report/,
+      });
+      fireEvent.click(screen.getByRole('button', {name: 'OK'}));
+
+      await waitFor(() => {
+        expect(gmp.reportexport.exportScanReport).toHaveBeenCalledWith(
+          expect.objectContaining({
+            report_id: entity.id,
+            format_id: 'pdf-format',
+          }),
+        );
+      });
+      expect(gmp.report.download).not.toHaveBeenCalled();
     });
 
     test('should close download dialog after successful download', async () => {

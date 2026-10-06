@@ -36,9 +36,9 @@ import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import DeltaReportDetailsContent from 'web/pages/reports/DeltaReportDetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
+import isPdfReportFormat from 'web/pages/reports/is-pdf-report-format';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
-import isPdfReportFormat from 'web/pages/reports/isPdfReportFormat';
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import {ROUTES} from 'web/route-paths';
 import {
@@ -278,10 +278,8 @@ const DeltaReportDetails = () => {
   );
 
   const [startTimer, clearTimer] = useReload(memoizedReloadFn, timeoutFunc);
-  const {
-    start: startReportExport,
-    startDirect: startDirectReportDownload,
-  } = useReportExportManager();
+  const {start: startReportExport, startDirect: startDirectReportDownload} =
+    useReportExportManager();
 
   const {
     dialogState,

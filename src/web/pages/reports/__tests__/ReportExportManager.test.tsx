@@ -356,12 +356,19 @@ describe('ReportExportManager', () => {
       </ReportExportManager>,
     );
 
-    fireEvent.click(screen.getByRole('button', {name: 'Start direct download'}));
+    fireEvent.click(
+      screen.getByRole('button', {name: 'Start direct download'}),
+    );
 
-    expect(await screen.findByText('Report download: Direct report')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Report download: Direct report'),
+    ).toBeInTheDocument();
     expect(screen.getByText('Downloading report')).toBeInTheDocument();
     expect(
-      screen.queryByRole('button', {name: 'Cancel report export', hidden: true}),
+      screen.queryByRole('button', {
+        name: 'Cancel report export',
+        hidden: true,
+      }),
     ).not.toBeInTheDocument();
     expect(gmp.report.download).toHaveBeenCalledWith(
       {id: 'report-uuid'},
@@ -404,7 +411,10 @@ describe('ReportExportManager', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Start two exports'}));
     await screen.findByText('Report export: Report A');
     expect(
-      screen.queryByRole('button', {name: 'Cancel report export', hidden: true}),
+      screen.queryByRole('button', {
+        name: 'Cancel report export',
+        hidden: true,
+      }),
     ).not.toBeInTheDocument();
     expect(gmp.reportexport.cancelReportExport).not.toHaveBeenCalled();
   });

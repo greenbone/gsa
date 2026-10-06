@@ -579,6 +579,7 @@ const useReportExport = ({onDownload}: UseReportExportParams) => {
       if (
         !record ||
         !job ||
+        record.directDownload ||
         job.cancelPending ||
         cancelInFlightRef.current.has(key) ||
         cancelAcceptedRef.current.has(key)

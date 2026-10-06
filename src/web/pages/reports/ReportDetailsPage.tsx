@@ -36,10 +36,10 @@ import usePageFilter from 'web/hooks/usePageFilter';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
+import isPdfReportFormat from 'web/pages/reports/is-pdf-report-format';
 import ReportDetailsContent from 'web/pages/reports/ReportDetailsContent';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
-import isPdfReportFormat from 'web/pages/reports/isPdfReportFormat';
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import {ROUTES} from 'web/route-paths';
 import {createPEMCertificate} from 'web/utils/certificates';
@@ -114,10 +114,8 @@ const ReportDetailsPage = () => {
     useState(false);
   const [reportComposerDefaults, setReportComposerDefaults] =
     useState<ReportComposerDefaults>({});
-  const {
-    start: startReportExport,
-    startDirect: startDirectReportDownload,
-  } = useReportExportManager();
+  const {start: startReportExport, startDirect: startDirectReportDownload} =
+    useReportExportManager();
 
   // Filter management
   const [pageFilter, , {changeFilter}] = usePageFilter(

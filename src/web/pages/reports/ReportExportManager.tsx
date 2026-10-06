@@ -15,11 +15,11 @@ import {
 } from 'react';
 import {ActionIcon, Group, Popover, Stack, Text} from '@mantine/core';
 import {showSuccessNotification} from '@greenbone/ui-lib';
-import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
 import styled from 'styled-components';
 import Button from 'web/components/form/Button';
 import {DownloadIcon, XIcon} from 'web/components/icon';
 import Link from 'web/components/link/Link';
+import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
 import useReportExport, {
   type ReportExportJob,
   type ReportExportState,
@@ -211,10 +211,10 @@ export const ReportExportActivity = () => {
               const statusText = job.directPending
                 ? _('Downloading report')
                 : job.downloadError
-                ? _('Download failed: {{error}}', {
-                    error: job.downloadError.message,
-                  })
-                : getStatusText(state, job.downloadStarted, _);
+                  ? _('Download failed: {{error}}', {
+                      error: job.downloadError.message,
+                    })
+                  : getStatusText(state, job.downloadStarted, _);
 
               return (
                 <ActivityJob key={job.key}>
@@ -226,8 +226,8 @@ export const ReportExportActivity = () => {
                               report: job.reportTitle,
                             })
                           : _('Report export: {{report}}', {
-                            report: job.reportTitle,
-                          })
+                              report: job.reportTitle,
+                            })
                         : job.directDownload
                           ? _('Report download')
                           : _('Report export')}
@@ -315,7 +315,7 @@ const ReportExportManager = ({children}: ReportExportManagerProps) => {
   const cancel = useCallback(
     (key: string) =>
       supportsCancellation ? reportExport.cancel(key) : Promise.resolve(),
-    [reportExport.cancel, supportsCancellation],
+    [reportExport, supportsCancellation],
   );
   const contextValue = useMemo(
     () => ({
