@@ -175,11 +175,10 @@ describe('ticket mutation hooks', () => {
     await waitFor(() => {
       expect(gmp.ticket.clone).toHaveBeenCalledWith({
         id: 'ticket-1',
-        name: 'Cloned Ticket',
       });
       expect(onSuccess).toHaveBeenCalledWith({id: 'ticket-3'});
       expect(
-        screen.getByText('Cloned Ticket cloned successfully.'),
+        screen.getByText('Ticket Cloned Ticket cloned successfully'),
       ).toBeInTheDocument();
     });
   });

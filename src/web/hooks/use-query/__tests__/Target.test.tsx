@@ -115,11 +115,10 @@ describe('target mutation hooks', () => {
     await waitFor(() => {
       expect(gmp.target.clone).toHaveBeenCalledWith({
         id: 'target-1',
-        name: 'Cloned Target',
       });
       expect(onSuccess).toHaveBeenCalledWith({id: 'target-2'});
       expect(
-        screen.getByText('Cloned Target cloned successfully.'),
+        screen.getByText('Target Cloned Target cloned successfully'),
       ).toBeInTheDocument();
     });
   });
@@ -168,7 +167,6 @@ describe('target mutation hooks', () => {
     await waitFor(() => {
       expect(gmp.target.delete).toHaveBeenCalledWith({
         id: 'target-1',
-        name: 'Deleted Target',
       });
       expect(onSuccess).toHaveBeenCalledWith(undefined);
       expect(

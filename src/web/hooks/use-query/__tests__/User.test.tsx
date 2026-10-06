@@ -235,7 +235,7 @@ describe('remaining user mutation hooks', () => {
       expect(gmp.user.clone).toHaveBeenCalledWith({id: 'user-id'});
       expect(onSuccess).toHaveBeenCalledWith({id: 'cloned'});
       expect(
-        screen.getByText('Cloned User cloned successfully.'),
+        screen.getByText('User Cloned User cloned successfully'),
       ).toBeInTheDocument();
     });
   });
