@@ -9,7 +9,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
 export interface CloneMutationInput extends EntityCommandParams {
-  name?: string;
+  name: string | undefined;
 }
 
 interface UseCloneMutationParams<TOutput, TError> {

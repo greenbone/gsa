@@ -12,11 +12,7 @@ export interface DeleteMutationInput extends EntityCommandParams {
   name: string | undefined;
 }
 
-interface UseDeleteMutationParams<
-  TOutput,
-  TError,
-  TInput extends DeleteMutationInput,
-> {
+interface UseDeleteMutationParams<TInput, TOutput, TError> {
   entityType: EntityType;
   gmpMethod: (input: TInput) => Promise<TOutput>;
   invalidateQueryIds?: string[];
@@ -25,25 +21,25 @@ interface UseDeleteMutationParams<
 }
 
 const useDeleteMutation = <
+  TInput extends object = DeleteMutationInput,
   TOutput = void,
   TError = Error,
-  TInput extends DeleteMutationInput = DeleteMutationInput,
 >({
   gmpMethod,
   entityType,
   invalidateQueryIds,
   onSuccess,
   onError,
-}: UseDeleteMutationParams<TOutput, TError, TInput>) => {
+}: UseDeleteMutationParams<TInput, TOutput, TError>) => {
   const [_] = useTranslation();
   return useGmpMutation<TInput, TOutput, TError>({
     gmpMethod: (data: TInput) => gmpMethod(data),
     invalidateQueryIds,
     successMessage: (_data, variables) =>
-      variables.name
+      'name' in variables && variables.name
         ? _('{{entity}} {{- name}} successfully deleted', {
             entity: typeName(entityType),
-            name: variables.name,
+            name: variables.name as string,
           })
         : _('{{entity}} successfully deleted', {
             entity: typeName(entityType),
