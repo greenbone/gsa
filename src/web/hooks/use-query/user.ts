@@ -9,6 +9,7 @@ import _ from 'gmp/locale';
 import type User from 'gmp/models/user';
 import useGmp from 'web/hooks/useGmp';
 import {type RefetchIntervalFn} from 'web/queries/helpers';
+import useCloneMutation from 'web/queries/useCloneMutation';
 import useGetEntity from 'web/queries/useGetEntity';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
@@ -97,16 +98,13 @@ export const useCloneUser = ({
   onError,
 }: UseUserMutationCallbacks<EntityActionData> = {}) => {
   const gmp = useGmp();
-  return useGmpMutation<UseModifyUserParams, EntityActionData>({
-    gmpMethod: async ({id}: UseModifyUserParams) => {
+  return useCloneMutation<EntityActionData, Error>({
+    gmpMethod: async ({id}) => {
       const response = await gmp.user.clone({id});
       return response.data;
     },
+    entityType: 'user',
     invalidateQueryIds: ['get_users'],
-    successMessage: (_data, entity) =>
-      _('{{- name}} cloned successfully.', {
-        name: entity.name as string,
-      }),
     onSuccess,
     onError,
   });

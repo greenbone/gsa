@@ -13,6 +13,7 @@ import {
 } from 'gmp/commands/port-list';
 import _ from 'gmp/locale';
 import useGmp from 'web/hooks/useGmp';
+import useCloneMutation from 'web/queries/useCloneMutation';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
 interface UsePortListMutationCallbacks<TResponse> {
@@ -65,16 +66,13 @@ export const useClonePortList = ({
   onError,
 }: UsePortListMutationCallbacks<EntityActionData> = {}) => {
   const gmp = useGmp();
-  return useGmpMutation<UseModifyPortListParams, EntityActionData>({
+  return useCloneMutation<EntityActionData, Error>({
     gmpMethod: async ({id}: UseModifyPortListParams) => {
       const response = await gmp.portlist.clone({id});
       return response.data;
     },
+    entityType: 'portlist',
     invalidateQueryIds: ['get_port_lists'],
-    successMessage: (_data, entity) =>
-      _('{{- name}} cloned successfully.', {
-        name: entity.name as string,
-      }),
     onSuccess,
     onError,
   });

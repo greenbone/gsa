@@ -11,6 +11,7 @@ import {
   type TicketStatusValue,
 } from 'gmp/models/ticket';
 import useGmp from 'web/hooks/useGmp';
+import useCloneMutation from 'web/queries/useCloneMutation';
 import useGetEntity from 'web/queries/useGetEntity';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
@@ -88,16 +89,13 @@ export const useCloneTicket = ({
   onError,
 }: UseTicketMutationCallbacks<EntityActionData> = {}) => {
   const gmp = useGmp();
-  return useGmpMutation<UseModifyTicketParams, EntityActionData>({
+  return useCloneMutation<EntityActionData, Error>({
     gmpMethod: async data => {
       const response = await gmp.ticket.clone(data);
       return response.data;
     },
+    entityType: 'ticket',
     invalidateQueryIds: ['get_tickets'],
-    successMessage: (_data, entity) =>
-      _('{{- name}} cloned successfully.', {
-        name: entity.name as string,
-      }),
     onSuccess,
     onError,
   });

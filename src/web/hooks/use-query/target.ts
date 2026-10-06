@@ -11,6 +11,7 @@ import {
 import _ from 'gmp/locale';
 import type Target from 'gmp/models/target';
 import useGmp from 'web/hooks/useGmp';
+import useCloneMutation from 'web/queries/useCloneMutation';
 import useGetEntity from 'web/queries/useGetEntity';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
@@ -73,16 +74,13 @@ export const useCloneTarget = ({
   onError,
 }: UseTargetMutationCallbacks<EntityActionData> = {}) => {
   const gmp = useGmp();
-  return useGmpMutation<UseModifyTargetParams, EntityActionData>({
-    gmpMethod: async ({id}: UseModifyTargetParams) => {
+  return useCloneMutation<EntityActionData, Error>({
+    gmpMethod: async ({id}) => {
       const response = await gmp.target.clone({id});
       return response.data;
     },
+    entityType: 'target',
     invalidateQueryIds: ['get_targets'],
-    successMessage: (_data, entity) =>
-      _('{{- name}} cloned successfully.', {
-        name: entity.name as string,
-      }),
     onSuccess,
     onError,
   });
