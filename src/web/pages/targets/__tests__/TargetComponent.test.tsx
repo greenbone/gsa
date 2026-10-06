@@ -385,7 +385,9 @@ describe('TargetComponent tests', () => {
 
     await actions?.delete(new Target({id: 'target-id', name: 'Target'}));
 
-    expect(gmp.target.delete).toHaveBeenCalledWith({id: 'target-id'});
+    expect(gmp.target.delete).toHaveBeenCalledWith({
+      id: 'target-id',
+    });
     expect(onDeleted).toHaveBeenCalled();
   });
 

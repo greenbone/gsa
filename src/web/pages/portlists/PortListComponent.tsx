@@ -124,14 +124,14 @@ const PortListComponent = ({
     onError: onCloneError,
   });
   const clonePortList = async (data: PortList) =>
-    await clonePortListMutation.mutateAsync(data);
+    await clonePortListMutation.mutateAsync({id: data.id, name: data.name});
 
   const deletePortListMutation = useDeletePortList({
     onSuccess: onDeleted,
     onError: onDeleteError,
   });
   const deletePortList = async (data: PortList) =>
-    await deletePortListMutation.mutateAsync(data);
+    await deletePortListMutation.mutateAsync({id: data.id, name: data.name});
 
   const importPortListMutation = useImportPortList({
     onSuccess: onImported,

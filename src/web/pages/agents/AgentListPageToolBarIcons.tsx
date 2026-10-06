@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Rejection from 'gmp/http/rejection';
 import type Agent from 'gmp/models/agent';
 import {isDefined} from 'gmp/utils/identity';
 import DateTime from 'web/components/date/DateTime';
@@ -15,7 +14,7 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface AgentsListPageToolBarIconsProps {
   agents?: Agent[];
-  onError: (error: Rejection) => void;
+  onError: (error: Error) => void;
 }
 
 const AgentsListPageToolBarIcons = ({
