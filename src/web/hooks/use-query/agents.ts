@@ -30,14 +30,14 @@ interface UseGetAgentsParams {
 
 interface UseModifyAgentParams {
   onSuccess?: () => void;
-  onError?: (error: Rejection) => void;
+  onError?: (error: Error) => void;
 }
 
 type AgentBulkInput = Agent[] | FilterType;
 
 interface UseDownloadAgentSupportBundleParams {
   onSuccess?: (response: Response<ArrayBuffer>) => void;
-  onError?: (error: Rejection) => void;
+  onError?: (error: Error) => void;
 }
 
 export interface DownloadAgentSupportBundleInput {
@@ -108,8 +108,8 @@ export const useModifyAgent = ({
 export const useDeleteAgent = ({onError, onSuccess}: UseModifyAgentParams) => {
   const gmp = useGmp();
   return useDeleteMutation({
-    gmpMethod: gmp.agent.delete.bind(gmp.agentgroup),
-    entityType: 'agentgroup',
+    gmpMethod: ({id}) => gmp.agent.delete({id}),
+    entityType: 'agent',
     invalidateQueryIds: ['get_agents'],
     onSuccess,
     onError,
@@ -179,7 +179,7 @@ export const useSyncAgents = ({
 }: UseModifyAgentParams = {}) => {
   const [_] = useTranslation();
   const gmp = useGmp();
-  return useGmpMutation<void, void, Rejection>({
+  return useGmpMutation<void, void, Error>({
     gmpMethod: () => gmp.agents.sync(),
     invalidateQueryIds: ['get_agents'],
     successMessage: _('Agents successfully synced'),

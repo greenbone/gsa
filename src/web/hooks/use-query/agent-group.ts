@@ -18,12 +18,12 @@ import useSaveMutation from 'web/queries/useSaveMutation';
 
 interface UseCreateAgentGroupParams {
   onSuccess?: (data: EntityActionResponse) => void;
-  onError?: (error: Rejection) => void;
+  onError?: (error: Error) => void;
 }
 
 interface UseModifyAgentGroupParams {
   onSuccess?: () => void;
-  onError?: (error: Rejection) => void;
+  onError?: (error: Error) => void;
 }
 
 export const useCreateAgentGroup = ({
@@ -78,7 +78,7 @@ export const useDeleteAgentGroup = ({
 }: UseModifyAgentGroupParams) => {
   const gmp = useGmp();
   return useDeleteMutation({
-    gmpMethod: gmp.agentgroup.delete.bind(gmp.agentgroup),
+    gmpMethod: ({id}) => gmp.agentgroup.delete({id}),
     entityType: AgentGroup.entityType,
     invalidateQueryIds: ['get_agent_groups'],
     onSuccess,

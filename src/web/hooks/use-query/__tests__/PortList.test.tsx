@@ -173,7 +173,9 @@ describe('useDeletePortList', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
 
     await waitFor(() => {
-      expect(gmp.portlist.delete).toHaveBeenCalledWith({id: 'port-list-1'});
+      expect(gmp.portlist.delete).toHaveBeenCalledWith({
+        id: 'port-list-1',
+      });
     });
   });
 });

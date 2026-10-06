@@ -11,10 +11,10 @@ import {
   type PortListCommandCreatePortRangeParams,
   type PortListCommandDeletePortRangeParams,
 } from 'gmp/commands/port-list';
-import _ from 'gmp/locale';
 import useGmp from 'web/hooks/useGmp';
 import useCloneMutation from 'web/queries/useCloneMutation';
 import useCreateMutation from 'web/queries/useCreateMutation';
+import useDeleteMutation from 'web/queries/useDeleteMutation';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
 interface UsePortListMutationCallbacks<TResponse> {
@@ -89,13 +89,10 @@ export const useDeletePortList = ({
   onError,
 }: UsePortListMutationCallbacks<void> = {}) => {
   const gmp = useGmp();
-  return useGmpMutation<UseModifyPortListParams, void>({
-    gmpMethod: ({id}: UseModifyPortListParams) => gmp.portlist.delete({id}),
+  return useDeleteMutation({
+    gmpMethod: ({id}) => gmp.portlist.delete({id}),
+    entityType: 'portlist',
     invalidateQueryIds: ['get_port_lists', 'get_port_list'],
-    successMessage: (_data, entity) =>
-      _('{{- name}} deleted successfully.', {
-        name: entity.name as string,
-      }),
     onSuccess,
     onError,
   });

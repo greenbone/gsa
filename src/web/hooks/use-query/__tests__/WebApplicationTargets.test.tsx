@@ -82,10 +82,18 @@ describe('web application target query hooks', () => {
           <button onClick={() => save.mutate({id: 'target-1', name: 'Saved'})}>
             Save
           </button>
-          <button onClick={() => remove.mutate({id: 'target-1'})}>
+          <button
+            onClick={() => remove.mutate({id: 'target-1', name: 'Target 1'})}
+          >
             Delete
           </button>
-          <button onClick={() => clone.mutate({id: 'target-1'})}>Clone</button>
+          <button
+            onClick={() =>
+              clone.mutate({id: 'target-1', name: 'Cloned Target'})
+            }
+          >
+            Clone
+          </button>
           <button onClick={() => bulkDelete.mutate(filter as never)}>
             Bulk delete
           </button>

@@ -85,7 +85,13 @@ describe('OCI image target query hooks', () => {
           <button onClick={() => remove.mutate({id: 'target-1'})}>
             Delete
           </button>
-          <button onClick={() => clone.mutate({id: 'target-1'})}>Clone</button>
+          <button
+            onClick={() =>
+              clone.mutate({id: 'target-1', name: 'Cloned Target'})
+            }
+          >
+            Clone
+          </button>
           <button onClick={() => bulkDelete.mutate([target] as never)}>
             Bulk delete
           </button>

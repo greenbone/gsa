@@ -207,7 +207,7 @@ describe('useSaveUser', () => {
   });
 });
 
-describe('remaining user mutation hooks', () => {
+describe('useCloneUser', () => {
   test('should clone a user with its name and call onSuccess', async () => {
     const gmp = createGmp();
     const onSuccess = testing.fn();
@@ -248,7 +248,11 @@ describe('remaining user mutation hooks', () => {
     const TestComponent = () => {
       const mutation = useCloneUser({onError});
       return (
-        <button onClick={() => mutation.mutate({id: 'user-id'})}>Clone</button>
+        <button
+          onClick={() => mutation.mutate({id: 'user-id', name: 'Cloned User'})}
+        >
+          Clone
+        </button>
       );
     };
 
@@ -257,7 +261,9 @@ describe('remaining user mutation hooks', () => {
 
     await waitFor(() => expect(onError.mock.calls[0][0]).toBe(error));
   });
+});
 
+describe('useDeleteUser', () => {
   test('should delete a user with its name and forward the inheritor ID', async () => {
     const gmp = createGmp();
     const onSuccess = testing.fn();
@@ -282,7 +288,7 @@ describe('remaining user mutation hooks', () => {
       });
       expect(onSuccess).toHaveBeenCalledWith(undefined);
       expect(
-        screen.getByText('Deleted User deleted successfully.'),
+        screen.getByText('User Deleted User successfully deleted'),
       ).toBeInTheDocument();
     });
   });
@@ -297,7 +303,11 @@ describe('remaining user mutation hooks', () => {
     const TestComponent = () => {
       const mutation = useDeleteUser({onError});
       return (
-        <button onClick={() => mutation.mutate({id: 'user-id'})}>Delete</button>
+        <button
+          onClick={() => mutation.mutate({id: 'user-id', name: 'Deleted User'})}
+        >
+          Delete
+        </button>
       );
     };
 
@@ -306,7 +316,9 @@ describe('remaining user mutation hooks', () => {
 
     await waitFor(() => expect(onError.mock.calls[0][0]).toBe(error));
   });
+});
 
+describe('useDownloadUser', () => {
   test('should download a user', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
