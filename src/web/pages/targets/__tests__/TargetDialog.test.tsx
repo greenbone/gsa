@@ -13,6 +13,7 @@ import {
   rendererWith,
   changeSelectInput,
 } from 'web/testing';
+import Response from 'gmp/http/response';
 import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   CERTIFICATE_CREDENTIAL_TYPE,
@@ -24,12 +25,14 @@ import Credential, {
   SNMP_CREDENTIAL_TYPES,
 } from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
+import PortList from 'gmp/models/port-list';
 import {
   ARP_PING,
   CONSIDER_ALIVE,
   ICMP_PING,
   SCAN_CONFIG_DEFAULT,
 } from 'gmp/models/target';
+import {createSession} from 'gmp/testing';
 import TargetDialog, {
   DEFAULT_PORT_LIST_ID,
   DEFAULT_PORT_LIST_NAME,
@@ -67,16 +70,29 @@ const cred5 = new Credential({
 });
 
 const credentials = [cred1, cred2, cred3, cred4, cred5];
+const portLists = [
+  new PortList({
+    id: DEFAULT_PORT_LIST_ID,
+    name: DEFAULT_PORT_LIST_NAME,
+  }),
+];
 
 const gmp = {
+  session: createSession({token: 'test-token'}),
   settings: {
     enableGreenboneSensor: true,
     enableKrb5: false,
   },
+  credentials: {
+    getAll: testing.fn().mockResolvedValue(new Response(credentials)),
+  },
+  portlists: {
+    getAll: testing.fn().mockResolvedValue(new Response(portLists)),
+  },
 };
 
 describe('TargetDialog tests', () => {
-  test('should render with default values', () => {
+  test('should render with default values', async () => {
     const handleClose = testing.fn();
     const handleChange = testing.fn();
     const handleSave = testing.fn();
@@ -86,7 +102,6 @@ describe('TargetDialog tests', () => {
 
     render(
       <TargetDialog
-        credentials={credentials}
         onClose={handleClose}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
@@ -94,6 +109,8 @@ describe('TargetDialog tests', () => {
         onSave={handleSave}
       />,
     );
+
+    await wait();
 
     const fileInputs = screen.queryFileInputs();
 
@@ -172,7 +189,7 @@ describe('TargetDialog tests', () => {
     expect(reverseLookupUnifyInputs[1]).toBeChecked();
   });
 
-  test('should display value from props', () => {
+  test('should display value from props', async () => {
     const handleClose = testing.fn();
     const handleChange = testing.fn();
     const handleSave = testing.fn();
@@ -185,7 +202,6 @@ describe('TargetDialog tests', () => {
         aliveTests={[SCAN_CONFIG_DEFAULT]}
         allowSimultaneousIPs={false}
         comment="hello world"
-        credentials={credentials}
         excludeHosts={[]}
         hosts={['123.455.67.434']}
         inUse={false}
@@ -200,6 +216,8 @@ describe('TargetDialog tests', () => {
         onSave={handleSave}
       />,
     );
+
+    await wait();
 
     const fileInputs = screen.queryFileInputs();
 
@@ -291,7 +309,6 @@ describe('TargetDialog tests', () => {
         aliveTests={[SCAN_CONFIG_DEFAULT]}
         allowSimultaneousIPs={false}
         comment="hello world"
-        credentials={credentials}
         excludeHosts={[]}
         hosts={['123.455.67.434']}
         inUse={false}
@@ -359,7 +376,6 @@ describe('TargetDialog tests', () => {
         aliveTests={[SCAN_CONFIG_DEFAULT]}
         allowSimultaneousIPs={false}
         comment="hello world"
-        credentials={credentials}
         excludeHosts={[]}
         hosts={['123.455.67.434']}
         inUse={false}
@@ -399,7 +415,6 @@ describe('TargetDialog tests', () => {
         aliveTests={[SCAN_CONFIG_DEFAULT]}
         allowSimultaneousIPs={false}
         comment="hello world"
-        credentials={credentials}
         excludeHosts={[]}
         hosts={['123.455.67.434']}
         inUse={false}
@@ -459,20 +474,20 @@ describe('TargetDialog tests', () => {
       const handleSave = testing.fn();
       const handleCreate = testing.fn();
 
-      const gmp = {
+      const krb5Gmp = {
+        ...gmp,
         settings: {
-          enableGreenboneSensor: true,
+          ...gmp.settings,
           enableKrb5: true,
         },
       };
-      const {render} = rendererWith({gmp, capabilities: true});
+      const {render} = rendererWith({gmp: krb5Gmp, capabilities: true});
 
       render(
         <TargetDialog
           aliveTests={[SCAN_CONFIG_DEFAULT]}
           allowSimultaneousIPs={false}
           comment="hello world"
-          credentials={credentials}
           excludeHosts={[]}
           hosts={['123.455.67.434']}
           inUse={false}
@@ -517,7 +532,6 @@ describe('TargetDialog tests', () => {
         aliveTests={[SCAN_CONFIG_DEFAULT]}
         allowSimultaneousIPs={false}
         comment="hello world"
-        credentials={credentials}
         excludeHosts={[]}
         hosts={['123.455.67.434']}
         inUse={false}
@@ -546,7 +560,7 @@ describe('TargetDialog tests', () => {
     expect(selectItems[1]).toHaveTextContent('ssh_key');
   });
 
-  test('should disable editing certain fields if target is in use', () => {
+  test('should disable editing certain fields if target is in use', async () => {
     const handleClose = testing.fn();
     const handleChange = testing.fn();
     const handleSave = testing.fn();
@@ -559,7 +573,6 @@ describe('TargetDialog tests', () => {
         aliveTests={[SCAN_CONFIG_DEFAULT]}
         allowSimultaneousIPs={false}
         comment="hello world"
-        credentials={credentials}
         excludeHosts={[]}
         hosts={['123.455.67.434']}
         inUse={true}
@@ -575,6 +588,8 @@ describe('TargetDialog tests', () => {
         onSave={handleSave}
       />,
     );
+
+    await wait();
 
     expect(screen.getDialogContent()).toHaveTextContent('Elevate privileges');
 
@@ -613,7 +628,6 @@ describe('TargetDialog tests', () => {
 
     render(
       <TargetDialog
-        credentials={credentials}
         onClose={handleClose}
         onNewCredentialsClick={handleCreate}
         onNewPortListClick={handleCreate}
@@ -715,11 +729,7 @@ describe('TargetDialog tests', () => {
         const {render} = rendererWith({gmp, capabilities: true});
 
         render(
-          <TargetDialog
-            credentials={credentials}
-            inUse={false}
-            onNewCredentialsClick={handleCreate}
-          />,
+          <TargetDialog inUse={false} onNewCredentialsClick={handleCreate} />,
         );
 
         const newIcon = screen.getByTestId(testId);

@@ -47,7 +47,7 @@ const createGmp = ({
       enableGreenboneSensor: true,
       enableKrb5: false,
     },
-    session: createSession(),
+    session: createSession({token: 'test-token'}),
     user: {
       currentSettings: testing.fn().mockResolvedValue(
         new Response({
@@ -112,7 +112,9 @@ describe('TargetComponent tests', () => {
     await wait();
 
     expect(screen.getDialog()).toBeInTheDocument();
+    await wait();
     fireEvent.click(screen.getDialogSaveButton());
+    await wait();
 
     expect(gmp.target.create).toHaveBeenCalledWith({
       aliveTests: [SCAN_CONFIG_DEFAULT],
@@ -143,12 +145,10 @@ describe('TargetComponent tests', () => {
 
     expect(onCreated).toHaveBeenCalledWith(
       expect.objectContaining({
-        _data: {
-          envelope: {
-            action_result: expect.objectContaining({
-              id: 'new-id',
-            }),
-          },
+        envelope: {
+          action_result: expect.objectContaining({
+            id: 'new-id',
+          }),
         },
       }),
     );
@@ -171,10 +171,11 @@ describe('TargetComponent tests', () => {
 
     fireEvent.click(screen.getByTestId('open'));
     await wait();
+    await wait();
     fireEvent.click(screen.getDialogSaveButton());
     await wait();
 
-    expect(onCreateError).toHaveBeenCalledWith(error);
+    expect(onCreateError.mock.calls[0][0]).toBe(error);
   });
 
   test('should allow to edit an existing target', async () => {
@@ -203,7 +204,9 @@ describe('TargetComponent tests', () => {
     await wait();
 
     expect(screen.getDialog()).toBeInTheDocument();
+    await wait();
     fireEvent.click(screen.getDialogSaveButton());
+    await wait();
 
     expect(gmp.target.save).toHaveBeenCalledWith({
       aliveTests: [],
@@ -234,12 +237,10 @@ describe('TargetComponent tests', () => {
 
     expect(onSaved).toHaveBeenCalledWith(
       expect.objectContaining({
-        _data: {
-          envelope: {
-            action_result: expect.objectContaining({
-              id: 'saved-id',
-            }),
-          },
+        envelope: {
+          action_result: expect.objectContaining({
+            id: 'saved-id',
+          }),
         },
       }),
     );
@@ -261,10 +262,11 @@ describe('TargetComponent tests', () => {
 
     fireEvent.click(screen.getByTestId('open'));
     await wait();
+    await wait();
     fireEvent.click(screen.getDialogSaveButton());
     await wait();
 
-    expect(onSaveError).toHaveBeenCalledWith(error);
+    expect(onSaveError.mock.calls[0][0]).toBe(error);
   });
 
   test('only saves editable fields for a target in use', async () => {
@@ -290,6 +292,7 @@ describe('TargetComponent tests', () => {
     fireEvent.click(screen.getByTestId('button'));
     await wait();
     fireEvent.click(screen.getDialogSaveButton());
+    await wait();
 
     expect(gmp.target.save).toHaveBeenCalledWith({
       id: '1234',
@@ -316,18 +319,17 @@ describe('TargetComponent tests', () => {
 
     const button = screen.getByTestId('button');
     fireEvent.click(button);
-    expect(gmp.target.clone).toHaveBeenCalledWith(target);
+    await wait();
+    expect(gmp.target.clone).toHaveBeenCalledWith({id: target.id});
 
     await wait();
 
     expect(onCloned).toHaveBeenCalledWith(
       expect.objectContaining({
-        _data: {
-          envelope: {
-            action_result: expect.objectContaining({
-              id: 'cloned-id',
-            }),
-          },
+        envelope: {
+          action_result: expect.objectContaining({
+            id: 'cloned-id',
+          }),
         },
       }),
     );
@@ -404,8 +406,10 @@ describe('TargetComponent tests', () => {
       </TargetComponent>,
     );
 
-    await actions?.delete(new Target({id: 'target-id', name: 'Target'}));
-    expect(onDeleteError).toHaveBeenCalledWith(error);
+    await expect(
+      actions?.delete(new Target({id: 'target-id', name: 'Target'})),
+    ).rejects.toThrow(error);
+    expect(onDeleteError.mock.calls[0][0]).toBe(error);
   });
 
   test('should create a credential from the target dialog', async () => {
