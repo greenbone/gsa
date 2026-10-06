@@ -15,12 +15,15 @@ import {
 } from 'react';
 import {ActionIcon, Group, Popover, Stack, Text} from '@mantine/core';
 import {showSuccessNotification} from '@greenbone/ui-lib';
+import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
 import styled from 'styled-components';
 import Button from 'web/components/form/Button';
 import {DownloadIcon, XIcon} from 'web/components/icon';
+import Link from 'web/components/link/Link';
 import useReportExport, {
   type ReportExportJob,
   type ReportExportState,
+  type StartDirectReportDownloadParams,
   type StartReportExportParams,
 } from 'web/hooks/useReportExport';
 import useTranslation, {type TranslateFunc} from 'web/hooks/useTranslation';
@@ -28,9 +31,11 @@ import Theme from 'web/utils/theme';
 
 interface ReportExportManagerContextValue {
   start: (params: StartReportExportParams) => Promise<boolean>;
+  startDirect: (params: StartDirectReportDownloadParams) => boolean;
   cancel: (key: string) => Promise<void>;
   dismiss: (key: string) => void;
   isActive: boolean;
+  supportsCancellation: boolean;
   jobs: ReportExportJob[];
 }
 
@@ -114,7 +119,8 @@ const getStatusText = (
 };
 
 export const ReportExportActivity = () => {
-  const {cancel, dismiss, isActive, jobs} = useReportExportManager();
+  const {cancel, dismiss, isActive, jobs, supportsCancellation} =
+    useReportExportManager();
   const [_] = useTranslation();
   const [opened, setOpened] = useState(false);
   const previousJobCount = useRef(jobs.length);
@@ -184,19 +190,27 @@ export const ReportExportActivity = () => {
             {jobs.map(job => {
               const {state} = job;
               const canCancel =
-                state.status === 'pending' || state.status === 'running';
+                supportsCancellation &&
+                !job.directDownload &&
+                (state.status === 'creating' ||
+                  state.status === 'checking' ||
+                  state.status === 'pending' ||
+                  state.status === 'running' ||
+                  job.downloadPending);
               const jobIsActive =
                 state.status === 'creating' ||
                 state.status === 'checking' ||
                 state.status === 'pending' ||
                 state.status === 'running' ||
-                state.status === 'cancel_requested';
-              const cancellationUnsupported = /unknown command/i.test(
-                job.cancelError?.message ?? '',
-              );
+                state.status === 'cancel_requested' ||
+                job.downloadPending ||
+                job.directPending ||
+                job.cancelPending;
               const isStatusError =
                 state.status === 'error' || Boolean(job.downloadError);
-              const statusText = job.downloadError
+              const statusText = job.directPending
+                ? _('Downloading report')
+                : job.downloadError
                 ? _('Download failed: {{error}}', {
                     error: job.downloadError.message,
                   })
@@ -207,10 +221,16 @@ export const ReportExportActivity = () => {
                   <Stack gap="xs">
                     <Text fw={600} size="sm">
                       {job.reportTitle
-                        ? _('Report export: {{report}}', {
+                        ? job.directDownload
+                          ? _('Report download: {{report}}', {
+                              report: job.reportTitle,
+                            })
+                          : _('Report export: {{report}}', {
                             report: job.reportTitle,
                           })
-                        : _('Report export')}
+                        : job.directDownload
+                          ? _('Report download')
+                          : _('Report export')}
                     </Text>
                     <ActivityStatus
                       aria-live={jobIsActive ? 'polite' : undefined}
@@ -219,6 +239,9 @@ export const ReportExportActivity = () => {
                     >
                       {statusText}
                     </ActivityStatus>
+                    {job.reportUrl && (
+                      <Link to={job.reportUrl}>{_('View report')}</Link>
+                    )}
                     {job.statusError && (
                       <ErrorText role="status" size="sm">
                         {_('Status check failed; retrying: {{error}}', {
@@ -233,20 +256,22 @@ export const ReportExportActivity = () => {
                         })}
                       </ErrorText>
                     )}
-                    {jobIsActive && !cancellationUnsupported && (
+                    {jobIsActive && canCancel && (
                       <Button
-                        disabled={!canCancel}
+                        disabled={!canCancel || job.cancelPending}
                         title={
-                          job.cancelError
-                            ? _('Retry cancellation')
-                            : _('Cancel export')
+                          job.cancelPending
+                            ? _('Cancellation requested')
+                            : job.cancelError
+                              ? _('Retry cancellation')
+                              : _('Cancel report export')
                         }
                         onClick={() => void cancel(job.key)}
                       />
                     )}
                     {!jobIsActive && (
                       <Button
-                        title={_('Dismiss')}
+                        title={_('Remove from activity')}
                         onClick={() => dismiss(job.key)}
                       />
                     )}
@@ -263,8 +288,11 @@ export const ReportExportActivity = () => {
 
 const ReportExportManager = ({children}: ReportExportManagerProps) => {
   const [_] = useTranslation();
+  const capabilities = useContext(CapabilitiesContext);
+  const supportsCancellation =
+    capabilities?.mayOp('cancel_report_export') ?? false;
   const handleDownload = useCallback(
-    (data: ArrayBuffer, filename: string) => {
+    (data: ArrayBuffer | string, filename: string) => {
       const url = window.URL.createObjectURL(new Blob([data]));
       const anchor = document.createElement('a');
       anchor.download = filename;
@@ -279,20 +307,27 @@ const ReportExportManager = ({children}: ReportExportManagerProps) => {
         anchor.remove();
         window.URL.revokeObjectURL(url);
       }, 1000);
-      showSuccessNotification('', _('Report export download started.'));
+      showSuccessNotification('', _('Report download started.'));
     },
     [_],
   );
   const reportExport = useReportExport({onDownload: handleDownload});
+  const cancel = useCallback(
+    (key: string) =>
+      supportsCancellation ? reportExport.cancel(key) : Promise.resolve(),
+    [reportExport.cancel, supportsCancellation],
+  );
   const contextValue = useMemo(
     () => ({
       start: reportExport.start,
-      cancel: reportExport.cancel,
+      startDirect: reportExport.startDirect,
+      cancel,
       dismiss: reportExport.dismiss,
       isActive: reportExport.isActive,
+      supportsCancellation,
       jobs: reportExport.jobs,
     }),
-    [reportExport],
+    [cancel, reportExport, supportsCancellation],
   );
 
   return (

@@ -16,7 +16,7 @@ import {
   type RefetchIntervalFn,
 } from 'web/queries/helpers';
 
-export const REPORT_EXPORT_POLL_INTERVAL = 3000;
+export const REPORT_EXPORT_POLL_INTERVAL = 500;
 
 interface UseGetReportExportParams {
   id?: string;

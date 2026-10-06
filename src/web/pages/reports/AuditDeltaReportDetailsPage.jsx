@@ -26,9 +26,11 @@ import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import DeltaReportDetailsContent from 'web/pages/reports/DeltaReportDetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
-import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
+import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
+import isPdfReportFormat from 'web/pages/reports/isPdfReportFormat';
 import TargetComponent from 'web/pages/targets/TargetComponent';
+import {ROUTES} from 'web/route-paths';
 import {
   loadAllEntities as loadFilters,
   selector as filterSelector,
@@ -87,6 +89,10 @@ const AuditDeltaReportDetails = props => {
       sortReverse: true,
     },
     errors: {
+      reportUrl:
+        reportId && deltaReportId
+          ? ROUTES.auditReportDelta.url(reportId, deltaReportId)
+          : undefined,
       sortField: 'error',
       sortReverse: false,
     },
@@ -127,7 +133,10 @@ const AuditDeltaReportDetails = props => {
   });
   const isLoading = !isDefined(entity);
 
-  const {start: startReportExport} = useReportExportManager();
+  const {
+    start: startReportExport,
+    startDirect: startDirectReportDownload,
+  } = useReportExportManager();
 
   useEffect(() => {
     dispatch(loadUserSettingDefaults(gmp)());
@@ -283,8 +292,7 @@ const AuditDeltaReportDetails = props => {
       ? reportFormats.find(format => format.id === reportFormatId)
       : undefined;
 
-    return startReportExport({
-      kind: 'delta_audit',
+    const request = {
       filename: generateFilename({
         creationTime: entity.creationTime,
         extension: reportFormat?.extension || 'unknown',
@@ -297,13 +305,23 @@ const AuditDeltaReportDetails = props => {
         username,
       }),
       reportTitle: entity.task?.name || _('Report'),
+      reportUrl:
+        reportId && deltaReportId
+          ? ROUTES.auditReportDelta.url(reportId, deltaReportId)
+          : undefined,
       payload: {
         report_id: entity.id,
         format_id: reportFormatId,
         delta_report_id: deltaReportId,
         filter: newFilter,
       },
-    }).then(started => {
+    };
+    const startPromise = isPdfReportFormat(reportFormat)
+      ? startReportExport({kind: 'delta_audit', ...request})
+      : Promise.resolve(
+          startDirectReportDownload({kind: 'delta_audit', ...request}),
+        );
+    return startPromise.then(started => {
       if (started) setShowDownloadReportDialog(false);
     });
   };
