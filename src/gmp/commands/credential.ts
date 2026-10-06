@@ -49,7 +49,7 @@ interface CredentialCommandSnmpFields {
 }
 
 // Create operation interfaces
-type CredentialCommandCreateArgs = CredentialCommandBaseArgs;
+export type CredentialCommandCreateParams = CredentialCommandBaseArgs;
 
 interface CredentialCommandKrb5Args
   extends CredentialCommandBaseArgs, CredentialCommandKrb5Fields {}
@@ -145,9 +145,9 @@ class CredentialCommand extends EntityCommand<
     };
   }
 
-  create(args: CredentialCommandCreateArgs) {
+  create(args: CredentialCommandCreateParams) {
     const baseData = this.createBase(args);
-    return this.action(baseData);
+    return this.entityAction(baseData);
   }
 
   createKrb5(args: CredentialCommandKrb5Args) {
