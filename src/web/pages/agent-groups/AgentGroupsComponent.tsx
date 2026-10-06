@@ -14,7 +14,7 @@ import {
   useCreateAgentGroup,
   useDeleteAgentGroup,
   useSaveAgentGroup,
-} from 'web/hooks/use-query/agent-groups';
+} from 'web/hooks/use-query/agent-group';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentGroupsDialog, {
   type AgentGroupDialogData,
