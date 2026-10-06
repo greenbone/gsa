@@ -6,7 +6,7 @@
 import {type CredentialCommandCreateParams} from 'gmp/commands/credential';
 import {type EntityActionData} from 'gmp/commands/entity';
 import useGmp from 'web/hooks/useGmp';
-import useGmpMutation from 'web/queries/useGmpMutation';
+import useCreateMutation from 'web/queries/useCreateMutation';
 
 interface UseCredentialMutationCallbacks<TResponse> {
   onSuccess?: (response: TResponse) => void;
@@ -18,11 +18,16 @@ export const useCreateCredential = ({
   onError,
 }: UseCredentialMutationCallbacks<EntityActionData> = {}) => {
   const gmp = useGmp();
-  return useGmpMutation<CredentialCommandCreateParams, EntityActionData>({
+  return useCreateMutation<
+    CredentialCommandCreateParams,
+    EntityActionData,
+    Error
+  >({
     gmpMethod: async data => {
       const response = await gmp.credential.create(data);
       return response.data;
     },
+    entityType: 'credential',
     invalidateQueryIds: ['get_credentials'],
     onSuccess,
     onError,

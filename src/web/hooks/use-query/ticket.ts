@@ -12,6 +12,7 @@ import {
 } from 'gmp/models/ticket';
 import useGmp from 'web/hooks/useGmp';
 import useCloneMutation from 'web/queries/useCloneMutation';
+import useCreateMutation from 'web/queries/useCreateMutation';
 import useGetEntity from 'web/queries/useGetEntity';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
@@ -57,11 +58,12 @@ export const useCreateTicket = ({
   onError,
 }: UseTicketMutationCallbacks<EntityActionData> = {}) => {
   const gmp = useGmp();
-  return useGmpMutation<TicketCreateInput, EntityActionData>({
+  return useCreateMutation<TicketCreateInput, EntityActionData, Error>({
     gmpMethod: async data => {
       const response = await gmp.ticket.create(data);
       return response.data;
     },
+    entityType: 'ticket',
     invalidateQueryIds: ['get_tickets'],
     onSuccess,
     onError,

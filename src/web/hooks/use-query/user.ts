@@ -10,6 +10,7 @@ import type User from 'gmp/models/user';
 import useGmp from 'web/hooks/useGmp';
 import {type RefetchIntervalFn} from 'web/queries/helpers';
 import useCloneMutation from 'web/queries/useCloneMutation';
+import useCreateMutation from 'web/queries/useCreateMutation';
 import useGetEntity from 'web/queries/useGetEntity';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
@@ -63,11 +64,12 @@ export const useCreateUser = ({
   onError,
 }: UseUserMutationCallbacks<EntityActionData> = {}) => {
   const gmp = useGmp();
-  return useGmpMutation<UserCreateInput, EntityActionData>({
+  return useCreateMutation<UserCreateInput, EntityActionData, Error>({
     gmpMethod: async data => {
       const response = await gmp.user.create(data);
       return response.data;
     },
+    entityType: 'user',
     invalidateQueryIds: ['get_users'],
     onSuccess,
     onError,
