@@ -1604,6 +1604,7 @@
   "Port Counts: Total": "ポート数: 合計",
   "Port Counts: UDP": "ポート数: UDP",
   "Port List": "ポートリスト",
+  "Port List imported successfully.": "",
   "Port List: {{name}}": "ポートリスト: {{name}}",
   "Port Lists": "ポートリスト",
   "Port Lists Filter": "ポートリストフィルター",

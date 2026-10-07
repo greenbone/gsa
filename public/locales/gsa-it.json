@@ -1604,6 +1604,7 @@
   "Port Counts: Total": "Conteggi porte: Totale",
   "Port Counts: UDP": "Conteggi porte: UDP",
   "Port List": "Elenco porte",
+  "Port List imported successfully.": "",
   "Port List: {{name}}": "Elenco porte: {{name}}",
   "Port Lists": "Elenchi porte",
   "Port Lists Filter": "Filtro elenchi porte",

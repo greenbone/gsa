@@ -1604,6 +1604,7 @@
   "Port Counts: Total": "Portanzahl: Gesamt",
   "Port Counts: UDP": "Portanzahl: UDP",
   "Port List": "Portliste",
+  "Port List imported successfully.": "Portliste erfolgreich importiert.",
   "Port List: {{name}}": "Portliste: {{name}}",
   "Port Lists": "Portlisten",
   "Port Lists Filter": "Portlisten-Filter",
