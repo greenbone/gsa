@@ -3,11 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type EntityActionResponse} from 'gmp/commands/entity';
-import {
-  type OciImageTargetCreateParams,
-  type OciImageTargetSaveParams,
-} from 'gmp/commands/oci-image-target';
 import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
@@ -16,23 +11,14 @@ import {isFilterType} from 'gmp/models/filter/utils';
 import type OciImageTarget from 'gmp/models/oci-image-target';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import useCloneMutation from 'web/queries/useCloneMutation';
-import useCreateMutation from 'web/queries/useCreateMutation';
 import useGetEntities from 'web/queries/useGetEntities';
 import useGmpMutation from 'web/queries/useGmpMutation';
-import useMoveToTrashCan from 'web/queries/useMoveToTrashCan';
-import useSaveMutation from 'web/queries/useSaveMutation';
 
 type OciImageTargetBulkInput = OciImageTarget[] | FilterType;
 
-interface UseCreateOciImageTargetParams {
-  onSuccess?: (data: EntityActionResponse) => void;
-  onError?: (error: Error) => void;
-}
-
 interface UseModifyOciImageTargetParams {
-  onSuccess?: () => void;
   onError?: (error: Error) => void;
+  onSuccess?: () => void;
 }
 
 export const useGetOciImageTargets = ({filter}: {filter?: FilterType}) => {
@@ -42,74 +28,6 @@ export const useGetOciImageTargets = ({filter}: {filter?: FilterType}) => {
     queryId: 'get_oci_image_targets',
     filter,
     gmpMethod: gmp.ociimagetargets.get.bind(gmp.ociimagetargets),
-  });
-};
-
-export const useCreateOciImageTarget = ({
-  onSuccess,
-  onError,
-}: UseCreateOciImageTargetParams) => {
-  const gmp = useGmp();
-
-  return useCreateMutation<
-    OciImageTargetCreateParams,
-    EntityActionResponse,
-    Rejection
-  >({
-    gmpMethod: gmp.ociimagetarget.create.bind(gmp.ociimagetarget),
-    entityType: 'ociimagetarget',
-    invalidateQueryIds: ['get_oci_image_targets'],
-    onError,
-    onSuccess,
-  });
-};
-
-export const useSaveOciImageTarget = ({
-  onError,
-  onSuccess,
-}: UseModifyOciImageTargetParams) => {
-  const gmp = useGmp();
-
-  return useSaveMutation<
-    OciImageTargetSaveParams,
-    EntityActionResponse,
-    Rejection
-  >({
-    gmpMethod: gmp.ociimagetarget.save.bind(gmp.ociimagetarget),
-    entityType: 'ociimagetarget',
-    invalidateQueryIds: ['get_oci_image_targets'],
-    onError,
-    onSuccess,
-  });
-};
-
-export const useDeleteOciImageTarget = ({
-  onError,
-  onSuccess,
-}: UseModifyOciImageTargetParams) => {
-  const gmp = useGmp();
-
-  return useMoveToTrashCan({
-    gmpMethod: gmp.ociimagetarget.delete.bind(gmp.ociimagetarget),
-    entityType: 'ociimagetarget',
-    invalidateQueryIds: ['get_oci_image_targets'],
-    onSuccess,
-    onError,
-  });
-};
-
-export const useCloneOciImageTarget = ({
-  onError,
-  onSuccess,
-}: UseCreateOciImageTargetParams) => {
-  const gmp = useGmp();
-
-  return useCloneMutation<EntityActionResponse, Rejection>({
-    gmpMethod: gmp.ociimagetarget.clone.bind(gmp.ociimagetarget),
-    entityType: 'ociimagetarget',
-    invalidateQueryIds: ['get_oci_image_targets'],
-    onError,
-    onSuccess,
   });
 };
 

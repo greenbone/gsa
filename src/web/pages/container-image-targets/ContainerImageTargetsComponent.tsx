@@ -22,7 +22,7 @@ import {
   useCreateOciImageTarget,
   useDeleteOciImageTarget,
   useSaveOciImageTarget,
-} from 'web/hooks/use-query/oci-image-targets';
+} from 'web/hooks/use-query/oci-image-target';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import ContainerImageTargetsDialog, {
