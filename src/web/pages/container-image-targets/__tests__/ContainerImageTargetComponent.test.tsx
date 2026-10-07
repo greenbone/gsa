@@ -16,12 +16,12 @@ type MaybeMock<T> = T | ((...args: unknown[]) => Promise<T>);
 
 type CreateGmpParams = {
   getAllCredentials?: unknown[];
-  createOciImageTarget?: MaybeMock<{id: string}>;
-  saveOciImageTarget?: MaybeMock<{id: string}>;
-  cloneOciImageTarget?: MaybeMock<{id: string}>;
+  createOciImageTarget?: MaybeMock<Response<{id: string}>>;
+  saveOciImageTarget?: MaybeMock<Response<{id: string}>>;
+  cloneOciImageTarget?: MaybeMock<Response<{id: string}>>;
   deleteOciImageTarget?: MaybeMock<undefined>;
   exportOciImageTarget?: MaybeMock<Response | string>;
-  createCredentialResponse?: MaybeMock<unknown>;
+  createCredentialResponse?: MaybeMock<Response<{id: string}>>;
   createCredential?: MaybeMock<unknown>;
 };
 
@@ -43,12 +43,12 @@ const assertHandlerError = (mock: MockFn, error: Error) => {
 
 const createGmp = ({
   getAllCredentials = [],
-  createOciImageTarget = {id: 'created-id'},
-  saveOciImageTarget = {id: 'saved-id'},
-  cloneOciImageTarget = {id: 'cloned-id'},
+  createOciImageTarget = new Response({id: 'created-id'}),
+  saveOciImageTarget = new Response({id: 'saved-id'}),
+  cloneOciImageTarget = new Response({id: 'cloned-id'}),
   deleteOciImageTarget,
   exportOciImageTarget = new Response('some-data'),
-  createCredentialResponse = {data: {id: 'cred-id'}},
+  createCredentialResponse = new Response({id: 'cred-id'}),
   createCredential = testing.fn().mockResolvedValue(createCredentialResponse),
 }: CreateGmpParams = {}): {
   credentials: {getAll: ReturnType<typeof testing.fn>};
@@ -218,7 +218,7 @@ describe('ContainerImageTargetsComponent tests', () => {
       screen.queryByText('Edit Container Image Target - foo'),
     ).not.toBeInTheDocument();
     expect(onSaveError).not.toHaveBeenCalled();
-    expect(onSaved).toHaveBeenCalledWith({id: 'saved-id'});
+    expect(onSaved).toHaveBeenCalledWith(undefined);
   });
 
   test('should call onSaveError if saving fails and show error', async () => {
@@ -506,7 +506,7 @@ describe('ContainerImageTargetsComponent tests', () => {
     expect(
       screen.queryByText('Edit Container Image Target - foo'),
     ).not.toBeInTheDocument();
-    expect(onSaved).toHaveBeenCalledWith({id: 'saved-id'});
+    expect(onSaved).toHaveBeenCalledWith(undefined);
   });
 
   test('should handle editing target with undefined excludeImages', async () => {
@@ -539,7 +539,7 @@ describe('ContainerImageTargetsComponent tests', () => {
     expect(
       screen.queryByText('Edit Container Image Target - foo'),
     ).not.toBeInTheDocument();
-    expect(onSaved).toHaveBeenCalledWith({id: 'saved-id'});
+    expect(onSaved).toHaveBeenCalledWith(undefined);
   });
 
   test('should render edit dialog when both imageReferences and excludeImages are undefined', async () => {

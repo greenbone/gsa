@@ -16,12 +16,12 @@ type MaybeMock<T> = T | ((...args: unknown[]) => Promise<T>);
 
 type CreateGmpParams = {
   getAllCredentials?: unknown[];
-  createWebApplicationTarget?: MaybeMock<{id: string}>;
-  saveWebApplicationTarget?: MaybeMock<{id: string}>;
-  cloneWebApplicationTarget?: MaybeMock<{id: string}>;
+  createWebApplicationTarget?: MaybeMock<Response<{id: string}>>;
+  saveWebApplicationTarget?: MaybeMock<Response<{id: string}>>;
+  cloneWebApplicationTarget?: MaybeMock<Response<{id: string}>>;
   deleteWebApplicationTarget?: MaybeMock<undefined>;
   exportWebApplicationTarget?: MaybeMock<Response | string>;
-  createCredential?: MaybeMock<unknown>;
+  createCredential?: MaybeMock<Response<{id: string}>>;
 };
 
 type MockFn = ReturnType<typeof testing.fn>;
@@ -36,12 +36,14 @@ const assertHandlerError = (mock: MockFn, error: Error) => {
 
 const createGmp = ({
   getAllCredentials = [],
-  createWebApplicationTarget = {id: 'created-id'},
-  saveWebApplicationTarget = {id: 'saved-id'},
-  cloneWebApplicationTarget = {id: 'cloned-id'},
+  createWebApplicationTarget = new Response({id: 'created-id'}),
+  saveWebApplicationTarget = new Response({id: 'saved-id'}),
+  cloneWebApplicationTarget = new Response({id: 'cloned-id'}),
   deleteWebApplicationTarget,
   exportWebApplicationTarget = new Response('some-data'),
-  createCredential = testing.fn().mockResolvedValue({data: {id: 'cred-id'}}),
+  createCredential = testing
+    .fn()
+    .mockResolvedValue(new Response({id: 'cred-id'})),
 }: CreateGmpParams = {}): {
   credentials: {getAll: ReturnType<typeof testing.fn>};
   webapplicationtarget: Record<string, ReturnType<typeof testing.fn>>;

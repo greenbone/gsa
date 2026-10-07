@@ -75,15 +75,14 @@ export const useCreateUser = ({
 export const useSaveUser = ({
   onSuccess,
   onError,
-}: UseUserMutationCallbacks<EntityActionData> = {}) => {
+}: UseUserMutationCallbacks<void> = {}) => {
   const gmp = useGmp();
-  return useGmpMutation<UserSaveInput, EntityActionData>({
+  return useGmpMutation<UserSaveInput, void>({
     gmpMethod: async data => {
-      const response = await gmp.user.save({
+      await gmp.user.save({
         ...data,
         oldName: data.oldName ?? data.name,
       });
-      return response.data;
     },
     invalidateQueryIds: ['get_users', 'get_user'],
     onSuccess,

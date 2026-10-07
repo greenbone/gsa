@@ -7,7 +7,6 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, wait} from 'web/testing';
 import {type EntityActionData} from 'gmp/commands/entity';
 import Response from 'gmp/http/response';
-import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import AgentGroup from 'gmp/models/agent-group';
 import {createSession} from 'gmp/testing';
 import Button from 'web/components/form/Button';
@@ -19,8 +18,10 @@ const sampleAgentGroup: AgentGroup = new AgentGroup({
 });
 
 const createGmp = () => {
-  const createMock = testing.fn().mockResolvedValue({id: '123'});
-  const cloneMock = testing.fn().mockResolvedValue({id: 'cloned'});
+  const createMock = testing.fn().mockResolvedValue(new Response({id: '123'}));
+  const cloneMock = testing
+    .fn()
+    .mockResolvedValue(new Response({id: 'cloned'}));
   const deleteMock = testing.fn().mockResolvedValue(undefined);
   const saveMock = testing.fn().mockResolvedValue(undefined);
 
@@ -52,9 +53,7 @@ describe('AgentGroupsComponent tests', () => {
 
     type AgentGroupsActions = {
       create: () => void;
-      clone: (
-        entity: AgentGroup,
-      ) => Promise<Response<EntityActionData, XmlMeta>>;
+      clone: (entity: AgentGroup) => Promise<EntityActionData>;
       delete: (entity: AgentGroup) => Promise<void>;
       edit: (entity: AgentGroup) => void;
     };
@@ -83,17 +82,14 @@ describe('AgentGroupsComponent tests', () => {
 
     await wait();
 
-    expect(saveMock).toHaveBeenCalledWith(
-      expect.objectContaining({
-        id: 'g1',
-        name: 'group1',
-        comment: '',
-        scannerId: '',
-        agentIds: [],
-        schedulerCronTime: '0 */12 * * *',
-      }),
-      expect.anything(),
-    );
+    expect(saveMock).toHaveBeenCalledWith({
+      id: 'g1',
+      name: 'group1',
+      comment: '',
+      scannerId: '',
+      agentIds: [],
+      schedulerCronTime: '0 */12 * * *',
+    });
     expect(onSaved).toHaveBeenCalled();
   });
 
@@ -163,7 +159,7 @@ describe('AgentGroupsComponent tests', () => {
     cloneMock.mockRejectedValue(error);
 
     let cloneFn:
-      | ((entity: AgentGroup) => Promise<Response<EntityActionData, XmlMeta>>)
+      | ((entity: AgentGroup) => Promise<EntityActionData>)
       | undefined;
 
     const {render} = rendererWith({gmp});

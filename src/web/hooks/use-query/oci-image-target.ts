@@ -3,12 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type EntityActionResponse} from 'gmp/commands/entity';
+import {type EntityActionData} from 'gmp/commands/entity';
 import {
   type OciImageTargetCreateParams,
   type OciImageTargetSaveParams,
 } from 'gmp/commands/oci-image-target';
-import type Rejection from 'gmp/http/rejection';
 import useGmp from 'web/hooks/useGmp';
 import useCloneMutation from 'web/queries/useCloneMutation';
 import useCreateMutation from 'web/queries/useCreateMutation';
@@ -16,7 +15,7 @@ import useMoveToTrashCan from 'web/queries/useMoveToTrashCan';
 import useSaveMutation from 'web/queries/useSaveMutation';
 
 interface UseCreateOciImageTargetParams {
-  onSuccess?: (data: EntityActionResponse) => void;
+  onSuccess?: (data: EntityActionData) => void;
   onError?: (error: Error) => void;
 }
 
@@ -31,12 +30,11 @@ export const useCreateOciImageTarget = ({
 }: UseCreateOciImageTargetParams) => {
   const gmp = useGmp();
 
-  return useCreateMutation<
-    OciImageTargetCreateParams,
-    EntityActionResponse,
-    Rejection
-  >({
-    gmpMethod: gmp.ociimagetarget.create.bind(gmp.ociimagetarget),
+  return useCreateMutation<OciImageTargetCreateParams, EntityActionData>({
+    gmpMethod: async data => {
+      const response = await gmp.ociimagetarget.create(data);
+      return response.data;
+    },
     entityType: 'ociimagetarget',
     invalidateQueryIds: ['get_oci_image_targets'],
     onError,
@@ -50,12 +48,10 @@ export const useSaveOciImageTarget = ({
 }: UseModifyOciImageTargetParams) => {
   const gmp = useGmp();
 
-  return useSaveMutation<
-    OciImageTargetSaveParams,
-    EntityActionResponse,
-    Rejection
-  >({
-    gmpMethod: gmp.ociimagetarget.save.bind(gmp.ociimagetarget),
+  return useSaveMutation<OciImageTargetSaveParams>({
+    gmpMethod: async data => {
+      await gmp.ociimagetarget.save(data);
+    },
     entityType: 'ociimagetarget',
     invalidateQueryIds: ['get_oci_image_targets'],
     onError,
@@ -84,8 +80,11 @@ export const useCloneOciImageTarget = ({
 }: UseCreateOciImageTargetParams) => {
   const gmp = useGmp();
 
-  return useCloneMutation<EntityActionResponse, Rejection>({
-    gmpMethod: ({id}) => gmp.ociimagetarget.clone({id}),
+  return useCloneMutation<EntityActionData>({
+    gmpMethod: async ({id}) => {
+      const response = await gmp.ociimagetarget.clone({id});
+      return response.data;
+    },
     entityType: 'ociimagetarget',
     invalidateQueryIds: ['get_oci_image_targets'],
     onError,

@@ -4,7 +4,7 @@
  */
 
 import React, {useState} from 'react';
-import {type EntityActionResponse} from 'gmp/commands/entity';
+import {type EntityActionData} from 'gmp/commands/entity';
 import {
   type OciImageTargetCreateParams,
   type OciImageTargetSaveParams,
@@ -36,7 +36,7 @@ interface ContainerImageTargetComponentRenderProps {
   delete: (entity: OciImageTarget) => Promise<void>;
   edit: (entity: OciImageTarget) => Promise<void>;
   create: () => Promise<void>;
-  clone: (entity: OciImageTarget) => Promise<EntityActionResponse>;
+  clone: (entity: OciImageTarget) => Promise<EntityActionData>;
   download: (entity: OciImageTarget) => Promise<void>;
   save: (entity: OciImageTarget) => Promise<void>;
 }
@@ -49,7 +49,7 @@ interface ContainerImageTargetsComponentProps {
   onDeleteError?: (error: Error) => void;
   onSaved?: () => void;
   onSaveError?: (error: Error) => void;
-  onCreated?: (response: EntityActionResponse) => void;
+  onCreated?: (response: EntityActionData) => void;
   onCreateError?: (error: Error) => void;
   onCloned?: () => void;
   onCloneError?: (error: Error) => void;

@@ -493,9 +493,7 @@ const TaskComponent = ({
     setTargetId(data.id);
   };
 
-  const handleOciImageTargetCreated = (resp: {data: {id?: string}}) => {
-    const {data} = resp;
-
+  const handleOciImageTargetCreated = (data: {id: string}) => {
     setOciImageTargetId(data.id);
   };
 
