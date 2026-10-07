@@ -33,7 +33,7 @@ describe('useEditCredentialStore', () => {
     render(<TestComponent />);
     fireEvent.click(screen.getByRole('button', {name: 'Run'}));
     await waitFor(() => {
-      expect(gmp.credentialstore.edit.mock.calls[0][0]).toEqual(input);
+      expect(gmp.credentialstore.edit).toHaveBeenCalledWith(input);
     });
   });
 });
@@ -51,7 +51,7 @@ describe('useVerifyCredentialStore', () => {
     render(<TestComponent />);
     fireEvent.click(screen.getByRole('button', {name: 'Run'}));
     await waitFor(() => {
-      expect(gmp.credentialstore.verify.mock.calls[0][0]).toEqual(input);
+      expect(gmp.credentialstore.verify).toHaveBeenCalledWith(input);
     });
   });
 });
