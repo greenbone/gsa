@@ -5,7 +5,7 @@
 
 import React, {useState} from 'react';
 import type Agent from 'gmp/models/agent';
-import {useDeleteAgent, useModifyAgent} from 'web/hooks/use-query/agents';
+import {useDeleteAgent, useModifyAgent} from 'web/hooks/use-query/agent';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentDialog, {type AgentDialogState} from 'web/pages/agents/AgentDialog';
 

@@ -14,10 +14,7 @@ import {
   useBulkDisableUpdateToLatestAgents,
   useBulkEnableUpdateToLatestAgents,
   useBulkRevokeAgents,
-  useDeleteAgent,
-  useDownloadAgentSupportBundle,
   useGetAgents,
-  useModifyAgent,
   useSyncAgents,
 } from 'web/hooks/use-query/agents';
 
@@ -96,68 +93,6 @@ describe('useGetAgents', () => {
   });
 });
 
-describe('useModifyAgent', () => {
-  test('should save an agent', async () => {
-    const gmp = createGmp();
-    const {render} = rendererWith({gmp, router: true});
-
-    const TestComponent = () => {
-      const mutation = useModifyAgent();
-      return (
-        <button
-          onClick={() =>
-            mutation.mutate({
-              agentsIds: ['agent-1'],
-              authorized: true,
-            })
-          }
-        >
-          Save
-        </button>
-      );
-    };
-
-    render(<TestComponent />);
-    fireEvent.click(screen.getByRole('button', {name: 'Save'}));
-
-    await waitFor(() => {
-      expect(gmp.agent.save.mock.calls[0][0]).toEqual({
-        agentsIds: ['agent-1'],
-        authorized: true,
-      });
-    });
-  });
-});
-
-describe('useDeleteAgent', () => {
-  test('should delete an agent', async () => {
-    const gmp = createGmp();
-    const {render} = rendererWith({gmp, router: true});
-
-    const TestComponent = () => {
-      const mutation = useDeleteAgent({});
-      return (
-        <button
-          onClick={() =>
-            mutation.mutate({id: 'agent-1', name: 'Deleted Agent'})
-          }
-        >
-          Delete
-        </button>
-      );
-    };
-
-    render(<TestComponent />);
-    fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
-
-    await waitFor(() => {
-      expect(gmp.agent.delete).toHaveBeenCalledWith({
-        id: 'agent-1',
-      });
-    });
-  });
-});
-
 describe('useBulkDeleteAgents', () => {
   test('should delete agents by entity list and filter', async () => {
     const gmp = createGmp();
@@ -186,48 +121,100 @@ describe('useBulkDeleteAgents', () => {
   });
 });
 
-describe('bulk agent mutation hooks', () => {
-  test.each([
-    ['authorize', useBulkAuthorizeAgents, 'authorize', 'authorizeByFilter'],
-    ['revoke', useBulkRevokeAgents, 'revoke', 'revokeByFilter'],
-    [
-      'enable update to latest',
-      useBulkEnableUpdateToLatestAgents,
-      'enableUpdateToLatest',
-      'enableUpdateToLatestByFilter',
-    ],
-    [
-      'disable update to latest',
-      useBulkDisableUpdateToLatestAgents,
-      'disableUpdateToLatest',
-      'disableUpdateToLatestByFilter',
-    ],
-  ])(
-    'should %s agents by entity list and filter',
-    async (_name, useMutation, entityMethod, filterMethod) => {
-      const gmp = createGmp();
-      const {render} = rendererWith({gmp, router: true});
+describe('useBulkAuthorizeAgents', () => {
+  test('should authorize agents by entity list and filter', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useBulkAuthorizeAgents({});
+      return (
+        <>
+          <button onClick={() => mutation.mutate([agent])}>Entities</button>
+          <button onClick={() => mutation.mutate(filter)}>Filter</button>
+        </>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Entities'}));
+    fireEvent.click(screen.getByRole('button', {name: 'Filter'}));
+    await waitFor(() => {
+      expect(gmp.agents.authorize).toHaveBeenCalledWith([agent]);
+      expect(gmp.agents.authorizeByFilter).toHaveBeenCalledWith(filter);
+    });
+  });
+});
 
-      const TestComponent = () => {
-        const mutation = useMutation({});
-        return (
-          <>
-            <button onClick={() => mutation.mutate([agent])}>Entities</button>
-            <button onClick={() => mutation.mutate(filter)}>Filter</button>
-          </>
-        );
-      };
+describe('useBulkRevokeAgents', () => {
+  test('should revoke agents by entity list and filter', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useBulkRevokeAgents({});
+      return (
+        <>
+          <button onClick={() => mutation.mutate([agent])}>Entities</button>
+          <button onClick={() => mutation.mutate(filter)}>Filter</button>
+        </>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Entities'}));
+    fireEvent.click(screen.getByRole('button', {name: 'Filter'}));
+    await waitFor(() => {
+      expect(gmp.agents.revoke).toHaveBeenCalledWith([agent]);
+      expect(gmp.agents.revokeByFilter).toHaveBeenCalledWith(filter);
+    });
+  });
+});
 
-      render(<TestComponent />);
-      fireEvent.click(screen.getByRole('button', {name: 'Entities'}));
-      fireEvent.click(screen.getByRole('button', {name: 'Filter'}));
+describe('useBulkEnableUpdateToLatestAgents', () => {
+  test('should enable automatic updates by entity list and filter', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useBulkEnableUpdateToLatestAgents({});
+      return (
+        <>
+          <button onClick={() => mutation.mutate([agent])}>Entities</button>
+          <button onClick={() => mutation.mutate(filter)}>Filter</button>
+        </>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Entities'}));
+    fireEvent.click(screen.getByRole('button', {name: 'Filter'}));
+    await waitFor(() => {
+      expect(gmp.agents.enableUpdateToLatest).toHaveBeenCalledWith([agent]);
+      expect(gmp.agents.enableUpdateToLatestByFilter).toHaveBeenCalledWith(
+        filter,
+      );
+    });
+  });
+});
 
-      await waitFor(() => {
-        expect(gmp.agents[entityMethod]).toHaveBeenCalledWith([agent]);
-        expect(gmp.agents[filterMethod]).toHaveBeenCalledWith(filter);
-      });
-    },
-  );
+describe('useBulkDisableUpdateToLatestAgents', () => {
+  test('should disable automatic updates by entity list and filter', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useBulkDisableUpdateToLatestAgents({});
+      return (
+        <>
+          <button onClick={() => mutation.mutate([agent])}>Entities</button>
+          <button onClick={() => mutation.mutate(filter)}>Filter</button>
+        </>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Entities'}));
+    fireEvent.click(screen.getByRole('button', {name: 'Filter'}));
+    await waitFor(() => {
+      expect(gmp.agents.disableUpdateToLatest).toHaveBeenCalledWith([agent]);
+      expect(gmp.agents.disableUpdateToLatestByFilter).toHaveBeenCalledWith(
+        filter,
+      );
+    });
+  });
 });
 
 describe('useSyncAgents', () => {
@@ -245,34 +232,6 @@ describe('useSyncAgents', () => {
 
     await waitFor(() => {
       expect(gmp.agents.sync).toHaveBeenCalledWith();
-    });
-  });
-});
-
-describe('useDownloadAgentSupportBundle', () => {
-  test('should download an agent support bundle', async () => {
-    const gmp = createGmp();
-    const {render} = rendererWith({gmp, router: true});
-
-    const TestComponent = () => {
-      const mutation = useDownloadAgentSupportBundle();
-      return (
-        <button
-          onClick={() => mutation.mutate({id: 'agent-1', encryption: false})}
-        >
-          Download
-        </button>
-      );
-    };
-
-    render(<TestComponent />);
-    fireEvent.click(screen.getByRole('button', {name: 'Download'}));
-
-    await waitFor(() => {
-      expect(gmp.agent.downloadSupportBundle).toHaveBeenCalledWith(
-        'agent-1',
-        false,
-      );
     });
   });
 });

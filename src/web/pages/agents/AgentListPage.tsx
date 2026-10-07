@@ -21,10 +21,10 @@ import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import BulkTags from 'web/entities/BulkTags';
 import EntitiesPage from 'web/entities/EntitiesPage';
+import {useDownloadAgentSupportBundle} from 'web/hooks/use-query/agent';
 import {
   useBulkAuthorizeAgents,
   useBulkDeleteAgents,
-  useDownloadAgentSupportBundle,
   useBulkDisableUpdateToLatestAgents,
   useBulkEnableUpdateToLatestAgents,
   useBulkRevokeAgents,
