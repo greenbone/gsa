@@ -35,7 +35,7 @@ import EditIcon from 'web/entity/icon/EditIcon';
 import TrashIcon from 'web/entity/icon/TrashIcon';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import {useGetPermissions} from 'web/hooks/use-query/permissions';
-import {useGetTag} from 'web/hooks/use-query/tags';
+import {useGetTag} from 'web/hooks/use-query/tag';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import TagComponent from 'web/pages/tags/TagComponent';
