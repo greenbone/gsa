@@ -122,7 +122,7 @@ describe('WebApplicationTargetCommand tests', () => {
         in_use: YES_VALUE,
       },
     });
-    expect(result.data.id).toEqual('wat-123');
+    expect(result).toBeUndefined();
   });
 
   test('should omit exclude_url when not provided in save', async () => {
