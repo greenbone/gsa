@@ -41,8 +41,31 @@ describe('useCreateOciImageTarget', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Create'}));
 
     await waitFor(() => {
-      expect(gmp.ociimagetarget.create.mock.calls[0][0]).toEqual(input);
+      expect(gmp.ociimagetarget.create).toHaveBeenCalledWith(input);
     });
+  });
+
+  test('should call onError when creating an OCI image target fails', async () => {
+    const error = new Error('Create failed');
+    const gmp = createGmp();
+    gmp.ociimagetarget.create.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useCreateOciImageTarget({onError});
+      return (
+        <button
+          onClick={() =>
+            mutation.mutate({name: 'Target', imageReferences: 'registry/image'})
+          }
+        >
+          Create
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Create'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
@@ -61,8 +84,29 @@ describe('useSaveOciImageTarget', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Save'}));
 
     await waitFor(() => {
-      expect(gmp.ociimagetarget.save.mock.calls[0][0]).toEqual(input);
+      expect(gmp.ociimagetarget.save).toHaveBeenCalledWith(input);
     });
+  });
+
+  test('should call onError when saving an OCI image target fails', async () => {
+    const error = new Error('Save failed');
+    const gmp = createGmp();
+    gmp.ociimagetarget.save.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useSaveOciImageTarget({onError});
+      return (
+        <button
+          onClick={() => mutation.mutate({id: target.id, name: 'Target'})}
+        >
+          Save
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Save'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
@@ -84,6 +128,23 @@ describe('useDeleteOciImageTarget', () => {
     await waitFor(() => {
       expect(gmp.ociimagetarget.delete).toHaveBeenCalledWith({id: target.id});
     });
+  });
+
+  test('should call onError when deleting an OCI image target fails', async () => {
+    const error = new Error('Delete failed');
+    const gmp = createGmp();
+    gmp.ociimagetarget.delete.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useDeleteOciImageTarget({onError});
+      return (
+        <button onClick={() => mutation.mutate({id: target.id})}>Delete</button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
@@ -111,5 +172,26 @@ describe('useCloneOciImageTarget', () => {
     await waitFor(() => {
       expect(gmp.ociimagetarget.clone).toHaveBeenCalledWith({id: target.id});
     });
+  });
+
+  test('should call onError when cloning an OCI image target fails', async () => {
+    const error = new Error('Clone failed');
+    const gmp = createGmp();
+    gmp.ociimagetarget.clone.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useCloneOciImageTarget({onError});
+      return (
+        <button
+          onClick={() => mutation.mutate({id: target.id, name: 'Target'})}
+        >
+          Clone
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Clone'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });

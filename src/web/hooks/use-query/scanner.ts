@@ -29,7 +29,7 @@ export const useModifyScannerAgentControlConfig = ({
     Response<ActionResult, XmlMeta>,
     Rejection
   >({
-    gmpMethod: gmp.scanner.modifyAgentControlConfig.bind(gmp.scanner),
+    gmpMethod: async data => gmp.scanner.modifyAgentControlConfig(data),
     invalidateQueryIds: ['get_scanners'],
     successMessage: _(
       'Scanner agent control configuration successfully updated',

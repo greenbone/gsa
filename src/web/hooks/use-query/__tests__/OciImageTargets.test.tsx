@@ -76,6 +76,25 @@ describe('useBulkDeleteOciImageTargets', () => {
       expect(gmp.ociimagetargets.delete).toHaveBeenCalledWith([target]);
     });
   });
+
+  test('should call onError when deleting OCI image targets fails', async () => {
+    const error = new Error('Delete failed');
+    const gmp = createGmp();
+    gmp.ociimagetargets.delete.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useBulkDeleteOciImageTargets({onError});
+      return (
+        <button onClick={() => mutation.mutate([target] as never)}>
+          Delete
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+  });
 });
 
 describe('useBulkExportOciImageTargets', () => {
@@ -96,5 +115,22 @@ describe('useBulkExportOciImageTargets', () => {
     await waitFor(() => {
       expect(gmp.ociimagetargets.exportByFilter).toHaveBeenCalledWith(filter);
     });
+  });
+
+  test('should call onError when exporting OCI image targets fails', async () => {
+    const error = new Error('Export failed');
+    const gmp = createGmp();
+    gmp.ociimagetargets.exportByFilter.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useBulkExportOciImageTargets({onError});
+      return (
+        <button onClick={() => mutation.mutate(filter as never)}>Export</button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Export'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });

@@ -94,6 +94,29 @@ describe('useBulkDeleteUsers', () => {
       expect(gmp.users.delete).toHaveBeenCalledWith(input.users, input.options);
     });
   });
+
+  test('should call onError when deleting users fails', async () => {
+    const error = new Error('Delete failed');
+    const gmp = createGmp();
+    gmp.users.delete.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useBulkDeleteUsers({onError});
+      return (
+        <button
+          onClick={() =>
+            mutation.mutate({users: [user], options: {inheritor_id: 'id'}})
+          }
+        >
+          Delete
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+  });
 });
 
 describe('useBulkExportUsers', () => {
@@ -119,5 +142,20 @@ describe('useBulkExportUsers', () => {
       expect(gmp.users.export).toHaveBeenCalledWith([user]);
       expect(gmp.users.exportByFilter).toHaveBeenCalledWith(userFilter);
     });
+  });
+
+  test('should call onError when exporting users fails', async () => {
+    const error = new Error('Export failed');
+    const gmp = createGmp();
+    gmp.users.export.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useBulkExportUsers({onError});
+      return <button onClick={() => mutation.mutate([user])}>Export</button>;
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Export'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });

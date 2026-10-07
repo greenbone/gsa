@@ -32,7 +32,31 @@ describe('useModifyScannerAgentControlConfig', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Save'}));
 
     await waitFor(() => {
-      expect(modifyAgentControlConfig.mock.calls[0][0]).toEqual(input);
+      expect(modifyAgentControlConfig).toHaveBeenCalledWith(input);
     });
+  });
+
+  test('should call onError when modifying the scanner configuration fails', async () => {
+    const error = new Error('Scanner configuration failed');
+    const modifyAgentControlConfig = testing.fn().mockRejectedValue(error);
+    const gmp = {
+      session: createSession({token: 'test-token'}),
+      settings: {},
+      scanner: {modifyAgentControlConfig},
+    };
+    gmp.scanner.modifyAgentControlConfig.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useModifyScannerAgentControlConfig({onError});
+      return (
+        <button onClick={() => mutation.mutate({id: 'scanner-1'})}>Run</button>
+      );
+    };
+
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Run'}));
+
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });

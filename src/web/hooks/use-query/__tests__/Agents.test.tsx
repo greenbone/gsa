@@ -119,6 +119,21 @@ describe('useBulkDeleteAgents', () => {
       expect(gmp.agents.deleteByFilter).toHaveBeenCalledWith(filter);
     });
   });
+
+  test('should call onError when deleting agents fails', async () => {
+    const error = new Error('Delete failed');
+    const gmp = createGmp();
+    gmp.agents.delete.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useBulkDeleteAgents({onError});
+      return <button onClick={() => mutation.mutate([agent])}>Delete</button>;
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+  });
 });
 
 describe('useBulkAuthorizeAgents', () => {
@@ -142,6 +157,23 @@ describe('useBulkAuthorizeAgents', () => {
       expect(gmp.agents.authorizeByFilter).toHaveBeenCalledWith(filter);
     });
   });
+
+  test('should call onError when authorizing agents fails', async () => {
+    const error = new Error('Authorize failed');
+    const gmp = createGmp();
+    gmp.agents.authorize.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useBulkAuthorizeAgents({onError});
+      return (
+        <button onClick={() => mutation.mutate([agent])}>Authorize</button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Authorize'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+  });
 });
 
 describe('useBulkRevokeAgents', () => {
@@ -164,6 +196,21 @@ describe('useBulkRevokeAgents', () => {
       expect(gmp.agents.revoke).toHaveBeenCalledWith([agent]);
       expect(gmp.agents.revokeByFilter).toHaveBeenCalledWith(filter);
     });
+  });
+
+  test('should call onError when revoking agents fails', async () => {
+    const error = new Error('Revoke failed');
+    const gmp = createGmp();
+    gmp.agents.revoke.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useBulkRevokeAgents({onError});
+      return <button onClick={() => mutation.mutate([agent])}>Revoke</button>;
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Revoke'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
@@ -190,6 +237,21 @@ describe('useBulkEnableUpdateToLatestAgents', () => {
       );
     });
   });
+
+  test('should call onError when enabling updates fails', async () => {
+    const error = new Error('Enable failed');
+    const gmp = createGmp();
+    gmp.agents.enableUpdateToLatest.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useBulkEnableUpdateToLatestAgents({onError});
+      return <button onClick={() => mutation.mutate([agent])}>Enable</button>;
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Enable'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+  });
 });
 
 describe('useBulkDisableUpdateToLatestAgents', () => {
@@ -215,6 +277,21 @@ describe('useBulkDisableUpdateToLatestAgents', () => {
       );
     });
   });
+
+  test('should call onError when disabling updates fails', async () => {
+    const error = new Error('Disable failed');
+    const gmp = createGmp();
+    gmp.agents.disableUpdateToLatest.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useBulkDisableUpdateToLatestAgents({onError});
+      return <button onClick={() => mutation.mutate([agent])}>Disable</button>;
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Disable'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+  });
 });
 
 describe('useSyncAgents', () => {
@@ -233,5 +310,20 @@ describe('useSyncAgents', () => {
     await waitFor(() => {
       expect(gmp.agents.sync).toHaveBeenCalledWith();
     });
+  });
+
+  test('should call onError when syncing agents fails', async () => {
+    const error = new Error('Sync failed');
+    const gmp = createGmp();
+    gmp.agents.sync.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useSyncAgents({onError});
+      return <button onClick={() => mutation.mutate()}>Sync</button>;
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Sync'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });

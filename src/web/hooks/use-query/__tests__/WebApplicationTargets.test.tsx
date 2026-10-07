@@ -76,6 +76,23 @@ describe('useBulkDeleteWebApplicationTargets', () => {
       );
     });
   });
+
+  test('should call onError when deleting web application targets fails', async () => {
+    const error = new Error('Delete failed');
+    const gmp = createGmp();
+    gmp.webapplicationtargets.deleteByFilter.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useBulkDeleteWebApplicationTargets({onError});
+      return (
+        <button onClick={() => mutation.mutate(filter as never)}>Delete</button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+  });
 });
 
 describe('useBulkExportWebApplicationTargets', () => {
@@ -98,5 +115,24 @@ describe('useBulkExportWebApplicationTargets', () => {
     await waitFor(() => {
       expect(gmp.webapplicationtargets.export).toHaveBeenCalledWith([target]);
     });
+  });
+
+  test('should call onError when exporting web application targets fails', async () => {
+    const error = new Error('Export failed');
+    const gmp = createGmp();
+    gmp.webapplicationtargets.export.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useBulkExportWebApplicationTargets({onError});
+      return (
+        <button onClick={() => mutation.mutate([target] as never)}>
+          Export
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Export'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });

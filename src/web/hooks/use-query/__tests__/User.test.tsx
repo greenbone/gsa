@@ -143,7 +143,7 @@ describe('useCreateUser', () => {
     render(<TestComponent />);
     fireEvent.click(screen.getByRole('button', {name: 'Create'}));
 
-    await waitFor(() => expect(onError.mock.calls[0][0]).toBe(error));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
@@ -203,7 +203,7 @@ describe('useSaveUser', () => {
     render(<TestComponent />);
     fireEvent.click(screen.getByRole('button', {name: 'Save'}));
 
-    await waitFor(() => expect(onError.mock.calls[0][0]).toBe(error));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
@@ -259,7 +259,7 @@ describe('useCloneUser', () => {
     render(<TestComponent />);
     fireEvent.click(screen.getByRole('button', {name: 'Clone'}));
 
-    await waitFor(() => expect(onError.mock.calls[0][0]).toBe(error));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
@@ -314,7 +314,7 @@ describe('useDeleteUser', () => {
     render(<TestComponent />);
     fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
 
-    await waitFor(() => expect(onError.mock.calls[0][0]).toBe(error));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
