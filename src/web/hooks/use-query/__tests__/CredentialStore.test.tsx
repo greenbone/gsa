@@ -36,6 +36,27 @@ describe('useEditCredentialStore', () => {
       expect(gmp.credentialstore.edit).toHaveBeenCalledWith(input);
     });
   });
+
+  test('should call onError when editing a credential store fails', async () => {
+    const error = new Error('Edit failed');
+    const gmp = createGmp();
+    gmp.credentialstore.edit.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useEditCredentialStore({onError});
+      return (
+        <button
+          onClick={() => mutation.mutate({id: 'credential-1', active: true})}
+        >
+          Run
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Run'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+  });
 });
 
 describe('useVerifyCredentialStore', () => {
@@ -53,5 +74,24 @@ describe('useVerifyCredentialStore', () => {
     await waitFor(() => {
       expect(gmp.credentialstore.verify).toHaveBeenCalledWith(input);
     });
+  });
+
+  test('should call onError when verifying a credential store fails', async () => {
+    const error = new Error('Verify failed');
+    const gmp = createGmp();
+    gmp.credentialstore.verify.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useVerifyCredentialStore({onError});
+      return (
+        <button onClick={() => mutation.mutate({id: 'credential-1'})}>
+          Run
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Run'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });

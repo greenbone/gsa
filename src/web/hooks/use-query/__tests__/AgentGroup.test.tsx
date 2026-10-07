@@ -39,8 +39,25 @@ describe('useCreateAgentGroup', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Run'}));
 
     await waitFor(() => {
-      expect(gmp.agentgroup.create.mock.calls[0][0]).toEqual(input);
+      expect(gmp.agentgroup.create).toHaveBeenCalledWith(input);
     });
+  });
+
+  test('should call onError when creating an agent group fails', async () => {
+    const error = new Error('Create failed');
+    const gmp = createGmp();
+    gmp.agentgroup.create.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useCreateAgentGroup({onError});
+      return (
+        <button onClick={() => mutation.mutate({name: 'Group'})}>Run</button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Run'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
@@ -62,6 +79,25 @@ describe('useCloneAgentGroup', () => {
       expect(gmp.agentgroup.clone).toHaveBeenCalledWith({id: 'group-1'});
     });
   });
+
+  test('should call onError when cloning an agent group fails', async () => {
+    const error = new Error('Clone failed');
+    const gmp = createGmp();
+    gmp.agentgroup.clone.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useCloneAgentGroup({onError});
+      return (
+        <button onClick={() => mutation.mutate({id: 'group-1', name: 'Group'})}>
+          Run
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Run'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+  });
 });
 
 describe('useSaveAgentGroup', () => {
@@ -79,8 +115,27 @@ describe('useSaveAgentGroup', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Run'}));
 
     await waitFor(() => {
-      expect(gmp.agentgroup.save.mock.calls[0][0]).toEqual(input);
+      expect(gmp.agentgroup.save).toHaveBeenCalledWith(input);
     });
+  });
+
+  test('should call onError when saving an agent group fails', async () => {
+    const error = new Error('Save failed');
+    const gmp = createGmp();
+    gmp.agentgroup.save.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useSaveAgentGroup({onError});
+      return (
+        <button onClick={() => mutation.mutate({id: 'group-1', name: 'Group'})}>
+          Run
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Run'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
@@ -101,5 +156,24 @@ describe('useDeleteAgentGroup', () => {
     await waitFor(() => {
       expect(gmp.agentgroup.delete).toHaveBeenCalledWith({id: 'group-1'});
     });
+  });
+
+  test('should call onError when deleting an agent group fails', async () => {
+    const error = new Error('Delete failed');
+    const gmp = createGmp();
+    gmp.agentgroup.delete.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useDeleteAgentGroup({onError});
+      return (
+        <button onClick={() => mutation.mutate({id: 'group-1', name: 'Group'})}>
+          Run
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Run'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });

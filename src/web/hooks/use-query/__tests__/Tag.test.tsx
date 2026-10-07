@@ -69,6 +69,25 @@ describe('useDeleteTag', () => {
       expect(gmp.tag.delete).toHaveBeenCalledWith({id: 'tag-1'});
     });
   });
+
+  test('should call onError when deleting a tag fails', async () => {
+    const error = new Error('Delete failed');
+    const gmp = createGmp();
+    gmp.tag.delete.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useDeleteTag({onError});
+      return (
+        <button onClick={() => mutation.mutate({id: 'tag-1', name: 'Tag'})}>
+          Run
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Run'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+  });
 });
 
 describe('useEnableTag', () => {
@@ -88,6 +107,23 @@ describe('useEnableTag', () => {
       expect(gmp.tag.enable).toHaveBeenCalledWith({id: 'tag-1'});
     });
   });
+
+  test('should call onError when enabling a tag fails', async () => {
+    const error = new Error('Enable failed');
+    const gmp = createGmp();
+    gmp.tag.enable.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useEnableTag({onError});
+      return (
+        <button onClick={() => mutation.mutate({id: 'tag-1'})}>Run</button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Run'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+  });
 });
 
 describe('useDisableTag', () => {
@@ -106,6 +142,23 @@ describe('useDisableTag', () => {
     await waitFor(() => {
       expect(gmp.tag.disable).toHaveBeenCalledWith({id: 'tag-1'});
     });
+  });
+
+  test('should call onError when disabling a tag fails', async () => {
+    const error = new Error('Disable failed');
+    const gmp = createGmp();
+    gmp.tag.disable.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useDisableTag({onError});
+      return (
+        <button onClick={() => mutation.mutate({id: 'tag-1'})}>Run</button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Run'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
@@ -130,6 +183,29 @@ describe('useCreateTag', () => {
       expect(gmp.tag.create).toHaveBeenCalledWith(input);
     });
   });
+
+  test('should call onError when creating a tag fails', async () => {
+    const error = new Error('Create failed');
+    const gmp = createGmp();
+    gmp.tag.create.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useCreateTag({onError});
+      return (
+        <button
+          onClick={() =>
+            mutation.mutate({active: true, name: 'Tag', resourceType: 'tag'})
+          }
+        >
+          Run
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Run'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+  });
 });
 
 describe('useSaveTag', () => {
@@ -153,6 +229,34 @@ describe('useSaveTag', () => {
       expect(gmp.tag.save).toHaveBeenCalledWith(input);
     });
   });
+
+  test('should call onError when saving a tag fails', async () => {
+    const error = new Error('Save failed');
+    const gmp = createGmp();
+    gmp.tag.save.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useSaveTag({onError});
+      return (
+        <button
+          onClick={() =>
+            mutation.mutate({
+              active: true,
+              id: 'tag-1',
+              name: 'Tag',
+              resourceType: 'tag',
+            })
+          }
+        >
+          Run
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Run'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+  });
 });
 
 describe('useCloneTag', () => {
@@ -175,5 +279,24 @@ describe('useCloneTag', () => {
     await waitFor(() => {
       expect(gmp.tag.clone).toHaveBeenCalledWith({id: 'tag-1'});
     });
+  });
+
+  test('should call onError when cloning a tag fails', async () => {
+    const error = new Error('Clone failed');
+    const gmp = createGmp();
+    gmp.tag.clone.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useCloneTag({onError});
+      return (
+        <button onClick={() => mutation.mutate({id: 'tag-1', name: 'Tag'})}>
+          Run
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Run'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });

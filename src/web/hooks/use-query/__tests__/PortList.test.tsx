@@ -101,7 +101,7 @@ describe('useCreatePortList', () => {
     render(<TestComponent />);
     fireEvent.click(screen.getByRole('button', {name: 'Create'}));
 
-    await waitFor(() => expect(onError.mock.calls[0][0]).toBe(error));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
@@ -122,6 +122,27 @@ describe('useSavePortList', () => {
     await waitFor(() => {
       expect(gmp.portlist.save).toHaveBeenCalledWith(input);
     });
+  });
+
+  test('should call onError when saving a port list fails', async () => {
+    const error = new Error('Save failed');
+    const gmp = createGmp();
+    gmp.portlist.save.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useSavePortList({onError});
+      return (
+        <button
+          onClick={() => mutation.mutate({id: 'port-list-1', name: 'List'})}
+        >
+          Save
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Save'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
@@ -149,6 +170,27 @@ describe('useClonePortList', () => {
     await waitFor(() => {
       expect(gmp.portlist.clone).toHaveBeenCalledWith({id: 'port-list-1'});
     });
+  });
+
+  test('should call onError when cloning a port list fails', async () => {
+    const error = new Error('Clone failed');
+    const gmp = createGmp();
+    gmp.portlist.clone.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useClonePortList({onError});
+      return (
+        <button
+          onClick={() => mutation.mutate({id: 'port-list-1', name: 'List'})}
+        >
+          Clone
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Clone'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
@@ -178,6 +220,27 @@ describe('useDeletePortList', () => {
         id: 'port-list-1',
       });
     });
+  });
+
+  test('should call onError when deleting a port list fails', async () => {
+    const error = new Error('Delete failed');
+    const gmp = createGmp();
+    gmp.portlist.delete.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useDeletePortList({onError});
+      return (
+        <button
+          onClick={() => mutation.mutate({id: 'port-list-1', name: 'List'})}
+        >
+          Delete
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
@@ -249,7 +312,7 @@ describe('useImportPortList', () => {
     render(<TestComponent />);
     fireEvent.click(screen.getByRole('button', {name: 'Import'}));
 
-    await waitFor(() => expect(onError.mock.calls[0][0]).toBe(error));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
@@ -276,6 +339,34 @@ describe('useCreatePortRange', () => {
       expect(gmp.portlist.createPortRange).toHaveBeenCalledWith(input);
     });
   });
+
+  test('should call onError when creating a port range fails', async () => {
+    const error = new Error('Create port range failed');
+    const gmp = createGmp();
+    gmp.portlist.createPortRange.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useCreatePortRange({onError});
+      return (
+        <button
+          onClick={() =>
+            mutation.mutate({
+              portListId: 'port-list-1',
+              portRangeStart: 1,
+              portRangeEnd: 10,
+              portType: 'TCP',
+            })
+          }
+        >
+          Create
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Create'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+  });
 });
 
 describe('useDeletePortRange', () => {
@@ -297,5 +388,24 @@ describe('useDeletePortRange', () => {
         id: 'port-range-1',
       });
     });
+  });
+
+  test('should call onError when deleting a port range fails', async () => {
+    const error = new Error('Delete port range failed');
+    const gmp = createGmp();
+    gmp.portlist.deletePortRange.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useDeletePortRange({onError});
+      return (
+        <button onClick={() => mutation.mutate({id: 'port-range-1'})}>
+          Delete
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });

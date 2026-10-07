@@ -56,7 +56,9 @@ export function useGmpMutation<
         onSuccess(data);
       }
     },
-    onError,
+    onError: error => {
+      onError?.(error);
+    },
   });
 }
 

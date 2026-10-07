@@ -75,6 +75,21 @@ describe('useBulkDeleteTags', () => {
       expect(gmp.tags.deleteByFilter).toHaveBeenCalledWith(filter);
     });
   });
+
+  test('should call onError when deleting tags fails', async () => {
+    const error = new Error('Delete failed');
+    const gmp = createGmp();
+    gmp.tags.delete.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useBulkDeleteTags({onError});
+      return <button onClick={() => mutation.mutate([tag])}>Delete</button>;
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+  });
 });
 
 describe('useBulkExportTags', () => {
@@ -98,5 +113,20 @@ describe('useBulkExportTags', () => {
       expect(gmp.tags.export).toHaveBeenCalledWith([tag]);
       expect(gmp.tags.exportByFilter).toHaveBeenCalledWith(filter);
     });
+  });
+
+  test('should call onError when exporting tags fails', async () => {
+    const error = new Error('Export failed');
+    const gmp = createGmp();
+    gmp.tags.export.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useBulkExportTags({onError});
+      return <button onClick={() => mutation.mutate([tag])}>Export</button>;
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Export'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });

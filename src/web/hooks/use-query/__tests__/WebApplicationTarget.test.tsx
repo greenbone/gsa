@@ -41,8 +41,31 @@ describe('useCreateWebApplicationTarget', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Create'}));
 
     await waitFor(() => {
-      expect(gmp.webapplicationtarget.create.mock.calls[0][0]).toEqual(input);
+      expect(gmp.webapplicationtarget.create).toHaveBeenCalledWith(input);
     });
+  });
+
+  test('should call onError when creating a web application target fails', async () => {
+    const error = new Error('Create failed');
+    const gmp = createGmp();
+    gmp.webapplicationtarget.create.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useCreateWebApplicationTarget({onError});
+      return (
+        <button
+          onClick={() =>
+            mutation.mutate({name: 'Target', urls: 'https://example.com'})
+          }
+        >
+          Create
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Create'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
@@ -61,8 +84,29 @@ describe('useSaveWebApplicationTarget', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Save'}));
 
     await waitFor(() => {
-      expect(gmp.webapplicationtarget.save.mock.calls[0][0]).toEqual(input);
+      expect(gmp.webapplicationtarget.save).toHaveBeenCalledWith(input);
     });
+  });
+
+  test('should call onError when saving a web application target fails', async () => {
+    const error = new Error('Save failed');
+    const gmp = createGmp();
+    gmp.webapplicationtarget.save.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useSaveWebApplicationTarget({onError});
+      return (
+        <button
+          onClick={() => mutation.mutate({id: target.id, name: 'Target'})}
+        >
+          Save
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Save'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
@@ -84,6 +128,21 @@ describe('useDeleteWebApplicationTarget', () => {
         id: target.id,
       });
     });
+  });
+
+  test('should call onError when deleting a web application target fails', async () => {
+    const error = new Error('Delete failed');
+    const gmp = createGmp();
+    gmp.webapplicationtarget.delete.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useDeleteWebApplicationTarget({onError});
+      return <button onClick={() => mutation.mutate(target)}>Delete</button>;
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });
 
@@ -113,5 +172,26 @@ describe('useCloneWebApplicationTarget', () => {
         id: target.id,
       });
     });
+  });
+
+  test('should call onError when cloning a web application target fails', async () => {
+    const error = new Error('Clone failed');
+    const gmp = createGmp();
+    gmp.webapplicationtarget.clone.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+    const TestComponent = () => {
+      const mutation = useCloneWebApplicationTarget({onError});
+      return (
+        <button
+          onClick={() => mutation.mutate({id: target.id, name: 'Target'})}
+        >
+          Clone
+        </button>
+      );
+    };
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Clone'}));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 });

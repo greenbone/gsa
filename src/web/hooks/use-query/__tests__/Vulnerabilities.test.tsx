@@ -21,7 +21,7 @@ const vulnerability = new Vulnerability({
   name: 'Vulnerability 1',
 });
 
-describe('vulnerability query hooks', () => {
+describe('useGetVulnerabilities', () => {
   test('should fetch vulnerabilities with a filter', async () => {
     const get = testing.fn().mockResolvedValue({
       data: [vulnerability],
@@ -52,14 +52,82 @@ describe('vulnerability query hooks', () => {
 
     expect(get).toHaveBeenCalledWith({filter});
   });
+});
 
-  test('should bulk delete and export vulnerabilities by list and filter', async () => {
+describe('useBulkDeleteVulnerabilities', () => {
+  test('should bulk delete vulnerabilities by list and filter', async () => {
     const gmp = {
       session: createSession({token: 'test-token'}),
       settings: {},
       vulns: {
         delete: testing.fn().mockResolvedValue(undefined),
         deleteByFilter: testing.fn().mockResolvedValue(undefined),
+      },
+    };
+    const {render} = rendererWith({gmp, router: true});
+
+    const TestComponent = () => {
+      const deleteMutation = useBulkDeleteVulnerabilities({});
+      return (
+        <>
+          <button onClick={() => deleteMutation.mutate([vulnerability])}>
+            Delete
+          </button>
+          <button onClick={() => deleteMutation.mutate(filter)}>
+            Delete filter
+          </button>
+        </>
+      );
+    };
+
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
+    fireEvent.click(screen.getByRole('button', {name: 'Delete filter'}));
+
+    await waitFor(() => {
+      expect(gmp.vulns.delete).toHaveBeenCalledWith([vulnerability]);
+      expect(gmp.vulns.deleteByFilter).toHaveBeenCalledWith(filter);
+    });
+  });
+
+  test.each(['Delete', 'Delete filter'])(
+    'should call onError for the %s vulnerability bulk mutation',
+    async name => {
+      const error = new Error('Vulnerability bulk mutation failed');
+      const gmp = {
+        session: createSession({token: 'test-token'}),
+        settings: {},
+        vulns: {
+          delete: testing.fn().mockRejectedValue(error),
+          deleteByFilter: testing.fn().mockRejectedValue(error),
+        },
+      };
+      const onError = testing.fn();
+      const {render} = rendererWith({gmp, router: true});
+      const TestComponent = () => {
+        const remove = useBulkDeleteVulnerabilities({onError});
+        return (
+          <>
+            <button onClick={() => remove.mutate([vulnerability])}>
+              Delete
+            </button>
+            <button onClick={() => remove.mutate(filter)}>Delete filter</button>
+          </>
+        );
+      };
+      render(<TestComponent />);
+      fireEvent.click(screen.getByRole('button', {name}));
+      await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+    },
+  );
+});
+
+describe('useBulkExportVulnerabilities', () => {
+  test('should bulk export vulnerabilities by list and filter', async () => {
+    const gmp = {
+      session: createSession({token: 'test-token'}),
+      settings: {},
+      vulns: {
         export: testing.fn().mockResolvedValue({data: 'vulnerabilities'}),
         exportByFilter: testing
           .fn()
@@ -69,16 +137,9 @@ describe('vulnerability query hooks', () => {
     const {render} = rendererWith({gmp, router: true});
 
     const TestComponent = () => {
-      const deleteMutation = useBulkDeleteVulnerabilities({});
       const exportMutation = useBulkExportVulnerabilities({});
       return (
         <>
-          <button onClick={() => deleteMutation.mutate([vulnerability])}>
-            Delete
-          </button>
-          <button onClick={() => deleteMutation.mutate(filter)}>
-            Delete filter
-          </button>
           <button onClick={() => exportMutation.mutate([vulnerability])}>
             Export
           </button>
@@ -90,16 +151,45 @@ describe('vulnerability query hooks', () => {
     };
 
     render(<TestComponent />);
-    fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
-    fireEvent.click(screen.getByRole('button', {name: 'Delete filter'}));
     fireEvent.click(screen.getByRole('button', {name: 'Export'}));
     fireEvent.click(screen.getByRole('button', {name: 'Export filter'}));
 
     await waitFor(() => {
-      expect(gmp.vulns.delete).toHaveBeenCalledWith([vulnerability]);
-      expect(gmp.vulns.deleteByFilter).toHaveBeenCalledWith(filter);
       expect(gmp.vulns.export).toHaveBeenCalledWith([vulnerability]);
       expect(gmp.vulns.exportByFilter).toHaveBeenCalledWith(filter);
     });
   });
+
+  test.each(['Export', 'Export filter'])(
+    'should call onError for the %s vulnerability bulk mutation',
+    async name => {
+      const error = new Error('Vulnerability bulk mutation failed');
+      const gmp = {
+        session: createSession({token: 'test-token'}),
+        settings: {},
+        vulns: {
+          export: testing.fn().mockRejectedValue(error),
+          exportByFilter: testing.fn().mockRejectedValue(error),
+        },
+      };
+      const onError = testing.fn();
+      const {render} = rendererWith({gmp, router: true});
+      const TestComponent = () => {
+        const exportMutation = useBulkExportVulnerabilities({onError});
+        return (
+          <>
+            <button onClick={() => exportMutation.mutate([vulnerability])}>
+              Export
+            </button>
+            <button onClick={() => exportMutation.mutate(filter)}>
+              Export filter
+            </button>
+          </>
+        );
+      };
+      render(<TestComponent />);
+      fireEvent.click(screen.getByRole('button', {name}));
+      await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+    },
+  );
 });
