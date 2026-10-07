@@ -5,7 +5,6 @@
 
 import {useQueryClient} from '@tanstack/react-query';
 import {type AgentModifyParams} from 'gmp/commands/agent';
-import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {isArray} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
@@ -46,9 +45,9 @@ export const useModifyAgent = ({
       },
     });
 
-  return useSaveMutation<AgentModifyParams, void, Rejection>({
+  return useSaveMutation<AgentModifyParams>({
     entityType: 'agent',
-    gmpMethod: gmp.agent.save.bind(gmp.agent),
+    gmpMethod: data => gmp.agent.save(data),
     invalidateQueryIds: ['get_agents'],
     onSuccess: async () => {
       await invalidateAgents();
@@ -75,14 +74,12 @@ export const useDownloadAgentSupportBundle = ({
 }: UseDownloadAgentSupportBundleParams = {}) => {
   const gmp = useGmp();
 
-  return useGmpMutation<
-    DownloadAgentSupportBundleInput,
-    Response<ArrayBuffer>,
-    Rejection
-  >({
-    gmpMethod: ({id, encryption}) =>
-      gmp.agent.downloadSupportBundle(id, encryption),
-    onSuccess,
-    onError,
-  });
+  return useGmpMutation<DownloadAgentSupportBundleInput, Response<ArrayBuffer>>(
+    {
+      gmpMethod: ({id, encryption}) =>
+        gmp.agent.downloadSupportBundle(id, encryption),
+      onSuccess,
+      onError,
+    },
+  );
 };

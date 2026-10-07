@@ -7,8 +7,7 @@ import {
   type AgentGroupCreateParams,
   type AgentGroupSaveParams,
 } from 'gmp/commands/agent-group';
-import {type EntityActionResponse} from 'gmp/commands/entity';
-import type Rejection from 'gmp/http/rejection';
+import {type EntityActionData} from 'gmp/commands/entity';
 import AgentGroup from 'gmp/models/agent-group';
 import useGmp from 'web/hooks/useGmp';
 import useCloneMutation from 'web/queries/useCloneMutation';
@@ -17,7 +16,7 @@ import useDeleteMutation from 'web/queries/useDeleteMutation';
 import useSaveMutation from 'web/queries/useSaveMutation';
 
 interface UseCreateAgentGroupParams {
-  onSuccess?: (data: EntityActionResponse) => void;
+  onSuccess?: (data: EntityActionData) => void;
   onError?: (error: Error) => void;
 }
 
@@ -31,12 +30,11 @@ export const useCreateAgentGroup = ({
   onError,
 }: UseCreateAgentGroupParams) => {
   const gmp = useGmp();
-  return useCreateMutation<
-    AgentGroupCreateParams,
-    EntityActionResponse,
-    Rejection
-  >({
-    gmpMethod: gmp.agentgroup.create.bind(gmp.agentgroup),
+  return useCreateMutation<AgentGroupCreateParams, EntityActionData>({
+    gmpMethod: async data => {
+      const response = await gmp.agentgroup.create(data);
+      return response.data;
+    },
     entityType: AgentGroup.entityType,
     invalidateQueryIds: ['get_agent_groups'],
     onError,
@@ -49,8 +47,11 @@ export const useCloneAgentGroup = ({
   onSuccess,
 }: UseCreateAgentGroupParams) => {
   const gmp = useGmp();
-  return useCloneMutation<EntityActionResponse, Rejection>({
-    gmpMethod: gmp.agentgroup.clone.bind(gmp.agentgroup),
+  return useCloneMutation<EntityActionData>({
+    gmpMethod: async ({id}) => {
+      const response = await gmp.agentgroup.clone({id});
+      return response.data;
+    },
     entityType: AgentGroup.entityType,
     invalidateQueryIds: ['get_agent_groups'],
     onError,
@@ -63,8 +64,10 @@ export const useSaveAgentGroup = ({
   onSuccess,
 }: UseModifyAgentGroupParams) => {
   const gmp = useGmp();
-  return useSaveMutation<AgentGroupSaveParams, void, Rejection>({
-    gmpMethod: gmp.agentgroup.save.bind(gmp.agentgroup),
+  return useSaveMutation<AgentGroupSaveParams>({
+    gmpMethod: async data => {
+      await gmp.agentgroup.save(data);
+    },
     entityType: AgentGroup.entityType,
     invalidateQueryIds: ['get_agent_groups'],
     onError,

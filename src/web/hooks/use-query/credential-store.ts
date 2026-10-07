@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type CredentialStoreModifyParams} from 'gmp/commands/credential-store';
-import {type EntityActionResponse} from 'gmp/commands/entity';
-import type Rejection from 'gmp/http/rejection';
+import {
+  type CredentialStoreVerifyParams,
+  type CredentialStoreModifyParams,
+} from 'gmp/commands/credential-store';
 import useGmp from 'web/hooks/useGmp';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
@@ -24,13 +25,11 @@ export const useEditCredentialStore = ({
   onSuccess,
 }: UseEditCredentialStoreParams) => {
   const gmp = useGmp();
-
-  return useGmpMutation<
-    CredentialStoreModifyParams,
-    EntityActionResponse,
-    Rejection
-  >({
-    gmpMethod: gmp.credentialstore.edit.bind(gmp.credentialstore),
+  return useGmpMutation<CredentialStoreModifyParams>({
+    gmpMethod: async data => {
+      const response = await gmp.credentialstore.edit(data);
+      return response.data;
+    },
     invalidateQueryIds: ['get_credential_stores'],
     onError,
     onSuccess,
@@ -43,8 +42,11 @@ export const useVerifyCredentialStore = ({
 }: UseVerifyCredentialStoreParams) => {
   const gmp = useGmp();
 
-  return useGmpMutation<{id: string}, EntityActionResponse, Rejection>({
-    gmpMethod: gmp.credentialstore.verify.bind(gmp.credentialstore),
+  return useGmpMutation<CredentialStoreVerifyParams>({
+    gmpMethod: async ({id}) => {
+      const response = await gmp.credentialstore.verify({id});
+      return response.data;
+    },
     onError,
     onSuccess,
   });

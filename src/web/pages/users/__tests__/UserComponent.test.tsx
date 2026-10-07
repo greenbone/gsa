@@ -6,6 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
+import Response from 'gmp/http/response';
 import Group from 'gmp/models/group';
 import Role from 'gmp/models/role';
 import Settings from 'gmp/models/settings';
@@ -63,12 +64,14 @@ const createGmp = () => ({
     reloadIntervalInactive: 0,
   },
   user: {
-    create: testing.fn().mockResolvedValue({data: {id: 'created'}}),
-    save: testing.fn().mockResolvedValue({data: {id: 'saved'}}),
-    clone: testing.fn().mockResolvedValue({data: {id: 'cloned'}}),
+    create: testing.fn().mockResolvedValue(new Response({id: 'created'})),
+    save: testing.fn().mockResolvedValue(new Response({id: 'saved'})),
+    clone: testing.fn().mockResolvedValue(new Response({id: 'cloned'})),
     delete: testing.fn().mockResolvedValue(undefined),
-    export: testing.fn().mockResolvedValue({data: 'user-data'}),
-    currentAuthSettings: testing.fn().mockResolvedValue({data: authSettings}),
+    export: testing.fn().mockResolvedValue(new Response('user-data')),
+    currentAuthSettings: testing
+      .fn()
+      .mockResolvedValue(new Response(authSettings)),
     currentSettings: testing
       .fn()
       .mockResolvedValue(currentSettingsDefaultResponse),
@@ -163,7 +166,7 @@ describe('UserComponent', () => {
         oldName: 'user 1',
         password: '',
       });
-      expect(onSaved).toHaveBeenCalledWith({id: 'saved'});
+      expect(onSaved).toHaveBeenCalledWith(undefined);
     });
   });
 
@@ -204,7 +207,7 @@ describe('UserComponent', () => {
         groupIds: ['group1', 'group2'],
         roleIds: ['role1', 'role2'],
       });
-      expect(onSaved).toHaveBeenCalledWith({id: 'saved'});
+      expect(onSaved).toHaveBeenCalledWith(undefined);
     });
   });
 

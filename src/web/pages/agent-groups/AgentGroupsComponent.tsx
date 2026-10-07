@@ -5,8 +5,6 @@
 
 import React, {useState} from 'react';
 import {type EntityActionData} from 'gmp/commands/entity';
-import type Response from 'gmp/http/response';
-import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import type AgentGroup from 'gmp/models/agent-group';
 import {isDefined} from 'gmp/utils/identity';
 import {
@@ -22,7 +20,7 @@ import AgentGroupsDialog, {
 
 interface AgentGroupsComponentRenderProps {
   create: () => void;
-  clone: (entity: AgentGroup) => Promise<Response<EntityActionData, XmlMeta>>;
+  clone: (entity: AgentGroup) => Promise<EntityActionData>;
   delete: (entity: AgentGroup) => Promise<void>;
   edit: (entity: AgentGroup) => void;
 }
@@ -31,7 +29,7 @@ interface AgentGroupsComponentProps {
   children: (actions: AgentGroupsComponentRenderProps) => React.ReactNode;
   onCloned?: () => void;
   onCloneError?: (error: Error) => void;
-  onCreated?: (response: Response<EntityActionData, XmlMeta>) => void;
+  onCreated?: (data: EntityActionData) => void;
   onCreateError?: (error: Error) => void;
   onDeleted?: () => void;
   onDeleteError?: (error: Error) => void;
