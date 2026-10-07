@@ -29,7 +29,7 @@ import {
   useDisableTag,
   useEnableTag,
   useSaveTag,
-} from 'web/hooks/use-query/tags';
+} from 'web/hooks/use-query/tag';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
