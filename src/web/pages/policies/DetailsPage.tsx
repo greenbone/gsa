@@ -27,7 +27,7 @@ import EntityPermissions from 'web/entity/EntityPermissions';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
 import {useGetPermissions} from 'web/hooks/use-query/permissions';
-import {useGetPolicy} from 'web/hooks/use-query/policies';
+import {useGetPolicy} from 'web/hooks/use-query/policy';
 import useTranslation from 'web/hooks/useTranslation';
 import PolicyDetails from 'web/pages/policies/Details';
 import PolicyComponent from 'web/pages/policies/PoliciesComponent';
