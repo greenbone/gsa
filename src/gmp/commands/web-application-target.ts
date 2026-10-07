@@ -81,7 +81,7 @@ class WebApplicationTargetCommand extends EntityCommand<WebApplicationTarget> {
     reverseLookupOnly,
     reverseLookupUnify,
     inUse,
-  }: WebApplicationTargetSaveParams): Promise<EntityActionResponse> {
+  }: WebApplicationTargetSaveParams) {
     log.debug('Modifying web application target', {
       id,
       name,
@@ -89,7 +89,7 @@ class WebApplicationTargetCommand extends EntityCommand<WebApplicationTarget> {
       urls,
       credentialId,
     });
-    return this.entityAction({
+    await this.entityAction({
       cmd: 'save_web_application_target',
       web_application_target_id: id,
       name,
