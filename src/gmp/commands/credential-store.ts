@@ -28,6 +28,10 @@ export interface CredentialStoreModifyParams {
   serverCaCertificate?: File;
 }
 
+export interface CredentialStoreVerifyParams {
+  id: string;
+}
+
 const log = logger.getLogger('gmp.commands.credentialStore');
 
 class CredentialStoreCommand extends EntityCommand<
@@ -90,7 +94,7 @@ class CredentialStoreCommand extends EntityCommand<
     });
   }
 
-  async verify({id}: {id: string}): Promise<EntityActionResponse> {
+  async verify({id}: CredentialStoreVerifyParams) {
     log.debug('Verifying credential store', {id});
 
     return this.entityAction({
