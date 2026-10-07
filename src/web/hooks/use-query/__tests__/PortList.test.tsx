@@ -5,6 +5,7 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
+import Response from 'gmp/http/response';
 import {createSession} from 'gmp/testing';
 import {
   useClonePortList,
@@ -20,14 +21,14 @@ const createGmp = () => ({
   session: createSession({token: 'test-token'}),
   settings: {},
   portlist: {
-    create: testing.fn().mockResolvedValue({data: {id: 'port-list-1'}}),
-    save: testing.fn().mockResolvedValue({data: {id: 'port-list-1'}}),
-    clone: testing.fn().mockResolvedValue({data: {id: 'port-list-2'}}),
+    create: testing.fn().mockResolvedValue(new Response({id: 'port-list-1'})),
+    save: testing.fn().mockResolvedValue(new Response({id: 'port-list-1'})),
+    clone: testing.fn().mockResolvedValue(new Response({id: 'port-list-2'})),
     delete: testing.fn().mockResolvedValue(undefined),
-    import: testing.fn().mockResolvedValue({data: {id: 'port-list-1'}}),
-    createPortRange: testing.fn().mockResolvedValue({
-      data: {id: 'port-range-1'},
-    }),
+    import: testing.fn().mockResolvedValue(new Response({id: 'port-list-1'})),
+    createPortRange: testing
+      .fn()
+      .mockResolvedValue(new Response({id: 'port-range-1'})),
     deletePortRange: testing.fn().mockResolvedValue(undefined),
   },
 });
@@ -197,6 +198,58 @@ describe('useImportPortList', () => {
     await waitFor(() => {
       expect(gmp.portlist.import).toHaveBeenCalledWith(input);
     });
+  });
+
+  test('should call onSuccess with the imported port list data', async () => {
+    const gmp = createGmp();
+    const onSuccess = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+
+    const TestComponent = () => {
+      const mutation = useImportPortList({onSuccess});
+      return (
+        <button
+          onClick={() =>
+            mutation.mutate({xmlFile: new File(['port list'], 'port-list.xml')})
+          }
+        >
+          Import
+        </button>
+      );
+    };
+
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Import'}));
+
+    await waitFor(() => {
+      expect(onSuccess).toHaveBeenCalledWith({id: 'port-list-1'});
+    });
+  });
+
+  test('should call onError when importing a port list fails', async () => {
+    const error = new Error('Import failed');
+    const gmp = createGmp();
+    gmp.portlist.import.mockRejectedValue(error);
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, router: true});
+
+    const TestComponent = () => {
+      const mutation = useImportPortList({onError});
+      return (
+        <button
+          onClick={() =>
+            mutation.mutate({xmlFile: new File(['port list'], 'port-list.xml')})
+          }
+        >
+          Import
+        </button>
+      );
+    };
+
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Import'}));
+
+    await waitFor(() => expect(onError.mock.calls[0][0]).toBe(error));
   });
 });
 

@@ -11,6 +11,7 @@ import {
   type PortListCommandCreatePortRangeParams,
   type PortListCommandDeletePortRangeParams,
 } from 'gmp/commands/port-list';
+import _ from 'gmp/locale';
 import useGmp from 'web/hooks/useGmp';
 import useCloneMutation from 'web/queries/useCloneMutation';
 import useCreateMutation from 'web/queries/useCreateMutation';
@@ -108,6 +109,7 @@ export const useImportPortList = ({
       const response = await gmp.portlist.import(data);
       return response.data;
     },
+    successMessage: _('Port List imported successfully.'),
     invalidateQueryIds: ['get_port_lists'],
     onSuccess,
     onError,

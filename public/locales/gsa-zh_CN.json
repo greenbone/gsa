@@ -1604,6 +1604,7 @@
   "Port Counts: Total": "端口数量: 总数",
   "Port Counts: UDP": "端口数量: UDP",
   "Port List": "端口列表",
+  "Port List imported successfully.": "",
   "Port List: {{name}}": "端口列表：{{name}}",
   "Port Lists": "端口列表",
   "Port Lists Filter": "端口列表筛选",

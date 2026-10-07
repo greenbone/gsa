@@ -12,6 +12,7 @@ import {
   wait,
   fireEvent,
 } from 'web/testing';
+import Response from 'gmp/http/response';
 import PortList from 'gmp/models/port-list';
 import {createSession} from 'gmp/testing';
 import Button from 'web/components/form/Button';
@@ -26,20 +27,18 @@ const currentSettings = testing
   .mockResolvedValue(currentSettingsDefaultResponse);
 const createGmp = ({
   getPortListResponse = defaultGetPortListResponse,
-  createPortListResponse = {data: {id: '123'}},
+  createPortListResponse = new Response({id: '123'}),
   // oxlint-disable-next-line typescript/no-useless-default-assignment
   deletePortListResponse = undefined,
-  savePortListResponse = {data: {id: '123'}},
-  clonePortListResponse = {data: {id: '123'}},
-  createPortRangeResponse = {id: '1234'},
+  savePortListResponse = new Response({id: '123'}),
+  clonePortListResponse = new Response({id: '123'}),
+  createPortRangeResponse = new Response({id: '1234'}),
   getPortList = testing.fn().mockResolvedValue(getPortListResponse),
   createPortList = testing.fn().mockResolvedValue(createPortListResponse),
   deletePortList = testing.fn().mockResolvedValue(deletePortListResponse),
   savePortList = testing.fn().mockResolvedValue(savePortListResponse),
   clonePortList = testing.fn().mockResolvedValue(clonePortListResponse),
-  createPortRange = testing
-    .fn()
-    .mockResolvedValue({data: createPortRangeResponse}),
+  createPortRange = testing.fn().mockResolvedValue(createPortRangeResponse),
   deletePortRange = testing.fn().mockResolvedValue(undefined),
 } = {}) => ({
   portlist: {

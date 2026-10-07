@@ -223,17 +223,8 @@ const PortListComponent = ({
   };
 
   const handleImportPortList = async (data: PortListImportDialogState) => {
-    try {
-      const response = await importPortListMutation.mutateAsync(data);
-      if (isDefined(onImported)) {
-        onImported(response);
-      }
-      closeImportDialog();
-    } catch (error) {
-      if (isDefined(onImportError)) {
-        onImportError(error as Rejection);
-      }
-    }
+    await importPortListMutation.mutateAsync(data);
+    closeImportDialog();
   };
 
   const handleSavePortList = async (
