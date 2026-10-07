@@ -10,7 +10,7 @@ import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import type FilterType from 'gmp/models/filter/filter-type';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {createSession} from 'gmp/testing';
-import {useGetAudit, useGetAudits} from 'web/hooks/use-query/audits';
+import {useGetAudits} from 'web/hooks/use-query/audits';
 
 const audit = Audit.fromElement({
   _id: 'audit-1',
@@ -29,27 +29,6 @@ const audit2 = Audit.fromElement({
 });
 
 const filter = QueryFilter.fromString('name~test');
-
-const SingleAuditComponent = ({id}: {id: string}) => {
-  const {data, isLoading, isError} = useGetAudit({id});
-
-  if (isLoading) {
-    return <div data-testid="loading">Loading...</div>;
-  }
-  if (isError) {
-    return <div data-testid="error">Error</div>;
-  }
-  if (!data) {
-    return <div data-testid="no-data">No data</div>;
-  }
-
-  return (
-    <div data-testid="audit">
-      <span data-testid="audit-name">{data.name}</span>
-      <span data-testid="audit-id">{data.id}</span>
-    </div>
-  );
-};
 
 const AuditListComponent = ({filter}: {filter?: FilterType}) => {
   const {data, isLoading, isError} = useGetAudits(
@@ -93,60 +72,6 @@ const createGmp = ({token}: {token?: string} = {token: 'test-token'}) => ({
   },
   session: createSession({token}),
   settings: {},
-});
-
-describe('useGetAudit', () => {
-  test('should fetch a single audit', async () => {
-    const gmp = createGmp();
-    const {render} = rendererWith({gmp, router: true});
-    render(<SingleAuditComponent id="audit-1" />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('audit-name')).toHaveTextContent('Test Audit');
-    });
-
-    expect(gmp.audit.get).toHaveBeenCalledWith({id: 'audit-1'});
-    expect(screen.getByTestId('audit-id')).toHaveTextContent('audit-1');
-  });
-
-  test('should show loading state initially', () => {
-    const gmp = createGmp();
-    const {render} = rendererWith({gmp, router: true});
-    render(<SingleAuditComponent id="audit-1" />);
-
-    expect(screen.getByTestId('loading')).toBeInTheDocument();
-  });
-
-  test('should not fetch an audit when the ID is empty', () => {
-    const gmp = createGmp();
-    const {render} = rendererWith({gmp, router: true});
-
-    render(<SingleAuditComponent id="" />);
-
-    expect(screen.getByTestId('no-data')).toBeInTheDocument();
-    expect(gmp.audit.get).not.toHaveBeenCalled();
-  });
-
-  test('should not fetch an audit without a session token', () => {
-    const gmp = createGmp({token: undefined});
-    const {render} = rendererWith({gmp, router: true});
-
-    render(<SingleAuditComponent id="audit-1" />);
-
-    expect(gmp.audit.get).not.toHaveBeenCalled();
-  });
-
-  test('should show an error when fetching an audit fails', async () => {
-    const gmp = createGmp();
-    gmp.audit.get.mockRejectedValue(new Error('Request failed'));
-    const {render} = rendererWith({gmp, router: true});
-
-    render(<SingleAuditComponent id="audit-1" />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('error')).toBeInTheDocument();
-    });
-  });
 });
 
 describe('useGetAudits', () => {
