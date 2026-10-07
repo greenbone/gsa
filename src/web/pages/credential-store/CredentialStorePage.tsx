@@ -22,10 +22,10 @@ import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import {
-  useGetCredentialStores,
   useEditCredentialStore,
   useVerifyCredentialStore,
 } from 'web/hooks/use-query/credential-store';
+import {useGetCredentialStores} from 'web/hooks/use-query/credential-stores';
 import useTranslation from 'web/hooks/useTranslation';
 import ConnectionStatusPill from 'web/pages/credential-store/ConnectionStatusPill';
 import CredentialStoreDialog, {
