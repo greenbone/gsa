@@ -36,7 +36,7 @@ import EntityPermissions, {
 } from 'web/entity/EntityPermissions';
 import {goToDetails, goToList} from 'web/entity/navigation';
 import EntityTags from 'web/entity/Tags';
-import {useGetAudit} from 'web/hooks/use-query/audits';
+import {useGetAudit} from 'web/hooks/use-query/audit';
 import {useGetPermissions} from 'web/hooks/use-query/permissions';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
