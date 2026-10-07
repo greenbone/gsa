@@ -4,7 +4,7 @@
  */
 
 import React, {useState} from 'react';
-import {type EntityActionResponse} from 'gmp/commands/entity';
+import {type EntityActionData} from 'gmp/commands/entity';
 import {
   type default as Credential,
   type CredentialType,
@@ -18,7 +18,7 @@ import {
   useCreateWebApplicationTarget,
   useDeleteWebApplicationTarget,
   useSaveWebApplicationTarget,
-} from 'web/hooks/use-query/web-application-targets';
+} from 'web/hooks/use-query/web-application-target';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import CredentialDialog, {
@@ -32,7 +32,7 @@ interface WebApplicationTargetComponentRenderProps {
   delete: (entity: WebApplicationTarget) => Promise<void>;
   edit: (entity: WebApplicationTarget) => Promise<void>;
   create: () => Promise<void>;
-  clone: (entity: WebApplicationTarget) => Promise<EntityActionResponse>;
+  clone: (entity: WebApplicationTarget) => Promise<EntityActionData>;
   download: (entity: WebApplicationTarget) => Promise<void>;
   save: (entity: WebApplicationTarget) => Promise<void>;
 }
@@ -45,7 +45,7 @@ interface WebApplicationTargetsComponentProps {
   onDeleteError?: (error: Error) => void;
   onSaved?: () => void;
   onSaveError?: (error: Error) => void;
-  onCreated?: (response: EntityActionResponse) => void;
+  onCreated?: (response: EntityActionData) => void;
   onCreateError?: (error: Error) => void;
   onCloned?: () => void;
   onCloneError?: (error: Error) => void;
