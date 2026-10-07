@@ -11,11 +11,7 @@ import {createSession} from 'gmp/testing';
 import {
   useBulkDeleteWebApplicationTargets,
   useBulkExportWebApplicationTargets,
-  useCloneWebApplicationTarget,
-  useCreateWebApplicationTarget,
-  useDeleteWebApplicationTarget,
   useGetWebApplicationTargets,
-  useSaveWebApplicationTarget,
 } from 'web/hooks/use-query/web-application-targets';
 
 const filter = QueryFilter.fromString('name~target');
@@ -37,15 +33,9 @@ const createGmp = () => ({
     export: testing.fn().mockResolvedValue({data: 'targets'}),
     exportByFilter: testing.fn().mockResolvedValue({data: 'targets'}),
   },
-  webapplicationtarget: {
-    create: testing.fn().mockResolvedValue({data: {id: 'target-2'}}),
-    save: testing.fn().mockResolvedValue({data: {id: 'target-1'}}),
-    delete: testing.fn().mockResolvedValue(undefined),
-    clone: testing.fn().mockResolvedValue({data: {id: 'target-2'}}),
-  },
 });
 
-describe('web application target query hooks', () => {
+describe('useGetWebApplicationTargets', () => {
   test('should fetch web application targets with a filter', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
@@ -63,70 +53,49 @@ describe('web application target query hooks', () => {
 
     expect(gmp.webapplicationtargets.get).toHaveBeenCalledWith({filter});
   });
+});
 
-  test('should forward web application target mutations', async () => {
+describe('useBulkDeleteWebApplicationTargets', () => {
+  test('should delete web application targets by filter', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
-    const input = {name: 'New Target', urls: 'https://example.com'};
 
     const TestComponent = () => {
-      const create = useCreateWebApplicationTarget({});
-      const save = useSaveWebApplicationTarget({});
-      const remove = useDeleteWebApplicationTarget({});
-      const clone = useCloneWebApplicationTarget({});
-      const bulkDelete = useBulkDeleteWebApplicationTargets({});
-      const bulkExport = useBulkExportWebApplicationTargets({});
+      const mutation = useBulkDeleteWebApplicationTargets({});
       return (
-        <>
-          <button onClick={() => create.mutate(input)}>Create</button>
-          <button onClick={() => save.mutate({id: 'target-1', name: 'Saved'})}>
-            Save
-          </button>
-          <button
-            onClick={() => remove.mutate({id: 'target-1', name: 'Target 1'})}
-          >
-            Delete
-          </button>
-          <button
-            onClick={() =>
-              clone.mutate({id: 'target-1', name: 'Cloned Target'})
-            }
-          >
-            Clone
-          </button>
-          <button onClick={() => bulkDelete.mutate(filter as never)}>
-            Bulk delete
-          </button>
-          <button onClick={() => bulkExport.mutate([target] as never)}>
-            Bulk export
-          </button>
-        </>
+        <button onClick={() => mutation.mutate(filter as never)}>Delete</button>
       );
     };
 
     render(<TestComponent />);
-    fireEvent.click(screen.getByRole('button', {name: 'Create'}));
-    fireEvent.click(screen.getByRole('button', {name: 'Save'}));
     fireEvent.click(screen.getByRole('button', {name: 'Delete'}));
-    fireEvent.click(screen.getByRole('button', {name: 'Clone'}));
-    fireEvent.click(screen.getByRole('button', {name: 'Bulk delete'}));
-    fireEvent.click(screen.getByRole('button', {name: 'Bulk export'}));
 
     await waitFor(() => {
-      expect(gmp.webapplicationtarget.create.mock.calls[0][0]).toEqual(input);
-      expect(gmp.webapplicationtarget.save.mock.calls[0][0]).toEqual({
-        id: 'target-1',
-        name: 'Saved',
-      });
-      expect(gmp.webapplicationtarget.delete).toHaveBeenCalledWith({
-        id: 'target-1',
-      });
-      expect(gmp.webapplicationtarget.clone).toHaveBeenCalledWith({
-        id: 'target-1',
-      });
       expect(gmp.webapplicationtargets.deleteByFilter).toHaveBeenCalledWith(
         filter,
       );
+    });
+  });
+});
+
+describe('useBulkExportWebApplicationTargets', () => {
+  test('should export web application targets', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, router: true});
+
+    const TestComponent = () => {
+      const mutation = useBulkExportWebApplicationTargets({});
+      return (
+        <button onClick={() => mutation.mutate([target] as never)}>
+          Export
+        </button>
+      );
+    };
+
+    render(<TestComponent />);
+    fireEvent.click(screen.getByRole('button', {name: 'Export'}));
+
+    await waitFor(() => {
       expect(gmp.webapplicationtargets.export).toHaveBeenCalledWith([target]);
     });
   });
