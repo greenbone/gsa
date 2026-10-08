@@ -4,7 +4,6 @@
  */
 
 import {
-  type default as Credential,
   type CredentialType,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
@@ -18,6 +17,7 @@ import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
 import {NewIcon} from 'web/components/icon';
 import Row from 'web/components/layout/Row';
+import {useGetAllCredentials} from 'web/hooks/use-query/credentials';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
@@ -54,7 +54,6 @@ export type ContainerImageTargetsDialogData =
 
 interface ContainerImageTargetsDialogProps {
   comment?: string;
-  credentials?: Credential[];
   excludeFile?: File;
   excludeImages?: string;
   file?: File;
@@ -77,7 +76,6 @@ interface ContainerImageTargetsDialogProps {
 
 const ContainerImageTargetsDialog = ({
   comment = '',
-  credentials = [],
   excludeFile,
   excludeImages = '',
   file,
@@ -100,6 +98,10 @@ const ContainerImageTargetsDialog = ({
   const [_] = useTranslation();
   const capabilities = useCapabilities();
   const hasPermissionToCreateCredential = capabilities.mayCreate('credential');
+
+  const getCredentialsQuery = useGetAllCredentials();
+
+  const credentials = getCredentialsQuery.data?.entities ?? [];
 
   name = name || _('Unnamed');
   title = title || _('New Container Image Target');
@@ -266,6 +268,7 @@ const ContainerImageTargetsDialog = ({
                   data-testid="credential-select"
                   disabled={inUse}
                   grow="1"
+                  isLoading={getCredentialsQuery.isLoading}
                   items={renderSelectItems(
                     upCredentials as RenderSelectItemProps[],
                   )}

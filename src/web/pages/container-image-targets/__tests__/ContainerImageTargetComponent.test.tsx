@@ -52,6 +52,11 @@ const createGmp = ({
   createCredential = testing.fn().mockResolvedValue(createCredentialResponse),
 }: CreateGmpParams = {}): {
   credentials: {getAll: ReturnType<typeof testing.fn>};
+  settings: {
+    reloadInterval: number;
+    reloadIntervalActive: number;
+    reloadIntervalInactive: number;
+  };
   ociimagetarget: Record<string, ReturnType<typeof testing.fn>>;
   credential: {create: ReturnType<typeof testing.fn>};
   user: {
@@ -66,6 +71,11 @@ const createGmp = ({
       : testing.fn().mockResolvedValue(val);
 
   return {
+    settings: {
+      reloadInterval: 0,
+      reloadIntervalActive: 0,
+      reloadIntervalInactive: 0,
+    },
     credentials: {
       getAll: testing.fn().mockResolvedValue(new Response(getAllCredentials)),
     },
@@ -480,8 +490,7 @@ describe('ContainerImageTargetsComponent tests', () => {
     fireEvent.click(saveButton);
     await wait();
 
-    // after creating credential, credentials list should have been refreshed and create called
-    expect(gmp.credentials.getAll).toHaveBeenCalled();
+    // after creating credential, the credential mutation should be called
     expect(gmp.credential.create).toHaveBeenCalled();
   });
 

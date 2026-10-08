@@ -5,14 +5,12 @@
 
 import React, {useState} from 'react';
 import {type EntityActionData} from 'gmp/commands/entity';
-import {
-  type default as Credential,
-  type CredentialType,
-} from 'gmp/models/credential';
+import {type CredentialType} from 'gmp/models/credential';
 import type WebApplicationTarget from 'gmp/models/web-application-target';
 import useEntityDownload, {
   type OnDownloadedFunc,
 } from 'web/entity/hooks/useEntityDownload';
+import {useCreateCredential} from 'web/hooks/use-query/credential';
 import {
   useCloneWebApplicationTarget,
   useCreateWebApplicationTarget,
@@ -85,7 +83,6 @@ const WebApplicationTargetsComponent = ({
 
   const [credentialsDialogVisible, setCredentialsDialogVisible] =
     useState(false);
-  const [credentials, setCredentials] = useState<Credential[]>([]);
   const [credentialTypes, setCredentialTypes] = useState<CredentialType[]>([]);
   const [credentialsTitle, setCredentialsTitle] = useState<string>('');
   const [credentialId, setCredentialId] = useState<string | undefined>(
@@ -122,10 +119,7 @@ const WebApplicationTargetsComponent = ({
     onError: onCloneError,
   });
 
-  const loadCredentials = async () => {
-    const response = await gmp.credentials.getAll();
-    return response.data;
-  };
+  const createCredentialMutation = useCreateCredential();
 
   const editTarget = async (target: WebApplicationTarget) => {
     setSelectedTarget(target);
@@ -135,8 +129,6 @@ const WebApplicationTargetsComponent = ({
       }),
     );
     setEditDialogVisible(true);
-    const creds = await loadCredentials();
-    setCredentials(creds);
     setCredentialId(target.credential?.id || undefined);
   };
 
@@ -144,8 +136,6 @@ const WebApplicationTargetsComponent = ({
     setSelectedTarget(undefined);
     setEditDialogTitle(_('New Web Application Target'));
     setEditDialogVisible(true);
-    const creds = await loadCredentials();
-    setCredentials(creds);
     setCredentialId(undefined);
   };
 
@@ -230,13 +220,9 @@ const WebApplicationTargetsComponent = ({
   };
 
   const handleCreateCredential = async (data: CredentialDialogState) => {
-    const response = await gmp.credential.create(data);
+    const response = await createCredentialMutation.mutateAsync(data);
     closeCredentialsDialog();
-    const newCredentials = await loadCredentials();
-    setCredentials(newCredentials);
-    if (response.data?.id) {
-      setCredentialId(response.data.id);
-    }
+    setCredentialId(response.id);
   };
 
   return (
@@ -253,7 +239,6 @@ const WebApplicationTargetsComponent = ({
         <WebApplicationTargetsDialog
           comment={selectedTarget?.comment}
           credentialId={credentialId}
-          credentials={credentials}
           excludeUrls={selectedTarget?.excludeUrls}
           inUse={selectedTarget?.inUse}
           name={selectedTarget?.name}
