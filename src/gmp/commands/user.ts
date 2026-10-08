@@ -133,7 +133,21 @@ export const DEFAULT_SETTINGS = {
   defaultospscanner: 'b20697c9-be0a-4cd4-8b4d-5fe7841ebb03',
   defaultschedule: '778eedad-5550-4de0-abb6-1320d13b5e18',
   defaulttarget: '23409203-940a-4b4a-b70c-447475f18323',
-};
+} as const;
+
+export const ExistingSettings = {
+  detailsexportfilename: 'a6ac88c5-729c-41ba-ac0a-deea4a3441f2',
+  listexportfilename: '0872a6ed-4f85-48c5-ac3f-a5ef5e006745',
+  reportexportfilename: 'e1a2ae0b-736e-4484-b029-330c9e15b900',
+  rowsperpage: '5f5a8712-8017-11e1-8556-406186ea4fc5',
+  feedimportowner: '78eceaec-3385-11ea-b237-28d24461215b',
+  agentowner: '1ee1f106-8b2e-461c-b426-7f5d76001b29',
+  maxrowsperpage: '76374a7a-0569-11e6-b6da-28d24461215b',
+  userinterfacelanguage: '6765549a-934e-11e3-b358-406186ea4fc5',
+  userinterfacetimeformat: '11deb7ff-550b-4950-aacf-06faeb7c61b9',
+  userinterfacedateformat: 'd9857b7c-1159-4193-9bc0-18fae5473a69',
+  autocacherebuild: 'a09285b0-2d47-49b6-a4ef-946ee71f1d5c',
+} as const;
 
 export const DEFAULT_FILTER_SETTINGS: Record<
   Exclude<
