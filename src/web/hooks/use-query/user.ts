@@ -3,11 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useQueryClient} from '@tanstack/react-query';
 import {type EntityActionData} from 'gmp/commands/entity';
 import {type UserCommandDeleteParams} from 'gmp/commands/user';
 import type Response from 'gmp/http/response';
 import type User from 'gmp/models/user';
 import useGmp from 'web/hooks/useGmp';
+import useSessionToken from 'web/hooks/useSessionToken';
 import {type RefetchIntervalFn} from 'web/queries/helpers';
 import useCloneMutation from 'web/queries/useCloneMutation';
 import useCreateMutation from 'web/queries/useCreateMutation';
@@ -132,4 +134,18 @@ export const useDownloadUser = ({
     onSuccess,
     onError,
   });
+};
+
+export const useGetUserSetting = () => {
+  const gmp = useGmp();
+  const token = useSessionToken();
+  const queryClient = useQueryClient();
+  return (id: string) =>
+    queryClient.query({
+      queryKey: ['get_user_setting', token, id],
+      queryFn: async () => {
+        const response = await gmp.user.getSetting(id);
+        return response.data;
+      },
+    });
 };
