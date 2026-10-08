@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {fireEvent, rendererWith, screen, within} from 'web/testing';
+import {fireEvent, rendererWith, screen, wait, within} from 'web/testing';
 import Cve from 'gmp/models/cve';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -133,6 +133,7 @@ const createGmp = ({
   session: createSession({timezone: 'UTC'}),
   user: {
     currentSettings,
+    getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
   },
 });
 
@@ -294,6 +295,7 @@ describe('CveDetailsPage tests', () => {
 
     const exportIcon = screen.getByTitle('Export CVE');
     fireEvent.click(exportIcon);
+    await wait();
     expect(gmp.cve.export).toHaveBeenCalledWith(cve);
   });
 });

@@ -53,7 +53,10 @@ const createGmp = ({
   groups: {
     getAll: getGroups,
   },
-  user: {currentSettings},
+  user: {
+    currentSettings,
+    getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
+  },
   session: createSession(),
 });
 

@@ -99,6 +99,7 @@ const createGmp = (settings = {}) => ({
     currentSettings: testing
       .fn()
       .mockResolvedValue(currentSettingsDefaultResponse),
+    getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
   },
 });
 
@@ -316,6 +317,7 @@ describe('TargetDetailsPage tests', () => {
 
     const exportIcon = screen.getByTitle('Export Target as XML');
     fireEvent.click(exportIcon);
+    await wait();
     expect(gmp.target.export).toHaveBeenCalledWith(target);
 
     const deleteIcon = screen.getByTitle('Move Target to trashcan');

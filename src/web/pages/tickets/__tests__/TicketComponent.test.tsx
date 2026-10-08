@@ -62,6 +62,7 @@ const createGmp = () => ({
     currentSettings: testing
       .fn()
       .mockResolvedValue(currentSettingsDefaultResponse),
+    getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
   },
   session: createSession({username: 'admin'}),
 });

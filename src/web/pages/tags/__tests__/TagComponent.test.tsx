@@ -65,6 +65,7 @@ const createGmp = ({
         }),
       }),
     ),
+    getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
   },
   tag: {
     clone: cloneTag,
@@ -245,9 +246,10 @@ describe('TagComponent tests', () => {
 
     const button = screen.getByTestId('button');
     fireEvent.click(button);
-    expect(gmp.tag.export).toHaveBeenCalledWith(tag);
 
     await wait();
+
+    expect(gmp.tag.export).toHaveBeenCalledWith(tag);
 
     expect(onDownloaded).toHaveBeenCalledWith({
       data: 'some-data',

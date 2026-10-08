@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent, screen, within} from 'web/testing';
+import {rendererWith, fireEvent, screen, wait, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
 import QueryFilter from 'gmp/models/filter/query-filter';
@@ -91,6 +91,7 @@ const createGmp = ({
   session: createSession({timezone: 'CET'}),
   user: {
     currentSettings,
+    getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
   },
 });
 
@@ -284,6 +285,7 @@ describe('OverrideDetailsPage tests', () => {
 
     const exportIcon = screen.getByTitle('Export Override as XML');
     fireEvent.click(exportIcon);
+    await wait();
     expect(gmp.override.export).toHaveBeenCalledWith(override);
 
     const deleteIcon = screen.getByTitle('Move Override to trashcan');

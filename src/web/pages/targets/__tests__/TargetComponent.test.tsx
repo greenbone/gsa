@@ -58,6 +58,7 @@ const createGmp = ({
           }),
         }),
       ),
+      getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
     },
     credential: {
       create: createCredential,
@@ -358,9 +359,10 @@ describe('TargetComponent tests', () => {
 
     const button = screen.getByTestId('button');
     fireEvent.click(button);
-    expect(gmp.target.export).toHaveBeenCalledWith(target);
 
     await wait();
+
+    expect(gmp.target.export).toHaveBeenCalledWith(target);
 
     expect(onDownloaded).toHaveBeenCalledWith({
       data: 'some-data',

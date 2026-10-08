@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent, screen} from 'web/testing';
+import {rendererWith, fireEvent, screen, wait} from 'web/testing';
 import Features from 'gmp/capabilities/features';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import QueryFilter from 'gmp/models/filter/query-filter';
@@ -238,6 +238,7 @@ const createGmp = ({
   session: createSession({timezone: 'CET'}),
   user: {
     currentSettings,
+    getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
   },
 });
 
@@ -445,19 +446,22 @@ describe('TaskDetailsPage tests', () => {
     fireEvent.click(deleteIcon);
     expect(gmp.task.delete).toHaveBeenCalledWith(task5Id);
 
-    const exportIcon = screen.getByTestId('export-icon');
-    expect(exportIcon).toHaveAttribute('title', 'Export Task as XML');
-    fireEvent.click(exportIcon);
-    expect(gmp.task.export).toHaveBeenCalledWith(task5);
-
     const startIcon = screen.getByTestId('start-icon');
     expect(startIcon).toHaveAttribute('title', 'Start');
     fireEvent.click(startIcon);
+    await wait();
     expect(gmp.task.start).toHaveBeenCalledWith(task5);
+
+    const exportIcon = screen.getByTestId('export-icon');
+    expect(exportIcon).toHaveAttribute('title', 'Export Task as XML');
+    fireEvent.click(exportIcon);
+    await wait();
+    expect(gmp.task.export).toHaveBeenCalledWith(task5);
 
     const resumeIcon = screen.getByTestId('resume-icon');
     expect(resumeIcon).toHaveAttribute('title', 'Resume');
     fireEvent.click(resumeIcon);
+    await wait();
     expect(gmp.task.resume).toHaveBeenCalledWith(task5);
   });
 });

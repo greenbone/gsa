@@ -54,7 +54,10 @@ const createGmp = ({
   credentials: {getAll: ReturnType<typeof testing.fn>};
   ociimagetarget: Record<string, ReturnType<typeof testing.fn>>;
   credential: {create: ReturnType<typeof testing.fn>};
-  user: {currentSettings: ReturnType<typeof testing.fn>};
+  user: {
+    currentSettings: ReturnType<typeof testing.fn>;
+    getSetting: ReturnType<typeof testing.fn>;
+  };
   session: ReturnType<typeof createSession>;
 } => {
   const make = (val: unknown) =>
@@ -80,6 +83,7 @@ const createGmp = ({
       currentSettings: testing
         .fn()
         .mockResolvedValue(currentSettingsDefaultResponse),
+      getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
     },
     session: createSession(),
   };

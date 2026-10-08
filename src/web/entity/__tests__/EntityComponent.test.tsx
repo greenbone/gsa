@@ -11,18 +11,8 @@ import {createSession} from 'gmp/testing';
 import {type EntityType} from 'gmp/utils/entity-type';
 import EntityComponent from 'web/entity/EntityComponent';
 
-const currentSettingsResponse = {
-  data: {
-    detailsexportfilename: {
-      id: 'a6ac88c5-729c-41ba-ac0a-deea4a3441f2',
-      name: 'Details Export File Name',
-      value: '%T-%U',
-    },
-  },
-};
-
 const createGmp = ({
-  currentSettings = testing.fn().mockResolvedValue(currentSettingsResponse),
+  getSetting = testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
   fooExport = testing.fn().mockResolvedValue({data: {id: '123'}}),
   fooClone = testing.fn().mockResolvedValue({id: '123'}),
   fooDelete = testing.fn().mockResolvedValue(undefined),
@@ -31,7 +21,7 @@ const createGmp = ({
 } = {}) => ({
   session: createSession(),
   user: {
-    currentSettings,
+    getSetting,
   },
   foo: {
     export: fooExport,
@@ -305,8 +295,6 @@ describe('EntityComponent tests', () => {
         )}
       </EntityComponent>,
     );
-    await wait(); // wait for currentSettings to be resolved and put into the store
-    expect(gmp.user.currentSettings).toHaveBeenCalledOnce();
     fireEvent.click(screen.getByTestId('button'));
     await wait();
     expect(onDownloaded).toHaveBeenCalledWith({
@@ -338,7 +326,6 @@ describe('EntityComponent tests', () => {
       </EntityComponent>,
     );
 
-    await wait(); // wait for currentSettings to be resolved and put into the store
     fireEvent.click(screen.getByTestId('button'));
     await wait();
     expect(onDownloadError).toHaveBeenCalledWith(error);

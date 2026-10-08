@@ -75,6 +75,7 @@ const createGmp = ({
     session: createSession({timezone: 'CET'}),
     user: {
       currentSettings,
+      getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
     },
   };
 };
