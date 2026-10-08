@@ -15,7 +15,6 @@
   "{{- entity}} successfully moved to trashcan": "{{- entity}} spostato nel Cestino con successo",
   "{{- name}} cloned successfully.": "{{- name}} clonato con successo.",
   "{{- name}} deleted successfully.": "{{- name}} eliminato con successo.",
-  "{{- name}} downloaded successfully.": "{{- name}} scaricato con successo.",
   "{{- name}} restored successfully.": "{{- name}} ripristinato con successo.",
   "{{age}} days old": "{{age}} giorni fa",
   "{{count}} alert(s) only visible to other users": "{{count}} avviso/i visibile/i solo ad altri utenti",
@@ -26,6 +25,7 @@
   "{{days}} day {{hours}}:{{minutes}} h": "{{days}} giorno {{hours}}:{{minutes}} h",
   "{{days}} days {{hours}}:{{minutes}} h": "{{days}} giorni {{hours}}:{{minutes}} h",
   "{{entity}} {{- name}} cloned successfully": "{{entity}} {{- name}} clonato con successo",
+  "{{entity}} {{- name}} downloaded successfully.": "{{entity}} {{- name}} scaricato con successo.",
   "{{entity}} {{- name}} successfully created": "{{entity}} {{- name}} creato con successo",
   "{{entity}} {{- name}} successfully deleted": "{{entity}} {{- name}} eliminato con successo",
   "{{entity}} {{- name}} successfully saved": "{{entity}} {{- name}} salvato con successo",
@@ -1605,7 +1605,6 @@
   "Port Counts: UDP": "Conteggi porte: UDP",
   "Port List": "Elenco porte",
   "Port List imported successfully.": "Elenco porte importato con successo.",
-
   "Port List: {{name}}": "Elenco porte: {{name}}",
   "Port Lists": "Elenchi porte",
   "Port Lists Filter": "Filtro elenchi porte",
