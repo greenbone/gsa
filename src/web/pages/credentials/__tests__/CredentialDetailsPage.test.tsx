@@ -64,6 +64,7 @@ const createGmp = ({
     currentSettings: testing
       .fn()
       .mockResolvedValue(currentSettingsDefaultResponse),
+    getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
   },
   permissions: {
     get: testing.fn().mockResolvedValue({
@@ -329,6 +330,7 @@ describe('CredentialDetailsPage tests', () => {
 
     const exportIcon = screen.getByTitle('Export Credential as XML');
     fireEvent.click(exportIcon);
+    await wait();
     expect(gmp.credential.export).toHaveBeenCalledWith({id: credential.id});
 
     const deleteIcon = screen.getByTitle('Move Credential to trashcan');
@@ -337,20 +339,47 @@ describe('CredentialDetailsPage tests', () => {
 
     const downloadDebIcon = screen.getByTitle('Download Debian (.deb) Package');
     fireEvent.click(downloadDebIcon);
+    await wait();
     expect(gmp.credential.download).toHaveBeenCalledWith(
       {id: credential.id},
       'deb',
     );
+  });
 
-    const downloadRpmIcon = screen.getByTitle('Download RPM (.rpm) Package');
-    fireEvent.click(downloadRpmIcon);
+  test('should download the RPM package', async () => {
+    const gmp = createGmp();
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(entityLoadingActions.success('6575', credential));
+    render(<CredentialDetailsPage id="6575" />);
+
+    fireEvent.click(screen.getByTitle('Download RPM (.rpm) Package'));
+    await wait();
     expect(gmp.credential.download).toHaveBeenCalledWith(
       {id: credential.id},
       'rpm',
     );
+  });
 
-    const downloadPublicKeyIcon = screen.getByTitle('Download Public Key');
-    fireEvent.click(downloadPublicKeyIcon);
+  test('should download the public key', async () => {
+    const gmp = createGmp();
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(entityLoadingActions.success('6575', credential));
+    render(<CredentialDetailsPage id="6575" />);
+
+    fireEvent.click(screen.getByTitle('Download Public Key'));
+    await wait();
     expect(gmp.credential.download).toHaveBeenCalledWith(
       {id: credential.id},
       'key',

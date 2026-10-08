@@ -88,6 +88,7 @@ interface GmpObject {
   settings: {manualUrl: string};
   user: {
     currentSettings: RecordPromiseMock;
+    getSetting: RecordPromiseMock;
   };
   [key: string]: unknown;
 }
@@ -259,6 +260,7 @@ const createGmp = ({
       session: createSession(),
       user: {
         currentSettings,
+        getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
       },
     } as GmpObject,
     mocks: {

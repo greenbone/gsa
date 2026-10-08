@@ -14,9 +14,10 @@ import ScheduleComponent from 'web/pages/schedules/ScheduleComponent';
 
 const createGmp = ({
   currentSettings = testing.fn().mockResolvedValue({}),
+  getSetting = testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
 } = {}) => ({
   session: createSession({timezone: 'UTC'}),
-  user: {currentSettings},
+  user: {currentSettings, getSetting},
 });
 
 describe('ScheduleComponent tests', () => {

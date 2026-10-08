@@ -183,6 +183,7 @@ const createGmp = ({
   session: createSession({timezone: 'CET'}),
   user: {
     currentSettings,
+    getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
   },
 });
 
@@ -438,6 +439,7 @@ describe('ScanConfigDetailsPage tests', () => {
 
     const exportIcon = screen.getByTitle('Export Scan Config as XML');
     fireEvent.click(exportIcon);
+    await wait();
     expect(gmp.scanconfig.export).toHaveBeenCalledWith(config);
 
     const trashcanIcon = screen.getByTitle('Move Scan Config to trashcan');
@@ -508,6 +510,7 @@ describe('ScanConfigDetailsPage tests', () => {
 
     const exportIcon = screen.getByTitle('Export Scan Config as XML');
     fireEvent.click(exportIcon);
+    await wait();
     expect(gmp.scanconfig.export).toHaveBeenCalledWith(config2);
 
     const deleteIcon = screen.getByTitle(
@@ -580,6 +583,7 @@ describe('ScanConfigDetailsPage tests', () => {
 
     const exportIcon = screen.getByTitle('Export Scan Config as XML');
     fireEvent.click(exportIcon);
+    await wait();
     expect(gmp.scanconfig.export).toHaveBeenCalledWith(config3);
 
     expect(
@@ -648,6 +652,7 @@ describe('ScanConfigDetailsPage tests', () => {
 
     const exportIcon = screen.getByTitle('Export Scan Config as XML');
     fireEvent.click(exportIcon);
+    await wait();
     expect(gmp.scanconfig.export).toHaveBeenCalledWith(config4);
 
     expect(

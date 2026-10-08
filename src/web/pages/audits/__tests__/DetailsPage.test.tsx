@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent, screen, within} from 'web/testing';
+import {rendererWith, fireEvent, screen, wait, within} from 'web/testing';
 import {Route, Routes} from 'react-router';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
@@ -198,6 +198,7 @@ const createGmp = ({
   session: createSession({token: 'test-token', timezone: 'CET'}),
   user: {
     currentSettings,
+    getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
   },
 });
 
@@ -366,6 +367,7 @@ describe('Audit DetailsPage tests', () => {
     expect(gmp.audit.export).not.toHaveBeenCalled();
     expect(exportIcon).toHaveAttribute('title', 'Export Audit as XML');
     fireEvent.click(exportIcon);
+    await wait();
     expect(gmp.audit.export).toHaveBeenCalledWith(audit5);
 
     const startIcon = screen.getByTestId('start-icon');

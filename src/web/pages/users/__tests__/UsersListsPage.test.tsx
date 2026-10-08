@@ -69,6 +69,7 @@ const createGmp = ({
   deleteUser = testing.fn().mockResolvedValue(deleteUserResponse),
   downloadUser = testing.fn().mockResolvedValue(downloadUserResponse),
   exportUser = testing.fn().mockResolvedValue(exportUserResponse),
+  getSetting = testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
   getUser = testing.fn().mockResolvedValue(getUserResponse),
   getUsers = testing.fn().mockResolvedValue(getUsersResponse),
   getAllUsers = testing.fn().mockResolvedValue(getAllUsersResponse),
@@ -92,6 +93,7 @@ const createGmp = ({
     download: downloadUser,
     export: exportUser,
     get: getUser,
+    getSetting,
     currentSettings: testing
       .fn()
       .mockResolvedValue(currentSettingsDefaultResponse),

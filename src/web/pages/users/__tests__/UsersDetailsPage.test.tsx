@@ -51,6 +51,7 @@ const createGmp = () => ({
     currentSettings: testing
       .fn()
       .mockResolvedValue(currentSettingsDefaultResponse),
+    getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
     currentAuthSettings: testing
       .fn()
       .mockResolvedValue({data: {get: () => ({})}}),

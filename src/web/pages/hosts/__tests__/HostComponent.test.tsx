@@ -141,6 +141,7 @@ const createGmp = ({
   currentSettings = testing
     .fn()
     .mockResolvedValue(currentSettingsDefaultResponse),
+  getSetting = testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
   getCredentials = testing.fn().mockResolvedValue({data: []}),
   getPortLists = testing.fn().mockResolvedValue({data: []}),
 } = {}) => ({
@@ -152,7 +153,7 @@ const createGmp = ({
   portlists: {
     getAll: getPortLists,
   },
-  user: {currentSettings},
+  user: {currentSettings, getSetting},
   settings: {
     manualUrl: 'test/',
     reloadInterval: -1,

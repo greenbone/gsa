@@ -50,7 +50,10 @@ const createGmp = ({
       meta: {filter: {}, counts: {}},
     }),
   },
-  user: {currentSettings},
+  user: {
+    currentSettings,
+    getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
+  },
   session: createSession(),
 });
 

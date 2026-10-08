@@ -182,7 +182,10 @@ const createGmp = ({
     severityRating: SEVERITY_RATING_CVSS_3,
   },
   session: createSession({timezone: 'CET'}),
-  user: {currentSettings},
+  user: {
+    currentSettings,
+    getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
+  },
 });
 
 describe('Host DetailsPage tests', () => {

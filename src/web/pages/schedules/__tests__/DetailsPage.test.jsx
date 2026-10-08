@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, fireEvent, screen, within} from 'web/testing';
+import {rendererWith, fireEvent, screen, wait, within} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import Schedule from 'gmp/models/schedule';
@@ -71,6 +71,7 @@ const createGmp = ({
   session: createSession({timezone: 'CET'}),
   user: {
     currentSettings,
+    getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
   },
 });
 
@@ -194,6 +195,7 @@ describe('ScheduleDetailsPage tests', () => {
 
     const exportIcon = screen.getByTitle('Export Schedule as XML');
     fireEvent.click(exportIcon);
+    await wait();
     expect(gmp.schedule.export).toHaveBeenCalledWith(schedule);
 
     const deleteIcon = screen.getByTitle('Move Schedule to trashcan');
