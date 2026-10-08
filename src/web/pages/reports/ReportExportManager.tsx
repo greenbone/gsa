@@ -11,18 +11,26 @@ import {
   useMemo,
   useRef,
   useState,
+  type Dispatch,
   type ReactNode,
+  type SetStateAction,
 } from 'react';
-import {ActionIcon, Group, Popover, Stack, Text} from '@mantine/core';
+import {ActionIcon, Group, Loader, Popover, Stack, Text} from '@mantine/core';
 import {showSuccessNotification} from '@greenbone/ui-lib';
 import styled from 'styled-components';
 import Button from 'web/components/form/Button';
-import {DownloadIcon, XIcon} from 'web/components/icon';
+import {
+  AlertCircleIcon,
+  CheckIcon,
+  CircleXDeleteIcon,
+  DownloadIcon,
+  ScheduleIcon,
+  XIcon,
+} from 'web/components/icon';
 import Link from 'web/components/link/Link';
 import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
 import useReportExport, {
   type ReportExportJob,
-  type ReportExportState,
   type StartDirectReportDownloadParams,
   type StartReportExportParams,
 } from 'web/hooks/useReportExport';
@@ -36,6 +44,8 @@ interface ReportExportManagerContextValue {
   dismiss: (key: string) => void;
   isActive: boolean;
   supportsCancellation: boolean;
+  activityOpen: boolean;
+  setActivityOpen: Dispatch<SetStateAction<boolean>>;
   jobs: ReportExportJob[];
 }
 
@@ -69,68 +79,285 @@ const ActivityDropdown = styled.div`
   width: 100%;
 `;
 
-const ActivityStatus = styled(Text)`
+type ActivityStatusTone =
+  | 'active'
+  | 'queued'
+  | 'downloading'
+  | 'canceled'
+  | 'error'
+  | 'ready';
+
+type ActivityStatusIcon =
+  | 'loading'
+  | 'queued'
+  | 'downloading'
+  | 'canceled'
+  | 'error'
+  | 'ready';
+
+const ActivityStatusPill = styled.div<{$tone: ActivityStatusTone}>`
+  align-items: center;
+  background: ${props => {
+    if (props.$tone === 'active') return Theme.reportActivityActiveBackground;
+    if (props.$tone === 'queued') return Theme.reportActivityQueuedBackground;
+    if (props.$tone === 'downloading') {
+      return Theme.reportActivityDownloadingBackground;
+    }
+    if (props.$tone === 'error') return Theme.reportActivityErrorBackground;
+    if (props.$tone === 'ready') return Theme.reportActivityReadyBackground;
+    return Theme.reportActivityCanceledBackground;
+  }};
+  border-radius: 4px;
+  color: ${props => {
+    if (props.$tone === 'active') return Theme.darkGreen;
+    if (props.$tone === 'queued' || props.$tone === 'downloading') {
+      return Theme.blue;
+    }
+    if (props.$tone === 'error') return Theme.darkRed;
+    if (props.$tone === 'ready') return Theme.darkGreen;
+    return Theme.darkGray;
+  }};
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 600;
+  gap: 6px;
+  line-height: 1.3;
+  max-width: 100%;
+  padding: 4px 8px;
+`;
+
+const ActivityStatusIconContainer = styled.span`
+  align-items: center;
+  display: inline-flex;
+  height: 14px;
+  justify-content: center;
+  width: 14px;
+`;
+
+const ActivityStatusDetail = styled(Text)`
+  overflow-wrap: anywhere;
+`;
+
+const ActivityHeading = styled.div`
+  align-items: flex-start;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+
+  @media (max-width: 360px) {
+    align-items: stretch;
+    flex-direction: column;
+  }
+`;
+
+const ActivityTitle = styled(Text)`
+  min-width: 0;
   overflow-wrap: anywhere;
 `;
 
 const ActivityJob = styled.div`
+  background: ${Theme.reportActivityRowBackground};
+  border: 1px solid ${Theme.lightGray};
+  border-radius: 6px;
   min-width: 0;
-  padding-top: 12px;
-  &:not(:first-child) {
-    border-top: 1px solid ${Theme.lightGray};
-  }
+  padding: 10px;
+`;
+
+const ActivityActions = styled.div`
+  align-items: center;
+  border-top: 1px solid ${Theme.lightGray};
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  justify-content: space-between;
+  padding-top: 8px;
 `;
 
 const ErrorText = styled(Text)`
   color: ${Theme.darkRed};
 `;
 
-const getStatusText = (
-  state: ReportExportState,
-  downloadStarted: boolean,
-  translate: TranslateFunc,
-) => {
-  if (state.status === 'creating') return translate('Preparing report export');
-  if (state.status === 'checking') {
-    return translate('Checking export status');
+interface ActivityStatusPresentation {
+  label: string;
+  detail?: string;
+  tone: ActivityStatusTone;
+  icon: ActivityStatusIcon;
+}
+
+const getRunningStatusPresentation = (
+  progress: string | undefined,
+  _: TranslateFunc,
+): ActivityStatusPresentation => ({
+  label: progress === 'preparing' ? _('Preparing') : _('Generating'),
+  detail:
+    progress && progress !== 'preparing' && progress !== 'generating'
+      ? _('Progress: {{progress}}', {progress})
+      : undefined,
+  tone: 'active',
+  icon: 'loading',
+});
+
+const getReportStatePresentation = (
+  job: ReportExportJob,
+  _: TranslateFunc,
+): ActivityStatusPresentation => {
+  switch (job.state.status) {
+    case 'creating':
+      return {
+        label: _('Preparing'),
+        tone: 'active',
+        icon: 'loading',
+      };
+    case 'checking':
+      return {
+        label: _('Checking'),
+        tone: 'active',
+        icon: 'loading',
+      };
+    case 'pending':
+      return {
+        label: _('Queued'),
+        tone: 'queued',
+        icon: 'queued',
+      };
+    case 'running':
+      return getRunningStatusPresentation(job.state.exportData?.progress, _);
+    case 'cancel_requested':
+      return {
+        label: _('Cancel requested'),
+        tone: 'queued',
+        icon: 'queued',
+      };
+    case 'canceled':
+      return {
+        label: _('Canceled'),
+        tone: 'canceled',
+        icon: 'canceled',
+      };
+    case 'error':
+      return {
+        label: _('Export failed'),
+        detail: job.state.error.message,
+        tone: 'error',
+        icon: 'error',
+      };
+    case 'done':
+      return {
+        label: job.downloadStarted ? _('Export complete') : _('Ready'),
+        tone: 'ready',
+        icon: 'ready',
+      };
+    case 'downloaded':
+      return {
+        label: _('Export complete'),
+        tone: 'ready',
+        icon: 'ready',
+      };
   }
-  if (state.status === 'pending' || state.exportData?.progress === 'queued') {
-    return translate('Queued');
+  return {
+    label: _('Preparing'),
+    tone: 'active',
+    icon: 'loading',
+  };
+};
+
+const getActivityStatusPresentation = (
+  job: ReportExportJob,
+  _: TranslateFunc,
+): ActivityStatusPresentation => {
+  if (job.downloadError) {
+    return {
+      label: _('Download failed'),
+      detail: job.downloadError.message,
+      tone: 'error',
+      icon: 'error',
+    };
   }
-  if (state.status === 'running' && !state.exportData?.progress) {
-    return translate('Generating report');
+  if (job.directPending || job.downloadPending) {
+    return {
+      label: _('Downloading'),
+      tone: 'downloading',
+      icon: 'downloading',
+    };
   }
-  if (state.status === 'cancel_requested') {
-    return translate('Cancellation requested');
+  if (job.cancelPending) {
+    return {
+      label: _('Canceling'),
+      tone: 'queued',
+      icon: 'queued',
+    };
   }
-  if (state.status === 'error') return state.error.message;
-  if (state.status === 'done') {
-    return downloadStarted
-      ? translate('Download started')
-      : translate('Preparing download');
+  if (job.state.status === 'running') {
+    return getRunningStatusPresentation(job.state.exportData?.progress, _);
   }
-  if (state.status === 'canceled') return translate('Export canceled');
-  if (state.exportData?.progress) {
-    return translate('Progress: {{progress}}', {
-      progress: state.exportData.progress,
-    });
+  if (job.state.exportData?.progress === 'queued') {
+    return {
+      label: _('Queued'),
+      tone: 'queued',
+      icon: 'queued',
+    };
   }
-  return translate('Status: {{status}}', {status: state.status});
+  return getReportStatePresentation(job, _);
+};
+
+const getActivityTitle = (job: ReportExportJob, _: TranslateFunc) => {
+  let title = job.directDownload ? _('Report download') : _('Report export');
+  if (job.reportTitle) {
+    title = job.directDownload
+      ? _('Report download: {{report}}', {report: job.reportTitle})
+      : _('Report export: {{report}}', {report: job.reportTitle});
+  }
+  const extensionIndex = job.filename.lastIndexOf('.');
+  const extension =
+    extensionIndex > 0
+      ? job.filename.slice(extensionIndex + 1).toLowerCase()
+      : '';
+  return extension ? `${title} (.${extension})` : title;
+};
+
+const getCancelButtonTitle = (job: ReportExportJob, _: TranslateFunc) => {
+  if (job.cancelPending) return _('Cancellation requested');
+  if (job.cancelError) return _('Retry cancellation');
+  return _('Cancel report export');
+};
+
+const getActivityStatusIcon = (icon: ActivityStatusIcon) => {
+  switch (icon) {
+    case 'loading':
+      return <Loader color={Theme.darkGreen} size={14} />;
+    case 'queued':
+      return <ScheduleIcon color={Theme.blue} />;
+    case 'downloading':
+      return <DownloadIcon color={Theme.blue} />;
+    case 'canceled':
+      return <CircleXDeleteIcon color={Theme.darkGray} />;
+    case 'error':
+      return <AlertCircleIcon color={Theme.darkRed} />;
+    case 'ready':
+      return <CheckIcon color={Theme.darkGreen} />;
+  }
 };
 
 export const ReportExportActivity = () => {
-  const {cancel, dismiss, isActive, jobs, supportsCancellation} =
-    useReportExportManager();
+  const {
+    activityOpen,
+    cancel,
+    dismiss,
+    isActive,
+    jobs,
+    setActivityOpen,
+    supportsCancellation,
+  } = useReportExportManager();
   const [_] = useTranslation();
-  const [opened, setOpened] = useState(false);
-  const previousJobCount = useRef(jobs.length);
+  const previousJobKeys = useRef(new Set(jobs.map(job => job.key)));
 
   useEffect(() => {
-    if (jobs.length > previousJobCount.current) {
-      setOpened(true);
+    if (jobs.some(job => !previousJobKeys.current.has(job.key))) {
+      setActivityOpen(true);
     }
-    previousJobCount.current = jobs.length;
-  }, [jobs.length]);
+    previousJobKeys.current = new Set(jobs.map(job => job.key));
+  }, [jobs, setActivityOpen]);
 
   if (jobs.length === 0) return null;
 
@@ -144,7 +371,7 @@ export const ReportExportActivity = () => {
   return (
     <Popover
       offset={8}
-      opened={opened}
+      opened={activityOpen}
       position="bottom-end"
       styles={{
         dropdown: {
@@ -156,7 +383,7 @@ export const ReportExportActivity = () => {
         },
       }}
       transitionProps={{duration: 0}}
-      onChange={setOpened}
+      onChange={setActivityOpen}
     >
       <Popover.Target>
         <ActionIcon
@@ -165,7 +392,7 @@ export const ReportExportActivity = () => {
           style={{position: 'relative'}}
           title={_('Report export activity')}
           variant="transparent"
-          onClick={() => setOpened(value => !value)}
+          onClick={() => setActivityOpen(value => !value)}
         >
           <DownloadIcon color={Theme.white} />
           <ActivityDot $state={indicatorState} />
@@ -182,7 +409,7 @@ export const ReportExportActivity = () => {
                 aria-label={_('Close export activity')}
                 size="sm"
                 variant="subtle"
-                onClick={() => setOpened(false)}
+                onClick={() => setActivityOpen(false)}
               >
                 <XIcon />
               </ActionIcon>
@@ -206,41 +433,33 @@ export const ReportExportActivity = () => {
                 job.downloadPending ||
                 job.directPending ||
                 job.cancelPending;
-              const isStatusError =
-                state.status === 'error' || Boolean(job.downloadError);
-              const statusText = job.directPending
-                ? _('Downloading report')
-                : job.downloadError
-                  ? _('Download failed: {{error}}', {
-                      error: job.downloadError.message,
-                    })
-                  : getStatusText(state, job.downloadStarted, _);
+              const status = getActivityStatusPresentation(job, _);
+              const isStatusError = status.tone === 'error';
 
               return (
                 <ActivityJob key={job.key}>
                   <Stack gap="xs">
-                    <Text fw={600} size="sm">
-                      {job.reportTitle
-                        ? job.directDownload
-                          ? _('Report download: {{report}}', {
-                              report: job.reportTitle,
-                            })
-                          : _('Report export: {{report}}', {
-                              report: job.reportTitle,
-                            })
-                        : job.directDownload
-                          ? _('Report download')
-                          : _('Report export')}
-                    </Text>
-                    <ActivityStatus
-                      aria-live={jobIsActive ? 'polite' : undefined}
-                      role={isStatusError ? 'alert' : 'status'}
-                      size="sm"
-                    >
-                      {statusText}
-                    </ActivityStatus>
-                    {job.reportUrl && (
-                      <Link to={job.reportUrl}>{_('View report')}</Link>
+                    <ActivityHeading>
+                      <ActivityTitle fw={600} size="sm">
+                        {getActivityTitle(job, _)}
+                      </ActivityTitle>
+                      <ActivityStatusPill
+                        $tone={status.tone}
+                        aria-live={jobIsActive ? 'polite' : undefined}
+                        data-state={status.tone}
+                        data-testid="report-export-status"
+                        role={isStatusError ? 'alert' : 'status'}
+                      >
+                        <ActivityStatusIconContainer aria-hidden="true">
+                          {getActivityStatusIcon(status.icon)}
+                        </ActivityStatusIconContainer>
+                        {status.label}
+                      </ActivityStatusPill>
+                    </ActivityHeading>
+                    {status.detail && (
+                      <ActivityStatusDetail c="dimmed" size="xs">
+                        {status.detail}
+                      </ActivityStatusDetail>
                     )}
                     {job.statusError && (
                       <ErrorText role="status" size="sm">
@@ -256,24 +475,29 @@ export const ReportExportActivity = () => {
                         })}
                       </ErrorText>
                     )}
-                    {jobIsActive && canCancel && (
-                      <Button
-                        disabled={!canCancel || job.cancelPending}
-                        title={
-                          job.cancelPending
-                            ? _('Cancellation requested')
-                            : job.cancelError
-                              ? _('Retry cancellation')
-                              : _('Cancel report export')
-                        }
-                        onClick={() => void cancel(job.key)}
-                      />
-                    )}
-                    {!jobIsActive && (
-                      <Button
-                        title={_('Remove from activity')}
-                        onClick={() => dismiss(job.key)}
-                      />
+                    {(job.reportUrl ||
+                      (jobIsActive && canCancel) ||
+                      !jobIsActive) && (
+                      <ActivityActions>
+                        {job.reportUrl && (
+                          <Link to={job.reportUrl}>
+                            {_('View report details')}
+                          </Link>
+                        )}
+                        {jobIsActive && canCancel && (
+                          <Button
+                            disabled={!canCancel || job.cancelPending}
+                            title={getCancelButtonTitle(job, _)}
+                            onClick={() => void cancel(job.key)}
+                          />
+                        )}
+                        {!jobIsActive && (
+                          <Button
+                            title={_('Remove from activity')}
+                            onClick={() => dismiss(job.key)}
+                          />
+                        )}
+                      </ActivityActions>
                     )}
                   </Stack>
                 </ActivityJob>
@@ -288,6 +512,11 @@ export const ReportExportActivity = () => {
 
 const ReportExportManager = ({children}: ReportExportManagerProps) => {
   const [_] = useTranslation();
+  const [activityOpen, setActivityOpen] = useState(false);
+  const activityOpenRef = useRef(activityOpen);
+  useEffect(() => {
+    activityOpenRef.current = activityOpen;
+  }, [activityOpen]);
   const capabilities = useContext(CapabilitiesContext);
   const supportsCancellation =
     capabilities?.mayOp('cancel_report_export') ?? false;
@@ -307,11 +536,16 @@ const ReportExportManager = ({children}: ReportExportManagerProps) => {
         anchor.remove();
         window.URL.revokeObjectURL(url);
       }, 1000);
-      showSuccessNotification('', _('Report download started.'));
+      if (!activityOpenRef.current) {
+        showSuccessNotification('', _('Report download started.'));
+      }
     },
     [_],
   );
-  const reportExport = useReportExport({onDownload: handleDownload});
+  const reportExport = useReportExport({
+    onDownload: handleDownload,
+    activityOpen,
+  });
   const cancel = useCallback(
     (key: string) =>
       supportsCancellation ? reportExport.cancel(key) : Promise.resolve(),
@@ -325,9 +559,11 @@ const ReportExportManager = ({children}: ReportExportManagerProps) => {
       dismiss: reportExport.dismiss,
       isActive: reportExport.isActive,
       supportsCancellation,
+      activityOpen,
+      setActivityOpen,
       jobs: reportExport.jobs,
     }),
-    [cancel, reportExport, supportsCancellation],
+    [activityOpen, cancel, reportExport, setActivityOpen, supportsCancellation],
   );
 
   return (

@@ -86,58 +86,61 @@ describe('ReportExportCommand tests', () => {
     expect(response.data).toEqual({id: 'export-uuid'});
   });
 
-  test('should parse report export status and metadata', async () => {
-    const fakeHttp = createHttp(
-      createResponse({
-        get_report_exports: {
-          get_report_exports_response: {
-            report_export: {
-              _id: 'export-uuid',
-              type: 'scan',
-              status: 'running',
-              progress: 'generating',
-              report: {_id: 'report-uuid'},
-              report_format: {_id: 'format-uuid'},
-              file_size: '0',
-              content_type: '',
-              extension: '',
-              error_message: '',
-              attempt_count: '1',
-              start_time: '2026-09-01T08:40:50Z',
+  test.each(['get_report_export', 'get_report_exports'])(
+    'should parse report export status and metadata from %s',
+    async wrapper => {
+      const fakeHttp = createHttp(
+        createResponse({
+          [wrapper]: {
+            get_report_exports_response: {
+              report_export: {
+                _id: 'export-uuid',
+                type: 'scan',
+                status: 'running',
+                progress: 'generating',
+                report: {_id: 'report-uuid'},
+                report_format: {_id: 'format-uuid'},
+                file_size: '0',
+                content_type: '',
+                extension: '',
+                error_message: '',
+                attempt_count: '1',
+                start_time: '2026-09-01T08:40:50Z',
+              },
             },
           },
+        }),
+      );
+      const exportCommand = new ReportExportCommand(fakeHttp);
+
+      const response = await exportCommand.getReportExports({
+        reportExportId: 'export-uuid',
+      });
+
+      expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+        args: {
+          cmd: 'get_report_export',
+          report_export_id: 'export-uuid',
         },
-      }),
-    );
-    const exportCommand = new ReportExportCommand(fakeHttp);
-
-    const response = await exportCommand.getReportExports({
-      reportExportId: 'export-uuid',
-    });
-
-    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
-      args: {
-        cmd: 'get_report_exports',
-        report_export_id: 'export-uuid',
-      },
-    });
-    expect(response.data).toEqual([
-      {
-        id: 'export-uuid',
-        type: 'scan',
-        status: 'running',
-        progress: 'generating',
-        reportId: 'report-uuid',
-        reportFormatId: 'format-uuid',
-        fileSize: 0,
-        contentType: '',
-        extension: '',
-        errorMessage: '',
-        attemptCount: 1,
-        startTime: '2026-09-01T08:40:50Z',
-      },
-    ]);
-  });
+      });
+      expect(response.data).toEqual([
+        {
+          id: 'export-uuid',
+          type: 'scan',
+          status: 'running',
+          progress: 'generating',
+          reportId: 'report-uuid',
+          reportFormatId: 'format-uuid',
+          fileSize: 0,
+          contentType: '',
+          extension: '',
+          errorMessage: '',
+          attemptCount: 1,
+          startTime: '2026-09-01T08:40:50Z',
+        },
+      ]);
+    },
+  );
 
   test('should download a completed export', async () => {
     const data = new ArrayBuffer(8);
