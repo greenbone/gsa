@@ -46,6 +46,11 @@ const createGmp = ({
     .mockResolvedValue(new Response({id: 'cred-id'})),
 }: CreateGmpParams = {}): {
   credentials: {getAll: ReturnType<typeof testing.fn>};
+  settings: {
+    reloadInterval: number;
+    reloadIntervalActive: number;
+    reloadIntervalInactive: number;
+  };
   webapplicationtarget: Record<string, ReturnType<typeof testing.fn>>;
   credential: {create: ReturnType<typeof testing.fn>};
   user: {currentSettings: ReturnType<typeof testing.fn>};
@@ -57,6 +62,11 @@ const createGmp = ({
       : testing.fn().mockResolvedValue(val);
 
   return {
+    settings: {
+      reloadInterval: 0,
+      reloadIntervalActive: 0,
+      reloadIntervalInactive: 0,
+    },
     credentials: {
       getAll: testing.fn().mockResolvedValue(new Response(getAllCredentials)),
     },

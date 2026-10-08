@@ -4,7 +4,6 @@
  */
 
 import {
-  type default as Credential,
   type CredentialType,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
@@ -15,6 +14,7 @@ import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
 import {NewIcon} from 'web/components/icon';
+import {useGetAllCredentials} from 'web/hooks/use-query/credentials';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import {type RenderSelectItemProps, renderSelectItems} from 'web/utils/Render';
@@ -43,7 +43,6 @@ export type WebApplicationTargetsDialogData =
 
 interface WebApplicationTargetsDialogProps {
   comment?: string;
-  credentials?: Credential[];
   inUse?: boolean;
   name?: string;
   reverseLookupOnly?: boolean;
@@ -60,7 +59,6 @@ interface WebApplicationTargetsDialogProps {
 
 const WebApplicationTargetsDialog = ({
   comment = '',
-  credentials = [],
   inUse = false,
   name,
   reverseLookupOnly = false,
@@ -77,6 +75,9 @@ const WebApplicationTargetsDialog = ({
   const [_] = useTranslation();
   const capabilities = useCapabilities();
   const hasPermissionToCreateCredential = capabilities.mayCreate('credential');
+  const getCredentialsQuery = useGetAllCredentials();
+
+  const credentials = getCredentialsQuery.data?.entities ?? [];
 
   name = name || _('Unnamed');
   title = title || _('New Web Application Target');
@@ -165,6 +166,7 @@ const WebApplicationTargetsDialog = ({
                   data-testid="credential-select"
                   disabled={inUse}
                   grow="1"
+                  isLoading={getCredentialsQuery.isLoading}
                   items={renderSelectItems(
                     upCredentials as RenderSelectItemProps[],
                   )}

@@ -9,14 +9,12 @@ import {
   type OciImageTargetCreateParams,
   type OciImageTargetSaveParams,
 } from 'gmp/commands/oci-image-target';
-import {
-  type default as Credential,
-  type CredentialType,
-} from 'gmp/models/credential';
+import {type CredentialType} from 'gmp/models/credential';
 import type OciImageTarget from 'gmp/models/oci-image-target';
 import useEntityDownload, {
   type OnDownloadedFunc,
 } from 'web/entity/hooks/useEntityDownload';
+import {useCreateCredential} from 'web/hooks/use-query/credential';
 import {
   useCloneOciImageTarget,
   useCreateOciImageTarget,
@@ -89,7 +87,6 @@ const ContainerImageTargetsComponent = ({
 
   const [credentialsDialogVisible, setCredentialsDialogVisible] =
     useState(false);
-  const [credentials, setCredentials] = useState<Credential[]>([]);
   const [credentialTypes, setCredentialTypes] = useState<CredentialType[]>([]);
   const [credentialsTitle, setCredentialsTitle] = useState<string>('');
   const [credentialId, setCredentialId] = useState<string | undefined>(
@@ -126,10 +123,7 @@ const ContainerImageTargetsComponent = ({
     onError: onCloneError,
   });
 
-  const loadCredentials = async () => {
-    const response = await gmp.credentials.getAll();
-    return response.data;
-  };
+  const createCredentialMutation = useCreateCredential();
 
   const editTarget = async (target: OciImageTarget) => {
     setSelectedTarget(target);
@@ -139,9 +133,6 @@ const ContainerImageTargetsComponent = ({
       }),
     );
     setEditDialogVisible(true);
-    const creds = await loadCredentials();
-    setCredentials(creds);
-
     setCredentialId(target.credential?.id || undefined);
   };
 
@@ -149,9 +140,6 @@ const ContainerImageTargetsComponent = ({
     setSelectedTarget(undefined);
     setEditDialogTitle(_('New Container Image Target'));
     setEditDialogVisible(true);
-    const creds = await loadCredentials();
-    setCredentials(creds);
-
     setCredentialId(undefined);
   };
 
@@ -239,14 +227,9 @@ const ContainerImageTargetsComponent = ({
   };
 
   const handleCreateCredential = async (data: CredentialDialogState) => {
-    const response = await gmp.credential.create(data);
+    const response = await createCredentialMutation.mutateAsync(data);
     closeCredentialsDialog();
-    const newCredentials = await loadCredentials();
-    setCredentials(newCredentials);
-
-    if (response.data?.id) {
-      setCredentialId(response.data.id);
-    }
+    setCredentialId(response.id);
   };
 
   return (
@@ -263,7 +246,6 @@ const ContainerImageTargetsComponent = ({
         <ContainerImageTargetsDialog
           comment={selectedTarget?.comment}
           credentialId={credentialId}
-          credentials={credentials}
           excludeFile={undefined}
           excludeImages={(selectedTarget?.excludeImages ?? []).join(', ')}
           file={undefined}
