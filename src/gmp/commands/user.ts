@@ -251,7 +251,9 @@ class UserCommand extends EntityCommand<User, PortListElement> {
     return response.setData(settings);
   }
 
-  async getSetting(id: string) {
+  async getSetting(
+    id: string,
+  ): Promise<Response<Setting | undefined, XmlMeta>> {
     const response = await this.httpGetWithTransform({
       cmd: 'get_setting',
       setting_id: id,
