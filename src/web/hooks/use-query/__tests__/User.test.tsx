@@ -5,6 +5,8 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
+import {ExistingSettings} from 'gmp/commands/user';
+import Response from 'gmp/http/response';
 import User from 'gmp/models/user';
 import {createSession} from 'gmp/testing';
 import {
@@ -13,6 +15,7 @@ import {
   useDeleteUser,
   useDownloadUser,
   useGetUser,
+  useGetUserSetting,
   useSaveUser,
 } from 'web/hooks/use-query/user';
 
@@ -36,12 +39,15 @@ const createGmp = (
   session: createSession({token}),
   settings: {},
   user: {
-    get: testing.fn().mockResolvedValue({data: user}),
-    create: testing.fn().mockResolvedValue({data: {id: 'created'}}),
-    save: testing.fn().mockResolvedValue({data: {id: 'saved'}}),
-    clone: testing.fn().mockResolvedValue({data: {id: 'cloned'}}),
+    get: testing.fn().mockResolvedValue(new Response(user)),
+    create: testing.fn().mockResolvedValue(new Response({id: 'created'})),
+    save: testing.fn().mockResolvedValue(new Response({id: 'saved'})),
+    clone: testing.fn().mockResolvedValue(new Response({id: 'cloned'})),
     delete: testing.fn().mockResolvedValue(undefined),
-    export: testing.fn().mockResolvedValue({data: 'user-content'}),
+    export: testing.fn().mockResolvedValue(new Response('user-content')),
+    getSetting: testing
+      .fn()
+      .mockResolvedValue(new Response({value: 'setting'})),
     ...userMethods,
   },
 });
@@ -94,9 +100,31 @@ describe('useGetUser', () => {
   });
 });
 
+describe('useGetUserSetting', () => {
+  test('should fetch a user setting and return its data', async () => {
+    const getSetting = testing
+      .fn()
+      .mockResolvedValue(new Response({value: 'task-%U'}));
+    const gmp = createGmp({getSetting});
+    const {renderHook} = rendererWith({gmp, router: true});
+    const {result} = renderHook(() => useGetUserSetting());
+
+    const setting = await result.current(
+      ExistingSettings.detailsexportfilename,
+    );
+
+    expect(getSetting).toHaveBeenCalledWith(
+      ExistingSettings.detailsexportfilename,
+    );
+    expect(setting).toEqual({value: 'task-%U'});
+  });
+});
+
 describe('useCreateUser', () => {
   test('forwards access_hosts arrays when creating a user', async () => {
-    const create = testing.fn().mockResolvedValue({data: {id: 'created'}});
+    const create = testing
+      .fn()
+      .mockResolvedValue(new Response({id: 'created'}));
     const gmp = createGmp({create});
     const {render} = rendererWith({gmp, router: true});
 
@@ -149,7 +177,7 @@ describe('useCreateUser', () => {
 
 describe('useSaveUser', () => {
   test('derives oldName when saving', async () => {
-    const save = testing.fn().mockResolvedValue({data: {id: 'saved'}});
+    const save = testing.fn().mockResolvedValue(new Response({id: 'saved'}));
     const gmp = createGmp({save});
     const {render} = rendererWith({gmp, router: true});
     const input = {...userData, id: 'user-id'};
@@ -168,7 +196,7 @@ describe('useSaveUser', () => {
   });
 
   test('preserves an explicit oldName when saving', async () => {
-    const save = testing.fn().mockResolvedValue({data: {id: 'saved'}});
+    const save = testing.fn().mockResolvedValue(new Response({id: 'saved'}));
     const gmp = createGmp({save});
     const {render} = rendererWith({gmp, router: true});
     const input = {...userData, id: 'user-id', oldName: 'previous-user'};
