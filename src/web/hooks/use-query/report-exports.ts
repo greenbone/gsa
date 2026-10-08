@@ -42,7 +42,9 @@ const useGetReportExport = ({
       const response = await gmp.reportexport.getReportExports({
         reportExportId: id as string,
       });
-      const reportExport = response.data[0];
+      const reportExport = response.data.find(
+        exportItem => exportItem?.id === id,
+      );
       if (!reportExport) {
         throw new Error(`Report export ${id} was not found`);
       }

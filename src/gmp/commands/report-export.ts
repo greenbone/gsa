@@ -102,7 +102,7 @@ const getFilterValue = (filter?: FilterType | string) => {
 };
 
 const getReportExportsFromRoot = (data: XmlResponseData): unknown[] => {
-  const exports = data.get_report_exports;
+  const exports = data.get_report_export ?? data.get_report_exports;
   const root =
     exports && typeof exports === 'object'
       ? (exports as Record<string, unknown>).get_report_exports_response
@@ -184,7 +184,7 @@ class ReportExportCommand extends HttpCommand {
 
   async getReportExports({reportExportId}: ReportExportParams) {
     const response = await this.httpGetWithTransform({
-      cmd: 'get_report_exports',
+      cmd: 'get_report_export',
       report_export_id: reportExportId,
     });
     return response.setData(

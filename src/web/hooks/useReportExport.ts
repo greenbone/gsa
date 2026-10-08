@@ -8,6 +8,7 @@ import {showErrorNotification} from '@greenbone/ui-lib';
 import {useQueries, useQueryClient} from '@tanstack/react-query';
 import {type ReportExportPayload} from 'gmp/commands/report-export';
 import {type FilterType} from 'gmp/models/filter';
+import {filterString} from 'gmp/models/filter/utils';
 import {
   REPORT_EXPORT_STATUS,
   type ReportExport,
@@ -49,6 +50,7 @@ export type ReportExportState =
   | {status: 'idle'; exportData?: undefined; error?: undefined}
   | {status: 'creating'; exportData?: undefined; error?: undefined}
   | {status: 'checking'; exportData: ReportExport; error?: undefined}
+  | {status: 'downloaded'; exportData?: undefined; error?: undefined}
   | {
       status: 'pending' | 'running' | 'cancel_requested';
       exportData: ReportExport;
@@ -60,10 +62,13 @@ export type ReportExportState =
 
 interface UseReportExportParams {
   onDownload: (data: ArrayBuffer | string, filename: string) => void;
+  activityOpen?: boolean;
+  onCancelError?: (error: Error) => void;
 }
 
 export interface ReportExportJob {
   key: string;
+  requestIdentity?: string;
   filename: string;
   reportTitle: string;
   state: ReportExportState;
@@ -80,6 +85,7 @@ export interface ReportExportJob {
 
 interface ExportJobRecord {
   key: string;
+  requestIdentity?: string;
   exportId?: string;
   filename: string;
   reportTitle: string;
@@ -109,10 +115,10 @@ const readStoredRecords = (): ExportJobRecord[] => {
         Boolean(record) &&
         typeof record === 'object' &&
         typeof record.key === 'string' &&
-        typeof record.exportId === 'string' &&
         typeof record.filename === 'string' &&
         typeof record.reportTitle === 'string' &&
-        record.downloadStarted !== true,
+        (typeof record.exportId === 'string' ||
+          (record.directDownload === true && record.downloadStarted === true)),
     );
   } catch {
     return [];
@@ -128,6 +134,22 @@ const updateRecord = (
     record.key === key ? {...record, ...changes} : record,
   );
 
+const getReportRequestIdentity = (
+  kind: ReportExportKind,
+  payload: ReportExportPayload,
+) =>
+  JSON.stringify([
+    kind,
+    payload.report_id,
+    payload.format_id,
+    payload.config_id ?? '',
+    filterString(payload.filter) ?? '',
+    payload.filter_id ?? '',
+    payload.delta_report_id ?? '',
+    payload.ignore_pagination ?? '',
+    payload.lean ?? '',
+  ]);
+
 const toError = (error: unknown) => {
   if (error instanceof Error) return error;
   if (
@@ -139,6 +161,13 @@ const toError = (error: unknown) => {
     return new Error(error.message);
   }
   return new Error('Unknown report export error');
+};
+
+const notifyExportErrorIfActivityClosed = (
+  activityOpen: boolean,
+  error: Error,
+) => {
+  if (!activityOpen) showErrorNotification(error.message);
 };
 
 const isActiveStatus = (status?: string) =>
@@ -163,7 +192,56 @@ const getTerminalState = (reportExport: ReportExport): ReportExportState => {
   };
 };
 
-const useReportExport = ({onDownload}: UseReportExportParams) => {
+const getJobState = (
+  record: ExportJobRecord,
+  reportExport?: ReportExport,
+): ReportExportState => {
+  if (record.directDownload) {
+    if (record.createError) {
+      return {status: 'error', error: record.createError};
+    }
+    return record.downloadStarted
+      ? {status: 'downloaded'}
+      : {status: 'creating'};
+  }
+  if (
+    record.cancelAccepted &&
+    reportExport?.status === REPORT_EXPORT_STATUS.done
+  ) {
+    return {
+      status: 'canceled',
+      exportData: {
+        id: record.exportId,
+        status: REPORT_EXPORT_STATUS.canceled,
+      },
+    };
+  }
+  if (record.createError) {
+    return {status: 'error', error: record.createError};
+  }
+  if (!record.exportId) return {status: 'creating'};
+  if (!reportExport) {
+    return record.cancelAccepted
+      ? {status: 'cancel_requested', exportData: {id: record.exportId}}
+      : {status: 'checking', exportData: {id: record.exportId}};
+  }
+  if (record.cancelRequested && isActiveStatus(reportExport.status)) {
+    return {status: 'cancel_requested', exportData: reportExport};
+  }
+  if (isActiveStatus(reportExport.status)) {
+    return {
+      status: reportExport.status as 'pending' | 'running' | 'cancel_requested',
+      exportData: reportExport,
+    };
+  }
+  return getTerminalState(reportExport);
+};
+
+const useReportExport = ({
+  onDownload,
+  activityOpen = false,
+  onCancelError,
+}: UseReportExportParams) => {
   const gmp = useGmp();
   const token = useSessionToken();
   const queryClient = useQueryClient();
@@ -189,6 +267,11 @@ const useReportExport = ({onDownload}: UseReportExportParams) => {
     [gmp],
   );
   const [records, setRecords] = useState<ExportJobRecord[]>(readStoredRecords);
+  const activityOpenRef = useRef(activityOpen);
+
+  useEffect(() => {
+    activityOpenRef.current = activityOpen;
+  }, [activityOpen]);
   const nextKeyRef = useRef(0);
   const mountedRef = useRef(true);
   const downloadStartedRef = useRef(
@@ -221,17 +304,33 @@ const useReportExport = ({onDownload}: UseReportExportParams) => {
     cancelAcceptedRef.current.delete(key);
     heldDownloadResponseRef.current.delete(key);
   }, []);
+  const markDownloadStarted = useCallback((key: string) => {
+    downloadStartedRef.current.add(key);
+    downloadInFlightRef.current.delete(key);
+    downloadRetryCountRef.current.delete(key);
+    const retryTimer = downloadRetryTimerRef.current.get(key);
+    if (retryTimer) clearTimeout(retryTimer);
+    downloadRetryTimerRef.current.delete(key);
+    setRecords(current =>
+      updateRecord(current, key, {
+        downloadStarted: true,
+        directPending: false,
+      }),
+    );
+  }, []);
 
   const queryRecords = records.filter(record => record.exportId);
   const exportQueries = useQueries({
     queries: queryRecords.map(record => ({
       enabled: Boolean(token),
-      queryKey: ['get_report_export', token, record.exportId],
+      queryKey: ['get_report_export', token, record.exportId, record.key],
       queryFn: async () => {
         const response = await gmp.reportexport.getReportExports({
           reportExportId: record.exportId as string,
         });
-        const reportExport = response.data[0];
+        const reportExport = response.data.find(
+          exportItem => exportItem?.id === record.exportId,
+        );
         if (!reportExport) {
           throw new Error(`Report export ${record.exportId} was not found`);
         }
@@ -253,49 +352,11 @@ const useReportExport = ({onDownload}: UseReportExportParams) => {
           queryRecord => queryRecord.key === record.key,
         );
         const query = queryIndex >= 0 ? exportQueries[queryIndex] : undefined;
-        let state: ReportExportState;
+        const state = getJobState(record, query?.data);
         const statusError = query?.isError ? toError(query.error) : undefined;
-        if (record.directDownload && record.createError) {
-          state = {status: 'error', error: record.createError};
-        } else if (record.directDownload) {
-          state = {status: 'creating'};
-        } else if (
-          record.cancelAccepted &&
-          query?.data?.status === REPORT_EXPORT_STATUS.done
-        ) {
-          state = {
-            status: 'canceled',
-            exportData: {
-              id: record.exportId,
-              status: REPORT_EXPORT_STATUS.canceled,
-            },
-          };
-        } else if (record.createError) {
-          state = {status: 'error', error: record.createError};
-        } else if (!record.exportId) {
-          state = {status: 'creating'};
-        } else if (!query?.data) {
-          state = record.cancelAccepted
-            ? {status: 'cancel_requested', exportData: {id: record.exportId}}
-            : {status: 'checking', exportData: {id: record.exportId}};
-        } else if (
-          record.cancelRequested &&
-          isActiveStatus(query.data.status)
-        ) {
-          state = {status: 'cancel_requested', exportData: query.data};
-        } else {
-          state = isActiveStatus(query.data.status)
-            ? {
-                status: query.data.status as
-                  | 'pending'
-                  | 'running'
-                  | 'cancel_requested',
-                exportData: query.data,
-              }
-            : getTerminalState(query.data);
-        }
         return {
           key: record.key,
+          requestIdentity: record.requestIdentity,
           filename: record.filename,
           reportTitle: record.reportTitle,
           reportUrl: record.reportUrl,
@@ -315,6 +376,22 @@ const useReportExport = ({onDownload}: UseReportExportParams) => {
         };
       }),
     [exportQueries, queryRecords, records],
+  );
+
+  const removeCanceledJobsForReport = useCallback(
+    (requestIdentity: string, reportUrl?: string) => {
+      jobs
+        .filter(
+          job =>
+            job.state.status === 'canceled' &&
+            (job.requestIdentity === requestIdentity ||
+              (!job.requestIdentity &&
+                Boolean(reportUrl) &&
+                job.reportUrl === reportUrl)),
+        )
+        .forEach(job => removeJobRecord(job.key));
+    },
+    [jobs, removeJobRecord],
   );
 
   const requestCancellation = useCallback(
@@ -350,7 +427,7 @@ const useReportExport = ({onDownload}: UseReportExportParams) => {
           }),
         );
         void queryClient.invalidateQueries({
-          queryKey: ['get_report_export', token, exportId],
+          queryKey: ['get_report_export', token, exportId, key],
         });
       } catch (error) {
         if (!mountedRef.current) return;
@@ -359,28 +436,32 @@ const useReportExport = ({onDownload}: UseReportExportParams) => {
         setRecords(current =>
           updateRecord(current, key, {
             cancelPending: false,
-            cancelError: cancellationError,
+            cancelError: activityOpenRef.current
+              ? cancellationError
+              : undefined,
           }),
         );
-        showErrorNotification(cancellationError.message);
+        if (!activityOpenRef.current) {
+          if (onCancelError) onCancelError(cancellationError);
+          else showErrorNotification(cancellationError.message);
+        }
         const heldResponse = heldDownloadResponseRef.current.get(key);
         if (heldResponse) {
           heldDownloadResponseRef.current.delete(key);
           try {
             onDownload(heldResponse.data, heldResponse.filename);
-            downloadStartedRef.current.add(key);
-            removeJobRecord(key);
+            markDownloadStarted(key);
           } catch {
             downloadInFlightRef.current.delete(key);
           }
         } else {
           void queryClient.invalidateQueries({
-            queryKey: ['get_report_export', token, exportId],
+            queryKey: ['get_report_export', token, exportId, key],
           });
         }
       }
     },
-    [gmp, onDownload, queryClient, removeJobRecord, token],
+    [gmp, markDownloadStarted, onCancelError, onDownload, queryClient, token],
   );
 
   useEffect(() => {
@@ -425,8 +506,7 @@ const useReportExport = ({onDownload}: UseReportExportParams) => {
             return;
           }
           onDownload(response.data, job.filename);
-          downloadStartedRef.current.add(job.key);
-          removeJobRecord(job.key);
+          markDownloadStarted(job.key);
         } catch {
           downloadInFlightRef.current.delete(job.key);
           if (
@@ -441,7 +521,7 @@ const useReportExport = ({onDownload}: UseReportExportParams) => {
             setRecords(current =>
               updateRecord(current, job.key, {downloadError: error}),
             );
-            showErrorNotification(error.message);
+            notifyExportErrorIfActivityClosed(activityOpenRef.current, error);
             return;
           }
 
@@ -460,6 +540,7 @@ const useReportExport = ({onDownload}: UseReportExportParams) => {
     gmp,
     jobs,
     onDownload,
+    markDownloadStarted,
     queryRecords,
     removeJobRecord,
     records,
@@ -474,12 +555,15 @@ const useReportExport = ({onDownload}: UseReportExportParams) => {
       reportUrl,
     }: StartReportExportParams) => {
       const key = `report-export-${Date.now()}-${++nextKeyRef.current}`;
+      const requestIdentity = getReportRequestIdentity(kind, payload);
       const record: ExportJobRecord = {
         key,
+        requestIdentity,
         filename: exportFilename,
         reportTitle: title,
         reportUrl,
       };
+      removeCanceledJobsForReport(requestIdentity, reportUrl);
       setRecords(current => [...current, record]);
       try {
         const response = await createExportCommand({kind, payload});
@@ -493,19 +577,23 @@ const useReportExport = ({onDownload}: UseReportExportParams) => {
         return true;
       } catch (error) {
         cancelIntentRef.current.delete(key);
-        showErrorNotification(toError(error).message);
+        const creationError = toError(error);
+        notifyExportErrorIfActivityClosed(
+          activityOpenRef.current,
+          creationError,
+        );
         if (mountedRef.current) {
           setRecords(current =>
             updateRecord(current, key, {
               cancelPending: false,
-              createError: toError(error),
+              createError: creationError,
             }),
           );
         }
         return false;
       }
     },
-    [createExportCommand, requestCancellation],
+    [createExportCommand, removeCanceledJobsForReport, requestCancellation],
   );
 
   const startDirect = useCallback(
@@ -517,14 +605,17 @@ const useReportExport = ({onDownload}: UseReportExportParams) => {
       reportUrl,
     }: StartDirectReportDownloadParams) => {
       const key = `report-download-${Date.now()}-${++nextKeyRef.current}`;
+      const requestIdentity = getReportRequestIdentity(kind, payload);
       const record: ExportJobRecord = {
         key,
+        requestIdentity,
         filename: downloadFilename,
         reportTitle: title,
         reportUrl,
         directDownload: true,
         directPending: true,
       };
+      removeCanceledJobsForReport(requestIdentity, reportUrl);
       setRecords(current => [...current, record]);
 
       const download = async () => {
@@ -552,12 +643,14 @@ const useReportExport = ({onDownload}: UseReportExportParams) => {
                 );
           if (!mountedRef.current) return;
           onDownload(response.data, downloadFilename);
-          downloadStartedRef.current.add(key);
-          removeJobRecord(key);
+          markDownloadStarted(key);
         } catch (error) {
           if (!mountedRef.current) return;
           const downloadError = toError(error);
-          showErrorNotification(downloadError.message);
+          notifyExportErrorIfActivityClosed(
+            activityOpenRef.current,
+            downloadError,
+          );
           setRecords(current =>
             updateRecord(current, key, {
               directPending: false,
@@ -569,7 +662,7 @@ const useReportExport = ({onDownload}: UseReportExportParams) => {
       void download();
       return true;
     },
-    [gmp, onDownload, removeJobRecord],
+    [gmp, markDownloadStarted, onDownload, removeCanceledJobsForReport],
   );
 
   const cancel = useCallback(
@@ -612,7 +705,7 @@ const useReportExport = ({onDownload}: UseReportExportParams) => {
       const job = jobs.find(item => item.key === key);
       if (
         !job ||
-        job.state.status === 'creating' ||
+        (!job.directDownload && job.state.status === 'creating') ||
         job.downloadPending ||
         job.cancelPending ||
         isActiveStatus(job.state.status)
@@ -637,7 +730,10 @@ const useReportExport = ({onDownload}: UseReportExportParams) => {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const recoverableRecords = records.filter(record => record.exportId);
+    const recoverableRecords = records.filter(
+      record =>
+        record.exportId || (record.directDownload && record.downloadStarted),
+    );
     if (recoverableRecords.length === 0) {
       window.sessionStorage.removeItem(EXPORT_STORAGE_KEY);
       return;
@@ -655,13 +751,13 @@ const useReportExport = ({onDownload}: UseReportExportParams) => {
   return {
     cancel,
     dismiss,
-    isActive: jobs.some(
-      job =>
-        job.state.status === 'creating' ||
-        job.state.status === 'checking' ||
-        isActiveStatus(job.state.status) ||
-        job.downloadPending ||
-        job.directPending,
+    isActive: jobs.some(job =>
+      job.directDownload
+        ? job.directPending
+        : job.state.status === 'creating' ||
+          job.state.status === 'checking' ||
+          isActiveStatus(job.state.status) ||
+          job.downloadPending,
     ),
     jobs,
     start,
