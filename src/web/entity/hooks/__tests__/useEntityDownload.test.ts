@@ -5,34 +5,30 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, wait} from 'web/testing';
+import {ExistingSettings} from 'gmp/commands/user';
+import Response from 'gmp/http/response';
 import date from 'gmp/models/date';
-import Model from 'gmp/models/model';
+import Task from 'gmp/models/task';
 import {createSession} from 'gmp/testing';
 import useEntityDownload from 'web/entity/hooks/useEntityDownload';
-import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 
 const createGmp = ({
-  exportFunc = testing.fn().mockResolvedValue({data: {id: '123'}}),
-  currentSettings = testing
-    .fn()
-    .mockResolvedValue(currentSettingsDefaultResponse),
+  exportFunc = testing.fn().mockResolvedValue(new Response({id: '123'})),
+  getSetting = testing.fn().mockResolvedValue(new Response({value: '%T-%U'})),
 } = {}) => ({
   session: createSession(),
   task: {export: exportFunc},
-  user: {currentSettings},
+  user: {getSetting},
 });
 
 describe('useEntityDownload', () => {
   test('should allow to download an entity', async () => {
-    const entity = new Model(
-      {
-        id: '123',
-        name: 'foo',
-        creationTime: date('2025-01-01T00:00:00Z'),
-        modificationTime: date('2025-01-01T00:00:00Z'),
-      },
-      'task',
-    );
+    const entity = new Task({
+      id: '123',
+      name: 'foo',
+      creationTime: date('2025-01-01T00:00:00Z'),
+      modificationTime: date('2025-01-01T00:00:00Z'),
+    });
     const onDownloaded = testing.fn();
     const onDownloadError = testing.fn();
 
@@ -44,10 +40,11 @@ describe('useEntityDownload', () => {
         onDownloadError,
       }),
     );
-    await wait(); // wait for currentSettings to be resolved and put into the store
-    expect(gmp.user.currentSettings).toHaveBeenCalledOnce();
     expect(result.current).toBeDefined();
     await result.current(entity);
+    expect(gmp.user.getSetting).toHaveBeenCalledWith(
+      ExistingSettings.detailsexportfilename,
+    );
     expect(onDownloaded).toHaveBeenCalledWith({
       filename: 'task-123.xml',
       data: {id: '123'},
@@ -57,7 +54,7 @@ describe('useEntityDownload', () => {
 
   test('should call onDownloadError when downloading an entity fails', async () => {
     const error = new Error('error');
-    const entity = new Model({id: '123'});
+    const entity = new Task({id: '123'});
     const onDownloaded = testing.fn();
     const onDownloadError = testing.fn();
     const exportFunc = testing.fn().mockRejectedValue(error);
@@ -79,7 +76,7 @@ describe('useEntityDownload', () => {
   });
 
   test('should allow to pass optional arguments to gmp method', async () => {
-    const entity = new Model({id: '123'}, 'task');
+    const entity = new Task({id: '123'});
     const onDownloaded = testing.fn();
     const onDownloadError = testing.fn();
 

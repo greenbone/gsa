@@ -3,19 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect} from 'react';
 import {showSuccessNotification} from '@greenbone/ui-lib';
-import {useDispatch} from 'react-redux';
 import {type EntityCommandParams} from 'gmp/commands/entity';
+import {ExistingSettings} from 'gmp/commands/user';
 import {type Meta, type default as Response} from 'gmp/http/response';
 import type Model from 'gmp/models/model';
+import {typeName} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
-import useGmp from 'web/hooks/useGmp';
-import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
+import {useGetUserSetting} from 'web/hooks/use-query/user';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
-import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
-import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {generateFilename, type GenerateFilenameParams} from 'web/utils/Render';
 
 export type OnDownloadedFunc<TData = string | ArrayBuffer> = (
@@ -69,34 +66,17 @@ const useEntityDownload = <
 ) => {
   const [_] = useTranslation();
   const username = useUserName();
-  const dispatch = useDispatch();
-  const gmp = useGmp();
-  const userDefaultsSelector = useShallowEqualSelector(getUserSettingsDefaults);
-
-  useEffect(() => {
-    const detailsExportFileName = userDefaultsSelector.getValueByName(
-      'detailsexportfilename',
-    );
-    const loadSettings = () => {
-      // @ts-expect-error
-      dispatch(loadUserSettingDefaults(gmp)());
-    };
-    if (
-      !userDefaultsSelector.isLoading() &&
-      !isDefined(detailsExportFileName) &&
-      !isDefined(userDefaultsSelector.getError())
-    ) {
-      loadSettings();
-    }
-  }, [dispatch, gmp, userDefaultsSelector]);
+  const getUserSettingQuery = useGetUserSetting();
 
   const handleEntityDownload = async (
     entity: TEntity,
     options?: TDataOptions & GenerateFilenameParams,
   ) => {
-    const detailsExportFileName = userDefaultsSelector.getValueByName(
-      'detailsexportfilename',
+    const detailsExportFileNameSetting = await getUserSettingQuery(
+      ExistingSettings.detailsexportfilename,
     );
+    const detailsExportFileName =
+      (detailsExportFileNameSetting?.value as string | undefined) ?? '';
 
     const filename = generateFilename({
       creationTime: entity.creationTime,
@@ -115,7 +95,8 @@ const useEntityDownload = <
       if (isDefined(onDownloaded)) {
         showSuccessNotification(
           '',
-          _('{{- name}} downloaded successfully.', {
+          _('{{entity}} {{- name}} downloaded successfully.', {
+            entity: typeName(entity.entityType),
             name: entity.name as string,
           }),
         );
