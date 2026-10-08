@@ -7,6 +7,7 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, wait} from 'web/testing';
 import Scanner, {AGENT_CONTROLLER_SCANNER_TYPE} from 'gmp/models/scanner';
 import {YES_VALUE} from 'gmp/parser';
+import {createSession} from 'gmp/testing';
 import ScannerAgentConfigSettings from 'web/pages/scanners/ScannerAgentConfigSettings';
 import {getSelectElement} from 'web/testing/custom-queries';
 
@@ -45,21 +46,21 @@ const createMockScanner = (overrides = {}) => {
   });
 };
 
+const createGmp = ({
+  modifyAgentControlConfig = testing.fn().mockResolvedValue({data: {}}),
+} = {}) => ({
+  session: createSession({token: 'test-token'}),
+  settings: {},
+  scanner: {modifyAgentControlConfig},
+});
+
 describe('ScannerAgentConfigSettings tests', () => {
   test('should render all configuration sections', () => {
     const scanner = createMockScanner();
     const handleChanged = testing.fn();
     const handleError = testing.fn();
 
-    const modifyAgentControlConfig = testing.fn().mockResolvedValue({
-      data: {},
-    });
-
-    const gmp = {
-      scanner: {
-        modifyAgentControlConfig,
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -84,15 +85,7 @@ describe('ScannerAgentConfigSettings tests', () => {
     const handleChanged = testing.fn();
     const handleError = testing.fn();
 
-    const modifyAgentControlConfig = testing.fn().mockResolvedValue({
-      data: {},
-    });
-
-    const gmp = {
-      scanner: {
-        modifyAgentControlConfig,
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -117,15 +110,7 @@ describe('ScannerAgentConfigSettings tests', () => {
     const handleChanged = testing.fn();
     const handleError = testing.fn();
 
-    const modifyAgentControlConfig = testing.fn().mockResolvedValue({
-      data: {},
-    });
-
-    const gmp = {
-      scanner: {
-        modifyAgentControlConfig,
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -152,15 +137,7 @@ describe('ScannerAgentConfigSettings tests', () => {
     const handleChanged = testing.fn();
     const handleError = testing.fn();
 
-    const modifyAgentControlConfig = testing.fn().mockResolvedValue({
-      data: {},
-    });
-
-    const gmp = {
-      scanner: {
-        modifyAgentControlConfig,
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -183,15 +160,7 @@ describe('ScannerAgentConfigSettings tests', () => {
     const handleChanged = testing.fn();
     const handleError = testing.fn();
 
-    const modifyAgentControlConfig = testing.fn().mockResolvedValue({
-      data: {},
-    });
-
-    const gmp = {
-      scanner: {
-        modifyAgentControlConfig,
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -212,15 +181,7 @@ describe('ScannerAgentConfigSettings tests', () => {
     const handleChanged = testing.fn();
     const handleError = testing.fn();
 
-    const modifyAgentControlConfig = testing.fn().mockResolvedValue({
-      data: {},
-    });
-
-    const gmp = {
-      scanner: {
-        modifyAgentControlConfig,
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -243,15 +204,7 @@ describe('ScannerAgentConfigSettings tests', () => {
   });
 
   test('should save changes when save button is clicked', async () => {
-    const modifyAgentControlConfig = testing.fn().mockResolvedValue({
-      data: {},
-    });
-
-    const gmp = {
-      scanner: {
-        modifyAgentControlConfig,
-      },
-    };
+    const gmp = createGmp();
 
     const scanner = createMockScanner();
     const handleChanged = testing.fn();
@@ -283,22 +236,19 @@ describe('ScannerAgentConfigSettings tests', () => {
 
     await wait();
 
-    expect(modifyAgentControlConfig).toHaveBeenCalledWith(
-      expect.objectContaining({
-        id: 'scanner-1',
-        attempts: 5,
-        delayInSeconds: 10,
-        maxJitterInSeconds: 5,
-        bulkSize: 100,
-        bulkThrottleTimeInMs: 500,
-        indexerDirDepth: 3,
-        schedulerCronTimes: ['0 */12 * * *'],
-        intervalInSeconds: 300,
-        missUntilInactive: 3,
-        updateToLatest: YES_VALUE,
-      }),
-      expect.anything(),
-    );
+    expect(gmp.scanner.modifyAgentControlConfig).toHaveBeenCalledWith({
+      id: 'scanner-1',
+      attempts: 5,
+      delayInSeconds: 10,
+      maxJitterInSeconds: 5,
+      bulkSize: 100,
+      bulkThrottleTimeInMs: 500,
+      indexerDirDepth: 3,
+      schedulerCronTimes: ['0 */12 * * *'],
+      intervalInSeconds: 300,
+      missUntilInactive: 3,
+      updateToLatest: YES_VALUE,
+    });
     expect(handleChanged).toHaveBeenCalled();
   });
 
@@ -307,15 +257,7 @@ describe('ScannerAgentConfigSettings tests', () => {
     const handleChanged = testing.fn();
     const handleError = testing.fn();
 
-    const modifyAgentControlConfig = testing.fn().mockResolvedValue({
-      data: {},
-    });
-
-    const gmp = {
-      scanner: {
-        modifyAgentControlConfig,
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -352,11 +294,7 @@ describe('ScannerAgentConfigSettings tests', () => {
       .fn()
       .mockRejectedValue(new Error('Save failed'));
 
-    const gmp = {
-      scanner: {
-        modifyAgentControlConfig,
-      },
-    };
+    const gmp = createGmp({modifyAgentControlConfig});
 
     const scanner = createMockScanner();
     const handleChanged = testing.fn();
@@ -393,15 +331,7 @@ describe('ScannerAgentConfigSettings tests', () => {
     const handleChanged = testing.fn();
     const handleError = testing.fn();
 
-    const modifyAgentControlConfig = testing.fn().mockResolvedValue({
-      data: {},
-    });
-
-    const gmp = {
-      scanner: {
-        modifyAgentControlConfig,
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -431,15 +361,7 @@ describe('ScannerAgentConfigSettings tests', () => {
     const handleChanged = testing.fn();
     const handleError = testing.fn();
 
-    const modifyAgentControlConfig = testing.fn().mockResolvedValue({
-      data: {},
-    });
-
-    const gmp = {
-      scanner: {
-        modifyAgentControlConfig,
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -478,15 +400,7 @@ describe('ScannerAgentConfigSettings tests', () => {
     const handleChanged = testing.fn();
     const handleError = testing.fn();
 
-    const modifyAgentControlConfig = testing.fn().mockResolvedValue({
-      data: {},
-    });
-
-    const gmp = {
-      scanner: {
-        modifyAgentControlConfig,
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -539,15 +453,7 @@ describe('ScannerAgentConfigSettings tests', () => {
     const handleChanged = testing.fn();
     const handleError = testing.fn();
 
-    const modifyAgentControlConfig = testing.fn().mockResolvedValue({
-      data: {},
-    });
-
-    const gmp = {
-      scanner: {
-        modifyAgentControlConfig,
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -595,15 +501,7 @@ describe('ScannerAgentConfigSettings tests', () => {
     const handleChanged = testing.fn();
     const handleError = testing.fn();
 
-    const modifyAgentControlConfig = testing.fn().mockResolvedValue({
-      data: {},
-    });
-
-    const gmp = {
-      scanner: {
-        modifyAgentControlConfig,
-      },
-    };
+    const gmp = createGmp();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
