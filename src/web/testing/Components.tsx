@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {ThemeProvider} from '@greenbone/ui-lib';
+import {MantineProvider} from '@mantine/core';
+import {ThemeProvider, theme} from '@greenbone/ui-lib';
 import {Provider as StoreProvider} from 'react-redux';
 import {useLocation} from 'react-router';
 import {StyleSheetManager} from 'styled-components';
@@ -17,9 +18,23 @@ import {LanguageContext} from 'web/components/provider/LanguageProvider';
 export const Main = ({children}: {children: React.ReactNode}) => {
   return (
     <ThemeProvider defaultColorScheme="light">
-      <StyleSheetManager enableVendorPrefixes>
-        <div data-testid="main-container">{children}</div>
-      </StyleSheetManager>
+      <MantineProvider
+        theme={{
+          ...theme,
+          components: {
+            ...theme.components,
+            Modal: {
+              defaultProps: {
+                transitionProps: {duration: 0, exitDuration: 0},
+              },
+            },
+          },
+        }}
+      >
+        <StyleSheetManager enableVendorPrefixes>
+          <div data-testid="main-container">{children}</div>
+        </StyleSheetManager>
+      </MantineProvider>
     </ThemeProvider>
   );
 };

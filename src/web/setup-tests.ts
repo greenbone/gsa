@@ -53,7 +53,7 @@ globalThis.URL.createObjectURL = testing.fn();
 
 globalThis.ResizeObserver = ResizeObserverModule.default;
 
-// avoid TypeError: window.matchMedia is not a function for @mantine/core/Select
+// Avoid matchMedia errors for Mantine components.
 globalThis.matchMedia = testing.fn().mockImplementation(query => {
   return {
     matches: false,
