@@ -149,6 +149,28 @@ describe('useGetEntities', () => {
     );
   });
 
+  test('should memoize the returned query object when the error is unchanged', async () => {
+    const error = new Error('Request failed');
+    const gmpMethod = createGmpMethod().mockRejectedValue(error);
+    const {renderHook} = rendererWith({
+      gmp: createGmp(),
+      router: true,
+    });
+
+    const {rerender, result} = renderHook(() =>
+      useGetEntities({
+        gmpMethod,
+        queryId: 'get_entities_memoized',
+      }),
+    );
+    await waitFor(() => expect(result.current.isError).toBe(true));
+
+    const initialQueryResult = result.current;
+    rerender();
+
+    expect(result.current).toBe(initialQueryResult);
+  });
+
   test('should not fetch when disabled', () => {
     const gmpMethod = testing.fn();
     const {render} = rendererWith({gmp: createGmp(), router: true});
@@ -192,11 +214,15 @@ describe('useGetEntities', () => {
       });
 
       return (
-        <div data-testid="error">{isError ? queryError?.message : ''}</div>
+        <div data-testid="error">
+          {isError ? queryError?.message : String(queryError)}
+        </div>
       );
     };
 
     render(<TestComponent />);
+
+    expect(screen.getByTestId('error')).toHaveTextContent('undefined');
 
     await waitFor(() => {
       expect(screen.getByTestId('error')).toHaveTextContent('Request failed');

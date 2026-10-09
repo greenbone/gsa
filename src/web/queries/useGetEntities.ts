@@ -3,12 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useMemo} from 'react';
 import {useQuery} from '@tanstack/react-query';
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import {type EntitiesMeta} from 'gmp/commands/entities';
 import {type HttpCommandInputParams} from 'gmp/commands/http';
 import type Response from 'gmp/http/response';
 import {type FilterType} from 'gmp/models/filter';
+import {hasValue} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useSessionToken from 'web/hooks/useSessionToken';
 import {
@@ -66,7 +68,32 @@ const useGetEntities = <
       ? transformRefetchIntervalFn(refetchInterval, settings)
       : resolveRefetchInterval(refetchInterval, settings);
 
-  return useQuery<UseGetEntitiesReturn<TModel>>({
+  const {
+    error,
+    data,
+    dataUpdatedAt,
+    errorUpdateCount,
+    errorUpdatedAt,
+    failureCount,
+    failureReason,
+    fetchStatus,
+    isEnabled,
+    isError,
+    isFetched,
+    isFetchedAfterMount,
+    isFetching,
+    isLoading,
+    isLoadingError,
+    isPaused,
+    isPending,
+    isPlaceholderData,
+    isRefetchError,
+    isRefetching,
+    isStale,
+    isSuccess,
+    refetch,
+    status,
+  } = useQuery<UseGetEntitiesReturn<TModel>>({
     enabled: enabled && Boolean(token),
     queryKey: [queryId, token, filter?.toFilterString()],
     queryFn: async () => {
@@ -92,6 +119,63 @@ const useGetEntities = <
       ? previousData => previousData
       : undefined,
   });
+  const normalizedError = hasValue(error) ? error : undefined;
+  return useMemo(
+    // Use useMemo to memoize the returned query object based on its dependencies
+    // to not trigger unnecessary re-renders
+    () => ({
+      data,
+      dataUpdatedAt,
+      error: normalizedError,
+      errorUpdateCount,
+      errorUpdatedAt,
+      failureCount,
+      failureReason,
+      fetchStatus,
+      isEnabled,
+      isError,
+      isFetched,
+      isFetchedAfterMount,
+      isFetching,
+      isLoading,
+      isLoadingError,
+      isPaused,
+      isPending,
+      isPlaceholderData,
+      isRefetchError,
+      isRefetching,
+      isStale,
+      isSuccess,
+      refetch,
+      status,
+    }),
+    [
+      data,
+      dataUpdatedAt,
+      errorUpdateCount,
+      errorUpdatedAt,
+      failureCount,
+      failureReason,
+      fetchStatus,
+      isEnabled,
+      isError,
+      isFetched,
+      isFetchedAfterMount,
+      isFetching,
+      isLoading,
+      isLoadingError,
+      isPaused,
+      isPending,
+      isPlaceholderData,
+      isRefetchError,
+      isRefetching,
+      isStale,
+      isSuccess,
+      refetch,
+      status,
+      normalizedError,
+    ],
+  );
 };
 
 export default useGetEntities;
