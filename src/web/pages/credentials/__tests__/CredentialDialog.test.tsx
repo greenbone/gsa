@@ -818,4 +818,27 @@ describe('CredentialDialog tests', () => {
       screen.getByRole('button', {name: 'Public PGP Key'}),
     ).toHaveTextContent('public-key.key');
   });
+
+  test('should save passphrase for Username + SSH Key', () => {
+    const {render} = rendererWith({gmp: createGmp()});
+    const handleSave = testing.fn();
+
+    render(
+      <CredentialDialog
+        credentialType="usk"
+        types={ALL_CREDENTIAL_TYPES}
+        onSave={handleSave}
+      />,
+    );
+
+    changeInputValue(screen.getByName('passphrase'), 'ssh-passphrase');
+    fireEvent.click(screen.getDialogSaveButton());
+
+    expect(handleSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        credentialType: 'usk',
+        passphrase: 'ssh-passphrase',
+      }),
+    );
+  });
 });
