@@ -24,7 +24,30 @@ export const Main = ({children}: {children: React.ReactNode}) => {
           components: {
             ...theme.components,
             Modal: {
+              ...theme.components?.Modal,
               defaultProps: {
+                ...theme.components?.Modal?.defaultProps,
+                transitionProps: {duration: 0, exitDuration: 0},
+              },
+            },
+            ModalOverlay: {
+              ...theme.components?.ModalOverlay,
+              defaultProps: {
+                ...theme.components?.ModalOverlay?.defaultProps,
+                transitionProps: {duration: 0, exitDuration: 0},
+              },
+            },
+            Popover: {
+              ...theme.components?.Popover,
+              defaultProps: {
+                ...theme.components?.Popover?.defaultProps,
+                transitionProps: {duration: 0, exitDuration: 0},
+              },
+            },
+            Tooltip: {
+              ...theme.components?.Tooltip,
+              defaultProps: {
+                ...theme.components?.Tooltip?.defaultProps,
                 transitionProps: {duration: 0, exitDuration: 0},
               },
             },
