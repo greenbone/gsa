@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect, useMemo, useState, useSyncExternalStore} from 'react';
+import {useEffect, useState, useSyncExternalStore} from 'react';
 import {useQueries, useQueryClient} from '@tanstack/react-query';
 import {
   reportExportQueryOptions,
@@ -22,12 +22,12 @@ import {
 } from 'web/report-export/direct-download';
 import {
   type ExportAttempt,
-  type StartReportExportParams,
   getReportExportActions,
   inStage,
   retainReportExportJobs,
   toReportExportJob,
 } from 'web/report-export/job';
+import {useReportExportMutations} from 'web/report-export/useReportExportMutations';
 
 export type {
   ReportExportJob,
@@ -46,6 +46,7 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
   const token = useSessionToken();
   const username = useUserName();
   const queryClient = useQueryClient();
+  const mutations = useReportExportMutations(token);
 
   const owner = `${token ?? ''}\0${username ?? ''}`;
   const createSession = () => ({
@@ -56,6 +57,7 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
       token,
       username,
       callbacks: {onDownload, onError},
+      mutations,
     }),
   });
   const [session, setSession] = useState(createSession);
@@ -64,7 +66,8 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
   const isOwner = session.owner === owner;
   useEffect(() => {
     controller.setCallbacks({onDownload, onError});
-  }, [controller, onDownload, onError]);
+    controller.setMutations(mutations);
+  }, [controller, onDownload, onError, mutations]);
 
   const attempts = useSyncExternalStore(
     controller.store.subscribe,
@@ -89,7 +92,7 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
 
   const statusQueries = useQueries({
     queries: records.map(attempt => ({
-      ...reportExportQueryOptions(gmp, token, attempt.exportId, attempt.key),
+      ...reportExportQueryOptions(gmp, token, attempt.exportId),
       enabled: Boolean(
         token &&
         attempt.exportId &&
@@ -109,20 +112,6 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
     controller.sync();
   }, [controller, records, statusQueries]);
 
-  const actions = useMemo(
-    () => ({
-      start: (params: StartReportExportParams) => controller.start(params),
-      startDirect: (params: StartReportExportParams) =>
-        controller.startDirect(params),
-      cancel: (key: string) => controller.cancel(key),
-      dismiss: (key: string) => controller.dismiss(key),
-      retry: (key: string) => controller.retry(key),
-      download: (key: string) => controller.download(key),
-      refreshDiscovery: controller.refreshInventory,
-    }),
-    [controller],
-  );
-
   const jobs = [
     ...records.map((attempt, index) =>
       toReportExportJob(
@@ -134,7 +123,13 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
     ...directDownloads.map(toDirectDownloadJob),
   ];
   return {
-    ...actions,
+    start: controller.start,
+    startDirect: controller.startDirect,
+    cancel: controller.cancel,
+    dismiss: controller.dismiss,
+    retry: controller.retry,
+    download: controller.download,
+    refreshDiscovery: controller.refreshInventory,
     jobs: retainReportExportJobs(jobs),
     isActive: jobs.some(job => getReportExportActions(job).active),
     discoveryError: inventory.error,

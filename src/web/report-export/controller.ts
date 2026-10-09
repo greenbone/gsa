@@ -8,11 +8,7 @@ import {v4 as uuid} from 'uuid';
 import type Gmp from 'gmp/gmp';
 import {type ReportExport} from 'gmp/models/report-export';
 import {reportExportQueryOptions} from 'web/hooks/use-query/report-exports';
-import {
-  type DirectDownload,
-  type DirectDownloadPhase,
-  fetchDirectDownload,
-} from 'web/report-export/direct-download';
+import {type DirectDownload} from 'web/report-export/direct-download';
 import {
   type ExportAttempt,
   type StartReportExportParams,
@@ -23,20 +19,22 @@ import {
   selectReportExportInventory,
   toReportExportJob,
 } from 'web/report-export/job';
-import {readExportIntents, writeExportIntents} from 'web/report-export/storage';
+import {
+  readExportIntents,
+  serializeExportIntents,
+  writeExportIntents,
+} from 'web/report-export/storage';
 import {
   createExportAttemptStore,
   type ExportAttemptEvent,
 } from 'web/report-export/store';
+import {type ReportExportMutations} from 'web/report-export/useReportExportMutations';
 import {ROUTES} from 'web/route-paths';
 
 export const REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL = 3000;
 const MAX_DOWNLOAD_RETRIES = 10;
 
-type ControllerGmp = Pick<
-  Gmp,
-  'session' | 'reportexport' | 'report' | 'auditreport'
->;
+type ControllerGmp = Pick<Gmp, 'session' | 'reportexport'>;
 
 export interface ReportExportCallbacks {
   onDownload: (
@@ -53,6 +51,7 @@ interface ControllerOptions {
   token?: string;
   username?: string;
   callbacks: ReportExportCallbacks;
+  mutations: ReportExportMutations;
 }
 
 interface AttemptRuntime {
@@ -62,13 +61,6 @@ interface AttemptRuntime {
   buffer?: ArrayBuffer | string;
   mimetype?: string;
 }
-
-const EXPORT_METHODS = {
-  scan: 'exportScanReport',
-  audit: 'exportAuditReport',
-  delta_scan: 'exportDeltaScanReport',
-  delta_audit: 'exportDeltaAuditReport',
-} as const;
 
 const toError = (error: unknown) =>
   error instanceof Error ? error : new Error(String(error));
@@ -133,21 +125,25 @@ export const createReportExportController = ({
   token,
   username,
   callbacks: initialCallbacks,
+  mutations: initialMutations,
 }: ControllerOptions) => {
-  const store = createExportAttemptStore(token ? loadAttempts(username) : []);
+  const initialAttempts = token ? loadAttempts(username) : [];
+  const store = createExportAttemptStore(initialAttempts);
+  let persistedIntents = JSON.stringify(readExportIntents(username));
+  let terminalStatusSnapshot = '[]';
   const runtimes = new Map<string, AttemptRuntime>();
   const dismissed = new Set<string>();
   const directListeners = new Set<() => void>();
   let directDownloads: DirectDownload[] = [];
   let callbacks = initialCallbacks;
+  let mutations = initialMutations;
   let active = false;
 
   const inventoryKey = () => ['get_report_exports', token, username];
-  const statusKey = (exportId: string | undefined, key: string) => [
+  const statusKey = (exportId: string | undefined) => [
     'get_report_export',
     token,
     exportId,
-    key,
   ];
 
   const isLive = () =>
@@ -163,7 +159,7 @@ export const createReportExportController = ({
   };
 
   const statusOf = (attempt: ExportAttempt) => {
-    const queryKey = statusKey(attempt.exportId, attempt.key);
+    const queryKey = statusKey(attempt.exportId);
     return {
       data: queryClient.getQueryData<ReportExport>(queryKey),
       error: queryClient.getQueryState<ReportExport, Error>(queryKey)?.error,
@@ -217,27 +213,37 @@ export const createReportExportController = ({
       if (keys.has(key)) continue;
       release(runtime);
       runtimes.delete(key);
-      void queryClient.cancelQueries({
-        queryKey: ['get_report_export', token],
-        predicate: query => query.queryKey[3] === key,
-      });
     }
   };
 
   const persist = () => {
     if (!username) return;
-    writeExportIntents(
-      username,
-      store.getSnapshot().map(attempt => {
-        const status = statusOf(attempt).data?.status;
-        return status === 'canceled' ||
-          status === 'error' ||
-          status === 'expired'
-          ? {...attempt, disposition: 'abandoned'}
-          : attempt;
-      }),
-    );
+    const intents = store.getSnapshot().map<ExportAttempt>(attempt => {
+      const status = statusOf(attempt).data?.status;
+      return status === 'canceled' || status === 'error' || status === 'expired'
+        ? {...attempt, disposition: 'abandoned' as const}
+        : attempt;
+    });
+    const serialized = serializeExportIntents(intents);
+    if (serialized === persistedIntents) return;
+    writeExportIntents(username, intents);
+    persistedIntents = serialized;
   };
+
+  const persistTerminalStatuses = () => {
+    const terminalStatuses = store.getSnapshot().flatMap(attempt => {
+      const status = statusOf(attempt).data?.status;
+      return status === 'canceled' || status === 'error' || status === 'expired'
+        ? [[attempt.key, status]]
+        : [];
+    });
+    const serialized = JSON.stringify(terminalStatuses);
+    if (serialized === terminalStatusSnapshot) return;
+    terminalStatusSnapshot = serialized;
+    if (terminalStatuses.length) persist();
+  };
+
+  store.subscribe(persist);
 
   const handoff = (runtime: AttemptRuntime) => {
     const attempt = store.getAttempt(runtime.key);
@@ -277,7 +283,7 @@ export const createReportExportController = ({
     if (!isCurrent(runtime)) return;
     try {
       const data = await queryClient.query({
-        ...reportExportQueryOptions(gmp, token, reportExportId, runtime.key),
+        ...reportExportQueryOptions(gmp, token, reportExportId),
         staleTime: 0,
       });
       if (!isCurrent(runtime)) return;
@@ -303,9 +309,7 @@ export const createReportExportController = ({
     if (!reportExportId) return;
     if (!send(runtime, {type: 'transfer', key: runtime.key})) return;
     try {
-      const response = await gmp.reportexport.downloadReportExport({
-        reportExportId,
-      });
+      const response = await mutations.download(reportExportId);
       if (!isCurrent(runtime)) return;
       runtime.buffer = response.data;
       handoff(runtime);
@@ -350,7 +354,7 @@ export const createReportExportController = ({
     if (!reportExportId) return;
     if (!send(runtime, {type: 'cancel', key: runtime.key})) return;
     try {
-      await gmp.reportexport.cancelReportExport({reportExportId});
+      await mutations.cancel(reportExportId);
       send(runtime, {type: 'cancel-accepted', key: runtime.key});
     } catch (error) {
       if (!isCurrent(runtime)) return;
@@ -360,7 +364,7 @@ export const createReportExportController = ({
     } finally {
       if (isCurrent(runtime))
         void queryClient.invalidateQueries({
-          queryKey: statusKey(reportExportId, runtime.key),
+          queryKey: statusKey(reportExportId),
         });
     }
   };
@@ -368,7 +372,7 @@ export const createReportExportController = ({
   const dismiss = (key: string) => {
     if (
       directDownloads.some(
-        item => item.key === key && item.phase.stage !== 'downloading',
+        item => item.key === key && item.view.kind !== 'downloading',
       )
     ) {
       setDirectDownloads(directDownloads.filter(item => item.key !== key));
@@ -377,7 +381,6 @@ export const createReportExportController = ({
     const job = jobFor(key);
     if (!job || !getReportExportActions(job).dismiss) return;
     if (job.exportId) dismissed.add(job.exportId);
-    void queryClient.cancelQueries({queryKey: statusKey(job.exportId, key)});
     removeAttempt(key);
   };
 
@@ -409,9 +412,10 @@ export const createReportExportController = ({
     if (!isLive()) return false;
     const runtime = addAttempt(params);
     try {
-      const response = await gmp.reportexport[EXPORT_METHODS[params.kind]](
-        params.payload,
-      );
+      const response = await mutations.create({
+        kind: params.kind,
+        payload: params.payload,
+      });
       if (!isCurrent(runtime)) return false;
       const exportId = response.data.id;
       const attempt = store.getAttempt(runtime.key);
@@ -462,24 +466,24 @@ export const createReportExportController = ({
     const {filename, reportTitle, reportUrl} = params;
     setDirectDownloads([
       ...directDownloads,
-      {key, filename, reportTitle, reportUrl, phase: {stage: 'downloading'}},
+      {key, filename, reportTitle, reportUrl, view: {kind: 'downloading'}},
     ]);
-    const setPhase = (phase: DirectDownloadPhase) =>
+    const setView = (view: DirectDownload['view']) =>
       setDirectDownloads(
         directDownloads.map(item =>
-          item.key === key ? {...item, phase} : item,
+          item.key === key ? {...item, view} : item,
         ),
       );
     const run = async () => {
       try {
-        const data = await fetchDirectDownload(gmp, params);
+        const data = await mutations.direct(params);
         if (!isLive()) return;
         callbacks.onDownload(data, filename);
-        setPhase({stage: 'complete'});
+        setView({kind: 'complete'});
       } catch (error) {
         if (!isLive()) return;
         const failure = toError(error);
-        setPhase({stage: 'failed', error: failure});
+        setView({kind: 'failed', reason: 'export', error: failure});
         notify(failure);
       }
     };
@@ -511,7 +515,7 @@ export const createReportExportController = ({
     runtime.retries = 0;
     if (!send(runtime, {type: 'resume', key})) return;
     await queryClient.resetQueries({
-      queryKey: statusKey(attempt.exportId, key),
+      queryKey: statusKey(attempt.exportId),
     });
   };
 
@@ -537,6 +541,9 @@ export const createReportExportController = ({
     setCallbacks: (next: ReportExportCallbacks) => {
       callbacks = next;
     },
+    setMutations: (next: ReportExportMutations) => {
+      mutations = next;
+    },
     activate: () => {
       active = true;
       dismissed.clear();
@@ -553,10 +560,7 @@ export const createReportExportController = ({
       const known = new Set(store.getSnapshot().map(item => item.exportId));
       for (const item of selectReportExportInventory(exports)) {
         if (!validId(item.id)) continue;
-        queryClient.setQueryData(
-          statusKey(item.id, `recovered-${item.id}`),
-          item,
-        );
+        queryClient.setQueryData(statusKey(item.id), item);
         if (known.has(item.id) || dismissed.has(item.id)) continue;
         store.dispatch({type: 'add', attempt: recoveredAttempt(item)});
         known.add(item.id);
@@ -570,7 +574,7 @@ export const createReportExportController = ({
         type: 'retain',
         keys: new Set(retainReportExportJobs(getJobs()).map(job => job.key)),
       });
-      persist();
+      persistTerminalStatuses();
       pickUpCompletedExports();
     },
     refreshInventory,

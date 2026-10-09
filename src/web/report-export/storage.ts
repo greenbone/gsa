@@ -82,10 +82,7 @@ export const readExportIntents = (username?: string): ExportIntent[] => {
   }
 };
 
-export const writeExportIntents = (
-  username: string,
-  intents: ExportIntent[],
-) => {
+const toStoredIntents = (intents: ExportIntent[]) => {
   const unfinished = intents.filter(
     intent =>
       intent.autoDownload &&
@@ -95,7 +92,7 @@ export const writeExportIntents = (
   const receipts = intents
     .filter(intent => intent.disposition !== 'awaiting')
     .slice(-MAX_RETAINED_RECEIPTS);
-  const values = [...unfinished, ...receipts].map(intent => ({
+  return [...unfinished, ...receipts].map(intent => ({
     key: intent.key,
     origin: intent.origin,
     exportId: intent.exportId,
@@ -105,9 +102,19 @@ export const writeExportIntents = (
     autoDownload: intent.autoDownload,
     disposition: intent.disposition,
   }));
+};
+
+export const serializeExportIntents = (intents: ExportIntent[]) =>
+  JSON.stringify(toStoredIntents(intents));
+
+export const writeExportIntents = (
+  username: string,
+  intents: ExportIntent[],
+) => {
   try {
-    const serialized = JSON.stringify(values);
-    if (!values.length) window.sessionStorage.removeItem(storageKey(username));
+    const serialized = serializeExportIntents(intents);
+    if (serialized === '[]')
+      window.sessionStorage.removeItem(storageKey(username));
     else if (window.sessionStorage.getItem(storageKey(username)) !== serialized)
       window.sessionStorage.setItem(storageKey(username), serialized);
   } catch {

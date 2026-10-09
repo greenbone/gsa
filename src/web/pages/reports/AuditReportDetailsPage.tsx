@@ -38,9 +38,9 @@ import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
 import TargetComponent from 'web/pages/targets/TargetComponent';
+import {buildReportExportRequest} from 'web/report-export/build-report-export-request';
 import {ROUTES} from 'web/route-paths';
 import {createPEMCertificate} from 'web/utils/certificates';
-import {generateFilename} from 'web/utils/Render';
 
 interface ReportComposerDefaults {
   defaultReportFormatId?: string;
@@ -325,27 +325,17 @@ const AuditReportDetailsPage = () => {
           format => format.id === reportFormatId,
         );
         const reportExportFileName = await reportExportFileNameQuery();
-        const request = {
-          filename: generateFilename({
-            creationTime: entity.creationTime,
-            extension: reportFormat?.extension ?? 'unknown',
-            fileNameFormat: reportExportFileName,
-            id: entity.id,
-            modificationTime: entity.modificationTime,
-            reportFormat: reportFormat?.name,
-            resourceName: entity.task?.name,
-            resourceType: 'report',
-            username,
-          }),
-          reportTitle: entity.task?.name ?? _('Report'),
+        const request = buildReportExportRequest({
+          kind: 'audit',
+          entity,
+          format: reportFormat ?? {id: reportFormatId},
+          filter: newFilter,
           reportUrl: ROUTES.auditReport.url(reportId),
-          payload: {
-            report_id: entity.id,
-            format_id: reportFormatId,
-            filter: newFilter,
-          },
-        };
-        if (await exportReport({kind: 'audit', ...request}, reportFormat))
+          fileNameFormat: reportExportFileName,
+          username,
+          fallbackReportTitle: _('Report'),
+        });
+        if (await exportReport(request, reportFormat))
           setShowDownloadReportDialog(false);
       } catch (error) {
         log.error(error);

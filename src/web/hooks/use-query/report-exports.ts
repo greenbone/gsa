@@ -19,13 +19,17 @@ import {
 export const REPORT_EXPORT_POLL_INTERVAL = 1000;
 
 export const reportExportQueryOptions = (
-  gmp: Pick<ReturnType<typeof useGmp>, 'reportexport'>,
+  gmp: {
+    reportexport: Pick<
+      ReturnType<typeof useGmp>['reportexport'],
+      'getReportExport'
+    >;
+  },
   token: string | undefined,
   id?: string,
-  attemptKey?: string,
 ) =>
   queryOptions({
-    queryKey: ['get_report_export', token, id, attemptKey],
+    queryKey: ['get_report_export', token, id],
     enabled: Boolean(token && id),
     queryFn: async () => {
       if (!id)

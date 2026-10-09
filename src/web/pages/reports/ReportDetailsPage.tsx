@@ -40,9 +40,9 @@ import ReportDetailsContent from 'web/pages/reports/ReportDetailsContent';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
 import TargetComponent from 'web/pages/targets/TargetComponent';
+import {buildReportExportRequest} from 'web/report-export/build-report-export-request';
 import {ROUTES} from 'web/route-paths';
 import {createPEMCertificate} from 'web/utils/certificates';
-import {generateFilename} from 'web/utils/Render';
 
 interface ReportComposerDefaults {
   defaultReportConfigId?: string;
@@ -335,28 +335,23 @@ const ReportDetailsPage = () => {
           format => format.id === reportFormatId,
         );
         const reportExportFileName = await reportExportFileNameQuery();
-        const request = {
-          filename: generateFilename({
-            creationTime: entity.creationTime,
-            extension: reportFormat?.extension ?? 'unknown',
-            fileNameFormat: reportExportFileName,
+        const request = buildReportExportRequest({
+          kind: 'scan',
+          entity: {
             id: entity.id as string,
+            creationTime: entity.creationTime,
             modificationTime: entity.modificationTime,
-            reportFormat: reportFormat?.name,
-            resourceName: entity.task?.name,
-            resourceType: 'report',
-            username,
-          }),
-          reportTitle: entity.task?.name ?? _('Report'),
-          reportUrl: ROUTES.report.url(reportId),
-          payload: {
-            report_id: entity.id as string,
-            format_id: reportFormatId,
-            config_id: reportConfigId || undefined,
-            filter: newFilter,
+            task: entity.task,
           },
-        };
-        if (await exportReport({kind: 'scan', ...request}, reportFormat))
+          format: reportFormat ?? {id: reportFormatId},
+          filter: newFilter,
+          reportConfigId,
+          reportUrl: ROUTES.report.url(reportId),
+          fileNameFormat: reportExportFileName,
+          username,
+          fallbackReportTitle: _('Report'),
+        });
+        if (await exportReport(request, reportFormat))
           setShowDownloadReportDialog(false);
       } catch (error) {
         log.error(error);

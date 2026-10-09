@@ -33,8 +33,6 @@ interface ReportExportManagerContextValue {
     params: StartReportExportParams,
     format?: {content_type?: string},
   ) => Promise<boolean>;
-  start: (params: StartReportExportParams) => Promise<boolean>;
-  startDirect: (params: StartReportExportParams) => boolean;
   cancel: (key: string) => Promise<void>;
   dismiss: (key: string) => void;
   retry: (key: string) => Promise<void>;
@@ -65,8 +63,7 @@ const ReportExportManager = ({children}: ReportExportManagerProps) => {
     activityOpenRef.current = activityOpen;
   }, [activityOpen]);
   const capabilities = useContext(CapabilitiesContext);
-  const supportsCancellation =
-    capabilities?.mayOp('cancel_report_export') ?? false;
+  const supportsCancellation = capabilities?.mayOp('get_reports') ?? false;
   const handleDownload = useCallback(
     (data: ArrayBuffer | string, filename: string, mimetype?: string) => {
       if (!downloadRef.current) throw new Error('Download is unavailable');
@@ -89,23 +86,17 @@ const ReportExportManager = ({children}: ReportExportManagerProps) => {
   useEffect(() => {
     if (activityOpen) refreshDiscovery();
   }, [activityOpen, refreshDiscovery]);
-  const cancel = useCallback(
-    (key: string) =>
-      supportsCancellation ? reportExport.cancel(key) : Promise.resolve(),
-    [reportExport, supportsCancellation],
-  );
   const contextValue = useMemo(
     () => ({
       exportReport: async (
         params: StartReportExportParams,
         format?: {content_type?: string},
       ) =>
-        selectExportTransport(params.kind, format, capabilities) === 'async'
+        selectExportTransport(format, capabilities) === 'async'
           ? reportExport.start(params)
           : reportExport.startDirect(params),
-      start: reportExport.start,
-      startDirect: reportExport.startDirect,
-      cancel,
+      cancel: (key: string) =>
+        supportsCancellation ? reportExport.cancel(key) : Promise.resolve(),
       dismiss: reportExport.dismiss,
       retry: reportExport.retry,
       download: reportExport.download,
@@ -117,14 +108,7 @@ const ReportExportManager = ({children}: ReportExportManagerProps) => {
       setActivityOpen,
       jobs: reportExport.jobs,
     }),
-    [
-      activityOpen,
-      cancel,
-      capabilities,
-      reportExport,
-      setActivityOpen,
-      supportsCancellation,
-    ],
+    [activityOpen, capabilities, reportExport, supportsCancellation],
   );
 
   return (

@@ -19,6 +19,7 @@ import {
 } from '@greenbone/ui-lib';
 import type * as UiLib from '@greenbone/ui-lib';
 import {vi} from 'vitest';
+import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import {createSession} from 'gmp/testing';
 import {ReportExportActivity} from 'web/pages/reports/ReportExportActivity';
@@ -69,18 +70,21 @@ const MultiExportStarter = ({
     {reportTitle: 'Report B', filename: 'Report B.xml'},
   ],
 }) => {
-  const {start} = useReportExportManager();
+  const {exportReport} = useReportExportManager();
   return (
     <button
       onClick={() => {
         void Promise.all(
           reports.map(({reportTitle, filename}) =>
-            start({
-              kind: 'scan',
-              payload: exportPayload,
-              filename,
-              reportTitle,
-            }),
+            exportReport(
+              {
+                kind: 'scan',
+                payload: exportPayload,
+                filename,
+                reportTitle,
+              },
+              {content_type: 'application/pdf'},
+            ),
           ),
         );
       }}
@@ -94,17 +98,20 @@ const CompletedExportStarter = ({
   filename = 'completed-report.xml',
   reportTitle = 'Completed report',
 }) => {
-  const {start} = useReportExportManager();
+  const {exportReport} = useReportExportManager();
   return (
     <button
       onClick={() => {
-        void start({
-          kind: 'scan',
-          payload: exportPayload,
-          filename,
-          reportTitle,
-          reportUrl: '/report/report-uuid',
-        });
+        void exportReport(
+          {
+            kind: 'scan',
+            payload: exportPayload,
+            filename,
+            reportTitle,
+            reportUrl: '/report/report-uuid',
+          },
+          {content_type: 'application/pdf'},
+        );
       }}
     >
       Start completed export
@@ -113,16 +120,19 @@ const CompletedExportStarter = ({
 };
 
 const DifferentReportStarter = () => {
-  const {start} = useReportExportManager();
+  const {exportReport} = useReportExportManager();
   return (
     <button
       onClick={() =>
-        void start({
-          kind: 'scan',
-          payload: {...exportPayload, report_id: 'other-report-uuid'},
-          filename: 'other-report.xml',
-          reportTitle: 'Other report',
-        })
+        void exportReport(
+          {
+            kind: 'scan',
+            payload: {...exportPayload, report_id: 'other-report-uuid'},
+            filename: 'other-report.xml',
+            reportTitle: 'Other report',
+          },
+          {content_type: 'application/pdf'},
+        )
       }
     >
       Start another report export
@@ -131,22 +141,25 @@ const DifferentReportStarter = () => {
 };
 
 const DirectDownloadStarter = () => {
-  const {startDirect} = useReportExportManager();
+  const {exportReport} = useReportExportManager();
   return (
     <button
       onClick={() =>
-        startDirect({
-          kind: 'delta_scan',
-          payload: {
-            report_id: 'report-uuid',
-            format_id: 'format-uuid',
-            config_id: 'config-uuid',
-            delta_report_id: 'delta-uuid',
+        void exportReport(
+          {
+            kind: 'delta_scan',
+            payload: {
+              report_id: 'report-uuid',
+              format_id: 'format-uuid',
+              config_id: 'config-uuid',
+              delta_report_id: 'delta-uuid',
+            },
+            filename: 'report.xml',
+            reportTitle: 'Direct report',
+            reportUrl: '/report/report-uuid',
           },
-          filename: 'report.xml',
-          reportTitle: 'Direct report',
-          reportUrl: '/report/report-uuid',
-        })
+          {content_type: 'text/xml'},
+        )
       }
     >
       Start direct download
@@ -155,17 +168,20 @@ const DirectDownloadStarter = () => {
 };
 
 const ReportPage = ({onStarted}: {onStarted: () => void}) => {
-  const {start} = useReportExportManager();
+  const {exportReport} = useReportExportManager();
 
   return (
     <button
       onClick={async () => {
-        const started = await start({
-          kind: 'scan',
-          payload: exportPayload,
-          filename: 'report.xml',
-          reportTitle: 'Test report',
-        });
+        const started = await exportReport(
+          {
+            kind: 'scan',
+            payload: exportPayload,
+            filename: 'report.xml',
+            reportTitle: 'Test report',
+          },
+          {content_type: 'application/pdf'},
+        );
         if (started) onStarted();
       }}
     >
@@ -244,7 +260,7 @@ describe('ReportExportManager', () => {
           },
         ],
       });
-      const {render} = rendererWith({gmp});
+      const {render} = rendererWith({gmp, capabilities: true});
       render(
         <ReportExportManager>
           <ReportExportActivity />
@@ -394,7 +410,7 @@ describe('ReportExportManager', () => {
     gmp.reportexport.getReportExport.mockResolvedValue({
       data: [{id: 'export-1', status: 'done'}],
     });
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp, capabilities: true});
     const view = render(
       <ReportExportManager>
         <ReportExportActivity />
@@ -785,6 +801,13 @@ describe('ReportExportManager', () => {
     expect(
       screen.getByText('Report export: Report B (.xml)'),
     ).toBeInTheDocument();
+    const reportJobs = screen.getAllByTestId('report-export-job');
+    expect(
+      within(reportJobs[0]).getByText('Report export: Report B (.xml)'),
+    ).toBeInTheDocument();
+    expect(
+      within(reportJobs[1]).getByText('Report export: Report A (.xml)'),
+    ).toBeInTheDocument();
     const generatingStatus = await screen.findByText('Generating');
     expect(generatingStatus).toBeInTheDocument();
     expect(
@@ -1012,7 +1035,7 @@ describe('ReportExportManager', () => {
     );
   });
 
-  test('hides cancellation when the server does not advertise it', async () => {
+  test('allows cancellation for users with report access', async () => {
     const gmp = createGmp();
     gmp.reportexport.exportScanReport.mockResolvedValue({
       data: {id: 'export-unsupported-cancel'},
@@ -1020,7 +1043,10 @@ describe('ReportExportManager', () => {
     gmp.reportexport.getReportExport.mockResolvedValue({
       data: [{id: 'export-unsupported-cancel', status: 'running'}],
     });
-    const {render} = rendererWith({gmp, capabilities: false});
+    const {render} = rendererWith({
+      gmp,
+      capabilities: new Capabilities(['get_reports']),
+    });
 
     render(
       <ReportExportManager>
@@ -1033,13 +1059,15 @@ describe('ReportExportManager', () => {
 
     fireEvent.click(screen.getByRole('button', {name: 'Start two exports'}));
     await screen.findByText('Report export: Report A (.xml)');
-    expect(
-      screen.queryByRole('button', {
+    fireEvent.click(
+      await screen.findByRole('button', {
         name: 'Cancel report export',
         hidden: true,
       }),
-    ).not.toBeInTheDocument();
-    expect(gmp.reportexport.cancelReportExport).not.toHaveBeenCalled();
+    );
+    await waitFor(() =>
+      expect(gmp.reportexport.cancelReportExport).toHaveBeenCalledTimes(1),
+    );
   });
 
   test('labels terminal-row removal separately from closing activity', async () => {

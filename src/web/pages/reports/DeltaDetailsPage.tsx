@@ -39,6 +39,7 @@ import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
 import TargetComponent from 'web/pages/targets/TargetComponent';
+import {buildReportExportRequest} from 'web/report-export/build-report-export-request';
 import {ROUTES} from 'web/route-paths';
 import {
   loadAllEntities as loadFilters,
@@ -64,7 +65,6 @@ import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilter
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
-import {generateFilename} from 'web/utils/Render';
 import {DESC} from 'web/utils/sort-direction';
 
 interface UseReportStateParams {
@@ -438,31 +438,21 @@ const DeltaReportDetails = () => {
       const reportFormat = reportFormats.find(
         format => format.id === chosenFormatId,
       );
-      const request = {
-        filename: generateFilename({
-          creationTime: entity.creationTime,
-          extension: reportFormat?.extension ?? 'unknown',
-          fileNameFormat: reportExportFileName,
-          id: entity.id,
-          modificationTime: entity.modificationTime,
-          reportFormat: reportFormat?.name,
-          resourceName: entity.task?.name,
-          resourceType: 'report',
-          username,
-        }),
-        reportTitle: entity.task?.name ?? _('Report'),
+      const request = buildReportExportRequest({
+        kind: 'delta_scan',
+        entity,
+        format: reportFormat ?? {id: chosenFormatId},
+        filter: newFilter,
+        reportConfigId,
+        deltaReportId,
         reportUrl: deltaReportId
           ? ROUTES.reportDelta.url(reportId, deltaReportId)
           : undefined,
-        payload: {
-          report_id: entity.id,
-          format_id: chosenFormatId,
-          config_id: reportConfigId || undefined,
-          delta_report_id: deltaReportId,
-          filter: newFilter,
-        },
-      };
-      if (await exportReport({kind: 'delta_scan', ...request}, reportFormat))
+        fileNameFormat: reportExportFileName,
+        username,
+        fallbackReportTitle: _('Report'),
+      });
+      if (await exportReport(request, reportFormat))
         setShowDownloadReportDialog(false);
     } catch (error) {
       handleError(error as Error);

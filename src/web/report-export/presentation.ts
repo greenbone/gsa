@@ -14,15 +14,10 @@ export type ActivityStatusTone =
   | 'error'
   | 'ready';
 
-export type ActivityStatusIcon =
-  | 'loading'
-  | Exclude<ActivityStatusTone, 'active'>;
-
 export interface ActivityStatusPresentation {
   label: string;
   detail?: string;
   tone: ActivityStatusTone;
-  icon: ActivityStatusIcon;
 }
 
 const getFailedLabel = (
@@ -49,11 +44,11 @@ export const getJobPresentation = (
 ): ActivityStatusPresentation => {
   switch (view.kind) {
     case 'creating':
-      return {label: _('Preparing'), tone: 'active', icon: 'loading'};
+      return {label: _('Preparing'), tone: 'active'};
     case 'checking':
-      return {label: _('Checking'), tone: 'active', icon: 'loading'};
+      return {label: _('Checking'), tone: 'active'};
     case 'queued':
-      return {label: _('Queued'), tone: 'queued', icon: 'queued'};
+      return {label: _('Queued'), tone: 'queued'};
     case 'generating':
       return {
         label: view.progress === 'preparing' ? _('Preparing') : _('Generating'),
@@ -64,24 +59,22 @@ export const getJobPresentation = (
             ? _('Progress: {{progress}}', {progress: view.progress})
             : undefined,
         tone: 'active',
-        icon: 'loading',
       };
     case 'cancel-requested':
-      return {label: _('Cancel requested'), tone: 'queued', icon: 'queued'};
+      return {label: _('Cancel requested'), tone: 'queued'};
     case 'canceling':
-      return {label: _('Canceling'), tone: 'queued', icon: 'queued'};
+      return {label: _('Canceling'), tone: 'queued'};
     case 'downloading':
       return {
         label: _('Downloading'),
         tone: 'downloading',
-        icon: 'downloading',
       };
     case 'ready':
-      return {label: _('Ready'), tone: 'ready', icon: 'ready'};
+      return {label: _('Ready'), tone: 'ready'};
     case 'complete':
-      return {label: _('Complete'), tone: 'ready', icon: 'ready'};
+      return {label: _('Complete'), tone: 'ready'};
     case 'canceled':
-      return {label: _('Canceled'), tone: 'canceled', icon: 'canceled'};
+      return {label: _('Canceled'), tone: 'canceled'};
     case 'failed':
       return {
         label: getFailedLabel(view.reason, _),
@@ -92,7 +85,6 @@ export const getJobPresentation = (
               )
             : view.error.message,
         tone: 'error',
-        icon: 'error',
       };
   }
 };

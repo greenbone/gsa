@@ -29,37 +29,40 @@ describe('isPdfReportFormat', () => {
 });
 
 describe('selectExportTransport', () => {
-  test('uses async export for PDF when the export command is allowed', () => {
-    expect(
-      selectExportTransport('scan', PDF, new EverythingCapabilities()),
-    ).toBe('async');
-    expect(
-      selectExportTransport(
-        'delta_audit',
-        PDF,
-        new Capabilities(['export_delta_audit_report']),
-      ),
-    ).toBe('async');
+  test('uses async export for PDF when reports are accessible', () => {
+    expect(selectExportTransport(PDF, new EverythingCapabilities())).toBe(
+      'async',
+    );
+    expect(selectExportTransport(PDF, new Capabilities(['get_reports']))).toBe(
+      'async',
+    );
   });
 
-  test('falls back to direct download without the export capability', () => {
-    expect(
-      selectExportTransport(
-        'audit',
-        PDF,
-        new Capabilities(['export_scan_report']),
-      ),
-    ).toBe('direct');
-    expect(selectExportTransport('scan', PDF)).toBe('direct');
+  test('falls back to direct download without report access', () => {
+    expect(selectExportTransport(PDF, new Capabilities(['get_tasks']))).toBe(
+      'direct',
+    );
+    expect(selectExportTransport(PDF)).toBe('direct');
   });
 
   test('uses direct download for non-PDF formats', () => {
     expect(
       selectExportTransport(
-        'scan',
         {content_type: 'text/xml'},
         new EverythingCapabilities(),
       ),
     ).toBe('direct');
+  });
+
+  test('can route another format asynchronously when a test policy enables it', () => {
+    const isAsyncFormat = format => format?.content_type === 'text/xml';
+
+    expect(
+      selectExportTransport(
+        {content_type: 'text/xml'},
+        new EverythingCapabilities(),
+        isAsyncFormat,
+      ),
+    ).toBe('async');
   });
 });

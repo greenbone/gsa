@@ -7,6 +7,7 @@ import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
 import {QueryClient} from '@tanstack/react-query';
 import {createSession} from 'gmp/testing';
 import {createReportExportController} from 'web/report-export/controller';
+import {type ReportExportMutations} from 'web/report-export/useReportExportMutations';
 
 const params = {
   kind: 'scan' as const,
@@ -17,6 +18,7 @@ const params = {
 
 const setup = () => {
   let resolveCreate: ((response: {data: {id: string}}) => void) | undefined;
+  const queryClient = new QueryClient();
   const gmp = {
     session: createSession({token: 'token', username: 'user'}),
     reportexport: {
@@ -28,19 +30,33 @@ const setup = () => {
       ),
     },
   };
+  const mutations: ReportExportMutations = {
+    create: testing.fn().mockImplementation(
+      () =>
+        new Promise(resolve => {
+          resolveCreate = resolve;
+        }),
+    ),
+    cancel: testing.fn().mockResolvedValue({}),
+    download: testing.fn().mockResolvedValue({data: new ArrayBuffer(8)}),
+    direct: testing.fn().mockResolvedValue(new ArrayBuffer(8)),
+  };
   const onDownload = testing.fn();
   const onError = testing.fn();
   const controller = createReportExportController({
     // @ts-expect-error partial gmp mock
     gmp,
-    queryClient: new QueryClient(),
+    queryClient,
     token: 'token',
     username: 'user',
     callbacks: {onDownload, onError},
+    mutations,
   });
   return {
     controller,
     gmp,
+    mutations,
+    queryClient,
     onError,
     resolve: (id: string) => resolveCreate?.({data: {id}}),
   };
@@ -67,10 +83,41 @@ describe('createReportExportController', () => {
       exportId: 'export-1',
       phase: {stage: 'tracking'},
     });
-    controller.sync();
     expect(
       window.sessionStorage.getItem('gsa-report-export-jobs:user'),
     ).toContain('export-1');
+  });
+
+  test('does not write the ledger during unchanged synchronization', async () => {
+    const {controller, resolve} = setup();
+    controller.activate();
+    const started = controller.start(params);
+    resolve('export-1');
+    await started;
+
+    const setItem = testing.spyOn(window.sessionStorage, 'setItem');
+    controller.sync();
+    controller.sync();
+    expect(setItem).not.toHaveBeenCalled();
+    setItem.mockRestore();
+  });
+
+  test('persists a remote terminal status as an abandoned intent', async () => {
+    const {controller, queryClient, resolve} = setup();
+    controller.activate();
+    const started = controller.start(params);
+    resolve('export-1');
+    await started;
+    queryClient.setQueryData(['get_report_export', 'token', 'export-1'], {
+      id: 'export-1',
+      status: 'expired',
+    });
+
+    controller.sync();
+
+    expect(
+      window.sessionStorage.getItem('gsa-report-export-jobs:user'),
+    ).toContain('"disposition":"abandoned"');
   });
 
   test('ignores a create response that arrives after dispose', async () => {

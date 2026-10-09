@@ -29,6 +29,7 @@ import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
 import TargetComponent from 'web/pages/targets/TargetComponent';
+import {buildReportExportRequest} from 'web/report-export/build-report-export-request';
 import {ROUTES} from 'web/route-paths';
 import {
   loadAllEntities as loadFilters,
@@ -54,7 +55,6 @@ import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/prop-types';
-import {generateFilename} from 'web/utils/Render';
 
 const log = logger.getLogger('web.pages.report.deltadetailspage');
 
@@ -289,35 +289,23 @@ const AuditDeltaReportDetails = props => {
       ? reportFormats.find(format => format.id === reportFormatId)
       : undefined;
 
-    const request = {
-      filename: generateFilename({
-        creationTime: entity.creationTime,
-        extension: reportFormat?.extension || 'unknown',
-        fileNameFormat: reportExportFileName,
-        id: entity.id,
-        modificationTime: entity.modificationTime,
-        reportFormat: reportFormat?.name,
-        resourceName: entity.task?.name,
-        resourceType: 'report',
-        username,
-      }),
-      reportTitle: entity.task?.name || _('Report'),
+    const request = buildReportExportRequest({
+      kind: 'delta_audit',
+      entity,
+      format: reportFormat ?? {id: reportFormatId},
+      filter: newFilter,
+      deltaReportId,
       reportUrl:
         reportId && deltaReportId
           ? ROUTES.auditReportDelta.url(reportId, deltaReportId)
           : undefined,
-      payload: {
-        report_id: entity.id,
-        format_id: reportFormatId,
-        delta_report_id: deltaReportId,
-        filter: newFilter,
-      },
-    };
-    return exportReport({kind: 'delta_audit', ...request}, reportFormat).then(
-      started => {
-        if (started) setShowDownloadReportDialog(false);
-      },
-    );
+      fileNameFormat: reportExportFileName,
+      username,
+      fallbackReportTitle: _('Report'),
+    });
+    return exportReport(request, reportFormat).then(started => {
+      if (started) setShowDownloadReportDialog(false);
+    });
   };
 
   const handleFilterCreated = filter => {

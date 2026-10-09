@@ -292,9 +292,6 @@ describe('useReportExport', () => {
     await waitFor(() => expect(result.current.jobs).toHaveLength(0));
     activeExport.status = 'done';
     act(() => changeSession(gmp, 'new-token', 'test-user'));
-    await waitFor(() =>
-      expect(gmp.reportexport.getReportExports).toHaveBeenCalledTimes(2),
-    );
     await waitFor(() => expect(onDownload).toHaveBeenCalledTimes(1));
     expect(result.current.jobs).toHaveLength(1);
     expect(result.current.jobs[0].exportId).toBe(activeExport.id);
@@ -694,18 +691,23 @@ describe('useReportExport', () => {
       ],
     });
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() =>
-      useQuery(
-        // @ts-expect-error partial gmp mock
-        reportExportQueryOptions(gmp, 'test-token', 'export-uuid-1'),
-      ),
+    const queryOptions = reportExportQueryOptions(
+      gmp,
+      'test-token',
+      'export-uuid-1',
     );
+    expect(queryOptions.queryKey).toEqual([
+      'get_report_export',
+      'test-token',
+      'export-uuid-1',
+    ]);
+    const {result} = renderHook(() => useQuery(queryOptions));
 
     await waitFor(() => expect(result.current.data?.id).toBe('export-uuid-1'));
     expect(result.current.data?.status).toBe('running');
   });
 
-  test('keeps export creation errors inline while activity is open', async () => {
+  test('retains export creation errors and invokes the error callback', async () => {
     const gmp = createGmp([]);
     gmp.reportexport.exportScanReport.mockRejectedValue(
       new Error('Export creation failed'),
@@ -726,24 +728,7 @@ describe('useReportExport', () => {
     expect(onError).toHaveBeenCalledWith(new Error('Export creation failed'));
   });
 
-  test('notifies about export creation errors while activity is closed', async () => {
-    const gmp = createGmp([]);
-    gmp.reportexport.exportScanReport.mockRejectedValue(
-      new Error('Export creation failed'),
-    );
-    const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() =>
-      useReportExport({onError, onDownload: testing.fn()}),
-    );
-
-    await act(async () => {
-      expect(await result.current.start(startParams)).toBe(false);
-    });
-
-    expect(onError).toHaveBeenCalledWith(new Error('Export creation failed'));
-  });
-
-  test('keeps direct download errors inline while activity is open', async () => {
+  test('retains direct download errors and invokes the error callback', async () => {
     const gmp = createGmp([]);
     gmp.report.download.mockRejectedValue(new Error('Direct download failed'));
     const {renderHook} = rendererWith({gmp});
@@ -1090,35 +1075,6 @@ describe('useReportExport', () => {
     expect(onCancelError).toHaveBeenCalledWith(new Error('Unknown command'));
   });
 
-  test('shows cancellation failures inline while activity is open', async () => {
-    const gmp = createGmp([exportData('running')]);
-    gmp.reportexport.cancelReportExport.mockRejectedValue(
-      new Error('Unknown command'),
-    );
-    const onCancelError = testing.fn();
-    const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() =>
-      useReportExport({
-        onDownload: testing.fn(),
-        onError: onCancelError,
-      }),
-    );
-
-    await act(async () => {
-      await result.current.start(startParams);
-    });
-    await waitFor(() =>
-      expect(result.current.jobs[0].view.kind).toBe('generating'),
-    );
-
-    await act(async () => {
-      await result.current.cancel(result.current.jobs[0].key);
-    });
-
-    expect(result.current.jobs[0].cancelError?.message).toBe('Unknown command');
-    expect(onCancelError).toHaveBeenCalledWith(new Error('Unknown command'));
-  });
-
   test('downloads a same-report retry when GMP reuses the export id', async () => {
     const gmp = createGmp([exportData('running')]);
     let status = 'running';
@@ -1228,6 +1184,44 @@ describe('useReportExport', () => {
     expect(result.current.jobs[0].statusError).toBeUndefined();
   }, 15000);
 
+  test('preserves unfinished intent across an unauthorized status response', async () => {
+    const gmp = createGmp([exportData('running')]);
+    gmp.reportexport.getReportExport.mockRejectedValueOnce(
+      Object.assign(new Error('Unauthorized'), {status: 401}),
+    );
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() =>
+      useReportExport({onError, onDownload: testing.fn()}),
+    );
+    await act(async () => {
+      await result.current.start(startParams);
+    });
+    await waitFor(() =>
+      expect(result.current.jobs[0]?.view).toMatchObject({
+        kind: 'failed',
+        reason: 'unavailable',
+      }),
+    );
+    const stored = JSON.parse(
+      window.sessionStorage.getItem('gsa-report-export-jobs:test-user') ?? '[]',
+    );
+    expect(stored).toContainEqual(
+      expect.objectContaining({
+        exportId: 'export-uuid-1',
+        disposition: 'awaiting',
+        autoDownload: true,
+      }),
+    );
+
+    act(() => changeSession(gmp));
+    act(() => changeSession(gmp, 'refreshed-token', 'test-user'));
+    await waitFor(() =>
+      expect(result.current.jobs[0]?.view.kind).toBe('generating'),
+    );
+    expect(gmp.reportexport.exportScanReport).toHaveBeenCalledTimes(1);
+    expect(result.current.jobs[0].exportId).toBe('export-uuid-1');
+  });
+
   test('rehydrates an export after the hook is remounted', async () => {
     const gmp = createGmp([exportData('running')]);
     const onDownload = testing.fn();
@@ -1255,6 +1249,35 @@ describe('useReportExport', () => {
     });
     expect(secondMount.result.current.jobs[0].filename).toBe('report.xml');
     expect(onDownload).not.toHaveBeenCalled();
+  });
+
+  test('does not write unchanged export intent during status polling', async () => {
+    const gmp = createGmp([exportData('running')]);
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() =>
+      useReportExport({onError, onDownload: testing.fn()}),
+    );
+    await act(async () => {
+      await result.current.start(startParams);
+    });
+    await waitFor(() =>
+      expect(
+        window.sessionStorage.getItem('gsa-report-export-jobs:test-user'),
+      ).toContain('export-uuid-1'),
+    );
+
+    const setItem = vi.spyOn(window.sessionStorage, 'setItem');
+    const initialStatusCalls =
+      gmp.reportexport.getReportExport.mock.calls.length;
+    await waitFor(
+      () =>
+        expect(
+          gmp.reportexport.getReportExport.mock.calls.length,
+        ).toBeGreaterThan(initialStatusCalls),
+      {timeout: REPORT_EXPORT_POLL_INTERVAL * 3},
+    );
+    expect(setItem).not.toHaveBeenCalled();
+    setItem.mockRestore();
   });
 
   test('retains handed-off records without downloading again', async () => {
@@ -1443,6 +1466,47 @@ describe('useReportExport', () => {
     expect(result.current.startDirect(startParams)).toBe(false);
   });
 
+  test('ignores cancellation that completes after logout', async () => {
+    const gmp = createGmp([exportData('running')]);
+    let resolveCancellation: ((value: unknown) => void) | undefined;
+    gmp.reportexport.cancelReportExport.mockImplementationOnce(
+      () =>
+        new Promise(resolve => {
+          resolveCancellation = resolve;
+        }),
+    );
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() =>
+      useReportExport({onError, onDownload: testing.fn()}),
+    );
+    await act(async () => {
+      await result.current.start(startParams);
+    });
+    await waitFor(() =>
+      expect(result.current.jobs[0]?.view.kind).toBe('generating'),
+    );
+
+    let cancellation: Promise<void> | undefined;
+    act(() => {
+      cancellation = result.current.cancel(result.current.jobs[0].key);
+    });
+    await waitFor(() =>
+      expect(gmp.reportexport.cancelReportExport).toHaveBeenCalledTimes(1),
+    );
+    act(() => changeSession(gmp));
+    act(() => changeSession(gmp, 'refreshed-token', 'test-user'));
+    await waitFor(() =>
+      expect(result.current.jobs[0]?.view.kind).toBe('generating'),
+    );
+    await act(async () => {
+      resolveCancellation?.({});
+      await cancellation;
+    });
+
+    expect(result.current.jobs[0].view.kind).toBe('generating');
+    expect(gmp.reportexport.cancelReportExport).toHaveBeenCalledTimes(1);
+  });
+
   test('keeps activity isolated when a different user logs in', async () => {
     const gmp = createGmp([exportData('done', 'completed')]);
     const onDownload = testing.fn();
@@ -1487,6 +1551,9 @@ describe('useReportExport', () => {
     act(() => {
       creation = result.current.start(startParams);
     });
+    await waitFor(() =>
+      expect(gmp.reportexport.exportScanReport).toHaveBeenCalledTimes(1),
+    );
     act(() => changeSession(gmp));
     act(() => changeSession(gmp, 'other-token', 'other-user'));
     await act(async () => {

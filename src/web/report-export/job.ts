@@ -158,32 +158,31 @@ const getLocalTerminalView = (
   return undefined;
 };
 
-const getRemoteTerminalView = (
+// Precedence: local terminal phases, then remote terminal status, then transfer/cancel/progress.
+const getAttemptView = (
+  {phase, autoDownload}: ExportAttempt,
   exportData?: ReportExport,
-): JobView | undefined => {
-  switch (exportData?.status) {
+  statusError?: Error | null,
+): JobView => {
+  const localView = getLocalTerminalView(phase, statusError);
+  if (localView) return localView;
+  const status = exportData?.status;
+  switch (status) {
     case 'error':
       return failed(
         'export',
-        new Error(exportData.errorMessage || 'Export failed'),
+        new Error(exportData?.errorMessage || 'Export failed'),
       );
     case 'expired':
       return failed(
         'expired',
-        new Error(exportData.errorMessage || 'Export expired'),
+        new Error(exportData?.errorMessage || 'Export expired'),
       );
     case 'canceled':
       return {kind: 'canceled'};
     case 'unknown':
       return failed('unavailable', new Error('Unsupported export status'));
   }
-  return undefined;
-};
-
-const getProgressView = (
-  {phase, autoDownload}: ExportAttempt,
-  exportData?: ReportExport,
-): JobView => {
   if (
     inStage(phase, 'waiting', 'handoff-failed') &&
     'error' in phase &&
@@ -192,7 +191,6 @@ const getProgressView = (
     return failed('download', phase.error);
   if (inStage(phase, 'transferring', 'waiting')) return {kind: 'downloading'};
   if (phase.stage === 'canceling') return {kind: 'canceling'};
-  const status = exportData?.status;
   if (phase.stage === 'cancel-requested' && isGenerationActive(status))
     return {kind: 'cancel-requested'};
   switch (status) {
@@ -207,16 +205,6 @@ const getProgressView = (
   }
   return {kind: 'checking'};
 };
-
-// Precedence: local terminal phases, then remote terminal status, then transfer/cancel/progress.
-const getAttemptView = (
-  attempt: ExportAttempt,
-  exportData?: ReportExport,
-  statusError?: Error | null,
-): JobView =>
-  getLocalTerminalView(attempt.phase, statusError) ??
-  getRemoteTerminalView(exportData) ??
-  getProgressView(attempt, exportData);
 
 export const toReportExportJob = (
   attempt: ExportAttempt,

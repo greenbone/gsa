@@ -26,7 +26,6 @@ import {
   type ReportExportJob,
 } from 'web/report-export/job';
 import {
-  type ActivityStatusIcon,
   type ActivityStatusTone,
   getCancelButtonTitle,
   getJobPresentation,
@@ -93,7 +92,16 @@ const Spinning = styled.span`
   display: inline-flex;
 `;
 
-const StatusBadge = styled(Badge)`
+const StatusBadge = styled(Badge)<{$tone: ActivityStatusTone}>`
+  && {
+    ${props =>
+      props.$tone === 'queued' || props.$tone === 'downloading'
+        ? `
+            background-color: var(--info-tip-background-color);
+            color: var(--info-tip-color);
+          `
+        : ''}
+  }
   flex: 0 0 auto;
   font-size: 12px;
   font-weight: 600;
@@ -166,9 +174,9 @@ const ActivityActions = styled.div`
 
 const isComplete = (job: ReportExportJob) => job.view.kind === 'complete';
 
-const getActivityStatusIcon = (icon: ActivityStatusIcon) => {
-  switch (icon) {
-    case 'loading':
+const getActivityStatusIcon = (tone: ActivityStatusTone) => {
+  switch (tone) {
+    case 'active':
       return (
         <Spinning>
           <RefreshIcon color="currentColor" size={BADGE_ICON_SIZE} />
@@ -187,19 +195,116 @@ const getActivityStatusIcon = (icon: ActivityStatusIcon) => {
   }
 };
 
+interface ReportExportJobRowProps {
+  job: ReportExportJob;
+}
+
+const ReportExportJobRow = ({job}: ReportExportJobRowProps) => {
+  const {supportsCancellation, cancel, dismiss, download, retry} =
+    useReportExportManager();
+  const [_] = useTranslation();
+  const actions = getReportExportActions(job);
+  const canCancel = supportsCancellation && actions.cancel;
+  const status = getJobPresentation(job, _);
+  const cancelTitle = getCancelButtonTitle(job, _);
+
+  return (
+    <ActivityJob data-testid="report-export-job">
+      <Column gap="xs">
+        <ActivityHeading>
+          <ActivityTitle>{getJobTitle(job, _)}</ActivityTitle>
+          <StatusBadge
+            $tone={status.tone}
+            color={BADGE_COLORS[status.tone]}
+            size="md"
+          >
+            <StatusIcon aria-hidden="true">
+              {getActivityStatusIcon(status.tone)}
+            </StatusIcon>
+            <output
+              aria-live={actions.active ? 'polite' : undefined}
+              data-state={status.tone}
+              data-testid="report-export-status"
+            >
+              {status.label}
+            </output>
+          </StatusBadge>
+        </ActivityHeading>
+        {status.detail && (
+          <ActivityStatusDetail>{status.detail}</ActivityStatusDetail>
+        )}
+        {job.statusError && (
+          <ErrorText role="status">
+            {_('Status check failed; retrying: {{error}}', {
+              error: job.statusError.message,
+            })}
+          </ErrorText>
+        )}
+        {job.cancelError && (
+          <ErrorText role="alert">
+            {_('Cancellation failed: {{error}}', {
+              error: job.cancelError.message,
+            })}
+          </ErrorText>
+        )}
+        {(job.reportUrl ||
+          canCancel ||
+          actions.dismiss ||
+          actions.download ||
+          actions.retry) && (
+          <ActivityActions>
+            {job.reportUrl && (
+              <Link to={job.reportUrl}>{_('View report details')}</Link>
+            )}
+            <Row gap={4} style={{gridColumn: 2}} wrap="nowrap">
+              {canCancel && (
+                <CircleXDeleteIcon
+                  aria-label={cancelTitle}
+                  color={Theme.darkRed}
+                  title={cancelTitle}
+                  onClick={() => cancel(job.key)}
+                />
+              )}
+              {actions.download && (
+                <DownloadIcon
+                  aria-label={_('Download report')}
+                  color={Theme.darkGreen}
+                  title={_('Download report')}
+                  onClick={() => download(job.key)}
+                />
+              )}
+              {actions.retry && (
+                <RefreshIcon
+                  aria-label={_('Retry')}
+                  color={Theme.blue}
+                  title={_('Retry')}
+                  onClick={() => retry(job.key)}
+                />
+              )}
+              {actions.dismiss && (
+                <XIcon
+                  aria-label={_('Remove from activity')}
+                  color={Theme.darkGray}
+                  title={_('Remove from activity')}
+                  onClick={() => dismiss(job.key)}
+                />
+              )}
+            </Row>
+          </ActivityActions>
+        )}
+      </Column>
+    </ActivityJob>
+  );
+};
+
 export const ReportExportActivity = () => {
   const {
     activityOpen,
-    cancel,
-    dismiss,
-    download,
-    retry,
     discoveryError,
     discoveryIncomplete,
     isActive,
     jobs,
     setActivityOpen,
-    supportsCancellation,
   } = useReportExportManager();
   const [_] = useTranslation();
   const previousJobKeys = useRef(new Set(jobs.map(job => job.key)));
@@ -207,12 +312,14 @@ export const ReportExportActivity = () => {
     () => new Set(jobs.filter(job => !isComplete(job)).map(job => job.key)),
   );
   const visibleJobs = jobs
-    .filter(job => !isComplete(job) || recentKeys.has(job.key))
+    .map((job, index) => ({job, index}))
+    .filter(({job}) => !isComplete(job) || recentKeys.has(job.key))
     .sort((first, second) => {
-      if (first.autoDownload !== second.autoDownload)
-        return first.autoDownload ? -1 : 1;
-      return jobs.indexOf(second) - jobs.indexOf(first);
-    });
+      if (first.job.autoDownload !== second.job.autoDownload)
+        return first.job.autoDownload ? -1 : 1;
+      return second.index - first.index;
+    })
+    .map(({job}) => job);
   const changeActivityOpen = (open: boolean) => {
     if (!open)
       setRecentKeys(
@@ -302,101 +409,9 @@ export const ReportExportActivity = () => {
                 {_('Export list is incomplete')}
               </ErrorText>
             )}
-            {visibleJobs.map(job => {
-              const actions = getReportExportActions(job);
-              const canCancel = supportsCancellation && actions.cancel;
-              const status = getJobPresentation(job, _);
-              const cancelTitle = getCancelButtonTitle(job, _);
-
-              return (
-                <ActivityJob key={job.key} data-testid="report-export-job">
-                  <Column gap="xs">
-                    <ActivityHeading>
-                      <ActivityTitle>{getJobTitle(job, _)}</ActivityTitle>
-                      <StatusBadge color={BADGE_COLORS[status.tone]} size="md">
-                        <StatusIcon aria-hidden="true">
-                          {getActivityStatusIcon(status.icon)}
-                        </StatusIcon>
-                        <span
-                          aria-live={actions.active ? 'polite' : undefined}
-                          data-state={status.tone}
-                          data-testid="report-export-status"
-                          role={status.tone === 'error' ? 'alert' : 'status'}
-                        >
-                          {status.label}
-                        </span>
-                      </StatusBadge>
-                    </ActivityHeading>
-                    {status.detail && (
-                      <ActivityStatusDetail>
-                        {status.detail}
-                      </ActivityStatusDetail>
-                    )}
-                    {job.statusError && (
-                      <ErrorText role="status">
-                        {_('Status check failed; retrying: {{error}}', {
-                          error: job.statusError.message,
-                        })}
-                      </ErrorText>
-                    )}
-                    {job.cancelError && (
-                      <ErrorText role="alert">
-                        {_('Cancellation failed: {{error}}', {
-                          error: job.cancelError.message,
-                        })}
-                      </ErrorText>
-                    )}
-                    {(job.reportUrl ||
-                      canCancel ||
-                      actions.dismiss ||
-                      actions.download ||
-                      actions.retry) && (
-                      <ActivityActions>
-                        {job.reportUrl && (
-                          <Link to={job.reportUrl}>
-                            {_('View report details')}
-                          </Link>
-                        )}
-                        <Row gap={4} style={{gridColumn: 2}} wrap="nowrap">
-                          {canCancel && (
-                            <CircleXDeleteIcon
-                              aria-label={cancelTitle}
-                              color={Theme.darkRed}
-                              title={cancelTitle}
-                              onClick={() => cancel(job.key)}
-                            />
-                          )}
-                          {actions.download && (
-                            <DownloadIcon
-                              aria-label={_('Download report')}
-                              color={Theme.darkGreen}
-                              title={_('Download report')}
-                              onClick={() => download(job.key)}
-                            />
-                          )}
-                          {actions.retry && (
-                            <RefreshIcon
-                              aria-label={_('Retry')}
-                              color={Theme.blue}
-                              title={_('Retry')}
-                              onClick={() => retry(job.key)}
-                            />
-                          )}
-                          {actions.dismiss && (
-                            <XIcon
-                              aria-label={_('Remove from activity')}
-                              color={Theme.darkGray}
-                              title={_('Remove from activity')}
-                              onClick={() => dismiss(job.key)}
-                            />
-                          )}
-                        </Row>
-                      </ActivityActions>
-                    )}
-                  </Column>
-                </ActivityJob>
-              );
-            })}
+            {visibleJobs.map(job => (
+              <ReportExportJobRow key={job.key} job={job} />
+            ))}
           </Column>
         </ActivityDropdown>
       </Popover.Dropdown>
