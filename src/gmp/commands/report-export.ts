@@ -21,7 +21,7 @@ export interface ReportExportPayload {
   report_id: string;
   format_id: string;
   config_id?: string;
-  filter?: FilterType | string;
+  filter?: FilterType;
   filter_id?: string;
   delta_report_id?: string;
   ignore_pagination?: boolean | number;
@@ -73,11 +73,6 @@ const parseReportExports = (element?: ReportExportsResponseElement) =>
     (item): item is ReportExport => item !== undefined,
   );
 
-const getFilterValue = (filter?: FilterType | string) => {
-  if (filter === undefined) return undefined;
-  return typeof filter === 'string' ? filter : filterString(filter.all());
-};
-
 class ReportExportCommand extends HttpCommand {
   constructor(http: Http) {
     super(http);
@@ -88,7 +83,7 @@ class ReportExportCommand extends HttpCommand {
     const response = await this.httpPostWithTransform({
       cmd: command,
       ...params,
-      filter: getFilterValue(filter),
+      filter: filter ? filterString(filter.all()) : undefined,
     });
     // gvmd answers with this id for both newly created and reused exports
     const id = (response.data as CreateResponseData)[command]?.[

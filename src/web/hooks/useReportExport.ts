@@ -22,9 +22,14 @@ import useGmp from 'web/hooks/useGmp';
 import useSessionToken from 'web/hooks/useSessionToken';
 import useUserName from 'web/hooks/useUserName';
 import {
+  type DirectDownload,
+  type DirectDownloadPhase,
+  fetchDirectDownload,
+  toDirectDownloadJob,
+} from 'web/report-export/direct-download';
+import {
   type ExportAttempt,
   type StartReportExportParams,
-  type StartDirectReportDownloadParams,
   getReportExportActions,
   isPermanentExportError,
   toReportExportJob,
@@ -43,12 +48,12 @@ export type {
   ReportExportKind,
   ReportExportState,
   StartReportExportParams,
-  StartDirectReportDownloadParams,
 } from 'web/report-export/job';
 export {REPORT_EXPORT_POLL_INTERVAL} from 'web/hooks/use-query/report-exports';
 export const REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL = 3000;
 const MAX_DOWNLOAD_RETRIES = 10;
 const EMPTY_ATTEMPTS: ExportAttempt[] = [];
+const EMPTY_DIRECT: DirectDownload[] = [];
 
 interface UseReportExportParams {
   onDownload: (
@@ -122,6 +127,9 @@ const useReportExport = ({onDownload, onError}: UseReportExportParams) => {
   const {store} = sessionStore;
   const snapshot = useSyncExternalStore(store.subscribe, store.getSnapshot);
   const records = sessionStore.owner === owner ? snapshot : EMPTY_ATTEMPTS;
+  const [direct, setDirect] = useState({owner, downloads: EMPTY_DIRECT});
+  const directDownloads =
+    direct.owner === owner ? direct.downloads : EMPTY_DIRECT;
   const activeStore = useRef(store);
   const resources = useRef(new Map<string, AttemptRuntime>());
   const dismissed = useRef(new Set<string>());
@@ -397,10 +405,7 @@ const useReportExport = ({onDownload, onError}: UseReportExportParams) => {
         });
     }
   };
-  const addAttempt = (
-    params: StartReportExportParams,
-    directDownload = false,
-  ) => {
+  const addAttempt = (params: StartReportExportParams) => {
     for (const job of jobs) {
       if (
         params.reportUrl &&
@@ -410,15 +415,14 @@ const useReportExport = ({onDownload, onError}: UseReportExportParams) => {
         dismiss(job.key);
     }
     const attempt: ExportAttempt = {
-      key: `report-${directDownload ? 'download' : 'export'}-${uuid()}`,
+      key: `report-export-${uuid()}`,
       origin: 'local',
       filename: params.filename,
       reportTitle: params.reportTitle,
       reportUrl: params.reportUrl,
-      directDownload,
       autoDownload: true,
       disposition: 'awaiting',
-      phase: {stage: directDownload ? 'transferring' : 'creating'},
+      phase: {stage: 'creating'},
     };
     const runtime = resourceFor(attempt);
     store.dispatch({type: 'add', attempt});
@@ -496,36 +500,42 @@ const useReportExport = ({onDownload, onError}: UseReportExportParams) => {
       return false;
     }
   };
-  const startDirect = (params: StartDirectReportDownloadParams) => {
+  const startDirect = (params: StartReportExportParams) => {
     if (!isCurrentSession()) return false;
-    const runtime = addAttempt(params, true);
-    const {report_id, format_id, config_id, delta_report_id, filter} =
-      params.payload;
-    const fetch = async () => {
+    const key = `report-download-${uuid()}`;
+    const {filename, reportTitle, reportUrl} = params;
+    const setPhase = (phase: DirectDownloadPhase) =>
+      setDirect(current =>
+        current.owner === owner
+          ? {
+              owner,
+              downloads: current.downloads.map(item =>
+                item.key === key ? {...item, phase} : item,
+              ),
+            }
+          : current,
+      );
+    setDirect(current => ({
+      owner,
+      downloads: [
+        ...(current.owner === owner ? current.downloads : []),
+        {key, filename, reportTitle, reportUrl, phase: {stage: 'downloading'}},
+      ],
+    }));
+    const run = async () => {
       try {
-        const options = {
-          reportFormatId: format_id,
-          deltaReportId: delta_report_id,
-          filter,
-        };
-        const response =
-          params.kind === 'audit' || params.kind === 'delta_audit'
-            ? await gmp.auditreport.download({id: report_id}, options)
-            : await gmp.report.download(
-                {id: report_id},
-                {...options, reportConfigId: config_id ?? ''},
-              );
-        if (!current(runtime)) return;
-        runtime.buffer = response.data;
-        handoff(runtime);
+        const data = await fetchDirectDownload(gmp, params);
+        if (!isCurrentSession()) return;
+        callbacks.current.onDownload(data, filename);
+        setPhase({stage: 'complete'});
       } catch (error) {
-        if (!current(runtime)) return;
+        if (!isCurrentSession()) return;
         const failure = toError(error);
-        send(runtime, {type: 'fail', key: runtime.key, error: failure});
+        setPhase({stage: 'failed', error: failure});
         notify(failure);
       }
     };
-    void fetch();
+    void run();
     return true;
   };
   const jobFor = (key: string) => {
@@ -550,6 +560,21 @@ const useReportExport = ({onDownload, onError}: UseReportExportParams) => {
     await requestCancellation(runtime);
   };
   const dismiss = (key: string) => {
+    if (
+      directDownloads.some(
+        item => item.key === key && item.phase.stage !== 'downloading',
+      )
+    ) {
+      setDirect(current =>
+        current.owner === owner
+          ? {
+              owner,
+              downloads: current.downloads.filter(item => item.key !== key),
+            }
+          : current,
+      );
+      return;
+    }
     const job = jobFor(key);
     if (!job || !getReportExportActions(job).dismiss) return;
     if (job.exportId) dismissed.current.add(job.exportId);
@@ -585,6 +610,7 @@ const useReportExport = ({onDownload, onError}: UseReportExportParams) => {
     send(runtime, {type: 'auto-download', key});
     await transfer(runtime);
   };
+  const allJobs = [...jobs, ...directDownloads.map(toDirectDownloadJob)];
   return {
     start,
     startDirect,
@@ -592,8 +618,8 @@ const useReportExport = ({onDownload, onError}: UseReportExportParams) => {
     dismiss,
     retry,
     download,
-    jobs: retainReportExportJobs(jobs),
-    isActive: jobs.some(job => getReportExportActions(job).active),
+    jobs: retainReportExportJobs(allJobs),
+    isActive: allJobs.some(job => getReportExportActions(job).active),
     discoveryError: inventory.error,
     discoveryIncomplete: inventory.data?.incomplete ?? false,
     refreshDiscovery: refreshInventory,

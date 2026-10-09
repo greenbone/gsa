@@ -53,11 +53,8 @@ const readIntent = (value: unknown): ExportIntent | undefined => {
     'exportId' in value && typeof value.exportId === 'string' && value.exportId
       ? value.exportId
       : undefined;
-  const directDownload =
-    'directDownload' in value && value.directDownload === true;
+  if (!exportId) return undefined;
   const disposition = readDisposition(value);
-  if (!exportId && !(directDownload && disposition === 'handed-off'))
-    return undefined;
   const discovered =
     'origin' in value
       ? value.origin === 'discovered'
@@ -70,7 +67,6 @@ const readIntent = (value: unknown): ExportIntent | undefined => {
     reportTitle: value.reportTitle,
     reportUrl:
       'reportUrl' in value ? safeReportUrl(value.reportUrl) : undefined,
-    directDownload,
     autoDownload: !('autoDownload' in value) || value.autoDownload === true,
     disposition,
   };
@@ -121,7 +117,6 @@ export const writeExportIntents = (
     filename: intent.filename,
     reportTitle: intent.reportTitle,
     reportUrl: intent.reportUrl,
-    directDownload: intent.directDownload,
     autoDownload: intent.autoDownload,
     disposition: intent.disposition,
   }));
