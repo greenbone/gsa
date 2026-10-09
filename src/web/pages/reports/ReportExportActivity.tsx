@@ -73,16 +73,7 @@ type ActivityStatusIcon =
 
 const ActivityStatusPill = styled.div<{$tone: ActivityStatusTone}>`
   align-items: center;
-  background: ${props => {
-    if (props.$tone === 'active') return Theme.reportActivityActiveBackground;
-    if (props.$tone === 'queued') return Theme.reportActivityQueuedBackground;
-    if (props.$tone === 'downloading') {
-      return Theme.reportActivityDownloadingBackground;
-    }
-    if (props.$tone === 'error') return Theme.reportActivityErrorBackground;
-    if (props.$tone === 'ready') return Theme.reportActivityReadyBackground;
-    return Theme.reportActivityCanceledBackground;
-  }};
+  background: ${Theme.white};
   border-radius: 4px;
   color: ${props => {
     if (props.$tone === 'active') return Theme.darkGreen;
@@ -133,7 +124,7 @@ const ActivityTitle = styled(Text)`
 `;
 
 const ActivityJob = styled.div`
-  background: ${Theme.reportActivityRowBackground};
+  background: ${Theme.white};
   border: 1px solid ${Theme.lightGray};
   border-radius: 6px;
   min-width: 0;
