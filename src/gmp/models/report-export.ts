@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {type EntityModelProperties} from 'gmp/models/entity-model';
+
 export const REPORT_EXPORT_STATUS = {
   pending: 'pending',
   running: 'running',
@@ -26,7 +28,10 @@ export const REPORT_EXPORT_PROGRESS = {
 export type ReportExportProgress =
   (typeof REPORT_EXPORT_PROGRESS)[keyof typeof REPORT_EXPORT_PROGRESS];
 
-export interface ReportExport {
+export interface ReportExport extends Pick<
+  EntityModelProperties,
+  'owner' | 'name' | 'creationTime' | 'modificationTime'
+> {
   id?: string;
   type?: string;
   status?: ReportExportStatus | (string & {});

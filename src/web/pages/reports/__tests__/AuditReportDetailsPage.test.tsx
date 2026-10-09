@@ -95,7 +95,7 @@ const createGmp = () => ({
     exportAuditReport: testing
       .fn()
       .mockResolvedValue({data: {id: 'export-uuid'}}),
-    getReportExports: testing.fn().mockResolvedValue({
+    getReportExport: testing.fn().mockResolvedValue({
       data: [{id: 'export-uuid', status: 'running', progress: 'generating'}],
     }),
     downloadReportExport: testing

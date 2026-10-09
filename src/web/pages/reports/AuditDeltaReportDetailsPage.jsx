@@ -26,7 +26,6 @@ import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import DeltaReportDetailsContent from 'web/pages/reports/DeltaReportDetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
-import isPdfReportFormat from 'web/pages/reports/is-pdf-report-format';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
 import TargetComponent from 'web/pages/targets/TargetComponent';
@@ -134,8 +133,7 @@ const AuditDeltaReportDetails = props => {
   });
   const isLoading = !isDefined(entity);
 
-  const {start: startReportExport, startDirect: startDirectReportDownload} =
-    useReportExportManager();
+  const {enqueue} = useReportExportManager();
 
   useEffect(() => {
     dispatch(loadUserSettingDefaults(gmp)());
@@ -315,14 +313,11 @@ const AuditDeltaReportDetails = props => {
         filter: newFilter,
       },
     };
-    const startPromise = isPdfReportFormat(reportFormat)
-      ? startReportExport({kind: 'delta_audit', ...request})
-      : Promise.resolve(
-          startDirectReportDownload({kind: 'delta_audit', ...request}),
-        );
-    return startPromise.then(started => {
-      if (started) setShowDownloadReportDialog(false);
-    });
+    return enqueue({kind: 'delta_audit', ...request}, reportFormat).then(
+      started => {
+        if (started) setShowDownloadReportDialog(false);
+      },
+    );
   };
 
   const handleFilterCreated = filter => {

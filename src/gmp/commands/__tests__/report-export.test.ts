@@ -113,7 +113,7 @@ describe('ReportExportCommand tests', () => {
       );
       const exportCommand = new ReportExportCommand(fakeHttp);
 
-      const response = await exportCommand.getReportExports({
+      const response = await exportCommand.getReportExport({
         reportExportId: 'export-uuid',
       });
 
@@ -159,6 +159,47 @@ describe('ReportExportCommand tests', () => {
       responseType: 'arraybuffer',
     });
     expect(response).toBe(data);
+  });
+
+  test('lists exports with explicit pagination and owner metadata', async () => {
+    const fakeHttp = createHttp(
+      createResponse({
+        get_report_exports: {
+          get_report_exports_response: {
+            report_export: {
+              _id: 'export-uuid',
+              owner: {name: 'alice'},
+              creation_time: '2026-09-01T08:40:50Z',
+              status: 'done',
+            },
+            report_exports: {_start: 101, _max: 100},
+            report_export_count: {page: 1, filtered: 101, __text: 101},
+          },
+        },
+      }),
+    );
+    const command = new ReportExportCommand(fakeHttp);
+    const response = await command.getReportExports({
+      filter: QueryFilter.fromString('owner="alice" first=101 rows=100'),
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('get', {
+      args: {
+        cmd: 'get_report_exports',
+        filter: 'owner="alice" first=101 rows=100',
+      },
+    });
+    expect(response.data[0]).toMatchObject({
+      id: 'export-uuid',
+      owner: {name: 'alice'},
+    });
+    expect(response.data[0].creationTime?.toISOString()).toBe(
+      '2026-09-01T08:40:50.000Z',
+    );
+    expect(response.meta.counts).toMatchObject({
+      first: 101,
+      filtered: 101,
+      length: 1,
+    });
   });
 
   test('should cancel a report export', async () => {
