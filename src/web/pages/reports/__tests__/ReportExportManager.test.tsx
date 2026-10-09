@@ -33,7 +33,7 @@ const exportPayload = {
 };
 
 const createGmp = () => ({
-  session: createSession({token: 'test-token'}),
+  session: createSession({token: 'test-token', username: 'test-user'}),
   settings: {},
   reportexport: {
     exportScanReport: testing.fn(),
