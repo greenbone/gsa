@@ -36,6 +36,8 @@ const getFailedLabel = (
       return _('Export expired');
     case 'download':
       return _('Download failed');
+    case 'gone':
+      return _('No longer available');
     case 'unavailable':
       return _('Unavailable');
   }
@@ -83,7 +85,12 @@ export const getJobPresentation = (
     case 'failed':
       return {
         label: getFailedLabel(view.reason, _),
-        detail: view.error.message,
+        detail:
+          view.reason === 'gone'
+            ? _(
+                'The file may already have been downloaded. Export the report again.',
+              )
+            : view.error.message,
         tone: 'error',
         icon: 'error',
       };
