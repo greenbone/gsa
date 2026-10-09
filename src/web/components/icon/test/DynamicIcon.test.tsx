@@ -57,6 +57,29 @@ describe('DynamicIcon', () => {
     expect(dynamicIcon).toHaveAttribute('title', 'Loading...');
   });
 
+  test('does not update loading state after being unmounted', async () => {
+    let resolveClick: () => void = () => undefined;
+    const mockOnClick = testing.fn<() => Promise<void>>(
+      () =>
+        new Promise<void>(resolve => {
+          resolveClick = resolve;
+        }),
+    );
+    const {unmount} = render(
+      <DynamicIcon
+        dataTestId="loading-icon"
+        icon={MockIcon}
+        onClick={mockOnClick}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId('loading-icon'));
+    unmount();
+    resolveClick();
+
+    await Promise.resolve();
+  });
+
   test('does not call onClick when active is false', () => {
     const mockOnClick = testing.fn();
     render(

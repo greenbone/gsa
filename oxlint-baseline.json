@@ -747,18 +747,6 @@
       "fingerprint": "src/web/components/form/__tests__/useFormValues.test.tsx|react(refs)|Cannot access refs during render|6|ref.current++;"
     },
     {
-      "filename": "src/web/components/icon/DynamicIcon.tsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 72,
-        "column": 27,
-        "offset": 1905
-      },
-      "sourceLine": "if (isDefined(result?.then)) {",
-      "fingerprint": "src/web/components/icon/DynamicIcon.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|27|if (isDefined(result?.then)) {"
-    },
-    {
       "filename": "src/web/components/icon/Icon.tsx",
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
@@ -1737,7 +1725,7 @@
       "location": {
         "line": 81,
         "column": 5,
-        "offset": 3272
+        "offset": 3312
       },
       "sourceLine": "setAgents(previousAgents => {",
       "fingerprint": "src/web/pages/agents/AgentListPage.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setAgents(previousAgents => {"
@@ -1749,7 +1737,7 @@
       "location": {
         "line": 100,
         "column": 34,
-        "offset": 3788
+        "offset": 3828
       },
       "sourceLine": "selected: selectedEntities = [],",
       "fingerprint": "src/web/pages/agents/AgentListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Agent[]` (not nullish). This default assignment will never be used.|34|selected: selectedEntities = [],"

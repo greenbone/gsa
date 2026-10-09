@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
+import React, {useLayoutEffect, useRef, useState} from 'react';
 import {ActionIcon, type ActionIconProps} from '@mantine/core';
 import {type LucideIcon} from 'lucide-react';
 import {isDefined} from 'gmp/utils/identity';
@@ -52,7 +52,14 @@ export function DynamicIcon<TValue = string | undefined>({
 }: Readonly<DynamicIconProps<TValue>>) {
   const [_] = useTranslation();
   const [loading, setLoading] = useState(false);
+  const isMounted = useRef(true);
   const {width, height} = useIconSize(size);
+
+  useLayoutEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   const mantineSize = Array.isArray(size)
     ? Math.max(parseInt(size[0]), parseInt(size[1])) + 'px'
@@ -69,12 +76,20 @@ export function DynamicIcon<TValue = string | undefined>({
 
     const result = onClick(value as TValue);
 
-    if (isDefined(result?.then)) {
+    if (
+      isDefined(result) &&
+      'then' in result &&
+      typeof result.then === 'function'
+    ) {
       try {
-        setLoading(true);
+        if (isMounted.current) {
+          setLoading(true);
+        }
         await result;
       } finally {
-        setLoading(false);
+        if (isMounted.current) {
+          setLoading(false);
+        }
       }
     }
   };
