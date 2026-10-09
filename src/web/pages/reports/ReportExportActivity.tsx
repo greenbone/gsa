@@ -4,8 +4,9 @@
  */
 
 import {useEffect, useRef, useState} from 'react';
-import {ActionIcon, Group, Loader, Popover, Stack, Text} from '@mantine/core';
-import styled from 'styled-components';
+import {Popover} from '@mantine/core';
+import {Badge, EThemeColors} from '@greenbone/ui-lib';
+import styled, {keyframes} from 'styled-components';
 import {
   AlertCircleIcon,
   CheckIcon,
@@ -15,6 +16,8 @@ import {
   ScheduleIcon,
   XIcon,
 } from 'web/components/icon';
+import Column from 'web/components/layout/Column';
+import Row from 'web/components/layout/Row';
 import Link from 'web/components/link/Link';
 import useTranslation from 'web/hooks/useTranslation';
 import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
@@ -31,7 +34,13 @@ import {
 } from 'web/report-export/presentation';
 import Theme from 'web/utils/theme';
 
-const ActivityTrigger = styled(ActionIcon)`
+const ActivityTrigger = styled.button`
+  align-items: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  padding: 4px;
   position: relative;
 
   @media (max-width: 600px) {
@@ -54,8 +63,8 @@ const ActivityDot = styled.span<{
   border-radius: 50%;
   height: 9px;
   position: absolute;
-  right: 4px;
-  top: 5px;
+  right: 0;
+  top: 1px;
   width: 9px;
 `;
 
@@ -64,39 +73,60 @@ const ActivityDropdown = styled.div`
   width: 100%;
 `;
 
-const ActivityStatusPill = styled.div<{$tone: ActivityStatusTone}>`
-  align-items: center;
-  background: ${Theme.white};
-  border-radius: 4px;
-  color: ${props => {
-    if (props.$tone === 'active') return Theme.darkGreen;
-    if (props.$tone === 'queued' || props.$tone === 'downloading') {
-      return Theme.blue;
-    }
-    if (props.$tone === 'error') return Theme.darkRed;
-    if (props.$tone === 'ready') return Theme.darkGreen;
-    return Theme.darkGray;
-  }};
+const BADGE_COLORS: Record<ActivityStatusTone, EThemeColors> = {
+  active: EThemeColors.Green,
+  queued: EThemeColors.Blue,
+  downloading: EThemeColors.Blue,
+  canceled: EThemeColors.NeutralLight,
+  error: EThemeColors.RedLight,
+  ready: EThemeColors.Green,
+};
+
+const spin = keyframes`
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const Spinning = styled.span`
+  animation: ${spin} 1.2s linear infinite;
   display: inline-flex;
+`;
+
+const StatusBadge = styled(Badge)`
   flex: 0 0 auto;
   font-size: 12px;
   font-weight: 600;
-  gap: 6px;
-  line-height: 1.3;
-  max-width: 100%;
-  padding: 4px 8px;
+  line-height: 1;
+  white-space: nowrap;
 `;
 
-const ActivityStatusIconContainer = styled.span`
+const StatusIcon = styled.span`
   align-items: center;
   display: inline-flex;
   height: 14px;
-  justify-content: center;
   width: 14px;
 `;
 
-const ActivityStatusDetail = styled(Text)`
+const BADGE_ICON_SIZE: [string, string] = ['14px', '14px'];
+
+const ActivityTitle = styled.span`
+  color: ${Theme.black};
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 0;
   overflow-wrap: anywhere;
+`;
+
+const ActivityStatusDetail = styled.span`
+  color: ${Theme.darkGray};
+  font-size: 12px;
+  overflow-wrap: anywhere;
+`;
+
+const ErrorText = styled.div`
+  color: ${Theme.darkRed};
+  font-size: 14px;
 `;
 
 const ActivityHeading = styled.div`
@@ -109,12 +139,6 @@ const ActivityHeading = styled.div`
     align-items: stretch;
     flex-direction: column;
   }
-`;
-
-const ActivityTitle = styled(Text)`
-  color: ${Theme.black};
-  min-width: 0;
-  overflow-wrap: anywhere;
 `;
 
 const ActivityJob = styled.div`
@@ -140,26 +164,26 @@ const ActivityActions = styled.div`
   }
 `;
 
-const ErrorText = styled(Text)`
-  color: ${Theme.darkRed};
-`;
-
 const isComplete = (job: ReportExportJob) => job.view.kind === 'complete';
 
 const getActivityStatusIcon = (icon: ActivityStatusIcon) => {
   switch (icon) {
     case 'loading':
-      return <Loader color={Theme.darkGreen} size={14} />;
+      return (
+        <Spinning>
+          <RefreshIcon color="currentColor" size={BADGE_ICON_SIZE} />
+        </Spinning>
+      );
     case 'queued':
-      return <ScheduleIcon color={Theme.blue} />;
+      return <ScheduleIcon color="currentColor" size={BADGE_ICON_SIZE} />;
     case 'downloading':
-      return <DownloadIcon color={Theme.blue} />;
+      return <DownloadIcon color="currentColor" size={BADGE_ICON_SIZE} />;
     case 'canceled':
-      return <CircleXDeleteIcon color={Theme.darkGray} />;
+      return <CircleXDeleteIcon color="currentColor" size={BADGE_ICON_SIZE} />;
     case 'error':
-      return <AlertCircleIcon color={Theme.darkRed} />;
+      return <AlertCircleIcon color="currentColor" size={BADGE_ICON_SIZE} />;
     case 'ready':
-      return <CheckIcon color={Theme.darkGreen} />;
+      return <CheckIcon color="currentColor" size={BADGE_ICON_SIZE} />;
   }
 };
 
@@ -246,7 +270,7 @@ export const ReportExportActivity = () => {
           aria-label={_('Report export activity')}
           data-testid="report-export-activity-button"
           title={_('Report export activity')}
-          variant="transparent"
+          type="button"
           onClick={() => changeActivityOpen(!activityOpen)}
         >
           <DownloadIcon color={Theme.white} />
@@ -255,73 +279,68 @@ export const ReportExportActivity = () => {
       </Popover.Target>
       <Popover.Dropdown data-testid="report-export-activity-popover">
         <ActivityDropdown>
-          <Stack gap="sm">
-            <Group justify="space-between" wrap="nowrap">
-              <Text fw={600} size="sm">
+          <Column gap="sm">
+            <Row justify="space-between" wrap="nowrap">
+              <ActivityTitle>
                 {_('Report exports ({{count}})', {count: visibleJobs.length})}
-              </Text>
-              <ActionIcon
+              </ActivityTitle>
+              <XIcon
                 aria-label={_('Close export activity')}
-                size="sm"
-                variant="subtle"
+                title={_('Close export activity')}
                 onClick={() => changeActivityOpen(false)}
-              >
-                <XIcon />
-              </ActionIcon>
-            </Group>
+              />
+            </Row>
             {discoveryError && (
-              <ErrorText role="alert" size="sm">
+              <ErrorText role="alert">
                 {_('Export discovery failed: {{error}}', {
                   error: discoveryError.message,
                 })}
               </ErrorText>
             )}
             {discoveryIncomplete && (
-              <ErrorText role="status" size="sm">
+              <ErrorText role="status">
                 {_('Export list is incomplete')}
               </ErrorText>
             )}
             {visibleJobs.map(job => {
               const actions = getReportExportActions(job);
               const canCancel = supportsCancellation && actions.cancel;
-              const jobIsActive = actions.active;
               const status = getJobPresentation(job, _);
-              const isStatusError = status.tone === 'error';
+              const cancelTitle = getCancelButtonTitle(job, _);
 
               return (
                 <ActivityJob key={job.key} data-testid="report-export-job">
-                  <Stack gap="xs">
+                  <Column gap="xs">
                     <ActivityHeading>
-                      <ActivityTitle fw={600} size="sm">
-                        {getJobTitle(job, _)}
-                      </ActivityTitle>
-                      <ActivityStatusPill
-                        $tone={status.tone}
-                        aria-live={jobIsActive ? 'polite' : undefined}
-                        data-state={status.tone}
-                        data-testid="report-export-status"
-                        role={isStatusError ? 'alert' : 'status'}
-                      >
-                        <ActivityStatusIconContainer aria-hidden="true">
+                      <ActivityTitle>{getJobTitle(job, _)}</ActivityTitle>
+                      <StatusBadge color={BADGE_COLORS[status.tone]} size="md">
+                        <StatusIcon aria-hidden="true">
                           {getActivityStatusIcon(status.icon)}
-                        </ActivityStatusIconContainer>
-                        {status.label}
-                      </ActivityStatusPill>
+                        </StatusIcon>
+                        <span
+                          aria-live={actions.active ? 'polite' : undefined}
+                          data-state={status.tone}
+                          data-testid="report-export-status"
+                          role={status.tone === 'error' ? 'alert' : 'status'}
+                        >
+                          {status.label}
+                        </span>
+                      </StatusBadge>
                     </ActivityHeading>
                     {status.detail && (
-                      <ActivityStatusDetail c="dimmed" size="xs">
+                      <ActivityStatusDetail>
                         {status.detail}
                       </ActivityStatusDetail>
                     )}
                     {job.statusError && (
-                      <ErrorText role="status" size="sm">
+                      <ErrorText role="status">
                         {_('Status check failed; retrying: {{error}}', {
                           error: job.statusError.message,
                         })}
                       </ErrorText>
                     )}
                     {job.cancelError && (
-                      <ErrorText role="alert" size="sm">
+                      <ErrorText role="alert">
                         {_('Cancellation failed: {{error}}', {
                           error: job.cancelError.message,
                         })}
@@ -338,59 +357,47 @@ export const ReportExportActivity = () => {
                             {_('View report details')}
                           </Link>
                         )}
-                        <Group gap={4} style={{gridColumn: 2}} wrap="nowrap">
+                        <Row gap={4} style={{gridColumn: 2}} wrap="nowrap">
                           {canCancel && (
-                            <ActionIcon
-                              aria-label={getCancelButtonTitle(job, _)}
-                              size="sm"
-                              title={getCancelButtonTitle(job, _)}
-                              variant="subtle"
-                              onClick={() => void cancel(job.key)}
-                            >
-                              <CircleXDeleteIcon color={Theme.darkRed} />
-                            </ActionIcon>
+                            <CircleXDeleteIcon
+                              aria-label={cancelTitle}
+                              color={Theme.darkRed}
+                              title={cancelTitle}
+                              onClick={() => cancel(job.key)}
+                            />
                           )}
                           {actions.download && (
-                            <ActionIcon
+                            <DownloadIcon
                               aria-label={_('Download report')}
-                              size="sm"
+                              color={Theme.darkGreen}
                               title={_('Download report')}
-                              variant="subtle"
-                              onClick={() => void download(job.key)}
-                            >
-                              <DownloadIcon color={Theme.darkGreen} />
-                            </ActionIcon>
+                              onClick={() => download(job.key)}
+                            />
                           )}
                           {actions.retry && (
-                            <ActionIcon
+                            <RefreshIcon
                               aria-label={_('Retry')}
-                              size="sm"
+                              color={Theme.blue}
                               title={_('Retry')}
-                              variant="subtle"
-                              onClick={() => void retry(job.key)}
-                            >
-                              <RefreshIcon color={Theme.blue} />
-                            </ActionIcon>
+                              onClick={() => retry(job.key)}
+                            />
                           )}
                           {actions.dismiss && (
-                            <ActionIcon
+                            <XIcon
                               aria-label={_('Remove from activity')}
-                              size="sm"
+                              color={Theme.darkGray}
                               title={_('Remove from activity')}
-                              variant="subtle"
                               onClick={() => dismiss(job.key)}
-                            >
-                              <XIcon color={Theme.darkGray} />
-                            </ActionIcon>
+                            />
                           )}
-                        </Group>
+                        </Row>
                       </ActivityActions>
                     )}
-                  </Stack>
+                  </Column>
                 </ActivityJob>
               );
             })}
-          </Stack>
+          </Column>
         </ActivityDropdown>
       </Popover.Dropdown>
     </Popover>
