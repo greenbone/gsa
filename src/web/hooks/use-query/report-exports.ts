@@ -5,18 +5,10 @@
 
 import {queryOptions, useQuery} from '@tanstack/react-query';
 import QueryFilter from 'gmp/models/filter/query-filter';
-import {
-  REPORT_EXPORT_STATUS,
-  type ReportExport,
-} from 'gmp/models/report-export';
+import {type ReportExport} from 'gmp/models/report-export';
 import useGmp from 'web/hooks/useGmp';
 import useSessionToken from 'web/hooks/useSessionToken';
 import useUserName from 'web/hooks/useUserName';
-import {
-  resolveRefetchInterval,
-  transformRefetchIntervalFn,
-  type RefetchIntervalFn,
-} from 'web/queries/helpers';
 import {
   isGenerationActive,
   isPermanentExportError,
@@ -106,11 +98,7 @@ export const useReportExportInventory = () => {
   const username = useUserName();
   return useQuery({
     queryKey: ['get_report_exports', token, username],
-    enabled: Boolean(
-      token &&
-      username &&
-      typeof gmp.reportexport.getReportExports === 'function',
-    ),
+    enabled: Boolean(token && username),
     queryFn: ({signal}) => {
       if (!username)
         throw new ReportExportUnavailableError('No authenticated user');
@@ -121,46 +109,3 @@ export const useReportExportInventory = () => {
     refetchInterval: false,
   });
 };
-
-interface UseGetReportExportParams {
-  id?: string;
-  refetchInterval?: number | false | RefetchIntervalFn<ReportExport>;
-}
-
-const useGetReportExport = ({
-  id,
-  refetchInterval,
-}: UseGetReportExportParams) => {
-  const gmp = useGmp();
-  const token = useSessionToken();
-  const settings = gmp.settings;
-  const resolvedRefetchInterval =
-    typeof refetchInterval === 'function'
-      ? transformRefetchIntervalFn(refetchInterval, settings)
-      : resolveRefetchInterval(refetchInterval, settings);
-
-  return useQuery({
-    ...reportExportQueryOptions(gmp, token, id),
-    enabled: Boolean(token) && Boolean(id),
-    refetchIntervalInBackground: true,
-    refetchInterval: query => {
-      if (isPermanentExportError(query.state.error)) return false;
-      return typeof resolvedRefetchInterval === 'function'
-        ? resolvedRefetchInterval(query)
-        : resolvedRefetchInterval;
-    },
-  });
-};
-
-export const useGetActiveReportExport = (id?: string) =>
-  useGetReportExport({
-    id,
-    refetchInterval: reportExport =>
-      reportExport?.status === REPORT_EXPORT_STATUS.pending ||
-      reportExport?.status === REPORT_EXPORT_STATUS.running ||
-      reportExport?.status === REPORT_EXPORT_STATUS.cancelRequested
-        ? REPORT_EXPORT_POLL_INTERVAL
-        : false,
-  });
-
-export default useGetReportExport;
