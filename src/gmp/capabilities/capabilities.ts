@@ -20,6 +20,7 @@ const CAPABILITY_NAMES = [
   // the list may not be complete yet
   'everything',
   'authenticate',
+  'cancel_report_export',
   'create_agent_group',
   'create_alert',
   'create_asset',
@@ -75,6 +76,10 @@ const CAPABILITY_NAMES = [
   'delete_user',
   'describe_auth',
   'empty_trashcan',
+  'export_audit_report',
+  'export_delta_audit_report',
+  'export_delta_scan_report',
+  'export_scan_report',
   'get_agent_groups',
   'get_agent_installer_instruction',
   'get_agent_installers',

@@ -6,6 +6,7 @@
 import {useCallback} from 'react';
 import {AppHeader} from '@greenbone/ui-lib';
 import {useLocation, useNavigate} from 'react-router';
+import styled from 'styled-components';
 import {LogoutIcon, MySettingsIcon} from 'web/components/icon';
 import SessionTimer from 'web/components/session-timer/SessionTimer';
 import getLogo from 'web/components/structure/GetLogo';
@@ -16,9 +17,24 @@ import useTranslation from 'web/hooks/useTranslation';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import useUserName from 'web/hooks/useUserName';
 import useUserTimezone from 'web/hooks/useUserTimezone';
+import {ReportExportActivity} from 'web/pages/reports/ReportExportActivity';
 import {ROUTES} from 'web/route-paths';
 import {type ApplianceLogo} from 'web/utils/appliance-data';
 import {saveLastVisitedPage} from 'web/utils/user-last-visited-page';
+
+const HeaderTools = styled.div`
+  align-items: center;
+  display: flex;
+  gap: 8px;
+
+  @media (max-width: 600px) {
+    min-width: 32px;
+
+    > :first-child {
+      display: none;
+    }
+  }
+`;
 
 const Header = () => {
   const [_] = useTranslation();
@@ -70,7 +86,12 @@ const Header = () => {
       logoLink={ROUTES.dashboards.url}
       manualLink={manualURL}
       menuPoints={menuPoints}
-      sessionTimer={<SessionTimer />}
+      sessionTimer={
+        <HeaderTools>
+          <SessionTimer />
+          <ReportExportActivity />
+        </HeaderTools>
+      }
       userNavWidth={150}
       username={username}
     />

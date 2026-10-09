@@ -38,7 +38,9 @@ import useUserName from 'web/hooks/useUserName';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsContent from 'web/pages/reports/ReportDetailsContent';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
+import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
 import TargetComponent from 'web/pages/targets/TargetComponent';
+import {ROUTES} from 'web/route-paths';
 import {createPEMCertificate} from 'web/utils/certificates';
 import {generateFilename} from 'web/utils/Render';
 
@@ -111,6 +113,7 @@ const ReportDetailsPage = () => {
     useState(false);
   const [reportComposerDefaults, setReportComposerDefaults] =
     useState<ReportComposerDefaults>({});
+  const {exportReport} = useReportExportManager();
 
   // Filter management
   const [pageFilter, , {changeFilter}] = usePageFilter(
@@ -328,38 +331,33 @@ const ReportDetailsPage = () => {
         }
       }
 
-      const reportFormat = reportFormats?.find(
-        format => reportFormatId === format.id,
-      );
-
-      const extension = isDefined(reportFormat)
-        ? reportFormat.extension
-        : 'unknown';
-
       try {
-        const response = await gmp.report.download(
-          {id: entity.id as string},
-          {
-            reportConfigId,
-            reportFormatId,
+        const reportFormat = reportFormats?.find(
+          format => format.id === reportFormatId,
+        );
+        const request = {
+          filename: generateFilename({
+            creationTime: entity.creationTime,
+            extension: reportFormat?.extension ?? 'unknown',
+            fileNameFormat: reportExportFileName,
+            id: entity.id as string,
+            modificationTime: entity.modificationTime,
+            reportFormat: reportFormat?.name,
+            resourceName: entity.task?.name,
+            resourceType: 'report',
+            username,
+          }),
+          reportTitle: entity.task?.name ?? _('Report'),
+          reportUrl: ROUTES.report.url(reportId),
+          payload: {
+            report_id: entity.id as string,
+            format_id: reportFormatId,
+            config_id: reportConfigId || undefined,
             filter: newFilter,
           },
-        );
-        setShowDownloadReportDialog(false);
-        const {data} = response;
-        const filename = generateFilename({
-          creationTime: entity.creationTime,
-          extension,
-          fileNameFormat: reportExportFileName,
-          id: entity.id as string,
-          modificationTime: entity.modificationTime,
-          reportFormat: reportFormat?.name,
-          resourceName: entity.task?.name,
-          resourceType: 'report',
-          username,
-        });
-
-        handleDownload({filename, data});
+        };
+        if (await exportReport({kind: 'scan', ...request}, reportFormat))
+          setShowDownloadReportDialog(false);
       } catch (error) {
         log.error(error);
         showError(error as Error);
@@ -368,13 +366,15 @@ const ReportDetailsPage = () => {
     [
       entity,
       gmp,
-      handleDownload,
+      reportId,
       reportComposerDefaults,
       reportExportFileName,
       reportFilter,
       reportFormats,
+      exportReport,
       showError,
       username,
+      _,
     ],
   );
 

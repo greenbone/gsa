@@ -22,8 +22,6 @@ import type ReportFormat from 'gmp/models/report-format';
 import {isActive} from 'gmp/models/task';
 import {first} from 'gmp/utils/array';
 import {isDefined, hasValue} from 'gmp/utils/identity';
-import Download from 'web/components/form/Download';
-import useDownload from 'web/components/form/useDownload';
 import {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
@@ -39,7 +37,9 @@ import useUserName from 'web/hooks/useUserName';
 import DeltaReportDetailsContent from 'web/pages/reports/DeltaReportDetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
+import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
 import TargetComponent from 'web/pages/targets/TargetComponent';
+import {ROUTES} from 'web/route-paths';
 import {
   loadAllEntities as loadFilters,
   selector as filterSelector,
@@ -277,7 +277,7 @@ const DeltaReportDetails = () => {
   );
 
   const [startTimer, clearTimer] = useReload(memoizedReloadFn, timeoutFunc);
-  const [downloadRef, onDownload] = useDownload();
+  const {exportReport} = useReportExportManager();
 
   const {
     dialogState,
@@ -430,42 +430,40 @@ const DeltaReportDetails = () => {
       saveReportComposerDefaults(defaults);
     }
 
-    const report_format = reportFormats.find(f => chosenFormatId === f.id);
-
-    const extension = report_format?.extension || 'unknown';
-
     if (!entity?.id) {
       throw new Error('Entity ID is undefined');
     }
 
     try {
-      const response = await gmp.report.download(
-        {id: entity.id},
-        {
-          reportConfigId,
-          reportFormatId: chosenFormatId,
-          deltaReportId,
+      const reportFormat = reportFormats.find(
+        format => format.id === chosenFormatId,
+      );
+      const request = {
+        filename: generateFilename({
+          creationTime: entity.creationTime,
+          extension: reportFormat?.extension ?? 'unknown',
+          fileNameFormat: reportExportFileName,
+          id: entity.id,
+          modificationTime: entity.modificationTime,
+          reportFormat: reportFormat?.name,
+          resourceName: entity.task?.name,
+          resourceType: 'report',
+          username,
+        }),
+        reportTitle: entity.task?.name ?? _('Report'),
+        reportUrl: deltaReportId
+          ? ROUTES.reportDelta.url(reportId, deltaReportId)
+          : undefined,
+        payload: {
+          report_id: entity.id,
+          format_id: chosenFormatId,
+          config_id: reportConfigId || undefined,
+          delta_report_id: deltaReportId,
           filter: newFilter,
         },
-      );
-
-      setShowDownloadReportDialog(false);
-
-      const {data} = response;
-
-      const filename = generateFilename({
-        creationTime: entity.creationTime,
-        extension,
-        fileNameFormat: reportExportFileName,
-        id: entity.id,
-        modificationTime: entity.modificationTime,
-        reportFormat: report_format?.name,
-        resourceName: entity.task?.name,
-        resourceType: 'report',
-        username,
-      });
-
-      onDownload({filename, data});
+      };
+      if (await exportReport({kind: 'delta_scan', ...request}, reportFormat))
+        setShowDownloadReportDialog(false);
     } catch (error) {
       handleError(error as Error);
     }
@@ -584,7 +582,6 @@ const DeltaReportDetails = () => {
           onSave={handleReportDownload}
         />
       )}
-      <Download ref={downloadRef} />
       <DialogNotification {...dialogState} onCloseClick={closeDialog} />
     </>
   );
