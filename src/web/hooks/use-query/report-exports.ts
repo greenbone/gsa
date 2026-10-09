@@ -19,7 +19,7 @@ import {
 export const REPORT_EXPORT_POLL_INTERVAL = 1000;
 
 export const reportExportQueryOptions = (
-  gmp: ReturnType<typeof useGmp>,
+  gmp: Pick<ReturnType<typeof useGmp>, 'reportexport'>,
   token: string | undefined,
   id?: string,
   attemptKey?: string,
