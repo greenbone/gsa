@@ -169,7 +169,7 @@ describe('export attempt store', () => {
 describe('export intent storage', () => {
   beforeEach(() => window.sessionStorage.clear());
 
-  test('migrates legacy origin once at the storage boundary and preserves explicit origin', () => {
+  test('reads only complete intents and round-trips them', () => {
     const intent = {
       exportId: 'export-1',
       filename: 'report.pdf',
@@ -180,31 +180,28 @@ describe('export intent storage', () => {
     window.sessionStorage.setItem(
       'gsa-report-export-jobs:test-user',
       JSON.stringify([
-        {...intent, key: 'legacy-local'},
-        {...intent, key: 'recovered-export-2', exportId: 'export-2'},
+        {...intent, key: 'local', origin: 'local'},
         {
           ...intent,
-          key: 'recovered-export-3',
-          exportId: 'export-3',
-          origin: 'local',
+          key: 'discovered',
+          exportId: 'export-2',
+          origin: 'discovered',
         },
+        {...intent, key: 'no-origin', exportId: 'export-3'},
         {...intent, key: 'invalid', exportId: 'export-4', origin: 'invalid'},
+        {
+          ...intent,
+          key: 'bad-disposition',
+          exportId: 'export-5',
+          origin: 'local',
+          disposition: 'unknown',
+        },
       ]),
     );
     const intents = readExportIntents('test-user');
-    expect(intents.map(item => item.origin)).toEqual([
-      'local',
-      'discovered',
-      'local',
-    ]);
+    expect(intents.map(item => item.key)).toEqual(['local', 'discovered']);
     writeExportIntents('test-user', intents);
     expect(readExportIntents('test-user')).toEqual(intents);
-    expect(
-      JSON.parse(
-        window.sessionStorage.getItem('gsa-report-export-jobs:test-user') ??
-          '[]',
-      ),
-    ).toHaveLength(3);
   });
 });
 
@@ -526,10 +523,12 @@ describe('useReportExport', () => {
   test('bounds receipts without dropping unfinished intents or persisting live state', async () => {
     const receipts = Array.from({length: 60}, (_, index) => ({
       key: `receipt-${index}`,
+      origin: 'local',
       exportId: `export-${index}`,
       filename: 'report.xml',
       reportTitle: 'Report',
-      downloadStarted: true,
+      autoDownload: true,
+      disposition: 'handed-off',
     }));
     window.sessionStorage.setItem(
       'gsa-report-export-jobs:test-user',
@@ -537,9 +536,12 @@ describe('useReportExport', () => {
         ...receipts,
         {
           key: 'unfinished',
+          origin: 'local',
           exportId: 'unfinished-export',
           filename: 'custom.xml',
           reportTitle: 'Unfinished',
+          autoDownload: true,
+          disposition: 'awaiting',
         },
       ]),
     );
@@ -1165,11 +1167,13 @@ describe('useReportExport', () => {
       'gsa-report-export-jobs:test-user',
       JSON.stringify([
         {
-          key: 'report-export-legacy',
+          key: 'report-export-receipt',
+          origin: 'local',
           exportId: 'export-uuid-1',
           filename: 'report.xml',
           reportTitle: 'Test report',
-          downloadStarted: true,
+          autoDownload: true,
+          disposition: 'handed-off',
         },
       ]),
     );
@@ -1370,29 +1374,6 @@ describe('useReportExport', () => {
       expect(result.current.jobs[0]?.view.kind).toBe('complete'),
     );
     expect(onDownload).toHaveBeenCalledTimes(1);
-  });
-
-  test('does not adopt unscoped legacy activity for the current user', () => {
-    window.sessionStorage.setItem(
-      'gsa-report-export-jobs',
-      JSON.stringify([
-        {
-          key: 'legacy',
-          exportId: 'other-export',
-          filename: 'report.pdf',
-          reportTitle: 'Other user report',
-          downloadStarted: true,
-        },
-      ]),
-    );
-    const gmp = createGmp([]);
-    const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() =>
-      useReportExport({onError, onDownload: testing.fn()}),
-    );
-    expect(result.current.jobs).toHaveLength(0);
-    expect(window.sessionStorage.getItem('gsa-report-export-jobs')).toBeNull();
-    expect(gmp.reportexport.getReportExport).not.toHaveBeenCalled();
   });
 
   test('ignores export creation that completes after logout', async () => {

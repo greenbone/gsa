@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type ExportIntent} from 'web/report-export/job';
+import {type ExportIntent, MAX_RETAINED_RECEIPTS} from 'web/report-export/job';
 
 const storageKey = (username: string) =>
   `gsa-report-export-jobs:${encodeURIComponent(username)}`;
@@ -20,16 +20,11 @@ const safeReportUrl = (value: unknown) => {
   }
 };
 
-const readDisposition = (value: object): ExportIntent['disposition'] => {
-  if (
-    ('disposition' in value && value.disposition === 'handed-off') ||
-    ('downloadStarted' in value && value.downloadStarted === true)
-  )
-    return 'handed-off';
-  return 'disposition' in value && value.disposition === 'abandoned'
-    ? 'abandoned'
-    : 'awaiting';
-};
+const DISPOSITIONS: ExportIntent['disposition'][] = [
+  'awaiting',
+  'handed-off',
+  'abandoned',
+];
 
 const readIntent = (value: unknown): ExportIntent | undefined => {
   if (!value || typeof value !== 'object') return undefined;
@@ -37,44 +32,34 @@ const readIntent = (value: unknown): ExportIntent | undefined => {
     !('key' in value) ||
     typeof value.key !== 'string' ||
     !value.key ||
+    !('exportId' in value) ||
+    typeof value.exportId !== 'string' ||
+    !value.exportId ||
     !('filename' in value) ||
     typeof value.filename !== 'string' ||
     !('reportTitle' in value) ||
-    typeof value.reportTitle !== 'string'
+    typeof value.reportTitle !== 'string' ||
+    !('origin' in value) ||
+    (value.origin !== 'local' && value.origin !== 'discovered') ||
+    !('disposition' in value) ||
+    !DISPOSITIONS.includes(value.disposition as ExportIntent['disposition'])
   )
     return undefined;
-  if (
-    'origin' in value &&
-    value.origin !== 'local' &&
-    value.origin !== 'discovered'
-  )
-    return undefined;
-  const exportId =
-    'exportId' in value && typeof value.exportId === 'string' && value.exportId
-      ? value.exportId
-      : undefined;
-  if (!exportId) return undefined;
-  const disposition = readDisposition(value);
-  const discovered =
-    'origin' in value
-      ? value.origin === 'discovered'
-      : value.key.startsWith('recovered-');
   return {
     key: value.key,
-    origin: discovered ? 'discovered' : 'local',
-    exportId,
+    origin: value.origin,
+    exportId: value.exportId,
     filename: value.filename,
     reportTitle: value.reportTitle,
     reportUrl:
       'reportUrl' in value ? safeReportUrl(value.reportUrl) : undefined,
-    autoDownload: !('autoDownload' in value) || value.autoDownload === true,
-    disposition,
+    autoDownload: 'autoDownload' in value && value.autoDownload === true,
+    disposition: value.disposition as ExportIntent['disposition'],
   };
 };
 
 export const readExportIntents = (username?: string): ExportIntent[] => {
   try {
-    window.sessionStorage.removeItem('gsa-report-export-jobs');
     if (!username) return [];
     const raw: unknown = JSON.parse(
       window.sessionStorage.getItem(storageKey(username)) ?? '[]',
@@ -109,7 +94,7 @@ export const writeExportIntents = (
   );
   const receipts = intents
     .filter(intent => intent.disposition !== 'awaiting')
-    .slice(-50);
+    .slice(-MAX_RETAINED_RECEIPTS);
   const values = [...unfinished, ...receipts].map(intent => ({
     key: intent.key,
     origin: intent.origin,

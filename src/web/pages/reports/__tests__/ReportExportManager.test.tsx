@@ -303,7 +303,7 @@ describe('ReportExportManager', () => {
     expect(gmp.reportexport.exportScanReport).not.toHaveBeenCalled();
   });
 
-  test('opens activity for explicit local origin regardless of a legacy recovered key', async () => {
+  test('opens activity for a restored local intent after login', async () => {
     const gmp = createGmp();
     gmp.session.token = undefined;
     gmp.session.username = undefined;
@@ -314,7 +314,7 @@ describe('ReportExportManager', () => {
       'gsa-report-export-jobs:test-user',
       JSON.stringify([
         {
-          key: 'recovered-local-intent',
+          key: 'local-intent',
           exportId: 'export-1',
           origin: 'local',
           filename: 'report.pdf',
