@@ -25,6 +25,11 @@ export interface UseGetEntitiesReturn<T> {
   filterType?: FilterType;
 }
 
+export type UseGetEntitiesRefetchInterval<TModel> =
+  | number
+  | false
+  | RefetchIntervalFn<UseGetEntitiesReturn<TModel>>;
+
 interface UseGetEntitiesParams<
   TModel,
   TInput extends GmpMethodParams = GmpMethodParams,
@@ -33,10 +38,7 @@ interface UseGetEntitiesParams<
   queryId: string;
   filter?: FilterType;
   enabled?: boolean;
-  refetchInterval?:
-    | number
-    | false
-    | RefetchIntervalFn<UseGetEntitiesReturn<TModel>>;
+  refetchInterval?: UseGetEntitiesRefetchInterval<TModel>;
   keepPreviousData?: boolean;
   staleTime?: number;
   gcTime?: number;
