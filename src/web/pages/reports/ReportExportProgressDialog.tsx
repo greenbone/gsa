@@ -6,7 +6,7 @@
 import styled from 'styled-components';
 import Dialog from 'web/components/dialog/Dialog';
 import DialogTwoButtonFooter from 'web/components/dialog/DialogTwoButtonFooter';
-import type {ReportExportState} from 'web/hooks/useReportExport';
+import {type ReportExportState} from 'web/hooks/useReportExport';
 import useTranslation from 'web/hooks/useTranslation';
 
 const Content = styled.div`

@@ -35,7 +35,6 @@ import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import Page from 'web/pages/reports/AuditReportDetailsContent';
 import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
-import isPdfReportFormat from 'web/pages/reports/is-pdf-report-format';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
 import TargetComponent from 'web/pages/targets/TargetComponent';
@@ -121,8 +120,7 @@ const AuditReportDetailsPage = () => {
     useState(false);
   const [reportComposerDefaults, setReportComposerDefaults] =
     useState<ReportComposerDefaults>({});
-  const {start: startReportExport, startDirect: startDirectReportDownload} =
-    useReportExportManager();
+  const {enqueue} = useReportExportManager();
 
   // Filter management
   const [pageFilter, , {changeFilter}] = usePageFilter(
@@ -347,12 +345,8 @@ const AuditReportDetailsPage = () => {
             filter: newFilter,
           },
         };
-        if (isPdfReportFormat(reportFormat)) {
-          await startReportExport({kind: 'audit', ...request});
-        } else {
-          startDirectReportDownload({kind: 'audit', ...request});
-        }
-        setShowDownloadReportDialog(false);
+        if (await enqueue({kind: 'audit', ...request}, reportFormat))
+          setShowDownloadReportDialog(false);
       } catch (error) {
         log.error(error);
         showError(error as Error);
@@ -360,18 +354,14 @@ const AuditReportDetailsPage = () => {
     },
     [
       entity,
-      auditreport,
       gmp.user,
-      handleDownload,
       reportId,
       reportComposerDefaults,
       reportExportFileName,
       reportFilter,
       reportFormats,
-      reportExportFileName,
       showError,
-      startReportExport,
-      startDirectReportDownload,
+      enqueue,
       username,
       _,
     ],

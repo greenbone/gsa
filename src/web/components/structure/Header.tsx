@@ -17,7 +17,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import useUserName from 'web/hooks/useUserName';
 import useUserTimezone from 'web/hooks/useUserTimezone';
-import {ReportExportActivity} from 'web/pages/reports/ReportExportManager';
+import {ReportExportActivity} from 'web/pages/reports/ReportExportActivity';
 import {ROUTES} from 'web/route-paths';
 import {type ApplianceLogo} from 'web/utils/appliance-data';
 import {saveLastVisitedPage} from 'web/utils/user-last-visited-page';
@@ -26,6 +26,14 @@ const HeaderTools = styled.div`
   align-items: center;
   display: flex;
   gap: 8px;
+
+  @media (max-width: 600px) {
+    min-width: 32px;
+
+    > :first-child {
+      display: none;
+    }
+  }
 `;
 
 const Header = () => {

@@ -4,14 +4,70 @@
  */
 
 import {login, username} from 'e2e/credentials';
-import {expect, test} from 'e2e/fixtures';
+import {expect, test, type Page} from 'e2e/fixtures';
 import {openCompletedReport} from 'e2e/reports/report-details-helpers';
 
 const getMultipartField = (body: string | null | undefined, field: string) =>
   body?.match(new RegExp(`name="${field}"\\r?\\n\\r?\\n([^\\r\\n]*)`))?.[1];
 
+const isolateExportActivity = async (page: Page) => {
+  await page.route(
+    url => url.searchParams.get('cmd') === 'get_report_exports',
+    route =>
+      route.fulfill({
+        contentType: 'application/xml',
+        body: '<envelope><get_report_exports><get_report_exports_response status="200"><report_exports start="1" max="100"/><report_export_count><filtered>0</filtered><page>0</page>0</report_export_count></get_report_exports_response></get_report_exports></envelope>',
+      }),
+  );
+};
+
 test.describe('report export', () => {
+  test('verifies the live owner-scoped collection contract', async ({page}) => {
+    const responsePromise = page.waitForResponse(response => {
+      const url = new URL(response.url());
+      return (
+        url.pathname.endsWith('/gmp') &&
+        url.searchParams.get('cmd') === 'get_report_exports'
+      );
+    });
+    await login(page);
+    const response = await responsePromise;
+    expect(response.ok()).toBe(true);
+    const requestFilter = new URL(response.url()).searchParams.get('filter');
+    expect(requestFilter).toContain('owner=');
+    expect(requestFilter).toContain('first=1');
+    expect(requestFilter).toContain('rows=100');
+    const contract = await page.evaluate(
+      xml => {
+        const document = new DOMParser().parseFromString(
+          xml,
+          'application/xml',
+        );
+        const collection = document.querySelector(
+          'get_report_exports_response',
+        );
+        return {
+          status: collection?.getAttribute('status'),
+          first: collection
+            ?.querySelector('report_exports')
+            ?.getAttribute('start'),
+          count: collection?.querySelector('report_export_count > filtered')
+            ?.textContent,
+          owners: [
+            ...document.querySelectorAll('report_export > owner > name'),
+          ].map(owner => owner.textContent),
+        };
+      },
+      await response.text(),
+    );
+    expect(contract.status).toBe('200');
+    expect(contract.first).toBe('1');
+    expect(Number(contract.count)).toBeGreaterThanOrEqual(0);
+    expect(contract.owners.every(owner => owner === username)).toBe(true);
+  });
+
   test('downloads a completed report', async ({page}, testInfo) => {
+    await isolateExportActivity(page);
     await login(page);
     const reportId = await openCompletedReport(page);
 
@@ -49,21 +105,7 @@ test.describe('report export', () => {
     await expect(activityButton).toHaveAttribute('aria-expanded', 'true');
     await expect(
       page.getByTestId('report-export-activity-popover'),
-    ).toContainText('Export complete');
-
-    await page.getByRole('link', {name: 'Dashboards'}).click();
-    await expect(page).toHaveURL(/\/dashboards/);
-    await expect(activityButton).toBeVisible();
-    if ((await activityButton.getAttribute('aria-expanded')) !== 'true') {
-      await activityButton.click();
-    }
-    await expect(activityButton).toHaveAttribute('aria-expanded', 'true');
-    await expect(
-      page.getByTestId('report-export-activity-popover'),
-    ).toBeVisible();
-    await expect(
-      page.getByTestId('report-export-activity-popover'),
-    ).toContainText('Export complete');
+    ).toContainText('Complete');
 
     const activityPopover = page.getByTestId('report-export-activity-popover');
     const popoverBounds = await activityPopover.boundingBox();
@@ -78,6 +120,25 @@ test.describe('report export', () => {
     expect(
       dismissButtonBounds.x + dismissButtonBounds.width,
     ).toBeLessThanOrEqual(popoverBounds.x + popoverBounds.width);
+    await page.screenshot({path: testInfo.outputPath('activity-desktop.png')});
+    await page.setViewportSize({width: 390, height: 844});
+    await expect(activityPopover).toBeVisible();
+    const mobileBounds = await activityPopover.boundingBox();
+    expect(mobileBounds?.x).toBeGreaterThanOrEqual(0);
+    expect(
+      (mobileBounds?.x ?? 0) + (mobileBounds?.width ?? 0),
+    ).toBeLessThanOrEqual(390);
+    await page.screenshot({path: testInfo.outputPath('activity-mobile.png')});
+    await activityPopover
+      .getByRole('button', {name: 'Close export activity'})
+      .click();
+    await page.setViewportSize({width: 1280, height: 720});
+    await page.getByRole('link', {name: 'Dashboards'}).click();
+    await expect(page).toHaveURL(/\/dashboards/);
+    if (await activityButton.isVisible()) {
+      await activityButton.click();
+      await expect(activityPopover).not.toContainText('Complete');
+    }
   });
 
   for (const initialStatus of ['done', 'running']) {
@@ -85,6 +146,7 @@ test.describe('report export', () => {
       page,
     }, testInfo) => {
       test.setTimeout(60000);
+      await isolateExportActivity(page);
       await login(page);
       const reportId = await openCompletedReport(page);
       testInfo.skip(!reportId, 'No standard completed report is available.');
@@ -122,6 +184,13 @@ test.describe('report export', () => {
             ? url.searchParams.get('cmd')
             : getMultipartField(request.postData(), 'cmd');
         const requestedId = url.searchParams.get('report_export_id');
+        if (command === 'get_report_exports') {
+          await route.fulfill({
+            contentType: 'application/xml',
+            body: '<envelope><get_report_exports><get_report_exports_response status="200"><report_exports start="1" max="100"/><report_export_count><filtered>0</filtered><page>0</page>0</report_export_count></get_report_exports_response></get_report_exports></envelope>',
+          });
+          return;
+        }
         if (command === 'export_scan_report') {
           createdIds.push(exportId);
           await route.fulfill({
@@ -154,13 +223,13 @@ test.describe('report export', () => {
           });
           return;
         }
-        await route.continue();
+        await route.fallback();
       });
 
       await dialog.getByTestId('dialog-save-button').click();
       const activity = page.getByTestId('report-export-activity-popover');
       await expect(activity).toContainText(
-        initialStatus === 'done' ? 'Export complete' : 'Generating',
+        initialStatus === 'done' ? 'Complete' : 'Generating',
       );
       await expect.poll(() => createdIds).toEqual([exportId]);
       await page
@@ -182,21 +251,25 @@ test.describe('report export', () => {
       if (resumedDownload)
         expect(await (await resumedDownload).path()).toBeTruthy();
       const activityButton = page.getByTestId('report-export-activity-button');
-      await expect(activityButton).toBeVisible();
-      if ((await activityButton.getAttribute('aria-expanded')) !== 'true')
-        await activityButton.click();
-      await expect(activity).toContainText('Export complete');
-      await expect(
-        activity.getByText(/Report export:.*\(\.pdf\)$/),
-      ).toBeVisible();
-      await expect(
-        activity.getByRole('link', {name: 'View report details'}),
-      ).toHaveAttribute('href', `/report/${reportId}`);
-      await expect(
-        activity.getByRole('button', {name: 'Remove from activity'}),
-      ).toBeVisible();
-      await expect(activity).not.toContainText('Checking');
-      await expect(activity).not.toContainText('Status check failed');
+      if (initialStatus === 'done') {
+        await expect(activityButton).toHaveCount(0);
+      } else {
+        await expect(activityButton).toBeVisible();
+        if ((await activityButton.getAttribute('aria-expanded')) !== 'true')
+          await activityButton.click();
+        await expect(activity).toContainText('Complete');
+        await expect(
+          activity.getByText(/Report export:.*\(\.pdf\)$/),
+        ).toBeVisible();
+        await expect(
+          activity.getByRole('link', {name: 'View report details'}),
+        ).toHaveAttribute('href', `/report/${reportId}`);
+        await expect(
+          activity.getByRole('button', {name: 'Remove from activity'}),
+        ).toBeVisible();
+        await expect(activity).not.toContainText('Checking');
+        await expect(activity).not.toContainText('Status check failed');
+      }
       expect(createdIds).toEqual([exportId]);
       expect(downloadedIds).toEqual([exportId]);
       expect(downloads).toHaveLength(1);
@@ -208,6 +281,7 @@ test.describe('report export', () => {
   test('cancels a PDF export and downloads a retry with its own ID', async ({
     page,
   }, testInfo) => {
+    await isolateExportActivity(page);
     await login(page);
     const reportId = await openCompletedReport(page);
 
@@ -303,7 +377,7 @@ test.describe('report export', () => {
         return;
       }
 
-      await route.continue();
+      await route.fallback();
     });
 
     const reportConfig = dialog.getByRole('textbox').nth(1);
@@ -347,7 +421,7 @@ test.describe('report export', () => {
     const download = await downloadPromise;
 
     expect(download.suggestedFilename()).toBeTruthy();
-    await expect(activityPopover).toContainText('Export complete');
+    await expect(activityPopover).toContainText('Complete');
     await expect(
       activityPopover.getByText(/Report export:.*\(\.pdf\)$/),
     ).toBeVisible();

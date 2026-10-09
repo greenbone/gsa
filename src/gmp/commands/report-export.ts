@@ -3,17 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import CollectionCounts from 'gmp/collection/collection-counts';
+import {parseCounts, parseFilter} from 'gmp/collection/parser';
 import HttpCommand from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
-import Response from 'gmp/http/response';
+import {type default as Response} from 'gmp/http/response';
 import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fast-xml';
+import {parseEntityModelProperties} from 'gmp/models/entity-model';
 import {type FilterType} from 'gmp/models/filter';
 import {filterString} from 'gmp/models/filter/utils';
-import {
-  type ReportExport,
-  type ReportExportProgress,
-  type ReportExportStatus,
-} from 'gmp/models/report-export';
+import {type ReportExport} from 'gmp/models/report-export';
 import {isDefined} from 'gmp/utils/identity';
 
 export interface ReportExportPayload {
@@ -33,6 +32,10 @@ interface ReportExportIdResponse {
 
 interface ReportExportParams {
   reportExportId: string;
+}
+
+interface ListReportExportsParams {
+  filter: FilterType;
 }
 
 const getText = (value: unknown): string | undefined => {
@@ -65,36 +68,53 @@ const getNumber = (value: unknown, name: string) => {
   return isDefined(text) ? Number(text) : undefined;
 };
 
-const getReportExport = (value: unknown): ReportExport => ({
-  id: getAttribute(value, 'id') ?? getValue(value, 'id'),
-  type: getValue(value, 'type'),
-  status: getValue(value, 'status') as ReportExportStatus | undefined,
-  progress: getValue(value, 'progress') as ReportExportProgress | undefined,
-  reportId: getAttribute(
-    value && (value as Record<string, unknown>).report,
-    'id',
-  ),
-  deltaReportId: getAttribute(
-    value && (value as Record<string, unknown>).delta_report,
-    'id',
-  ),
-  reportFormatId: getAttribute(
-    value && (value as Record<string, unknown>).report_format,
-    'id',
-  ),
-  reportConfigId: getAttribute(
-    value && (value as Record<string, unknown>).report_config,
-    'id',
-  ),
-  fileSize: getNumber(value, 'file_size'),
-  contentType: getValue(value, 'content_type'),
-  extension: getValue(value, 'extension'),
-  errorMessage: getValue(value, 'error_message'),
-  attemptCount: getNumber(value, 'attempt_count'),
-  createdTime: getValue(value, 'created_time'),
-  startTime: getValue(value, 'start_time'),
-  endTime: getValue(value, 'end_time'),
-});
+const getReportExport = (value: unknown): ReportExport => {
+  const ownerName = getValue(
+    value && (value as Record<string, unknown>).owner,
+    'name',
+  );
+  const common = parseEntityModelProperties({
+    _id: getAttribute(value, 'id') ?? getValue(value, 'id') ?? '',
+    owner: ownerName ? {name: ownerName} : undefined,
+    name: getValue(value, 'name'),
+    creation_time: getValue(value, 'creation_time'),
+    modification_time: getValue(value, 'modification_time'),
+  });
+  return {
+    id: common.id || undefined,
+    owner: common.owner,
+    name: common.name,
+    creationTime: common.creationTime,
+    modificationTime: common.modificationTime,
+    type: getValue(value, 'type'),
+    status: getValue(value, 'status'),
+    progress: getValue(value, 'progress'),
+    reportId: getAttribute(
+      value && (value as Record<string, unknown>).report,
+      'id',
+    ),
+    deltaReportId: getAttribute(
+      value && (value as Record<string, unknown>).delta_report,
+      'id',
+    ),
+    reportFormatId: getAttribute(
+      value && (value as Record<string, unknown>).report_format,
+      'id',
+    ),
+    reportConfigId: getAttribute(
+      value && (value as Record<string, unknown>).report_config,
+      'id',
+    ),
+    fileSize: getNumber(value, 'file_size'),
+    contentType: getValue(value, 'content_type'),
+    extension: getValue(value, 'extension'),
+    errorMessage: getValue(value, 'error_message'),
+    attemptCount: getNumber(value, 'attempt_count'),
+    createdTime: getValue(value, 'creation_time'),
+    startTime: getValue(value, 'start_time'),
+    endTime: getValue(value, 'end_time'),
+  };
+};
 
 const getFilterValue = (filter?: FilterType | string) => {
   if (!isDefined(filter)) return undefined;
@@ -182,13 +202,39 @@ class ReportExportCommand extends HttpCommand {
     );
   }
 
-  async getReportExports({reportExportId}: ReportExportParams) {
+  async getReportExport({reportExportId}: ReportExportParams) {
     const response = await this.httpGetWithTransform({
       cmd: 'get_report_export',
       report_export_id: reportExportId,
     });
     return response.setData(
       getReportExportsFromRoot(response.data).map(getReportExport),
+    );
+  }
+
+  async getReportExports({filter}: ListReportExportsParams) {
+    const response = await this.httpGetWithTransform({
+      cmd: 'get_report_exports',
+      filter: filterString(filter),
+    });
+    const root = response.data.get_report_exports;
+    if (
+      !root ||
+      typeof root !== 'object' ||
+      !('get_report_exports_response' in root)
+    ) {
+      throw new Error('Invalid report export collection response');
+    }
+    const collection = root.get_report_exports_response;
+    if (!collection || typeof collection !== 'object') {
+      throw new Error('Invalid report export collection response');
+    }
+    return response.set(
+      getReportExportsFromRoot(response.data).map(getReportExport),
+      {
+        counts: new CollectionCounts(parseCounts(collection, 'report_export')),
+        filter: parseFilter(collection),
+      },
     );
   }
 

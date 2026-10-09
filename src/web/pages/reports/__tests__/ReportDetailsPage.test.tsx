@@ -18,9 +18,8 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import ReportDetailsPage from 'web/pages/reports/ReportDetailsPage';
-import ReportExportManager, {
-  ReportExportActivity,
-} from 'web/pages/reports/ReportExportManager';
+import {ReportExportActivity} from 'web/pages/reports/ReportExportActivity';
+import ReportExportManager from 'web/pages/reports/ReportExportManager';
 
 interface CollectionResponse {
   data: unknown[];
@@ -99,7 +98,7 @@ const createGmp = () => ({
     exportScanReport: testing
       .fn()
       .mockResolvedValue({data: {id: 'export-uuid'}}),
-    getReportExports: testing.fn().mockResolvedValue({
+    getReportExport: testing.fn().mockResolvedValue({
       data: [{id: 'export-uuid', status: 'running', progress: 'generating'}],
     }),
     downloadReportExport: testing
@@ -561,7 +560,7 @@ describe('ReportDetailsPage tests', () => {
         exportStatuses[id] = exportCount === 1 ? 'running' : 'done';
         return {data: {id}};
       });
-      gmp.reportexport.getReportExports.mockImplementation(
+      gmp.reportexport.getReportExport.mockImplementation(
         async ({reportExportId}: {reportExportId: string}) => ({
           data: [
             {
