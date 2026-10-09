@@ -521,7 +521,7 @@ const CredentialDialog = ({
                     grow="1"
                     name="passphrase"
                     value={state.passphrase}
-                    onChange={onValueChange}
+                    onChange={setPassphrase}
                   />
                 </FormGroup>
               </>
