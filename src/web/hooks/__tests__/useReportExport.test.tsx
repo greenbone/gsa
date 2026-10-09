@@ -18,7 +18,10 @@ import {
 import useReportExport, {
   REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL,
 } from 'web/hooks/useReportExport';
-import {type ExportAttempt} from 'web/report-export/job';
+import {
+  type ExportAttempt,
+  getReportExportActions,
+} from 'web/report-export/job';
 import {readExportIntents, writeExportIntents} from 'web/report-export/storage';
 import {createExportAttemptStore} from 'web/report-export/store';
 
@@ -475,6 +478,31 @@ describe('useReportExport', () => {
     expect(onDownload).toHaveBeenCalledTimes(2);
     expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(1);
     expect(result.current.jobs[0].view.kind).toBe('complete');
+  });
+
+  test('reports a consumed export file without offering a retry', async () => {
+    const gmp = createGmp([exportData('done', 'completed')]);
+    gmp.reportexport.downloadReportExport.mockRejectedValue(
+      Object.assign(new Error('Report export not found'), {status: 404}),
+    );
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() =>
+      useReportExport({onError, onDownload: testing.fn()}),
+    );
+    await act(async () => {
+      await result.current.start(startParams);
+    });
+    await waitFor(() =>
+      expect(result.current.jobs[0].view).toMatchObject({
+        kind: 'failed',
+        reason: 'gone',
+      }),
+    );
+    expect(getReportExportActions(result.current.jobs[0])).toMatchObject({
+      retry: false,
+      dismiss: true,
+    });
+    expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(1);
   });
 
   test('stops automatic lookup on denied access and allows local removal', async () => {

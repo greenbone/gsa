@@ -54,6 +54,9 @@ export const inStage = (
   ...stages: AttemptPhase['stage'][]
 ) => stages.includes(phase.stage);
 
+// 'gone': the download was rejected permanently; gvmd deletes the file after the first full response.
+type FailureReason = 'export' | 'expired' | 'download' | 'gone' | 'unavailable';
+
 export type JobView =
   | {
       kind:
@@ -70,7 +73,7 @@ export type JobView =
   | {kind: 'generating'; progress?: ReportExportProgress}
   | {
       kind: 'failed';
-      reason: 'export' | 'expired' | 'download' | 'unavailable';
+      reason: FailureReason;
       error: Error;
     };
 
@@ -127,10 +130,11 @@ export const isPermanentExportError = (error: unknown) => {
   );
 };
 
-const failed = (
-  reason: 'export' | 'expired' | 'download' | 'unavailable',
-  error: Error,
-): JobView => ({kind: 'failed', reason, error});
+const failed = (reason: FailureReason, error: Error): JobView => ({
+  kind: 'failed',
+  reason,
+  error,
+});
 
 // Ordered by precedence: terminal states first, then local transfer/cancel, then remote progress.
 const getAttemptView = (
@@ -151,7 +155,7 @@ const getAttemptView = (
     phase.error &&
     isPermanentExportError(phase.error)
   )
-    return failed('unavailable', phase.error);
+    return failed('gone', phase.error);
   const status = exportData?.status;
   if (status === 'error')
     return failed(
