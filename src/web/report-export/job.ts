@@ -4,7 +4,10 @@
  */
 
 import {type ReportExportPayload} from 'gmp/commands/report-export';
-import {type ReportExport} from 'gmp/models/report-export';
+import {
+  type ReportExport,
+  type ReportExportProgress,
+} from 'gmp/models/report-export';
 
 export type ReportExportKind = 'scan' | 'audit' | 'delta_scan' | 'delta_audit';
 
@@ -44,58 +47,68 @@ export interface ExportAttempt extends ExportIntent {
   cancelError?: Error;
 }
 
-export type ReportExportState =
+export const inStage = (
+  phase: AttemptPhase,
+  ...stages: AttemptPhase['stage'][]
+) => stages.includes(phase.stage);
+
+export type JobView =
   | {
-      status:
+      kind:
         | 'creating'
         | 'checking'
-        | 'pending'
-        | 'running'
-        | 'cancel_requested'
-        | 'done'
+        | 'queued'
+        | 'cancel-requested'
+        | 'canceling'
+        | 'downloading'
+        | 'ready'
+        | 'complete'
         | 'canceled';
-      exportData?: ReportExport;
-      error?: undefined;
     }
+  | {kind: 'generating'; progress?: ReportExportProgress}
   | {
-      status: 'error' | 'unavailable';
-      exportData?: ReportExport;
+      kind: 'failed';
+      reason: 'export' | 'expired' | 'download' | 'unavailable';
       error: Error;
     };
 
 export interface ReportExportJob extends ExportIntent {
   transport: 'async' | 'direct';
-  state: ReportExportState;
-  downloadStarted: boolean;
-  downloadPending: boolean;
-  cancelPending: boolean;
-  downloadError?: Error;
+  view: JobView;
+  exportData?: ReportExport;
   cancelError?: Error;
   statusError?: Error;
 }
+
+const ACTIVE_KINDS = new Set<JobView['kind']>([
+  'creating',
+  'checking',
+  'queued',
+  'generating',
+  'cancel-requested',
+  'canceling',
+  'downloading',
+]);
 
 export const isGenerationActive = (
   status?: string,
 ): status is 'pending' | 'running' | 'cancel_requested' =>
   status === 'pending' || status === 'running' || status === 'cancel_requested';
 
-export const getReportExportActions = (job: ReportExportJob) => {
-  const status = job.state.status;
-  const active =
-    status === 'creating' ||
-    status === 'checking' ||
-    isGenerationActive(status) ||
-    job.downloadPending ||
-    job.cancelPending;
+export const getReportExportActions = ({transport, view}: ReportExportJob) => {
+  const active = ACTIVE_KINDS.has(view.kind);
   return {
     active,
     cancel:
-      job.transport === 'async' &&
-      !job.cancelPending &&
-      (status === 'creating' || status === 'pending' || status === 'running'),
-    dismiss: !active || (status === 'checking' && !job.cancelPending),
-    download: status === 'done' && !job.downloadStarted && !job.downloadPending,
-    retry: status === 'unavailable' || Boolean(job.downloadError),
+      transport === 'async' &&
+      (view.kind === 'creating' ||
+        view.kind === 'queued' ||
+        view.kind === 'generating'),
+    dismiss: !active || view.kind === 'checking',
+    download: view.kind === 'ready',
+    retry:
+      view.kind === 'failed' &&
+      (view.reason === 'unavailable' || view.reason === 'download'),
   };
 };
 
@@ -112,77 +125,66 @@ export const isPermanentExportError = (error: unknown) => {
   );
 };
 
-const getRemoteState = (
-  exportData: ReportExport,
-  phase: AttemptPhase,
-): ReportExportState => {
-  const status = exportData.status;
-  if (status === 'error' || status === 'expired') {
-    return {
-      status: 'error',
-      exportData,
-      error: new Error(
-        exportData.errorMessage ||
-          (status === 'expired' ? 'Export expired' : 'Export failed'),
-      ),
-    };
-  }
-  if (status === 'canceled') return {status: 'canceled', exportData};
-  if (status === 'done') return {status: 'done', exportData};
-  if (isGenerationActive(status)) {
-    return {
-      status: phase.stage === 'cancel-requested' ? 'cancel_requested' : status,
-      exportData,
-    };
-  }
-  return {
-    status: 'unavailable',
-    exportData,
-    error: new Error('Unsupported export status'),
-  };
-};
+const failed = (
+  reason: 'export' | 'expired' | 'download' | 'unavailable',
+  error: Error,
+): JobView => ({kind: 'failed', reason, error});
 
-const getAttemptState = (
-  attempt: ExportAttempt,
+// Ordered by precedence: terminal states first, then local transfer/cancel, then remote progress.
+const getAttemptView = (
+  {phase, autoDownload}: ExportAttempt,
   exportData?: ReportExport,
   statusError?: Error | null,
-): ReportExportState => {
-  const {phase} = attempt;
-  if (phase.stage === 'handed-off') return {status: 'done'};
-  if (phase.stage === 'failed') return {status: 'error', error: phase.error};
-  if (phase.stage === 'creating') return {status: 'creating'};
+): JobView => {
+  if (phase.stage === 'handed-off') return {kind: 'complete'};
+  if (phase.stage === 'failed') return failed('export', phase.error);
+  if (phase.stage === 'creating')
+    return {kind: phase.cancelRequested ? 'canceling' : 'creating'};
   if (statusError && isPermanentExportError(statusError))
-    return {status: 'unavailable', exportData, error: statusError};
+    return failed('unavailable', statusError);
+  if (phase.stage === 'abandoned')
+    return failed('unavailable', new Error('Tracking stopped'));
   if (
     phase.stage === 'waiting' &&
     phase.error &&
     isPermanentExportError(phase.error)
   )
-    return {status: 'unavailable', exportData, error: phase.error};
-  if (phase.stage === 'abandoned')
-    return {
-      status: 'unavailable',
-      exportData,
-      error: new Error('Tracking stopped'),
-    };
-  return exportData ? getRemoteState(exportData, phase) : {status: 'checking'};
-};
-
-const isTransferPending = (
-  attempt: ExportAttempt,
-  state: ReportExportState,
-  downloadError?: Error,
-) => {
-  const {phase} = attempt;
-  if (phase.stage === 'transferring') return true;
-  if (phase.stage === 'waiting') return !phase.error;
-  return (
-    state.status === 'done' &&
-    attempt.autoDownload &&
-    phase.stage !== 'handed-off' &&
-    phase.stage !== 'canceling' &&
-    !downloadError
-  );
+    return failed('unavailable', phase.error);
+  const status = exportData?.status;
+  if (status === 'error')
+    return failed(
+      'export',
+      new Error(exportData?.errorMessage || 'Export failed'),
+    );
+  if (status === 'expired')
+    return failed(
+      'expired',
+      new Error(exportData?.errorMessage || 'Export expired'),
+    );
+  if (status === 'canceled') return {kind: 'canceled'};
+  if (status === 'unknown')
+    return failed('unavailable', new Error('Unsupported export status'));
+  if (
+    (phase.stage === 'waiting' || phase.stage === 'handoff-failed') &&
+    phase.error
+  )
+    return failed('download', phase.error);
+  if (phase.stage === 'transferring' || phase.stage === 'waiting')
+    return {kind: 'downloading'};
+  if (phase.stage === 'canceling') return {kind: 'canceling'};
+  if (phase.stage === 'cancel-requested' && isGenerationActive(status))
+    return {kind: 'cancel-requested'};
+  switch (status) {
+    case 'pending':
+      return {kind: 'queued'};
+    case 'running':
+      return {kind: 'generating', progress: exportData?.progress};
+    case 'cancel_requested':
+      return {kind: 'cancel-requested'};
+    case 'done':
+      return {kind: autoDownload ? 'downloading' : 'ready'};
+  }
+  return {kind: 'checking'};
 };
 
 export const toReportExportJob = (
@@ -190,25 +192,16 @@ export const toReportExportJob = (
   exportData?: ReportExport,
   statusError?: Error | null,
 ): ReportExportJob => {
-  const {phase} = attempt;
-  const state = getAttemptState(attempt, exportData, statusError);
-  const downloadError =
-    phase.stage === 'handoff-failed' || phase.stage === 'waiting'
-      ? phase.error
-      : undefined;
+  const {phase: _phase, ...intent} = attempt;
   return {
-    ...attempt,
+    ...intent,
     transport: 'async',
-    state,
-    downloadStarted: phase.stage === 'handed-off',
-    downloadPending: isTransferPending(attempt, state, downloadError),
-    cancelPending:
-      phase.stage === 'canceling' ||
-      (phase.stage === 'creating' && Boolean(phase.cancelRequested)),
-    downloadError,
-    statusError: !isPermanentExportError(statusError)
-      ? (statusError ?? undefined)
-      : undefined,
+    view: getAttemptView(attempt, exportData, statusError),
+    exportData,
+    statusError:
+      statusError && !isPermanentExportError(statusError)
+        ? statusError
+        : undefined,
   };
 };
 
@@ -221,8 +214,8 @@ export const retainReportExportJobs = (jobs: ReportExportJob[]) => {
           (job.autoDownload &&
             job.exportId &&
             job.disposition === 'awaiting' &&
-            job.state.status !== 'error' &&
-            job.state.status !== 'canceled'),
+            job.view.kind !== 'failed' &&
+            job.view.kind !== 'canceled'),
       )
       .map(job => job.key),
   );

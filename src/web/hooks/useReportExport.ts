@@ -31,6 +31,7 @@ import {
   type ExportAttempt,
   type StartReportExportParams,
   getReportExportActions,
+  inStage,
   isPermanentExportError,
   toReportExportJob,
   retainReportExportJobs,
@@ -46,7 +47,7 @@ import {ROUTES} from 'web/route-paths';
 export type {
   ReportExportJob,
   ReportExportKind,
-  ReportExportState,
+  JobView,
   StartReportExportParams,
 } from 'web/report-export/job';
 export {REPORT_EXPORT_POLL_INTERVAL} from 'web/hooks/use-query/report-exports';
@@ -218,10 +219,13 @@ const useReportExport = ({onDownload, onError}: UseReportExportParams) => {
         token &&
         attempt.exportId &&
         attempt.disposition === 'awaiting' &&
-        attempt.phase.stage !== 'creating' &&
-        attempt.phase.stage !== 'handoff-failed' &&
-        attempt.phase.stage !== 'transferring' &&
-        attempt.phase.stage !== 'failed',
+        !inStage(
+          attempt.phase,
+          'creating',
+          'handoff-failed',
+          'transferring',
+          'failed',
+        ),
       ),
     })),
   });
@@ -279,8 +283,7 @@ const useReportExport = ({onDownload, onError}: UseReportExportParams) => {
       !attempt ||
       !current(runtime) ||
       runtime.buffer === undefined ||
-      (attempt.phase.stage !== 'transferring' &&
-        attempt.phase.stage !== 'handoff-failed')
+      !inStage(attempt.phase, 'transferring', 'handoff-failed')
     )
       return;
     try {
@@ -374,8 +377,7 @@ const useReportExport = ({onDownload, onError}: UseReportExportParams) => {
         !attempt.autoDownload ||
         data?.status !== 'done' ||
         isPermanentExportError(statusQueries[index]?.error) ||
-        (attempt.phase.stage !== 'tracking' &&
-          attempt.phase.stage !== 'cancel-requested')
+        !inStage(attempt.phase, 'tracking', 'cancel-requested')
       )
         continue;
       const runtime = resourceFor(attempt);
@@ -410,7 +412,7 @@ const useReportExport = ({onDownload, onError}: UseReportExportParams) => {
       if (
         params.reportUrl &&
         job.reportUrl === params.reportUrl &&
-        job.state.status === 'canceled'
+        job.view.kind === 'canceled'
       )
         dismiss(job.key);
     }
@@ -606,7 +608,7 @@ const useReportExport = ({onDownload, onError}: UseReportExportParams) => {
     const attempt = store.getAttempt(key);
     if (!job || !attempt || !getReportExportActions(job).download) return;
     const runtime = resourceFor(attempt);
-    runtime.mimetype = job.state.exportData?.contentType;
+    runtime.mimetype = job.exportData?.contentType;
     send(runtime, {type: 'auto-download', key});
     await transfer(runtime);
   };

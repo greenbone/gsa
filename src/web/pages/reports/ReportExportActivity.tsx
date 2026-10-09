@@ -16,10 +16,19 @@ import {
   XIcon,
 } from 'web/components/icon';
 import Link from 'web/components/link/Link';
-import {type ReportExportJob} from 'web/hooks/useReportExport';
-import useTranslation, {type TranslateFunc} from 'web/hooks/useTranslation';
+import useTranslation from 'web/hooks/useTranslation';
 import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
-import {getReportExportActions} from 'web/report-export/job';
+import {
+  getReportExportActions,
+  type ReportExportJob,
+} from 'web/report-export/job';
+import {
+  type ActivityStatusIcon,
+  type ActivityStatusTone,
+  getCancelButtonTitle,
+  getJobPresentation,
+  getJobTitle,
+} from 'web/report-export/presentation';
 import Theme from 'web/utils/theme';
 
 const ActivityTrigger = styled(ActionIcon)`
@@ -54,22 +63,6 @@ const ActivityDropdown = styled.div`
   min-width: 0;
   width: 100%;
 `;
-
-type ActivityStatusTone =
-  | 'active'
-  | 'queued'
-  | 'downloading'
-  | 'canceled'
-  | 'error'
-  | 'ready';
-
-type ActivityStatusIcon =
-  | 'loading'
-  | 'queued'
-  | 'downloading'
-  | 'canceled'
-  | 'error'
-  | 'ready';
 
 const ActivityStatusPill = styled.div<{$tone: ActivityStatusTone}>`
   align-items: center;
@@ -151,154 +144,7 @@ const ErrorText = styled(Text)`
   color: ${Theme.darkRed};
 `;
 
-interface ActivityStatusPresentation {
-  label: string;
-  detail?: string;
-  tone: ActivityStatusTone;
-  icon: ActivityStatusIcon;
-}
-
-const getRunningStatusPresentation = (
-  progress: string | undefined,
-  _: TranslateFunc,
-): ActivityStatusPresentation => ({
-  label: progress === 'preparing' ? _('Preparing') : _('Generating'),
-  detail:
-    progress && progress !== 'preparing' && progress !== 'generating'
-      ? _('Progress: {{progress}}', {progress})
-      : undefined,
-  tone: 'active',
-  icon: 'loading',
-});
-
-const getReportStatePresentation = (
-  job: ReportExportJob,
-  _: TranslateFunc,
-): ActivityStatusPresentation => {
-  switch (job.state.status) {
-    case 'creating':
-      return {
-        label: _('Preparing'),
-        tone: 'active',
-        icon: 'loading',
-      };
-    case 'checking':
-      return {
-        label: _('Checking'),
-        tone: 'active',
-        icon: 'loading',
-      };
-    case 'unavailable':
-      return {
-        label: _('Unavailable'),
-        detail: job.state.error.message,
-        tone: 'error',
-        icon: 'error',
-      };
-    case 'pending':
-      return {
-        label: _('Queued'),
-        tone: 'queued',
-        icon: 'queued',
-      };
-    case 'running':
-      return getRunningStatusPresentation(job.state.exportData?.progress, _);
-    case 'cancel_requested':
-      return {
-        label: _('Cancel requested'),
-        tone: 'queued',
-        icon: 'queued',
-      };
-    case 'canceled':
-      return {
-        label: _('Canceled'),
-        tone: 'canceled',
-        icon: 'canceled',
-      };
-    case 'error':
-      return {
-        label:
-          job.state.exportData?.status === 'expired'
-            ? _('Export expired')
-            : _('Export failed'),
-        detail: job.state.error.message,
-        tone: 'error',
-        icon: 'error',
-      };
-    case 'done':
-      return {
-        label: job.downloadStarted ? _('Complete') : _('Ready'),
-        tone: 'ready',
-        icon: 'ready',
-      };
-  }
-  return {
-    label: _('Preparing'),
-    tone: 'active',
-    icon: 'loading',
-  };
-};
-
-const getActivityStatusPresentation = (
-  job: ReportExportJob,
-  _: TranslateFunc,
-): ActivityStatusPresentation => {
-  if (
-    job.state.status === 'error' ||
-    job.state.status === 'unavailable' ||
-    job.state.status === 'canceled'
-  ) {
-    return getReportStatePresentation(job, _);
-  }
-  if (job.downloadError) {
-    return {
-      label: _('Download failed'),
-      detail: job.downloadError.message,
-      tone: 'error',
-      icon: 'error',
-    };
-  }
-  if (job.downloadPending) {
-    return {
-      label: _('Downloading'),
-      tone: 'downloading',
-      icon: 'downloading',
-    };
-  }
-  if (job.cancelPending) {
-    return {
-      label: _('Canceling'),
-      tone: 'queued',
-      icon: 'queued',
-    };
-  }
-  if (job.state.status === 'running') {
-    return getRunningStatusPresentation(job.state.exportData?.progress, _);
-  }
-  return getReportStatePresentation(job, _);
-};
-
-const getActivityTitle = (job: ReportExportJob, _: TranslateFunc) => {
-  const isDirect = job.transport === 'direct';
-  let title = isDirect ? _('Report download') : _('Report export');
-  if (job.reportTitle) {
-    title = isDirect
-      ? _('Report download: {{report}}', {report: job.reportTitle})
-      : _('Report export: {{report}}', {report: job.reportTitle});
-  }
-  const extensionIndex = job.filename.lastIndexOf('.');
-  const extension =
-    extensionIndex > 0
-      ? job.filename.slice(extensionIndex + 1).toLowerCase()
-      : '';
-  return extension ? `${title} (.${extension})` : title;
-};
-
-const getCancelButtonTitle = (job: ReportExportJob, _: TranslateFunc) => {
-  if (job.cancelPending) return _('Cancellation requested');
-  if (job.cancelError) return _('Retry cancellation');
-  return _('Cancel report export');
-};
+const isComplete = (job: ReportExportJob) => job.view.kind === 'complete';
 
 const getActivityStatusIcon = (icon: ActivityStatusIcon) => {
   switch (icon) {
@@ -334,10 +180,10 @@ export const ReportExportActivity = () => {
   const [_] = useTranslation();
   const previousJobKeys = useRef(new Set(jobs.map(job => job.key)));
   const [recentKeys, setRecentKeys] = useState(
-    () => new Set(jobs.filter(job => !job.downloadStarted).map(job => job.key)),
+    () => new Set(jobs.filter(job => !isComplete(job)).map(job => job.key)),
   );
   const visibleJobs = jobs
-    .filter(job => !job.downloadStarted || recentKeys.has(job.key))
+    .filter(job => !isComplete(job) || recentKeys.has(job.key))
     .sort((first, second) => {
       if (first.autoDownload !== second.autoDownload)
         return first.autoDownload ? -1 : 1;
@@ -346,7 +192,7 @@ export const ReportExportActivity = () => {
   const changeActivityOpen = (open: boolean) => {
     if (!open)
       setRecentKeys(
-        new Set(jobs.filter(job => !job.downloadStarted).map(job => job.key)),
+        new Set(jobs.filter(job => !isComplete(job)).map(job => job.key)),
       );
     setActivityOpen(open);
   };
@@ -360,9 +206,7 @@ export const ReportExportActivity = () => {
       setActivityOpen(true);
     }
     const additions = jobs
-      .filter(
-        job => !previousJobKeys.current.has(job.key) && !job.downloadStarted,
-      )
+      .filter(job => !previousJobKeys.current.has(job.key) && !isComplete(job))
       .map(job => job.key);
     if (additions.length)
       setRecentKeys(current => new Set([...current, ...additions]));
@@ -373,11 +217,7 @@ export const ReportExportActivity = () => {
     return null;
 
   const hasError = visibleJobs.some(
-    job =>
-      job.state.status === 'error' ||
-      job.state.status === 'unavailable' ||
-      job.cancelError ||
-      job.downloadError,
+    job => job.view.kind === 'failed' || job.cancelError,
   );
   let indicatorState: 'error' | 'active' | 'complete' = 'complete';
   if (isActive) indicatorState = 'active';
@@ -445,7 +285,7 @@ export const ReportExportActivity = () => {
               const actions = getReportExportActions(job);
               const canCancel = supportsCancellation && actions.cancel;
               const jobIsActive = actions.active;
-              const status = getActivityStatusPresentation(job, _);
+              const status = getJobPresentation(job, _);
               const isStatusError = status.tone === 'error';
 
               return (
@@ -453,7 +293,7 @@ export const ReportExportActivity = () => {
                   <Stack gap="xs">
                     <ActivityHeading>
                       <ActivityTitle fw={600} size="sm">
-                        {getActivityTitle(job, _)}
+                        {getJobTitle(job, _)}
                       </ActivityTitle>
                       <ActivityStatusPill
                         $tone={status.tone}
