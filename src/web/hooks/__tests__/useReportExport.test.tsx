@@ -939,6 +939,73 @@ describe('useReportExport', () => {
     );
   });
 
+  test('drops a queued cancellation when export creation fails', async () => {
+    const gmp = createGmp([]);
+    let rejectCreate: ((error: Error) => void) | undefined;
+    gmp.reportexport.exportScanReport.mockImplementation(
+      () =>
+        new Promise((_resolve, reject) => {
+          rejectCreate = reject;
+        }),
+    );
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() =>
+      useReportExport({onError, onDownload: testing.fn()}),
+    );
+    let startPromise: Promise<boolean>;
+
+    act(() => {
+      startPromise = result.current.start(startParams);
+    });
+    await act(async () => {
+      await result.current.cancel(result.current.jobs[0].key);
+    });
+    expect(result.current.jobs[0].view.kind).toBe('canceling');
+
+    await act(async () => {
+      rejectCreate?.(new Error('Export creation failed'));
+      await startPromise;
+    });
+
+    expect(result.current.jobs[0].view).toMatchObject({
+      kind: 'failed',
+      reason: 'export',
+    });
+    expect(gmp.reportexport.cancelReportExport).not.toHaveBeenCalled();
+  });
+
+  test.each([
+    ['delta_scan', '/report/delta/report-uuid/delta-uuid'],
+    ['delta_audit', '/audit-report/delta/report-uuid/delta-uuid'],
+  ])('links discovered %s exports to the delta report', async (type, url) => {
+    const gmp = createGmp([]);
+    gmp.reportexport.getReportExports.mockResolvedValue({
+      data: [
+        {
+          ...exportData('running'),
+          type,
+          reportId: 'report-uuid',
+          deltaReportId: 'delta-uuid',
+          owner: {name: 'test-user'},
+        },
+      ],
+      meta: {
+        counts: new CollectionCounts({
+          first: 1,
+          filtered: 1,
+          length: 1,
+          rows: 100,
+        }),
+      },
+    });
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() =>
+      useReportExport({onError, onDownload: testing.fn()}),
+    );
+
+    await waitFor(() => expect(result.current.jobs[0]?.reportUrl).toBe(url));
+  });
+
   test('does not send generation cancellation during a completed-file transfer', async () => {
     const gmp = createGmp([exportData('done', 'completed')]);
     let resolveDownload: ((response: {data: ArrayBuffer}) => void) | undefined;

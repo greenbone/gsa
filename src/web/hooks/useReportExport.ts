@@ -89,21 +89,35 @@ const release = (runtime: AttemptRuntime) => {
   runtime.buffer = undefined;
   runtime.retries = 0;
 };
-const recoveredAttempt = (item: ReportExport): ExportAttempt => {
-  let reportUrl: string | undefined;
-  if (item.reportId && validId(item.reportId)) {
-    if (item.type === 'audit')
-      reportUrl = ROUTES.auditReport.url(item.reportId);
-    if (item.type === 'scan') reportUrl = ROUTES.report.url(item.reportId);
+const getRecoveredReportUrl = ({
+  type,
+  reportId,
+  deltaReportId,
+}: ReportExport) => {
+  if (!reportId || !validId(reportId)) return undefined;
+  const delta =
+    deltaReportId && validId(deltaReportId) ? deltaReportId : undefined;
+  switch (type) {
+    case 'scan':
+      return ROUTES.report.url(reportId);
+    case 'audit':
+      return ROUTES.auditReport.url(reportId);
+    case 'delta_scan':
+      return delta && ROUTES.reportDelta.url(reportId, delta);
+    case 'delta_audit':
+      return delta && ROUTES.auditReportDelta.url(reportId, delta);
   }
+  return undefined;
+};
+const recoveredAttempt = (item: ReportExport): ExportAttempt => {
   const extension = item.extension?.replace(/^\./, '');
   return {
     key: `recovered-${item.id}`,
     origin: 'discovered',
     exportId: item.id,
     filename: `report-${item.id}.${extension && /^[a-zA-Z0-9]{1,16}$/.test(extension) ? extension : 'bin'}`,
-    reportTitle: item.name || item.reportId || item.id || '',
-    reportUrl,
+    reportTitle: item.name || item.reportId || item.id,
+    reportUrl: getRecoveredReportUrl(item),
     autoDownload: false,
     disposition: 'awaiting',
     phase: {stage: 'tracking'},
