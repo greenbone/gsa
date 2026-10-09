@@ -599,7 +599,7 @@ describe('useReportExport', () => {
   });
 
   test('checks export status more often than it retries a not-ready download', () => {
-    expect(REPORT_EXPORT_POLL_INTERVAL).toBe(500);
+    expect(REPORT_EXPORT_POLL_INTERVAL).toBe(1000);
     expect(REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL).toBe(3000);
   });
 

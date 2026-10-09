@@ -15,7 +15,8 @@ import {
   ReportExportUnavailableError,
 } from 'web/report-export/job';
 
-export const REPORT_EXPORT_POLL_INTERVAL = 500;
+// gvmd's export scheduler checks its queue once per second
+export const REPORT_EXPORT_POLL_INTERVAL = 1000;
 
 export const reportExportQueryOptions = (
   gmp: ReturnType<typeof useGmp>,
@@ -41,7 +42,6 @@ export const reportExportQueryOptions = (
     },
     retry: (count, error) => !isPermanentExportError(error) && count < 2,
     retryDelay: (count: number) => Math.min(1000 * 2 ** count, 30000),
-    refetchIntervalInBackground: true,
     refetchInterval: query => {
       if (isPermanentExportError(query.state.error)) return false;
       if (query.state.error) return 5000;

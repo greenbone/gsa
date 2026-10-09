@@ -119,16 +119,14 @@ export const getReportExportActions = ({transport, view}: ReportExportJob) => {
 
 export class ReportExportUnavailableError extends Error {}
 
-export const isPermanentExportError = (error: unknown) => {
-  if (error instanceof ReportExportUnavailableError) return true;
-  if (!error || typeof error !== 'object' || !('status' in error)) return false;
-  return (
-    error.status === 400 ||
-    error.status === 401 ||
-    error.status === 403 ||
-    error.status === 404
-  );
-};
+const getStatus = (error: unknown) =>
+  error && typeof error === 'object' && 'status' in error
+    ? error.status
+    : undefined;
+
+export const isPermanentExportError = (error: unknown) =>
+  error instanceof ReportExportUnavailableError ||
+  [400, 401, 403, 404].some(code => getStatus(error) === code);
 
 const failed = (reason: FailureReason, error: Error): JobView => ({
   kind: 'failed',
@@ -136,12 +134,10 @@ const failed = (reason: FailureReason, error: Error): JobView => ({
   error,
 });
 
-// Ordered by precedence: terminal states first, then local transfer/cancel, then remote progress.
-const getAttemptView = (
-  {phase, autoDownload}: ExportAttempt,
-  exportData?: ReportExport,
+const getLocalTerminalView = (
+  phase: AttemptPhase,
   statusError?: Error | null,
-): JobView => {
+): JobView | undefined => {
   if (phase.stage === 'handed-off') return {kind: 'complete'};
   if (phase.stage === 'failed') return failed('export', phase.error);
   if (phase.stage === 'creating')
@@ -155,29 +151,48 @@ const getAttemptView = (
     phase.error &&
     isPermanentExportError(phase.error)
   )
-    return failed('gone', phase.error);
-  const status = exportData?.status;
-  if (status === 'error')
     return failed(
-      'export',
-      new Error(exportData?.errorMessage || 'Export failed'),
+      getStatus(phase.error) === 404 ? 'gone' : 'unavailable',
+      phase.error,
     );
-  if (status === 'expired')
-    return failed(
-      'expired',
-      new Error(exportData?.errorMessage || 'Export expired'),
-    );
-  if (status === 'canceled') return {kind: 'canceled'};
-  if (status === 'unknown')
-    return failed('unavailable', new Error('Unsupported export status'));
+  return undefined;
+};
+
+const getRemoteTerminalView = (
+  exportData?: ReportExport,
+): JobView | undefined => {
+  switch (exportData?.status) {
+    case 'error':
+      return failed(
+        'export',
+        new Error(exportData.errorMessage || 'Export failed'),
+      );
+    case 'expired':
+      return failed(
+        'expired',
+        new Error(exportData.errorMessage || 'Export expired'),
+      );
+    case 'canceled':
+      return {kind: 'canceled'};
+    case 'unknown':
+      return failed('unavailable', new Error('Unsupported export status'));
+  }
+  return undefined;
+};
+
+const getProgressView = (
+  {phase, autoDownload}: ExportAttempt,
+  exportData?: ReportExport,
+): JobView => {
   if (
-    (phase.stage === 'waiting' || phase.stage === 'handoff-failed') &&
+    inStage(phase, 'waiting', 'handoff-failed') &&
+    'error' in phase &&
     phase.error
   )
     return failed('download', phase.error);
-  if (phase.stage === 'transferring' || phase.stage === 'waiting')
-    return {kind: 'downloading'};
+  if (inStage(phase, 'transferring', 'waiting')) return {kind: 'downloading'};
   if (phase.stage === 'canceling') return {kind: 'canceling'};
+  const status = exportData?.status;
   if (phase.stage === 'cancel-requested' && isGenerationActive(status))
     return {kind: 'cancel-requested'};
   switch (status) {
@@ -192,6 +207,16 @@ const getAttemptView = (
   }
   return {kind: 'checking'};
 };
+
+// Precedence: local terminal phases, then remote terminal status, then transfer/cancel/progress.
+const getAttemptView = (
+  attempt: ExportAttempt,
+  exportData?: ReportExport,
+  statusError?: Error | null,
+): JobView =>
+  getLocalTerminalView(attempt.phase, statusError) ??
+  getRemoteTerminalView(exportData) ??
+  getProgressView(attempt, exportData);
 
 export const toReportExportJob = (
   attempt: ExportAttempt,
