@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type ExportAttempt} from 'web/report-export/job';
+import {type ExportAttempt, inStage} from 'web/report-export/job';
 
 type AttemptMetadata = Pick<
   ExportAttempt,
@@ -77,7 +77,7 @@ const transitionAttempt = (
       return changeAttempt(
         attempt,
         Boolean(attempt.exportId) &&
-          ['tracking', 'waiting', 'creating'].includes(phase.stage),
+          inStage(phase, 'tracking', 'waiting', 'creating'),
         {phase: {stage: 'canceling'}, cancelError: undefined},
       );
     case 'cancel-accepted':
@@ -94,37 +94,35 @@ const transitionAttempt = (
         attempt,
         Boolean(attempt.exportId) &&
           attempt.disposition === 'awaiting' &&
-          ['tracking', 'waiting', 'cancel-requested'].includes(phase.stage),
+          inStage(phase, 'tracking', 'waiting', 'cancel-requested'),
         {phase: {stage: 'transferring'}},
       );
     case 'wait':
-      return changeAttempt(
-        attempt,
-        ['transferring', 'waiting'].includes(phase.stage),
-        {phase: {stage: 'waiting', error: event.error}},
-      );
+      return changeAttempt(attempt, inStage(phase, 'transferring', 'waiting'), {
+        phase: {stage: 'waiting', error: event.error},
+      });
     case 'resume':
       return changeAttempt(
         attempt,
-        ['tracking', 'waiting', 'abandoned'].includes(phase.stage),
+        inStage(phase, 'tracking', 'waiting', 'abandoned'),
         {phase: {stage: 'tracking'}, disposition: 'awaiting'},
       );
     case 'handoff':
       return changeAttempt(
         attempt,
-        ['transferring', 'handoff-failed'].includes(phase.stage),
+        inStage(phase, 'transferring', 'handoff-failed'),
         {phase: {stage: 'handed-off'}, disposition: 'handed-off'},
       );
     case 'handoff-failed':
       return changeAttempt(
         attempt,
-        ['transferring', 'handoff-failed'].includes(phase.stage),
+        inStage(phase, 'transferring', 'handoff-failed'),
         {phase: {stage: 'handoff-failed', error: event.error}},
       );
     case 'fail':
       return changeAttempt(
         attempt,
-        ['creating', 'transferring'].includes(phase.stage),
+        inStage(phase, 'creating', 'transferring'),
         {phase: {stage: 'failed', error: event.error}},
       );
   }

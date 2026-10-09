@@ -5,6 +5,7 @@
 
 import type Gmp from 'gmp/gmp';
 import {
+  type JobView,
   type ReportExportJob,
   type StartReportExportParams,
 } from 'web/report-export/job';
@@ -42,6 +43,17 @@ export const fetchDirectDownload = async (
   return response.data;
 };
 
+const toView = (phase: DirectDownloadPhase): JobView => {
+  switch (phase.stage) {
+    case 'downloading':
+      return {kind: 'downloading'};
+    case 'complete':
+      return {kind: 'complete'};
+    case 'failed':
+      return {kind: 'failed', reason: 'export', error: phase.error};
+  }
+};
+
 export const toDirectDownloadJob = ({
   phase,
   ...download
@@ -51,11 +63,5 @@ export const toDirectDownloadJob = ({
   autoDownload: true,
   disposition: phase.stage === 'complete' ? 'handed-off' : 'awaiting',
   transport: 'direct',
-  state:
-    phase.stage === 'failed'
-      ? {status: 'error', error: phase.error}
-      : {status: phase.stage === 'complete' ? 'done' : 'creating'},
-  downloadStarted: phase.stage === 'complete',
-  downloadPending: phase.stage === 'downloading',
-  cancelPending: false,
+  view: toView(phase),
 });
