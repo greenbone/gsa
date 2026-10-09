@@ -12,6 +12,30 @@ import Task from 'gmp/models/task';
 import BulkTags from 'web/entities/BulkTags';
 import SelectionType from 'web/utils/selection-type';
 
+interface GmpOverrides {
+  createTag?: ReturnType<typeof testing.fn>;
+  getAllResourceNames?: ReturnType<typeof testing.fn>;
+  getAllTags?: ReturnType<typeof testing.fn>;
+  getTag?: ReturnType<typeof testing.fn>;
+  saveTag?: ReturnType<typeof testing.fn>;
+}
+
+const createGmp = ({
+  createTag = testing.fn().mockResolvedValue({data: {id: '2'}}),
+  getAllResourceNames = testing.fn().mockResolvedValue({data: []}),
+  getAllTags = testing.fn().mockResolvedValue({data: []}),
+  getTag = testing.fn().mockResolvedValue({data: new Tag({id: '2'})}),
+  saveTag = testing.fn().mockResolvedValue({data: {id: '2'}}),
+}: GmpOverrides = {}) => ({
+  tags: {getAll: getAllTags},
+  resourcenames: {getAll: getAllResourceNames},
+  tag: {
+    create: createTag,
+    get: getTag,
+    save: saveTag,
+  },
+});
+
 describe('BulkTags tests', () => {
   test('should render the BulkTags component', () => {
     const entities = [new Task({id: '1'}), new Task({id: '2'})];
@@ -22,9 +46,7 @@ describe('BulkTags tests', () => {
     const getAllTags = testing
       .fn()
       .mockResolvedValue({data: [new Tag({id: '1'})]});
-    const gmp = {
-      tags: {getAll: getAllTags},
-    };
+    const gmp = createGmp({getAllTags});
     const {render} = rendererWith({gmp, store: true});
     render(
       <BulkTags
@@ -38,6 +60,33 @@ describe('BulkTags tests', () => {
     );
     const dialog = screen.getDialog();
     expect(dialog).toBeInTheDocument();
+    expect(getAllTags).toHaveBeenCalledWith({filter: 'resource_type=task'});
+  });
+
+  test('should render when optional entity data is undefined', () => {
+    const entities = [new Task({id: '1'})];
+    const filter = QueryFilter.fromString();
+    const onClose = testing.fn();
+    const getAllTags = testing.fn().mockResolvedValue({data: []});
+    const gmp = createGmp({getAllTags});
+    const {render} = rendererWith({gmp, store: true});
+
+    render(
+      <BulkTags
+        entities={entities}
+        entitiesCounts={undefined}
+        filter={filter}
+        selectedEntities={undefined}
+        selectionType={SelectionType.SELECTION_PAGE_CONTENTS}
+        onClose={onClose}
+      />,
+    );
+
+    expect(screen.getDialog()).toBeInTheDocument();
+    expect(screen.getDialogTitle()).toHaveTextContent(
+      'Add Tag to Page Contents',
+    );
+    expect(getAllTags).toHaveBeenCalledWith({filter: 'resource_type=task'});
   });
 
   test('should allow to tag all filtered entities', () => {
@@ -49,9 +98,7 @@ describe('BulkTags tests', () => {
     const getAllTags = testing
       .fn()
       .mockResolvedValue({data: [new Tag({id: '1'})]});
-    const gmp = {
-      tags: {getAll: getAllTags},
-    };
+    const gmp = createGmp({getAllTags});
     const {render} = rendererWith({gmp, store: true});
     render(
       <BulkTags
@@ -80,15 +127,13 @@ describe('BulkTags tests', () => {
       .mockResolvedValue({data: [new Tag({id: '1'})]});
     const getAllResourceNames = testing.fn().mockResolvedValue({data: []});
     const saveTag = testing.fn().mockResolvedValue({data: {id: '2'}});
-    const gmp = {
-      tags: {getAll: getAllTags},
-      resourcenames: {getAll: getAllResourceNames},
-      tag: {
-        create: createTag,
-        get: getTag,
-        save: saveTag,
-      },
-    };
+    const gmp = createGmp({
+      createTag,
+      getAllResourceNames,
+      getAllTags,
+      getTag,
+      saveTag,
+    });
     const {render} = rendererWith({gmp, store: true});
     render(
       <BulkTags
