@@ -13,15 +13,15 @@ import useGmp from 'web/hooks/useGmp';
 import useSessionToken from 'web/hooks/useSessionToken';
 import useUserName from 'web/hooks/useUserName';
 import {
-  isGenerationActive,
-  isPermanentExportError,
-  ReportExportUnavailableError,
-} from 'web/pages/reports/report-export-job';
-import {
   resolveRefetchInterval,
   transformRefetchIntervalFn,
   type RefetchIntervalFn,
 } from 'web/queries/helpers';
+import {
+  isGenerationActive,
+  isPermanentExportError,
+  ReportExportUnavailableError,
+} from 'web/report-export/job';
 
 export const REPORT_EXPORT_POLL_INTERVAL = 500;
 
@@ -117,8 +117,8 @@ export const useReportExportInventory = () => {
       return discoverReportExports(gmp.reportexport, username, signal);
     },
     retry: (count, error) => !isPermanentExportError(error) && count < 2,
-    refetchInterval: query =>
-      isPermanentExportError(query.state.error) ? false : 30000,
+    refetchOnWindowFocus: true,
+    refetchInterval: false,
   });
 };
 

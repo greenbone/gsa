@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState} from 'react';
+import {StrictMode, useState} from 'react';
 import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
 import {
   act,
@@ -13,7 +13,10 @@ import {
   waitFor,
   within,
 } from 'web/testing';
-import {showSuccessNotification} from '@greenbone/ui-lib';
+import {
+  showErrorNotification,
+  showSuccessNotification,
+} from '@greenbone/ui-lib';
 import type * as UiLib from '@greenbone/ui-lib';
 import {vi} from 'vitest';
 import CollectionCounts from 'gmp/collection/collection-counts';
@@ -26,6 +29,7 @@ import ReportExportManager, {
 vi.mock('@greenbone/ui-lib', async importOriginal => ({
   ...(await importOriginal<typeof UiLib>()),
   showSuccessNotification: vi.fn<typeof showSuccessNotification>(),
+  showErrorNotification: vi.fn<typeof showErrorNotification>(),
 }));
 
 const exportPayload = {
@@ -261,6 +265,86 @@ describe('ReportExportManager', () => {
       expect(gmp.reportexport.downloadReportExport).not.toHaveBeenCalled();
     },
   );
+
+  test('restores an unfinished intent once under StrictMode', async () => {
+    const gmp = createGmp();
+    gmp.reportexport.getReportExport.mockResolvedValue({
+      data: [{id: 'export-1', status: 'done'}],
+    });
+    window.sessionStorage.setItem(
+      'gsa-report-export-jobs:test-user',
+      JSON.stringify([
+        {
+          key: 'local-intent',
+          exportId: 'export-1',
+          origin: 'local',
+          filename: 'report.pdf',
+          reportTitle: 'Local intent',
+          autoDownload: true,
+          disposition: 'awaiting',
+        },
+      ]),
+    );
+    const {render} = rendererWith({gmp});
+    render(
+      <StrictMode>
+        <ReportExportManager>
+          <ReportExportActivity />
+        </ReportExportManager>
+      </StrictMode>,
+    );
+    await waitFor(() =>
+      expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(1),
+    );
+    const button = await screen.findByTestId('report-export-activity-button');
+    fireEvent.click(button);
+    expect(await screen.findByText('Complete')).toBeInTheDocument();
+    expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(1);
+    expect(gmp.reportexport.exportScanReport).not.toHaveBeenCalled();
+  });
+
+  test('opens activity for explicit local origin regardless of a legacy recovered key', async () => {
+    const gmp = createGmp();
+    gmp.session.token = undefined;
+    gmp.session.username = undefined;
+    gmp.reportexport.getReportExport.mockResolvedValue({
+      data: [{id: 'export-1', status: 'running'}],
+    });
+    window.sessionStorage.setItem(
+      'gsa-report-export-jobs:test-user',
+      JSON.stringify([
+        {
+          key: 'recovered-local-intent',
+          exportId: 'export-1',
+          origin: 'local',
+          filename: 'report.pdf',
+          reportTitle: 'Local intent',
+          autoDownload: true,
+          disposition: 'awaiting',
+        },
+      ]),
+    );
+    const {render} = rendererWith({gmp});
+    render(
+      <ReportExportManager>
+        <ReportExportActivity />
+      </ReportExportManager>,
+    );
+    expect(
+      screen.queryByTestId('report-export-activity-button'),
+    ).not.toBeInTheDocument();
+    act(() => {
+      gmp.session.token = 'new-token';
+      gmp.session.username = 'test-user';
+      gmp.session.listener.forEach(listener => listener());
+    });
+    await waitFor(() =>
+      expect(
+        screen.getByTestId('report-export-activity-button'),
+      ).toHaveAttribute('aria-expanded', 'true'),
+    );
+    expect(await screen.findByText('Generating')).toBeInTheDocument();
+  });
 
   test('does not add historical ready jobs to activity', async () => {
     const gmp = createGmp();
@@ -608,6 +692,59 @@ describe('ReportExportManager', () => {
     expect(activityButton).toHaveAttribute('aria-expanded', 'false');
     fireEvent.click(activityButton);
     expect(activityButton).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  test('retains cancellation errors when activity closes during the request', async () => {
+    const gmp = createGmp();
+    gmp.reportexport.exportScanReport.mockResolvedValue({
+      data: {id: 'export-1'},
+    });
+    gmp.reportexport.getReportExport.mockResolvedValue({
+      data: [{id: 'export-1', status: 'running'}],
+    });
+    let rejectCancellation: ((error: Error) => void) | undefined;
+    gmp.reportexport.cancelReportExport.mockImplementationOnce(
+      () =>
+        new Promise((_resolve, reject) => {
+          rejectCancellation = reject;
+        }),
+    );
+    const {render} = rendererWith({gmp, capabilities: true});
+    render(
+      <ReportExportManager>
+        <ReportExportActivity />
+        <CompletedExportStarter />
+      </ReportExportManager>,
+    );
+    fireEvent.click(screen.getByText('Start completed export'));
+    await screen.findByText('Generating');
+    fireEvent.click(
+      screen.getByRole('button', {name: 'Cancel report export', hidden: true}),
+    );
+    await waitFor(() =>
+      expect(gmp.reportexport.cancelReportExport).toHaveBeenCalledTimes(1),
+    );
+    fireEvent.click(
+      screen.getByRole('button', {name: 'Close export activity', hidden: true}),
+    );
+    await act(async () => {
+      rejectCancellation?.(new Error('Cancellation denied'));
+    });
+    await waitFor(() => expect(showErrorNotification).toHaveBeenCalledTimes(1));
+    expect(showErrorNotification).toHaveBeenCalledWith('Cancellation denied');
+    fireEvent.click(screen.getByTestId('report-export-activity-button'));
+    expect(
+      await screen.findByText('Cancellation failed: Cancellation denied'),
+    ).toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole('button', {name: 'Retry cancellation', hidden: true}),
+    );
+    await waitFor(() =>
+      expect(
+        screen.queryByText('Cancellation failed: Cancellation denied'),
+      ).not.toBeInTheDocument(),
+    );
+    expect(showErrorNotification).toHaveBeenCalledTimes(1);
   });
 
   test('lists multiple report exports independently', async () => {

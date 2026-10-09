@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type ExportIntent} from 'web/pages/reports/report-export-job';
+import {type ExportIntent} from 'web/report-export/job';
 
 const storageKey = (username: string) =>
   `gsa-report-export-jobs:${encodeURIComponent(username)}`;
@@ -20,6 +20,17 @@ const safeReportUrl = (value: unknown) => {
   }
 };
 
+const readDisposition = (value: object): ExportIntent['disposition'] => {
+  if (
+    ('disposition' in value && value.disposition === 'handed-off') ||
+    ('downloadStarted' in value && value.downloadStarted === true)
+  )
+    return 'handed-off';
+  return 'disposition' in value && value.disposition === 'abandoned'
+    ? 'abandoned'
+    : 'awaiting';
+};
+
 const readIntent = (value: unknown): ExportIntent | undefined => {
   if (!value || typeof value !== 'object') return undefined;
   if (
@@ -32,18 +43,28 @@ const readIntent = (value: unknown): ExportIntent | undefined => {
     typeof value.reportTitle !== 'string'
   )
     return undefined;
+  if (
+    'origin' in value &&
+    value.origin !== 'local' &&
+    value.origin !== 'discovered'
+  )
+    return undefined;
   const exportId =
     'exportId' in value && typeof value.exportId === 'string' && value.exportId
       ? value.exportId
       : undefined;
   const directDownload =
     'directDownload' in value && value.directDownload === true;
-  const handedOff =
-    ('disposition' in value && value.disposition === 'handed-off') ||
-    ('downloadStarted' in value && value.downloadStarted === true);
-  if (!exportId && !(directDownload && handedOff)) return undefined;
+  const disposition = readDisposition(value);
+  if (!exportId && !(directDownload && disposition === 'handed-off'))
+    return undefined;
+  const discovered =
+    'origin' in value
+      ? value.origin === 'discovered'
+      : value.key.startsWith('recovered-');
   return {
     key: value.key,
+    origin: discovered ? 'discovered' : 'local',
     exportId,
     filename: value.filename,
     reportTitle: value.reportTitle,
@@ -51,11 +72,7 @@ const readIntent = (value: unknown): ExportIntent | undefined => {
       'reportUrl' in value ? safeReportUrl(value.reportUrl) : undefined,
     directDownload,
     autoDownload: !('autoDownload' in value) || value.autoDownload === true,
-    disposition: handedOff
-      ? 'handed-off'
-      : 'disposition' in value && value.disposition === 'abandoned'
-        ? 'abandoned'
-        : 'awaiting',
+    disposition,
   };
 };
 
@@ -99,6 +116,7 @@ export const writeExportIntents = (
     .slice(-50);
   const values = [...unfinished, ...receipts].map(intent => ({
     key: intent.key,
+    origin: intent.origin,
     exportId: intent.exportId,
     filename: intent.filename,
     reportTitle: intent.reportTitle,

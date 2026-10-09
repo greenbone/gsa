@@ -3,8 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useEffect, useEffectEvent, useRef, useState} from 'react';
-import {showErrorNotification} from '@greenbone/ui-lib';
+import {
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react';
 import {useQueries, useQueryClient} from '@tanstack/react-query';
 import {v4 as uuid} from 'uuid';
 import {type ReportExport} from 'gmp/models/report-export';
@@ -24,11 +30,12 @@ import {
   toReportExportJob,
   retainReportExportJobs,
   selectReportExportInventory,
-} from 'web/pages/reports/report-export-job';
+} from 'web/report-export/job';
+import {readExportIntents, writeExportIntents} from 'web/report-export/storage';
 import {
-  readExportIntents,
-  writeExportIntents,
-} from 'web/pages/reports/report-export-storage';
+  createExportAttemptStore,
+  type ExportAttemptEvent,
+} from 'web/report-export/store';
 import {ROUTES} from 'web/route-paths';
 
 export type {
@@ -37,7 +44,7 @@ export type {
   ReportExportState,
   StartReportExportParams,
   StartDirectReportDownloadParams,
-} from 'web/pages/reports/report-export-job';
+} from 'web/report-export/job';
 export {REPORT_EXPORT_POLL_INTERVAL} from 'web/hooks/use-query/report-exports';
 export const REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL = 3000;
 const MAX_DOWNLOAD_RETRIES = 10;
@@ -49,12 +56,11 @@ interface UseReportExportParams {
     filename: string,
     mimetype?: string,
   ) => void;
-  activityOpen?: boolean;
-  onCancelError?: (error: Error) => void;
+  onError?: (error: Error) => void;
 }
 
 interface AttemptRuntime {
-  attempt: ExportAttempt;
+  key: string;
   retries: number;
   timer?: ReturnType<typeof setTimeout>;
   buffer?: ArrayBuffer | string;
@@ -87,6 +93,7 @@ const recoveredAttempt = (item: ReportExport): ExportAttempt => {
   const extension = item.extension?.replace(/^\./, '');
   return {
     key: `recovered-${item.id}`,
+    origin: 'discovered',
     exportId: item.id,
     filename: `report-${item.id}.${extension && /^[a-zA-Z0-9]{1,16}$/.test(extension) ? extension : 'bin'}`,
     reportTitle: item.name || item.reportId || item.id || '',
@@ -97,67 +104,58 @@ const recoveredAttempt = (item: ReportExport): ExportAttempt => {
   };
 };
 
-const useReportExport = ({
-  onDownload,
-  activityOpen = false,
-  onCancelError,
-}: UseReportExportParams) => {
+const useReportExport = ({onDownload, onError}: UseReportExportParams) => {
   const gmp = useGmp();
   const token = useSessionToken();
   const username = useUserName();
   const queryClient = useQueryClient();
   const owner = `${token ?? ''}\0${username ?? ''}`;
-  const [sessionRecords, setSessionRecords] = useState(() => ({
+  const [sessionStore, setSessionStore] = useState(() => ({
     owner,
-    records: token ? loadAttempts(username) : [],
+    store: createExportAttemptStore(token ? loadAttempts(username) : []),
   }));
-  if (sessionRecords.owner !== owner)
-    setSessionRecords({owner, records: token ? loadAttempts(username) : []});
-  const records =
-    sessionRecords.owner === owner ? sessionRecords.records : EMPTY_ATTEMPTS;
+  if (sessionStore.owner !== owner)
+    setSessionStore({
+      owner,
+      store: createExportAttemptStore(token ? loadAttempts(username) : []),
+    });
+  const {store} = sessionStore;
+  const snapshot = useSyncExternalStore(store.subscribe, store.getSnapshot);
+  const records = sessionStore.owner === owner ? snapshot : EMPTY_ATTEMPTS;
+  const activeStore = useRef(store);
   const resources = useRef(new Map<string, AttemptRuntime>());
   const dismissed = useRef(new Set<string>());
   const mounted = useRef(false);
-  const callbacks = useRef({onDownload, activityOpen, onCancelError});
+  const callbacks = useRef({onDownload, onError});
   useEffect(() => {
-    callbacks.current = {onDownload, activityOpen, onCancelError};
-  }, [onDownload, activityOpen, onCancelError]);
+    callbacks.current = {onDownload, onError};
+  }, [onDownload, onError]);
   const inventory = useReportExportInventory();
   const isCurrentSession = useCallback(
     () =>
       mounted.current &&
+      activeStore.current === store &&
       Boolean(token && username) &&
       gmp.session.token === token &&
       gmp.session.username === username,
-    [gmp, token, username],
+    [gmp, token, username, store],
   );
   const current = (runtime: AttemptRuntime) =>
     isCurrentSession() &&
-    resources.current.get(runtime.attempt.key) === runtime;
-  const update = (runtime: AttemptRuntime, changes: Partial<ExportAttempt>) => {
-    if (!current(runtime)) return;
-    runtime.attempt = {...runtime.attempt, ...changes};
-    setSessionRecords(previous =>
-      previous.owner !== owner
-        ? previous
-        : {
-            ...previous,
-            records: previous.records.map(item =>
-              item.key === runtime.attempt.key ? runtime.attempt : item,
-            ),
-          },
-    );
-  };
+    Boolean(store.getAttempt(runtime.key)) &&
+    resources.current.get(runtime.key) === runtime;
+  const send = (runtime: AttemptRuntime, event: ExportAttemptEvent) =>
+    current(runtime) && store.dispatch(event);
   const resourceFor = useCallback((attempt: ExportAttempt) => {
     let runtime = resources.current.get(attempt.key);
     if (!runtime) {
-      runtime = {attempt, retries: 0};
+      runtime = {key: attempt.key, retries: 0};
       resources.current.set(attempt.key, runtime);
     }
     return runtime;
   }, []);
   const notify = (error: Error) => {
-    if (!callbacks.current.activityOpen) showErrorNotification(error.message);
+    callbacks.current.onError?.(error);
   };
   const refreshInventory = useCallback(() => {
     void queryClient.invalidateQueries({
@@ -165,6 +163,7 @@ const useReportExport = ({
     });
   }, [queryClient, token, username]);
   useEffect(() => {
+    activeStore.current = store;
     mounted.current = true;
     dismissed.current.clear();
     const attempts = resources.current;
@@ -177,10 +176,7 @@ const useReportExport = ({
         queryKey: ['get_report_exports', token, username],
       });
     };
-  }, [owner, queryClient, token, username]);
-  useEffect(() => {
-    if (activityOpen) refreshInventory();
-  }, [activityOpen, refreshInventory]);
+  }, [owner, queryClient, token, username, store]);
   const mergeInventory = useEffectEvent((exports: ReportExport[]) => {
     if (!isCurrentSession()) return;
     const visible = selectReportExportInventory(exports);
@@ -191,22 +187,18 @@ const useReportExport = ({
           item,
         );
     }
-    setSessionRecords(previous => {
-      if (previous.owner !== owner) return previous;
-      const known = new Set(previous.records.map(item => item.exportId));
-      const additions = visible
-        .filter(
-          item =>
-            item.id &&
-            validId(item.id) &&
-            !known.has(item.id) &&
-            !dismissed.current.has(item.id),
-        )
-        .map(recoveredAttempt);
-      return additions.length
-        ? {...previous, records: [...previous.records, ...additions]}
-        : previous;
-    });
+    const known = new Set(store.getSnapshot().map(item => item.exportId));
+    for (const item of visible) {
+      if (
+        item.id &&
+        validId(item.id) &&
+        !known.has(item.id) &&
+        !dismissed.current.has(item.id)
+      ) {
+        store.dispatch({type: 'add', attempt: recoveredAttempt(item)});
+        known.add(item.id);
+      }
+    }
   });
   useEffect(() => {
     if (inventory.data) mergeInventory(inventory.data.exports);
@@ -232,19 +224,19 @@ const useReportExport = ({
       statusQueries[index]?.error,
     ),
   );
-  const retained = new Set(retainReportExportJobs(jobs).map(job => job.key));
-  if (retained.size < records.length) {
-    setSessionRecords(previous =>
-      previous.owner !== owner
-        ? previous
-        : {
-            ...previous,
-            records: previous.records.filter(item => retained.has(item.key)),
-          },
-    );
-  }
+  const pruneAttempts = useEffectEvent(() => {
+    if (isCurrentSession() && store.getSnapshot() === records)
+      store.dispatch({
+        type: 'retain',
+        keys: new Set(retainReportExportJobs(jobs).map(job => job.key)),
+      });
+  });
+  useEffect(() => {
+    pruneAttempts();
+  }, [records, statusQueries, owner]);
   const persistIntents = useEffectEvent(() => {
-    if (!isCurrentSession() || !username) return;
+    if (!isCurrentSession() || !username || store.getSnapshot() !== records)
+      return;
     writeExportIntents(
       username,
       records.map((attempt, index) => {
@@ -265,52 +257,58 @@ const useReportExport = ({
     const keys = new Set(records.map(attempt => attempt.key));
     for (const [key, runtime] of resources.current) {
       if (keys.has(key)) continue;
-      const {attempt} = runtime;
       release(runtime);
       resources.current.delete(key);
-      if (attempt.exportId) dismissed.current.add(attempt.exportId);
       void queryClient.cancelQueries({
-        queryKey: ['get_report_export', token, attempt.exportId, attempt.key],
+        queryKey: ['get_report_export', token],
+        predicate: query => query.queryKey[3] === key,
       });
     }
   }, [records, owner, resourceFor, queryClient, token]);
   const handoff = (runtime: AttemptRuntime) => {
-    if (!current(runtime) || runtime.buffer === undefined) return;
+    const attempt = store.getAttempt(runtime.key);
+    if (
+      !attempt ||
+      !current(runtime) ||
+      runtime.buffer === undefined ||
+      (attempt.phase.stage !== 'transferring' &&
+        attempt.phase.stage !== 'handoff-failed')
+    )
+      return;
     try {
       if (runtime.mimetype)
         callbacks.current.onDownload(
           runtime.buffer,
-          runtime.attempt.filename,
+          attempt.filename,
           runtime.mimetype,
         );
-      else
-        callbacks.current.onDownload(runtime.buffer, runtime.attempt.filename);
-      update(runtime, {
-        phase: {stage: 'handed-off'},
-        disposition: 'handed-off',
-      });
+      else callbacks.current.onDownload(runtime.buffer, attempt.filename);
+      send(runtime, {type: 'handoff', key: runtime.key});
       release(runtime);
       refreshInventory();
     } catch (error) {
       const failure = toError(error);
-      update(runtime, {phase: {stage: 'handoff-failed', error: failure}});
+      if (
+        !send(runtime, {
+          type: 'handoff-failed',
+          key: runtime.key,
+          error: failure,
+        })
+      )
+        return;
       notify(failure);
     }
   };
   const transfer = async (runtime: AttemptRuntime) => {
-    if (
-      !current(runtime) ||
-      runtime.attempt.phase.stage === 'transferring' ||
-      runtime.attempt.phase.stage === 'canceling'
-    )
-      return;
+    const attempt = store.getAttempt(runtime.key);
+    if (!attempt || !current(runtime)) return;
     if (runtime.buffer !== undefined) {
       handoff(runtime);
       return;
     }
-    const reportExportId = runtime.attempt.exportId;
+    const reportExportId = attempt.exportId;
     if (!reportExportId) return;
-    update(runtime, {phase: {stage: 'transferring'}});
+    if (!send(runtime, {type: 'transfer', key: runtime.key})) return;
     try {
       const response = await gmp.reportexport.downloadReportExport({
         reportExportId,
@@ -325,7 +323,7 @@ const useReportExport = ({
         !isPermanentExportError(error) &&
         runtime.retries++ < MAX_DOWNLOAD_RETRIES
       ) {
-        update(runtime, {phase: {stage: 'waiting'}});
+        send(runtime, {type: 'wait', key: runtime.key});
         runtime.timer = setTimeout(async () => {
           runtime.timer = undefined;
           if (!current(runtime)) return;
@@ -334,8 +332,8 @@ const useReportExport = ({
               ...reportExportQueryOptions(
                 gmp,
                 token,
-                runtime.attempt.exportId,
-                runtime.attempt.key,
+                reportExportId,
+                runtime.key,
               ),
               staleTime: 0,
             });
@@ -344,16 +342,18 @@ const useReportExport = ({
               void transfer(runtime);
               return;
             }
-            update(runtime, {phase: {stage: 'tracking'}});
+            send(runtime, {type: 'resume', key: runtime.key});
           } catch (lookupError) {
             if (!current(runtime)) return;
-            update(runtime, {
-              phase: {stage: 'waiting', error: toError(lookupError)},
+            send(runtime, {
+              type: 'wait',
+              key: runtime.key,
+              error: toError(lookupError),
             });
           }
         }, REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL);
       } else {
-        update(runtime, {phase: {stage: 'waiting', error: failure}});
+        send(runtime, {type: 'wait', key: runtime.key, error: failure});
         notify(failure);
       }
     }
@@ -379,31 +379,21 @@ const useReportExport = ({
     pickUpExports();
   }, [records, statusQueries, owner]);
   const requestCancellation = async (runtime: AttemptRuntime) => {
-    const reportExportId = runtime.attempt.exportId;
+    const reportExportId = store.getAttempt(runtime.key)?.exportId;
     if (!reportExportId) return;
-    update(runtime, {phase: {stage: 'canceling'}, cancelError: undefined});
+    if (!send(runtime, {type: 'cancel', key: runtime.key})) return;
     try {
       await gmp.reportexport.cancelReportExport({reportExportId});
-      if (current(runtime))
-        update(runtime, {phase: {stage: 'cancel-requested'}});
+      send(runtime, {type: 'cancel-accepted', key: runtime.key});
     } catch (error) {
       if (!current(runtime)) return;
       const failure = toError(error);
-      update(runtime, {
-        phase: {stage: 'tracking'},
-        cancelError: callbacks.current.activityOpen ? failure : undefined,
-      });
-      if (!callbacks.current.activityOpen)
-        callbacks.current.onCancelError?.(failure);
+      send(runtime, {type: 'cancel-failed', key: runtime.key, error: failure});
+      notify(failure);
     } finally {
       if (current(runtime))
         void queryClient.invalidateQueries({
-          queryKey: [
-            'get_report_export',
-            token,
-            runtime.attempt.exportId,
-            runtime.attempt.key,
-          ],
+          queryKey: ['get_report_export', token, reportExportId, runtime.key],
         });
     }
   };
@@ -421,6 +411,7 @@ const useReportExport = ({
     }
     const attempt: ExportAttempt = {
       key: `report-${directDownload ? 'download' : 'export'}-${uuid()}`,
+      origin: 'local',
       filename: params.filename,
       reportTitle: params.reportTitle,
       reportUrl: params.reportUrl,
@@ -430,11 +421,7 @@ const useReportExport = ({
       phase: {stage: directDownload ? 'transferring' : 'creating'},
     };
     const runtime = resourceFor(attempt);
-    setSessionRecords(previous =>
-      previous.owner !== owner
-        ? previous
-        : {...previous, records: [...previous.records, attempt]},
-    );
+    store.dispatch({type: 'add', attempt});
     return runtime;
   };
   const start = async (params: StartReportExportParams) => {
@@ -451,21 +438,21 @@ const useReportExport = ({
         params.payload,
       );
       if (!current(runtime)) return false;
+      const attempt = store.getAttempt(runtime.key);
       const cancelRequested =
-        runtime.attempt.phase.stage === 'creating' &&
-        runtime.attempt.phase.cancelRequested;
-      const existing = [...resources.current.values()].find(candidate => {
+        attempt?.phase.stage === 'creating' && attempt.phase.cancelRequested;
+      const existing = store.getSnapshot().find(candidate => {
         if (
-          candidate === runtime ||
-          candidate.attempt.exportId !== response.data.id ||
-          candidate.attempt.disposition !== 'awaiting'
+          candidate.key === runtime.key ||
+          candidate.exportId !== response.data.id ||
+          candidate.disposition !== 'awaiting'
         )
           return false;
         const data = queryClient.getQueryData<ReportExport>([
           'get_report_export',
           token,
-          candidate.attempt.exportId,
-          candidate.attempt.key,
+          candidate.exportId,
+          candidate.key,
         ]);
         return (
           data?.status !== 'error' &&
@@ -474,34 +461,29 @@ const useReportExport = ({
         );
       });
       if (existing) {
-        if (!existing.attempt.autoDownload)
-          update(existing, {
-            autoDownload: true,
-            filename: params.filename,
-            reportTitle: params.reportTitle,
-            reportUrl: params.reportUrl,
+        const existingRuntime = resourceFor(existing);
+        if (!existing.autoDownload)
+          send(existingRuntime, {
+            type: 'adopt',
+            key: existing.key,
+            metadata: {
+              filename: params.filename,
+              reportTitle: params.reportTitle,
+              reportUrl: params.reportUrl,
+            },
           });
         release(runtime);
-        resources.current.delete(runtime.attempt.key);
-        setSessionRecords(previous =>
-          previous.owner !== owner
-            ? previous
-            : {
-                ...previous,
-                records: previous.records.filter(
-                  item => item.key !== runtime.attempt.key,
-                ),
-              },
-        );
-        if (cancelRequested && existing.attempt.phase.stage !== 'transferring')
-          await requestCancellation(existing);
+        resources.current.delete(runtime.key);
+        store.dispatch({type: 'remove', key: runtime.key});
+        if (cancelRequested) await requestCancellation(existingRuntime);
         refreshInventory();
         return true;
       }
       dismissed.current.delete(response.data.id);
-      update(runtime, {
+      send(runtime, {
+        type: 'created',
+        key: runtime.key,
         exportId: response.data.id,
-        phase: {stage: cancelRequested ? 'canceling' : 'tracking'},
       });
       refreshInventory();
       if (cancelRequested) await requestCancellation(runtime);
@@ -509,7 +491,7 @@ const useReportExport = ({
     } catch (error) {
       if (!current(runtime)) return false;
       const failure = toError(error);
-      update(runtime, {phase: {stage: 'failed', error: failure}});
+      send(runtime, {type: 'fail', key: runtime.key, error: failure});
       notify(failure);
       return false;
     }
@@ -539,27 +521,36 @@ const useReportExport = ({
       } catch (error) {
         if (!current(runtime)) return;
         const failure = toError(error);
-        update(runtime, {phase: {stage: 'failed', error: failure}});
+        send(runtime, {type: 'fail', key: runtime.key, error: failure});
         notify(failure);
       }
     };
     void fetch();
     return true;
   };
+  const jobFor = (key: string) => {
+    const attempt = store.getAttempt(key);
+    if (!attempt || !isCurrentSession()) return undefined;
+    const queryKey = ['get_report_export', token, attempt.exportId, key];
+    return toReportExportJob(
+      attempt,
+      queryClient.getQueryData<ReportExport>(queryKey),
+      queryClient.getQueryState<ReportExport, Error>(queryKey)?.error,
+    );
+  };
   const cancel = async (key: string) => {
-    const job = jobs.find(item => item.key === key);
-    const attempt = records.find(item => item.key === key);
+    const job = jobFor(key);
+    const attempt = store.getAttempt(key);
     if (!job || !attempt || !getReportExportActions(job).cancel) return;
     const runtime = resourceFor(attempt);
-    if (runtime.attempt.phase.stage === 'canceling') return;
-    if (!runtime.attempt.exportId) {
-      update(runtime, {phase: {stage: 'creating', cancelRequested: true}});
+    if (!attempt.exportId) {
+      send(runtime, {type: 'queue-cancel', key});
       return;
     }
     await requestCancellation(runtime);
   };
   const dismiss = (key: string) => {
-    const job = jobs.find(item => item.key === key);
+    const job = jobFor(key);
     if (!job || !getReportExportActions(job).dismiss) return;
     if (job.exportId) dismissed.current.add(job.exportId);
     const runtime = resources.current.get(key);
@@ -568,18 +559,11 @@ const useReportExport = ({
     void queryClient.cancelQueries({
       queryKey: ['get_report_export', token, job.exportId, key],
     });
-    setSessionRecords(previous =>
-      previous.owner !== owner
-        ? previous
-        : {
-            ...previous,
-            records: previous.records.filter(item => item.key !== key),
-          },
-    );
+    store.dispatch({type: 'remove', key});
   };
   const retry = async (key: string) => {
-    const job = jobs.find(item => item.key === key);
-    const attempt = records.find(item => item.key === key);
+    const job = jobFor(key);
+    const attempt = store.getAttempt(key);
     if (!job || !attempt || !getReportExportActions(job).retry) return;
     const runtime = resourceFor(attempt);
     if (runtime.buffer !== undefined) {
@@ -587,18 +571,18 @@ const useReportExport = ({
       return;
     }
     runtime.retries = 0;
-    update(runtime, {phase: {stage: 'tracking'}, disposition: 'awaiting'});
+    if (!send(runtime, {type: 'resume', key})) return;
     await queryClient.resetQueries({
       queryKey: ['get_report_export', token, attempt.exportId, key],
     });
   };
   const download = async (key: string) => {
-    const job = jobs.find(item => item.key === key);
-    const attempt = records.find(item => item.key === key);
+    const job = jobFor(key);
+    const attempt = store.getAttempt(key);
     if (!job || !attempt || !getReportExportActions(job).download) return;
     const runtime = resourceFor(attempt);
     runtime.mimetype = job.state.exportData?.contentType;
-    update(runtime, {autoDownload: true});
+    send(runtime, {type: 'auto-download', key});
     await transfer(runtime);
   };
   return {
@@ -612,6 +596,7 @@ const useReportExport = ({
     isActive: jobs.some(job => getReportExportActions(job).active),
     discoveryError: inventory.error,
     discoveryIncomplete: inventory.data?.incomplete ?? false,
+    refreshDiscovery: refreshInventory,
   };
 };
 
