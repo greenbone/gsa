@@ -53,13 +53,6 @@ interface ThemeInterface {
   statusNewGreen: string;
   statusRunGreen: string;
   paleGreen: string;
-  reportActivityActiveBackground: string;
-  reportActivityQueuedBackground: string;
-  reportActivityDownloadingBackground: string;
-  reportActivityCanceledBackground: string;
-  reportActivityErrorBackground: string;
-  reportActivityReadyBackground: string;
-  reportActivityRowBackground: string;
   darkGreen: string;
   darkGreenTransparent: string;
   Layers: ThemeLayer;
@@ -112,14 +105,6 @@ const Theme: ThemeInterface = {
   statusRunGreen: '#70c000', // used by: progressbar
 
   paleGreen: '#99BE48', // used by: compliance status bar
-
-  reportActivityActiveBackground: '#e5f4eb',
-  reportActivityQueuedBackground: '#eaf2fb',
-  reportActivityDownloadingBackground: '#e4eefb',
-  reportActivityCanceledBackground: '#f0f0f0',
-  reportActivityErrorBackground: '#fdf2f2',
-  reportActivityReadyBackground: '#edf4e5',
-  reportActivityRowBackground: '#fafafa',
 
   /* source ? */
   darkGreen: '#074320', // RGB: 7, 67, 32
