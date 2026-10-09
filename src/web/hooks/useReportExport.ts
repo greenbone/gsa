@@ -3,7 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {
+  type SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {showErrorNotification} from '@greenbone/ui-lib';
 import {useQueries, useQueryClient} from '@tanstack/react-query';
 import {type ReportExportPayload} from 'gmp/commands/report-export';
@@ -16,6 +23,7 @@ import {
 import {REPORT_EXPORT_POLL_INTERVAL} from 'web/hooks/use-query/report-exports';
 import useGmp from 'web/hooks/useGmp';
 import useSessionToken from 'web/hooks/useSessionToken';
+import useUserName from 'web/hooks/useUserName';
 
 export {REPORT_EXPORT_POLL_INTERVAL} from 'web/hooks/use-query/report-exports';
 
@@ -102,24 +110,37 @@ interface ExportJobRecord {
 }
 
 const EXPORT_STORAGE_KEY = 'gsa-report-export-jobs';
+const EMPTY_EXPORT_RECORDS: ExportJobRecord[] = [];
 
-const readStoredRecords = (): ExportJobRecord[] => {
-  if (typeof window === 'undefined') return [];
+const getExportStorageKey = (username: string) =>
+  `${EXPORT_STORAGE_KEY}:${encodeURIComponent(username)}`;
+
+const readStoredRecords = (username?: string): ExportJobRecord[] => {
+  if (typeof window === 'undefined' || !username) return [];
   try {
-    const stored = window.sessionStorage.getItem(EXPORT_STORAGE_KEY);
+    window.sessionStorage.removeItem(EXPORT_STORAGE_KEY);
+    const stored = window.sessionStorage.getItem(getExportStorageKey(username));
     if (!stored) return [];
     const records: unknown = JSON.parse(stored);
     if (!Array.isArray(records)) return [];
-    return records.filter(
-      (record): record is ExportJobRecord =>
-        Boolean(record) &&
-        typeof record === 'object' &&
-        typeof record.key === 'string' &&
-        typeof record.filename === 'string' &&
-        typeof record.reportTitle === 'string' &&
-        (typeof record.exportId === 'string' ||
-          (record.directDownload === true && record.downloadStarted === true)),
-    );
+    return records
+      .filter(
+        (record): record is ExportJobRecord =>
+          Boolean(record) &&
+          typeof record === 'object' &&
+          typeof record.key === 'string' &&
+          typeof record.filename === 'string' &&
+          typeof record.reportTitle === 'string' &&
+          (typeof record.exportId === 'string' ||
+            (record.directDownload === true &&
+              record.downloadStarted === true)),
+      )
+      .map(record => ({
+        ...record,
+        cancelPending: false,
+        cancelError: undefined,
+        downloadError: undefined,
+      }));
   } catch {
     return [];
   }
@@ -196,13 +217,19 @@ const getJobState = (
   record: ExportJobRecord,
   reportExport?: ReportExport,
 ): ReportExportState => {
-  if (record.directDownload) {
-    if (record.createError) {
-      return {status: 'error', error: record.createError};
-    }
-    return record.downloadStarted
+  if (record.createError) {
+    return {status: 'error', error: record.createError};
+  }
+  if (record.downloadStarted) {
+    return record.directDownload
       ? {status: 'downloaded'}
-      : {status: 'creating'};
+      : {
+          status: 'done',
+          exportData: {id: record.exportId, status: REPORT_EXPORT_STATUS.done},
+        };
+  }
+  if (record.directDownload || !record.exportId) {
+    return {status: 'creating'};
   }
   if (
     record.cancelAccepted &&
@@ -216,10 +243,6 @@ const getJobState = (
       },
     };
   }
-  if (record.createError) {
-    return {status: 'error', error: record.createError};
-  }
-  if (!record.exportId) return {status: 'creating'};
   if (!reportExport) {
     return record.cancelAccepted
       ? {status: 'cancel_requested', exportData: {id: record.exportId}}
@@ -244,6 +267,7 @@ const useReportExport = ({
 }: UseReportExportParams) => {
   const gmp = useGmp();
   const token = useSessionToken();
+  const username = useUserName();
   const queryClient = useQueryClient();
   const createExportCommand = useCallback(
     ({
@@ -266,7 +290,39 @@ const useReportExport = ({
     },
     [gmp],
   );
-  const [records, setRecords] = useState<ExportJobRecord[]>(readStoredRecords);
+  const [sessionRecords, setSessionRecords] = useState(() => ({
+    token,
+    username,
+    records: readStoredRecords(token ? username : undefined),
+  }));
+  if (sessionRecords.token !== token || sessionRecords.username !== username) {
+    setSessionRecords({
+      token,
+      username,
+      records: readStoredRecords(token ? username : undefined),
+    });
+  }
+  const records =
+    token &&
+    username &&
+    sessionRecords.token === token &&
+    sessionRecords.username === username
+      ? sessionRecords.records
+      : EMPTY_EXPORT_RECORDS;
+  const setRecords = useCallback(
+    (update: SetStateAction<ExportJobRecord[]>) => {
+      setSessionRecords(current => {
+        if (current.token !== token || current.username !== username)
+          return current;
+        return {
+          ...current,
+          records:
+            typeof update === 'function' ? update(current.records) : update,
+        };
+      });
+    },
+    [token, username],
+  );
   const activityOpenRef = useRef(activityOpen);
 
   useEffect(() => {
@@ -292,37 +348,77 @@ const useReportExport = ({
   const heldDownloadResponseRef = useRef(
     new Map<string, {data: ArrayBuffer; filename: string}>(),
   );
-  const removeJobRecord = useCallback((key: string) => {
-    setRecords(current => current.filter(item => item.key !== key));
-    downloadInFlightRef.current.delete(key);
-    downloadRetryCountRef.current.delete(key);
-    const retryTimer = downloadRetryTimerRef.current.get(key);
-    if (retryTimer) clearTimeout(retryTimer);
-    downloadRetryTimerRef.current.delete(key);
-    cancelIntentRef.current.delete(key);
-    cancelInFlightRef.current.delete(key);
-    cancelAcceptedRef.current.delete(key);
-    heldDownloadResponseRef.current.delete(key);
-  }, []);
-  const markDownloadStarted = useCallback((key: string) => {
-    downloadStartedRef.current.add(key);
-    downloadInFlightRef.current.delete(key);
-    downloadRetryCountRef.current.delete(key);
-    const retryTimer = downloadRetryTimerRef.current.get(key);
-    if (retryTimer) clearTimeout(retryTimer);
-    downloadRetryTimerRef.current.delete(key);
-    setRecords(current =>
-      updateRecord(current, key, {
-        downloadStarted: true,
-        directPending: false,
-      }),
-    );
-  }, []);
+  const isCurrentSession = useCallback(
+    () =>
+      mountedRef.current &&
+      Boolean(token && username) &&
+      gmp.session.token === token &&
+      gmp.session.username === username,
+    [gmp, token, username],
+  );
 
-  const queryRecords = records.filter(record => record.exportId);
+  useEffect(() => {
+    const restored = readStoredRecords(token ? username : undefined);
+    downloadInFlightRef.current.clear();
+    downloadRetryCountRef.current.clear();
+    downloadRetryTimerRef.current.forEach(timer => clearTimeout(timer));
+    downloadRetryTimerRef.current.clear();
+    cancelIntentRef.current.clear();
+    cancelInFlightRef.current.clear();
+    heldDownloadResponseRef.current.clear();
+    downloadStartedRef.current = new Set(
+      restored
+        .filter(record => record.downloadStarted)
+        .map(record => record.key),
+    );
+    cancelAcceptedRef.current = new Set(
+      restored
+        .filter(record => record.cancelAccepted)
+        .map(record => record.key),
+    );
+    return () => {
+      void queryClient.cancelQueries({queryKey: ['get_report_export', token]});
+    };
+  }, [queryClient, token, username]);
+  const removeJobRecord = useCallback(
+    (key: string) => {
+      setRecords(current => current.filter(item => item.key !== key));
+      downloadInFlightRef.current.delete(key);
+      downloadRetryCountRef.current.delete(key);
+      const retryTimer = downloadRetryTimerRef.current.get(key);
+      if (retryTimer) clearTimeout(retryTimer);
+      downloadRetryTimerRef.current.delete(key);
+      cancelIntentRef.current.delete(key);
+      cancelInFlightRef.current.delete(key);
+      cancelAcceptedRef.current.delete(key);
+      heldDownloadResponseRef.current.delete(key);
+    },
+    [setRecords],
+  );
+  const markDownloadStarted = useCallback(
+    (key: string) => {
+      downloadStartedRef.current.add(key);
+      downloadInFlightRef.current.delete(key);
+      downloadRetryCountRef.current.delete(key);
+      const retryTimer = downloadRetryTimerRef.current.get(key);
+      if (retryTimer) clearTimeout(retryTimer);
+      downloadRetryTimerRef.current.delete(key);
+      setRecords(current =>
+        updateRecord(current, key, {
+          downloadStarted: true,
+          directPending: false,
+        }),
+      );
+    },
+    [setRecords],
+  );
+
+  const queryRecords = records.filter(
+    record => record.exportId && !record.downloadStarted,
+  );
   const exportQueries = useQueries({
     queries: queryRecords.map(record => ({
-      enabled: Boolean(token),
+      enabled: Boolean(token && username),
       queryKey: ['get_report_export', token, record.exportId, record.key],
       queryFn: async () => {
         const response = await gmp.reportexport.getReportExports({
@@ -397,6 +493,7 @@ const useReportExport = ({
   const requestCancellation = useCallback(
     async (key: string, exportId: string) => {
       if (
+        !isCurrentSession() ||
         cancelInFlightRef.current.has(key) ||
         cancelAcceptedRef.current.has(key)
       )
@@ -411,7 +508,7 @@ const useReportExport = ({
       );
       try {
         await gmp.reportexport.cancelReportExport({reportExportId: exportId});
-        if (!mountedRef.current) return;
+        if (!isCurrentSession()) return;
         cancelInFlightRef.current.delete(key);
         cancelAcceptedRef.current.add(key);
         const retryTimer = downloadRetryTimerRef.current.get(key);
@@ -430,7 +527,7 @@ const useReportExport = ({
           queryKey: ['get_report_export', token, exportId, key],
         });
       } catch (error) {
-        if (!mountedRef.current) return;
+        if (!isCurrentSession()) return;
         cancelInFlightRef.current.delete(key);
         const cancellationError = toError(error);
         setRecords(current =>
@@ -461,10 +558,20 @@ const useReportExport = ({
         }
       }
     },
-    [gmp, markDownloadStarted, onCancelError, onDownload, queryClient, token],
+    [
+      gmp,
+      isCurrentSession,
+      markDownloadStarted,
+      onCancelError,
+      onDownload,
+      queryClient,
+      setRecords,
+      token,
+    ],
   );
 
   useEffect(() => {
+    if (!isCurrentSession()) return;
     jobs.forEach(job => {
       const record = records.find(item => item.key === job.key);
       const queryIndex = queryRecords.findIndex(item => item.key === job.key);
@@ -484,7 +591,7 @@ const useReportExport = ({
       const exportId = record.exportId;
       const attemptDownload = async () => {
         if (
-          !mountedRef.current ||
+          !isCurrentSession() ||
           cancelAcceptedRef.current.has(job.key) ||
           cancelInFlightRef.current.has(job.key)
         ) {
@@ -495,7 +602,7 @@ const useReportExport = ({
           const response = await gmp.reportexport.downloadReportExport({
             reportExportId: exportId,
           });
-          if (!mountedRef.current || cancelAcceptedRef.current.has(job.key))
+          if (!isCurrentSession() || cancelAcceptedRef.current.has(job.key))
             return;
           if (cancelInFlightRef.current.has(job.key)) {
             heldDownloadResponseRef.current.set(job.key, {
@@ -508,9 +615,9 @@ const useReportExport = ({
           onDownload(response.data, job.filename);
           markDownloadStarted(job.key);
         } catch {
+          if (!isCurrentSession()) return;
           downloadInFlightRef.current.delete(job.key);
           if (
-            !mountedRef.current ||
             cancelAcceptedRef.current.has(job.key) ||
             cancelInFlightRef.current.has(job.key)
           )
@@ -527,6 +634,7 @@ const useReportExport = ({
 
           downloadRetryCountRef.current.set(job.key, retryCount + 1);
           const retryTimer = setTimeout(() => {
+            if (!isCurrentSession()) return;
             downloadRetryTimerRef.current.delete(job.key);
             void attemptDownload();
           }, REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL);
@@ -538,12 +646,14 @@ const useReportExport = ({
   }, [
     exportQueries,
     gmp,
+    isCurrentSession,
     jobs,
     onDownload,
     markDownloadStarted,
     queryRecords,
     removeJobRecord,
     records,
+    setRecords,
   ]);
 
   const start = useCallback(
@@ -554,6 +664,7 @@ const useReportExport = ({
       reportTitle: title,
       reportUrl,
     }: StartReportExportParams) => {
+      if (!isCurrentSession()) return false;
       const key = `report-export-${Date.now()}-${++nextKeyRef.current}`;
       const requestIdentity = getReportRequestIdentity(kind, payload);
       const record: ExportJobRecord = {
@@ -567,7 +678,7 @@ const useReportExport = ({
       setRecords(current => [...current, record]);
       try {
         const response = await createExportCommand({kind, payload});
-        if (!mountedRef.current) return false;
+        if (!isCurrentSession()) return false;
         setRecords(current =>
           updateRecord(current, key, {exportId: response.data.id}),
         );
@@ -576,6 +687,7 @@ const useReportExport = ({
         }
         return true;
       } catch (error) {
+        if (!isCurrentSession()) return false;
         cancelIntentRef.current.delete(key);
         const creationError = toError(error);
         notifyExportErrorIfActivityClosed(
@@ -593,7 +705,13 @@ const useReportExport = ({
         return false;
       }
     },
-    [createExportCommand, removeCanceledJobsForReport, requestCancellation],
+    [
+      createExportCommand,
+      isCurrentSession,
+      removeCanceledJobsForReport,
+      requestCancellation,
+      setRecords,
+    ],
   );
 
   const startDirect = useCallback(
@@ -604,6 +722,7 @@ const useReportExport = ({
       reportTitle: title,
       reportUrl,
     }: StartDirectReportDownloadParams) => {
+      if (!isCurrentSession()) return false;
       const key = `report-download-${Date.now()}-${++nextKeyRef.current}`;
       const requestIdentity = getReportRequestIdentity(kind, payload);
       const record: ExportJobRecord = {
@@ -641,11 +760,11 @@ const useReportExport = ({
                     filter,
                   },
                 );
-          if (!mountedRef.current) return;
+          if (!isCurrentSession()) return;
           onDownload(response.data, downloadFilename);
           markDownloadStarted(key);
         } catch (error) {
-          if (!mountedRef.current) return;
+          if (!isCurrentSession()) return;
           const downloadError = toError(error);
           notifyExportErrorIfActivityClosed(
             activityOpenRef.current,
@@ -662,7 +781,14 @@ const useReportExport = ({
       void download();
       return true;
     },
-    [gmp, markDownloadStarted, onDownload, removeCanceledJobsForReport],
+    [
+      gmp,
+      isCurrentSession,
+      markDownloadStarted,
+      onDownload,
+      removeCanceledJobsForReport,
+      setRecords,
+    ],
   );
 
   const cancel = useCallback(
@@ -697,7 +823,7 @@ const useReportExport = ({
         return;
       await requestCancellation(key, record.exportId);
     },
-    [jobs, records, requestCancellation],
+    [jobs, records, requestCancellation, setRecords],
   );
 
   const dismiss = useCallback(
@@ -729,24 +855,32 @@ const useReportExport = ({
   }, []);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (
+      typeof window === 'undefined' ||
+      !token ||
+      !username ||
+      sessionRecords.token !== token ||
+      sessionRecords.username !== username
+    )
+      return;
+    const storageKey = getExportStorageKey(username);
     const recoverableRecords = records.filter(
       record =>
         record.exportId || (record.directDownload && record.downloadStarted),
     );
-    if (recoverableRecords.length === 0) {
-      window.sessionStorage.removeItem(EXPORT_STORAGE_KEY);
-      return;
-    }
     try {
+      if (recoverableRecords.length === 0) {
+        window.sessionStorage.removeItem(storageKey);
+        return;
+      }
       window.sessionStorage.setItem(
-        EXPORT_STORAGE_KEY,
+        storageKey,
         JSON.stringify(recoverableRecords),
       );
     } catch {
       // Storage may be disabled or full; live export tracking still works.
     }
-  }, [records]);
+  }, [records, sessionRecords.token, sessionRecords.username, token, username]);
 
   return {
     cancel,

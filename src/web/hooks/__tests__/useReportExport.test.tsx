@@ -40,7 +40,7 @@ const exportData = (
 const createGmp = (exports: ReturnType<typeof exportData>[]) => {
   let createCount = 0;
   return {
-    session: createSession({token: 'test-token'}),
+    session: createSession({token: 'test-token', username: 'test-user'}),
     settings: {},
     report: {
       download: testing.fn().mockResolvedValue({data: new ArrayBuffer(8)}),
@@ -80,6 +80,16 @@ const createGmp = (exports: ReturnType<typeof exportData>[]) => {
   };
 };
 
+const changeSession = (
+  gmp: ReturnType<typeof createGmp>,
+  token?: string,
+  username?: string,
+) => {
+  gmp.session.token = token;
+  gmp.session.username = username;
+  gmp.session.listener.forEach(listener => listener());
+};
+
 describe('useReportExport', () => {
   beforeEach(() => {
     testing.clearAllMocks();
@@ -114,9 +124,9 @@ describe('useReportExport', () => {
       expect(result.current.jobs[0].downloadStarted).toBe(true),
     );
     expect(result.current.jobs[0].downloadPending).toBe(false);
-    expect(window.sessionStorage.getItem('gsa-report-export-jobs')).toContain(
-      'export-uuid-1',
-    );
+    expect(
+      window.sessionStorage.getItem('gsa-report-export-jobs:test-user'),
+    ).toContain('export-uuid-1');
 
     const remount = renderHook(() => useReportExport({onDownload}));
     await waitFor(() => expect(remount.result.current.jobs).toHaveLength(1));
@@ -379,13 +389,15 @@ describe('useReportExport', () => {
     );
     expect(result.current.jobs).toHaveLength(1);
     expect(result.current.isActive).toBe(false);
-    expect(window.sessionStorage.getItem('gsa-report-export-jobs')).toContain(
-      'export-uuid-1',
-    );
+    expect(
+      window.sessionStorage.getItem('gsa-report-export-jobs:test-user'),
+    ).toContain('export-uuid-1');
 
     act(() => result.current.dismiss(result.current.jobs[0].key));
     await waitFor(() => expect(result.current.jobs).toHaveLength(0));
-    expect(window.sessionStorage.getItem('gsa-report-export-jobs')).toBeNull();
+    expect(
+      window.sessionStorage.getItem('gsa-report-export-jobs:test-user'),
+    ).toBeNull();
   });
 
   test('sends a queued cancellation after export creation returns its id', async () => {
@@ -661,9 +673,9 @@ describe('useReportExport', () => {
       await firstMount.result.current.start(startParams);
     });
     await waitFor(() =>
-      expect(window.sessionStorage.getItem('gsa-report-export-jobs')).toContain(
-        'export-uuid-1',
-      ),
+      expect(
+        window.sessionStorage.getItem('gsa-report-export-jobs:test-user'),
+      ).toContain('export-uuid-1'),
     );
     firstMount.unmount();
 
@@ -680,7 +692,7 @@ describe('useReportExport', () => {
 
   test('retains handed-off records without downloading again', async () => {
     window.sessionStorage.setItem(
-      'gsa-report-export-jobs',
+      'gsa-report-export-jobs:test-user',
       JSON.stringify([
         {
           key: 'report-export-legacy',
@@ -692,16 +704,252 @@ describe('useReportExport', () => {
       ]),
     );
     const gmp = createGmp([exportData('done', 'completed')]);
+    gmp.reportexport.getReportExports.mockRejectedValue(
+      new Error('Failure to receive response from manager daemon'),
+    );
     const onDownload = testing.fn();
     const {renderHook} = rendererWith({gmp});
     const {result} = renderHook(() => useReportExport({onDownload}));
 
     await waitFor(() => expect(result.current.jobs).toHaveLength(1));
     expect(result.current.jobs[0].downloadStarted).toBe(true);
-    expect(window.sessionStorage.getItem('gsa-report-export-jobs')).toContain(
-      'export-uuid-1',
-    );
+    expect(result.current.jobs[0].state.status).toBe('done');
+    expect(result.current.jobs[0].statusError).toBeUndefined();
+    expect(result.current.isActive).toBe(false);
+    expect(
+      window.sessionStorage.getItem('gsa-report-export-jobs:test-user'),
+    ).toContain('export-uuid-1');
     expect(gmp.reportexport.downloadReportExport).not.toHaveBeenCalled();
+    expect(gmp.reportexport.getReportExports).not.toHaveBeenCalled();
+    expect(onDownload).not.toHaveBeenCalled();
+  });
+
+  test('restores completed history after login without contacting the backend', async () => {
+    const gmp = createGmp([exportData('done', 'completed')]);
+    const onDownload = testing.fn();
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() => useReportExport({onDownload}));
+
+    await act(async () => {
+      await result.current.start(startParams);
+    });
+    await waitFor(() =>
+      expect(result.current.jobs[0].downloadStarted).toBe(true),
+    );
+    gmp.reportexport.getReportExports
+      .mockClear()
+      .mockRejectedValue(
+        new Error('Failure to receive response from manager daemon'),
+      );
+
+    act(() => changeSession(gmp));
+    expect(result.current.jobs).toHaveLength(0);
+    expect(result.current.isActive).toBe(false);
+    act(() => changeSession(gmp, 'new-token', 'test-user'));
+
+    await waitFor(() =>
+      expect(result.current.jobs[0]?.state.status).toBe('done'),
+    );
+    expect(result.current.jobs[0].statusError).toBeUndefined();
+    expect(result.current.jobs[0].filename).toBe('report.xml');
+    expect(gmp.reportexport.getReportExports).not.toHaveBeenCalled();
+    expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(1);
+    expect(onDownload).toHaveBeenCalledTimes(1);
+    act(() => result.current.dismiss(result.current.jobs[0].key));
+    expect(result.current.jobs).toHaveLength(0);
+  });
+
+  test('continues the same unfinished export after login without creating another', async () => {
+    const exports = [exportData('running')];
+    const gmp = createGmp(exports);
+    const onDownload = testing.fn();
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() => useReportExport({onDownload}));
+
+    await act(async () => {
+      await result.current.start(startParams);
+    });
+    await waitFor(() =>
+      expect(result.current.jobs[0].state.status).toBe('running'),
+    );
+    act(() => changeSession(gmp));
+    gmp.reportexport.getReportExports.mockClear();
+    expect(result.current.jobs).toHaveLength(0);
+    exports[0] = exportData('done', 'completed');
+    expect(gmp.reportexport.getReportExports).not.toHaveBeenCalled();
+
+    act(() => changeSession(gmp, 'new-token', 'test-user'));
+    await waitFor(() => expect(onDownload).toHaveBeenCalledTimes(1));
+    expect(gmp.reportexport.exportScanReport).toHaveBeenCalledTimes(1);
+    expect(gmp.reportexport.getReportExports).toHaveBeenCalledWith({
+      reportExportId: 'export-uuid-1',
+    });
+    expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledWith({
+      reportExportId: 'export-uuid-1',
+    });
+    expect(result.current.jobs[0].downloadStarted).toBe(true);
+  });
+
+  test('restarts an interrupted transfer and ignores its old-session response', async () => {
+    const gmp = createGmp([exportData('done', 'completed')]);
+    const onDownload = testing.fn();
+    let resolveOld: ((response: {data: ArrayBuffer}) => void) | undefined;
+    let resolveNew: ((response: {data: ArrayBuffer}) => void) | undefined;
+    gmp.reportexport.downloadReportExport
+      .mockImplementationOnce(
+        () =>
+          new Promise(resolve => {
+            resolveOld = resolve;
+          }),
+      )
+      .mockImplementationOnce(
+        () =>
+          new Promise(resolve => {
+            resolveNew = resolve;
+          }),
+      );
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() => useReportExport({onDownload}));
+
+    await act(async () => {
+      await result.current.start(startParams);
+    });
+    await waitFor(() =>
+      expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(1),
+    );
+    act(() => changeSession(gmp));
+    expect(result.current.jobs).toHaveLength(0);
+    act(() => changeSession(gmp, 'new-token', 'test-user'));
+    await waitFor(() =>
+      expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(2),
+    );
+
+    await act(async () => {
+      resolveOld?.({data: new ArrayBuffer(4)});
+    });
+    expect(onDownload).not.toHaveBeenCalled();
+    expect(result.current.jobs[0].downloadStarted).toBe(false);
+    await act(async () => {
+      resolveNew?.({data: new ArrayBuffer(8)});
+    });
+    await waitFor(() => expect(onDownload).toHaveBeenCalledTimes(1));
+    expect(onDownload).toHaveBeenCalledWith(new ArrayBuffer(8), 'report.xml');
+    expect(gmp.reportexport.exportScanReport).toHaveBeenCalledTimes(1);
+    expect(
+      gmp.reportexport.downloadReportExport.mock.calls.map(
+        ([params]) => params,
+      ),
+    ).toEqual([
+      {reportExportId: 'export-uuid-1'},
+      {reportExportId: 'export-uuid-1'},
+    ]);
+  });
+
+  test('does not retry or notify when a transfer fails after logout', async () => {
+    const gmp = createGmp([exportData('done', 'completed')]);
+    let rejectDownload: ((error: Error) => void) | undefined;
+    gmp.reportexport.downloadReportExport.mockImplementationOnce(
+      () =>
+        new Promise((_resolve, reject) => {
+          rejectDownload = reject;
+        }),
+    );
+    const onDownload = testing.fn();
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() => useReportExport({onDownload}));
+    await act(async () => {
+      await result.current.start(startParams);
+    });
+    await waitFor(() =>
+      expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(1),
+    );
+    act(() => changeSession(gmp));
+    await act(async () => {
+      rejectDownload?.(new Error('Session ended'));
+    });
+    expect(result.current.jobs).toHaveLength(0);
+    expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(1);
+    expect(showErrorNotification).not.toHaveBeenCalled();
+    expect(onDownload).not.toHaveBeenCalled();
+    expect(await result.current.start(startParams)).toBe(false);
+    expect(result.current.startDirect(startParams)).toBe(false);
+  });
+
+  test('keeps activity isolated when a different user logs in', async () => {
+    const gmp = createGmp([exportData('done', 'completed')]);
+    const onDownload = testing.fn();
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() => useReportExport({onDownload}));
+    await act(async () => {
+      await result.current.start(startParams);
+    });
+    await waitFor(() =>
+      expect(result.current.jobs[0].downloadStarted).toBe(true),
+    );
+    gmp.reportexport.getReportExports.mockClear();
+
+    act(() => changeSession(gmp));
+    act(() => changeSession(gmp, 'other-token', 'other-user'));
+    expect(result.current.jobs).toHaveLength(0);
+    expect(gmp.reportexport.getReportExports).not.toHaveBeenCalled();
+    expect(
+      window.sessionStorage.getItem('gsa-report-export-jobs:test-user'),
+    ).toContain('export-uuid-1');
+    act(() => changeSession(gmp));
+    act(() => changeSession(gmp, 'third-token', 'test-user'));
+    await waitFor(() =>
+      expect(result.current.jobs[0]?.downloadStarted).toBe(true),
+    );
+    expect(onDownload).toHaveBeenCalledTimes(1);
+  });
+
+  test('does not adopt unscoped legacy activity for the current user', () => {
+    window.sessionStorage.setItem(
+      'gsa-report-export-jobs',
+      JSON.stringify([
+        {
+          key: 'legacy',
+          exportId: 'other-export',
+          filename: 'report.pdf',
+          reportTitle: 'Other user report',
+          downloadStarted: true,
+        },
+      ]),
+    );
+    const gmp = createGmp([]);
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() =>
+      useReportExport({onDownload: testing.fn()}),
+    );
+    expect(result.current.jobs).toHaveLength(0);
+    expect(window.sessionStorage.getItem('gsa-report-export-jobs')).toBeNull();
+    expect(gmp.reportexport.getReportExports).not.toHaveBeenCalled();
+  });
+
+  test('ignores export creation that completes after logout', async () => {
+    const gmp = createGmp([]);
+    let resolveCreate: ((response: {data: {id: string}}) => void) | undefined;
+    gmp.reportexport.exportScanReport.mockImplementationOnce(
+      () =>
+        new Promise(resolve => {
+          resolveCreate = resolve;
+        }),
+    );
+    const onDownload = testing.fn();
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() => useReportExport({onDownload}));
+    let creation: Promise<boolean> | undefined;
+    act(() => {
+      creation = result.current.start(startParams);
+    });
+    act(() => changeSession(gmp));
+    act(() => changeSession(gmp, 'other-token', 'other-user'));
+    await act(async () => {
+      resolveCreate?.({data: {id: 'old-export'}});
+      expect(await creation).toBe(false);
+    });
+    expect(result.current.jobs).toHaveLength(0);
+    expect(gmp.reportexport.getReportExports).not.toHaveBeenCalled();
     expect(onDownload).not.toHaveBeenCalled();
   });
 
