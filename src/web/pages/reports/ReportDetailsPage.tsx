@@ -113,7 +113,7 @@ const ReportDetailsPage = () => {
     useState(false);
   const [reportComposerDefaults, setReportComposerDefaults] =
     useState<ReportComposerDefaults>({});
-  const {enqueue} = useReportExportManager();
+  const {exportReport} = useReportExportManager();
 
   // Filter management
   const [pageFilter, , {changeFilter}] = usePageFilter(
@@ -356,7 +356,7 @@ const ReportDetailsPage = () => {
             filter: newFilter,
           },
         };
-        if (await enqueue({kind: 'scan', ...request}, reportFormat))
+        if (await exportReport({kind: 'scan', ...request}, reportFormat))
           setShowDownloadReportDialog(false);
       } catch (error) {
         log.error(error);
@@ -371,7 +371,7 @@ const ReportDetailsPage = () => {
       reportExportFileName,
       reportFilter,
       reportFormats,
-      enqueue,
+      exportReport,
       showError,
       username,
       _,

@@ -4,7 +4,6 @@
  */
 
 import {type ReportExportPayload} from 'gmp/commands/report-export';
-import {type FilterType} from 'gmp/models/filter';
 import {type ReportExport} from 'gmp/models/report-export';
 
 export type ReportExportKind = 'scan' | 'audit' | 'delta_scan' | 'delta_audit';
@@ -17,13 +16,6 @@ export interface StartReportExportParams {
   reportUrl?: string;
 }
 
-export interface StartDirectReportDownloadParams extends Omit<
-  StartReportExportParams,
-  'payload'
-> {
-  payload: Omit<ReportExportPayload, 'filter'> & {filter?: FilterType};
-}
-
 export interface ExportIntent {
   key: string;
   origin: 'local' | 'discovered';
@@ -31,7 +23,6 @@ export interface ExportIntent {
   filename: string;
   reportTitle: string;
   reportUrl?: string;
-  directDownload?: boolean;
   autoDownload: boolean;
   disposition: 'awaiting' | 'handed-off' | 'abandoned';
 }
@@ -62,7 +53,6 @@ export type ReportExportState =
         | 'running'
         | 'cancel_requested'
         | 'done'
-        | 'downloaded'
         | 'canceled';
       exportData?: ReportExport;
       error?: undefined;
@@ -74,10 +64,10 @@ export type ReportExportState =
     };
 
 export interface ReportExportJob extends ExportIntent {
+  transport: 'async' | 'direct';
   state: ReportExportState;
   downloadStarted: boolean;
   downloadPending: boolean;
-  directPending: boolean;
   cancelPending: boolean;
   downloadError?: Error;
   cancelError?: Error;
@@ -96,12 +86,11 @@ export const getReportExportActions = (job: ReportExportJob) => {
     status === 'checking' ||
     isGenerationActive(status) ||
     job.downloadPending ||
-    job.directPending ||
     job.cancelPending;
   return {
     active,
     cancel:
-      !job.directDownload &&
+      job.transport === 'async' &&
       !job.cancelPending &&
       (status === 'creating' || status === 'pending' || status === 'running'),
     dismiss: !active || (status === 'checking' && !job.cancelPending),
@@ -159,14 +148,9 @@ const getAttemptState = (
   statusError?: Error | null,
 ): ReportExportState => {
   const {phase} = attempt;
-  if (phase.stage === 'handed-off')
-    return {status: attempt.directDownload ? 'downloaded' : 'done'};
+  if (phase.stage === 'handed-off') return {status: 'done'};
   if (phase.stage === 'failed') return {status: 'error', error: phase.error};
   if (phase.stage === 'creating') return {status: 'creating'};
-  if (attempt.directDownload && phase.stage === 'transferring')
-    return {status: 'creating'};
-  if (attempt.directDownload && phase.stage === 'handoff-failed')
-    return {status: 'error', error: phase.error};
   if (statusError && isPermanentExportError(statusError))
     return {status: 'unavailable', exportData, error: statusError};
   if (
@@ -190,7 +174,6 @@ const isTransferPending = (
   downloadError?: Error,
 ) => {
   const {phase} = attempt;
-  if (attempt.directDownload) return false;
   if (phase.stage === 'transferring') return true;
   if (phase.stage === 'waiting') return !phase.error;
   return (
@@ -215,12 +198,10 @@ export const toReportExportJob = (
       : undefined;
   return {
     ...attempt,
+    transport: 'async',
     state,
     downloadStarted: phase.stage === 'handed-off',
     downloadPending: isTransferPending(attempt, state, downloadError),
-    directPending: Boolean(
-      attempt.directDownload && phase.stage === 'transferring',
-    ),
     cancelPending:
       phase.stage === 'canceling' ||
       (phase.stage === 'creating' && Boolean(phase.cancelRequested)),

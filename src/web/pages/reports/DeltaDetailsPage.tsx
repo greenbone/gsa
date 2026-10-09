@@ -277,7 +277,7 @@ const DeltaReportDetails = () => {
   );
 
   const [startTimer, clearTimer] = useReload(memoizedReloadFn, timeoutFunc);
-  const {enqueue} = useReportExportManager();
+  const {exportReport} = useReportExportManager();
 
   const {
     dialogState,
@@ -462,7 +462,7 @@ const DeltaReportDetails = () => {
           filter: newFilter,
         },
       };
-      if (await enqueue({kind: 'delta_scan', ...request}, reportFormat))
+      if (await exportReport({kind: 'delta_scan', ...request}, reportFormat))
         setShowDownloadReportDialog(false);
     } catch (error) {
       handleError(error as Error);

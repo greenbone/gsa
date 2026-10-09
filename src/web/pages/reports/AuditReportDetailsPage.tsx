@@ -120,7 +120,7 @@ const AuditReportDetailsPage = () => {
     useState(false);
   const [reportComposerDefaults, setReportComposerDefaults] =
     useState<ReportComposerDefaults>({});
-  const {enqueue} = useReportExportManager();
+  const {exportReport} = useReportExportManager();
 
   // Filter management
   const [pageFilter, , {changeFilter}] = usePageFilter(
@@ -345,7 +345,7 @@ const AuditReportDetailsPage = () => {
             filter: newFilter,
           },
         };
-        if (await enqueue({kind: 'audit', ...request}, reportFormat))
+        if (await exportReport({kind: 'audit', ...request}, reportFormat))
           setShowDownloadReportDialog(false);
       } catch (error) {
         log.error(error);
@@ -361,7 +361,7 @@ const AuditReportDetailsPage = () => {
       reportFilter,
       reportFormats,
       showError,
-      enqueue,
+      exportReport,
       username,
       _,
     ],

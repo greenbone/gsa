@@ -231,12 +231,6 @@ const getReportStatePresentation = (
         tone: 'ready',
         icon: 'ready',
       };
-    case 'downloaded':
-      return {
-        label: _('Complete'),
-        tone: 'ready',
-        icon: 'ready',
-      };
   }
   return {
     label: _('Preparing'),
@@ -264,7 +258,7 @@ const getActivityStatusPresentation = (
       icon: 'error',
     };
   }
-  if (job.directPending || job.downloadPending) {
+  if (job.downloadPending) {
     return {
       label: _('Downloading'),
       tone: 'downloading',
@@ -285,9 +279,10 @@ const getActivityStatusPresentation = (
 };
 
 const getActivityTitle = (job: ReportExportJob, _: TranslateFunc) => {
-  let title = job.directDownload ? _('Report download') : _('Report export');
+  const isDirect = job.transport === 'direct';
+  let title = isDirect ? _('Report download') : _('Report export');
   if (job.reportTitle) {
-    title = job.directDownload
+    title = isDirect
       ? _('Report download: {{report}}', {report: job.reportTitle})
       : _('Report export: {{report}}', {report: job.reportTitle});
   }

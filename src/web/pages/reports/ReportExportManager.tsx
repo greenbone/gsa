@@ -23,19 +23,18 @@ import Download from 'web/components/form/Download';
 import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
 import useReportExport, {
   type ReportExportJob,
-  type StartDirectReportDownloadParams,
   type StartReportExportParams,
 } from 'web/hooks/useReportExport';
 import useTranslation from 'web/hooks/useTranslation';
-import isPdfReportFormat from 'web/pages/reports/is-pdf-report-format';
+import {selectExportTransport} from 'web/report-export/route';
 
 interface ReportExportManagerContextValue {
-  enqueue: (
-    params: StartDirectReportDownloadParams,
+  exportReport: (
+    params: StartReportExportParams,
     format?: {content_type?: string},
   ) => Promise<boolean>;
   start: (params: StartReportExportParams) => Promise<boolean>;
-  startDirect: (params: StartDirectReportDownloadParams) => boolean;
+  startDirect: (params: StartReportExportParams) => boolean;
   cancel: (key: string) => Promise<void>;
   dismiss: (key: string) => void;
   retry: (key: string) => Promise<void>;
@@ -97,11 +96,11 @@ const ReportExportManager = ({children}: ReportExportManagerProps) => {
   );
   const contextValue = useMemo(
     () => ({
-      enqueue: async (
-        params: StartDirectReportDownloadParams,
+      exportReport: async (
+        params: StartReportExportParams,
         format?: {content_type?: string},
       ) =>
-        isPdfReportFormat(format)
+        selectExportTransport(params.kind, format, capabilities) === 'async'
           ? reportExport.start(params)
           : reportExport.startDirect(params),
       start: reportExport.start,
@@ -118,7 +117,14 @@ const ReportExportManager = ({children}: ReportExportManagerProps) => {
       setActivityOpen,
       jobs: reportExport.jobs,
     }),
-    [activityOpen, cancel, reportExport, setActivityOpen, supportsCancellation],
+    [
+      activityOpen,
+      cancel,
+      capabilities,
+      reportExport,
+      setActivityOpen,
+      supportsCancellation,
+    ],
   );
 
   return (

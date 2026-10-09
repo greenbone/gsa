@@ -133,7 +133,7 @@ const AuditDeltaReportDetails = props => {
   });
   const isLoading = !isDefined(entity);
 
-  const {enqueue} = useReportExportManager();
+  const {exportReport} = useReportExportManager();
 
   useEffect(() => {
     dispatch(loadUserSettingDefaults(gmp)());
@@ -313,7 +313,7 @@ const AuditDeltaReportDetails = props => {
         filter: newFilter,
       },
     };
-    return enqueue({kind: 'delta_audit', ...request}, reportFormat).then(
+    return exportReport({kind: 'delta_audit', ...request}, reportFormat).then(
       started => {
         if (started) setShowDownloadReportDialog(false);
       },

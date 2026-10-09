@@ -787,14 +787,7 @@ describe('useReportExport', () => {
     expect(gmp.reportexport.getReportExport).not.toHaveBeenCalled();
 
     const remount = renderHook(() => useReportExport({onError, onDownload}));
-    await waitFor(() =>
-      expect(remount.result.current.jobs).toHaveLength(kinds.length),
-    );
-    expect(
-      remount.result.current.jobs.every(
-        job => job.state.status === 'downloaded',
-      ),
-    ).toBe(true);
+    expect(remount.result.current.jobs).toHaveLength(0);
     expect(gmp.report.download).toHaveBeenCalledTimes(2);
     expect(gmp.auditreport.download).toHaveBeenCalledTimes(2);
   });
