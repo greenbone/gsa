@@ -15,7 +15,10 @@ import {
   type ReactNode,
   type SetStateAction,
 } from 'react';
-import {showSuccessNotification} from '@greenbone/ui-lib';
+import {
+  showErrorNotification,
+  showSuccessNotification,
+} from '@greenbone/ui-lib';
 import Download from 'web/components/form/Download';
 import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
 import useReportExport, {
@@ -79,8 +82,14 @@ const ReportExportManager = ({children}: ReportExportManagerProps) => {
   );
   const reportExport = useReportExport({
     onDownload: handleDownload,
-    activityOpen,
+    onError: error => {
+      if (!activityOpenRef.current) showErrorNotification(error.message);
+    },
   });
+  const {refreshDiscovery} = reportExport;
+  useEffect(() => {
+    if (activityOpen) refreshDiscovery();
+  }, [activityOpen, refreshDiscovery]);
   const cancel = useCallback(
     (key: string) =>
       supportsCancellation ? reportExport.cancel(key) : Promise.resolve(),

@@ -18,8 +18,8 @@ import {
 import Link from 'web/components/link/Link';
 import {type ReportExportJob} from 'web/hooks/useReportExport';
 import useTranslation, {type TranslateFunc} from 'web/hooks/useTranslation';
-import {getReportExportActions} from 'web/pages/reports/report-export-job';
 import {useReportExportManager} from 'web/pages/reports/ReportExportManager';
+import {getReportExportActions} from 'web/report-export/job';
 import Theme from 'web/utils/theme';
 
 const ActivityTrigger = styled(ActionIcon)`
@@ -358,9 +358,7 @@ export const ReportExportActivity = () => {
   useEffect(() => {
     if (
       jobs.some(
-        job =>
-          !job.key.startsWith('recovered-') &&
-          !previousJobKeys.current.has(job.key),
+        job => job.origin === 'local' && !previousJobKeys.current.has(job.key),
       )
     ) {
       setActivityOpen(true);

@@ -5,8 +5,7 @@
 
 import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
 import {act, rendererWith, waitFor} from 'web/testing';
-import {showErrorNotification} from '@greenbone/ui-lib';
-import type * as UiLib from '@greenbone/ui-lib';
+import {focusManager} from '@tanstack/react-query';
 import {vi} from 'vitest';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import {filterString} from 'gmp/models/filter/utils';
@@ -19,11 +18,11 @@ import {
 import useReportExport, {
   REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL,
 } from 'web/hooks/useReportExport';
+import {type ExportAttempt} from 'web/report-export/job';
+import {readExportIntents, writeExportIntents} from 'web/report-export/storage';
+import {createExportAttemptStore} from 'web/report-export/store';
 
-vi.mock('@greenbone/ui-lib', async importOriginal => ({
-  ...(await importOriginal<typeof UiLib>()),
-  showErrorNotification: vi.fn<typeof showErrorNotification>(),
-}));
+const onError = testing.fn();
 
 const payload = {
   report_id: 'report-uuid',
@@ -97,6 +96,118 @@ const changeSession = (
   gmp.session.listener.forEach(listener => listener());
 };
 
+describe('export attempt store', () => {
+  const attempt = (
+    phase: ExportAttempt['phase'] = {stage: 'tracking'},
+  ): ExportAttempt => ({
+    key: 'attempt-1',
+    origin: 'local',
+    exportId: 'export-1',
+    filename: 'report.pdf',
+    reportTitle: 'Report',
+    autoDownload: true,
+    disposition: 'awaiting',
+    phase,
+  });
+
+  test('keeps snapshots stable for rejected and missing transitions', () => {
+    const initial = attempt();
+    const store = createExportAttemptStore([initial]);
+    const listener = testing.fn();
+    store.subscribe(listener);
+    const snapshot = store.getSnapshot();
+    expect(store.dispatch({type: 'resume', key: 'missing'})).toBe(false);
+    expect(store.dispatch({type: 'handoff', key: initial.key})).toBe(false);
+    expect(store.dispatch({type: 'add', attempt: initial})).toBe(false);
+    expect(store.getSnapshot()).toBe(snapshot);
+    expect(listener).not.toHaveBeenCalled();
+  });
+
+  test('claims a transfer synchronously and prevents repeating a completed handoff', () => {
+    const initial = attempt();
+    const store = createExportAttemptStore([initial]);
+    expect(store.dispatch({type: 'transfer', key: initial.key})).toBe(true);
+    expect(store.dispatch({type: 'transfer', key: initial.key})).toBe(false);
+    expect(store.dispatch({type: 'cancel', key: initial.key})).toBe(false);
+    expect(initial.phase.stage).toBe('tracking');
+    expect(store.dispatch({type: 'handoff', key: initial.key})).toBe(true);
+    expect(store.dispatch({type: 'transfer', key: initial.key})).toBe(false);
+    expect(store.dispatch({type: 'resume', key: initial.key})).toBe(false);
+  });
+
+  test('keeps queued cancellation blocking pickup and retains failures until retry', () => {
+    const initial = attempt({stage: 'creating'});
+    const store = createExportAttemptStore([initial]);
+    expect(store.dispatch({type: 'queue-cancel', key: initial.key})).toBe(true);
+    expect(
+      store.dispatch({type: 'created', key: initial.key, exportId: 'export-2'}),
+    ).toBe(true);
+    expect(store.dispatch({type: 'transfer', key: initial.key})).toBe(false);
+    expect(store.dispatch({type: 'cancel', key: initial.key})).toBe(true);
+    const error = new Error('Cancellation denied');
+    store.dispatch({type: 'cancel-failed', key: initial.key, error});
+    expect(store.getAttempt(initial.key)?.cancelError).toBe(error);
+    store.dispatch({type: 'cancel', key: initial.key});
+    expect(store.getAttempt(initial.key)?.cancelError).toBeUndefined();
+  });
+
+  test('publishes immutable snapshots and unsubscribes listeners', () => {
+    const initial = attempt();
+    const store = createExportAttemptStore([initial]);
+    const listener = testing.fn();
+    const unsubscribe = store.subscribe(listener);
+    const snapshot = store.getSnapshot();
+    store.dispatch({type: 'transfer', key: initial.key});
+    expect(store.getSnapshot()).not.toBe(snapshot);
+    expect(listener).toHaveBeenCalledTimes(1);
+    unsubscribe();
+    store.dispatch({type: 'wait', key: initial.key});
+    expect(listener).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('export intent storage', () => {
+  beforeEach(() => window.sessionStorage.clear());
+
+  test('migrates legacy origin once at the storage boundary and preserves explicit origin', () => {
+    const intent = {
+      exportId: 'export-1',
+      filename: 'report.pdf',
+      reportTitle: 'Report',
+      autoDownload: true,
+      disposition: 'awaiting',
+    };
+    window.sessionStorage.setItem(
+      'gsa-report-export-jobs:test-user',
+      JSON.stringify([
+        {...intent, key: 'legacy-local'},
+        {...intent, key: 'recovered-export-2', exportId: 'export-2'},
+        {
+          ...intent,
+          key: 'recovered-export-3',
+          exportId: 'export-3',
+          origin: 'local',
+        },
+        {...intent, key: 'invalid', exportId: 'export-4', origin: 'invalid'},
+      ]),
+    );
+    const intents = readExportIntents('test-user');
+    expect(intents.map(item => item.origin)).toEqual([
+      'local',
+      'discovered',
+      'local',
+    ]);
+    writeExportIntents('test-user', intents);
+    expect(readExportIntents('test-user')).toEqual(intents);
+    expect(
+      JSON.parse(
+        window.sessionStorage.getItem('gsa-report-export-jobs:test-user') ??
+          '[]',
+      ),
+    ).toHaveLength(3);
+  });
+});
+
 describe('useReportExport', () => {
   beforeEach(() => {
     testing.clearAllMocks();
@@ -136,12 +247,13 @@ describe('useReportExport', () => {
     });
     const onDownload = testing.fn();
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() => useReportExport({onDownload}));
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
     await waitFor(() => expect(result.current.jobs).toHaveLength(1));
     await waitFor(() =>
       expect(result.current.jobs[0].state.status).toBe('done'),
     );
     expect(result.current.jobs[0].autoDownload).toBe(false);
+    expect(result.current.jobs[0].origin).toBe('discovered');
     expect(onDownload).not.toHaveBeenCalled();
     await act(async () => {
       await result.current.download(result.current.jobs[0].key);
@@ -170,7 +282,7 @@ describe('useReportExport', () => {
     });
     const onDownload = testing.fn();
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() => useReportExport({onDownload}));
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
     await act(async () => {
       await result.current.start(startParams);
     });
@@ -189,6 +301,103 @@ describe('useReportExport', () => {
     expect(result.current.jobs).toHaveLength(1);
     expect(result.current.jobs[0].exportId).toBe(activeExport.id);
     expect(result.current.jobs[0].downloadStarted).toBe(true);
+  });
+
+  test('claims explicit downloads before a second click can send another request', async () => {
+    const gmp = createGmp([exportData('done', 'completed')]);
+    gmp.reportexport.getReportExports.mockResolvedValue({
+      data: [{...exportData('running'), owner: {name: 'test-user'}}],
+      meta: {
+        counts: new CollectionCounts({
+          first: 1,
+          filtered: 1,
+          length: 1,
+          rows: 100,
+        }),
+      },
+    });
+    let finishDownload: ((response: {data: ArrayBuffer}) => void) | undefined;
+    gmp.reportexport.downloadReportExport.mockImplementationOnce(
+      () =>
+        new Promise(resolve => {
+          finishDownload = resolve;
+        }),
+    );
+    const onDownload = testing.fn();
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
+    await waitFor(() =>
+      expect(result.current.jobs[0]?.state.status).toBe('done'),
+    );
+    const key = result.current.jobs[0].key;
+    await act(async () => {
+      const first = result.current.download(key);
+      await result.current.download(key);
+      expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(1);
+      finishDownload?.({data: new ArrayBuffer(8)});
+      await first;
+    });
+    expect(onDownload).toHaveBeenCalledTimes(1);
+  });
+
+  test('claims cancellation before a second click can send another request', async () => {
+    const gmp = createGmp([exportData('running')]);
+    let finishCancellation: (() => void) | undefined;
+    gmp.reportexport.cancelReportExport.mockImplementationOnce(
+      () =>
+        new Promise<void>(resolve => {
+          finishCancellation = resolve;
+        }),
+    );
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() =>
+      useReportExport({onError, onDownload: testing.fn()}),
+    );
+    await act(async () => {
+      await result.current.start(startParams);
+    });
+    await waitFor(() =>
+      expect(result.current.jobs[0]?.state.status).toBe('running'),
+    );
+    const key = result.current.jobs[0].key;
+    await act(async () => {
+      const first = result.current.cancel(key);
+      await result.current.cancel(key);
+      expect(gmp.reportexport.cancelReportExport).toHaveBeenCalledTimes(1);
+      finishCancellation?.();
+      await first;
+    });
+    expect(result.current.jobs[0].state.status).toBe('cancel_requested');
+  });
+
+  test('refreshes discovery on explicit refresh and focus but not on an interval', async () => {
+    const gmp = createGmp([]);
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() =>
+      useReportExport({onError, onDownload: testing.fn()}),
+    );
+    await waitFor(() =>
+      expect(gmp.reportexport.getReportExports).toHaveBeenCalledTimes(1),
+    );
+    vi.useFakeTimers();
+    try {
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(60000);
+      });
+      expect(gmp.reportexport.getReportExports).toHaveBeenCalledTimes(1);
+      await act(async () => {
+        result.current.refreshDiscovery();
+      });
+      expect(gmp.reportexport.getReportExports).toHaveBeenCalledTimes(2);
+      act(() => focusManager.setFocused(false));
+      await act(async () => {
+        focusManager.setFocused(true);
+      });
+      expect(gmp.reportexport.getReportExports).toHaveBeenCalledTimes(3);
+    } finally {
+      focusManager.setFocused(undefined);
+      vi.useRealTimers();
+    }
   });
 
   test('uses returned row caps and detects pagination reset', async () => {
@@ -254,9 +463,7 @@ describe('useReportExport', () => {
       throw new Error('Browser handoff failed');
     });
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() =>
-      useReportExport({onDownload, activityOpen: true}),
-    );
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
     await act(async () => {
       await result.current.start(startParams);
     });
@@ -280,7 +487,7 @@ describe('useReportExport', () => {
     );
     const {renderHook} = rendererWith({gmp});
     const {result} = renderHook(() =>
-      useReportExport({onDownload: testing.fn()}),
+      useReportExport({onError, onDownload: testing.fn()}),
     );
     await act(async () => {
       await result.current.start(startParams);
@@ -301,7 +508,7 @@ describe('useReportExport', () => {
     });
     const onDownload = testing.fn();
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() => useReportExport({onDownload}));
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
     await act(async () => {
       await Promise.all([
         result.current.start(startParams),
@@ -338,7 +545,7 @@ describe('useReportExport', () => {
     ]);
     const {renderHook} = rendererWith({gmp});
     const {result} = renderHook(() =>
-      useReportExport({onDownload: testing.fn()}),
+      useReportExport({onError, onDownload: testing.fn()}),
     );
     await waitFor(() => expect(result.current.jobs).toHaveLength(51));
     expect(
@@ -367,7 +574,7 @@ describe('useReportExport', () => {
     const gmp = createGmp([exportData('done', 'completed')]);
     const onDownload = testing.fn();
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() => useReportExport({onDownload}));
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
 
     await act(async () => {
       await result.current.start(startParams);
@@ -383,7 +590,7 @@ describe('useReportExport', () => {
       window.sessionStorage.getItem('gsa-report-export-jobs:test-user'),
     ).toContain('export-uuid-1');
 
-    const remount = renderHook(() => useReportExport({onDownload}));
+    const remount = renderHook(() => useReportExport({onError, onDownload}));
     await waitFor(() => expect(remount.result.current.jobs).toHaveLength(1));
     expect(remount.result.current.jobs[0].downloadStarted).toBe(true);
     expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(1);
@@ -399,7 +606,7 @@ describe('useReportExport', () => {
     });
     const onDownload = testing.fn();
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() => useReportExport({onDownload}));
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
 
     await act(async () => {
       await result.current.start(startParams);
@@ -421,7 +628,7 @@ describe('useReportExport', () => {
       .mockResolvedValue({data: [exportData('running')]});
     const onDownload = testing.fn();
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() => useReportExport({onDownload}));
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
 
     await act(async () => {
       await result.current.start(startParams);
@@ -467,7 +674,7 @@ describe('useReportExport', () => {
     );
     const {renderHook} = rendererWith({gmp});
     const {result} = renderHook(() =>
-      useReportExport({onDownload: testing.fn(), activityOpen: true}),
+      useReportExport({onError, onDownload: testing.fn()}),
     );
 
     await act(async () => {
@@ -477,7 +684,7 @@ describe('useReportExport', () => {
     expect(result.current.jobs[0].state.error?.message).toBe(
       'Export creation failed',
     );
-    expect(showErrorNotification).not.toHaveBeenCalled();
+    expect(onError).toHaveBeenCalledWith(new Error('Export creation failed'));
   });
 
   test('notifies about export creation errors while activity is closed', async () => {
@@ -487,16 +694,14 @@ describe('useReportExport', () => {
     );
     const {renderHook} = rendererWith({gmp});
     const {result} = renderHook(() =>
-      useReportExport({onDownload: testing.fn()}),
+      useReportExport({onError, onDownload: testing.fn()}),
     );
 
     await act(async () => {
       expect(await result.current.start(startParams)).toBe(false);
     });
 
-    expect(showErrorNotification).toHaveBeenCalledWith(
-      'Export creation failed',
-    );
+    expect(onError).toHaveBeenCalledWith(new Error('Export creation failed'));
   });
 
   test('keeps direct download errors inline while activity is open', async () => {
@@ -504,7 +709,7 @@ describe('useReportExport', () => {
     gmp.report.download.mockRejectedValue(new Error('Direct download failed'));
     const {renderHook} = rendererWith({gmp});
     const {result} = renderHook(() =>
-      useReportExport({onDownload: testing.fn(), activityOpen: true}),
+      useReportExport({onError, onDownload: testing.fn()}),
     );
 
     act(() => {
@@ -521,14 +726,14 @@ describe('useReportExport', () => {
         'Direct download failed',
       ),
     );
-    expect(showErrorNotification).not.toHaveBeenCalled();
+    expect(onError).toHaveBeenCalledWith(new Error('Direct download failed'));
   });
 
   test('dispatches direct downloads to synchronous GMP commands without polling', async () => {
     const gmp = createGmp([]);
     const onDownload = testing.fn();
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() => useReportExport({onDownload}));
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
     const directPayload = {
       report_id: 'report-uuid',
       format_id: 'format-uuid',
@@ -578,7 +783,7 @@ describe('useReportExport', () => {
     );
     expect(gmp.reportexport.getReportExport).not.toHaveBeenCalled();
 
-    const remount = renderHook(() => useReportExport({onDownload}));
+    const remount = renderHook(() => useReportExport({onError, onDownload}));
     await waitFor(() =>
       expect(remount.result.current.jobs).toHaveLength(kinds.length),
     );
@@ -598,7 +803,7 @@ describe('useReportExport', () => {
       .mockResolvedValue({data: new ArrayBuffer(8)});
     const onDownload = testing.fn();
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() => useReportExport({onDownload}));
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
 
     await act(async () => {
       await result.current.start(startParams);
@@ -627,7 +832,7 @@ describe('useReportExport', () => {
     );
     const {renderHook} = rendererWith({gmp});
     const {result} = renderHook(() =>
-      useReportExport({onDownload: testing.fn()}),
+      useReportExport({onError, onDownload: testing.fn()}),
     );
 
     await act(async () => {
@@ -672,7 +877,7 @@ describe('useReportExport', () => {
     );
     const {renderHook} = rendererWith({gmp});
     const {result} = renderHook(() =>
-      useReportExport({onDownload: testing.fn()}),
+      useReportExport({onError, onDownload: testing.fn()}),
     );
     let startPromise: Promise<boolean>;
 
@@ -711,7 +916,7 @@ describe('useReportExport', () => {
     );
     const onDownload = testing.fn();
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() => useReportExport({onDownload}));
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
 
     await act(async () => {
       await result.current.start(startParams);
@@ -737,7 +942,7 @@ describe('useReportExport', () => {
     const gmp = createGmp([exportData('running')]);
     const {renderHook} = rendererWith({gmp});
     const {result} = renderHook(() =>
-      useReportExport({onDownload: testing.fn()}),
+      useReportExport({onError, onDownload: testing.fn()}),
     );
 
     await act(async () => {
@@ -765,7 +970,7 @@ describe('useReportExport', () => {
     const onCancelError = testing.fn();
     const {renderHook} = rendererWith({gmp});
     const {result} = renderHook(() =>
-      useReportExport({onDownload: testing.fn(), onCancelError}),
+      useReportExport({onDownload: testing.fn(), onError: onCancelError}),
     );
 
     await act(async () => {
@@ -781,7 +986,7 @@ describe('useReportExport', () => {
 
     expect(result.current.jobs[0].state.status).toBe('running');
     expect(result.current.isActive).toBe(true);
-    expect(result.current.jobs[0].cancelError).toBeUndefined();
+    expect(result.current.jobs[0].cancelError?.message).toBe('Unknown command');
     expect(onCancelError).toHaveBeenCalledWith(new Error('Unknown command'));
   });
 
@@ -795,8 +1000,7 @@ describe('useReportExport', () => {
     const {result} = renderHook(() =>
       useReportExport({
         onDownload: testing.fn(),
-        activityOpen: true,
-        onCancelError,
+        onError: onCancelError,
       }),
     );
 
@@ -812,7 +1016,7 @@ describe('useReportExport', () => {
     });
 
     expect(result.current.jobs[0].cancelError?.message).toBe('Unknown command');
-    expect(onCancelError).not.toHaveBeenCalled();
+    expect(onCancelError).toHaveBeenCalledWith(new Error('Unknown command'));
   });
 
   test('downloads a same-report retry when GMP reuses the export id', async () => {
@@ -828,7 +1032,7 @@ describe('useReportExport', () => {
     );
     const onDownload = testing.fn();
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() => useReportExport({onDownload}));
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
     const params = {...startParams, reportUrl: '/report/report-uuid'};
 
     await act(async () => {
@@ -873,7 +1077,7 @@ describe('useReportExport', () => {
     ]);
     const {renderHook} = rendererWith({gmp});
     const {result} = renderHook(() =>
-      useReportExport({onDownload: testing.fn()}),
+      useReportExport({onError, onDownload: testing.fn()}),
     );
 
     await act(async () => {
@@ -903,7 +1107,7 @@ describe('useReportExport', () => {
       .mockRejectedValueOnce(new Error('Temporary network error'));
     const {renderHook} = rendererWith({gmp});
     const {result} = renderHook(() =>
-      useReportExport({onDownload: testing.fn()}),
+      useReportExport({onError, onDownload: testing.fn()}),
     );
 
     await act(async () => {
@@ -928,7 +1132,7 @@ describe('useReportExport', () => {
     const gmp = createGmp([exportData('running')]);
     const onDownload = testing.fn();
     const {renderHook} = rendererWith({gmp});
-    const firstMount = renderHook(() => useReportExport({onDownload}));
+    const firstMount = renderHook(() => useReportExport({onError, onDownload}));
 
     await act(async () => {
       await firstMount.result.current.start(startParams);
@@ -940,7 +1144,9 @@ describe('useReportExport', () => {
     );
     firstMount.unmount();
 
-    const secondMount = renderHook(() => useReportExport({onDownload}));
+    const secondMount = renderHook(() =>
+      useReportExport({onError, onDownload}),
+    );
     await waitFor(() =>
       expect(secondMount.result.current.jobs[0].state.status).toBe('running'),
     );
@@ -970,7 +1176,7 @@ describe('useReportExport', () => {
     );
     const onDownload = testing.fn();
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() => useReportExport({onDownload}));
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
 
     await waitFor(() => expect(result.current.jobs).toHaveLength(1));
     expect(result.current.jobs[0].downloadStarted).toBe(true);
@@ -989,7 +1195,7 @@ describe('useReportExport', () => {
     const gmp = createGmp([exportData('done', 'completed')]);
     const onDownload = testing.fn();
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() => useReportExport({onDownload}));
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
 
     await act(async () => {
       await result.current.start(startParams);
@@ -1025,7 +1231,7 @@ describe('useReportExport', () => {
     const gmp = createGmp(exports);
     const onDownload = testing.fn();
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() => useReportExport({onDownload}));
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
 
     await act(async () => {
       await result.current.start(startParams);
@@ -1070,7 +1276,7 @@ describe('useReportExport', () => {
           }),
       );
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() => useReportExport({onDownload}));
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
 
     await act(async () => {
       await result.current.start(startParams);
@@ -1117,7 +1323,7 @@ describe('useReportExport', () => {
     );
     const onDownload = testing.fn();
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() => useReportExport({onDownload}));
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
     await act(async () => {
       await result.current.start(startParams);
     });
@@ -1130,7 +1336,7 @@ describe('useReportExport', () => {
     });
     expect(result.current.jobs).toHaveLength(0);
     expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(1);
-    expect(showErrorNotification).not.toHaveBeenCalled();
+    expect(onError).not.toHaveBeenCalled();
     expect(onDownload).not.toHaveBeenCalled();
     expect(await result.current.start(startParams)).toBe(false);
     expect(result.current.startDirect(startParams)).toBe(false);
@@ -1140,7 +1346,7 @@ describe('useReportExport', () => {
     const gmp = createGmp([exportData('done', 'completed')]);
     const onDownload = testing.fn();
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() => useReportExport({onDownload}));
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
     await act(async () => {
       await result.current.start(startParams);
     });
@@ -1180,7 +1386,7 @@ describe('useReportExport', () => {
     const gmp = createGmp([]);
     const {renderHook} = rendererWith({gmp});
     const {result} = renderHook(() =>
-      useReportExport({onDownload: testing.fn()}),
+      useReportExport({onError, onDownload: testing.fn()}),
     );
     expect(result.current.jobs).toHaveLength(0);
     expect(window.sessionStorage.getItem('gsa-report-export-jobs')).toBeNull();
@@ -1198,7 +1404,7 @@ describe('useReportExport', () => {
     );
     const onDownload = testing.fn();
     const {renderHook} = rendererWith({gmp});
-    const {result} = renderHook(() => useReportExport({onDownload}));
+    const {result} = renderHook(() => useReportExport({onError, onDownload}));
     let creation: Promise<boolean> | undefined;
     act(() => {
       creation = result.current.start(startParams);
@@ -1230,7 +1436,7 @@ describe('useReportExport', () => {
     });
     const {renderHook} = rendererWith({gmp});
     const {result} = renderHook(() =>
-      useReportExport({onDownload: testing.fn()}),
+      useReportExport({onError, onDownload: testing.fn()}),
     );
     const csvParams = {
       ...startParams,
