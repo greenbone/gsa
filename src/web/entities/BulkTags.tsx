@@ -17,11 +17,11 @@ import TagDialog, {type TagDialogState} from 'web/pages/tags/TagDialog';
 import SelectionType, {type SelectionTypeType} from 'web/utils/selection-type';
 
 interface BulkTagsProps<TEntity extends Model> {
-  entities: TEntity[];
-  selectedEntities: TEntity[];
+  entities: TEntity[] | undefined;
+  selectedEntities: TEntity[] | undefined;
   filter: FilterType;
   selectionType: SelectionTypeType;
-  entitiesCounts: CollectionCounts;
+  entitiesCounts: CollectionCounts | undefined;
   onClose: () => void;
 }
 
@@ -30,7 +30,7 @@ const getEntityIds = <TEntity extends Model>(entityArray: TEntity[] = []) =>
 
 const getMultiTagEntitiesCount = <TEntity extends Model>(
   pageEntities: TEntity[],
-  counts: CollectionCounts,
+  counts: CollectionCounts | undefined,
   selectedEntities: TEntity[] | Set<TEntity>,
   selectionType: SelectionTypeType,
 ) => {
@@ -45,12 +45,12 @@ const getMultiTagEntitiesCount = <TEntity extends Model>(
     return pageEntities.length;
   }
 
-  return counts.filtered;
+  return counts?.filtered ?? 0;
 };
 
 const BulkTags = <TEntity extends Model>({
-  entities,
-  selectedEntities,
+  entities = [],
+  selectedEntities = [],
   filter,
   selectionType,
   entitiesCounts,
