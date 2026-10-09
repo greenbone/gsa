@@ -447,25 +447,15 @@ const useReportExport = ({onDownload, onError}: UseReportExportParams) => {
       const attempt = store.getAttempt(runtime.key);
       const cancelRequested =
         attempt?.phase.stage === 'creating' && attempt.phase.cancelRequested;
-      const existing = store.getSnapshot().find(candidate => {
-        if (
-          candidate.key === runtime.key ||
-          candidate.exportId !== response.data.id ||
-          candidate.disposition !== 'awaiting'
-        )
-          return false;
-        const data = queryClient.getQueryData<ReportExport>([
-          'get_report_export',
-          token,
-          candidate.exportId,
-          candidate.key,
-        ]);
-        return (
-          data?.status !== 'error' &&
-          data?.status !== 'expired' &&
-          data?.status !== 'canceled'
+      // gvmd reuses only pending/running exports, so a match is still generating
+      const existing = store
+        .getSnapshot()
+        .find(
+          candidate =>
+            candidate.key !== runtime.key &&
+            candidate.exportId === response.data.id &&
+            candidate.disposition === 'awaiting',
         );
-      });
       if (existing) {
         const existingRuntime = resourceFor(existing);
         if (!existing.autoDownload)

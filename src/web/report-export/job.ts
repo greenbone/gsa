@@ -11,6 +11,8 @@ import {
 
 export type ReportExportKind = 'scan' | 'audit' | 'delta_scan' | 'delta_audit';
 
+export const MAX_RETAINED_RECEIPTS = 50;
+
 export interface StartReportExportParams {
   kind: ReportExportKind;
   payload: ReportExportPayload;
@@ -222,7 +224,7 @@ export const retainReportExportJobs = (jobs: ReportExportJob[]) => {
   const recent = new Set(
     jobs
       .filter(job => !unfinished.has(job.key))
-      .slice(-50)
+      .slice(-MAX_RETAINED_RECEIPTS)
       .map(job => job.key),
   );
   return jobs.filter(job => unfinished.has(job.key) || recent.has(job.key));
