@@ -5,7 +5,7 @@
 
 import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
 import {act, rendererWith, waitFor} from 'web/testing';
-import {focusManager} from '@tanstack/react-query';
+import {focusManager, useQuery} from '@tanstack/react-query';
 import {vi} from 'vitest';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import {filterString} from 'gmp/models/filter/utils';
@@ -13,7 +13,7 @@ import {createSession} from 'gmp/testing';
 import {
   discoverReportExports,
   REPORT_EXPORT_POLL_INTERVAL,
-  useGetActiveReportExport,
+  reportExportQueryOptions,
 } from 'web/hooks/use-query/report-exports';
 import useReportExport, {
   REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL,
@@ -650,7 +650,7 @@ describe('useReportExport', () => {
     expect(onDownload).not.toHaveBeenCalled();
   });
 
-  test('the active export query selects the requested ID instead of a canceled entry', async () => {
+  test('the export status query selects the requested ID instead of another entry', async () => {
     const gmp = createGmp([]);
     gmp.reportexport.getReportExport.mockResolvedValue({
       data: [
@@ -660,7 +660,10 @@ describe('useReportExport', () => {
     });
     const {renderHook} = rendererWith({gmp});
     const {result} = renderHook(() =>
-      useGetActiveReportExport('export-uuid-1'),
+      useQuery(
+        // @ts-expect-error partial gmp mock
+        reportExportQueryOptions(gmp, 'test-token', 'export-uuid-1'),
+      ),
     );
 
     await waitFor(() => expect(result.current.data?.id).toBe('export-uuid-1'));

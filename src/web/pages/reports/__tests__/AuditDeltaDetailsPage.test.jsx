@@ -101,6 +101,12 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
   auditreport: {
     getDelta: testing.fn().mockReturnValue(new Promise(() => {})),
   },
+  reportexport: {
+    getReportExports: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {counts: new CollectionCounts({first: 1})},
+    }),
+  },
 });
 
 describe('AuditDeltaReportDetailsPage', () => {

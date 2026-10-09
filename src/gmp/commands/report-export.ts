@@ -7,13 +7,15 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import {parseCounts, parseFilter} from 'gmp/collection/parser';
 import HttpCommand from 'gmp/commands/http';
 import type Http from 'gmp/http/http';
-import {type default as Response} from 'gmp/http/response';
-import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fast-xml';
-import {parseEntityModelProperties} from 'gmp/models/entity-model';
+import {type XmlResponseData} from 'gmp/http/transform/fast-xml';
 import {type FilterType} from 'gmp/models/filter';
 import {filterString} from 'gmp/models/filter/utils';
-import {type ReportExport} from 'gmp/models/report-export';
-import {isDefined} from 'gmp/utils/identity';
+import {
+  parseReportExport,
+  type ReportExport,
+  type ReportExportElement,
+} from 'gmp/models/report-export';
+import {map} from 'gmp/utils/array';
 
 export interface ReportExportPayload {
   report_id: string;
@@ -25,6 +27,12 @@ export interface ReportExportPayload {
   ignore_pagination?: boolean | number;
   lean?: boolean | number;
 }
+
+type ExportCommand =
+  | 'export_scan_report'
+  | 'export_audit_report'
+  | 'export_delta_scan_report'
+  | 'export_delta_audit_report';
 
 interface ReportExportIdResponse {
   id: string;
@@ -38,103 +46,36 @@ interface ListReportExportsParams {
   filter: FilterType;
 }
 
-const getText = (value: unknown): string | undefined => {
-  if (typeof value === 'string' || typeof value === 'number') {
-    return String(value);
-  }
-  if (value && typeof value === 'object' && '__text' in value) {
-    return getText(value.__text);
-  }
-  return undefined;
-};
+interface ReportExportsResponseElement extends Pick<
+  Parameters<typeof parseFilter>[0],
+  'filters'
+> {
+  report_export?: ReportExportElement | ReportExportElement[];
+}
 
-const getAttribute = (value: unknown, name: string) => {
-  if (value && typeof value === 'object') {
-    const attribute = (value as Record<string, unknown>)[`_${name}`];
-    return getText(attribute);
-  }
-  return undefined;
-};
+type CreateResponseData = XmlResponseData &
+  Partial<Record<ExportCommand, Record<string, {_id?: string} | undefined>>>;
 
-const getValue = (value: unknown, name: string) => {
-  if (value && typeof value === 'object') {
-    return getText((value as Record<string, unknown>)[name]);
-  }
-  return undefined;
-};
-
-const getNumber = (value: unknown, name: string) => {
-  const text = getValue(value, name);
-  return isDefined(text) ? Number(text) : undefined;
-};
-
-const getReportExport = (value: unknown): ReportExport => {
-  const ownerName = getValue(
-    value && (value as Record<string, unknown>).owner,
-    'name',
-  );
-  const common = parseEntityModelProperties({
-    _id: getAttribute(value, 'id') ?? getValue(value, 'id') ?? '',
-    owner: ownerName ? {name: ownerName} : undefined,
-    name: getValue(value, 'name'),
-    creation_time: getValue(value, 'creation_time'),
-    modification_time: getValue(value, 'modification_time'),
-  });
-  return {
-    id: common.id || undefined,
-    owner: common.owner,
-    name: common.name,
-    creationTime: common.creationTime,
-    modificationTime: common.modificationTime,
-    type: getValue(value, 'type'),
-    status: getValue(value, 'status'),
-    progress: getValue(value, 'progress'),
-    reportId: getAttribute(
-      value && (value as Record<string, unknown>).report,
-      'id',
-    ),
-    deltaReportId: getAttribute(
-      value && (value as Record<string, unknown>).delta_report,
-      'id',
-    ),
-    reportFormatId: getAttribute(
-      value && (value as Record<string, unknown>).report_format,
-      'id',
-    ),
-    reportConfigId: getAttribute(
-      value && (value as Record<string, unknown>).report_config,
-      'id',
-    ),
-    fileSize: getNumber(value, 'file_size'),
-    contentType: getValue(value, 'content_type'),
-    extension: getValue(value, 'extension'),
-    errorMessage: getValue(value, 'error_message'),
-    attemptCount: getNumber(value, 'attempt_count'),
-    createdTime: getValue(value, 'creation_time'),
-    startTime: getValue(value, 'start_time'),
-    endTime: getValue(value, 'end_time'),
+interface GetReportExportResponseData extends XmlResponseData {
+  get_report_export?: {
+    get_report_exports_response?: ReportExportsResponseElement;
   };
-};
+}
+
+interface GetReportExportsResponseData extends XmlResponseData {
+  get_report_exports?: {
+    get_report_exports_response?: ReportExportsResponseElement;
+  };
+}
+
+const parseReportExports = (element?: ReportExportsResponseElement) =>
+  map(element?.report_export, parseReportExport).filter(
+    (item): item is ReportExport => item !== undefined,
+  );
 
 const getFilterValue = (filter?: FilterType | string) => {
-  if (!isDefined(filter)) return undefined;
+  if (filter === undefined) return undefined;
   return typeof filter === 'string' ? filter : filterString(filter.all());
-};
-
-const getReportExportsFromRoot = (data: XmlResponseData): unknown[] => {
-  const exports = data.get_report_export ?? data.get_report_exports;
-  const root =
-    exports && typeof exports === 'object'
-      ? (exports as Record<string, unknown>).get_report_exports_response
-      : undefined;
-  const response =
-    root && typeof root === 'object'
-      ? (root as Record<string, unknown>)
-      : undefined;
-  if (!response?.report_export) return [];
-  return Array.isArray(response.report_export)
-    ? response.report_export
-    : [response.report_export];
 };
 
 class ReportExportCommand extends HttpCommand {
@@ -142,64 +83,37 @@ class ReportExportCommand extends HttpCommand {
     super(http);
   }
 
-  private create(command: string, payload: ReportExportPayload) {
+  private async create(command: ExportCommand, payload: ReportExportPayload) {
     const {filter, ...params} = payload;
-    return this.httpPostWithTransform({
+    const response = await this.httpPostWithTransform({
       cmd: command,
       ...params,
       filter: getFilterValue(filter),
     });
-  }
-
-  private transformCreateResponse(
-    response: Response<XmlResponseData, XmlMeta>,
-  ): Response<ReportExportIdResponse, XmlMeta> {
-    const data = response.data as Record<string, unknown>;
-    const responseIds = [
-      'export_scan_report',
-      'export_audit_report',
-      'export_delta_scan_report',
-      'export_delta_audit_report',
-    ].map(command => {
-      const commandData = data[command];
-      if (!commandData || typeof commandData !== 'object') return undefined;
-      const responseData = (commandData as Record<string, unknown>)[
-        `${command}_response`
-      ];
-      return getAttribute(responseData, 'id');
-    });
-    const reportExportId =
-      getValue(data.action_result, 'report_export_id') ??
-      getValue(data, 'report_export_id') ??
-      responseIds.find(isDefined);
-    if (!reportExportId) {
+    // gvmd answers with this id for both newly created and reused exports
+    const id = (response.data as CreateResponseData)[command]?.[
+      `${command}_response`
+    ]?._id;
+    if (!id) {
       throw new Error('Invalid response: report_export_id not found');
     }
-    return response.setData({id: reportExportId});
+    return response.setData<ReportExportIdResponse>({id});
   }
 
   exportScanReport(payload: ReportExportPayload) {
-    return this.create('export_scan_report', payload).then(response =>
-      this.transformCreateResponse(response),
-    );
+    return this.create('export_scan_report', payload);
   }
 
   exportAuditReport(payload: ReportExportPayload) {
-    return this.create('export_audit_report', payload).then(response =>
-      this.transformCreateResponse(response),
-    );
+    return this.create('export_audit_report', payload);
   }
 
   exportDeltaScanReport(payload: ReportExportPayload) {
-    return this.create('export_delta_scan_report', payload).then(response =>
-      this.transformCreateResponse(response),
-    );
+    return this.create('export_delta_scan_report', payload);
   }
 
   exportDeltaAuditReport(payload: ReportExportPayload) {
-    return this.create('export_delta_audit_report', payload).then(response =>
-      this.transformCreateResponse(response),
-    );
+    return this.create('export_delta_audit_report', payload);
   }
 
   async getReportExport({reportExportId}: ReportExportParams) {
@@ -207,8 +121,9 @@ class ReportExportCommand extends HttpCommand {
       cmd: 'get_report_export',
       report_export_id: reportExportId,
     });
+    const data = response.data as GetReportExportResponseData;
     return response.setData(
-      getReportExportsFromRoot(response.data).map(getReportExport),
+      parseReportExports(data.get_report_export?.get_report_exports_response),
     );
   }
 
@@ -217,25 +132,15 @@ class ReportExportCommand extends HttpCommand {
       cmd: 'get_report_exports',
       filter: filterString(filter),
     });
-    const root = response.data.get_report_exports;
-    if (
-      !root ||
-      typeof root !== 'object' ||
-      !('get_report_exports_response' in root)
-    ) {
+    const collection = (response.data as GetReportExportsResponseData)
+      .get_report_exports?.get_report_exports_response;
+    if (!collection) {
       throw new Error('Invalid report export collection response');
     }
-    const collection = root.get_report_exports_response;
-    if (!collection || typeof collection !== 'object') {
-      throw new Error('Invalid report export collection response');
-    }
-    return response.set(
-      getReportExportsFromRoot(response.data).map(getReportExport),
-      {
-        counts: new CollectionCounts(parseCounts(collection, 'report_export')),
-        filter: parseFilter(collection),
-      },
-    );
+    return response.set(parseReportExports(collection), {
+      counts: new CollectionCounts(parseCounts(collection, 'report_export')),
+      filter: parseFilter(collection),
+    });
   }
 
   downloadReportExport({reportExportId}: ReportExportParams) {

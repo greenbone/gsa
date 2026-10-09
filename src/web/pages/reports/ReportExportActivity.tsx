@@ -119,6 +119,7 @@ const ActivityHeading = styled.div`
 `;
 
 const ActivityTitle = styled(Text)`
+  color: ${Theme.black};
   min-width: 0;
   overflow-wrap: anywhere;
 `;
