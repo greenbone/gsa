@@ -128,10 +128,10 @@ const ReportExportManager = ({children}: ReportExportManagerProps) => {
   );
 
   return (
-    <ReportExportManagerContext.Provider value={contextValue}>
+    <ReportExportManagerContext value={contextValue}>
       <Download ref={downloadRef} onClick={event => event.stopPropagation()} />
       {children}
-    </ReportExportManagerContext.Provider>
+    </ReportExportManagerContext>
   );
 };
 
