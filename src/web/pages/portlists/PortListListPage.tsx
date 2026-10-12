@@ -3,15 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {
-  type FilterType,
-  PORTLISTS_FILTER_FILTER,
-  RESET_FILTER,
-} from 'gmp/models/filter';
+import {useCallback, useState} from 'react';
+import {ExistingSettings} from 'gmp/commands/user';
+import {type FilterType, PORTLISTS_FILTER_FILTER} from 'gmp/models/filter';
 import type PortList from 'gmp/models/port-list';
-import {isDefined, hasValue} from 'gmp/utils/identity';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {PortListIcon} from 'web/components/icon';
@@ -20,56 +15,36 @@ import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import BulkTags from 'web/entities/BulkTags';
 import EntitiesPage from 'web/entities/EntitiesPage';
-import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
+import useEntitiesRefetchInterval from 'web/entities/useEntitiesRefetchInterval';
+import {
+  useBulkDeletePortLists,
+  useBulkExportPortLists,
+  useGetPortLists,
+} from 'web/hooks/use-query/port-lists';
+import {useGetUserSetting} from 'web/hooks/use-query/user';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
-import useGmp from 'web/hooks/useGmp';
-import useInstanceVariable from 'web/hooks/useInstanceVariable';
 import usePageFilter from 'web/hooks/usePageFilter';
 import usePagination from 'web/hooks/usePagination';
-import useReload from 'web/hooks/useReload';
 import useSelection from 'web/hooks/useSelection';
-import useShallowEqualSelector from 'web/hooks/useShallowEqualSelector';
 import useTranslation from 'web/hooks/useTranslation';
 import PortListComponent from 'web/pages/portlists/PortListComponent';
 import PortListsFilterDialog from 'web/pages/portlists/PortListFilterDialog';
 import PortListListPageToolBarIcons from 'web/pages/portlists/PortListListPageToolBarIcons';
 import PortListsTable from 'web/pages/portlists/PortListTable';
-import {loadEntities, selector} from 'web/store/entities/portlists';
-import {type EntitiesSelector} from 'web/store/entities/utils/selectors';
-import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {generateFilename} from 'web/utils/Render';
 import SelectionType from 'web/utils/selection-type';
 
-const getData = (filter: FilterType, eSelector: EntitiesSelector) => {
-  const entities = eSelector.getEntities(filter);
-  return {
-    entities,
-    entitiesCounts: eSelector.getEntitiesCounts(filter),
-    entitiesError: eSelector.getEntitiesError(filter),
-    filter,
-    isLoading: eSelector.isLoadingEntities(filter),
-    loadedFilter: eSelector.getLoadedFilter(filter),
-  };
-};
-
 const PortListsPage = () => {
   const [_] = useTranslation();
-  const gmp = useGmp();
-  const dispatch = useDispatch();
   const [isTagsDialogVisible, setIsTagsDialogVisible] = useState(false);
   const [downloadRef, handleDownload] = useDownload();
-  const [filter, isLoadingFilter, {changeFilter, resetFilter, removeFilter}] =
-    usePageFilter('portlist', 'portlist');
-  const [requestedFilter, setRequestedFilter] = useInstanceVariable<
-    FilterType | undefined
-  >(undefined);
-  const portListsSelector = useShallowEqualSelector(selector);
-  const listExportFileName = useShallowEqualSelector(state =>
-    getUserSettingsDefaults(state).getValueByName('listexportfilename'),
+  const [filter, , {changeFilter, resetFilter, removeFilter}] = usePageFilter(
+    'portlist',
+    'portlist',
   );
   const {
     selectionType,
-    selected: selectedEntities = [],
+    selected: selectedEntities,
     changeSelectionType,
     select,
     deselect,
@@ -84,41 +59,36 @@ const PortListsPage = () => {
     showError,
   } = useDialogNotification();
 
-  // fetch port lists
-  const fetch = useCallback(
-    (withFilter?: FilterType) => {
-      setRequestedFilter(withFilter);
-      // @ts-expect-error
-      dispatch(loadEntities(gmp)(withFilter));
-    },
-    [dispatch, gmp, setRequestedFilter],
-  );
+  const portListBulkDeleteMutation = useBulkDeletePortLists({
+    onError: showError,
+  });
+  const portListBulkExportMutation = useBulkExportPortLists({
+    onError: showError,
+  });
+  const getUserSettingQuery = useGetUserSetting();
 
-  // refetch port lists with the current filter
-  const refetch = useCallback(() => {
-    fetch(filter);
-  }, [filter, fetch]);
-
-  const {entities, entitiesCounts, entitiesError, isLoading} = getData(
-    filter,
-    // @ts-expect-error
-    portListsSelector,
-  );
+  const reloadIntervalFunc = useEntitiesRefetchInterval();
+  const {
+    data,
+    error: entitiesError,
+    isLoading,
+  } = useGetPortLists({
+    filter: filter,
+    refetchInterval: data => reloadIntervalFunc(data?.entities),
+  });
+  const {entities, entitiesCounts} = data ?? {};
 
   const handleFilterChanged = useCallback(
     (newFilter?: FilterType) => {
       changeFilter(newFilter);
-      fetch(newFilter);
     },
-    [changeFilter, fetch],
+    [changeFilter],
   );
   const handleFilterReset = () => {
     resetFilter();
-    fetch();
   };
   const handleFilterRemoved = () => {
     removeFilter();
-    fetch(RESET_FILTER);
   };
 
   const [getFirst, getLast, getNext, getPrevious] = usePagination(
@@ -126,32 +96,6 @@ const PortListsPage = () => {
     entitiesCounts,
     handleFilterChanged,
   );
-  const timeoutFunc = useEntitiesReloadInterval(entities);
-  const [startReload, stopReload, hasRunningTimer] = useReload(
-    refetch,
-    timeoutFunc,
-  );
-
-  useEffect(() => {
-    const shouldFetch =
-      isDefined(filter) &&
-      !isLoadingFilter &&
-      filter.identifier() !== requestedFilter?.identifier();
-
-    if (shouldFetch) {
-      fetch(filter);
-    }
-  }, [filter, isLoadingFilter, fetch, requestedFilter]);
-
-  useEffect(() => {
-    // start reloading if tasks are available and no timer is running yet
-    if (hasValue(entities) && !hasRunningTimer) {
-      startReload();
-    }
-  }, [entities, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // stop reload on unmount
-  useEffect(() => stopReload, [stopReload]);
 
   const closeTagsDialog = useCallback(() => {
     setIsTagsDialogVisible(false);
@@ -162,77 +106,52 @@ const PortListsPage = () => {
   }, [setIsTagsDialogVisible]);
 
   const handleBulkDelete = useCallback(async () => {
-    const entitiesCommand = gmp.portlists;
-    let promise;
     if (selectionType === SelectionType.SELECTION_USER) {
-      promise = entitiesCommand.delete(selectedEntities);
+      await portListBulkDeleteMutation.mutateAsync(selectedEntities);
     } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      promise = entitiesCommand.deleteByFilter(filter);
+      await portListBulkDeleteMutation.mutateAsync(filter);
     } else {
-      promise = entitiesCommand.deleteByFilter(filter.all());
+      await portListBulkDeleteMutation.mutateAsync(filter.all());
     }
-
-    try {
-      await promise;
-      refetch();
-    } catch (error) {
-      showError(error as Error);
-    }
-  }, [
-    selectionType,
-    filter,
-    selectedEntities,
-    showError,
-    gmp.portlists,
-    refetch,
-  ]);
+  }, [selectionType, filter, selectedEntities, portListBulkDeleteMutation]);
 
   const handleBulkDownload = useCallback(async () => {
-    const entitiesCommand = gmp.portlists;
-    let promise;
+    let promise: Promise<string>;
     if (selectionType === SelectionType.SELECTION_USER) {
-      promise = entitiesCommand.export(selectedEntities);
+      promise = portListBulkExportMutation.mutateAsync(selectedEntities);
     } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      promise = entitiesCommand.exportByFilter(filter);
+      promise = portListBulkExportMutation.mutateAsync(filter);
     } else {
-      promise = entitiesCommand.exportByFilter(filter.all());
+      promise = portListBulkExportMutation.mutateAsync(filter.all());
     }
 
-    try {
-      const response = await promise;
-      const filename = generateFilename({
-        fileNameFormat: listExportFileName,
-        resourceType: 'portlists',
-      });
-      const {data: downloadData} = response;
-      handleDownload({filename, data: downloadData});
-    } catch (error) {
-      showError(error as Error);
-    }
+    const [downloadData, listExportFileNameSetting] = await Promise.all([
+      promise,
+      getUserSettingQuery(ExistingSettings.listexportfilename),
+    ]);
+    const filename = generateFilename({
+      fileNameFormat: listExportFileNameSetting?.value as string,
+      resourceType: 'portlists',
+    });
+    handleDownload({filename, data: downloadData});
   }, [
     handleDownload,
-    showError,
-    gmp.portlists,
     filter,
     selectedEntities,
     selectionType,
-    listExportFileName,
+    getUserSettingQuery,
+    portListBulkExportMutation,
   ]);
 
   return (
     <PortListComponent
       onCloneError={showError}
-      onCloned={refetch}
       onCreateError={showError}
-      onCreated={refetch}
       onDeleteError={showError}
-      onDeleted={refetch}
       onDownloadError={showError}
       onDownloaded={handleDownload}
       onImportError={showError}
-      onImported={refetch}
       onSaveError={showError}
-      onSaved={refetch}
     >
       {({
         clone,
