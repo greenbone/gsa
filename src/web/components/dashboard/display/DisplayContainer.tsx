@@ -68,6 +68,7 @@ const DisplayView = styled.div`
   flex-basis: 0;
   background-color: ${Theme.white};
   position: relative;
+  isolation: isolate;
   border-radius: 8px;
   overflow: hidden;
 `;

@@ -37,9 +37,10 @@ describe('DisplayContainer component tests', () => {
   });
 
   test('should render the loading overlay when loading', () => {
-    render(<DisplayContainer isLoading={true} />);
+    const {container} = render(<DisplayContainer isLoading={true} />);
 
     expect(screen.getByTestId('loading')).toBeVisible();
+    expect(container.firstElementChild).toHaveStyle({isolation: 'isolate'});
   });
 
   test('should render the chart error message when a child throws', () => {
