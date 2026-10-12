@@ -80,14 +80,7 @@ const BulkTags = <TEntity extends Model>({
   });
   const tags = data?.entities ?? [];
 
-  if (tagsError) {
-    setError(tagsError);
-  }
-
   const {data: tag, error: tagError} = useGetTag({id: tagId});
-  if (tagError) {
-    setError(tagError);
-  }
 
   const useCreateTagMutation = useCreateTag({
     onError: setError,
@@ -196,7 +189,7 @@ const BulkTags = <TEntity extends Model>({
       <TagsDialog
         comment={tag?.comment}
         entitiesCount={multiTagEntitiesCount}
-        error={error?.message}
+        error={tagError ?? tagsError ?? error}
         name={tag?.name}
         tagId={tag?.id}
         tags={tags}

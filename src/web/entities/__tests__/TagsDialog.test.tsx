@@ -22,6 +22,12 @@ describe('TagsDialog tests', () => {
     expect(screen.getDialog()).toBeInTheDocument();
   });
 
+  test('should display an error message', () => {
+    render(<TagsDialog error={new Error('Tag request failed')} />);
+
+    expect(screen.getDialogContent()).toHaveTextContent('Tag request failed');
+  });
+
   test('should disable tag selection when no existing tags are available', () => {
     const tags = [];
 
