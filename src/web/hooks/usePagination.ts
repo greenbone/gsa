@@ -6,6 +6,7 @@
 import {useCallback} from 'react';
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import {type FilterType} from 'gmp/models/filter';
+import {isDefined} from 'gmp/utils/identity';
 
 interface ChangeFilterFunc {
   (filter: FilterType): void;
@@ -36,7 +37,7 @@ interface ChangeFilterFunc {
  */
 const usePagination = (
   filter: FilterType,
-  counts: CollectionCounts,
+  counts: CollectionCounts | undefined,
   changeFilter: ChangeFilterFunc,
 ): [() => void, () => void, () => void, () => void] => {
   const getNext = useCallback(() => {
@@ -52,10 +53,12 @@ const usePagination = (
   }, [filter, changeFilter]);
 
   const getLast = useCallback(() => {
-    const last =
-      Math.floor((counts.filtered - 1) / counts.rows) * counts.rows + 1;
-    const newFilter = filter.first(last);
-    changeFilter(newFilter);
+    if (isDefined(counts)) {
+      const last =
+        Math.floor((counts.filtered - 1) / counts.rows) * counts.rows + 1;
+      const newFilter = filter.first(last);
+      changeFilter(newFilter);
+    }
   }, [filter, counts, changeFilter]);
 
   return [getFirst, getLast, getNext, getPrevious];

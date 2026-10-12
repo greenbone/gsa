@@ -65,6 +65,23 @@ describe('usePageFilter', () => {
     );
   });
 
+  test('should not change the filter for the last page without counts', () => {
+    const filter = QueryFilter.fromString('first=10');
+    const changeFilter = testing.fn();
+
+    render(
+      <TestComponent
+        changeFilter={changeFilter}
+        counts={undefined}
+        filter={filter}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId('last'));
+
+    expect(changeFilter).not.toHaveBeenCalled();
+  });
+
   test('should change the filter for the next page', () => {
     const filter = QueryFilter.fromString('first=10');
     const counts = {filtered: 100, rows: 10};
