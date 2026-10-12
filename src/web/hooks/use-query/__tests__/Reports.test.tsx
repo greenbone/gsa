@@ -6,6 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWith, screen, waitFor} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
+import {ExistingSettings} from 'gmp/commands/user';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {createSession} from 'gmp/testing';
 import {
@@ -36,13 +37,11 @@ const createGmp = ({setting}: {setting?: unknown} = {}) => ({
   reportformats: {get: testing.fn().mockResolvedValue(createListResponse())},
   reportconfigs: {get: testing.fn().mockResolvedValue(createListResponse())},
   user: {
-    currentSettings: testing.fn().mockResolvedValue({
-      data: setting === undefined ? {} : {reportexportfilename: setting},
-    }),
+    getSetting: testing.fn().mockResolvedValue({data: setting}),
   },
 });
 
-describe('report query hooks', () => {
+describe('useGetReport', () => {
   test('should fetch a report with its filter and details disabled', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
@@ -63,65 +62,79 @@ describe('report query hooks', () => {
       {filter: filter.toFilterString(), details: false},
     );
   });
+});
 
-  test('should fetch result filters, report formats, and report configs', async () => {
+describe('useGetResultsFilters', () => {
+  test('should fetch result filters', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
 
     const TestComponent = () => {
       const filters = useGetResultsFilters();
-      const formats = useGetReportFormats();
-      const configs = useGetReportConfigs();
-      return (
-        <div data-testid="counts">
-          {Number(filters.data?.entities.length ?? 0) +
-            Number(formats.data?.entities.length ?? 0) +
-            Number(configs.data?.entities.length ?? 0)}
-        </div>
-      );
+      return <div data-testid="filters">{filters.data?.entities.length}</div>;
     };
 
     render(<TestComponent />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('counts')).toHaveTextContent('3');
+      expect(screen.getByTestId('filters')).toHaveTextContent('1');
     });
 
     expect(gmp.filters.get).toHaveBeenCalled();
-    expect(gmp.reportformats.get).toHaveBeenCalled();
-    expect(gmp.reportconfigs.get).toHaveBeenCalled();
   });
+});
 
-  test('should return the configured report export filename', async () => {
-    const gmp = createGmp({setting: {value: 'report-name'}});
+describe('useGetReportFormats', () => {
+  test('should fetch report formats', async () => {
+    const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
 
     const TestComponent = () => {
-      const {data} = useGetReportExportFileName();
-      return <div data-testid="filename">{data}</div>;
+      const formats = useGetReportFormats();
+      return <div data-testid="formats">{formats.data?.entities.length}</div>;
     };
 
     render(<TestComponent />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('filename')).toHaveTextContent('report-name');
+      expect(screen.getByTestId('formats')).toHaveTextContent('1');
     });
 
-    expect(gmp.user.currentSettings).toHaveBeenCalledWith();
+    expect(gmp.reportformats.get).toHaveBeenCalled();
   });
+});
 
-  test('should not fetch the report export filename without a token', () => {
+describe('useGetReportConfigs', () => {
+  test('should fetch report configs', async () => {
     const gmp = createGmp();
-    gmp.session.token = undefined;
     const {render} = rendererWith({gmp, router: true});
 
     const TestComponent = () => {
-      useGetReportExportFileName();
-      return <div />;
+      const configs = useGetReportConfigs();
+      return <div data-testid="configs">{configs.data?.entities.length}</div>;
     };
 
     render(<TestComponent />);
 
-    expect(gmp.user.currentSettings).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(screen.getByTestId('configs')).toHaveTextContent('1');
+    });
+
+    expect(gmp.reportconfigs.get).toHaveBeenCalled();
+  });
+});
+
+describe('useGetReportExportFileName', () => {
+  test('should return the configured report export filename', async () => {
+    const gmp = createGmp({setting: {value: 'report-name'}});
+    const {renderHook} = rendererWith({gmp, router: true});
+    const {result} = renderHook(() => useGetReportExportFileName());
+
+    const filename = await result.current();
+
+    expect(filename).toBe('report-name');
+    expect(gmp.user.getSetting).toHaveBeenCalledWith(
+      ExistingSettings.reportexportfilename,
+    );
   });
 });

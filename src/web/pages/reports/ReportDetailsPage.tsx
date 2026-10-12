@@ -161,8 +161,7 @@ const ReportDetailsPage = () => {
   const {data: reportConfigsData} = useGetReportConfigs();
   const reportConfigs = reportConfigsData?.entities ?? [];
 
-  // User settings: report export filename
-  const {data: reportExportFileName} = useGetReportExportFileName();
+  const reportExportFileNameQuery = useGetReportExportFileName();
 
   // Report composer defaults
   useEffect(() => {
@@ -337,14 +336,17 @@ const ReportDetailsPage = () => {
         : 'unknown';
 
       try {
-        const response = await gmp.report.download(
-          {id: entity.id as string},
-          {
-            reportConfigId,
-            reportFormatId,
-            filter: newFilter,
-          },
-        );
+        const [response, reportExportFileName] = await Promise.all([
+          gmp.report.download(
+            {id: entity.id as string},
+            {
+              reportConfigId,
+              reportFormatId,
+              filter: newFilter,
+            },
+          ),
+          reportExportFileNameQuery(),
+        ]);
         setShowDownloadReportDialog(false);
         const {data} = response;
         const filename = generateFilename({
@@ -370,7 +372,7 @@ const ReportDetailsPage = () => {
       gmp,
       handleDownload,
       reportComposerDefaults,
-      reportExportFileName,
+      reportExportFileNameQuery,
       reportFilter,
       reportFormats,
       showError,
