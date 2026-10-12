@@ -23,11 +23,8 @@ interface UsePortListMutationCallbacks<TResponse> {
   onError?: (error: Error) => void;
 }
 
-interface UseGetPortListParams {
+interface UseModifyPortListParams {
   id: string;
-}
-
-interface UseModifyPortListParams extends UseGetPortListParams {
   name?: string;
 }
 

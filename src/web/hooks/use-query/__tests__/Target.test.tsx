@@ -44,12 +44,12 @@ describe('useGetTarget', () => {
     expect(gmp.target.get).toHaveBeenCalledWith({id: target.id});
   });
 
-  test('should not fetch when the ID is empty', () => {
+  test('should not fetch when the ID is undefined', () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
 
     const TestComponent = () => {
-      useGetTarget({id: ''});
+      useGetTarget({id: undefined});
       return <div />;
     };
 

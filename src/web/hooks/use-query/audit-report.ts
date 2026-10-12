@@ -6,18 +6,19 @@
 import type AuditReport from 'gmp/models/audit-report';
 import {type FilterType} from 'gmp/models/filter';
 import type ReportHost from 'gmp/models/report/host';
+import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useGetEntities from 'web/queries/useGetEntities';
 import useGetEntity from 'web/queries/useGetEntity';
 
 interface UseGetAuditReportParams {
-  id: string;
+  id: string | undefined;
   filter?: FilterType;
   refetchInterval?: number | false | ((data?: AuditReport) => number | false);
 }
 
 interface UseGetAuditReportHostsParams {
-  reportId: string;
+  reportId: string | undefined;
   filter?: FilterType;
   refetchInterval?: number | false;
 }
@@ -51,13 +52,13 @@ export const useGetAuditReportHosts = ({
   return useGetEntities<ReportHost>({
     gmpMethod: ({filter: reportFilter}) =>
       gmp.auditreport.getHosts({
-        report_id: reportId,
+        report_id: reportId as string,
         filter: reportFilter,
       }),
     queryId: `get_audit_report_hosts_${reportId}`,
     filter,
     refetchInterval,
-    enabled: Boolean(reportId),
+    enabled: isDefined(reportId),
     keepPreviousData: true,
   });
 };

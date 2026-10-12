@@ -25,7 +25,7 @@ const createGmp = ({token}: {token?: string} = {token: 'test-token'}) => ({
   settings: {},
 });
 
-const SingleAuditComponent = ({id}: {id: string}) => {
+const SingleAuditComponent = ({id}: {id: string | undefined}) => {
   const {data, isLoading, isError} = useGetAudit({id});
 
   if (isLoading) return <div data-testid="loading">Loading...</div>;
@@ -60,10 +60,10 @@ describe('useGetAudit', () => {
     expect(screen.getByTestId('loading')).toBeInTheDocument();
   });
 
-  test('should not fetch an audit when the ID is empty', () => {
+  test('should not fetch an audit when the ID is undefined', () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
-    render(<SingleAuditComponent id="" />);
+    render(<SingleAuditComponent id={undefined} />);
     expect(screen.getByTestId('no-data')).toBeInTheDocument();
     expect(gmp.audit.get).not.toHaveBeenCalled();
   });

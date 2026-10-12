@@ -32,9 +32,12 @@ const userData = {
 
 const user = new User({id: 'user-id', name: 'user'});
 
+type GmpOverrides = Record<string, unknown> & {
+  token?: string;
+};
+
 const createGmp = (
-  userMethods: Record<string, unknown> = {},
-  token = 'test-token',
+  {token, ...userMethods}: GmpOverrides = {token: 'test-token'},
 ) => ({
   session: createSession({token}),
   settings: {},
@@ -72,7 +75,7 @@ describe('useGetUser', () => {
   });
 
   test('should not fetch a user without a session token', () => {
-    const gmp = createGmp({}, '');
+    const gmp = createGmp({});
     const {render} = rendererWith({gmp, router: true});
 
     const TestComponent = () => {
@@ -85,12 +88,12 @@ describe('useGetUser', () => {
     expect(gmp.user.get).not.toHaveBeenCalled();
   });
 
-  test('should not fetch a user when the ID is empty', () => {
+  test('should not fetch a user when the ID is undefined', () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
 
     const TestComponent = () => {
-      useGetUser({id: ''});
+      useGetUser({id: undefined});
       return <div />;
     };
 

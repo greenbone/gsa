@@ -25,7 +25,7 @@ const ticket = Ticket.fromElement({
   open_note: 'Ticket opened',
 });
 
-const SingleTicketComponent = ({id}: {id: string}) => {
+const SingleTicketComponent = ({id}: {id: string | undefined}) => {
   const {data, isLoading, isError} = useGetTicket({id});
 
   if (isLoading) return <div data-testid="loading">Loading...</div>;
@@ -77,11 +77,11 @@ describe('useGetTicket', () => {
     expect(screen.getByTestId('loading')).toBeInTheDocument();
   });
 
-  test('should not fetch a ticket when the ID is empty', () => {
+  test('should not fetch a ticket when the ID is undefined', () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
 
-    render(<SingleTicketComponent id="" />);
+    render(<SingleTicketComponent id={undefined} />);
 
     expect(screen.getByTestId('no-data')).toBeInTheDocument();
     expect(gmp.ticket.get).not.toHaveBeenCalled();
