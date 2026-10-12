@@ -54,6 +54,72 @@ const createGmp = ({
 });
 
 describe('BulkTags tests', () => {
+  test('should show an error when loading tags fails', async () => {
+    const error = new Error('Failed to load tags');
+    const getTags = testing.fn().mockRejectedValue(error);
+    const gmp = createGmp({getTags});
+    const {render} = rendererWith({gmp, store: true});
+
+    render(
+      <BulkTags
+        entities={[new Task({id: '1'})]}
+        entitiesCounts={new CollectionCounts({filtered: 1, all: 1})}
+        filter={QueryFilter.fromString()}
+        selectedEntities={[]}
+        selectionType={SelectionType.SELECTION_PAGE_CONTENTS}
+        onClose={testing.fn()}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(screen.getDialog()).toBeInTheDocument();
+      expect(screen.getDialogContent()).toHaveTextContent(
+        'Failed to load tags',
+      );
+    });
+  });
+
+  test('should show an error when loading the selected tag fails', async () => {
+    const getTags = testing.fn().mockResolvedValue({
+      data: [
+        new Tag({id: '1', name: 'Tag 1'}),
+        new Tag({id: '2', name: 'Tag 2'}),
+      ],
+      meta: {
+        counts: new CollectionCounts({all: 1, filtered: 1, length: 1}),
+        filter: QueryFilter.fromString(),
+      },
+    });
+    const getTag = testing
+      .fn()
+      .mockRejectedValue(new Error('Failed to load selected tag'));
+    const gmp = createGmp({getTags, getTag});
+    const {render} = rendererWith({gmp, store: true});
+
+    render(
+      <BulkTags
+        entities={[new Task({id: '1'})]}
+        entitiesCounts={new CollectionCounts({filtered: 1, all: 1})}
+        filter={QueryFilter.fromString()}
+        selectedEntities={[]}
+        selectionType={SelectionType.SELECTION_PAGE_CONTENTS}
+        onClose={testing.fn()}
+      />,
+    );
+
+    const selectItems = await getSelectItemElementsForSelect(
+      screen.getSelectElement(),
+    );
+    fireEvent.click(selectItems[1]);
+
+    await waitFor(() => {
+      expect(getTag).toHaveBeenCalledWith({id: '2'});
+      expect(screen.getDialogContent()).toHaveTextContent(
+        'Failed to load selected tag',
+      );
+    });
+  });
+
   test('should render the BulkTags component', async () => {
     const entities = [new Task({id: '1'}), new Task({id: '2'})];
     const entitiesCounts = new CollectionCounts({filtered: 2, all: 2});
@@ -229,6 +295,33 @@ describe('BulkTags tests', () => {
     );
   });
 
+  test('should show an error when saving a tag fails', async () => {
+    const error = new Error('Failed to save tag');
+    const saveTag = testing.fn().mockRejectedValue(error);
+    const onClose = testing.fn();
+    const gmp = createGmp({saveTag});
+    const {render} = rendererWith({gmp, store: true});
+
+    render(
+      <BulkTags
+        entities={[new Task({id: '1'})]}
+        entitiesCounts={new CollectionCounts({filtered: 1, all: 1})}
+        filter={QueryFilter.fromString()}
+        selectedEntities={[]}
+        selectionType={SelectionType.SELECTION_PAGE_CONTENTS}
+        onClose={onClose}
+      />,
+    );
+
+    fireEvent.click(screen.getDialogSaveButton());
+
+    await waitFor(() => {
+      expect(saveTag).toHaveBeenCalled();
+      expect(screen.getDialogContent()).toHaveTextContent('Failed to save tag');
+    });
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
   test('should support selected entities provided as a set', () => {
     const entities = [new Task({id: '1'})];
     const selectedEntities = new Set(entities);
@@ -359,6 +452,39 @@ describe('BulkTags tests', () => {
         value: '',
       }),
     );
+  });
+
+  test('should show an error when creating a new tag fails', async () => {
+    const createTag = testing
+      .fn()
+      .mockRejectedValue(new Error('Failed to create tag'));
+    const gmp = createGmp({
+      createTag,
+      getAllResourceNames: testing.fn().mockResolvedValue({data: []}),
+    });
+    const {render} = rendererWith({gmp, store: true});
+
+    render(
+      <BulkTags
+        entities={[new Task({id: '1'})]}
+        entitiesCounts={new CollectionCounts({filtered: 1, all: 1})}
+        filter={QueryFilter.fromString()}
+        selectedEntities={[new Task({id: '1'})]}
+        selectionType={SelectionType.SELECTION_PAGE_CONTENTS}
+        onClose={testing.fn()}
+      />,
+    );
+
+    fireEvent.click(within(screen.getDialog()).getByTitle('Create a new Tag'));
+    const dialogs = screen.getAllByRole('dialog');
+    fireEvent.click(within(dialogs[1]).getDialogSaveButton());
+
+    await waitFor(() => {
+      expect(createTag).toHaveBeenCalled();
+      expect(
+        within(dialogs[0]).getByText('Failed to create tag'),
+      ).toBeInTheDocument();
+    });
   });
 
   test('should close the tag dialog', () => {

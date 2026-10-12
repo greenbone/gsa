@@ -24,7 +24,7 @@ export interface TagsDialogData {
 interface TagsDialogProps {
   comment?: string;
   entitiesCount?: number;
-  error?: string;
+  error?: Error;
   name?: string;
   tagId?: string;
   tags?: Tag[];
@@ -65,7 +65,7 @@ const TagsDialog = ({
     <SaveDialog
       buttonTitle="Add Tag"
       data-testid="bulk-tags-dialog"
-      error={error}
+      error={error?.message}
       title={title}
       values={{
         comment,
