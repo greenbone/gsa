@@ -26,7 +26,6 @@ import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {UserIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
-import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import BulkTags from 'web/entities/BulkTags';
 import EntitiesPage from 'web/entities/EntitiesPage';
@@ -95,9 +94,8 @@ const UsersListPage = () => {
   const [_] = useTranslation();
   const gmp = useGmp();
   const queryClient = useQueryClient();
-  const {dialogState, closeDialog, showError} = useDialogNotification();
+  const {dialogNotification, showError} = useDialogNotification();
   const [downloadRef, handleDownload] = useDownload();
-  const {title: dialogTitle, message: dialogMessage} = dialogState;
 
   const [filter, , {changeFilter, removeFilter, resetFilter}] = usePageFilter(
     'user',
@@ -338,11 +336,7 @@ const UsersListPage = () => {
     >
       {({clone, create, download, edit}) => (
         <>
-          <DialogNotification
-            message={dialogMessage}
-            title={dialogTitle}
-            onCloseClick={closeDialog}
-          />
+          {dialogNotification}
           <Download ref={downloadRef} />
           <PageTitle title={_('Users')} />
           <EntitiesPage<User>

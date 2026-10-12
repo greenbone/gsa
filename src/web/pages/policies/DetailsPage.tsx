@@ -12,7 +12,6 @@ import useDownload from 'web/components/form/useDownload';
 import {PolicyIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
-import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import Tab from 'web/components/tab/Tab';
 import TabLayout from 'web/components/tab/TabLayout';
@@ -54,7 +53,7 @@ const PolicyDetailsPage = () => {
   const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const {dialogState, closeDialog, showError} = useDialogNotification();
+  const {dialogNotification, showError} = useDialogNotification();
   const [downloadRef, handleDownload] = useDownload();
 
   const {data: entity, isLoading, error} = useGetPolicy({id: id ?? ''});
@@ -79,7 +78,7 @@ const PolicyDetailsPage = () => {
 
   return (
     <>
-      <DialogNotification {...dialogState} onCloseClick={closeDialog} />
+      {dialogNotification}
       <Download ref={downloadRef} />
       <PolicyComponent
         onCloneError={onError}

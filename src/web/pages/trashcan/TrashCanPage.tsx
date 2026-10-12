@@ -20,7 +20,6 @@ import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import LinkTarget from 'web/components/link/Target';
 import Loading from 'web/components/loading/Loading';
-import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import Section from 'web/components/section/Section';
 import Table from 'web/components/table/StripedTable';
@@ -98,11 +97,7 @@ const TrashCan = () => {
   const [isEmptyingTrash, setIsEmptyingTrash] = useState(false);
   const [trash, setTrash] = useState<TrashCanGetData | undefined>();
   const [_] = useTranslation();
-  const {
-    dialogState: notificationDialogState,
-    closeDialog: closeNotificationDialog,
-    showError,
-  } = useDialogNotification();
+  const {dialogNotification, showError} = useDialogNotification();
 
   const loadTrash = useCallback(() => {
     setIsLoading(true);
@@ -223,10 +218,7 @@ const TrashCan = () => {
           {/* span prevents Toolbar from growing */}
           <TrashCanPageToolBarIcons />
         </span>
-        <DialogNotification
-          {...notificationDialogState}
-          onCloseClick={closeNotificationDialog}
-        />
+        {dialogNotification}
         <Section img={<TrashcanIcon size="large" />} title={_('Trashcan')} />
         <EmptyTrashButton onClick={openEmptyTrashDialog} />
         {isEmptyTrashDialogVisible && (

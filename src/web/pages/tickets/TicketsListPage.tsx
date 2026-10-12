@@ -19,7 +19,6 @@ import useDownload from 'web/components/form/useDownload';
 import {TicketIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import PageTitle from 'web/components/layout/PageTitle';
-import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import SubscriptionProvider from 'web/components/provider/SubscriptionProvider';
 import EntitiesPage from 'web/entities/EntitiesPage';
@@ -77,9 +76,8 @@ const TicketsDashboardControls = () => (
 const TicketsListPage = () => {
   const [_] = useTranslation();
   const queryClient = useQueryClient();
-  const {dialogState, closeDialog, showError} = useDialogNotification();
+  const {dialogNotification, showError} = useDialogNotification();
   const [downloadRef, handleDownload] = useDownload();
-  const {title: dialogTitle, message: dialogMessage} = dialogState;
 
   const [filter, , {changeFilter, removeFilter, resetFilter}] = usePageFilter(
     'ticket',
@@ -192,11 +190,7 @@ const TicketsListPage = () => {
     >
       {({clone, delete: deleteTicket, edit}) => (
         <>
-          <DialogNotification
-            message={dialogMessage}
-            title={dialogTitle}
-            onCloseClick={closeDialog}
-          />
+          {dialogNotification}
           <Download ref={downloadRef} />
           <PageTitle title={_('Tickets')} />
           <EntitiesPage<Ticket>

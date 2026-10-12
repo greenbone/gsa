@@ -16,7 +16,6 @@ import {VulnerabilityIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
-import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import SubscriptionProvider from 'web/components/provider/SubscriptionProvider';
 import EntitiesPage from 'web/entities/EntitiesPage';
@@ -79,11 +78,7 @@ const VulnerabilitiesPage = () => {
     getUserSettingsDefaults(state).getValueByName('listexportfilename'),
   );
 
-  const {
-    dialogState: notificationDialogState,
-    closeDialog: closeNotificationDialog,
-    showError,
-  } = useDialogNotification();
+  const {dialogNotification, showError} = useDialogNotification();
 
   const [filter, isFilterLoading, {changeFilter, resetFilter, removeFilter}] =
     usePageFilter('vulnerability', 'vulnerability');
@@ -232,10 +227,7 @@ const VulnerabilitiesPage = () => {
         onFilterReset={resetFilter}
       />
       <Download ref={downloadRef} />
-      <DialogNotification
-        {...notificationDialogState}
-        onCloseClick={closeNotificationDialog}
-      />
+      {dialogNotification}
     </>
   );
 };

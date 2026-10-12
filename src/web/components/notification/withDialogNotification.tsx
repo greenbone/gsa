@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification, {
   type ErrorWithMessage,
 } from 'web/components/notification/useDialogNotification';
@@ -21,12 +20,11 @@ const withDialogNotification = <TProps extends {} = {}>(
   Component: React.ComponentType<TProps & DialogNotificationProps>,
 ) => {
   const WithDialogNotification = (props: TProps) => {
-    const {dialogState, closeDialog, ...notificationProps} =
-      useDialogNotification();
+    const {dialogNotification, ...notificationProps} = useDialogNotification();
     return (
       <>
         <Component {...props} {...notificationProps} />
-        <DialogNotification {...dialogState} onCloseClick={closeDialog} />
+        {dialogNotification}
       </>
     );
   };

@@ -17,7 +17,6 @@ import Radio from 'web/components/form/Radio';
 import useDownload from 'web/components/form/useDownload';
 import {HatAndGlassesIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
-import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import BulkTags from 'web/entities/BulkTags';
 import EntitiesPage from 'web/entities/EntitiesPage';
@@ -61,11 +60,7 @@ const AgentListPage = () => {
     undefined,
   );
 
-  const {
-    dialogState: notificationDialogState,
-    closeDialog: closeNotificationDialog,
-    showError,
-  } = useDialogNotification();
+  const {dialogNotification, showError} = useDialogNotification();
 
   const [filter, isFilterLoading, {changeFilter, resetFilter, removeFilter}] =
     usePageFilter('agents', 'agents');
@@ -375,10 +370,7 @@ const AgentListPage = () => {
               onFilterReset={handleFilterReset}
             />
             <Download ref={downloadRef} />
-            <DialogNotification
-              {...notificationDialogState}
-              onCloseClick={closeNotificationDialog}
-            />
+            {dialogNotification}
             {confirmDeleteDialogVisible && deleteAgent && (
               <ConfirmationDialog
                 content={_(

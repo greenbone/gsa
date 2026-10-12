@@ -5,13 +5,11 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {render, screen, fireEvent, within} from 'web/testing';
-import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 
 const TestComponent = () => {
   const {
-    dialogState,
-    closeDialog,
+    dialogNotification,
     showMessage,
     showError,
     showErrorMessage,
@@ -36,7 +34,7 @@ const TestComponent = () => {
         data-testid="show-error"
         onClick={() => showError(new Error('foo'))}
       />
-      <DialogNotification {...dialogState} onCloseClick={closeDialog} />
+      {dialogNotification}
     </div>
   );
 };
@@ -65,7 +63,7 @@ const showSuccessMessage = () => {
   fireEvent.click(button);
 };
 
-describe('DialogNotification tests', () => {
+describe('useDialogNotification tests', () => {
   test('should display a message', () => {
     render(<TestComponent />);
 

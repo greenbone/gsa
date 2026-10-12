@@ -28,7 +28,6 @@ import {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/Reload';
-import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import useFilterSortBy from 'web/hooks/useFilterSortBy';
 import useGmp from 'web/hooks/useGmp';
@@ -279,13 +278,8 @@ const DeltaReportDetails = () => {
   const [startTimer, clearTimer] = useReload(memoizedReloadFn, timeoutFunc);
   const [downloadRef, onDownload] = useDownload();
 
-  const {
-    dialogState,
-    closeDialog,
-    showError,
-    showErrorMessage,
-    showSuccessMessage,
-  } = useDialogNotification();
+  const {dialogNotification, showError, showErrorMessage, showSuccessMessage} =
+    useDialogNotification();
 
   const [showFilterDialog, setShowFilterDialog] = useState(false);
 
@@ -585,7 +579,7 @@ const DeltaReportDetails = () => {
         />
       )}
       <Download ref={downloadRef} />
-      <DialogNotification {...dialogState} onCloseClick={closeDialog} />
+      {dialogNotification}
     </>
   );
 };

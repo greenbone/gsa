@@ -16,7 +16,6 @@ import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {HatAndGlassesIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
-import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import BulkTags from 'web/entities/BulkTags';
 import EntitiesPage from 'web/entities/EntitiesPage';
@@ -51,11 +50,7 @@ const AgentInstallerListPage = () => {
     changeFilter,
   );
   const [downloadRef, handleDownload] = useDownload();
-  const {
-    dialogState: notificationDialogState,
-    closeDialog: closeNotificationDialog,
-    showError,
-  } = useDialogNotification();
+  const {dialogNotification, showError} = useDialogNotification();
 
   const {
     selectionType,
@@ -179,10 +174,7 @@ const AgentInstallerListPage = () => {
         onFilterReset={resetFilter}
       />
       <Download ref={downloadRef} />
-      <DialogNotification
-        {...notificationDialogState}
-        onCloseClick={closeNotificationDialog}
-      />
+      {dialogNotification}
       {isTagsDialogVisible && (
         <BulkTags<AgentInstaller>
           entities={agentInstallers}

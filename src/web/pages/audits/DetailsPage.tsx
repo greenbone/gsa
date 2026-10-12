@@ -15,7 +15,6 @@ import useDownload from 'web/components/form/useDownload';
 import {AuditIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
-import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import Tab from 'web/components/tab/Tab';
 import TabLayout from 'web/components/tab/TabLayout';
@@ -126,7 +125,7 @@ const AuditDetailsPage = () => {
   const navigate = useNavigate();
   const gmp = useGmp();
   const queryClient = useQueryClient();
-  const {dialogState, closeDialog, showError} = useDialogNotification();
+  const {dialogNotification, showError} = useDialogNotification();
   const [downloadRef, handleDownload] = useDownload();
 
   const getRefetchInterval = (entity?: Audit) => {
@@ -167,7 +166,7 @@ const AuditDetailsPage = () => {
 
   return (
     <>
-      <DialogNotification {...dialogState} onCloseClick={closeDialog} />
+      {dialogNotification}
       <Download ref={downloadRef} />
       <AuditComponent
         onCloneError={onError}

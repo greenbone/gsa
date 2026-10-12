@@ -19,7 +19,6 @@ import ManualIcon from 'web/components/icon/ManualIcon';
 import Divider from 'web/components/layout/Divider';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
-import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import Tab from 'web/components/tab/Tab';
 import TabLayout from 'web/components/tab/TabLayout';
@@ -101,9 +100,8 @@ const UserDetailsPage = () => {
   const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const {dialogState, closeDialog, showError} = useDialogNotification();
+  const {dialogNotification, showError} = useDialogNotification();
   const [downloadRef, handleDownload] = useDownload();
-  const {title: dialogTitle, message: dialogMessage} = dialogState;
 
   const {data: entity, error, isLoading} = useGetUser({id: id ?? ''});
 
@@ -132,11 +130,7 @@ const UserDetailsPage = () => {
 
   return (
     <>
-      <DialogNotification
-        message={dialogMessage}
-        title={dialogTitle}
-        onCloseClick={closeDialog}
-      />
+      {dialogNotification}
       <Download ref={downloadRef} />
       <UserComponent
         onCloneError={onError}

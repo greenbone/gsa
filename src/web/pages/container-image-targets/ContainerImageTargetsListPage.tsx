@@ -15,7 +15,6 @@ import {NewIcon, TargetIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import PageTitle from 'web/components/layout/PageTitle';
-import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import BulkTags from 'web/entities/BulkTags';
 import EntitiesPage from 'web/entities/EntitiesPage';
@@ -73,11 +72,7 @@ const ContainerImageTargetsListPage = () => {
     getUserSettingsDefaults(state).getValueByName('listexportfilename'),
   );
 
-  const {
-    dialogState: notificationDialogState,
-    closeDialog: closeNotificationDialog,
-    showError,
-  } = useDialogNotification();
+  const {dialogNotification, showError} = useDialogNotification();
 
   const [filter, isFilterLoading, {changeFilter, resetFilter, removeFilter}] =
     usePageFilter('oci_image_targets', 'container_image_targets');
@@ -295,10 +290,7 @@ const ContainerImageTargetsListPage = () => {
               onTagsBulk={openTagsDialog}
             />
             <Download ref={downloadRef} />
-            <DialogNotification
-              {...notificationDialogState}
-              onCloseClick={closeNotificationDialog}
-            />
+            {dialogNotification}
             {isTagsDialogVisible && (
               <BulkTags
                 entities={allEntities}

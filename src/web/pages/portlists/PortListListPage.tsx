@@ -11,7 +11,6 @@ import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {PortListIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
-import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import BulkTags from 'web/entities/BulkTags';
 import EntitiesPage from 'web/entities/EntitiesPage';
@@ -53,11 +52,7 @@ const PortListsPage = () => {
     filter,
     changeFilter,
   );
-  const {
-    dialogState: notificationDialogState,
-    closeDialog: closeNotificationDialog,
-    showError,
-  } = useDialogNotification();
+  const {dialogNotification, showError} = useDialogNotification();
 
   const portListBulkDeleteMutation = useBulkDeletePortLists({
     onError: showError,
@@ -212,10 +207,7 @@ const PortListsPage = () => {
             onFilterReset={handleFilterReset}
           />
           <Download ref={downloadRef} />
-          <DialogNotification
-            {...notificationDialogState}
-            onCloseClick={closeNotificationDialog}
-          />
+          {dialogNotification}
           {isTagsDialogVisible && (
             <BulkTags
               entities={entities}
