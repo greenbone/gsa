@@ -1608,6 +1608,7 @@
   "Port List: {{name}}": "端口列表：{{name}}",
   "Port Lists": "端口列表",
   "Port Lists Filter": "端口列表筛选",
+  "Port Lists successfully deleted": "",
   "Port Range": "端口范围",
   "Port Ranges": "端口范围",
   "Port Ranges ({{count}})": "端口范围（{{count}}）",

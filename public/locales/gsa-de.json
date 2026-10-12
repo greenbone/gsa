@@ -1608,6 +1608,7 @@
   "Port List: {{name}}": "Portliste: {{name}}",
   "Port Lists": "Portlisten",
   "Port Lists Filter": "Portlisten-Filter",
+  "Port Lists successfully deleted": "Portlisten erfolgreich gelöscht",
   "Port Range": "Portbereiche",
   "Port Ranges": "Portbereiche",
   "Port Ranges ({{count}})": "Portbereiche ({{count}})",
