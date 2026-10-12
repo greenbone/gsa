@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {useLocation} from 'react-router';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {isDefined} from 'gmp/utils/identity';
@@ -97,19 +97,35 @@ const Page = ({
 }) => {
   const [_] = useTranslation();
   const location = useLocation();
+  const lastScrollAttempt = useRef();
   const defaultTimeout = isDefined(entity) ? entity.defaultTimeout : undefined;
   const preferences = isDefined(entity) ? entity.preferences : [];
   const userTags = isDefined(entity) ? entity.userTags : undefined;
   const numPreferences = preferences.length;
 
   useEffect(() => {
+    const id = props.id;
+
+    if (!isDefined(entity) || entity.id !== id) {
+      return;
+    }
+
+    if (
+      lastScrollAttempt.current?.id === id &&
+      lastScrollAttempt.current?.hash === location.hash
+    ) {
+      return;
+    }
+
+    lastScrollAttempt.current = {id, hash: location.hash};
+
     if (!location.hash) {
       return;
     }
 
     const element = document.getElementById(location.hash.slice(1));
     element?.scrollIntoView();
-  }, [location.hash, entity]);
+  }, [location.hash, entity, props.id]);
 
   return (
     <NvtComponent
