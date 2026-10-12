@@ -7,6 +7,7 @@ import {useQuery} from '@tanstack/react-query';
 import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import type Model from 'gmp/models/model';
+import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useSessionToken from 'web/hooks/useSessionToken';
 import {
@@ -18,7 +19,7 @@ import {
 interface UseGetEntityParams<TModel extends Model> {
   gmpMethod: (params: {id: string}) => Promise<Response<TModel, XmlMeta>>;
   queryId: string;
-  id: string;
+  id: string | undefined;
   queryKeyParts?: unknown[];
   refetchInterval?: number | false | RefetchIntervalFn<TModel>;
   staleTime?: number | ((query: {state: {data: TModel | undefined}}) => number);
@@ -46,10 +47,10 @@ const useGetEntity = <TModel extends Model>({
       : resolveRefetchInterval(refetchInterval, settings);
 
   return useQuery<TModel>({
-    enabled: Boolean(token) && Boolean(id),
+    enabled: isDefined(token) && isDefined(id),
     queryKey: [queryId, token, id, ...(queryKeyParts ?? [])],
     queryFn: async () => {
-      const response = await gmpMethod({id});
+      const response = await gmpMethod({id: id as string});
       return response.data;
     },
     refetchInterval: resolvedRefetchInterval,
