@@ -20,7 +20,6 @@ import {isDefined} from 'gmp/utils/identity';
 import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import PageTitle from 'web/components/layout/PageTitle';
-import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import {useGetAuditReport} from 'web/hooks/use-query/audit-report';
 import {
@@ -104,13 +103,8 @@ const AuditReportDetailsPage = () => {
   const queryClient = useQueryClient();
   const username = useUserName();
 
-  const {
-    dialogState,
-    closeDialog,
-    showError,
-    showErrorMessage,
-    showSuccessMessage,
-  } = useDialogNotification();
+  const {dialogNotification, showError, showErrorMessage, showSuccessMessage} =
+    useDialogNotification();
   const [downloadRef, handleDownload] = useDownload();
 
   const [showFilterDialog, setShowFilterDialog] = useState(false);
@@ -420,7 +414,7 @@ const AuditReportDetailsPage = () => {
 
   return (
     <>
-      <DialogNotification {...dialogState} onCloseClick={closeDialog} />
+      {dialogNotification}
       <Download ref={downloadRef} />
       <PageTitle title={_('Report Details')} />
       <TargetComponent onSaveError={handleError}>

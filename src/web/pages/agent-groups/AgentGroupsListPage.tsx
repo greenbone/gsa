@@ -9,7 +9,6 @@ import type AgentGroup from 'gmp/models/agent-group';
 import {AGENT_GROUPS_FILTER_FILTER, type FilterType} from 'gmp/models/filter';
 import {HatAndGlassesIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
-import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import BulkTags from 'web/entities/BulkTags';
 import EntitiesPage from 'web/entities/EntitiesPage';
@@ -33,11 +32,7 @@ const AgentGroupsListPage = () => {
     ((agentGroup: AgentGroup) => Promise<void> | void) | null
   >(null);
 
-  const {
-    dialogState: notificationDialogState,
-    closeDialog: closeNotificationDialog,
-    showError,
-  } = useDialogNotification();
+  const {dialogNotification, showError} = useDialogNotification();
 
   const [filter, isFilterLoading, {changeFilter, resetFilter, removeFilter}] =
     usePageFilter('agent_groups', 'agent_groups');
@@ -211,10 +206,7 @@ const AgentGroupsListPage = () => {
               onFilterRemoved={handleFilterRemoved}
               onFilterReset={handleFilterReset}
             />
-            <DialogNotification
-              {...notificationDialogState}
-              onCloseClick={closeNotificationDialog}
-            />
+            {dialogNotification}
             {isTagsDialogVisible && (
               <BulkTags
                 entities={allEntities}

@@ -5,6 +5,7 @@
 
 import {useCallback, useState} from 'react';
 import _ from 'gmp/locale';
+import DialogNotification from 'web/components/notification/DialogNotification';
 
 export interface ErrorWithMessage {
   message: string;
@@ -16,26 +17,33 @@ interface DialogState {
 }
 
 /**
- * Hook to handle the state for showing different types of messages in a dialog
+ * Provides actions for displaying message, success, and error dialogs.
  *
- * Should be used in conjunction with a DialogNotification component
+ * Render the returned `dialogNotification` element wherever the notification
+ * dialog should appear. The dialog closes itself through its close controls.
+ * Use `showMessage` to provide a message with an optional custom title,
+ * `showSuccessMessage` for a success message, and `showErrorMessage` or
+ * `showError` for error messages.
  *
  * @example
  *
- * const {
- *   dialogState,
- *   closeDialog,
- *   showError,
- *   showMessage,
- * } = useDialogNotification();
+ * const {dialogNotification, showError} = useDialogNotification();
+ *
+ * const handleError = (error: ErrorWithMessage) => {
+ *   showError(error);
+ * };
  *
  * return (
- *   <DialogNotification
- *      {...dialogState}
- *      onCloseClick={closeDialog}
- *   />
+ *   <>
+ *     <button onClick={() => handleError(new Error('Request failed'))}>
+ *       Show error
+ *     </button>
+ *     {dialogNotification}
+ *   </>
  * );
- * @returns Object containing the dialog state and functions to show different types of messages
+ *
+ * @returns An object containing callbacks for showing messages and a
+ * ready-to-render `dialogNotification` element.
  */
 const useDialogNotification = () => {
   const [dialogState, setDialogState] = useState<DialogState>({});
@@ -73,13 +81,16 @@ const useDialogNotification = () => {
   const handleDialogClose = useCallback(() => {
     setDialogState(prevState => ({...prevState, message: undefined}));
   }, []);
+
+  const dialogNotification = (
+    <DialogNotification {...dialogState} onCloseClick={handleDialogClose} />
+  );
   return {
-    closeDialog: handleDialogClose,
     showError,
     showErrorMessage,
     showMessage,
     showSuccessMessage,
-    dialogState,
+    dialogNotification,
   };
 };
 
