@@ -4,18 +4,27 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, within, rendererWith, fireEvent, wait} from 'web/testing';
+import {
+  screen,
+  within,
+  rendererWith,
+  fireEvent,
+  getSelectItemElementsForSelect,
+  wait,
+  waitFor,
+} from 'web/testing';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import Tag from 'gmp/models/tag';
 import Task from 'gmp/models/task';
+import {createSession} from 'gmp/testing';
 import BulkTags from 'web/entities/BulkTags';
 import SelectionType from 'web/utils/selection-type';
 
 interface GmpOverrides {
   createTag?: ReturnType<typeof testing.fn>;
   getAllResourceNames?: ReturnType<typeof testing.fn>;
-  getAllTags?: ReturnType<typeof testing.fn>;
+  getTags?: ReturnType<typeof testing.fn>;
   getTag?: ReturnType<typeof testing.fn>;
   saveTag?: ReturnType<typeof testing.fn>;
 }
@@ -23,11 +32,19 @@ interface GmpOverrides {
 const createGmp = ({
   createTag = testing.fn().mockResolvedValue({data: {id: '2'}}),
   getAllResourceNames = testing.fn().mockResolvedValue({data: []}),
-  getAllTags = testing.fn().mockResolvedValue({data: []}),
+  getTags = testing.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      counts: new CollectionCounts({all: 0, filtered: 0, length: 0}),
+      filter: QueryFilter.fromString(),
+    },
+  }),
   getTag = testing.fn().mockResolvedValue({data: new Tag({id: '2'})}),
   saveTag = testing.fn().mockResolvedValue({data: {id: '2'}}),
 }: GmpOverrides = {}) => ({
-  tags: {getAll: getAllTags},
+  session: createSession({token: 'test-token'}),
+  settings: {},
+  tags: {get: getTags},
   resourcenames: {getAll: getAllResourceNames},
   tag: {
     create: createTag,
@@ -37,16 +54,20 @@ const createGmp = ({
 });
 
 describe('BulkTags tests', () => {
-  test('should render the BulkTags component', () => {
+  test('should render the BulkTags component', async () => {
     const entities = [new Task({id: '1'}), new Task({id: '2'})];
     const entitiesCounts = new CollectionCounts({filtered: 2, all: 2});
     const filter = QueryFilter.fromString();
     const selectedEntities = [];
     const onClose = testing.fn();
-    const getAllTags = testing
-      .fn()
-      .mockResolvedValue({data: [new Tag({id: '1'})]});
-    const gmp = createGmp({getAllTags});
+    const getTags = testing.fn().mockResolvedValue({
+      data: [new Tag({id: '1'})],
+      meta: {
+        counts: new CollectionCounts({all: 1, filtered: 1, length: 1}),
+        filter: QueryFilter.fromString(),
+      },
+    });
+    const gmp = createGmp({getTags});
     const {render} = rendererWith({gmp, store: true});
     render(
       <BulkTags
@@ -60,15 +81,24 @@ describe('BulkTags tests', () => {
     );
     const dialog = screen.getDialog();
     expect(dialog).toBeInTheDocument();
-    expect(getAllTags).toHaveBeenCalledWith({filter: 'resource_type=task'});
+    await waitFor(() => expect(getTags).toHaveBeenCalled());
+    expect(getTags.mock.calls[0][0].filter.toFilterString()).toContain(
+      'resource_type=task',
+    );
   });
 
-  test('should render when optional entity data is undefined', () => {
+  test('should render when optional entity data is undefined', async () => {
     const entities = [new Task({id: '1'})];
     const filter = QueryFilter.fromString();
     const onClose = testing.fn();
-    const getAllTags = testing.fn().mockResolvedValue({data: []});
-    const gmp = createGmp({getAllTags});
+    const getTags = testing.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        counts: new CollectionCounts({all: 0, filtered: 0, length: 0}),
+        filter: QueryFilter.fromString(),
+      },
+    });
+    const gmp = createGmp({getTags});
     const {render} = rendererWith({gmp, store: true});
 
     render(
@@ -86,7 +116,30 @@ describe('BulkTags tests', () => {
     expect(screen.getDialogTitle()).toHaveTextContent(
       'Add Tag to Page Contents',
     );
-    expect(getAllTags).toHaveBeenCalledWith({filter: 'resource_type=task'});
+    await waitFor(() => expect(getTags).toHaveBeenCalled());
+    expect(getTags.mock.calls[0][0].filter.toFilterString()).toContain(
+      'resource_type=task',
+    );
+  });
+
+  test('should not render when entities are undefined', () => {
+    const filter = QueryFilter.fromString();
+    const onClose = testing.fn();
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, store: true});
+
+    render(
+      <BulkTags
+        entities={undefined}
+        entitiesCounts={undefined}
+        filter={filter}
+        selectedEntities={undefined}
+        selectionType={SelectionType.SELECTION_PAGE_CONTENTS}
+        onClose={onClose}
+      />,
+    );
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   test('should allow to tag all filtered entities', () => {
@@ -95,10 +148,14 @@ describe('BulkTags tests', () => {
     const filter = QueryFilter.fromString();
     const selectedEntities = [];
     const onClose = testing.fn();
-    const getAllTags = testing
-      .fn()
-      .mockResolvedValue({data: [new Tag({id: '1'})]});
-    const gmp = createGmp({getAllTags});
+    const getTags = testing.fn().mockResolvedValue({
+      data: [new Tag({id: '1'})],
+      meta: {
+        counts: new CollectionCounts({all: 1, filtered: 1, length: 1}),
+        filter: QueryFilter.fromString(),
+      },
+    });
+    const gmp = createGmp({getTags});
     const {render} = rendererWith({gmp, store: true});
     render(
       <BulkTags
@@ -114,23 +171,137 @@ describe('BulkTags tests', () => {
     expect(title).toHaveTextContent('Add Tag to All Filtered');
   });
 
+  test('should save a tag for all filtered entities', async () => {
+    const entities = [new Task({id: '1'})];
+    const filter = QueryFilter.fromString('name~task');
+    const saveTag = testing.fn().mockResolvedValue({data: {id: '1'}});
+    const gmp = createGmp({saveTag});
+    const {render} = rendererWith({gmp, store: true});
+
+    render(
+      <BulkTags
+        entities={entities}
+        entitiesCounts={new CollectionCounts({filtered: 1, all: 1})}
+        filter={filter}
+        selectedEntities={[]}
+        selectionType={SelectionType.SELECTION_FILTER}
+        onClose={testing.fn()}
+      />,
+    );
+
+    fireEvent.click(screen.getDialogSaveButton());
+
+    await waitFor(() =>
+      expect(saveTag).toHaveBeenCalledWith(
+        expect.objectContaining({
+          filter: filter.all().toFilterString(),
+          resourceIds: undefined,
+        }),
+      ),
+    );
+  });
+
+  test('should save a tag for selected entities', async () => {
+    const entities = [new Task({id: '1'}), new Task({id: '2'})];
+    const selectedEntities = [entities[0]];
+    const saveTag = testing.fn().mockResolvedValue({data: {id: '1'}});
+    const gmp = createGmp({saveTag});
+    const {render} = rendererWith({gmp, store: true});
+
+    render(
+      <BulkTags
+        entities={entities}
+        entitiesCounts={new CollectionCounts({filtered: 2, all: 2})}
+        filter={QueryFilter.fromString()}
+        selectedEntities={selectedEntities}
+        selectionType={SelectionType.SELECTION_USER}
+        onClose={testing.fn()}
+      />,
+    );
+
+    expect(screen.getDialogTitle()).toHaveTextContent('Add Tag to Selection');
+    fireEvent.click(screen.getDialogSaveButton());
+
+    await waitFor(() =>
+      expect(saveTag).toHaveBeenCalledWith(
+        expect.objectContaining({resourceIds: ['1']}),
+      ),
+    );
+  });
+
+  test('should support selected entities provided as a set', () => {
+    const entities = [new Task({id: '1'})];
+    const selectedEntities = new Set(entities);
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, store: true});
+
+    render(
+      <BulkTags
+        entities={entities}
+        entitiesCounts={undefined}
+        filter={QueryFilter.fromString()}
+        selectedEntities={selectedEntities as unknown as Task[]}
+        selectionType={SelectionType.SELECTION_USER}
+        onClose={testing.fn()}
+      />,
+    );
+
+    expect(screen.getDialogTitle()).toHaveTextContent('Add Tag to Selection');
+  });
+
+  test('should load a tag when it is selected', async () => {
+    const getTags = testing.fn().mockResolvedValue({
+      data: [new Tag({id: '1'}), new Tag({id: '2'})],
+      meta: {
+        counts: new CollectionCounts({all: 2, filtered: 2, length: 2}),
+        filter: QueryFilter.fromString(),
+      },
+    });
+    const getTag = testing.fn().mockResolvedValue({
+      data: new Tag({id: '2', name: 'Selected tag'}),
+    });
+    const gmp = createGmp({getTags, getTag});
+    const {render} = rendererWith({gmp, store: true});
+
+    render(
+      <BulkTags
+        entities={[new Task({id: '1'})]}
+        entitiesCounts={new CollectionCounts({filtered: 1, all: 1})}
+        filter={QueryFilter.fromString()}
+        selectedEntities={[]}
+        selectionType={SelectionType.SELECTION_PAGE_CONTENTS}
+        onClose={testing.fn()}
+      />,
+    );
+
+    const select = screen.getSelectElement();
+    const items = await getSelectItemElementsForSelect(select);
+    fireEvent.click(items[1]);
+
+    await waitFor(() => expect(getTag).toHaveBeenCalledWith({id: '2'}));
+  });
+
   test('should allow to tag tasks with a new tag', async () => {
     const entities = [new Task({id: '1'}), new Task({id: '2'})];
     const entitiesCounts = new CollectionCounts({filtered: 2, all: 2});
     const filter = QueryFilter.fromString();
-    const selectedEntities = [];
+    const selectedEntities = [new Task({id: '1'})];
     const onClose = testing.fn();
     const createTag = testing.fn().mockResolvedValue({data: {id: '2'}});
     const getTag = testing.fn().mockResolvedValue({data: new Tag({id: '2'})});
-    const getAllTags = testing
-      .fn()
-      .mockResolvedValue({data: [new Tag({id: '1'})]});
+    const getTags = testing.fn().mockResolvedValue({
+      data: [new Tag({id: '1'})],
+      meta: {
+        counts: new CollectionCounts({all: 1, filtered: 1, length: 1}),
+        filter: QueryFilter.fromString(),
+      },
+    });
     const getAllResourceNames = testing.fn().mockResolvedValue({data: []});
     const saveTag = testing.fn().mockResolvedValue({data: {id: '2'}});
     const gmp = createGmp({
       createTag,
       getAllResourceNames,
-      getAllTags,
+      getTags,
       getTag,
       saveTag,
     });
@@ -166,7 +337,7 @@ describe('BulkTags tests', () => {
       active: true,
       comment: '',
       name: 'default:unnamed',
-      resourceIds: [],
+      resourceIds: ['1'],
       resourceType: 'task',
       value: '',
     });
@@ -175,16 +346,61 @@ describe('BulkTags tests', () => {
     const saveTagsButton = tagsDialog.getDialogSaveButton();
     fireEvent.click(saveTagsButton);
 
-    expect(saveTag).toHaveBeenCalledWith({
-      active: true,
-      comment: '',
-      filter: undefined,
-      id: '2',
-      name: undefined,
-      resourceIds: ['1', '2'],
-      resourceType: 'task',
-      resourcesAction: 'add',
-      value: '',
-    });
+    await waitFor(() =>
+      expect(saveTag).toHaveBeenCalledWith({
+        active: true,
+        comment: '',
+        filter: undefined,
+        id: '2',
+        name: undefined,
+        resourceIds: ['1', '2'],
+        resourceType: 'task',
+        resourcesAction: 'add',
+        value: '',
+      }),
+    );
+  });
+
+  test('should close the tag dialog', () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, store: true});
+
+    render(
+      <BulkTags
+        entities={[new Task({id: '1'})]}
+        entitiesCounts={new CollectionCounts({filtered: 1, all: 1})}
+        filter={QueryFilter.fromString()}
+        selectedEntities={[]}
+        selectionType={SelectionType.SELECTION_PAGE_CONTENTS}
+        onClose={testing.fn()}
+      />,
+    );
+
+    fireEvent.click(screen.getByTitle('Create a new Tag'));
+    const dialogs = screen.getAllByRole('dialog');
+    fireEvent.click(within(dialogs[1]).getDialogCloseButton());
+
+    expect(screen.getAllByRole('dialog')).toHaveLength(1);
+  });
+
+  test('should close the BulkTags dialog', () => {
+    const onClose = testing.fn();
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, store: true});
+
+    render(
+      <BulkTags
+        entities={[new Task({id: '1'})]}
+        entitiesCounts={new CollectionCounts({filtered: 1, all: 1})}
+        filter={QueryFilter.fromString()}
+        selectedEntities={[]}
+        selectionType={SelectionType.SELECTION_PAGE_CONTENTS}
+        onClose={onClose}
+      />,
+    );
+
+    fireEvent.click(screen.getDialogCloseButton());
+
+    expect(onClose).toHaveBeenCalled();
   });
 });

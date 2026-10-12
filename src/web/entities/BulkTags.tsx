@@ -3,15 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useState} from 'react';
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import {type FilterType} from 'gmp/models/filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
 import type Model from 'gmp/models/model';
-import type Tag from 'gmp/models/tag';
 import {apiType, type EntityType, getEntityType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import TagsDialog, {type TagsDialogData} from 'web/entities/TagsDialog';
-import useGmp from 'web/hooks/useGmp';
+import {useCreateTag, useGetTag, useSaveTag} from 'web/hooks/use-query/tag';
+import {useGetTags} from 'web/hooks/use-query/tags';
 import useTranslation from 'web/hooks/useTranslation';
 import TagDialog, {type TagDialogState} from 'web/pages/tags/TagDialog';
 import SelectionType, {type SelectionTypeType} from 'web/utils/selection-type';
@@ -57,28 +58,43 @@ const BulkTags = <TEntity extends Model>({
   onClose,
 }: BulkTagsProps<TEntity>) => {
   const [_] = useTranslation();
-  const gmp = useGmp();
-  const [tag, setTag] = useState<Tag>();
+  const [tagId, setTagId] = useState<string>();
   const [tagDialogVisible, setTagDialogVisible] = useState(false);
-  const [tags, setTags] = useState<Tag[]>([]);
-  const [error, setError] = useState();
+  const [error, setError] = useState<Error>();
+
+  if (entities.length === 0) {
+    return null;
+  }
 
   const entitiesType = getEntityType(entities[0]);
-  // if there are no entities, BulkTagComponent is not rendered.
+  const tagFilter = QueryFilter.fromString(
+    `resource_type=${apiType(entitiesType)}`,
+  ).all();
 
-  const fetchTagsByType = useCallback(() => {
-    const tagFilter = `resource_type=${apiType(entitiesType)}`;
-    return gmp.tags
-      .getAll({filter: tagFilter})
-      .then(resp => {
-        setTags(resp.data);
-      })
-      .catch(setError);
-  }, [gmp.tags, entitiesType]);
+  const {
+    data,
+    refetch: refetchTags,
+    error: tagsError,
+  } = useGetTags({
+    filter: tagFilter,
+  });
+  const tags = data?.entities ?? [];
 
-  useEffect(() => {
-    void fetchTagsByType();
-  }, [fetchTagsByType]);
+  if (tagsError) {
+    setError(tagsError);
+  }
+
+  const {data: tag, error: tagError} = useGetTag({id: tagId});
+  if (tagError) {
+    setError(tagError);
+  }
+
+  const useCreateTagMutation = useCreateTag({
+    onError: setError,
+  });
+  const useSaveTagMutation = useSaveTag({
+    onError: setError,
+  });
 
   const multiTagEntitiesCount = getMultiTagEntitiesCount(
     entities,
@@ -96,43 +112,29 @@ const BulkTags = <TEntity extends Model>({
   }, []);
 
   const handleCreateTag = useCallback(
-    (data: TagDialogState) => {
-      return gmp.tag
-        .create({
-          active: data.active,
-          comment: data.comment,
-          name: data.name as string,
-          resourceIds: data.resourceIds,
-          resourceType: data.resourceType as EntityType,
-          value: data.value as string,
-        })
-        .then(response => gmp.tag.get(response.data))
-        .then(response => {
-          const newTags = [...tags, response.data];
-          setTags(newTags);
-          setTag(response.data);
-        })
-        .then(closeTagDialog)
-        .catch(setError);
+    async (data: TagDialogState) => {
+      const response = await useCreateTagMutation.mutateAsync({
+        active: data.active,
+        comment: data.comment,
+        name: data.name as string,
+        resourceIds: data.resourceIds,
+        resourceType: data.resourceType as EntityType,
+        value: data.value as string,
+      });
+      await refetchTags();
+      setTagId(response.data.id);
+      closeTagDialog();
     },
-    [closeTagDialog, gmp.tag, tags],
+    [closeTagDialog, useCreateTagMutation, refetchTags],
   );
 
   const handleCloseTagDialog = useCallback(() => {
     closeTagDialog();
   }, [closeTagDialog]);
 
-  const handleTagChange = useCallback(
-    (id: string) => {
-      return gmp.tag
-        .get({id})
-        .then(resp => {
-          setTag(resp.data);
-        })
-        .catch(setError);
-    },
-    [gmp.tag],
-  );
+  const handleTagChange = useCallback((id: string) => {
+    setTagId(id);
+  }, []);
 
   const handleCloseTagsDialog = useCallback(() => {
     onClose();
@@ -143,7 +145,7 @@ const BulkTags = <TEntity extends Model>({
   }, []);
 
   const handleAddMultiTag = useCallback(
-    ({comment, id, name, value = ''}: TagsDialogData) => {
+    async ({comment, id, name, value = ''}: TagsDialogData) => {
       let tagEntitiesIds: string[] | undefined = undefined;
       let loadedFilter: string | undefined = undefined;
 
@@ -154,30 +156,27 @@ const BulkTags = <TEntity extends Model>({
       } else {
         loadedFilter = filter.all().toFilterString();
       }
-
-      return gmp.tag
-        .save({
-          active: true,
-          comment,
-          filter: loadedFilter,
-          id: id as string,
-          name: name as string,
-          resourceIds: tagEntitiesIds,
-          resourceType: entitiesType,
-          resourcesAction: 'add',
-          value,
-        })
-        .then(onClose)
-        .catch(setError);
+      await useSaveTagMutation.mutateAsync({
+        active: true,
+        comment,
+        filter: loadedFilter,
+        id: id as string,
+        name: name as string,
+        resourceIds: tagEntitiesIds,
+        resourceType: entitiesType,
+        resourcesAction: 'add',
+        value,
+      });
+      onClose();
     },
     [
       entities,
       entitiesType,
       filter,
-      gmp.tag,
       onClose,
       selectedEntities,
       selectionType,
+      useSaveTagMutation,
     ],
   );
 
@@ -197,7 +196,7 @@ const BulkTags = <TEntity extends Model>({
       <TagsDialog
         comment={tag?.comment}
         entitiesCount={multiTagEntitiesCount}
-        error={error}
+        error={error?.message}
         name={tag?.name}
         tagId={tag?.id}
         tags={tags}
