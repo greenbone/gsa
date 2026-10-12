@@ -1608,6 +1608,7 @@
   "Port List: {{name}}": "Elenco porte: {{name}}",
   "Port Lists": "Elenchi porte",
   "Port Lists Filter": "Filtro elenchi porte",
+  "Port Lists successfully deleted": "",
   "Port Range": "Intervallo porte",
   "Port Ranges": "Intervalli porte",
   "Port Ranges ({{count}})": "Intervalli porte ({{count}})",
