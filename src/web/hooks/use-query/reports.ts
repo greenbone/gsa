@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useQuery} from '@tanstack/react-query';
+import {ExistingSettings} from 'gmp/commands/user';
 import {
   ALL_FILTER,
   RESULTS_FILTER_FILTER,
@@ -16,8 +16,8 @@ import type ReportConfig from 'gmp/models/report-config';
 import type ReportFormat from 'gmp/models/report-format';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
+import {useGetUserSetting} from 'web/hooks/use-query/user';
 import useGmp from 'web/hooks/useGmp';
-import useSessionToken from 'web/hooks/useSessionToken';
 import {type RefetchIntervalFn} from 'web/queries/helpers';
 import useGetEntities from 'web/queries/useGetEntities';
 import useGetEntity from 'web/queries/useGetEntity';
@@ -106,17 +106,11 @@ export const useGetReportConfigs = () => {
 };
 
 export const useGetReportExportFileName = () => {
-  const gmp = useGmp();
-  const token = useSessionToken();
-
-  return useQuery<string | undefined>({
-    queryKey: ['user_settings', token, 'reportexportfilename'],
-    queryFn: async () => {
-      const response = await gmp.user.currentSettings();
-      const settings = response.data;
-      const setting = settings?.reportexportfilename;
-      return isDefined(setting) ? String(setting.value) : undefined;
-    },
-    enabled: Boolean(token),
-  });
+  const getUserSettingQuery = useGetUserSetting();
+  return async () => {
+    const setting = await getUserSettingQuery(
+      ExistingSettings.reportexportfilename,
+    );
+    return isDefined(setting) ? String(setting.value) : undefined;
+  };
 };
