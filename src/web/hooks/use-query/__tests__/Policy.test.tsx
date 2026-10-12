@@ -18,7 +18,7 @@ const policy = Policy.fromElement({
   permissions: {permission: [{name: 'everything'}]},
 });
 
-const SinglePolicyComponent = ({id}: {id: string}) => {
+const SinglePolicyComponent = ({id}: {id: string | undefined}) => {
   const {data, isLoading, isError} = useGetPolicy({id});
 
   if (isLoading) {
@@ -71,11 +71,11 @@ describe('useGetPolicy', () => {
     expect(screen.getByTestId('loading')).toBeInTheDocument();
   });
 
-  test('should not fetch a policy when the ID is empty', () => {
+  test('should not fetch a policy when the ID is undefined', () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
 
-    render(<SinglePolicyComponent id="" />);
+    render(<SinglePolicyComponent id={undefined} />);
 
     expect(screen.getByTestId('no-data')).toBeInTheDocument();
     expect(gmp.policy.get).not.toHaveBeenCalled();

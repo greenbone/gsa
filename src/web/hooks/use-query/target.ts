@@ -3,7 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type EntityActionData} from 'gmp/commands/entity';
+import {
+  type EntityCommandParams,
+  type EntityActionData,
+} from 'gmp/commands/entity';
 import {
   type TargetCommandCreateParams,
   type TargetCommandSaveParams,
@@ -22,13 +25,13 @@ interface UseTargetMutationCallbacks<TResponse> {
 }
 
 interface UseGetTargetParams {
-  id: string;
+  id: string | undefined;
 }
 
 export const useGetTarget = ({id}: UseGetTargetParams) => {
   const gmp = useGmp();
   return useGetEntity<Target>({
-    gmpMethod: (data: UseGetTargetParams) => gmp.target.get(data),
+    gmpMethod: (data: EntityCommandParams) => gmp.target.get(data),
     queryId: 'get_targets',
     id,
   });

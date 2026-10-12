@@ -16,7 +16,7 @@ import {
 
 const filter = QueryFilter.fromString('rows=10 first=1 sort=compliant');
 
-const HostsComponent = ({reportId}: {reportId: string}) => {
+const HostsComponent = ({reportId}: {reportId: string | undefined}) => {
   const {data, isLoading, isError} = useGetAuditReportHosts({
     reportId,
     filter,
@@ -45,7 +45,7 @@ const HostsComponent = ({reportId}: {reportId: string}) => {
   );
 };
 
-const AuditReportComponent = ({reportId}: {reportId: string}) => {
+const AuditReportComponent = ({reportId}: {reportId: string | undefined}) => {
   const {data, isLoading, isError} = useGetAuditReport({
     id: reportId,
     filter,
@@ -93,7 +93,7 @@ const createGmp = ({token}: {token?: string} = {token: 'test-token'}) => ({
   },
 });
 
-describe('audit-report query hooks', () => {
+describe('useGetAuditReportHosts', () => {
   test('should fetch audit report hosts from auditreport command', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
@@ -110,6 +110,27 @@ describe('audit-report query hooks', () => {
     });
   });
 
+  test('should not fetch hosts when reportId is undefined', () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, router: true});
+
+    render(<HostsComponent reportId={undefined} />);
+
+    expect(screen.getByTestId('no-data')).toBeInTheDocument();
+    expect(gmp.auditreport.getHosts).not.toHaveBeenCalled();
+  });
+
+  test('should not fetch audit report hosts without a session token', () => {
+    const gmp = createGmp({token: undefined});
+    const {render} = rendererWith({gmp, router: true});
+
+    render(<HostsComponent reportId="1234" />);
+
+    expect(gmp.auditreport.getHosts).not.toHaveBeenCalled();
+  });
+});
+
+describe('useGetAuditReport', () => {
   test('should fetch audit report entity', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
@@ -126,21 +147,11 @@ describe('audit-report query hooks', () => {
     );
   });
 
-  test('should not fetch hosts when reportId is empty', () => {
+  test('should not fetch an audit report when id is undefined', () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp, router: true});
 
-    render(<HostsComponent reportId="" />);
-
-    expect(screen.getByTestId('no-data')).toBeInTheDocument();
-    expect(gmp.auditreport.getHosts).not.toHaveBeenCalled();
-  });
-
-  test('should not fetch an audit report when id is empty', () => {
-    const gmp = createGmp();
-    const {render} = rendererWith({gmp, router: true});
-
-    render(<AuditReportComponent reportId="" />);
+    render(<AuditReportComponent reportId={undefined} />);
 
     expect(screen.getByTestId('no-report')).toBeInTheDocument();
     expect(gmp.auditreport.get).not.toHaveBeenCalled();
@@ -153,15 +164,6 @@ describe('audit-report query hooks', () => {
     render(<AuditReportComponent reportId="report-1234" />);
 
     expect(gmp.auditreport.get).not.toHaveBeenCalled();
-  });
-
-  test('should not fetch audit report hosts without a session token', () => {
-    const gmp = createGmp({token: undefined});
-    const {render} = rendererWith({gmp, router: true});
-
-    render(<HostsComponent reportId="1234" />);
-
-    expect(gmp.auditreport.getHosts).not.toHaveBeenCalled();
   });
 
   test('should show an error when fetching the audit report fails', async () => {

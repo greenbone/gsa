@@ -3,7 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type EntityActionResponse} from 'gmp/commands/entity';
+import {
+  type EntityActionResponse,
+  type EntityCommandParams,
+} from 'gmp/commands/entity';
 import type Rejection from 'gmp/http/rejection';
 import type Response from 'gmp/http/response';
 import {type XmlMeta, type XmlResponseData} from 'gmp/http/transform/fast-xml';
@@ -18,7 +21,7 @@ import useGmpMutation from 'web/queries/useGmpMutation';
 import useSaveMutation from 'web/queries/useSaveMutation';
 
 interface UseGetTagParams {
-  id: string;
+  id: string | undefined;
   refetchInterval?: RefetchIntervalFn<Tag>;
 }
 
@@ -40,7 +43,7 @@ interface UseModifyTagParams {
 export const useGetTag = ({id, refetchInterval}: UseGetTagParams) => {
   const gmp = useGmp();
   return useGetEntity<Tag>({
-    gmpMethod: gmp.tag.get.bind(gmp.tag),
+    gmpMethod: (data: EntityCommandParams) => gmp.tag.get(data),
     queryId: 'get_tag',
     id,
     refetchInterval,

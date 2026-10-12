@@ -3,7 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type EntityActionData} from 'gmp/commands/entity';
+import {
+  type EntityCommandParams,
+  type EntityActionData,
+} from 'gmp/commands/entity';
 import type Response from 'gmp/http/response';
 import {
   type default as Ticket,
@@ -17,7 +20,7 @@ import useGetEntity from 'web/queries/useGetEntity';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
 interface UseGetTicketParams {
-  id: string;
+  id: string | undefined;
 }
 
 interface UseTicketMutationCallbacks<TResponse> {
@@ -43,7 +46,7 @@ interface TicketSaveInput {
 export const useGetTicket = ({id}: UseGetTicketParams) => {
   const gmp = useGmp();
   return useGetEntity<Ticket>({
-    gmpMethod: gmp.ticket.get.bind(gmp.ticket),
+    gmpMethod: ({id}: EntityCommandParams) => gmp.ticket.get({id}),
     queryId: 'get_ticket',
     id,
   });

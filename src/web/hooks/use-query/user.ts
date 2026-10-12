@@ -4,7 +4,10 @@
  */
 
 import {useQueryClient} from '@tanstack/react-query';
-import {type EntityActionData} from 'gmp/commands/entity';
+import {
+  type EntityCommandParams,
+  type EntityActionData,
+} from 'gmp/commands/entity';
 import {type UserCommandDeleteParams} from 'gmp/commands/user';
 import type Response from 'gmp/http/response';
 import type User from 'gmp/models/user';
@@ -18,7 +21,7 @@ import useGetEntity from 'web/queries/useGetEntity';
 import useGmpMutation from 'web/queries/useGmpMutation';
 
 interface UseGetUserParams {
-  id: string;
+  id: string | undefined;
   refetchInterval?: RefetchIntervalFn<User>;
 }
 
@@ -50,7 +53,7 @@ interface UserDeleteInput extends UserCommandDeleteParams {
 export const useGetUser = ({id, refetchInterval}: UseGetUserParams) => {
   const gmp = useGmp();
   return useGetEntity<User>({
-    gmpMethod: gmp.user.get.bind(gmp.user),
+    gmpMethod: ({id}: EntityCommandParams) => gmp.user.get({id}),
     queryId: 'get_user',
     id,
     refetchInterval,
