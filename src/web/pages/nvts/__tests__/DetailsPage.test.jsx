@@ -457,7 +457,17 @@ describe('Nvt DetailsPage tests', () => {
     render(<DetailsPage id="12345" />);
     await wait();
 
-    expect(scrollIntoView).toHaveBeenCalled();
+    expect(scrollIntoView).toHaveBeenCalledTimes(1);
+
+    store.dispatch(
+      entityLoadingActions.success(
+        '12345',
+        new NVT({id: '12345', name: 'Refreshed NVT'}),
+      ),
+    );
+    await wait();
+
+    expect(scrollIntoView).toHaveBeenCalledTimes(1);
   });
 
   test('should hide technical information when it is unavailable', async () => {
