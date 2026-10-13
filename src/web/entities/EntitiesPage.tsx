@@ -325,13 +325,6 @@ class EntitiesPage<
   }
 }
 
-export const createEntitiesPage = (options = {}) => {
-  const EntitiesPageWrapper = props => {
-    return <EntitiesPage {...options} {...props} />;
-  };
-  return EntitiesPageWrapper;
-};
-
 const mapStateToProps = (
   state: unknown,
   {filtersFilter}: {filtersFilter: Filter},
