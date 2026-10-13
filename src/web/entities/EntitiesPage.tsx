@@ -3,25 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Gmp from 'gmp/gmp';
 import {type default as Filter, type FilterType} from 'gmp/models/filter';
 import type Model from 'gmp/models/model';
 import {isDefined, hasValue} from 'gmp/utils/identity';
-import {excludeObjectProps} from 'gmp/utils/object';
 import ToolBar from 'web/components/bar/ToolBar';
 import ErrorMessage from 'web/components/error/ErrorMessage';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
 import PowerFilter from 'web/components/powerfilter/PowerFilter';
 import Section from 'web/components/section/Section';
-import {type TranslateFunc} from 'web/hooks/useTranslation';
+import useTranslation from 'web/hooks/useTranslation';
 import {loadAllEntities, selector} from 'web/store/entities/filters';
 import compose from 'web/utils/compose';
 import withGmp from 'web/utils/withGmp';
-import withTranslation from 'web/utils/withTranslation';
 
 interface FilterDialogComponentProps {
   createFilterType?: string;
@@ -55,10 +53,6 @@ interface SectionComponentProps {
   img?: React.ReactNode;
   title: string;
   children?: React.ReactNode;
-}
-
-interface EntitiesPageState {
-  showFilterDialog: boolean;
 }
 
 export interface EntitiesPageProps<TModel extends Model = Model, TProps = {}> {
@@ -95,50 +89,46 @@ interface EntitiesPagePropsWithHOCs<
   gmp: Gmp;
   loadFilters: () => void;
   isLoadingFilters?: boolean;
-  _: TranslateFunc;
 }
 
-const excludeProps = [
-  'children',
-  'dashboard',
-  'dashboardControls',
-  'filterEditDialog',
-  'filters',
-  'powerfilter',
-  'section',
-  'sectionIcon',
-  'table',
-  'title',
-  'toolBarIcons',
-];
-
-class EntitiesPage<
+const EntitiesPage = <
   TModel extends Model = Model,
-  TProps extends {} = {},
-> extends React.Component<
-  EntitiesPagePropsWithHOCs<TModel, TProps>,
-  EntitiesPageState
-> {
-  constructor(props: EntitiesPagePropsWithHOCs<TModel, TProps> & TProps) {
-    super(props);
+  TProps extends object = object,
+>({
+  createFilterType,
+  dashboard,
+  dashboardControls,
+  entities,
+  entitiesCounts,
+  entitiesError,
+  filter,
+  filterEditDialog: FilterDialogComponent,
+  filters,
+  isLoading,
+  isLoadingFilters,
+  loadFilters,
+  powerfilter = PowerFilter,
+  section: SectionComponent = Section,
+  sectionIcon,
+  table: TableComponent,
+  title,
+  toolBarIcons: ToolBarIconsComponent,
+  onError,
+  onFilterChanged,
+  onFilterCreated,
+  onFilterRemoved,
+  onFilterReset,
+  ...props
+}: EntitiesPagePropsWithHOCs<TModel, TProps> & TProps) => {
+  const [_] = useTranslation();
+  const [showFilterDialog, setShowFilterDialog] = useState<boolean>(false);
 
-    this.state = {
-      showFilterDialog: false,
-    };
+  useEffect(() => {
+    loadFilters();
+    // oxlint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    this.handleFilterCreated = this.handleFilterCreated.bind(this);
-    this.handleFilterEditClick = this.handleFilterEditClick.bind(this);
-    this.handleFilterDialogCloseClick =
-      this.handleFilterDialogCloseClick.bind(this);
-  }
-
-  componentDidMount() {
-    this.props.loadFilters();
-  }
-
-  getSectionTitle() {
-    const {entitiesCounts, title, _} = this.props;
-
+  const getSectionTitle = () => {
     if (!isDefined(entitiesCounts)) {
       return title;
     }
@@ -148,22 +138,17 @@ class EntitiesPage<
       filtered: entitiesCounts.filtered,
       all: entitiesCounts.all,
     });
-  }
+  };
 
-  handleFilterEditClick() {
-    this.setState({showFilterDialog: true});
-  }
+  const handleFilterEditClick = useCallback(() => {
+    setShowFilterDialog(true);
+  }, []);
 
-  handleFilterDialogCloseClick() {
-    this.setState({showFilterDialog: false});
-  }
+  const handleFilterDialogCloseClick = useCallback(() => {
+    setShowFilterDialog(false);
+  }, []);
 
-  renderSection() {
-    const {entities, isLoading, sectionIcon, dashboard, dashboardControls} =
-      this.props;
-
-    const {section: SectionComponent = Section} = this.props;
-
+  const renderSection = () => {
     if (SectionComponent === false) {
       return null;
     }
@@ -177,26 +162,17 @@ class EntitiesPage<
         className="entities-section"
         extra={extra}
         img={sectionIcon}
-        title={this.getSectionTitle()}
+        title={getSectionTitle()}
       >
         <Layout flex="column" grow="1">
           {typeof dashboard === 'function' ? dashboard() : dashboard}
-          {isLoading && !isDefined(entities) ? <Loading /> : this.renderTable()}
+          {isLoading && !isDefined(entities) ? <Loading /> : renderTable()}
         </Layout>
       </SectionComponent>
     );
-  }
+  };
 
-  renderTable() {
-    const {
-      filter,
-      entities,
-      entitiesCounts,
-      entitiesError,
-      table: TableComponent,
-      ...props
-    } = this.props;
-
+  const renderTable = () => {
     if (isDefined(entitiesError)) {
       return <ErrorMessage message={entitiesError.message} />;
     }
@@ -209,40 +185,25 @@ class EntitiesPage<
       return TableComponent;
     }
 
-    const other = excludeObjectProps(props, excludeProps);
-
     return (
       <TableComponent
-        {...(other as TProps)}
+        {...(props as TProps)}
         entities={entities}
         entitiesCounts={entitiesCounts}
         filter={filter}
       />
     );
-  }
+  };
 
-  renderPowerFilter() {
-    const {
-      filter,
-      filterEditDialog,
-      filters,
-      isLoading,
-      isLoadingFilters,
-      powerfilter = PowerFilter,
-      onError,
-      onFilterChanged,
-      onFilterRemoved,
-      onFilterReset,
-    } = this.props;
-
+  const renderPowerFilter = () => {
     if (!powerfilter) {
       return null;
     }
 
     const PowerFilterComponent = powerfilter;
 
-    const handler = isDefined(filterEditDialog)
-      ? this.handleFilterEditClick
+    const handler = isDefined(FilterDialogComponent)
+      ? handleFilterEditClick
       : undefined;
 
     return (
@@ -260,11 +221,9 @@ class EntitiesPage<
         />
       </Layout>
     );
-  }
+  };
 
-  renderToolbarIcons() {
-    const {toolBarIcons: ToolBarIconsComponent, ...other} = this.props;
-
+  const renderToolbarIcons = () => {
     if (!isDefined(ToolBarIconsComponent)) {
       return null;
     }
@@ -272,33 +231,27 @@ class EntitiesPage<
     if (React.isValidElement(ToolBarIconsComponent)) {
       return ToolBarIconsComponent;
     }
-    const otherProps = excludeObjectProps(other, excludeProps);
-    return <ToolBarIconsComponent {...(otherProps as TProps)} />;
-  }
+    return <ToolBarIconsComponent {...(props as TProps)} />;
+  };
 
-  renderToolbar() {
+  const renderToolbar = () => {
     return (
       <ToolBar>
-        {this.renderToolbarIcons()}
-        {this.renderPowerFilter()}
+        {renderToolbarIcons()}
+        {renderPowerFilter()}
       </ToolBar>
     );
-  }
+  };
 
-  handleFilterCreated(filter: Filter) {
-    this.props.loadFilters();
-    this.props.onFilterCreated(filter);
-  }
+  const handleFilterCreated = useCallback(
+    (filter: Filter) => {
+      loadFilters();
+      onFilterCreated(filter);
+    },
+    [loadFilters, onFilterCreated],
+  );
 
-  renderDialogs() {
-    const {
-      createFilterType,
-      filter,
-      filterEditDialog: FilterDialogComponent,
-      onFilterChanged,
-    } = this.props;
-    const {showFilterDialog} = this.state;
-
+  const renderDialogs = () => {
     if (!FilterDialogComponent || !showFilterDialog) {
       return null;
     }
@@ -307,23 +260,21 @@ class EntitiesPage<
       <FilterDialogComponent
         createFilterType={createFilterType}
         filter={filter}
-        onClose={this.handleFilterDialogCloseClick}
+        onClose={handleFilterDialogCloseClick}
         onFilterChanged={onFilterChanged}
-        onFilterCreated={this.handleFilterCreated}
+        onFilterCreated={handleFilterCreated}
       />
     );
-  }
+  };
 
-  render() {
-    return (
-      <Layout align="start" flex="column" grow="1">
-        {this.renderToolbar()}
-        {this.renderSection()}
-        {this.renderDialogs()}
-      </Layout>
-    );
-  }
-}
+  return (
+    <Layout align="start" flex="column" grow="1">
+      {renderToolbar()}
+      {renderSection()}
+      {renderDialogs()}
+    </Layout>
+  );
+};
 
 const mapStateToProps = (
   state: unknown,
@@ -362,7 +313,6 @@ const mapDispatchToProps = (
 
 export default compose(
   withGmp,
-  withTranslation,
   connect(mapStateToProps, mapDispatchToProps),
 )(EntitiesPage) as <TModel extends Model = Model, TProps = {}>(
   props: EntitiesPageProps<TModel, TProps> & TProps,
