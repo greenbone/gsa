@@ -7,7 +7,6 @@ import {useCallback, useState} from 'react';
 import {ExistingSettings} from 'gmp/commands/user';
 import {type FilterType, PORTLISTS_FILTER_FILTER} from 'gmp/models/filter';
 import type PortList from 'gmp/models/port-list';
-import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {PortListIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -36,7 +35,7 @@ import SelectionType from 'web/utils/selection-type';
 const PortListsPage = () => {
   const [_] = useTranslation();
   const [isTagsDialogVisible, setIsTagsDialogVisible] = useState(false);
-  const [downloadRef, handleDownload] = useDownload();
+  const {downloadComponent, download: handleDownload} = useDownload();
   const [filter, , {changeFilter, resetFilter, removeFilter}] = usePageFilter(
     'portlist',
     'portlist',
@@ -206,7 +205,7 @@ const PortListsPage = () => {
             onFilterRemoved={handleFilterRemoved}
             onFilterReset={handleFilterReset}
           />
-          <Download ref={downloadRef} />
+          {downloadComponent}
           {dialogNotification}
           {isTagsDialogVisible && (
             <BulkTags

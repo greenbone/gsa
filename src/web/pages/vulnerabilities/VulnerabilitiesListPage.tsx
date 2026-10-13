@@ -10,7 +10,6 @@ import {type FilterType, VULNS_FILTER_FILTER} from 'gmp/models/filter';
 import type Vulnerability from 'gmp/models/vulnerability';
 import {getEntityType, pluralizeType} from 'gmp/utils/entity-type';
 import DashboardControlsContainer from 'web/components/dashboard/DashboardControlsContainer';
-import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {VulnerabilityIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -72,7 +71,7 @@ const ToolBarIcons = () => {
 const VulnerabilitiesPage = () => {
   const [_] = useTranslation();
 
-  const [downloadRef, handleDownload] = useDownload();
+  const {downloadComponent, download: handleDownload} = useDownload();
 
   const listExportFileName = useShallowEqualSelector(state =>
     getUserSettingsDefaults(state).getValueByName('listexportfilename'),
@@ -226,7 +225,7 @@ const VulnerabilitiesPage = () => {
         onFilterRemoved={removeFilter}
         onFilterReset={resetFilter}
       />
-      <Download ref={downloadRef} />
+      {downloadComponent}
       {dialogNotification}
     </>
   );

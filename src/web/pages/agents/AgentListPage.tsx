@@ -11,7 +11,6 @@ import {parseBoolean} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
-import Download from 'web/components/form/Download';
 import FormGroup from 'web/components/form/FormGroup';
 import Radio from 'web/components/form/Radio';
 import useDownload from 'web/components/form/useDownload';
@@ -55,7 +54,7 @@ const AgentListPage = () => {
   const [entitiesCounts, setEntitiesCounts] = useState<
     CollectionCounts | undefined
   >(undefined);
-  const [downloadRef, handleDownload] = useDownload();
+  const {downloadComponent, download: handleDownload} = useDownload();
   const deleteFuncRef = useRef<((agent: Agent) => Promise<void>) | undefined>(
     undefined,
   );
@@ -369,7 +368,7 @@ const AgentListPage = () => {
               onFilterRemoved={handleFilterRemoved}
               onFilterReset={handleFilterReset}
             />
-            <Download ref={downloadRef} />
+            {downloadComponent}
             {dialogNotification}
             {confirmDeleteDialogVisible && deleteAgent && (
               <ConfirmationDialog

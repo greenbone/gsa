@@ -6,16 +6,13 @@
 import {type default as React, useRef, useCallback} from 'react';
 import logger from 'gmp/log';
 import {hasValue} from 'gmp/utils/identity';
-import {
-  type DownloadData,
-  type default as Download,
-} from 'web/components/form/Download';
+import Download, {type DownloadData} from 'web/components/form/Download';
 
-type DownloadParams = {
+interface DownloadParams {
   filename: string;
   data: DownloadData;
   mimetype?: string;
-};
+}
 
 export type DownloadFunc = (params: DownloadParams) => void;
 
@@ -26,10 +23,14 @@ const log = logger.getLogger('web.components.form.useDownload');
  *
  * Should be used in combination with the Download component
  *
- * @returns Array of downloadRef and download function
+ * @returns Object containing the download function and download component
  */
-const useDownload = (): [React.RefObject<Download | null>, DownloadFunc] => {
+const useDownload = (): {
+  download: DownloadFunc;
+  downloadComponent: React.ReactElement<Download>;
+} => {
   const downloadRef = useRef<Download | null>(null);
+  const downloadComponent = <Download ref={downloadRef} />;
 
   const download = useCallback(({filename, data, mimetype}: DownloadParams) => {
     if (!hasValue(downloadRef.current)) {
@@ -41,7 +42,7 @@ const useDownload = (): [React.RefObject<Download | null>, DownloadFunc] => {
     downloadRef.current.setData(data, mimetype);
     downloadRef.current.download();
   }, []);
-  return [downloadRef, download];
+  return {download, downloadComponent};
 };
 
 export default useDownload;

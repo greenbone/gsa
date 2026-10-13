@@ -9,7 +9,6 @@ import type CollectionCounts from 'gmp/collection/collection-counts';
 import {type FilterType, TAGS_FILTER_FILTER} from 'gmp/models/filter';
 import type Tag from 'gmp/models/tag';
 import {getEntityType, pluralizeType} from 'gmp/utils/entity-type';
-import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {NewIcon, TagIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -61,7 +60,7 @@ const ToolBarIcons = ({onTagCreateClick}: ToolBarIconsProps) => {
 const TagsPage = () => {
   const [_] = useTranslation();
 
-  const [downloadRef, handleDownload] = useDownload();
+  const {downloadComponent, download: handleDownload} = useDownload();
   const [isTagsDialogVisible, setIsTagsDialogVisible] = useState(false);
   const deleteFuncRef = useRef<((tag: Tag) => Promise<void> | void) | null>(
     null,
@@ -291,7 +290,7 @@ const TagsPage = () => {
               onFilterRemoved={handleFilterRemoved}
               onFilterReset={handleFilterReset}
             />
-            <Download ref={downloadRef} />
+            {downloadComponent}
             {dialogNotification}
             {isTagsDialogVisible && (
               <BulkTags

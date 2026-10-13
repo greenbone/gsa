@@ -5,14 +5,13 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, render, screen} from 'web/testing';
-import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 
 const TestComponent = () => {
-  const [ref, download] = useDownload();
+  const {downloadComponent, download} = useDownload();
   return (
     <>
-      <Download ref={ref} />
+      {downloadComponent}
       <button
         data-testid="download"
         onClick={() =>

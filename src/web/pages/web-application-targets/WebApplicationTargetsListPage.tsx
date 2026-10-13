@@ -9,7 +9,6 @@ import type CollectionCounts from 'gmp/collection/collection-counts';
 import {type FilterType, TARGETS_FILTER_FILTER} from 'gmp/models/filter';
 import type WebApplicationTarget from 'gmp/models/web-application-target';
 import {getEntityType, pluralizeType} from 'gmp/utils/entity-type';
-import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {NewIcon, TargetIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -65,7 +64,7 @@ const WebApplicationTargetsListPageToolBarIcons = ({
 const WebApplicationTargetsListPage = () => {
   const [_] = useTranslation();
 
-  const [downloadRef, handleDownload] = useDownload();
+  const {downloadComponent, download: handleDownload} = useDownload();
   const [isTagsDialogVisible, setIsTagsDialogVisible] = useState(false);
   const deleteFuncRef = useRef<
     ((target: WebApplicationTarget) => Promise<void> | void) | null
@@ -292,7 +291,7 @@ const WebApplicationTargetsListPage = () => {
               onFilterReset={handleFilterReset}
               onTagsBulk={openTagsDialog}
             />
-            <Download ref={downloadRef} />
+            {downloadComponent}
             {dialogNotification}
             {isTagsDialogVisible && (
               <BulkTags

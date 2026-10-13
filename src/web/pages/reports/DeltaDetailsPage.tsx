@@ -22,7 +22,6 @@ import type ReportFormat from 'gmp/models/report-format';
 import {isActive} from 'gmp/models/task';
 import {first} from 'gmp/utils/array';
 import {isDefined, hasValue} from 'gmp/utils/identity';
-import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {
   NO_RELOAD,
@@ -276,7 +275,7 @@ const DeltaReportDetails = () => {
   );
 
   const [startTimer, clearTimer] = useReload(memoizedReloadFn, timeoutFunc);
-  const [downloadRef, onDownload] = useDownload();
+  const {downloadComponent, download: onDownload} = useDownload();
 
   const {dialogNotification, showError, showErrorMessage, showSuccessMessage} =
     useDialogNotification();
@@ -578,7 +577,7 @@ const DeltaReportDetails = () => {
           onSave={handleReportDownload}
         />
       )}
-      <Download ref={downloadRef} />
+      {downloadComponent}
       {dialogNotification}
     </>
   );

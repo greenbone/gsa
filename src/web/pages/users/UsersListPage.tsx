@@ -22,7 +22,6 @@ import type User from 'gmp/models/user';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
 import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
-import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {UserIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -95,7 +94,7 @@ const UsersListPage = () => {
   const gmp = useGmp();
   const queryClient = useQueryClient();
   const {dialogNotification, showError} = useDialogNotification();
-  const [downloadRef, handleDownload] = useDownload();
+  const {downloadComponent, download: handleDownload} = useDownload();
 
   const [filter, , {changeFilter, removeFilter, resetFilter}] = usePageFilter(
     'user',
@@ -337,7 +336,7 @@ const UsersListPage = () => {
       {({clone, create, download, edit}) => (
         <>
           {dialogNotification}
-          <Download ref={downloadRef} />
+          {downloadComponent}
           <PageTitle title={_('Users')} />
           <EntitiesPage<User>
             createFilterType="user"
