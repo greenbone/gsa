@@ -12,7 +12,6 @@ import type CollectionCounts from 'gmp/collection/collection-counts';
 import logger from 'gmp/log';
 import type AgentInstaller from 'gmp/models/agent-installer';
 import {AGENT_INSTALLERS_FILTER_FILTER} from 'gmp/models/filter';
-import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {HatAndGlassesIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -49,7 +48,7 @@ const AgentInstallerListPage = () => {
     filter,
     changeFilter,
   );
-  const [downloadRef, handleDownload] = useDownload();
+  const {downloadComponent, download: handleDownload} = useDownload();
   const {dialogNotification, showError} = useDialogNotification();
 
   const {
@@ -173,7 +172,7 @@ const AgentInstallerListPage = () => {
         onFilterRemoved={removeFilter}
         onFilterReset={resetFilter}
       />
-      <Download ref={downloadRef} />
+      {downloadComponent}
       {dialogNotification}
       {isTagsDialogVisible && (
         <BulkTags<AgentInstaller>

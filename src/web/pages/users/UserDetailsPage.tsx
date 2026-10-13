@@ -10,7 +10,6 @@ import {type FilterType} from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import type User from 'gmp/models/user';
 import {isDefined} from 'gmp/utils/identity';
-import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {UserIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
@@ -101,7 +100,7 @@ const UserDetailsPage = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const {dialogNotification, showError} = useDialogNotification();
-  const [downloadRef, handleDownload] = useDownload();
+  const {downloadComponent, download: handleDownload} = useDownload();
 
   const {data: entity, error, isLoading} = useGetUser({id: id ?? ''});
 
@@ -131,7 +130,7 @@ const UserDetailsPage = () => {
   return (
     <>
       {dialogNotification}
-      <Download ref={downloadRef} />
+      {downloadComponent}
       <UserComponent
         onCloneError={onError}
         onCloned={handleEntityActionCompleted}

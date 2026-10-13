@@ -7,7 +7,6 @@ import {useQueryClient} from '@tanstack/react-query';
 import {useNavigate, useParams} from 'react-router';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import type Policy from 'gmp/models/policy';
-import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {PolicyIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
@@ -54,7 +53,7 @@ const PolicyDetailsPage = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const {dialogNotification, showError} = useDialogNotification();
-  const [downloadRef, handleDownload] = useDownload();
+  const {downloadComponent, download: handleDownload} = useDownload();
 
   const {data: entity, isLoading, error} = useGetPolicy({id: id ?? ''});
 
@@ -79,7 +78,7 @@ const PolicyDetailsPage = () => {
   return (
     <>
       {dialogNotification}
-      <Download ref={downloadRef} />
+      {downloadComponent}
       <PolicyComponent
         onCloneError={onError}
         onCloned={goToDetails('policy', navigate)}

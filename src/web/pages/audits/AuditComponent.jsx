@@ -17,7 +17,6 @@ import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {hasId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
-import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import EntityComponent from 'web/entity/EntityComponent';
 import useCapabilities from 'web/hooks/useCapabilities';
@@ -85,7 +84,7 @@ const AuditComponent = ({
   const [_] = useTranslation();
   const gmp = useGmp();
   const capabilities = useCapabilities();
-  const [downloadRef, download] = useDownload();
+  const {downloadComponent, download} = useDownload();
 
   const [auditDialogVisible, setAuditDialogVisible] = useState(false);
   const [alertIds, setAlertIds] = useState([]);
@@ -560,7 +559,7 @@ const AuditComponent = ({
     >
       {other => (
         <>
-          <Download ref={downloadRef} />
+          {downloadComponent}
           {children({
             ...other,
             create: openAuditDialog,

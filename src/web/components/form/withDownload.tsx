@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import Download from 'web/components/form/Download';
 import useDownload, {type DownloadFunc} from 'web/components/form/useDownload';
 import {updateDisplayName} from 'web/utils/display-name';
 
@@ -16,11 +15,11 @@ const withDownload = <P extends {}>(
   Component: React.ComponentType<P & DownloadProps>,
 ) => {
   const WithDownloadComponent = (props: P) => {
-    const [ref, download] = useDownload();
+    const {downloadComponent, download} = useDownload();
     return (
       <>
         <Component {...props} onDownload={download} />
-        <Download ref={ref} />
+        {downloadComponent}
       </>
     );
   };

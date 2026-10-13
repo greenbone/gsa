@@ -14,7 +14,6 @@ import {
 } from 'gmp/models/filter';
 import type Ticket from 'gmp/models/ticket';
 import DashboardControlsContainer from 'web/components/dashboard/DashboardControlsContainer';
-import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {TicketIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -77,7 +76,7 @@ const TicketsListPage = () => {
   const [_] = useTranslation();
   const queryClient = useQueryClient();
   const {dialogNotification, showError} = useDialogNotification();
-  const [downloadRef, handleDownload] = useDownload();
+  const {downloadComponent, download: handleDownload} = useDownload();
 
   const [filter, , {changeFilter, removeFilter, resetFilter}] = usePageFilter(
     'ticket',
@@ -191,7 +190,7 @@ const TicketsListPage = () => {
       {({clone, delete: deleteTicket, edit}) => (
         <>
           {dialogNotification}
-          <Download ref={downloadRef} />
+          {downloadComponent}
           <PageTitle title={_('Tickets')} />
           <EntitiesPage<Ticket>
             createFilterType="ticket"

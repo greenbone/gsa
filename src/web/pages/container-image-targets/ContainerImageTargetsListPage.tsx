@@ -9,7 +9,6 @@ import type CollectionCounts from 'gmp/collection/collection-counts';
 import {type FilterType, TARGETS_FILTER_FILTER} from 'gmp/models/filter';
 import type OciImageTarget from 'gmp/models/oci-image-target';
 import {getEntityType, pluralizeType} from 'gmp/utils/entity-type';
-import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {NewIcon, TargetIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
@@ -62,7 +61,7 @@ const ContainerImageTargetsListPageToolBarIcons = ({
 const ContainerImageTargetsListPage = () => {
   const [_] = useTranslation();
 
-  const [downloadRef, handleDownload] = useDownload();
+  const {downloadComponent, download: handleDownload} = useDownload();
   const [isTagsDialogVisible, setIsTagsDialogVisible] = useState(false);
   const deleteFuncRef = useRef<
     ((ociImageTarget: OciImageTarget) => Promise<void> | void) | null
@@ -289,7 +288,7 @@ const ContainerImageTargetsListPage = () => {
               onFilterReset={handleFilterReset}
               onTagsBulk={openTagsDialog}
             />
-            <Download ref={downloadRef} />
+            {downloadComponent}
             {dialogNotification}
             {isTagsDialogVisible && (
               <BulkTags

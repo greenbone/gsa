@@ -18,7 +18,6 @@ import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {type ScannerType} from 'gmp/models/scanner';
 import {isActive} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
-import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import PageTitle from 'web/components/layout/PageTitle';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
@@ -98,7 +97,7 @@ const ReportDetailsPage = () => {
 
   const {dialogNotification, showError, showErrorMessage, showSuccessMessage} =
     useDialogNotification();
-  const [downloadRef, handleDownload] = useDownload();
+  const {downloadComponent, download: handleDownload} = useDownload();
 
   const [showFilterDialog, setShowFilterDialog] = useState(false);
   const [showDownloadReportDialog, setShowDownloadReportDialog] =
@@ -445,7 +444,7 @@ const ReportDetailsPage = () => {
   return (
     <>
       {dialogNotification}
-      <Download ref={downloadRef} />
+      {downloadComponent}
       <PageTitle title={_('Report Details')} />
       <TargetComponent onSaveError={handleError}>
         {({edit}) => (

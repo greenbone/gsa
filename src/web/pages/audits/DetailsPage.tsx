@@ -10,7 +10,6 @@ import type Audit from 'gmp/models/audit';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import type Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
-import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {AuditIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
@@ -126,7 +125,7 @@ const AuditDetailsPage = () => {
   const gmp = useGmp();
   const queryClient = useQueryClient();
   const {dialogNotification, showError} = useDialogNotification();
-  const [downloadRef, handleDownload] = useDownload();
+  const {downloadComponent, download: handleDownload} = useDownload();
 
   const getRefetchInterval = (entity?: Audit) => {
     if (!isDefined(entity) || entity.isImport()) {
@@ -167,7 +166,7 @@ const AuditDetailsPage = () => {
   return (
     <>
       {dialogNotification}
-      <Download ref={downloadRef} />
+      {downloadComponent}
       <AuditComponent
         onCloneError={onError}
         onCloned={goToDetails('audit', navigate)}

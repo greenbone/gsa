@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
 import {useQueryClient} from '@tanstack/react-query';
 import {useNavigate, useParams} from 'react-router';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import type Tag from 'gmp/models/tag';
-import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {DisableIcon, EnableIcon, TagIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
@@ -112,7 +110,7 @@ const TagDetailsPage = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const {dialogNotification, showError} = useDialogNotification();
-  const [downloadRef, handleDownload] = useDownload();
+  const {downloadComponent, download: handleDownload} = useDownload();
 
   const {
     data: entity,
@@ -143,7 +141,7 @@ const TagDetailsPage = () => {
   return (
     <>
       {dialogNotification}
-      <Download ref={downloadRef} />
+      {downloadComponent}
       <TagComponent
         onCloneError={onError}
         onCloned={goToDetails('tag', navigate)}

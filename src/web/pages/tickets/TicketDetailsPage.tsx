@@ -12,7 +12,6 @@ import {
 } from 'gmp/models/ticket';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import Comment from 'web/components/comment/Comment';
-import Download from 'web/components/form/Download';
 import useDownload from 'web/components/form/useDownload';
 import {TicketIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
@@ -171,7 +170,7 @@ const TicketDetailsPage = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const {dialogNotification, showError} = useDialogNotification();
-  const [downloadRef, handleDownload] = useDownload();
+  const {downloadComponent, download: handleDownload} = useDownload();
 
   const {data: entity, error, isLoading} = useGetTicket({id: id ?? ''});
 
@@ -192,7 +191,7 @@ const TicketDetailsPage = () => {
   return (
     <>
       {dialogNotification}
-      <Download ref={downloadRef} />
+      {downloadComponent}
       <TicketComponent
         onCloneError={onError}
         onCloned={handleEntityActionCompleted}
