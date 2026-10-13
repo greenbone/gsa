@@ -3,15 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useQueryClient} from '@tanstack/react-query';
+import {useNavigate, useParams} from 'react-router';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
+import useDownload from 'web/components/form/useDownload';
 import {CpeLogoIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import DetailsLink from 'web/components/link/DetailsLink';
 import Loading from 'web/components/loading/Loading';
+import DialogNotification from 'web/components/notification/DialogNotification';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
 import Tab from 'web/components/tab/Tab';
 import TabLayout from 'web/components/tab/TabLayout';
 import TabList from 'web/components/tab/TabList';
@@ -31,11 +36,10 @@ import EntityComponent from 'web/entity/EntityComponent';
 import {EntityInfoTable} from 'web/entity/EntityInfo';
 import EntityPage from 'web/entity/EntityPage';
 import EntityTags from 'web/entity/Tags';
-import withEntityContainer from 'web/entity/withEntityContainer';
+import useGetCpe from 'web/hooks/use-query/cpe';
 import useTranslation from 'web/hooks/useTranslation';
 import CpeDetailsPageToolBarIcons from 'web/pages/cpes/CpeDetailsPageToolBarIcons';
 import CpeDetails from 'web/pages/cpes/Details';
-import {selector, loadEntity} from 'web/store/entities/cpes';
 import PropTypes from 'web/utils/prop-types';
 
 const CpeEntityInfo = ({entity}) => {
@@ -132,71 +136,94 @@ Details.propTypes = {
   links: PropTypes.bool,
 };
 
-const CpePage = ({entity, onChanged, onDownloaded, onError, ...props}) => {
+const CpePage = () => {
   const [_] = useTranslation();
+  const {id: routeId} = useParams();
+  const id = routeId ? decodeURIComponent(routeId) : undefined;
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const {dialogState, closeDialog, showError} = useDialogNotification();
+  const {downloadComponent, download: handleDownload} = useDownload();
+  const {data, error, isLoading} = useGetCpe({id});
+  const entity = data?.cpe;
+  const candidateFilter = data?.candidateFilter;
+
+  useEffect(() => {
+    if (candidateFilter) {
+      void navigate(`/cpes?filter=${encodeURIComponent(candidateFilter)}`, {
+        replace: true,
+      });
+    }
+  }, [candidateFilter, navigate]);
+
+  const entityError = error
+    ? {status: error.status ?? 0, message: error.message}
+    : undefined;
+  const onChanged = () => {
+    void queryClient.invalidateQueries({queryKey: ['get_cpe']});
+  };
+  const onError = error => showError(error);
 
   return (
-    <EntityComponent
-      name="cpe"
-      onDownloadError={onError}
-      onDownloaded={onDownloaded}
-    >
-      {({download}) => (
-        <EntityPage
-          {...props}
-          entity={entity}
-          infoComponent={CpeEntityInfo}
-          sectionIcon={<CpeLogoIcon size="large" />}
-          title={_('CPE')}
-          toolBarIcons={CpeDetailsPageToolBarIcons}
-          onCpeDownloadClick={download}
-        >
-          {() => {
-            return (
-              <>
-                <PageTitle title={_('CPE: {{title}}', {title: entity.title})} />
-                <TabsContainer flex="column" grow="1">
-                  <TabLayout align={['start', 'end']} grow="1">
-                    <TabList align={['start', 'stretch']}>
-                      <Tab>{_('Information')}</Tab>
-                      <EntitiesTab entities={entity.userTags}>
-                        {_('User Tags')}
-                      </EntitiesTab>
-                    </TabList>
-                  </TabLayout>
+    <>
+      <DialogNotification {...dialogState} onCloseClick={closeDialog} />
+      {downloadComponent}
+      <EntityComponent
+        name="cpe"
+        onDownloadError={onError}
+        onDownloaded={handleDownload}
+      >
+        {({download}) => (
+          <EntityPage
+            entity={entity}
+            entityError={entityError}
+            entityType="cpe"
+            infoComponent={CpeEntityInfo}
+            isLoading={isLoading || Boolean(candidateFilter)}
+            sectionIcon={<CpeLogoIcon size="large" />}
+            title={_('CPE')}
+            toolBarIcons={CpeDetailsPageToolBarIcons}
+            onCpeDownloadClick={download}
+          >
+            {() => {
+              return (
+                <>
+                  <PageTitle
+                    title={_('CPE: {{title}}', {title: entity.title})}
+                  />
+                  <TabsContainer flex="column" grow="1">
+                    <TabLayout align={['start', 'end']} grow="1">
+                      <TabList align={['start', 'stretch']}>
+                        <Tab>{_('Information')}</Tab>
+                        <EntitiesTab entities={entity.userTags}>
+                          {_('User Tags')}
+                        </EntitiesTab>
+                      </TabList>
+                    </TabLayout>
 
-                  <Tabs>
-                    <TabPanels>
-                      <TabPanel>
-                        <Details entity={entity} />
-                      </TabPanel>
-                      <TabPanel>
-                        <EntityTags
-                          entity={entity}
-                          onChanged={onChanged}
-                          onError={onError}
-                        />
-                      </TabPanel>
-                    </TabPanels>
-                  </Tabs>
-                </TabsContainer>
-              </>
-            );
-          }}
-        </EntityPage>
-      )}
-    </EntityComponent>
+                    <Tabs>
+                      <TabPanels>
+                        <TabPanel>
+                          <Details entity={entity} />
+                        </TabPanel>
+                        <TabPanel>
+                          <EntityTags
+                            entity={entity}
+                            onChanged={onChanged}
+                            onError={onError}
+                          />
+                        </TabPanel>
+                      </TabPanels>
+                    </Tabs>
+                  </TabsContainer>
+                </>
+              );
+            }}
+          </EntityPage>
+        )}
+      </EntityComponent>
+    </>
   );
 };
 
-CpePage.propTypes = {
-  entity: PropTypes.model,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-};
-
-export default withEntityContainer('cpe', {
-  load: loadEntity,
-  entitySelector: selector,
-})(CpePage);
+export default CpePage;

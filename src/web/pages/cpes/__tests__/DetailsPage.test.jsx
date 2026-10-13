@@ -4,7 +4,8 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {rendererWith, wait, fireEvent, screen, within} from 'web/testing';
+import {rendererWith, waitFor, fireEvent, screen, within} from 'web/testing';
+import {Route, Routes} from 'react-router';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Response from 'gmp/http/response';
 import CPE from 'gmp/models/cpe';
@@ -13,7 +14,6 @@ import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import CpePage from 'web/pages/cpes/DetailsPage';
-import {entityLoadingActions} from 'web/store/entities/cpes';
 
 const cpe = CPE.fromElement({
   _id: 'cpe:/a:foo',
@@ -46,6 +46,7 @@ const createGmp = ({
     filter: QueryFilter.fromString(),
     counts: new CollectionCounts(),
   }),
+  getCpes = testing.fn().mockResolvedValue({data: []}),
   currentSettings = testing.fn().mockResolvedValue(currentSettingsResponse),
   exportCpeResponse = new Response({foo: 'bar'}),
   getCpe = testing.fn().mockResolvedValue(getCpeResponse),
@@ -56,15 +57,19 @@ const createGmp = ({
     get: getCpe,
     export: exportCpe,
   },
+  cpes: {
+    get: getCpes,
+  },
   tags: {
     get: getTags,
   },
   reloadInterval,
   settings: {
     manualUrl,
+    reloadInterval,
     severityRating: SEVERITY_RATING_CVSS_3,
   },
-  session: createSession({timezone: 'UTC'}),
+  session: createSession({timezone: 'UTC', token: 'test-token'}),
   user: {
     currentSettings,
     getSetting: testing.fn().mockResolvedValue({data: {value: '%T-%U'}}),
@@ -72,18 +77,96 @@ const createGmp = ({
 });
 
 describe('CpeDetailsPage tests', () => {
-  test('should render full DetailsPage', () => {
-    const gmp = createGmp();
-    const {render, store} = rendererWith({
+  const renderCpeRoute = render =>
+    render(
+      <Routes>
+        <Route element={<CpePage />} path="/cpe/:id" />
+      </Routes>,
+    );
+
+  test('should navigate to CPE candidates when direct lookup has matches', async () => {
+    const searchFilter = 'name:gitlab:gitlab:18.5.1 first=1 rows=20';
+    const gmp = createGmp({
+      getCpe: testing
+        .fn()
+        .mockRejectedValue(
+          Object.assign(new Error('CPE not found'), {status: 404}),
+        ),
+      getCpes: testing.fn().mockResolvedValue({
+        data: [
+          CPE.fromElement({
+            _id: 'cpe:/a:gitlab:gitlab:18.5.1::~~enterprise~~~',
+            name: 'cpe:/a:gitlab:gitlab:18.5.1::~~enterprise~~~',
+            cpe: {title: 'GitLab 18.5.1 Enterprise Edition'},
+          }),
+          CPE.fromElement({
+            _id: 'cpe:/a:gitlab:gitlab:18.5.1::~~community~~~',
+            name: 'cpe:/a:gitlab:gitlab:18.5.1::~~community~~~',
+            cpe: {title: 'GitLab 18.5.1 Community Edition'},
+          }),
+        ],
+      }),
+    });
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
+      showLocation: true,
+      route: `/cpe/${encodeURIComponent('cpe:/a:gitlab:gitlab:18.5.1')}`,
+    });
+    renderCpeRoute(render);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('location-pathname')).toHaveTextContent(
+        '/cpes',
+      );
+      expect(screen.getByTestId('location-search')).toHaveTextContent(
+        `?filter=${encodeURIComponent(searchFilter)}`,
+      );
+    });
+    expect(gmp.cpes.get.mock.calls[0][0].filter.get('name')).toBe(
+      'gitlab:gitlab:18.5.1',
+    );
+    expect(
+      gmp.cpes.get.mock.calls[0][0].filter.getTerms('name')[0].relation,
+    ).toBe(':');
+  });
+
+  test('should keep not-found page when candidate lookup has no matches', async () => {
+    const error = Object.assign(new Error('CPE not found'), {status: 404});
+    const {render} = rendererWith({
+      gmp: createGmp({
+        getCpe: testing.fn().mockRejectedValue(error),
+        getCpes: testing.fn().mockResolvedValue({data: []}),
+      }),
+      capabilities: true,
+      router: true,
+      route: `/cpe/${encodeURIComponent('cpe:/a:univention:univention_management_console')}`,
     });
 
-    store.dispatch(entityLoadingActions.success('cpe:/a:foo', cpe));
+    renderCpeRoute(render);
 
-    render(<CpePage id="cpe:/a:foo" />);
+    await waitFor(() => {
+      expect(
+        screen.getByText(/The CPE you were looking for could not be found/i),
+      ).toBeInTheDocument();
+    });
+  });
+
+  test('should render full DetailsPage', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+      route: `/cpe/${encodeURIComponent('cpe:/a:foo')}`,
+    });
+    renderCpeRoute(render);
+
+    await waitFor(() => {
+      expect(gmp.cpe.get).toHaveBeenCalledWith({id: 'cpe:/a:foo'});
+      expect(screen.getByTitle('Help: CPEs')).toBeInTheDocument();
+    });
 
     expect(screen.getByTitle('Help: CPEs')).toBeInTheDocument();
     expect(screen.getByTestId('manual-link')).toHaveAttribute(
@@ -139,38 +222,35 @@ describe('CpeDetailsPage tests', () => {
 
   test('should render user tags tab', async () => {
     const gmp = createGmp();
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
+      route: `/cpe/${encodeURIComponent('cpe:/a:foo')}`,
     });
 
-    store.dispatch(entityLoadingActions.success('cpe:/a:foo', cpe));
+    const {container} = renderCpeRoute(render);
 
-    const {container} = render(<CpePage id="cpe:/a:foo" />);
-
-    const userTagsTab = screen.getByRole('tab', {name: /^user tags/i});
+    const userTagsTab = await screen.findByRole('tab', {name: /^user tags/i});
     fireEvent.click(userTagsTab);
     expect(container).toHaveTextContent('No user tags available');
   });
 
   test('should call commands', async () => {
     const gmp = createGmp();
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
-      store: true,
+      route: `/cpe/${encodeURIComponent('cpe:/a:foo')}`,
     });
 
-    store.dispatch(entityLoadingActions.success('cpe:/a:foo', cpe));
-
-    render(<CpePage id="cpe:/a:foo" />);
-    const exportIcon = screen.getByTestId('export-icon');
+    renderCpeRoute(render);
+    const exportIcon = await screen.findByTestId('export-icon');
     expect(exportIcon).toHaveAttribute('title', 'Export CPE');
     fireEvent.click(exportIcon);
-    await wait();
-    expect(gmp.cpe.export).toHaveBeenCalledWith(cpe);
+    await waitFor(() => {
+      expect(gmp.cpe.export).toHaveBeenCalledWith(cpe);
+    });
   });
 });
