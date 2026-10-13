@@ -1323,42 +1323,6 @@
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|39|onSelectionTypeChange: this.handleSelectionTypeChange,"
     },
     {
-      "filename": "src/web/entities/EntitiesPage.tsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 245,
-        "column": 14,
-        "offset": 6439
-      },
-      "sourceLine": "? this.handleFilterEditClick",
-      "fingerprint": "src/web/entities/EntitiesPage.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|14|? this.handleFilterEditClick"
-    },
-    {
-      "filename": "src/web/entities/EntitiesPage.tsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 310,
-        "column": 23,
-        "offset": 7996
-      },
-      "sourceLine": "onClose={this.handleFilterDialogCloseClick}",
-      "fingerprint": "src/web/entities/EntitiesPage.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|23|onClose={this.handleFilterDialogCloseClick}"
-    },
-    {
-      "filename": "src/web/entities/EntitiesPage.tsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 312,
-        "column": 31,
-        "offset": 8098
-      },
-      "sourceLine": "onFilterCreated={this.handleFilterCreated}",
-      "fingerprint": "src/web/entities/EntitiesPage.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|31|onFilterCreated={this.handleFilterCreated}"
-    },
-    {
       "filename": "src/web/entity/Container.jsx",
       "code": "typescript(unbound-method)",
       "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
