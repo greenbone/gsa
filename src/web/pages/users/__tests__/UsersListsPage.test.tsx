@@ -166,7 +166,7 @@ describe('UsersListPage tests', () => {
     screen.getByTitle('Help: Powerfilter');
     screen.getByTitle('Edit Filter');
     expect(select).toHaveAttribute('title', 'Loaded filter');
-    expect(select).toHaveValue('--');
+    await waitFor(() => expect(select).toHaveValue('--'));
 
     // table column headers - wait for async data load
     await waitFor(() => {
