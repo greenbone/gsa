@@ -10,6 +10,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter, {type FilterType} from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import Task from 'gmp/models/task';
+import {createSession} from 'gmp/testing';
 import EntitiesPage, {type EntitiesPageProps} from 'web/entities/EntitiesPage';
 
 type PowerFilterProps = {
@@ -42,6 +43,8 @@ const createGmp = ({
     },
   }),
 }: GmpOverrides = {}) => ({
+  session: createSession({token: 'test-token'}),
+  settings: {},
   filters: {get: getFilters},
 });
 
@@ -316,7 +319,7 @@ describe('EntitiesPage', () => {
     expect(screen.queryByTestId('toolbar-icons')).not.toBeInTheDocument();
   });
 
-  test('loads through the connected component when no filters filter is supplied', async () => {
+  test('does not load filters when no filters filter is supplied', () => {
     const props = createProps();
     const getFilters = testing.fn().mockResolvedValue({
       data: [],
@@ -335,7 +338,7 @@ describe('EntitiesPage', () => {
 
     render(<EntitiesPage {...props} filtersFilter={undefined as never} />);
 
-    await waitFor(() => expect(getFilters).toHaveBeenCalled());
+    expect(getFilters).not.toHaveBeenCalled();
   });
 
   test('maps loaded filters and loading state through the connected component', async () => {
