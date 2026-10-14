@@ -128,7 +128,7 @@ describe('ScannerAgentConfigSettings tests', () => {
     expect(screen.getByText('500')).toBeInTheDocument();
     expect(screen.getByText('Indexer Directory Depth')).toBeInTheDocument();
     expect(screen.getAllByText('3').length).toBeGreaterThan(0);
-    expect(screen.getByText('Scheduler Cron Time')).toBeInTheDocument();
+    expect(screen.getByText('Scheduler Cron Times')).toBeInTheDocument();
     expect(screen.getByText('0 */12 * * *')).toBeInTheDocument();
   });
 
@@ -529,5 +529,86 @@ describe('ScannerAgentConfigSettings tests', () => {
     expect(
       screen.getByText('Cannot save: scanner ID is missing.'),
     ).toBeInTheDocument();
+  });
+});
+
+describe('ScannerAgentConfigSettings multiple schedules', () => {
+  const createMultiCronScanner = () => {
+    const scanner = createMockScanner();
+    const agentDefaults = scanner.agentControlConfig?.agentDefaults;
+    if (!agentDefaults) {
+      throw new Error('Mock scanner is missing agent defaults');
+    }
+    agentDefaults.agentScriptExecutor.schedulerCronTimes = [
+      '0 5 * * *',
+      '0 7 * * *',
+    ];
+    return scanner;
+  };
+
+  test('preserves every schedule when saving another setting', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, capabilities: true});
+    render(
+      <ScannerAgentConfigSettings
+        scanner={createMultiCronScanner()}
+        onError={testing.fn()}
+      />,
+    );
+    expect(screen.getByText('0 5 * * *, 0 7 * * *')).toBeInTheDocument();
+    fireEvent.click(screen.getAllByTestId('edit-icon')[0]);
+    fireEvent.change(screen.getByDisplayValue('3'), {target: {value: '5'}});
+    fireEvent.click(screen.getByTitle('Save'));
+    await wait();
+    expect(gmp.scanner.modifyAgentControlConfig).toHaveBeenCalledWith(
+      expect.objectContaining({
+        attempts: 5,
+        schedulerCronTimes: ['0 5 * * *', '0 7 * * *'],
+      }),
+    );
+  });
+
+  test('saves edits and additions as a full schedule array', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, capabilities: true});
+    render(
+      <ScannerAgentConfigSettings
+        scanner={createMultiCronScanner()}
+        onError={testing.fn()}
+      />,
+    );
+    fireEvent.click(screen.getAllByTestId('edit-icon')[6]);
+    fireEvent.change(screen.getByDisplayValue('0 7 * * *'), {
+      target: {value: '0 9 * * *'},
+    });
+    fireEvent.click(screen.getByRole('button', {name: 'Add schedule'}));
+    fireEvent.click(screen.getByTitle('Save'));
+    await wait();
+    expect(gmp.scanner.modifyAgentControlConfig).toHaveBeenCalledWith(
+      expect.objectContaining({
+        schedulerCronTimes: ['0 5 * * *', '0 9 * * *', '0 * * * *'],
+      }),
+    );
+  });
+
+  test('discards schedule additions and removals when canceled', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, capabilities: true});
+    render(
+      <ScannerAgentConfigSettings
+        scanner={createMultiCronScanner()}
+        onError={testing.fn()}
+      />,
+    );
+    fireEvent.click(screen.getAllByTestId('edit-icon')[6]);
+    fireEvent.click(screen.getByRole('button', {name: 'Remove schedule 1'}));
+    fireEvent.click(screen.getByRole('button', {name: 'Add schedule'}));
+    fireEvent.click(screen.getByTitle('Cancel'));
+    await wait();
+    expect(screen.getByText('0 5 * * *, 0 7 * * *')).toBeInTheDocument();
+    expect(gmp.scanner.modifyAgentControlConfig).not.toHaveBeenCalled();
+    fireEvent.click(screen.getAllByTestId('edit-icon')[6]);
+    expect(screen.getByDisplayValue('0 5 * * *')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('0 7 * * *')).toBeInTheDocument();
   });
 });
