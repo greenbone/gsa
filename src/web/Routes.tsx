@@ -206,7 +206,7 @@ const loggedInRoutes = [
       {
         path: ROUTES.cpe.path,
         lazy: async () => ({
-          Component: (await import('web/pages/cpes/DetailsPage')).default,
+          Component: (await import('web/pages/cpes/CpeDetailsPage')).default,
         }),
       },
 
