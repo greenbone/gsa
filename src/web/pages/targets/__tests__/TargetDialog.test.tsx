@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import { describe, test, expect, testing } from "@gsa/testing";
 import {
   changeInputValue,
   getSelectItemElementsForSelect,
@@ -11,9 +11,8 @@ import {
   fireEvent,
   wait,
   rendererWith,
-  changeSelectInput,
-} from 'web/testing';
-import Response from 'gmp/http/response';
+} from "web/testing";
+import Response from "gmp/http/response";
 import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   CERTIFICATE_CREDENTIAL_TYPE,
@@ -23,49 +22,48 @@ import Credential, {
   SSH_CREDENTIAL_TYPES,
   SMB_CREDENTIAL_TYPES,
   SNMP_CREDENTIAL_TYPES,
-} from 'gmp/models/credential';
-import Filter from 'gmp/models/filter';
-import PortList from 'gmp/models/port-list';
+} from "gmp/models/credential";
+import Filter from "gmp/models/filter";
+import PortList from "gmp/models/port-list";
 import {
   ARP_PING,
   CONSIDER_ALIVE,
   ICMP_PING,
   SCAN_CONFIG_DEFAULT,
-} from 'gmp/models/target';
-import {createSession} from 'gmp/testing';
+} from "gmp/models/target";
+import { createSession } from "gmp/testing";
 import TargetDialog, {
   DEFAULT_PORT_LIST_ID,
   DEFAULT_PORT_LIST_NAME,
-} from 'web/pages/targets/TargetDialog';
-import {UNSET_LABEL} from 'web/utils/Render';
+} from "web/pages/targets/TargetDialog";
 
 const cred1 = new Credential({
-  id: '5678',
-  name: 'client certificate',
+  id: "5678",
+  name: "client certificate",
   credentialType: CERTIFICATE_CREDENTIAL_TYPE,
 });
 
 const cred2 = new Credential({
-  id: '2345',
-  name: 'username+password',
+  id: "2345",
+  name: "username+password",
   credentialType: USERNAME_PASSWORD_CREDENTIAL_TYPE,
 });
 
 const cred3 = new Credential({
-  id: '5463',
-  name: 'up2',
+  id: "5463",
+  name: "up2",
   credentialType: USERNAME_PASSWORD_CREDENTIAL_TYPE,
 });
 
 const cred4 = new Credential({
-  id: '6536',
-  name: 'ssh_key',
+  id: "6536",
+  name: "ssh_key",
   credentialType: USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 });
 
 const cred5 = new Credential({
-  id: '2345',
-  name: 'krb5_key',
+  id: "2345",
+  name: "krb5_key",
   credentialType: KRB5_CREDENTIAL_TYPE,
 });
 
@@ -78,7 +76,7 @@ const portLists = [
 ];
 
 const gmp = {
-  session: createSession({token: 'test-token'}),
+  session: createSession({ token: "test-token" }),
   settings: {
     enableGreenboneSensor: true,
     enableKrb5: false,
@@ -91,14 +89,14 @@ const gmp = {
   },
 };
 
-describe('TargetDialog tests', () => {
-  test('should render with default values', async () => {
+describe("TargetDialog tests", () => {
+  test("should render with default values", async () => {
     const handleClose = testing.fn();
     const handleChange = testing.fn();
     const handleSave = testing.fn();
     const handleCreate = testing.fn();
 
-    const {render} = rendererWith({gmp, capabilities: true});
+    const { render } = rendererWith({ gmp, capabilities: true });
 
     render(
       <TargetDialog
@@ -114,88 +112,88 @@ describe('TargetDialog tests', () => {
 
     const fileInputs = screen.queryFileInputs();
 
-    const nameField = screen.getByName('name');
-    expect(nameField).toHaveValue('Unnamed');
+    const nameField = screen.getByName("name");
+    expect(nameField).toHaveValue("Unnamed");
 
-    const commentField = screen.getByName('comment');
-    expect(commentField).toHaveValue('');
+    const commentField = screen.getByName("comment");
+    expect(commentField).toHaveValue("");
 
-    const hostsField = screen.getByName('hosts');
-    expect(hostsField).toHaveValue('');
+    const hostsField = screen.getByName("hosts");
+    expect(hostsField).toHaveValue("");
 
-    const targetSourceInputs = screen.getAllByName('targetSource');
-    expect(targetSourceInputs[0]).toHaveAttribute('value', 'manual');
+    const targetSourceInputs = screen.getAllByName("targetSource");
+    expect(targetSourceInputs[0]).toHaveAttribute("value", "manual");
     expect(targetSourceInputs[0]).toBeChecked();
-    expect(targetSourceInputs[1]).toHaveAttribute('name', 'targetSource');
-    expect(targetSourceInputs[1]).toHaveAttribute('value', 'file');
+    expect(targetSourceInputs[1]).toHaveAttribute("name", "targetSource");
+    expect(targetSourceInputs[1]).toHaveAttribute("value", "file");
     expect(targetSourceInputs[1]).not.toBeChecked();
 
     expect(fileInputs[0]).toBeDisabled();
 
     const targetExcludeSourceInputs = screen.getAllByName(
-      'targetExcludeSource',
+      "targetExcludeSource",
     );
-    expect(targetExcludeSourceInputs[0]).toHaveAttribute('value', 'manual');
+    expect(targetExcludeSourceInputs[0]).toHaveAttribute("value", "manual");
     expect(targetExcludeSourceInputs[0]).toBeChecked();
     expect(targetExcludeSourceInputs[1]).toHaveAttribute(
-      'name',
-      'targetExcludeSource',
+      "name",
+      "targetExcludeSource",
     );
-    expect(targetExcludeSourceInputs[1]).toHaveAttribute('value', 'file');
+    expect(targetExcludeSourceInputs[1]).toHaveAttribute("value", "file");
     expect(targetExcludeSourceInputs[1]).not.toBeChecked();
 
-    const excludeHostsField = screen.getByName('excludeHosts');
-    expect(excludeHostsField).toHaveValue('');
+    const excludeHostsField = screen.getByName("excludeHosts");
+    expect(excludeHostsField).toHaveValue("");
 
     expect(fileInputs[1]).toBeDisabled();
 
     const allowSimultaneousIPsInputs = screen.getAllByName(
-      'allowSimultaneousIPs',
+      "allowSimultaneousIPs",
     );
     expect(allowSimultaneousIPsInputs[0]).toBeChecked();
     expect(allowSimultaneousIPsInputs[1]).not.toBeChecked();
 
     expect(screen.getDialogContent()).not.toHaveTextContent(
-      'Elevate privileges',
+      "Elevate privileges",
     ); // elevate privileges should not be rendered without valid sshCredentialId
 
-    expect(screen.getByName('aliveTests')).toHaveValue('');
+    expect(screen.getByName("aliveTests")).toHaveValue("");
 
-    const aliveTestsRadios = screen.getAllByName('baseAliveTests');
-    expect(aliveTestsRadios[0]).toHaveAttribute('value', 'Scan Config Default');
+    const aliveTestsRadios = screen.getAllByName("baseAliveTests");
+    expect(aliveTestsRadios[0]).toHaveAttribute("value", "Scan Config Default");
     expect(aliveTestsRadios[0]).toBeChecked();
-    expect(aliveTestsRadios[1]).toHaveAttribute('value', 'Consider Alive');
+    expect(aliveTestsRadios[1]).toHaveAttribute("value", "Consider Alive");
     expect(aliveTestsRadios[1]).not.toBeChecked();
-    expect(aliveTestsRadios[2]).toHaveAttribute('value', 'custom');
+    expect(aliveTestsRadios[2]).toHaveAttribute("value", "custom");
     expect(aliveTestsRadios[2]).not.toBeChecked();
 
-    expect(screen.getByName('portListId')).toHaveValue(DEFAULT_PORT_LIST_ID);
-    expect(screen.getByName('sshCredentialId')).toHaveValue('');
-    expect(screen.getByName('smbCredentialId')).toHaveValue('');
-    expect(screen.getByName('esxiCredentialId')).toHaveValue('');
+    expect(screen.getByName("portListId")).toHaveValue(DEFAULT_PORT_LIST_ID);
+    expect(screen.getByName("sshCredentialId")).toHaveValue("");
+    expect(screen.getByName("smbCredentialId")).toHaveValue("");
+    expect(screen.getByName("esxiCredentialId")).toHaveValue("");
 
-    expect(screen.getByTitle('Create a new port list')).toBeInTheDocument();
+    expect(screen.getByTitle("Create a new port list")).toBeInTheDocument();
     const createCredentialIcons = screen.getAllByTitle(
-      'Create a new credential',
+      "Create a new credential",
     );
     expect(createCredentialIcons.length).toEqual(4); // Each icon has both a span and an svg icon. There should be 4 total (Kerberos is disabled by default)
 
-    const reverseLookupOnlyInputs = screen.getAllByName('reverseLookupOnly');
+    const reverseLookupOnlyInputs = screen.getAllByName("reverseLookupOnly");
     expect(reverseLookupOnlyInputs[0]).not.toBeChecked();
     expect(reverseLookupOnlyInputs[1]).toBeChecked();
 
-    const reverseLookupUnifyInputs = screen.getAllByName('reverseLookupUnify');
+    const reverseLookupUnifyInputs = screen.getAllByName("reverseLookupUnify");
     expect(reverseLookupUnifyInputs[0]).not.toBeChecked();
     expect(reverseLookupUnifyInputs[1]).toBeChecked();
   });
 
-  test('should display value from props', async () => {
+  test("should display value from props", async () => {
     const handleClose = testing.fn();
     const handleChange = testing.fn();
     const handleSave = testing.fn();
     const handleCreate = testing.fn();
 
-    const {render} = rendererWith({gmp, capabilities: true});
+    const { render } = rendererWith({ gmp, capabilities: true });
 
     render(
       <TargetDialog
@@ -203,7 +201,7 @@ describe('TargetDialog tests', () => {
         allowSimultaneousIPs={false}
         comment="hello world"
         excludeHosts={[]}
-        hosts={['123.455.67.434']}
+        hosts={["123.455.67.434"]}
         inUse={false}
         name="target"
         reverseLookupOnly={false}
@@ -221,88 +219,88 @@ describe('TargetDialog tests', () => {
 
     const fileInputs = screen.queryFileInputs();
 
-    const nameField = screen.getByName('name');
-    expect(nameField).toHaveValue('target');
+    const nameField = screen.getByName("name");
+    expect(nameField).toHaveValue("target");
 
-    const commentField = screen.getByName('comment');
-    expect(commentField).toHaveValue('hello world');
+    const commentField = screen.getByName("comment");
+    expect(commentField).toHaveValue("hello world");
 
-    const hostsField = screen.getByName('hosts');
-    expect(hostsField).toHaveValue('123.455.67.434');
+    const hostsField = screen.getByName("hosts");
+    expect(hostsField).toHaveValue("123.455.67.434");
 
-    const targetSourceInputs = screen.getAllByName('targetSource');
-    expect(targetSourceInputs[0]).toHaveAttribute('value', 'manual');
+    const targetSourceInputs = screen.getAllByName("targetSource");
+    expect(targetSourceInputs[0]).toHaveAttribute("value", "manual");
     expect(targetSourceInputs[0]).toBeChecked();
-    expect(targetSourceInputs[1]).toHaveAttribute('name', 'targetSource');
-    expect(targetSourceInputs[1]).toHaveAttribute('value', 'file');
+    expect(targetSourceInputs[1]).toHaveAttribute("name", "targetSource");
+    expect(targetSourceInputs[1]).toHaveAttribute("value", "file");
     expect(targetSourceInputs[1]).not.toBeChecked();
 
-    expect(fileInputs[0]).toHaveAttribute('disabled');
+    expect(fileInputs[0]).toHaveAttribute("disabled");
 
     const targetExcludeSourceInputs = screen.getAllByName(
-      'targetExcludeSource',
+      "targetExcludeSource",
     );
-    expect(targetExcludeSourceInputs[0]).toHaveAttribute('value', 'manual');
+    expect(targetExcludeSourceInputs[0]).toHaveAttribute("value", "manual");
     expect(targetExcludeSourceInputs[0]).toBeChecked();
     expect(targetExcludeSourceInputs[1]).toHaveAttribute(
-      'name',
-      'targetExcludeSource',
+      "name",
+      "targetExcludeSource",
     );
-    expect(targetExcludeSourceInputs[1]).toHaveAttribute('value', 'file');
+    expect(targetExcludeSourceInputs[1]).toHaveAttribute("value", "file");
     expect(targetExcludeSourceInputs[1]).not.toBeChecked();
 
-    const excludeHostsField = screen.getByName('excludeHosts');
-    expect(excludeHostsField).toHaveValue('');
+    const excludeHostsField = screen.getByName("excludeHosts");
+    expect(excludeHostsField).toHaveValue("");
 
     expect(fileInputs[1]).toBeDisabled();
 
     const allowSimultaneousIPsInputs = screen.getAllByName(
-      'allowSimultaneousIPs',
+      "allowSimultaneousIPs",
     );
     expect(allowSimultaneousIPsInputs[0]).not.toBeChecked();
     expect(allowSimultaneousIPsInputs[1]).toBeChecked();
 
     expect(screen.getDialogContent()).not.toHaveTextContent(
-      'Elevate privileges',
+      "Elevate privileges",
     ); // elevate privileges should not be rendered without valid sshCredentialId
 
-    expect(screen.getByName('aliveTests')).toHaveValue('');
+    expect(screen.getByName("aliveTests")).toHaveValue("");
 
-    const aliveTestsRadios = screen.getAllByName('baseAliveTests');
-    expect(aliveTestsRadios[0]).toHaveAttribute('value', 'Scan Config Default');
+    const aliveTestsRadios = screen.getAllByName("baseAliveTests");
+    expect(aliveTestsRadios[0]).toHaveAttribute("value", "Scan Config Default");
     expect(aliveTestsRadios[0]).toBeChecked();
-    expect(aliveTestsRadios[1]).toHaveAttribute('value', 'Consider Alive');
+    expect(aliveTestsRadios[1]).toHaveAttribute("value", "Consider Alive");
     expect(aliveTestsRadios[1]).not.toBeChecked();
-    expect(aliveTestsRadios[2]).toHaveAttribute('value', 'custom');
+    expect(aliveTestsRadios[2]).toHaveAttribute("value", "custom");
     expect(aliveTestsRadios[2]).not.toBeChecked();
 
-    expect(screen.getByName('portListId')).toHaveValue(DEFAULT_PORT_LIST_ID);
-    expect(screen.getByName('sshCredentialId')).toHaveValue('');
-    expect(screen.getByName('smbCredentialId')).toHaveValue('2345');
-    expect(screen.getByName('esxiCredentialId')).toHaveValue('');
+    expect(screen.getByName("portListId")).toHaveValue(DEFAULT_PORT_LIST_ID);
+    expect(screen.getByName("sshCredentialId")).toHaveValue("");
+    expect(screen.getByName("smbCredentialId")).toHaveValue("2345");
+    expect(screen.getByName("esxiCredentialId")).toHaveValue("");
 
-    expect(screen.getByTitle('Create a new port list')).toBeInTheDocument();
+    expect(screen.getByTitle("Create a new port list")).toBeInTheDocument();
     const createCredentialIcons = screen.getAllByTitle(
-      'Create a new credential',
+      "Create a new credential",
     );
     expect(createCredentialIcons.length).toEqual(4); // Each icon has both a span and an svg icon. There should be 4 total (Kerberos is disabled by default)
 
-    const reverseLookupOnlyInputs = screen.getAllByName('reverseLookupOnly');
+    const reverseLookupOnlyInputs = screen.getAllByName("reverseLookupOnly");
     expect(reverseLookupOnlyInputs[0]).not.toBeChecked();
     expect(reverseLookupOnlyInputs[1]).toBeChecked();
 
-    const reverseLookupUnifyInputs = screen.getAllByName('reverseLookupUnify');
+    const reverseLookupUnifyInputs = screen.getAllByName("reverseLookupUnify");
     expect(reverseLookupUnifyInputs[0]).not.toBeChecked();
     expect(reverseLookupUnifyInputs[1]).toBeChecked();
   });
 
-  test('should allow to change values and save the dialog', () => {
+  test("should allow to change values and save the dialog", () => {
     const handleClose = testing.fn();
     const handleChange = testing.fn();
     const handleSave = testing.fn();
     const handleCreate = testing.fn();
 
-    const {render} = rendererWith({gmp, capabilities: true});
+    const { render } = rendererWith({ gmp, capabilities: true });
 
     render(
       <TargetDialog
@@ -310,7 +308,7 @@ describe('TargetDialog tests', () => {
         allowSimultaneousIPs={false}
         comment="hello world"
         excludeHosts={[]}
-        hosts={['123.455.67.434']}
+        hosts={["123.455.67.434"]}
         inUse={false}
         name="target"
         reverseLookupOnly={false}
@@ -325,11 +323,11 @@ describe('TargetDialog tests', () => {
     );
 
     // text input
-    const nameInput = screen.getByName('name');
-    changeInputValue(nameInput, 'ross');
+    const nameInput = screen.getByName("name");
+    changeInputValue(nameInput, "ross");
 
     // radio input
-    const simultaneousIPInput = screen.getAllByName('allowSimultaneousIPs');
+    const simultaneousIPInput = screen.getAllByName("allowSimultaneousIPs");
     expect(simultaneousIPInput.length).toBe(2);
     expect(simultaneousIPInput[0]).not.toBeChecked();
     expect(simultaneousIPInput[1]).toBeChecked();
@@ -343,41 +341,41 @@ describe('TargetDialog tests', () => {
       id: undefined,
       aliveTests: [SCAN_CONFIG_DEFAULT],
       allowSimultaneousIPs: true,
-      comment: 'hello world',
+      comment: "hello world",
       esxiCredentialId: undefined,
       excludeHosts: [],
-      hosts: ['123.455.67.434'],
+      hosts: ["123.455.67.434"],
       hostsCount: undefined,
       inUse: false,
-      name: 'ross',
+      name: "ross",
       port: 22,
       portListId: DEFAULT_PORT_LIST_ID,
       reverseLookupOnly: false,
       reverseLookupUnify: true,
-      smbCredentialId: '2345',
+      smbCredentialId: "2345",
       snmpCredentialId: undefined,
       sshCredentialId: undefined,
       sshElevateCredentialId: undefined,
       krb5CredentialId: undefined,
-      targetExcludeSource: 'manual',
-      targetSource: 'manual',
+      targetExcludeSource: "manual",
+      targetSource: "manual",
     });
   });
 
-  test('should render elevate privilege option if ssh credential is defined', () => {
+  test("should render elevate privilege option if ssh credential is defined", () => {
     const handleClose = testing.fn();
     const handleChange = testing.fn();
     const handleSave = testing.fn();
     const handleCreate = testing.fn();
 
-    const {render} = rendererWith({gmp, capabilities: true});
+    const { render } = rendererWith({ gmp, capabilities: true });
     render(
       <TargetDialog
         aliveTests={[SCAN_CONFIG_DEFAULT]}
         allowSimultaneousIPs={false}
         comment="hello world"
         excludeHosts={[]}
-        hosts={['123.455.67.434']}
+        hosts={["123.455.67.434"]}
         inUse={false}
         name="target"
         reverseLookupOnly={false}
@@ -392,31 +390,31 @@ describe('TargetDialog tests', () => {
       />,
     );
 
-    expect(screen.getDialogContent()).toHaveTextContent('Elevate privileges');
+    expect(screen.getDialogContent()).toHaveTextContent("Elevate privileges");
 
     const selects = screen.queryAllSelectElements();
     expect(selects.length).toEqual(6); // Should have 6 selects (Kerberos is disabled by default)
 
     const createCredentialIcons = screen.getAllByTitle(
-      'Create a new credential',
+      "Create a new credential",
     );
     expect(createCredentialIcons.length).toEqual(5); // Each icon has both a span and an svg icon. There should be 5 total, including elevate privileges (Kerberos is disabled by default)
   });
 
-  test('ssh elevate credential dropdown should only allow username + password options and remove ssh credential from list', async () => {
+  test("ssh elevate credential dropdown should only allow username + password options and remove ssh credential from list", async () => {
     const handleClose = testing.fn();
     const handleChange = testing.fn();
     const handleSave = testing.fn();
     const handleCreate = testing.fn();
 
-    const {render} = rendererWith({gmp, capabilities: true});
+    const { render } = rendererWith({ gmp, capabilities: true });
     render(
       <TargetDialog
         aliveTests={[SCAN_CONFIG_DEFAULT]}
         allowSimultaneousIPs={false}
         comment="hello world"
         excludeHosts={[]}
-        hosts={['123.455.67.434']}
+        hosts={["123.455.67.434"]}
         inUse={false}
         name="target"
         reverseLookupOnly={false}
@@ -431,35 +429,35 @@ describe('TargetDialog tests', () => {
       />,
     );
 
-    expect(screen.getDialogContent()).toHaveTextContent('Elevate privileges');
+    expect(screen.getDialogContent()).toHaveTextContent("Elevate privileges");
 
     const selects = screen.queryAllSelectElements();
     expect(selects.length).toEqual(6); // Should have 6 selects (Kerberos is disabled by default)
 
     const selectItems = await getSelectItemElementsForSelect(selects[2]);
     expect(selectItems.length).toBe(1);
-    expect(selectItems[0]).toHaveTextContent('up2');
+    expect(selectItems[0]).toHaveTextContent("up2");
   });
 
   test.each([
     {
-      name: 'Kerberos credential should disable smb credential dropdown',
-      credentialValue: 'krb5_key',
+      name: "Kerberos credential should disable smb credential dropdown",
+      credentialValue: "krb5_key",
       getSelectElement: () =>
-        screen.getByTestId<HTMLSelectElement>('krb5-credential-select'),
+        screen.getByTestId<HTMLSelectElement>("krb5-credential-select"),
       getDisabledElement: () =>
-        screen.getByTestId<HTMLSelectElement>('smb-credential-select'),
+        screen.getByTestId<HTMLSelectElement>("smb-credential-select"),
     },
     {
-      name: 'smb credential should disable kerberos credential dropdown',
-      credentialValue: 'OpenVAS Default',
+      name: "smb credential should disable kerberos credential dropdown",
+      credentialValue: "up2",
       getDisabledElement: () =>
-        screen.getByTestId<HTMLSelectElement>('krb5-credential-select'),
+        screen.getByTestId<HTMLSelectElement>("krb5-credential-select"),
       getSelectElement: () =>
-        screen.getByTestId<HTMLSelectElement>('smb-credential-select'),
+        screen.getByTestId<HTMLSelectElement>("smb-credential-select"),
     },
   ])(
-    '$name',
+    "$name",
     async ({
       credentialValue,
       getSelectElement,
@@ -473,6 +471,8 @@ describe('TargetDialog tests', () => {
       const handleChange = testing.fn();
       const handleSave = testing.fn();
       const handleCreate = testing.fn();
+      const onKrb5CredentialChange = testing.fn();
+      const onSmbCredentialChange = testing.fn();
 
       const krb5Gmp = {
         ...gmp,
@@ -481,51 +481,71 @@ describe('TargetDialog tests', () => {
           enableKrb5: true,
         },
       };
-      const {render} = rendererWith({gmp: krb5Gmp, capabilities: true});
-
-      render(
+      const { render } = rendererWith({ gmp: krb5Gmp, capabilities: true });
+      const renderDialog = (
+        krb5CredentialId?: string,
+        smbCredentialId?: string,
+      ) => (
         <TargetDialog
           aliveTests={[SCAN_CONFIG_DEFAULT]}
           allowSimultaneousIPs={false}
           comment="hello world"
           excludeHosts={[]}
-          hosts={['123.455.67.434']}
+          hosts={["123.455.67.434"]}
           inUse={false}
-          krb5CredentialId="2345"
+          krb5CredentialId={krb5CredentialId}
           name="target"
           reverseLookupOnly={false}
           reverseLookupUnify={false}
-          smbCredentialId="5463"
+          smbCredentialId={smbCredentialId}
           onClose={handleClose}
           onNewCredentialsClick={handleCreate}
           onNewPortListClick={handleCreate}
           onPortListChange={handleChange}
           onSave={handleSave}
-        />,
+          onKrb5CredentialChange={onKrb5CredentialChange}
+          onSmbCredentialChange={onSmbCredentialChange}
+        />
       );
+      const { rerender } = render(renderDialog());
 
       const selectElement = getSelectElement();
       const disabledElement = getDisabledElement();
 
-      changeSelectInput(UNSET_LABEL, selectElement);
-      expect(selectElement).toHaveValue(UNSET_LABEL);
+      const options = await getSelectItemElementsForSelect(selectElement);
+      const credentialOption = options.find(
+        (option) => option.textContent === credentialValue,
+      );
+      expect(credentialOption).toBeDefined();
+      fireEvent.click(credentialOption as HTMLElement);
 
-      changeSelectInput(credentialValue, selectElement);
-      expect(selectElement).toHaveValue(credentialValue);
-
-      await wait();
+      const selectedCredentialId = credentialOption?.getAttribute("value");
+      expect(selectedCredentialId).toBeTruthy();
+      if (selectElement.dataset.testid === "krb5-credential-select") {
+        expect(onKrb5CredentialChange).toHaveBeenCalledWith(
+          selectedCredentialId,
+          "krb5CredentialId",
+        );
+        rerender(renderDialog(selectedCredentialId ?? undefined));
+      } else {
+        expect(onSmbCredentialChange).toHaveBeenCalledWith(
+          selectedCredentialId,
+          "smbCredentialId",
+        );
+        rerender(renderDialog(undefined, selectedCredentialId ?? undefined));
+      }
 
       expect(disabledElement).toBeDisabled();
     },
   );
 
-  test('ssh credential dropdown should remove ssh elevate credential from list', async () => {
+  test("ssh credential dropdown should remove ssh elevate credential from list", async () => {
     const handleClose = testing.fn();
     const handleChange = testing.fn();
     const handleSave = testing.fn();
     const handleCreate = testing.fn();
 
-    const {render} = rendererWith({gmp, capabilities: true});
+    const { render } = rendererWith({ gmp, capabilities: true });
 
     render(
       <TargetDialog
@@ -533,7 +553,7 @@ describe('TargetDialog tests', () => {
         allowSimultaneousIPs={false}
         comment="hello world"
         excludeHosts={[]}
-        hosts={['123.455.67.434']}
+        hosts={["123.455.67.434"]}
         inUse={false}
         name="target"
         reverseLookupOnly={false}
@@ -548,7 +568,7 @@ describe('TargetDialog tests', () => {
       />,
     );
 
-    expect(screen.getDialogContent()).toHaveTextContent('Elevate privileges');
+    expect(screen.getDialogContent()).toHaveTextContent("Elevate privileges");
 
     const selects = screen.queryAllSelectElements();
     expect(selects.length).toEqual(6); // Should have 6 selects (Kerberos is disabled by default)
@@ -556,17 +576,17 @@ describe('TargetDialog tests', () => {
     const selectItems = await getSelectItemElementsForSelect(selects[1]);
     expect(selectItems.length).toBe(2); // ssh elevate option removed
 
-    expect(selectItems[0]).toHaveTextContent('username+password');
-    expect(selectItems[1]).toHaveTextContent('ssh_key');
+    expect(selectItems[0]).toHaveTextContent("username+password");
+    expect(selectItems[1]).toHaveTextContent("ssh_key");
   });
 
-  test('should disable editing certain fields if target is in use', async () => {
+  test("should disable editing certain fields if target is in use", async () => {
     const handleClose = testing.fn();
     const handleChange = testing.fn();
     const handleSave = testing.fn();
     const handleCreate = testing.fn();
 
-    const {render} = rendererWith({gmp, capabilities: true});
+    const { render } = rendererWith({ gmp, capabilities: true });
 
     render(
       <TargetDialog
@@ -574,7 +594,7 @@ describe('TargetDialog tests', () => {
         allowSimultaneousIPs={false}
         comment="hello world"
         excludeHosts={[]}
-        hosts={['123.455.67.434']}
+        hosts={["123.455.67.434"]}
         inUse={true}
         name="target"
         reverseLookupOnly={false}
@@ -591,9 +611,9 @@ describe('TargetDialog tests', () => {
 
     await wait();
 
-    expect(screen.getDialogContent()).toHaveTextContent('Elevate privileges');
+    expect(screen.getDialogContent()).toHaveTextContent("Elevate privileges");
 
-    const newIcons = screen.queryAllByTitle('Create a new credential');
+    const newIcons = screen.queryAllByTitle("Create a new credential");
     expect(newIcons.length).toBe(0); // no new credential can be created
 
     const selects = screen.queryAllSelectElements();
@@ -602,29 +622,29 @@ describe('TargetDialog tests', () => {
     expect(selects[0]).toHaveValue(DEFAULT_PORT_LIST_NAME);
     expect(selects[0]).toBeDisabled();
 
-    expect(selects[1]).toHaveValue('username+password');
+    expect(selects[1]).toHaveValue("username+password");
     expect(selects[1]).toBeDisabled();
 
-    expect(selects[2]).toHaveValue('up2');
+    expect(selects[2]).toHaveValue("up2");
     expect(selects[2]).toBeDisabled();
 
-    expect(selects[3]).toHaveValue('');
+    expect(selects[3]).toHaveValue("");
     expect(selects[3]).toBeDisabled();
 
-    expect(selects[4]).toHaveValue('');
+    expect(selects[4]).toHaveValue("");
     expect(selects[4]).toBeDisabled();
 
-    expect(selects[5]).toHaveValue('');
+    expect(selects[5]).toHaveValue("");
     expect(selects[5]).toBeDisabled();
   });
 
-  test('should allow to close the dialog', () => {
+  test("should allow to close the dialog", () => {
     const handleClose = testing.fn();
     const handleChange = testing.fn();
     const handleSave = testing.fn();
     const handleCreate = testing.fn();
 
-    const {render} = rendererWith({gmp, capabilities: true});
+    const { render } = rendererWith({ gmp, capabilities: true });
 
     render(
       <TargetDialog
@@ -643,11 +663,11 @@ describe('TargetDialog tests', () => {
     expect(handleSave).not.toHaveBeenCalled();
   });
 
-  test('should allow to create a target from asset hosts', () => {
+  test("should allow to create a target from asset hosts", () => {
     const handleSave = testing.fn();
-    const hostsFilter = new Filter({id: 'test-id', filter_type: 'asset'});
+    const hostsFilter = new Filter({ id: "test-id", filter_type: "asset" });
 
-    const {render} = rendererWith({gmp, capabilities: true});
+    const { render } = rendererWith({ gmp, capabilities: true });
 
     render(
       <TargetDialog
@@ -658,12 +678,12 @@ describe('TargetDialog tests', () => {
       />,
     );
 
-    const targetSourceInputs = screen.getAllByName('targetSource');
-    expect(targetSourceInputs[0]).toHaveAttribute('value', 'manual');
+    const targetSourceInputs = screen.getAllByName("targetSource");
+    expect(targetSourceInputs[0]).toHaveAttribute("value", "manual");
     expect(targetSourceInputs[0]).not.toBeChecked();
-    expect(targetSourceInputs[1]).toHaveAttribute('value', 'file');
+    expect(targetSourceInputs[1]).toHaveAttribute("value", "file");
     expect(targetSourceInputs[1]).not.toBeChecked();
-    expect(targetSourceInputs[2]).toHaveAttribute('value', 'asset_hosts');
+    expect(targetSourceInputs[2]).toHaveAttribute("value", "asset_hosts");
     expect(targetSourceInputs[2]).toBeChecked();
 
     const saveButton = screen.getDialogSaveButton();
@@ -671,7 +691,7 @@ describe('TargetDialog tests', () => {
     expect(handleSave).toHaveBeenCalledWith({
       aliveTests: [SCAN_CONFIG_DEFAULT],
       allowSimultaneousIPs: true,
-      comment: '',
+      comment: "",
       esxiCredentialId: undefined,
       excludeHosts: [],
       hosts: [],
@@ -679,7 +699,7 @@ describe('TargetDialog tests', () => {
       hostsFilter,
       id: undefined,
       inUse: false,
-      name: 'Unnamed',
+      name: "Unnamed",
       port: 22,
       portListId: DEFAULT_PORT_LIST_ID,
       reverseLookupOnly: false,
@@ -689,44 +709,44 @@ describe('TargetDialog tests', () => {
       sshCredentialId: undefined,
       sshElevateCredentialId: undefined,
       krb5CredentialId: undefined,
-      targetExcludeSource: 'manual',
-      targetSource: 'asset_hosts',
+      targetExcludeSource: "manual",
+      targetSource: "asset_hosts",
     });
   });
 
-  describe('New Credential Icons', () => {
+  describe("New Credential Icons", () => {
     test.each([
       [
-        'new-icon-esxi',
-        'esxiCredentialId',
-        'Create new ESXi credential',
+        "new-icon-esxi",
+        "esxiCredentialId",
+        "Create new ESXi credential",
         ESXI_CREDENTIAL_TYPES,
       ],
       [
-        'new-icon-ssh',
-        'sshCredentialId',
-        'Create new SSH credential',
+        "new-icon-ssh",
+        "sshCredentialId",
+        "Create new SSH credential",
         SSH_CREDENTIAL_TYPES,
       ],
 
       [
-        'new-icon-smb',
-        'smbCredentialId',
-        'Create new SMB credential',
+        "new-icon-smb",
+        "smbCredentialId",
+        "Create new SMB credential",
         SMB_CREDENTIAL_TYPES,
       ],
       [
-        'new-icon-snmp',
-        'snmpCredentialId',
-        'Create new SNMP credential',
+        "new-icon-snmp",
+        "snmpCredentialId",
+        "Create new SNMP credential",
         SNMP_CREDENTIAL_TYPES,
       ],
     ])(
-      'should render NewIcon for %s when conditions are met',
+      "should render NewIcon for %s when conditions are met",
       (testId, idField, title, types) => {
         const handleCreate = testing.fn();
 
-        const {render} = rendererWith({gmp, capabilities: true});
+        const { render } = rendererWith({ gmp, capabilities: true });
 
         render(
           <TargetDialog inUse={false} onNewCredentialsClick={handleCreate} />,
@@ -744,11 +764,11 @@ describe('TargetDialog tests', () => {
     );
   });
 
-  test('should allow to render consider alive alive tests', () => {
+  test("should allow to render consider alive alive tests", () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {render} = rendererWith({gmp, capabilities: true});
+    const { render } = rendererWith({ gmp, capabilities: true });
 
     render(
       <TargetDialog
@@ -758,22 +778,22 @@ describe('TargetDialog tests', () => {
       />,
     );
 
-    expect(screen.getByName('aliveTests')).toHaveValue('');
+    expect(screen.getByName("aliveTests")).toHaveValue("");
 
-    const aliveTestsRadios = screen.getAllByName('baseAliveTests');
-    expect(aliveTestsRadios[0]).toHaveAttribute('value', 'Scan Config Default');
+    const aliveTestsRadios = screen.getAllByName("baseAliveTests");
+    expect(aliveTestsRadios[0]).toHaveAttribute("value", "Scan Config Default");
     expect(aliveTestsRadios[0]).not.toBeChecked();
-    expect(aliveTestsRadios[1]).toHaveAttribute('value', 'Consider Alive');
+    expect(aliveTestsRadios[1]).toHaveAttribute("value", "Consider Alive");
     expect(aliveTestsRadios[1]).toBeChecked();
-    expect(aliveTestsRadios[2]).toHaveAttribute('value', 'custom');
+    expect(aliveTestsRadios[2]).toHaveAttribute("value", "custom");
     expect(aliveTestsRadios[2]).not.toBeChecked();
   });
 
-  test('should allow to render custom alive tests', () => {
+  test("should allow to render custom alive tests", () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {render} = rendererWith({gmp, capabilities: true});
+    const { render } = rendererWith({ gmp, capabilities: true });
 
     render(
       <TargetDialog
@@ -783,38 +803,38 @@ describe('TargetDialog tests', () => {
       />,
     );
 
-    expect(screen.getByName('aliveTests')).toHaveValue('ICMP Ping,ARP Ping');
+    expect(screen.getByName("aliveTests")).toHaveValue("ICMP Ping,ARP Ping");
 
-    const aliveTestsRadios = screen.getAllByName('baseAliveTests');
-    expect(aliveTestsRadios[0]).toHaveAttribute('value', 'Scan Config Default');
+    const aliveTestsRadios = screen.getAllByName("baseAliveTests");
+    expect(aliveTestsRadios[0]).toHaveAttribute("value", "Scan Config Default");
     expect(aliveTestsRadios[0]).not.toBeChecked();
-    expect(aliveTestsRadios[1]).toHaveAttribute('value', 'Consider Alive');
+    expect(aliveTestsRadios[1]).toHaveAttribute("value", "Consider Alive");
     expect(aliveTestsRadios[1]).not.toBeChecked();
-    expect(aliveTestsRadios[2]).toHaveAttribute('value', 'custom');
+    expect(aliveTestsRadios[2]).toHaveAttribute("value", "custom");
     expect(aliveTestsRadios[2]).toBeChecked();
   });
 
-  test('should update alive tests when selecting custom and base options', () => {
+  test("should update alive tests when selecting custom and base options", () => {
     const handleSave = testing.fn();
 
-    const {render} = rendererWith({gmp, capabilities: true});
+    const { render } = rendererWith({ gmp, capabilities: true });
 
     render(<TargetDialog onSave={handleSave} />);
 
-    fireEvent.click(screen.getByRole('radio', {name: 'Custom'}));
+    fireEvent.click(screen.getByRole("radio", { name: "Custom" }));
     fireEvent.click(screen.getDialogSaveButton());
 
     expect(handleSave).toHaveBeenLastCalledWith(
-      expect.objectContaining({aliveTests: []}),
+      expect.objectContaining({ aliveTests: [] }),
     );
 
     fireEvent.click(
-      screen.getByRole('radio', {name: 'Consider Hosts as Alive'}),
+      screen.getByRole("radio", { name: "Consider Hosts as Alive" }),
     );
     fireEvent.click(screen.getDialogSaveButton());
 
     expect(handleSave).toHaveBeenLastCalledWith(
-      expect.objectContaining({aliveTests: [CONSIDER_ALIVE]}),
+      expect.objectContaining({ aliveTests: [CONSIDER_ALIVE] }),
     );
   });
 });

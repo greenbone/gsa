@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {testing} from '@gsa/testing';
-import * as jestDomMatchers from '@testing-library/jest-dom/matchers';
+import { testing } from "@gsa/testing";
+import * as jestDomMatchers from "@testing-library/jest-dom/matchers";
 // eslint-disable-next-line no-restricted-imports import/no-unassigned-import
-import '../setup-tests';
-import * as ResizeObserverModule from 'resize-observer-polyfill';
+import "../setup-tests";
+import * as ResizeObserverModule from "resize-observer-polyfill";
 // eslint-disable-next-line no-restricted-imports import/no-unassigned-import
-import 'web/testing/custom-matchers';
-import {expect} from 'vitest';
+import "web/testing/custom-matchers";
+import { expect } from "vitest";
 
 // setup additional matchers for vitest
 expect.extend(jestDomMatchers);
@@ -27,13 +27,13 @@ interface JSDOMVirtualConsole {
 }
 const virtualConsole = (
   globalThis as unknown as {
-    jsdom?: {virtualConsole?: JSDOMVirtualConsole};
+    jsdom?: { virtualConsole?: JSDOMVirtualConsole };
   }
 ).jsdom?.virtualConsole;
 if (virtualConsole) {
-  virtualConsole.removeAllListeners('jsdomError');
-  virtualConsole.on('jsdomError', (error: Error) => {
-    if (error?.message?.includes('Could not parse CSS stylesheet')) {
+  virtualConsole.removeAllListeners("jsdomError");
+  virtualConsole.on("jsdomError", (error: Error) => {
+    if (error?.message?.includes("Could not parse CSS stylesheet")) {
       return;
     }
     console.error(error.message);
@@ -53,8 +53,19 @@ globalThis.URL.createObjectURL = testing.fn();
 
 globalThis.ResizeObserver = ResizeObserverModule.default;
 
+// Mantine v9 Textarea autosizing subscribes to font-loading events.
+if (!document.fonts) {
+  Object.defineProperty(document, "fonts", {
+    configurable: true,
+    value: {
+      addEventListener: testing.fn(),
+      removeEventListener: testing.fn(),
+    },
+  });
+}
+
 // Avoid matchMedia errors for Mantine components.
-globalThis.matchMedia = testing.fn().mockImplementation(query => {
+globalThis.matchMedia = testing.fn().mockImplementation((query) => {
   return {
     matches: false,
     media: query,

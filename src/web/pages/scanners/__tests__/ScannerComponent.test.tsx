@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
-import {screen, fireEvent, rendererWith, wait} from 'web/testing';
-import QueryFilter from 'gmp/models/filter/query-filter';
+import { describe, test, expect, testing } from "@gsa/testing";
+import { screen, fireEvent, rendererWith, wait } from "web/testing";
+import QueryFilter from "gmp/models/filter/query-filter";
 import Scanner, {
   AGENT_CONTROLLER_SCANNER_TYPE,
   AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
@@ -15,10 +15,10 @@ import Scanner, {
   OPENVAS_SCANNER_TYPE,
   OPENVASD_SCANNER_TYPE,
   WEB_APPLICATION_SCANNER_TYPE,
-} from 'gmp/models/scanner';
-import {createSession} from 'gmp/testing';
-import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
-import ScannerComponent from 'web/pages/scanners/ScannerComponent';
+} from "gmp/models/scanner";
+import { createSession } from "gmp/testing";
+import { currentSettingsDefaultResponse } from "web/pages/__fixtures__/current-settings";
+import ScannerComponent from "web/pages/scanners/ScannerComponent";
 
 const createGmp = (object?: unknown) => {
   const gmp = {
@@ -33,10 +33,10 @@ const createGmp = (object?: unknown) => {
     },
   };
   // @ts-expect-error
-  return {...gmp, ...object};
+  return { ...gmp, ...object };
 };
 
-describe('ScannerComponent tests', () => {
+describe("ScannerComponent tests", () => {
   test.each([
     OPENVAS_SCANNER_TYPE,
     OPENVASD_SCANNER_TYPE,
@@ -44,41 +44,41 @@ describe('ScannerComponent tests', () => {
     CONTAINER_IMAGE_SCANNER_TYPE,
     WEB_APPLICATION_SCANNER_TYPE,
   ])(
-    'should open a client certificate credential dialog for scanner type %s',
-    async scannerType => {
+    "should open a client certificate credential dialog for scanner type %s",
+    async (scannerType) => {
       const scanner = new Scanner({
-        id: '1234',
-        name: 'Test Scanner',
-        host: 'http://scanner-host',
+        id: "1234",
+        name: "Test Scanner",
+        host: "http://scanner-host",
         port: 443,
         scannerType,
       });
       const gmp = createGmp({
         scanner: {
-          get: testing.fn().mockResolvedValue({data: scanner}),
+          get: testing.fn().mockResolvedValue({ data: scanner }),
         },
         credentials: {
-          getAll: testing.fn().mockResolvedValue({data: []}),
+          getAll: testing.fn().mockResolvedValue({ data: [] }),
         },
       });
-      const {render} = rendererWith({capabilities: true, gmp, store: true});
+      const { render } = rendererWith({ capabilities: true, gmp, store: true });
 
       render(
         <ScannerComponent>
-          {({edit}) => (
+          {({ edit }) => (
             <button onClick={() => edit(scanner)}>Open Scanner</button>
           )}
         </ScannerComponent>,
       );
 
-      fireEvent.click(screen.getByRole('button', {name: 'Open Scanner'}));
+      fireEvent.click(screen.getByRole("button", { name: "Open Scanner" }));
       await wait();
 
-      fireEvent.click(screen.getByTitle('Create a new Credential'));
+      fireEvent.click(screen.getByTitle("Create a new Credential"));
 
-      expect(screen.getByText('New Credential')).toBeVisible();
-      expect(screen.getByRole('textbox', {name: 'Type'})).toHaveValue(
-        'Client Certificate',
+      expect(screen.getByText("New Credential")).toBeVisible();
+      expect(screen.getByRole("combobox", { name: "Type" })).toHaveValue(
+        "Client Certificate",
       );
     },
   );
@@ -88,48 +88,48 @@ describe('ScannerComponent tests', () => {
     GREENBONE_SENSOR_SCANNER_TYPE,
     AGENT_CONTROLLER_SENSOR_SCANNER_TYPE,
   ])(
-    'should not render credential fields or creation for scanner type %s',
-    async scannerType => {
+    "should not render credential fields or creation for scanner type %s",
+    async (scannerType) => {
       const scanner = new Scanner({
-        id: '1234',
-        name: 'Test Scanner',
-        host: 'http://scanner-host',
+        id: "1234",
+        name: "Test Scanner",
+        host: "http://scanner-host",
         port: 443,
         scannerType,
       });
       const gmp = createGmp({
         scanner: {
-          get: testing.fn().mockResolvedValue({data: scanner}),
+          get: testing.fn().mockResolvedValue({ data: scanner }),
         },
       });
-      const {render} = rendererWith({capabilities: true, gmp, store: true});
+      const { render } = rendererWith({ capabilities: true, gmp, store: true });
 
       render(
         <ScannerComponent>
-          {({edit}) => (
+          {({ edit }) => (
             <button onClick={() => edit(scanner)}>Open Scanner</button>
           )}
         </ScannerComponent>,
       );
 
-      fireEvent.click(screen.getByRole('button', {name: 'Open Scanner'}));
+      fireEvent.click(screen.getByRole("button", { name: "Open Scanner" }));
       await wait();
 
       expect(
-        screen.queryByTitle('Create a new Credential'),
+        screen.queryByTitle("Create a new Credential"),
       ).not.toBeInTheDocument();
       expect(
-        screen.queryByRole('textbox', {name: 'Credential'}),
+        screen.queryByRole("combobox", { name: "Credential" }),
       ).not.toBeInTheDocument();
-      expect(screen.queryByName('caCertificate')).not.toBeInTheDocument();
+      expect(screen.queryByName("caCertificate")).not.toBeInTheDocument();
     },
   );
 
-  test('should allow to clone a scanner', async () => {
+  test("should allow to clone a scanner", async () => {
     const scanner = new Scanner({
-      id: '1234',
-      name: 'Test Scanner',
-      host: 'http://scanner-host',
+      id: "1234",
+      name: "Test Scanner",
+      host: "http://scanner-host",
       port: 443,
       scannerType: OPENVASD_SCANNER_TYPE,
     });
@@ -141,14 +141,14 @@ describe('ScannerComponent tests', () => {
     });
     const handleCloned = testing.fn();
     const handleCloneError = testing.fn();
-    const {render} = rendererWith({capabilities: true, gmp, store: true});
+    const { render } = rendererWith({ capabilities: true, gmp, store: true });
     render(
       <ScannerComponent onCloneError={handleCloneError} onCloned={handleCloned}>
-        {({clone}) => <button onClick={() => clone(scanner)}></button>}
+        {({ clone }) => <button onClick={() => clone(scanner)}></button>}
       </ScannerComponent>,
     );
 
-    const button = screen.getByRole('button');
+    const button = screen.getByRole("button");
     fireEvent.click(button);
     expect(cloneScanner).toHaveBeenCalledWith(scanner);
 
@@ -158,15 +158,15 @@ describe('ScannerComponent tests', () => {
     expect(handleCloneError).not.toHaveBeenCalled();
   });
 
-  test('should handle error on cloning a scanner', async () => {
+  test("should handle error on cloning a scanner", async () => {
     const scanner = new Scanner({
-      id: '1234',
-      name: 'Test Scanner',
-      host: 'http://scanner-host',
+      id: "1234",
+      name: "Test Scanner",
+      host: "http://scanner-host",
       port: 443,
       scannerType: OPENVASD_SCANNER_TYPE,
     });
-    const error = new Error('Clone error');
+    const error = new Error("Clone error");
     const cloneScanner = testing.fn().mockRejectedValue(error);
     const gmp = createGmp({
       scanner: {
@@ -175,16 +175,16 @@ describe('ScannerComponent tests', () => {
     });
     const handleCloned = testing.fn();
     const handleCloneError = testing.fn();
-    const {render} = rendererWith({capabilities: true, gmp, store: true});
+    const { render } = rendererWith({ capabilities: true, gmp, store: true });
     render(
       <ScannerComponent onCloneError={handleCloneError} onCloned={handleCloned}>
-        {({clone}) => (
+        {({ clone }) => (
           <button aria-label="clone" onClick={() => clone(scanner)}></button>
         )}
       </ScannerComponent>,
     );
 
-    const button = screen.getByRole('button', {name: 'clone'});
+    const button = screen.getByRole("button", { name: "clone" });
     fireEvent.click(button);
     expect(cloneScanner).toHaveBeenCalledWith(scanner);
 
@@ -194,11 +194,11 @@ describe('ScannerComponent tests', () => {
     expect(handleCloned).not.toHaveBeenCalled();
   });
 
-  test('should allow to delete a scanner', async () => {
+  test("should allow to delete a scanner", async () => {
     const scanner = new Scanner({
-      id: '1234',
-      name: 'Test Scanner',
-      host: 'http://scanner-host',
+      id: "1234",
+      name: "Test Scanner",
+      host: "http://scanner-host",
       port: 443,
       scannerType: OPENVASD_SCANNER_TYPE,
     });
@@ -210,21 +210,21 @@ describe('ScannerComponent tests', () => {
     });
     const handleDeleted = testing.fn();
     const handleDeleteError = testing.fn();
-    const {render} = rendererWith({capabilities: true, gmp, store: true});
+    const { render } = rendererWith({ capabilities: true, gmp, store: true });
     render(
       <ScannerComponent
         onDeleteError={handleDeleteError}
         onDeleted={handleDeleted}
       >
-        {({delete: remove}) => (
+        {({ delete: remove }) => (
           <button aria-label="delete" onClick={() => remove(scanner)}></button>
         )}
       </ScannerComponent>,
     );
 
-    const button = screen.getByRole('button', {name: 'delete'});
+    const button = screen.getByRole("button", { name: "delete" });
     fireEvent.click(button);
-    expect(deleteScanner).toHaveBeenCalledWith({id: '1234'});
+    expect(deleteScanner).toHaveBeenCalledWith({ id: "1234" });
 
     await wait();
 
@@ -232,15 +232,15 @@ describe('ScannerComponent tests', () => {
     expect(handleDeleteError).not.toHaveBeenCalled();
   });
 
-  test('should handle error on deleting a scanner', async () => {
+  test("should handle error on deleting a scanner", async () => {
     const scanner = new Scanner({
-      id: '1234',
-      name: 'Test Scanner',
-      host: 'http://scanner-host',
+      id: "1234",
+      name: "Test Scanner",
+      host: "http://scanner-host",
       port: 443,
       scannerType: OPENVASD_SCANNER_TYPE,
     });
-    const error = new Error('Delete error');
+    const error = new Error("Delete error");
     const deleteScanner = testing.fn().mockRejectedValue(error);
     const gmp = createGmp({
       scanner: {
@@ -249,21 +249,21 @@ describe('ScannerComponent tests', () => {
     });
     const handleDeleted = testing.fn();
     const handleDeleteError = testing.fn();
-    const {render} = rendererWith({capabilities: true, gmp, store: true});
+    const { render } = rendererWith({ capabilities: true, gmp, store: true });
     render(
       <ScannerComponent
         onDeleteError={handleDeleteError}
         onDeleted={handleDeleted}
       >
-        {({delete: remove}) => (
+        {({ delete: remove }) => (
           <button aria-label="delete" onClick={() => remove(scanner)}></button>
         )}
       </ScannerComponent>,
     );
 
-    const button = screen.getByRole('button', {name: 'delete'});
+    const button = screen.getByRole("button", { name: "delete" });
     fireEvent.click(button);
-    expect(deleteScanner).toHaveBeenCalledWith({id: '1234'});
+    expect(deleteScanner).toHaveBeenCalledWith({ id: "1234" });
 
     await wait();
 
@@ -271,17 +271,17 @@ describe('ScannerComponent tests', () => {
     expect(handleDeleted).not.toHaveBeenCalled();
   });
 
-  test('should allow to edit a scanner', async () => {
+  test("should allow to edit a scanner", async () => {
     const scanner = new Scanner({
-      id: '1234',
-      name: 'Test Scanner',
-      host: 'http://scanner-host',
+      id: "1234",
+      name: "Test Scanner",
+      host: "http://scanner-host",
       port: 443,
       scannerType: OPENVASD_SCANNER_TYPE,
     });
     const gmp = createGmp({
       scanner: {
-        get: testing.fn().mockResolvedValue({data: scanner}),
+        get: testing.fn().mockResolvedValue({ data: scanner }),
         save: testing.fn().mockResolvedValue(scanner),
       },
       credentials: {
@@ -290,20 +290,20 @@ describe('ScannerComponent tests', () => {
     });
     const handleEdited = testing.fn();
     const handleEditError = testing.fn();
-    const {render} = rendererWith({capabilities: true, gmp, store: true});
+    const { render } = rendererWith({ capabilities: true, gmp, store: true });
     render(
       <ScannerComponent onSaveError={handleEditError} onSaved={handleEdited}>
-        {({edit}) => (
+        {({ edit }) => (
           <button aria-label="edit" onClick={() => edit(scanner)}></button>
         )}
       </ScannerComponent>,
     );
 
-    const button = screen.getByRole('button', {name: 'edit'});
+    const button = screen.getByRole("button", { name: "edit" });
     fireEvent.click(button);
-    expect(gmp.scanner.get).toHaveBeenCalledWith({id: '1234'});
+    expect(gmp.scanner.get).toHaveBeenCalledWith({ id: "1234" });
     expect(gmp.credentials.getAll).toHaveBeenCalledWith({
-      filter: QueryFilter.fromString('type=cc'),
+      filter: QueryFilter.fromString("type=cc"),
     });
 
     await wait();
@@ -317,11 +317,11 @@ describe('ScannerComponent tests', () => {
     expect(handleEditError).not.toHaveBeenCalled();
   });
 
-  test('should allow to create a new scanner', async () => {
+  test("should allow to create a new scanner", async () => {
     const gmp = createGmp({
       scanner: {
         create: testing.fn().mockResolvedValue({
-          id: '1234',
+          id: "1234",
         }),
       },
       credentials: {
@@ -330,19 +330,19 @@ describe('ScannerComponent tests', () => {
     });
     const handleCreated = testing.fn();
     const handleCreateError = testing.fn();
-    const {render} = rendererWith({capabilities: true, gmp, store: true});
+    const { render } = rendererWith({ capabilities: true, gmp, store: true });
     render(
       <ScannerComponent
         onCreateError={handleCreateError}
         onCreated={handleCreated}
       >
-        {({create}) => (
+        {({ create }) => (
           <button aria-label="create" onClick={() => create()}></button>
         )}
       </ScannerComponent>,
     );
 
-    const button = screen.getByRole('button', {name: 'create'});
+    const button = screen.getByRole("button", { name: "create" });
     fireEvent.click(button);
 
     await wait();
@@ -354,20 +354,20 @@ describe('ScannerComponent tests', () => {
 
     expect(gmp.scanner.create).toHaveBeenCalledWith({
       caCertificate: undefined,
-      comment: '',
+      comment: "",
       credentialId: undefined,
-      host: 'localhost',
+      host: "localhost",
       id: undefined,
-      name: 'Unnamed',
+      name: "Unnamed",
       port: 0,
       type: GREENBONE_SENSOR_SCANNER_TYPE,
     });
-    expect(handleCreated).toHaveBeenCalledWith({id: '1234'});
+    expect(handleCreated).toHaveBeenCalledWith({ id: "1234" });
     expect(handleCreateError).not.toHaveBeenCalled();
   });
 
-  test('should handle error on creating a new scanner', async () => {
-    const error = new Error('Create error');
+  test("should handle error on creating a new scanner", async () => {
+    const error = new Error("Create error");
     const gmp = createGmp({
       scanner: {
         create: testing.fn().mockRejectedValue(error),
@@ -378,19 +378,19 @@ describe('ScannerComponent tests', () => {
     });
     const handleCreated = testing.fn();
     const handleCreateError = testing.fn();
-    const {render} = rendererWith({capabilities: true, gmp, store: true});
+    const { render } = rendererWith({ capabilities: true, gmp, store: true });
     render(
       <ScannerComponent
         onCreateError={handleCreateError}
         onCreated={handleCreated}
       >
-        {({create}) => (
+        {({ create }) => (
           <button aria-label="create" onClick={() => create()}></button>
         )}
       </ScannerComponent>,
     );
 
-    const button = screen.getByRole('button', {name: 'create'});
+    const button = screen.getByRole("button", { name: "create" });
     fireEvent.click(button);
 
     await wait();

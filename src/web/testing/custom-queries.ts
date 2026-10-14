@@ -11,8 +11,8 @@ import {
   queryAllByRole,
   queryByRole,
   queryByTestId,
-} from '@testing-library/react';
-import {isDefined} from 'gmp/utils/identity';
+} from "@testing-library/react";
+import { isDefined } from "gmp/utils/identity";
 
 /**
  * Creates a query function that retrieves an element and throws an error if the element is not found.
@@ -58,7 +58,7 @@ export const getElementOrReturnDocument = (element?: HTMLElement) =>
 export const getRadioInputs = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
   return Array.from(
-    element.querySelectorAll<HTMLElement>('.mantine-Radio-radio'),
+    element.querySelectorAll<HTMLElement>(".mantine-Radio-radio"),
   );
 };
 
@@ -77,18 +77,18 @@ export const getSelectItemElements = (element?: HTMLElement) => {
  * Get the input box of a Select component
  *
  * This function first attempts to find an element with the test ID 'form-select'.
- * If no such element is found, it falls back to finding an element with the role 'textbox'.
+ * If no such element is found, it falls back to finding an element with the role 'combobox'.
  *
  * @param element - The optional element to search within.
  * @returns The found select element
  */
 export const getSelectElement = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  const select = queryByTestId(element, 'form-select');
+  const select = queryByTestId(element, "form-select");
   if (select) {
     return select as HTMLSelectElement;
   }
-  return getByRole(element, 'textbox') as HTMLSelectElement;
+  return getByRole(element, "combobox") as HTMLSelectElement;
 };
 
 /**
@@ -100,7 +100,7 @@ export const getSelectElement = (element?: HTMLElement) => {
 export const queryAllSelectElements = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
   return Array.from(
-    element.querySelectorAll<HTMLSelectElement>('.mantine-Select-input'),
+    element.querySelectorAll<HTMLSelectElement>(".mantine-Select-input"),
   );
 };
 
@@ -113,7 +113,7 @@ export const queryAllSelectElements = (element?: HTMLElement) => {
 export const getMultiSelectElements = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
   return Array.from(
-    element.querySelectorAll<HTMLElement>('.mantine-MultiSelect-inputField'),
+    element.querySelectorAll<HTMLElement>(".mantine-MultiSelect-inputField"),
   );
 };
 
@@ -124,7 +124,7 @@ export const getMultiSelectElements = (element?: HTMLElement) => {
  */
 export const getMultiSelectElement = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return getByRole(element, 'textbox');
+  return getByRole(element, "combobox");
 };
 
 /**
@@ -135,7 +135,7 @@ export const getMultiSelectElement = (element?: HTMLElement) => {
  */
 export const getSelectedItems = (element: ParentNode) => {
   return Array.from(
-    element.querySelectorAll<HTMLElement>('.mantine-MultiSelect-pill'),
+    element.querySelectorAll<HTMLElement>(".mantine-MultiSelect-pill"),
   );
 };
 
@@ -146,7 +146,7 @@ export const getSelectedItems = (element: ParentNode) => {
  */
 export const getSelectItemElementsForMultiSelect = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return queryAllByRole(element, 'option', {hidden: true});
+  return queryAllByRole(element, "option", { hidden: true });
 };
 
 /**
@@ -157,7 +157,7 @@ export const getSelectItemElementsForMultiSelect = (element?: HTMLElement) => {
  */
 export const queryDialogs = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return queryAllByRole(element, 'dialog');
+  return queryAllByRole(element, "dialog");
 };
 
 /**
@@ -168,7 +168,7 @@ export const queryDialogs = (element?: HTMLElement) => {
  */
 export const queryDialog = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return queryByRole(element, 'dialog');
+  return queryByRole(element, "dialog");
 };
 
 /**
@@ -179,7 +179,7 @@ export const queryDialog = (element?: HTMLElement) => {
  */
 export const getDialog = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return getByRole(element, 'dialog');
+  return getByRole(element, "dialog");
 };
 
 /**
@@ -190,7 +190,7 @@ export const getDialog = (element?: HTMLElement) => {
  */
 export const queryDialogContent = (dialog?: HTMLElement) => {
   dialog = isDefined(dialog) ? dialog : getDialog();
-  return dialog.querySelector<HTMLElement>('.mantine-Modal-body');
+  return dialog.querySelector<HTMLElement>(".mantine-Modal-body");
 };
 
 /**
@@ -206,7 +206,7 @@ export const queryDialogContent = (dialog?: HTMLElement) => {
  */
 export const getDialogContent = createGetQuery(
   queryDialogContent,
-  'dialog content',
+  "dialog content",
 );
 
 /**
@@ -217,7 +217,7 @@ export const getDialogContent = createGetQuery(
  */
 export const queryDialogTitle = (dialog?: HTMLElement) => {
   dialog = isDefined(dialog) ? dialog : getDialog();
-  return dialog.querySelector<HTMLElement>('.mantine-Modal-title');
+  return dialog.querySelector<HTMLElement>(".mantine-Modal-title");
 };
 
 /**
@@ -227,7 +227,7 @@ export const queryDialogTitle = (dialog?: HTMLElement) => {
  * @returns The dialog title element if found.
  * @throws Throws an error if the dialog title cannot be found.
  */
-export const getDialogTitle = createGetQuery(queryDialogTitle, 'dialog title');
+export const getDialogTitle = createGetQuery(queryDialogTitle, "dialog title");
 
 /**
  * Retrieves the save button of a dialog (in the footer)
@@ -237,7 +237,7 @@ export const getDialogTitle = createGetQuery(queryDialogTitle, 'dialog title');
  */
 export const getDialogSaveButton = (dialog?: HTMLElement) => {
   dialog = isDefined(dialog) ? dialog : getDialog();
-  return getByTestId(dialog, 'dialog-save-button');
+  return getByTestId(dialog, "dialog-save-button");
 };
 
 /**
@@ -248,7 +248,7 @@ export const getDialogSaveButton = (dialog?: HTMLElement) => {
  */
 export const getDialogCloseButton = (dialog?: HTMLElement) => {
   dialog = isDefined(dialog) ? dialog : getDialog();
-  return getByTestId(dialog, 'dialog-close-button');
+  return getByTestId(dialog, "dialog-close-button");
 };
 
 /**
@@ -259,9 +259,9 @@ export const getDialogCloseButton = (dialog?: HTMLElement) => {
  */
 export const getDialogXButton = (dialog?: HTMLElement) => {
   dialog = isDefined(dialog) ? dialog : getDialog();
-  const button = dialog.querySelector<HTMLElement>('.mantine-CloseButton-root');
+  const button = dialog.querySelector<HTMLElement>(".mantine-CloseButton-root");
   if (!button) {
-    throw getElementError('Unable to find dialog X button.', dialog);
+    throw getElementError("Unable to find dialog X button.", dialog);
   }
   return button;
 };
@@ -274,7 +274,7 @@ export const getDialogXButton = (dialog?: HTMLElement) => {
  */
 export const queryPowerFilter = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return element.querySelector<HTMLElement>('.powerfilter');
+  return element.querySelector<HTMLElement>(".powerfilter");
 };
 
 /**
@@ -286,7 +286,7 @@ export const queryPowerFilter = (element?: HTMLElement) => {
  * @returns The power filter HTMLElement.
  * @throws Will throw an error if the power filter element cannot be found.
  */
-export const getPowerFilter = createGetQuery(queryPowerFilter, 'powerfilter');
+export const getPowerFilter = createGetQuery(queryPowerFilter, "powerfilter");
 
 /**
  * Get text inputs
@@ -297,7 +297,7 @@ export const getPowerFilter = createGetQuery(queryPowerFilter, 'powerfilter');
 export const queryTextInputs = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
   return Array.from(
-    element.querySelectorAll<HTMLElement>('.mantine-TextInput-input'),
+    element.querySelectorAll<HTMLElement>(".mantine-TextInput-input"),
   );
 };
 
@@ -309,7 +309,7 @@ export const queryTextInputs = (element?: HTMLElement) => {
  */
 export const queryTable = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return element.querySelector('table');
+  return element.querySelector("table");
 };
 
 /**
@@ -320,10 +320,10 @@ export const queryTable = (element?: HTMLElement) => {
  */
 export const queryTableBody = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return element.querySelector('tbody');
+  return element.querySelector("tbody");
 };
 
-export const getTableBody = createGetQuery(queryTableBody, 'table body');
+export const getTableBody = createGetQuery(queryTableBody, "table body");
 
 /**
  * Queries the table footer element.
@@ -333,10 +333,10 @@ export const getTableBody = createGetQuery(queryTableBody, 'table body');
  */
 export const queryTableFooter = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return element.querySelector('tfoot');
+  return element.querySelector("tfoot");
 };
 
-export const getTableFooter = createGetQuery(queryTableFooter, 'table footer');
+export const getTableFooter = createGetQuery(queryTableFooter, "table footer");
 
 /**
  * Queries the table header element.
@@ -346,10 +346,10 @@ export const getTableFooter = createGetQuery(queryTableFooter, 'table footer');
  */
 export const queryTableHeader = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return element.querySelector('thead');
+  return element.querySelector("thead");
 };
 
-export const getTableHeader = createGetQuery(queryTableHeader, 'table header');
+export const getTableHeader = createGetQuery(queryTableHeader, "table header");
 
 /**
  * Queries and returns all checkbox input elements
@@ -360,7 +360,7 @@ export const getTableHeader = createGetQuery(queryTableHeader, 'table header');
 export const queryCheckBoxes = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
   return Array.from(
-    element.querySelectorAll<HTMLElement>('.mantine-Checkbox-input'),
+    element.querySelectorAll<HTMLElement>(".mantine-Checkbox-input"),
   );
 };
 
@@ -392,7 +392,7 @@ export const getAllCheckBoxes = (container: HTMLElement) => {
 export const queryFileInputs = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
   return Array.from(
-    element.querySelectorAll<HTMLElement>('.mantine-FileInput-input'),
+    element.querySelectorAll<HTMLElement>(".mantine-FileInput-input"),
   );
 };
 
@@ -404,7 +404,7 @@ export const queryFileInputs = (element?: HTMLElement) => {
  * @returns An array of elements that match the specified `name` attribute.
  */
 export const queryAllByName = (container: HTMLElement, name: string) =>
-  queryAllByAttribute('name', container, name);
+  queryAllByAttribute("name", container, name);
 
 /**
  * Queries the given container for elements matching the specified name and returns the first matching element.

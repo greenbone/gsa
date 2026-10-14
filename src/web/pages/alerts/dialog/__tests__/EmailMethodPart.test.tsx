@@ -3,36 +3,36 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect, testing} from '@gsa/testing';
+import { describe, test, expect, testing } from "@gsa/testing";
 import {
   changeInputValue,
   fireEvent,
   getSelectItemElementsForSelect,
   rendererWith,
   screen,
-} from 'web/testing';
+} from "web/testing";
 import {
   EMAIL_NOTICE_ATTACH,
   EMAIL_NOTICE_INCLUDE,
   EMAIL_NOTICE_SIMPLE,
   EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
   EVENT_TYPE_TICKET_RECEIVED,
-} from 'gmp/models/alert';
+} from "gmp/models/alert";
 import Credential, {
   EMAIL_CREDENTIAL_TYPES,
   KRB5_CREDENTIAL_TYPE,
-} from 'gmp/models/credential';
-import ReportConfig from 'gmp/models/report-config';
-import ReportFormat from 'gmp/models/report-format';
-import EmailMethodPart from 'web/pages/alerts/dialog/EmailMethodPart';
-import {UNSET_LABEL, UNSET_VALUE} from 'web/utils/Render';
+} from "gmp/models/credential";
+import ReportConfig from "gmp/models/report-config";
+import ReportFormat from "gmp/models/report-format";
+import EmailMethodPart from "web/pages/alerts/dialog/EmailMethodPart";
+import { UNSET_LABEL, UNSET_VALUE } from "web/utils/Render";
 
-describe('EmailMethodPart tests', () => {
-  test('should render the EmailMethodPart component', () => {
+describe("EmailMethodPart tests", () => {
+  test("should render the EmailMethodPart component", () => {
     const onChange = testing.fn();
     const onCredentialChange = testing.fn();
     const onNewCredentialClick = testing.fn();
-    const {render} = rendererWith({capabilities: true});
+    const { render } = rendererWith({ capabilities: true });
 
     render(
       <EmailMethodPart
@@ -44,24 +44,24 @@ describe('EmailMethodPart tests', () => {
       />,
     );
 
-    expect(screen.getByName('to_address')).toBeInTheDocument();
-    expect(screen.getByName('from_address')).toBeInTheDocument();
-    expect(screen.getByName('subject')).toBeInTheDocument();
-    expect(screen.getByName('recipient_credential')).toBeInTheDocument();
-    expect(screen.getByName('notice')).toBeInTheDocument();
-    expect(screen.getByName('notice_report_format')).toBeInTheDocument();
-    expect(screen.getByName('notice_report_config')).toBeInTheDocument();
-    expect(screen.getByName('message')).toBeInTheDocument();
-    expect(screen.getByName('notice_attach_format')).toBeInTheDocument();
-    expect(screen.getByName('notice_attach_config')).toBeInTheDocument();
-    expect(screen.getByName('message_attach')).toBeInTheDocument();
+    expect(screen.getByName("to_address")).toBeInTheDocument();
+    expect(screen.getByName("from_address")).toBeInTheDocument();
+    expect(screen.getByName("subject")).toBeInTheDocument();
+    expect(screen.getByName("recipient_credential")).toBeInTheDocument();
+    expect(screen.getByName("notice")).toBeInTheDocument();
+    expect(screen.getByName("notice_report_format")).toBeInTheDocument();
+    expect(screen.getByName("notice_report_config")).toBeInTheDocument();
+    expect(screen.getByName("message")).toBeInTheDocument();
+    expect(screen.getByName("notice_attach_format")).toBeInTheDocument();
+    expect(screen.getByName("notice_attach_config")).toBeInTheDocument();
+    expect(screen.getByName("message_attach")).toBeInTheDocument();
   });
 
-  test('should render the EmailMethodPart for ticket alerts', () => {
+  test("should render the EmailMethodPart for ticket alerts", () => {
     const onChange = testing.fn();
     const onCredentialChange = testing.fn();
     const onNewCredentialClick = testing.fn();
-    const {render} = rendererWith({capabilities: true});
+    const { render } = rendererWith({ capabilities: true });
 
     render(
       <EmailMethodPart
@@ -73,24 +73,24 @@ describe('EmailMethodPart tests', () => {
       />,
     );
 
-    expect(screen.getByName('to_address')).toBeInTheDocument();
-    expect(screen.getByName('from_address')).toBeInTheDocument();
-    expect(screen.queryByName('subject')).not.toBeInTheDocument();
-    expect(screen.getByName('recipient_credential')).toBeInTheDocument();
-    expect(screen.queryByName('notice')).not.toBeInTheDocument();
-    expect(screen.queryByName('notice_report_format')).not.toBeInTheDocument();
-    expect(screen.queryByName('notice_report_config')).not.toBeInTheDocument();
-    expect(screen.queryByName('message')).not.toBeInTheDocument();
-    expect(screen.queryByName('notice_attach_format')).not.toBeInTheDocument();
-    expect(screen.queryByName('notice_attach_config')).not.toBeInTheDocument();
-    expect(screen.queryByName('message_attach')).not.toBeInTheDocument();
+    expect(screen.getByName("to_address")).toBeInTheDocument();
+    expect(screen.getByName("from_address")).toBeInTheDocument();
+    expect(screen.queryByName("subject")).not.toBeInTheDocument();
+    expect(screen.getByName("recipient_credential")).toBeInTheDocument();
+    expect(screen.queryByName("notice")).not.toBeInTheDocument();
+    expect(screen.queryByName("notice_report_format")).not.toBeInTheDocument();
+    expect(screen.queryByName("notice_report_config")).not.toBeInTheDocument();
+    expect(screen.queryByName("message")).not.toBeInTheDocument();
+    expect(screen.queryByName("notice_attach_format")).not.toBeInTheDocument();
+    expect(screen.queryByName("notice_attach_config")).not.toBeInTheDocument();
+    expect(screen.queryByName("message_attach")).not.toBeInTheDocument();
   });
 
-  test('should allow to use a prefix', () => {
+  test("should allow to use a prefix", () => {
     const onChange = testing.fn();
     const onCredentialChange = testing.fn();
     const onNewCredentialClick = testing.fn();
-    const {render} = rendererWith({capabilities: true});
+    const { render } = rendererWith({ capabilities: true });
 
     render(
       <EmailMethodPart
@@ -103,24 +103,24 @@ describe('EmailMethodPart tests', () => {
       />,
     );
 
-    expect(screen.getByName('test_to_address')).toBeInTheDocument();
-    expect(screen.getByName('test_from_address')).toBeInTheDocument();
-    expect(screen.getByName('test_subject')).toBeInTheDocument();
-    expect(screen.getByName('test_recipient_credential')).toBeInTheDocument();
-    expect(screen.getByName('test_notice')).toBeInTheDocument();
-    expect(screen.getByName('test_notice_report_format')).toBeInTheDocument();
-    expect(screen.getByName('test_notice_report_config')).toBeInTheDocument();
-    expect(screen.getByName('test_message')).toBeInTheDocument();
-    expect(screen.getByName('test_notice_attach_format')).toBeInTheDocument();
-    expect(screen.getByName('test_notice_attach_config')).toBeInTheDocument();
-    expect(screen.getByName('test_message_attach')).toBeInTheDocument();
+    expect(screen.getByName("test_to_address")).toBeInTheDocument();
+    expect(screen.getByName("test_from_address")).toBeInTheDocument();
+    expect(screen.getByName("test_subject")).toBeInTheDocument();
+    expect(screen.getByName("test_recipient_credential")).toBeInTheDocument();
+    expect(screen.getByName("test_notice")).toBeInTheDocument();
+    expect(screen.getByName("test_notice_report_format")).toBeInTheDocument();
+    expect(screen.getByName("test_notice_report_config")).toBeInTheDocument();
+    expect(screen.getByName("test_message")).toBeInTheDocument();
+    expect(screen.getByName("test_notice_attach_format")).toBeInTheDocument();
+    expect(screen.getByName("test_notice_attach_config")).toBeInTheDocument();
+    expect(screen.getByName("test_message_attach")).toBeInTheDocument();
   });
 
-  test('should allow to render simple notice', () => {
+  test("should allow to render simple notice", () => {
     const onChange = testing.fn();
     const onCredentialChange = testing.fn();
     const onNewCredentialClick = testing.fn();
-    const {render} = rendererWith({capabilities: true});
+    const { render } = rendererWith({ capabilities: true });
 
     render(
       <EmailMethodPart
@@ -135,41 +135,41 @@ describe('EmailMethodPart tests', () => {
       />,
     );
 
-    expect(screen.getByRole('textbox', {name: 'To Address'})).toHaveValue(
-      'baz@baz.gov',
+    expect(screen.getByRole("textbox", { name: "To Address" })).toHaveValue(
+      "baz@baz.gov",
     );
-    expect(screen.getByRole('textbox', {name: 'From Address'})).toHaveValue(
-      'foo@bar.com',
+    expect(screen.getByRole("textbox", { name: "From Address" })).toHaveValue(
+      "foo@bar.com",
     );
-    expect(screen.getByRole('textbox', {name: 'Subject'})).toHaveValue(
-      'Some Message',
+    expect(screen.getByRole("textbox", { name: "Subject" })).toHaveValue(
+      "Some Message",
     );
-    expect(screen.getByRole('textbox', {name: 'Email Encryption'})).toHaveValue(
-      '',
-    );
+    expect(
+      screen.getByRole("combobox", { name: "Email Encryption" }),
+    ).toHaveValue("");
 
-    expect(screen.getByLabelText('Simple Notice')).toBeChecked();
-    expect(screen.getByLabelText('Include report')).not.toBeChecked();
-    expect(screen.getByLabelText('Attach report')).not.toBeChecked();
+    expect(screen.getByLabelText("Simple Notice")).toBeChecked();
+    expect(screen.getByLabelText("Include report")).not.toBeChecked();
+    expect(screen.getByLabelText("Attach report")).not.toBeChecked();
 
-    expect(screen.getByName('notice_report_format')).toBeDisabled();
-    expect(screen.getByName('notice_report_config')).toBeDisabled();
-    expect(screen.getByName('message')).toBeDisabled();
-    expect(screen.getByName('notice_attach_format')).toBeDisabled();
-    expect(screen.getByName('notice_attach_config')).toBeDisabled();
-    expect(screen.getByName('message_attach')).toBeDisabled();
+    expect(screen.getByName("notice_report_format")).toBeDisabled();
+    expect(screen.getByName("notice_report_config")).toBeDisabled();
+    expect(screen.getByName("message")).toBeDisabled();
+    expect(screen.getByName("notice_attach_format")).toBeDisabled();
+    expect(screen.getByName("notice_attach_config")).toBeDisabled();
+    expect(screen.getByName("message_attach")).toBeDisabled();
   });
 
-  test('should allow to include report', () => {
+  test("should allow to include report", () => {
     const reportFormat = new ReportFormat({
-      id: '123',
-      name: 'Test Format',
-      content_type: 'text/xml',
+      id: "123",
+      name: "Test Format",
+      content_type: "text/xml",
     });
     const onChange = testing.fn();
     const onCredentialChange = testing.fn();
     const onNewCredentialClick = testing.fn();
-    const {render} = rendererWith({capabilities: true});
+    const { render } = rendererWith({ capabilities: true });
 
     render(
       <EmailMethodPart
@@ -187,48 +187,48 @@ describe('EmailMethodPart tests', () => {
       />,
     );
 
-    expect(screen.getByRole('textbox', {name: 'To Address'})).toHaveValue(
-      'baz@baz.gov',
+    expect(screen.getByRole("textbox", { name: "To Address" })).toHaveValue(
+      "baz@baz.gov",
     );
-    expect(screen.getByRole('textbox', {name: 'From Address'})).toHaveValue(
-      'foo@bar.com',
+    expect(screen.getByRole("textbox", { name: "From Address" })).toHaveValue(
+      "foo@bar.com",
     );
-    expect(screen.getByRole('textbox', {name: 'Subject'})).toHaveValue(
-      'Some Message',
+    expect(screen.getByRole("textbox", { name: "Subject" })).toHaveValue(
+      "Some Message",
     );
-    expect(screen.getByRole('textbox', {name: 'Email Encryption'})).toHaveValue(
-      '',
-    );
+    expect(
+      screen.getByRole("combobox", { name: "Email Encryption" }),
+    ).toHaveValue("");
 
-    expect(screen.getByLabelText('Simple Notice')).not.toBeChecked();
-    expect(screen.getByLabelText('Include report')).toBeChecked();
-    expect(screen.getByLabelText('Attach report')).not.toBeChecked();
+    expect(screen.getByLabelText("Simple Notice")).not.toBeChecked();
+    expect(screen.getByLabelText("Include report")).toBeChecked();
+    expect(screen.getByLabelText("Attach report")).not.toBeChecked();
 
-    expect(screen.getByName('notice_report_format')).not.toBeDisabled();
-    expect(screen.getByName('notice_report_format')).toHaveValue(
+    expect(screen.getByName("notice_report_format")).not.toBeDisabled();
+    expect(screen.getByName("notice_report_format")).toHaveValue(
       reportFormat.id,
     );
-    expect(screen.getByName('notice_report_config')).not.toBeDisabled();
-    expect(screen.getByName('notice_report_config')).toHaveValue(UNSET_VALUE);
-    expect(screen.getByName('message')).not.toBeDisabled();
-    expect(screen.getByName('message')).toHaveValue(
-      'Some message to include in the notice',
+    expect(screen.getByName("notice_report_config")).not.toBeDisabled();
+    expect(screen.getByName("notice_report_config")).toHaveValue(UNSET_VALUE);
+    expect(screen.getByName("message")).not.toBeDisabled();
+    expect(screen.getByName("message")).toHaveValue(
+      "Some message to include in the notice",
     );
-    expect(screen.getByName('notice_attach_format')).toBeDisabled();
-    expect(screen.getByName('notice_attach_config')).toBeDisabled();
-    expect(screen.getByName('message_attach')).toBeDisabled();
+    expect(screen.getByName("notice_attach_format")).toBeDisabled();
+    expect(screen.getByName("notice_attach_config")).toBeDisabled();
+    expect(screen.getByName("message_attach")).toBeDisabled();
   });
 
-  test('should allow to attach report', () => {
+  test("should allow to attach report", () => {
     const reportFormat = new ReportFormat({
-      id: '123',
-      name: 'Test Format',
-      content_type: 'text/xml',
+      id: "123",
+      name: "Test Format",
+      content_type: "text/xml",
     });
     const onChange = testing.fn();
     const onCredentialChange = testing.fn();
     const onNewCredentialClick = testing.fn();
-    const {render} = rendererWith({capabilities: true});
+    const { render } = rendererWith({ capabilities: true });
 
     render(
       <EmailMethodPart
@@ -246,55 +246,55 @@ describe('EmailMethodPart tests', () => {
       />,
     );
 
-    expect(screen.getByRole('textbox', {name: 'To Address'})).toHaveValue(
-      'baz@baz.gov',
+    expect(screen.getByRole("textbox", { name: "To Address" })).toHaveValue(
+      "baz@baz.gov",
     );
-    expect(screen.getByRole('textbox', {name: 'From Address'})).toHaveValue(
-      'foo@bar.com',
+    expect(screen.getByRole("textbox", { name: "From Address" })).toHaveValue(
+      "foo@bar.com",
     );
-    expect(screen.getByRole('textbox', {name: 'Subject'})).toHaveValue(
-      'Some Message',
+    expect(screen.getByRole("textbox", { name: "Subject" })).toHaveValue(
+      "Some Message",
     );
-    expect(screen.getByRole('textbox', {name: 'Email Encryption'})).toHaveValue(
-      '',
-    );
+    expect(
+      screen.getByRole("combobox", { name: "Email Encryption" }),
+    ).toHaveValue("");
 
-    expect(screen.getByLabelText('Simple Notice')).not.toBeChecked();
-    expect(screen.getByLabelText('Include report')).not.toBeChecked();
-    expect(screen.getByLabelText('Attach report')).toBeChecked();
+    expect(screen.getByLabelText("Simple Notice")).not.toBeChecked();
+    expect(screen.getByLabelText("Include report")).not.toBeChecked();
+    expect(screen.getByLabelText("Attach report")).toBeChecked();
 
-    expect(screen.getByName('notice_report_format')).toBeDisabled();
-    expect(screen.getByName('notice_report_config')).toBeDisabled();
-    expect(screen.getByName('message')).toBeDisabled();
-    expect(screen.getByName('notice_attach_format')).toHaveValue(
+    expect(screen.getByName("notice_report_format")).toBeDisabled();
+    expect(screen.getByName("notice_report_config")).toBeDisabled();
+    expect(screen.getByName("message")).toBeDisabled();
+    expect(screen.getByName("notice_attach_format")).toHaveValue(
       reportFormat.id,
     );
-    expect(screen.getByName('notice_attach_format')).not.toBeDisabled();
-    expect(screen.getByName('notice_attach_config')).not.toBeDisabled();
-    expect(screen.getByName('notice_attach_config')).toHaveValue(UNSET_VALUE);
-    expect(screen.getByName('message_attach')).not.toBeDisabled();
-    expect(screen.getByName('message_attach')).toHaveValue(
-      'Some message to attach in the notice',
+    expect(screen.getByName("notice_attach_format")).not.toBeDisabled();
+    expect(screen.getByName("notice_attach_config")).not.toBeDisabled();
+    expect(screen.getByName("notice_attach_config")).toHaveValue(UNSET_VALUE);
+    expect(screen.getByName("message_attach")).not.toBeDisabled();
+    expect(screen.getByName("message_attach")).toHaveValue(
+      "Some message to attach in the notice",
     );
   });
 
-  test('should call onChange when changing values', async () => {
+  test("should call onChange when changing values", async () => {
     const reportFormat1 = new ReportFormat({
-      id: '123',
-      name: 'Test Format',
-      content_type: 'text/xml',
+      id: "123",
+      name: "Test Format",
+      content_type: "text/xml",
     });
     const reportFormat2 = new ReportFormat({
-      id: '124',
-      name: 'Another Test Format',
-      content_type: 'text/html',
+      id: "124",
+      name: "Another Test Format",
+      content_type: "text/html",
     });
     const onChange = testing.fn();
     const onCredentialChange = testing.fn();
     const onNewCredentialClick = testing.fn();
-    const {render} = rendererWith({capabilities: true});
+    const { render } = rendererWith({ capabilities: true });
 
-    const {rerender} = render(
+    const { rerender } = render(
       <EmailMethodPart
         event={EVENT_TYPE_TASK_RUN_STATUS_CHANGED}
         notice={EMAIL_NOTICE_SIMPLE}
@@ -307,27 +307,27 @@ describe('EmailMethodPart tests', () => {
       />,
     );
 
-    const fromAddressInput = screen.getByRole('textbox', {
-      name: 'From Address',
+    const fromAddressInput = screen.getByRole("textbox", {
+      name: "From Address",
     });
-    changeInputValue(fromAddressInput, 'new@address.com');
-    expect(onChange).toHaveBeenCalledWith('new@address.com', 'from_address');
+    changeInputValue(fromAddressInput, "new@address.com");
+    expect(onChange).toHaveBeenCalledWith("new@address.com", "from_address");
 
-    const toAddressInput = screen.getByRole('textbox', {
-      name: 'To Address',
+    const toAddressInput = screen.getByRole("textbox", {
+      name: "To Address",
     });
-    changeInputValue(toAddressInput, 'new@address.gov');
-    expect(onChange).toHaveBeenCalledWith('new@address.gov', 'to_address');
+    changeInputValue(toAddressInput, "new@address.gov");
+    expect(onChange).toHaveBeenCalledWith("new@address.gov", "to_address");
 
-    const subjectInput = screen.getByRole('textbox', {
-      name: 'Subject',
+    const subjectInput = screen.getByRole("textbox", {
+      name: "Subject",
     });
-    changeInputValue(subjectInput, 'New Subject');
-    expect(onChange).toHaveBeenCalledWith('New Subject', 'subject');
+    changeInputValue(subjectInput, "New Subject");
+    expect(onChange).toHaveBeenCalledWith("New Subject", "subject");
 
-    const noticeRadios = screen.getAllByName('notice');
+    const noticeRadios = screen.getAllByName("notice");
     fireEvent.click(noticeRadios[1]);
-    expect(onChange).toHaveBeenCalledWith(EMAIL_NOTICE_INCLUDE, 'notice');
+    expect(onChange).toHaveBeenCalledWith(EMAIL_NOTICE_INCLUDE, "notice");
 
     rerender(
       <EmailMethodPart
@@ -343,9 +343,9 @@ describe('EmailMethodPart tests', () => {
     );
 
     const noticeReportFormatSelect = screen.getByRole<HTMLSelectElement>(
-      'textbox',
+      "combobox",
       {
-        name: 'Include Report Format',
+        name: "Include Report Format",
       },
     );
     const noticeReportFormatOptions = await getSelectItemElementsForSelect(
@@ -355,15 +355,15 @@ describe('EmailMethodPart tests', () => {
     fireEvent.click(noticeReportFormatOptions[1]);
     expect(onChange).toHaveBeenCalledWith(
       reportFormat2.id,
-      'notice_report_format',
+      "notice_report_format",
     );
 
-    const messageInput = screen.getByName('message');
-    changeInputValue(messageInput, 'New message to include');
-    expect(onChange).toHaveBeenCalledWith('New message to include', 'message');
+    const messageInput = screen.getByName("message");
+    changeInputValue(messageInput, "New message to include");
+    expect(onChange).toHaveBeenCalledWith("New message to include", "message");
 
     fireEvent.click(noticeRadios[2]);
-    expect(onChange).toHaveBeenCalledWith(EMAIL_NOTICE_ATTACH, 'notice');
+    expect(onChange).toHaveBeenCalledWith(EMAIL_NOTICE_ATTACH, "notice");
 
     rerender(
       <EmailMethodPart
@@ -379,9 +379,9 @@ describe('EmailMethodPart tests', () => {
     );
 
     const noticeAttachFormatSelect = screen.getByRole<HTMLSelectElement>(
-      'textbox',
+      "combobox",
       {
-        name: 'Attach Report Format',
+        name: "Attach Report Format",
       },
     );
     const noticeAttachFormatOptions = await getSelectItemElementsForSelect(
@@ -391,42 +391,42 @@ describe('EmailMethodPart tests', () => {
     fireEvent.click(noticeAttachFormatOptions[1]);
     expect(onChange).toHaveBeenCalledWith(
       reportFormat2.id,
-      'notice_attach_format',
+      "notice_attach_format",
     );
 
-    const messageAttachInput = screen.getByName('message_attach');
-    changeInputValue(messageAttachInput, 'New message to attach');
+    const messageAttachInput = screen.getByName("message_attach");
+    changeInputValue(messageAttachInput, "New message to attach");
     expect(onChange).toHaveBeenCalledWith(
-      'New message to attach',
-      'message_attach',
+      "New message to attach",
+      "message_attach",
     );
   });
 
-  test('should allow to select a report config for include report format', async () => {
+  test("should allow to select a report config for include report format", async () => {
     const reportFormat1 = new ReportFormat({
-      id: '123',
-      name: 'Test Format',
-      content_type: 'text/xml',
+      id: "123",
+      name: "Test Format",
+      content_type: "text/xml",
     });
     const reportFormat2 = new ReportFormat({
-      id: '124',
-      name: 'Another Test Format',
-      content_type: 'text/html',
+      id: "124",
+      name: "Another Test Format",
+      content_type: "text/html",
     });
     const reportConfig1 = new ReportConfig({
-      id: '321',
-      name: 'Test Config',
+      id: "321",
+      name: "Test Config",
       reportFormat: reportFormat1,
     });
     const reportConfig2 = new ReportConfig({
-      id: '322',
-      name: 'Another Test Config',
+      id: "322",
+      name: "Another Test Config",
       reportFormat: reportFormat1,
     });
     const onChange = testing.fn();
     const onCredentialChange = testing.fn();
     const onNewCredentialClick = testing.fn();
-    const {render} = rendererWith({capabilities: true});
+    const { render } = rendererWith({ capabilities: true });
     render(
       <EmailMethodPart
         event={EVENT_TYPE_TASK_RUN_STATUS_CHANGED}
@@ -441,9 +441,9 @@ describe('EmailMethodPart tests', () => {
     );
 
     const noticeIncludeReportConfigSelect = screen.getByRole<HTMLSelectElement>(
-      'textbox',
+      "combobox",
       {
-        name: 'Include Report Config',
+        name: "Include Report Config",
       },
     );
     const noticeIncludeReportConfigOptions =
@@ -452,35 +452,35 @@ describe('EmailMethodPart tests', () => {
     fireEvent.click(noticeIncludeReportConfigOptions[1]);
     expect(onChange).toHaveBeenCalledWith(
       reportConfig1.id,
-      'notice_report_config',
+      "notice_report_config",
     );
   });
 
-  test('should allow to select a report config for attach report format', async () => {
+  test("should allow to select a report config for attach report format", async () => {
     const reportFormat1 = new ReportFormat({
-      id: '123',
-      name: 'Test Format',
-      content_type: 'text/xml',
+      id: "123",
+      name: "Test Format",
+      content_type: "text/xml",
     });
     const reportFormat2 = new ReportFormat({
-      id: '124',
-      name: 'Another Test Format',
-      content_type: 'text/html',
+      id: "124",
+      name: "Another Test Format",
+      content_type: "text/html",
     });
     const reportConfig1 = new ReportConfig({
-      id: '321',
-      name: 'Test Config',
+      id: "321",
+      name: "Test Config",
       reportFormat: reportFormat1,
     });
     const reportConfig2 = new ReportConfig({
-      id: '322',
-      name: 'Another Test Config',
+      id: "322",
+      name: "Another Test Config",
       reportFormat: reportFormat1,
     });
     const onChange = testing.fn();
     const onCredentialChange = testing.fn();
     const onNewCredentialClick = testing.fn();
-    const {render} = rendererWith({capabilities: true});
+    const { render } = rendererWith({ capabilities: true });
     render(
       <EmailMethodPart
         event={EVENT_TYPE_TASK_RUN_STATUS_CHANGED}
@@ -495,9 +495,9 @@ describe('EmailMethodPart tests', () => {
     );
 
     const noticeAttachReportConfigSelect = screen.getByRole<HTMLSelectElement>(
-      'textbox',
+      "combobox",
       {
-        name: 'Report Config',
+        name: "Report Config",
       },
     );
     const noticeAttachReportConfigOptions =
@@ -506,31 +506,31 @@ describe('EmailMethodPart tests', () => {
     fireEvent.click(noticeAttachReportConfigOptions[1]);
     expect(onChange).toHaveBeenCalledWith(
       reportConfig1.id,
-      'notice_attach_config',
+      "notice_attach_config",
     );
   });
 
-  test('should allow to select an email credential', async () => {
+  test("should allow to select an email credential", async () => {
     const onChange = testing.fn();
     const onCredentialChange = testing.fn();
     const onNewCredentialClick = testing.fn();
     const credential1 = new Credential({
-      id: 'cred1',
-      name: 'Credential 1',
+      id: "cred1",
+      name: "Credential 1",
       credentialType: EMAIL_CREDENTIAL_TYPES[0],
     });
     const credential2 = new Credential({
-      id: 'cred2',
-      name: 'Credential 2',
+      id: "cred2",
+      name: "Credential 2",
       credentialType: EMAIL_CREDENTIAL_TYPES[1],
     });
     // will be filtered out, because not of email credential type
     const credential3 = new Credential({
-      id: 'cred3',
-      name: 'Credential 3',
+      id: "cred3",
+      name: "Credential 3",
       credentialType: KRB5_CREDENTIAL_TYPE,
     });
-    const {render} = rendererWith({capabilities: true});
+    const { render } = rendererWith({ capabilities: true });
     render(
       <EmailMethodPart
         credentials={[credential1, credential2, credential3]}
@@ -542,27 +542,27 @@ describe('EmailMethodPart tests', () => {
       />,
     );
 
-    const credentialSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Email Encryption',
+    const credentialSelect = screen.getByRole<HTMLSelectElement>("combobox", {
+      name: "Email Encryption",
     });
     const credentialOptions =
       await getSelectItemElementsForSelect(credentialSelect);
     expect(credentialOptions.length).toEqual(3);
     expect(credentialOptions[0]).toHaveTextContent(UNSET_LABEL);
-    expect(credentialOptions[1]).toHaveTextContent('Credential 1');
-    expect(credentialOptions[2]).toHaveTextContent('Credential 2');
+    expect(credentialOptions[1]).toHaveTextContent("Credential 1");
+    expect(credentialOptions[2]).toHaveTextContent("Credential 2");
     fireEvent.click(credentialOptions[1]);
     expect(onCredentialChange).toHaveBeenCalledWith(
       credential1.id,
-      'recipient_credential',
+      "recipient_credential",
     );
   });
 
-  test('should allow to create a new credential', async () => {
+  test("should allow to create a new credential", async () => {
     const onChange = testing.fn();
     const onCredentialChange = testing.fn();
     const onNewCredentialClick = testing.fn();
-    const {render} = rendererWith({capabilities: true});
+    const { render } = rendererWith({ capabilities: true });
 
     render(
       <EmailMethodPart
@@ -574,8 +574,8 @@ describe('EmailMethodPart tests', () => {
       />,
     );
 
-    const newCredentialButton = screen.getByRole('button', {
-      name: 'New Icon',
+    const newCredentialButton = screen.getByRole("button", {
+      name: "New Icon",
     });
     fireEvent.click(newCredentialButton);
     expect(onNewCredentialClick).toHaveBeenCalledWith(EMAIL_CREDENTIAL_TYPES);

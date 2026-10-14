@@ -3,30 +3,30 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, expect, test, testing} from '@gsa/testing';
+import { describe, expect, test, testing } from "@gsa/testing";
 import {
   rendererWith,
   fireEvent,
   getSelectItemElementsForSelect,
   screen,
-} from 'web/testing';
-import Task, {TASK_STATUS} from 'gmp/models/task';
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
-import AgentTaskDialog from 'web/pages/tasks/AgentTaskDialog';
+} from "web/testing";
+import Task, { TASK_STATUS } from "gmp/models/task";
+import { NO_VALUE, YES_VALUE } from "gmp/parser";
+import AgentTaskDialog from "web/pages/tasks/AgentTaskDialog";
 
-describe('AgentTaskDialog component tests', () => {
-  const gmp = {settings: {}};
+describe("AgentTaskDialog component tests", () => {
+  const gmp = { settings: {} };
 
   const agentGroups = [
-    {id: 'ag-1', name: 'Group A'},
-    {id: 'ag-2', name: 'Group B'},
+    { id: "ag-1", name: "Group A" },
+    { id: "ag-2", name: "Group B" },
   ];
   const alerts = [
-    {id: 'al-1', name: 'Alert 1'},
-    {id: 'al-2', name: 'Alert 2'},
+    { id: "al-1", name: "Alert 1" },
+    { id: "al-2", name: "Alert 2" },
   ];
-  const schedules = [{id: 'sc-1', name: 'Daily 09:00'}];
-  const tags = [{id: 'tg-1', name: 'Important'}];
+  const schedules = [{ id: "sc-1", name: "Daily 09:00" }];
+  const tags = [{ id: "tg-1", name: "Important" }];
 
   const commonHandlers = () => ({
     onClose: testing.fn(),
@@ -42,7 +42,7 @@ describe('AgentTaskDialog component tests', () => {
   const renderDialog = (
     props: Partial<React.ComponentProps<typeof AgentTaskDialog>> = {},
   ) =>
-    rendererWith({gmp, capabilities: true}).render(
+    rendererWith({ gmp, capabilities: true }).render(
       <AgentTaskDialog
         addTag={NO_VALUE}
         agentGroups={agentGroups}
@@ -60,115 +60,115 @@ describe('AgentTaskDialog component tests', () => {
       />,
     );
 
-  test('should render defaults (title, name fallback)', async () => {
+  test("should render defaults (title, name fallback)", async () => {
     renderDialog();
 
-    expect(screen.getDialogTitle()).toHaveTextContent('New Agent Task');
+    expect(screen.getDialogTitle()).toHaveTextContent("New Agent Task");
 
-    expect(screen.getByName('name')).toHaveValue('Unnamed');
+    expect(screen.getByName("name")).toHaveValue("Unnamed");
 
-    expect(screen.getByName('comment')).toBeInTheDocument();
-    expect(screen.getByName('applyOverrides')).toBeInTheDocument();
-    expect(screen.getByName('minQod')).toBeInTheDocument();
+    expect(screen.getByName("comment")).toBeInTheDocument();
+    expect(screen.getByName("applyOverrides")).toBeInTheDocument();
+    expect(screen.getByName("minQod")).toBeInTheDocument();
   });
 
-  test('should list agent groups and call onAgentGroupChange when selected', async () => {
-    const {onAgentGroupChange} = commonHandlers();
-    renderDialog({onAgentGroupChange});
+  test("should list agent groups and call onAgentGroupChange when selected", async () => {
+    const { onAgentGroupChange } = commonHandlers();
+    renderDialog({ onAgentGroupChange });
 
-    const agentGroupSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Scan Agent Groups',
+    const agentGroupSelect = screen.getByRole<HTMLSelectElement>("combobox", {
+      name: "Scan Agent Groups",
     });
     fireEvent.click(agentGroupSelect);
 
     const items = await getSelectItemElementsForSelect(agentGroupSelect);
-    expect(items[0]).toHaveTextContent('Group A');
+    expect(items[0]).toHaveTextContent("Group A");
     fireEvent.click(items[0]);
 
-    expect(onAgentGroupChange).toHaveBeenCalledWith('ag-1', 'agentGroupId');
+    expect(onAgentGroupChange).toHaveBeenCalledWith("ag-1", "agentGroupId");
   });
 
-  test('should show Tag selector in create mode (no task)', () => {
+  test("should show Tag selector in create mode (no task)", () => {
     renderDialog();
-    expect(screen.getByName('addTag')).toBeInTheDocument();
-    expect(screen.getByName('tagId')).toBeInTheDocument();
+    expect(screen.getByName("addTag")).toBeInTheDocument();
+    expect(screen.getByName("tagId")).toBeInTheDocument();
   });
 
-  test('hides Tag selector in edit mode (task provided)', () => {
+  test("hides Tag selector in edit mode (task provided)", () => {
     const task = new Task({
-      id: 'test-id',
+      id: "test-id",
       status: TASK_STATUS.new,
       alterable: YES_VALUE,
     });
-    renderDialog({task});
-    expect(screen.queryByName('addTag')).toBeNull();
-    expect(screen.queryByName('tagId')).toBeNull();
+    renderDialog({ task });
+    expect(screen.queryByName("addTag")).toBeNull();
+    expect(screen.queryByName("tagId")).toBeNull();
   });
 
   test('should list schedules and toggle "Once" checkbox', async () => {
-    const {onScheduleChange} = commonHandlers();
-    renderDialog({onScheduleChange});
+    const { onScheduleChange } = commonHandlers();
+    renderDialog({ onScheduleChange });
 
-    const scheduleSelect = screen.getByName('scheduleId');
+    const scheduleSelect = screen.getByName("scheduleId");
     fireEvent.click(scheduleSelect);
-    const daily = await screen.findByText('Daily 09:00');
+    const daily = await screen.findByText("Daily 09:00");
     fireEvent.click(daily);
-    expect(onScheduleChange).toHaveBeenCalledWith('sc-1', 'scheduleId');
+    expect(onScheduleChange).toHaveBeenCalledWith("sc-1", "scheduleId");
 
-    const once = screen.getByName('schedulePeriods') as HTMLInputElement;
+    const once = screen.getByName("schedulePeriods") as HTMLInputElement;
     expect(once.checked).toBe(false);
     fireEvent.click(once);
     expect(once.checked).toBe(true);
   });
 
-  test('should render InfoTip for Schedule field', () => {
+  test("should render InfoTip for Schedule field", () => {
     renderDialog();
 
-    expect(screen.getByText('Schedule')).toBeInTheDocument();
+    expect(screen.getByText("Schedule")).toBeInTheDocument();
 
     // InfoTip wrapper has aria-label
-    const helpRegion = screen.getByRole('region', {
-      name: 'More information about schedules',
+    const helpRegion = screen.getByRole("region", {
+      name: "More information about schedules",
     });
     expect(helpRegion).toBeInTheDocument();
   });
 
-  test('should list alerts (MultiSelect) and call onNewAlertClick', async () => {
-    const {onNewAlertClick, onAlertsChange} = commonHandlers();
-    renderDialog({onNewAlertClick, onAlertsChange});
+  test("should list alerts (MultiSelect) and call onNewAlertClick", async () => {
+    const { onNewAlertClick, onAlertsChange } = commonHandlers();
+    renderDialog({ onNewAlertClick, onAlertsChange });
 
-    const ms = screen.getByName('alertIds');
+    const ms = screen.getByName("alertIds");
     expect(ms).toBeInTheDocument();
 
-    const newBtn = screen.getByTitle('Create a new alert');
+    const newBtn = screen.getByTitle("Create a new alert");
     fireEvent.click(newBtn);
     expect(onNewAlertClick).toHaveBeenCalled();
   });
 
-  test('should disable Apply Overrides and Min QoD when inAssets is NO', async () => {
-    renderDialog({inAssets: NO_VALUE});
+  test("should disable Apply Overrides and Min QoD when inAssets is NO", async () => {
+    renderDialog({ inAssets: NO_VALUE });
 
-    const apply = screen.getByName('applyOverrides');
-    const minQod = screen.getByName('minQod');
+    const apply = screen.getByName("applyOverrides");
+    const minQod = screen.getByName("minQod");
 
     expect(apply).toBeDisabled();
     expect(minQod).toBeDisabled();
   });
 
-  test('should call creation buttons for agent group and schedule', async () => {
-    const {onNewScheduleClick, onNewAgentGroupClick} = commonHandlers();
-    renderDialog({onNewScheduleClick, onNewAgentGroupClick});
+  test("should call creation buttons for agent group and schedule", async () => {
+    const { onNewScheduleClick, onNewAgentGroupClick } = commonHandlers();
+    renderDialog({ onNewScheduleClick, onNewAgentGroupClick });
 
-    fireEvent.click(screen.getByTitle('Create a new Agent Group'));
+    fireEvent.click(screen.getByTitle("Create a new Agent Group"));
     expect(onNewAgentGroupClick).toHaveBeenCalled();
 
-    fireEvent.click(screen.getByTitle('Create a new schedule'));
+    fireEvent.click(screen.getByTitle("Create a new schedule"));
     expect(onNewScheduleClick).toHaveBeenCalled();
   });
 
-  test('should close dialog on close button click', () => {
-    const {onClose} = commonHandlers();
-    rendererWith({gmp, capabilities: true}).render(
+  test("should close dialog on close button click", () => {
+    const { onClose } = commonHandlers();
+    rendererWith({ gmp, capabilities: true }).render(
       <AgentTaskDialog
         agentGroups={agentGroups}
         alerts={alerts}
