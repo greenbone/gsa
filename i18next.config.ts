@@ -4,9 +4,10 @@
  */
 
 import {defineConfig} from 'i18next-cli';
+import {LANGUAGE_CODES} from './src/gmp/locale/languages';
 
 export default defineConfig({
-  locales: ['en', 'de', 'ja', 'zh_TW', 'zh_CN', 'it'],
+  locales: [...LANGUAGE_CODES],
   extract: {
     input: ['src/**/*.js', 'src/**/*.jsx', 'src/**/*.ts', 'src/**/*.tsx'],
     ignore: ['src/**/__tests__/**'],
