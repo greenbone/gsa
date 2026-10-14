@@ -15,7 +15,6 @@ import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import DetailsLink from 'web/components/link/DetailsLink';
 import Loading from 'web/components/loading/Loading';
-import DialogNotification from 'web/components/notification/DialogNotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 import Tab from 'web/components/tab/Tab';
 import TabLayout from 'web/components/tab/TabLayout';
@@ -142,7 +141,7 @@ const CpePage = () => {
   const id = routeId ? decodeURIComponent(routeId) : undefined;
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const {dialogState, closeDialog, showError} = useDialogNotification();
+  const {dialogNotification, showError} = useDialogNotification();
   const {downloadComponent, download: handleDownload} = useDownload();
   const {data, error, isLoading} = useGetCpe({id});
   const entity = data?.cpe;
@@ -157,7 +156,13 @@ const CpePage = () => {
   }, [candidateFilter, navigate]);
 
   const entityError = error
-    ? {status: error.status ?? 0, message: error.message}
+    ? {
+        status:
+          'status' in error && typeof error.status === 'number'
+            ? error.status
+            : 0,
+        message: error.message,
+      }
     : undefined;
   const onChanged = () => {
     void queryClient.invalidateQueries({queryKey: ['get_cpe']});
@@ -166,7 +171,7 @@ const CpePage = () => {
 
   return (
     <>
-      <DialogNotification {...dialogState} onCloseClick={closeDialog} />
+      {dialogNotification}
       {downloadComponent}
       <EntityComponent
         name="cpe"
@@ -182,14 +187,24 @@ const CpePage = () => {
             isLoading={isLoading || Boolean(candidateFilter)}
             sectionIcon={<CpeLogoIcon size="large" />}
             title={_('CPE')}
-            toolBarIcons={CpeDetailsPageToolBarIcons}
-            onCpeDownloadClick={download}
+            toolBarIcons={
+              entity ? (
+                <CpeDetailsPageToolBarIcons
+                  entity={entity}
+                  onCpeDownloadClick={download}
+                />
+              ) : (
+                <></>
+              )
+            }
           >
-            {() => {
+            {entity => {
               return (
                 <>
                   <PageTitle
-                    title={_('CPE: {{title}}', {title: entity.title})}
+                    title={_('CPE: {{title}}', {
+                      title: entity.title ?? entity.name ?? entity.id,
+                    })}
                   />
                   <TabsContainer flex="column" grow="1">
                     <TabLayout align={['start', 'end']} grow="1">
