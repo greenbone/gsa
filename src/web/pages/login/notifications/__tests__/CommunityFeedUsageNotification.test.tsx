@@ -4,6 +4,7 @@
  */
 
 import {updateNotification} from '@mantine/notifications';
+import type * as MantineNotifications from '@mantine/notifications';
 import {describe, test, expect, beforeEach, testing} from '@gsa/testing';
 import {screen, rendererWith, wait} from 'web/testing';
 import {showNotification} from '@greenbone/ui-lib';
@@ -22,7 +23,8 @@ vi.mock('@greenbone/ui-lib', () => ({
   },
 }));
 
-vi.mock('@mantine/notifications', () => ({
+vi.mock('@mantine/notifications', async importOriginal => ({
+  ...(await importOriginal<typeof MantineNotifications>()),
   updateNotification: vi.fn<(...args: unknown[]) => void>(),
 }));
 
