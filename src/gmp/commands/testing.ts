@@ -7,7 +7,10 @@ import {testing} from '@gsa/testing';
 import {type Mock} from 'vitest';
 import {type default as Http, type HttpOptions} from 'gmp/http/http';
 import Response, {type Meta} from 'gmp/http/response';
+import {type FilterType} from 'gmp/models/filter';
+import {type FilterResponseElement} from 'gmp/models/filter/query-filter';
 import {type Element} from 'gmp/models/model';
+import {isDefined} from 'gmp/utils/identity';
 
 type MockHttp = Http & {request: Mock};
 
@@ -61,6 +64,48 @@ export const createEntitiesResponse = (
       },
     },
   });
+
+export const createEntitiesResponseWithFilter = (
+  name: string,
+  entities: Element[],
+  filter: FilterType,
+  {
+    getName = `get_${name}s`,
+    responseName = `get_${name}s_response`,
+    pluralName = `${name}s`,
+    countName = `${name}_count`,
+  }: {
+    getName?: string;
+    responseName?: string;
+    pluralName?: string;
+    countName?: string;
+  } = {},
+) => {
+  const filterData: FilterResponseElement = {
+    term: filter.toFilterString(),
+  };
+  if (isDefined(filter.id)) {
+    filterData._id = filter.id;
+  }
+  const keywords = filter.getAllTerms().map(term => ({
+    column: term.keyword,
+    relation: term.relation,
+    value: isDefined(term.value) ? String(term.value) : undefined,
+  }));
+  if (keywords.length > 0) {
+    filterData.keywords = {keyword: keywords};
+  }
+  return createResponse({
+    [getName]: {
+      [responseName]: {
+        [name]: entities,
+        [pluralName]: entitiesRange,
+        [countName]: createEntitiesCounts(entities),
+        filters: filterData,
+      },
+    },
+  });
+};
 
 export const createEntityResponse = (
   name: string,

@@ -45,7 +45,7 @@ interface ReportCommandDownloadParams {
 
 interface ReportCommandDownloadOptions {
   reportFormatId: string;
-  reportConfigId: string;
+  reportConfigId?: string;
   deltaReportId?: string;
   filter?: FilterType;
 }
