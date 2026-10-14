@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
+import { beforeEach, describe, expect, test, testing } from "@gsa/testing";
 import {
   changeInputValue,
   closeDialog,
@@ -11,12 +11,12 @@ import {
   getSelectItemElementsForSelect,
   rendererWith,
   screen,
-} from 'web/testing';
-import date from 'gmp/models/date';
-import type Event from 'gmp/models/event';
-import Schedule from 'gmp/models/schedule';
-import {createSession} from 'gmp/testing';
-import ScheduleDialog from 'web/pages/schedules/ScheduleDialog';
+} from "web/testing";
+import date from "gmp/models/date";
+import type Event from "gmp/models/event";
+import Schedule from "gmp/models/schedule";
+import { createSession } from "gmp/testing";
+import ScheduleDialog from "web/pages/schedules/ScheduleDialog";
 
 const checkElementVisibilityAndContent = (
   labelText,
@@ -46,16 +46,16 @@ beforeEach(() => {
 });
 
 const schedule = Schedule.fromElement({
-  comment: 'hello world',
-  name: 'schedule 1',
-  _id: 'foo',
+  comment: "hello world",
+  name: "schedule 1",
+  _id: "foo",
   icalendar:
-    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.4.0~dev1//EN\nBEGIN:VEVENT\nDTSTART:20210208T150000Z\nDURATION:PT4H45M\nRRULE:FREQ=WEEKLY\nUID:foo\nDTSTAMP:20210208T143704Z\nEND:VEVENT\nEND:VCALENDAR',
-  creation_time: '2021-02-08T14:37:04+00:00',
-  modification_time: '2021-02-08T14:37:04+00:00',
-  owner: {name: 'admin'},
-  permissions: {permission: [{name: 'Everything'}]},
-  timezone: 'UTC',
+    "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.4.0~dev1//EN\nBEGIN:VEVENT\nDTSTART:20210208T150000Z\nDURATION:PT4H45M\nRRULE:FREQ=WEEKLY\nUID:foo\nDTSTAMP:20210208T143704Z\nEND:VEVENT\nEND:VCALENDAR",
+  creation_time: "2021-02-08T14:37:04+00:00",
+  modification_time: "2021-02-08T14:37:04+00:00",
+  owner: { name: "admin" },
+  permissions: { permission: [{ name: "Everything" }] },
+  timezone: "UTC",
   in_use: 0,
 });
 
@@ -79,22 +79,22 @@ const {
 } = recurrence;
 
 const mockedTimezones = [
-  'UTC',
-  'Europe/Berlin',
-  'America/New_York',
-  'Asia/Tokyo',
+  "UTC",
+  "Europe/Berlin",
+  "America/New_York",
+  "Asia/Tokyo",
 ];
 
 const createGmp = () => ({
-  session: createSession({token: 'token'}),
+  session: createSession({ token: "token" }),
   timezones: {
-    get: testing.fn().mockResolvedValue({data: mockedTimezones}),
+    get: testing.fn().mockResolvedValue({ data: mockedTimezones }),
   },
 });
 
-describe('ScheduleDialog component tests', () => {
-  test('should render with default values', () => {
-    const {render} = rendererWith({
+describe("ScheduleDialog component tests", () => {
+  test("should render with default values", () => {
+    const { render } = rendererWith({
       capabilities: true,
       gmp: createGmp(),
     });
@@ -117,39 +117,39 @@ describe('ScheduleDialog component tests', () => {
       />,
     );
 
-    const nameInput = screen.getByRole('textbox', {name: 'Name'});
-    expect(nameInput).toHaveAttribute('name', 'name');
-    expect(nameInput).toHaveValue('schedule 1'); // name field
+    const nameInput = screen.getByRole("textbox", { name: "Name" });
+    expect(nameInput).toHaveAttribute("name", "name");
+    expect(nameInput).toHaveValue("schedule 1"); // name field
 
-    const commentInput = screen.getByRole('textbox', {name: 'Comment'});
-    expect(commentInput).toHaveAttribute('name', 'comment');
-    expect(commentInput).toHaveValue('hello world'); // comment field
+    const commentInput = screen.getByRole("textbox", { name: "Comment" });
+    expect(commentInput).toHaveAttribute("name", "comment");
+    expect(commentInput).toHaveValue("hello world"); // comment field
 
-    const defaultTimezone = screen.getByRole('textbox', {name: 'Timezone'});
-    expect(defaultTimezone).toHaveValue('UTC');
+    const defaultTimezone = screen.getByRole("combobox", { name: "Timezone" });
+    expect(defaultTimezone).toHaveValue("UTC");
 
     checkElementVisibilityAndContent(
-      'Start Date',
-      '08/02/2021',
-      '08/02/2021',
-      'Start Time',
-      '15:00',
+      "Start Date",
+      "08/02/2021",
+      "08/02/2021",
+      "Start Time",
+      "15:00",
     );
     checkElementVisibilityAndContent(
-      'End Date',
-      '08/02/2021',
-      '08/02/2021',
-      'End Time',
-      '19:45',
+      "End Date",
+      "08/02/2021",
+      "08/02/2021",
+      "End Time",
+      "19:45",
     );
 
-    const recurrence = screen.getByRole('textbox', {name: 'Recurrence'});
-    expect(recurrence).toHaveValue('Weekly');
+    const recurrence = screen.getByRole("combobox", { name: "Recurrence" });
+    expect(recurrence).toHaveValue("Weekly");
   });
 
-  test('should allow to change text field', () => {
-    const mockCurrentTime = date('2021-02-08T14:37:04+00:00');
-    const {render} = rendererWith({
+  test("should allow to change text field", () => {
+    const mockCurrentTime = date("2021-02-08T14:37:04+00:00");
+    const { render } = rendererWith({
       capabilities: true,
       gmp: createGmp(),
     });
@@ -157,38 +157,38 @@ describe('ScheduleDialog component tests', () => {
     render(
       <ScheduleDialog
         startDate={mockCurrentTime}
-        title={'New Schedule'}
+        title={"New Schedule"}
         onClose={handleClose}
         onSave={handleSave}
       />,
     );
 
-    const nameInput = screen.getByRole('textbox', {name: 'Name'});
-    expect(nameInput).toHaveValue('Unnamed');
-    changeInputValue(nameInput, 'foo');
-    expect(nameInput).toHaveValue('foo');
+    const nameInput = screen.getByRole("textbox", { name: "Name" });
+    expect(nameInput).toHaveValue("Unnamed");
+    changeInputValue(nameInput, "foo");
+    expect(nameInput).toHaveValue("foo");
 
-    const commentInput = screen.getByRole('textbox', {name: 'Comment'});
-    expect(commentInput).toHaveValue('');
-    changeInputValue(commentInput, 'bar');
-    expect(commentInput).toHaveValue('bar');
+    const commentInput = screen.getByRole("textbox", { name: "Comment" });
+    expect(commentInput).toHaveValue("");
+    changeInputValue(commentInput, "bar");
+    expect(commentInput).toHaveValue("bar");
 
     handleSave.mockResolvedValue({});
 
-    const saveButton = screen.getByRole('button', {name: 'Save'});
+    const saveButton = screen.getByRole("button", { name: "Save" });
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalled();
   });
 
-  test('should allow to close the dialog', () => {
-    const {render} = rendererWith({
+  test("should allow to close the dialog", () => {
+    const { render } = rendererWith({
       capabilities: true,
       gmp: createGmp(),
     });
     render(
       <ScheduleDialog
-        title={'New Schedule'}
+        title={"New Schedule"}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -198,9 +198,9 @@ describe('ScheduleDialog component tests', () => {
     expect(handleClose).toHaveBeenCalled();
   });
 
-  test('should allow changing select values', async () => {
+  test("should allow changing select values", async () => {
     handleSave.mockResolvedValue({});
-    const {render} = rendererWith({
+    const { render } = rendererWith({
       capabilities: true,
       gmp: createGmp(),
     });
@@ -224,14 +224,14 @@ describe('ScheduleDialog component tests', () => {
     );
 
     let selectItems;
-    const timezoneSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Timezone',
+    const timezoneSelect = screen.getByRole<HTMLSelectElement>("combobox", {
+      name: "Timezone",
     });
-    const recurrenceSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Recurrence',
+    const recurrenceSelect = screen.getByRole<HTMLSelectElement>("combobox", {
+      name: "Recurrence",
     });
-    expect(timezoneSelect).toHaveValue('UTC');
-    expect(recurrenceSelect).toHaveValue('Weekly');
+    expect(timezoneSelect).toHaveValue("UTC");
+    expect(recurrenceSelect).toHaveValue("Weekly");
 
     selectItems = await getSelectItemElementsForSelect(timezoneSelect);
     expect(selectItems.length).toBe(mockedTimezones.length);
@@ -242,7 +242,7 @@ describe('ScheduleDialog component tests', () => {
     expect(selectItems.length).toBe(8);
     fireEvent.click(selectItems[6]);
 
-    expect(recurrenceSelect).toHaveValue('Workweek (Monday till Friday)');
+    expect(recurrenceSelect).toHaveValue("Workweek (Monday till Friday)");
 
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
@@ -253,28 +253,28 @@ describe('ScheduleDialog component tests', () => {
   // Test time changes with parameterized tests
   test.each([
     {
-      description: 'start time only',
-      startTime: '12:00',
+      description: "start time only",
+      startTime: "12:00",
       endTime: null,
-      expectedIcal: 'DTSTART:20210208T120000Z',
+      expectedIcal: "DTSTART:20210208T120000Z",
     },
     {
-      description: 'end time only',
+      description: "end time only",
       startTime: null,
-      endTime: '18:30',
+      endTime: "18:30",
       expectedIcal: /DTSTART:20210208T150000Z.*DURATION:PT3H30M/s,
     },
     {
-      description: 'both start and end times',
-      startTime: '10:00',
-      endTime: '14:30',
+      description: "both start and end times",
+      startTime: "10:00",
+      endTime: "14:30",
       expectedIcal: /DTSTART:20210208T100000Z.*DURATION:PT4H30M/s,
     },
   ])(
-    'should allow changing $description',
-    async ({startTime, endTime, expectedIcal}) => {
+    "should allow changing $description",
+    async ({ startTime, endTime, expectedIcal }) => {
       handleSave.mockResolvedValue({});
-      const {render} = rendererWith({
+      const { render } = rendererWith({
         capabilities: true,
         gmp: createGmp(),
       });
@@ -298,15 +298,15 @@ describe('ScheduleDialog component tests', () => {
       );
 
       if (startTime) {
-        const startTimeInput = screen.getByLabelText('Start Time');
-        expect(startTimeInput).toHaveValue('15:00');
+        const startTimeInput = screen.getByLabelText("Start Time");
+        expect(startTimeInput).toHaveValue("15:00");
         changeInputValue(startTimeInput, startTime);
         expect(startTimeInput).toHaveValue(startTime);
       }
 
       if (endTime) {
-        const endTimeInput = screen.getByLabelText('End Time');
-        expect(endTimeInput).toHaveValue('19:45');
+        const endTimeInput = screen.getByLabelText("End Time");
+        expect(endTimeInput).toHaveValue("19:45");
         changeInputValue(endTimeInput, endTime);
         expect(endTimeInput).toHaveValue(endTime);
       }
@@ -319,7 +319,7 @@ describe('ScheduleDialog component tests', () => {
         name: scheduleName,
         comment: scheduleComment,
         icalendar:
-          typeof expectedIcal === 'string'
+          typeof expectedIcal === "string"
             ? expect.stringContaining(expectedIcal)
             : expect.stringMatching(expectedIcal),
         timezone: scheduleTimezone,
@@ -327,9 +327,9 @@ describe('ScheduleDialog component tests', () => {
     },
   );
 
-  test('should preserve date when changing only time', async () => {
+  test("should preserve date when changing only time", async () => {
     handleSave.mockResolvedValue({});
-    const {render} = rendererWith({
+    const { render } = rendererWith({
       capabilities: true,
       gmp: createGmp(),
     });
@@ -352,8 +352,8 @@ describe('ScheduleDialog component tests', () => {
       />,
     );
 
-    const startTimeInput = screen.getByLabelText('Start Time');
-    changeInputValue(startTimeInput, '08:00');
+    const startTimeInput = screen.getByLabelText("Start Time");
+    changeInputValue(startTimeInput, "08:00");
 
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
@@ -363,18 +363,18 @@ describe('ScheduleDialog component tests', () => {
       id: scheduleId,
       name: scheduleName,
       comment: scheduleComment,
-      icalendar: expect.stringContaining('DTSTART:20210208T080000Z'),
+      icalendar: expect.stringContaining("DTSTART:20210208T080000Z"),
       timezone: scheduleTimezone,
     });
   });
 
-  test('should allow changing both date and time and verify sent values match inputs', async () => {
+  test("should allow changing both date and time and verify sent values match inputs", async () => {
     handleSave.mockResolvedValue({});
 
     // Use a schedule with a specific start date and time
     // Using a date in February to avoid DST timezone issues
-    const testStartDate = date('2021-02-15T15:00:00Z').tz('UTC');
-    const {render} = rendererWith({
+    const testStartDate = date("2021-02-15T15:00:00Z").tz("UTC");
+    const { render } = rendererWith({
       capabilities: true,
       gmp: createGmp(),
     });
@@ -398,21 +398,21 @@ describe('ScheduleDialog component tests', () => {
     );
 
     // Verify initial state
-    const startDateInput = screen.getByLabelText('Start Date');
-    expect(startDateInput).toHaveValue('15/02/2021');
+    const startDateInput = screen.getByLabelText("Start Date");
+    expect(startDateInput).toHaveValue("15/02/2021");
 
-    const startTimeInput = screen.getByLabelText('Start Time');
-    expect(startTimeInput).toHaveValue('15:00');
+    const startTimeInput = screen.getByLabelText("Start Time");
+    expect(startTimeInput).toHaveValue("15:00");
 
     // Change the start time
-    changeInputValue(startTimeInput, '09:30');
-    expect(startTimeInput).toHaveValue('09:30');
+    changeInputValue(startTimeInput, "09:30");
+    expect(startTimeInput).toHaveValue("09:30");
 
     // Change the end time
-    const endTimeInput = screen.getByLabelText('End Time');
-    expect(endTimeInput).toHaveValue('19:45');
-    changeInputValue(endTimeInput, '17:00');
-    expect(endTimeInput).toHaveValue('17:00');
+    const endTimeInput = screen.getByLabelText("End Time");
+    expect(endTimeInput).toHaveValue("19:45");
+    changeInputValue(endTimeInput, "17:00");
+    expect(endTimeInput).toHaveValue("17:00");
 
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
@@ -429,9 +429,9 @@ describe('ScheduleDialog component tests', () => {
     });
   });
 
-  test('should prevent changing start and end times when value is invalid', async () => {
+  test("should prevent changing start and end times when value is invalid", async () => {
     handleSave.mockResolvedValue({});
-    const {render} = rendererWith({
+    const { render } = rendererWith({
       capabilities: true,
       gmp: createGmp(),
     });
@@ -454,54 +454,54 @@ describe('ScheduleDialog component tests', () => {
       />,
     );
 
-    const startTimeInput = screen.getByLabelText('Start Time');
-    expect(startTimeInput).toHaveValue('15:00');
-    changeInputValue(startTimeInput, '');
-    expect(startTimeInput).toHaveValue('15:00');
-    changeInputValue(startTimeInput, '13');
-    expect(startTimeInput).toHaveValue('15:00');
-    changeInputValue(startTimeInput, 'a:00');
-    expect(startTimeInput).toHaveValue('15:00');
-    changeInputValue(startTimeInput, ':00');
-    expect(startTimeInput).toHaveValue('15:00');
-    changeInputValue(startTimeInput, '25:00');
-    expect(startTimeInput).toHaveValue('15:00');
-    changeInputValue(startTimeInput, '15:a');
-    expect(startTimeInput).toHaveValue('15:00');
-    changeInputValue(startTimeInput, '15:0');
-    expect(startTimeInput).toHaveValue('15:00');
-    changeInputValue(startTimeInput, '15:');
-    expect(startTimeInput).toHaveValue('15:00');
-    changeInputValue(startTimeInput, '15:62');
-    expect(startTimeInput).toHaveValue('15:00');
+    const startTimeInput = screen.getByLabelText("Start Time");
+    expect(startTimeInput).toHaveValue("15:00");
+    changeInputValue(startTimeInput, "");
+    expect(startTimeInput).toHaveValue("15:00");
+    changeInputValue(startTimeInput, "13");
+    expect(startTimeInput).toHaveValue("15:00");
+    changeInputValue(startTimeInput, "a:00");
+    expect(startTimeInput).toHaveValue("15:00");
+    changeInputValue(startTimeInput, ":00");
+    expect(startTimeInput).toHaveValue("15:00");
+    changeInputValue(startTimeInput, "25:00");
+    expect(startTimeInput).toHaveValue("15:00");
+    changeInputValue(startTimeInput, "15:a");
+    expect(startTimeInput).toHaveValue("15:00");
+    changeInputValue(startTimeInput, "15:0");
+    expect(startTimeInput).toHaveValue("15:00");
+    changeInputValue(startTimeInput, "15:");
+    expect(startTimeInput).toHaveValue("15:00");
+    changeInputValue(startTimeInput, "15:62");
+    expect(startTimeInput).toHaveValue("15:00");
 
-    const endTimeInput = screen.getByLabelText('End Time');
-    expect(endTimeInput).toHaveValue('19:45');
-    changeInputValue(endTimeInput, '');
-    expect(endTimeInput).toHaveValue('19:45');
-    changeInputValue(endTimeInput, '15');
-    expect(endTimeInput).toHaveValue('19:45');
-    changeInputValue(endTimeInput, 'a:00');
-    expect(endTimeInput).toHaveValue('19:45');
-    changeInputValue(endTimeInput, ':00');
-    expect(endTimeInput).toHaveValue('19:45');
-    changeInputValue(endTimeInput, '25:00');
-    expect(endTimeInput).toHaveValue('19:45');
-    changeInputValue(endTimeInput, '19:a');
-    expect(endTimeInput).toHaveValue('19:45');
-    changeInputValue(endTimeInput, '19:0');
-    expect(endTimeInput).toHaveValue('19:45');
-    changeInputValue(endTimeInput, '19:');
-    expect(endTimeInput).toHaveValue('19:45');
-    changeInputValue(endTimeInput, '19:62');
-    expect(endTimeInput).toHaveValue('19:45');
+    const endTimeInput = screen.getByLabelText("End Time");
+    expect(endTimeInput).toHaveValue("19:45");
+    changeInputValue(endTimeInput, "");
+    expect(endTimeInput).toHaveValue("19:45");
+    changeInputValue(endTimeInput, "15");
+    expect(endTimeInput).toHaveValue("19:45");
+    changeInputValue(endTimeInput, "a:00");
+    expect(endTimeInput).toHaveValue("19:45");
+    changeInputValue(endTimeInput, ":00");
+    expect(endTimeInput).toHaveValue("19:45");
+    changeInputValue(endTimeInput, "25:00");
+    expect(endTimeInput).toHaveValue("19:45");
+    changeInputValue(endTimeInput, "19:a");
+    expect(endTimeInput).toHaveValue("19:45");
+    changeInputValue(endTimeInput, "19:0");
+    expect(endTimeInput).toHaveValue("19:45");
+    changeInputValue(endTimeInput, "19:");
+    expect(endTimeInput).toHaveValue("19:45");
+    changeInputValue(endTimeInput, "19:62");
+    expect(endTimeInput).toHaveValue("19:45");
   });
 
   // Timezone-related tests
-  describe('Timezone handling', () => {
-    test('should preserve date and time when changing timezone', async () => {
+  describe("Timezone handling", () => {
+    test("should preserve date and time when changing timezone", async () => {
       handleSave.mockResolvedValue({});
-      const {render} = rendererWith({
+      const { render } = rendererWith({
         capabilities: true,
         gmp: createGmp(),
       });
@@ -526,16 +526,16 @@ describe('ScheduleDialog component tests', () => {
       );
 
       // Verify initial state
-      const startTimeInput = screen.getByLabelText('Start Time');
-      expect(startTimeInput).toHaveValue('15:00');
+      const startTimeInput = screen.getByLabelText("Start Time");
+      expect(startTimeInput).toHaveValue("15:00");
 
       // Change timezone to America/New_York
-      const timezoneSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-        name: 'Timezone',
+      const timezoneSelect = screen.getByRole<HTMLSelectElement>("combobox", {
+        name: "Timezone",
       });
       const selectItems = await getSelectItemElementsForSelect(timezoneSelect);
       const nyTimezone = selectItems.find(
-        item => item.textContent === 'America/New_York',
+        (item) => item.textContent === "America/New_York",
       );
       if (nyTimezone) {
         fireEvent.click(nyTimezone);
@@ -553,7 +553,7 @@ describe('ScheduleDialog component tests', () => {
           name: scheduleName,
           comment: scheduleComment,
           icalendar: expect.any(String),
-          timezone: 'America/New_York',
+          timezone: "America/New_York",
         });
       }
     });
@@ -561,55 +561,55 @@ describe('ScheduleDialog component tests', () => {
     // Test date preservation when changing time across different timezones
     test.each([
       {
-        timezone: 'Europe/Berlin',
-        description: 'Europe/Berlin (UTC+1)',
-        newTime: '09:30',
+        timezone: "Europe/Berlin",
+        description: "Europe/Berlin (UTC+1)",
+        newTime: "09:30",
       },
       {
-        timezone: 'Asia/Tokyo',
-        description: 'Asia/Tokyo (UTC+9)',
-        newTime: '10:00',
+        timezone: "Asia/Tokyo",
+        description: "Asia/Tokyo (UTC+9)",
+        newTime: "10:00",
       },
       {
-        timezone: 'Australia/Sydney',
-        description: 'Australia/Sydney (UTC+11)',
-        newTime: '10:30',
+        timezone: "Australia/Sydney",
+        description: "Australia/Sydney (UTC+11)",
+        newTime: "10:30",
       },
       {
-        timezone: 'America/Los_Angeles',
-        description: 'America/Los_Angeles (UTC-8)',
-        newTime: '10:00',
+        timezone: "America/Los_Angeles",
+        description: "America/Los_Angeles (UTC-8)",
+        newTime: "10:00",
       },
       {
-        timezone: 'Asia/Shanghai',
-        description: 'Asia/Shanghai (UTC+8)',
-        newTime: '16:00',
+        timezone: "Asia/Shanghai",
+        description: "Asia/Shanghai (UTC+8)",
+        newTime: "16:00",
       },
       {
-        timezone: 'Europe/London',
-        description: 'Europe/London (UTC+0)',
-        newTime: '11:00',
+        timezone: "Europe/London",
+        description: "Europe/London (UTC+0)",
+        newTime: "11:00",
       },
       {
-        timezone: 'America/New_York',
-        description: 'America/New_York (UTC-5)',
-        newTime: '10:15',
+        timezone: "America/New_York",
+        description: "America/New_York (UTC-5)",
+        newTime: "10:15",
       },
       {
-        timezone: 'America/Chicago',
-        description: 'America/Chicago (UTC-6)',
-        newTime: '12:00',
+        timezone: "America/Chicago",
+        description: "America/Chicago (UTC-6)",
+        newTime: "12:00",
       },
       {
-        timezone: 'Africa/Cairo',
-        description: 'Africa/Cairo (UTC+2)',
-        newTime: '13:00',
+        timezone: "Africa/Cairo",
+        description: "Africa/Cairo (UTC+2)",
+        newTime: "13:00",
       },
     ])(
-      'should preserve date when changing time in $description',
-      async ({timezone, newTime}) => {
+      "should preserve date when changing time in $description",
+      async ({ timezone, newTime }) => {
         handleSave.mockResolvedValue({});
-        const {render} = rendererWith({
+        const { render } = rendererWith({
           capabilities: true,
           gmp: createGmp(),
         });
@@ -633,7 +633,7 @@ describe('ScheduleDialog component tests', () => {
         );
 
         // Change only the time
-        const startTimeInput = screen.getByLabelText('Start Time');
+        const startTimeInput = screen.getByLabelText("Start Time");
         changeInputValue(startTimeInput, newTime);
         expect(startTimeInput).toHaveValue(newTime);
 
@@ -646,7 +646,7 @@ describe('ScheduleDialog component tests', () => {
           name: scheduleName,
           comment: scheduleComment,
           icalendar: expect.stringContaining(
-            `DTSTART:20210208T${newTime.replace(':', '')}00`,
+            `DTSTART:20210208T${newTime.replace(":", "")}00`,
           ),
           timezone,
         });
@@ -656,34 +656,34 @@ describe('ScheduleDialog component tests', () => {
     // Test both date and time changes in different timezones
     test.each([
       {
-        timezone: 'Europe/Berlin',
-        description: 'Europe/Berlin',
-        startTime: '10:30',
-        endTime: '18:00',
+        timezone: "Europe/Berlin",
+        description: "Europe/Berlin",
+        startTime: "10:30",
+        endTime: "18:00",
       },
       {
-        timezone: 'Asia/Tokyo',
-        description: 'Asia/Tokyo',
-        startTime: '09:00',
-        endTime: '16:30',
+        timezone: "Asia/Tokyo",
+        description: "Asia/Tokyo",
+        startTime: "09:00",
+        endTime: "16:30",
       },
       {
-        timezone: 'Australia/Sydney',
-        description: 'Australia/Sydney',
-        startTime: '10:30',
-        endTime: '18:00',
+        timezone: "Australia/Sydney",
+        description: "Australia/Sydney",
+        startTime: "10:30",
+        endTime: "18:00",
       },
       {
-        timezone: 'America/Los_Angeles',
-        description: 'America/Los_Angeles',
-        startTime: '08:00',
-        endTime: '15:30',
+        timezone: "America/Los_Angeles",
+        description: "America/Los_Angeles",
+        startTime: "08:00",
+        endTime: "15:30",
       },
     ])(
-      'should handle both date and time changes in $description timezone',
-      async ({timezone, startTime, endTime}) => {
+      "should handle both date and time changes in $description timezone",
+      async ({ timezone, startTime, endTime }) => {
         handleSave.mockResolvedValue({});
-        const {render} = rendererWith({
+        const { render } = rendererWith({
           capabilities: true,
           gmp: createGmp(),
         });
@@ -707,12 +707,12 @@ describe('ScheduleDialog component tests', () => {
         );
 
         // Change the time
-        const startTimeInput = screen.getByLabelText('Start Time');
+        const startTimeInput = screen.getByLabelText("Start Time");
         changeInputValue(startTimeInput, startTime);
         expect(startTimeInput).toHaveValue(startTime);
 
         // Change the end time
-        const endTimeInput = screen.getByLabelText('End Time');
+        const endTimeInput = screen.getByLabelText("End Time");
         changeInputValue(endTimeInput, endTime);
         expect(endTimeInput).toHaveValue(endTime);
 
@@ -735,31 +735,31 @@ describe('ScheduleDialog component tests', () => {
     // Test DST handling in different timezones
     test.each([
       {
-        timezone: 'America/New_York',
-        description: 'America/New_York during DST transition',
-        testDate: date('2021-03-14T10:00:00'),
-        newTime: '08:00',
-        expectedDate: '20210314',
+        timezone: "America/New_York",
+        description: "America/New_York during DST transition",
+        testDate: date("2021-03-14T10:00:00"),
+        newTime: "08:00",
+        expectedDate: "20210314",
       },
       {
-        timezone: 'Europe/London',
-        description: 'Europe/London before DST',
+        timezone: "Europe/London",
+        description: "Europe/London before DST",
         testDate: scheduleStartDate,
-        newTime: '11:00',
-        expectedDate: '20210208',
+        newTime: "11:00",
+        expectedDate: "20210208",
       },
       {
-        timezone: 'Australia/Sydney',
-        description: 'Australia/Sydney during DST',
+        timezone: "Australia/Sydney",
+        description: "Australia/Sydney during DST",
         testDate: scheduleStartDate,
-        newTime: '14:00',
-        expectedDate: '20210208',
+        newTime: "14:00",
+        expectedDate: "20210208",
       },
     ])(
-      'should handle DST correctly in $description',
-      async ({timezone, testDate, newTime, expectedDate}) => {
+      "should handle DST correctly in $description",
+      async ({ timezone, testDate, newTime, expectedDate }) => {
         handleSave.mockResolvedValue({});
-        const {render} = rendererWith({
+        const { render } = rendererWith({
           capabilities: true,
           gmp: createGmp(),
         });
@@ -783,7 +783,7 @@ describe('ScheduleDialog component tests', () => {
         );
 
         // Change the time
-        const startTimeInput = screen.getByLabelText('Start Time');
+        const startTimeInput = screen.getByLabelText("Start Time");
         changeInputValue(startTimeInput, newTime);
         expect(startTimeInput).toHaveValue(newTime);
 
@@ -803,12 +803,12 @@ describe('ScheduleDialog component tests', () => {
     );
   });
 
-  describe('handleSave recurrence logic', () => {
-    const mockStartDate = date('2021-02-08T15:00:00Z').tz('UTC');
+  describe("handleSave recurrence logic", () => {
+    const mockStartDate = date("2021-02-08T15:00:00Z").tz("UTC");
 
     test('should save with "once" recurrence (no RRULE in ical)', async () => {
       handleSave.mockResolvedValue({});
-      const {render} = rendererWith({
+      const { render } = rendererWith({
         capabilities: true,
         gmp: createGmp(),
       });
@@ -826,24 +826,24 @@ describe('ScheduleDialog component tests', () => {
       );
 
       // Default recurrence is "Once" when no freq is provided
-      const recurrenceSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-        name: 'Recurrence',
+      const recurrenceSelect = screen.getByRole<HTMLSelectElement>("combobox", {
+        name: "Recurrence",
       });
-      expect(recurrenceSelect).toHaveValue('Once');
+      expect(recurrenceSelect).toHaveValue("Once");
 
       const saveButton = screen.getDialogSaveButton();
       fireEvent.click(saveButton);
 
       expect(handleSave).toHaveBeenCalledWith(
         expect.objectContaining({
-          icalendar: expect.not.stringContaining('RRULE'),
+          icalendar: expect.not.stringContaining("RRULE"),
         }),
       );
     });
 
     test('should save with "workweek" recurrence (FREQ=WEEKLY with BYDAY=MO,TU,WE,TH,FR)', async () => {
       handleSave.mockResolvedValue({});
-      const {render} = rendererWith({
+      const { render } = rendererWith({
         capabilities: true,
         gmp: createGmp(),
       });
@@ -862,23 +862,23 @@ describe('ScheduleDialog component tests', () => {
       );
 
       // Select "Workweek" recurrence
-      const recurrenceSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-        name: 'Recurrence',
+      const recurrenceSelect = screen.getByRole<HTMLSelectElement>("combobox", {
+        name: "Recurrence",
       });
       const selectItems =
         await getSelectItemElementsForSelect(recurrenceSelect);
       const workweekOption = selectItems.find(
-        item => item.textContent === 'Workweek (Monday till Friday)',
+        (item) => item.textContent === "Workweek (Monday till Friday)",
       ) as HTMLElement;
       fireEvent.click(workweekOption);
-      expect(recurrenceSelect).toHaveValue('Workweek (Monday till Friday)');
+      expect(recurrenceSelect).toHaveValue("Workweek (Monday till Friday)");
 
       const saveButton = screen.getDialogSaveButton();
       fireEvent.click(saveButton);
 
       const ical = handleSave.mock.calls[0][0].icalendar;
-      expect(ical).toContain('RRULE');
-      expect(ical).toContain('FREQ=WEEKLY');
+      expect(ical).toContain("RRULE");
+      expect(ical).toContain("FREQ=WEEKLY");
       expect(ical).toMatch(/BYDAY=.*MO/);
       expect(ical).toMatch(/BYDAY=.*TU/);
       expect(ical).toMatch(/BYDAY=.*WE/);
@@ -890,30 +890,30 @@ describe('ScheduleDialog component tests', () => {
 
     test.each([
       {
-        label: 'Hourly',
-        expectedFreq: 'FREQ=HOURLY',
+        label: "Hourly",
+        expectedFreq: "FREQ=HOURLY",
       },
       {
-        label: 'Daily',
-        expectedFreq: 'FREQ=DAILY',
+        label: "Daily",
+        expectedFreq: "FREQ=DAILY",
       },
       {
-        label: 'Weekly',
-        expectedFreq: 'FREQ=WEEKLY',
+        label: "Weekly",
+        expectedFreq: "FREQ=WEEKLY",
       },
       {
-        label: 'Monthly',
-        expectedFreq: 'FREQ=MONTHLY',
+        label: "Monthly",
+        expectedFreq: "FREQ=MONTHLY",
       },
       {
-        label: 'Yearly',
-        expectedFreq: 'FREQ=YEARLY',
+        label: "Yearly",
+        expectedFreq: "FREQ=YEARLY",
       },
     ])(
       'should save pre-defined "$label" recurrence with interval=1',
-      async ({label, expectedFreq}) => {
+      async ({ label, expectedFreq }) => {
         handleSave.mockResolvedValue({});
-        const {render} = rendererWith({
+        const { render } = rendererWith({
           capabilities: true,
           gmp: createGmp(),
         });
@@ -933,15 +933,15 @@ describe('ScheduleDialog component tests', () => {
 
         // Select the pre-defined recurrence
         const recurrenceSelect = screen.getByRole<HTMLSelectElement>(
-          'textbox',
+          "combobox",
           {
-            name: 'Recurrence',
+            name: "Recurrence",
           },
         );
         const selectItems =
           await getSelectItemElementsForSelect(recurrenceSelect);
         const option = selectItems.find(
-          item => item.textContent === label,
+          (item) => item.textContent === label,
         ) as HTMLElement;
         fireEvent.click(option);
 
@@ -955,9 +955,9 @@ describe('ScheduleDialog component tests', () => {
       },
     );
 
-    test('should save with open end (no DURATION in ical)', async () => {
+    test("should save with open end (no DURATION in ical)", async () => {
       handleSave.mockResolvedValue({});
-      const {render} = rendererWith({
+      const { render } = rendererWith({
         capabilities: true,
         gmp: createGmp(),
       });
@@ -980,12 +980,12 @@ describe('ScheduleDialog component tests', () => {
       fireEvent.click(saveButton);
 
       const ical = handleSave.mock.calls[0][0].icalendar;
-      expect(ical).not.toContain('DURATION');
+      expect(ical).not.toContain("DURATION");
     });
 
-    test('should save with duration when end date is set', async () => {
+    test("should save with duration when end date is set", async () => {
       handleSave.mockResolvedValue({});
-      const {render} = rendererWith({
+      const { render } = rendererWith({
         capabilities: true,
         gmp: createGmp(),
       });
@@ -1009,17 +1009,17 @@ describe('ScheduleDialog component tests', () => {
       fireEvent.click(saveButton);
 
       const ical = handleSave.mock.calls[0][0].icalendar;
-      expect(ical).toContain('DURATION');
+      expect(ical).toContain("DURATION");
     });
 
-    test('should reject when end date is before start date', async () => {
-      const {render} = rendererWith({
+    test("should reject when end date is before start date", async () => {
+      const { render } = rendererWith({
         capabilities: true,
         gmp: createGmp(),
       });
 
       // Start at 15:00, end at 14:00 (end before start)
-      const startDate = date('2021-02-08T15:00:00Z').tz('UTC');
+      const startDate = date("2021-02-08T15:00:00Z").tz("UTC");
 
       render(
         <ScheduleDialog
@@ -1037,8 +1037,8 @@ describe('ScheduleDialog component tests', () => {
       );
 
       // Change start time to after end time
-      const startTimeInput = screen.getByLabelText('Start Time');
-      changeInputValue(startTimeInput, '20:00');
+      const startTimeInput = screen.getByLabelText("Start Time");
+      changeInputValue(startTimeInput, "20:00");
 
       const saveButton = screen.getDialogSaveButton();
       fireEvent.click(saveButton);
