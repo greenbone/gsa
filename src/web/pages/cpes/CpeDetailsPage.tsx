@@ -4,7 +4,6 @@
  */
 
 import {useEffect} from 'react';
-import {useQueryClient} from '@tanstack/react-query';
 import {useNavigate, useParams} from 'react-router';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
@@ -140,10 +139,9 @@ const CpeDetailsPage = () => {
   const {id: routeId} = useParams();
   const id = routeId ? decodeURIComponent(routeId) : undefined;
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const {dialogNotification, showError} = useDialogNotification();
   const {downloadComponent, download: handleDownload} = useDownload();
-  const {data, error, isLoading} = useGetCpe({id});
+  const {data, error, isLoading, refetch} = useGetCpe({id});
   const entity = data?.cpe;
   const candidateFilter = data?.candidateFilter;
 
@@ -165,7 +163,7 @@ const CpeDetailsPage = () => {
       }
     : undefined;
   const onChanged = () => {
-    void queryClient.invalidateQueries({queryKey: ['get_cpe']});
+    void refetch();
   };
   const onError = error => showError(error);
 
