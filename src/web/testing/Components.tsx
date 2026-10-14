@@ -20,6 +20,7 @@ export const Main = ({children}: {children: React.ReactNode}) => {
   return (
     <MantineProvider
       defaultColorScheme="light"
+      env="test"
       theme={{
         ...theme,
         components: {
