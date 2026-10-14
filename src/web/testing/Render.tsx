@@ -4,12 +4,14 @@
  */
 
 import React from 'react';
-import {afterEach} from '@gsa/testing';
+import {notifications} from '@mantine/notifications';
+import {afterEach, testing} from '@gsa/testing';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {
   render as reactTestingRender,
   cleanup,
   renderHook as rtlRenderHook,
+  act,
 } from '@testing-library/react/pure';
 import {type InitialEntry, MemoryRouter} from 'react-router';
 import {type Store} from 'redux';
@@ -53,7 +55,22 @@ const createTestQueryClient = () =>
 
 export {renderHook} from '@testing-library/react/pure';
 
-afterEach(cleanup);
+export const cleanupRender = async () => {
+  cleanup();
+  // Unmount before clearing the shared store to avoid starting exit transitions.
+  notifications.clean();
+  // Notifications schedules an untracked zero-delay forceUpdate on additions.
+  // Let it settle while jsdom still exists, also when a test uses fake timers.
+  await act(async () => {
+    if (testing.isFakeTimers()) {
+      await testing.advanceTimersByTimeAsync(0);
+    } else {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    }
+  });
+};
+
+afterEach(cleanupRender);
 
 export const render = (ui: React.ReactNode) => {
   const {
