@@ -20,6 +20,10 @@ describe('screen', () => {
     expect(typeof screen.getSelectItemElements).toBe('function');
     expect(screen.getSelectElement).toBeDefined();
     expect(typeof screen.getSelectElement).toBe('function');
+    expect(screen.getSelectElementByLabel).toBeDefined();
+    expect(typeof screen.getSelectElementByLabel).toBe('function');
+    expect(screen.querySelectElementByLabel).toBeDefined();
+    expect(typeof screen.querySelectElementByLabel).toBe('function');
   });
 
   test('should have debug function', () => {
