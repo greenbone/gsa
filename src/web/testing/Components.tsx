@@ -4,7 +4,8 @@
  */
 
 import {MantineProvider} from '@mantine/core';
-import {ThemeProvider, theme} from '@greenbone/ui-lib';
+import {Notifications} from '@mantine/notifications';
+import {theme} from '@greenbone/ui-lib';
 import {Provider as StoreProvider} from 'react-redux';
 import {useLocation} from 'react-router';
 import {StyleSheetManager} from 'styled-components';
@@ -17,48 +18,48 @@ import {LanguageContext} from 'web/components/provider/LanguageProvider';
 
 export const Main = ({children}: {children: React.ReactNode}) => {
   return (
-    <ThemeProvider defaultColorScheme="light">
-      <MantineProvider
-        theme={{
-          ...theme,
-          components: {
-            ...theme.components,
-            Modal: {
-              ...theme.components?.Modal,
-              defaultProps: {
-                ...theme.components?.Modal?.defaultProps,
-                transitionProps: {duration: 0, exitDuration: 0},
-              },
-            },
-            ModalOverlay: {
-              ...theme.components?.ModalOverlay,
-              defaultProps: {
-                ...theme.components?.ModalOverlay?.defaultProps,
-                transitionProps: {duration: 0, exitDuration: 0},
-              },
-            },
-            Popover: {
-              ...theme.components?.Popover,
-              defaultProps: {
-                ...theme.components?.Popover?.defaultProps,
-                transitionProps: {duration: 0, exitDuration: 0},
-              },
-            },
-            Tooltip: {
-              ...theme.components?.Tooltip,
-              defaultProps: {
-                ...theme.components?.Tooltip?.defaultProps,
-                transitionProps: {duration: 0, exitDuration: 0},
-              },
+    <MantineProvider
+      defaultColorScheme="light"
+      theme={{
+        ...theme,
+        components: {
+          ...theme.components,
+          Modal: {
+            ...theme.components?.Modal,
+            defaultProps: {
+              ...theme.components?.Modal?.defaultProps,
+              transitionProps: {duration: 0, exitDuration: 0},
             },
           },
-        }}
-      >
-        <StyleSheetManager enableVendorPrefixes>
-          <div data-testid="main-container">{children}</div>
-        </StyleSheetManager>
-      </MantineProvider>
-    </ThemeProvider>
+          ModalOverlay: {
+            ...theme.components?.ModalOverlay,
+            defaultProps: {
+              ...theme.components?.ModalOverlay?.defaultProps,
+              transitionProps: {duration: 0, exitDuration: 0},
+            },
+          },
+          Popover: {
+            ...theme.components?.Popover,
+            defaultProps: {
+              ...theme.components?.Popover?.defaultProps,
+              transitionProps: {duration: 0, exitDuration: 0},
+            },
+          },
+          Tooltip: {
+            ...theme.components?.Tooltip,
+            defaultProps: {
+              ...theme.components?.Tooltip?.defaultProps,
+              transitionProps: {duration: 0, exitDuration: 0},
+            },
+          },
+        },
+      }}
+    >
+      <Notifications position="top-right" transitionDuration={0} />
+      <StyleSheetManager enableVendorPrefixes>
+        <div data-testid="main-container">{children}</div>
+      </StyleSheetManager>
+    </MantineProvider>
   );
 };
 
