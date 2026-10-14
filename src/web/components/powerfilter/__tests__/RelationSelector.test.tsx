@@ -3,87 +3,87 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { describe, test, expect, testing } from "@gsa/testing";
+import {describe, test, expect, testing} from '@gsa/testing';
 import {
   openSelectElement,
   screen,
   render,
   fireEvent,
   userEvent,
-} from "web/testing";
-import RelationSelector from "web/components/powerfilter/RelationSelector";
+} from 'web/testing';
+import RelationSelector from 'web/components/powerfilter/RelationSelector';
 
-describe("Relation Selector Tests", () => {
-  test("should render", () => {
+describe('Relation Selector Tests', () => {
+  test('should render', () => {
     const onChange = testing.fn();
-    const { container } = render(
+    const {container} = render(
       <RelationSelector relation="<" onChange={onChange} />,
     );
 
     expect(container).toBeVisible();
   });
 
-  test("should return items", async () => {
+  test('should return items', async () => {
     const onChange = testing.fn();
     render(<RelationSelector relation="<" onChange={onChange} />);
 
     expect(screen.getSelectItemElements().length).toEqual(4);
-    const select = screen.getByTestId<HTMLSelectElement>("relation-selector");
+    const select = screen.getByTestId<HTMLSelectElement>('relation-selector');
     await openSelectElement(select);
 
     const domItems = screen.getSelectItemElements();
     expect(domItems.length).toEqual(4);
-    expect(domItems[0]).toHaveTextContent("--");
-    expect(domItems[1]).toHaveTextContent("is equal to");
-    expect(domItems[2]).toHaveTextContent("is greater than");
-    expect(domItems[3]).toHaveTextContent("is less than");
+    expect(domItems[0]).toHaveTextContent('--');
+    expect(domItems[1]).toHaveTextContent('is equal to');
+    expect(domItems[2]).toHaveTextContent('is greater than');
+    expect(domItems[3]).toHaveTextContent('is less than');
   });
 
-  test("should call onChange handler", async () => {
+  test('should call onChange handler', async () => {
     const onChange = testing.fn();
 
     render(<RelationSelector relation="<" onChange={onChange} />);
 
-    const select = screen.getByTestId<HTMLSelectElement>("relation-selector");
+    const select = screen.getByTestId<HTMLSelectElement>('relation-selector');
     await openSelectElement(select);
 
     const domItems = screen.getSelectItemElements();
     fireEvent.click(domItems[1]);
     expect(onChange).toHaveBeenCalled();
-    expect(onChange).toHaveBeenCalledWith("=", undefined);
+    expect(onChange).toHaveBeenCalledWith('=', undefined);
   });
 
-  test("should change value", async () => {
+  test('should change value', async () => {
     const onChange = testing.fn();
 
     render(<RelationSelector relation="=" onChange={onChange} />);
 
-    const select = screen.getByTestId<HTMLSelectElement>("relation-selector");
-    expect(select).toHaveValue("is equal to");
+    const select = screen.getByTestId<HTMLSelectElement>('relation-selector');
+    expect(select).toHaveValue('is equal to');
 
     await openSelectElement(select);
 
     const domItems = screen.getSelectItemElements();
     fireEvent.click(domItems[3]);
     expect(onChange).toHaveBeenCalled();
-    expect(onChange).toHaveBeenCalledWith("<", undefined);
+    expect(onChange).toHaveBeenCalledWith('<', undefined);
   });
 
-  test("should filter items", async () => {
+  test('should filter items', async () => {
     const onChange = testing.fn();
     render(<RelationSelector relation="=" onChange={onChange} />);
 
-    fireEvent.click(screen.getByRole("combobox"));
+    fireEvent.click(screen.getSelectElement());
 
-    expect(screen.getAllByRole("option").length).toEqual(4);
+    expect(screen.getAllByRole('option').length).toEqual(4);
 
-    const select = screen.getByRole("combobox");
+    const select = screen.getSelectElement();
     await userEvent.clear(select);
-    await userEvent.type(select, "than");
-    expect(screen.getAllByRole("option").length).toEqual(2);
+    await userEvent.type(select, 'than');
+    expect(screen.getAllByRole('option').length).toEqual(2);
 
     await userEvent.clear(select);
-    await userEvent.type(select, "to");
-    expect(screen.getAllByRole("option").length).toEqual(1);
+    await userEvent.type(select, 'to');
+    expect(screen.getAllByRole('option').length).toEqual(1);
   });
 });
