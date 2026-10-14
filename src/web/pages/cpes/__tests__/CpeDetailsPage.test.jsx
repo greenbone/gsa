@@ -13,7 +13,7 @@ import QueryFilter from 'gmp/models/filter/query-filter';
 import {createSession} from 'gmp/testing';
 import {SEVERITY_RATING_CVSS_3} from 'gmp/utils/severity';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
-import CpePage from 'web/pages/cpes/DetailsPage';
+import CpePage from 'web/pages/cpes/CpeDetailsPage';
 
 const cpe = CPE.fromElement({
   _id: 'cpe:/a:foo',

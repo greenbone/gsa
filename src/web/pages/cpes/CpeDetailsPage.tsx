@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useEffect} from 'react';
+import {useEffect} from 'react';
 import {useQueryClient} from '@tanstack/react-query';
 import {useNavigate, useParams} from 'react-router';
 import {isDefined} from 'gmp/utils/identity';
@@ -135,7 +135,7 @@ Details.propTypes = {
   links: PropTypes.bool,
 };
 
-const CpePage = () => {
+const CpeDetailsPage = () => {
   const [_] = useTranslation();
   const {id: routeId} = useParams();
   const id = routeId ? decodeURIComponent(routeId) : undefined;
@@ -241,4 +241,4 @@ const CpePage = () => {
   );
 };
 
-export default CpePage;
+export default CpeDetailsPage;
