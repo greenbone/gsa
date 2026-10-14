@@ -13,6 +13,7 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface SchedulerCronFieldProps {
   activeCronExpression?: string;
+  compact?: boolean;
   name?: string;
   title?: React.ReactNode;
   infoTip?: React.ReactNode;
@@ -24,6 +25,7 @@ interface SchedulerCronFieldProps {
 
 const SchedulerCronField = ({
   activeCronExpression,
+  compact = false,
   name = 'schedulerCronTime',
   title,
   infoTip,
@@ -84,7 +86,7 @@ const SchedulerCronField = ({
     <Column gap="md">
       <FormGroup
         title={
-          title ? (
+          compact ? undefined : title ? (
             <>
               {title}
               {infoTip && (
@@ -99,9 +101,13 @@ const SchedulerCronField = ({
         }
       >
         <Select
-          description={_(
-            "Choose from the dropdown of common schedules, or select 'Custom cron expression' in the list to enter your own cron schedule.",
-          )}
+          description={
+            compact
+              ? undefined
+              : _(
+                  "Choose from the dropdown of common schedules, or select 'Custom cron expression' in the list to enter your own cron schedule.",
+                )
+          }
           disabled={disabled}
           items={cronScheduleItems}
           name={name}

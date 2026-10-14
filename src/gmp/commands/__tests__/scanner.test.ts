@@ -10,6 +10,7 @@ import {
   createActionResultResponse,
   createEntityResponse,
 } from 'gmp/commands/testing';
+import {createFormData} from 'gmp/http/utils';
 import Scanner, {OPENVASD_SCANNER_TYPE} from 'gmp/models/scanner';
 
 describe('ScannerCommand tests', () => {
@@ -325,7 +326,7 @@ describe('ScannerCommand tests', () => {
         bulk_size: 100,
         bulk_throttle_time_in_ms: 500,
         indexer_dir_depth: 3,
-        'scheduler_cron_times:': '0 0 * * *,0 12 * * *',
+        'scheduler_cron_times:': ['0 0 * * *', '0 12 * * *'],
         interval_in_seconds: 60,
         miss_until_inactive: 3,
         update_to_latest: 1,
@@ -351,7 +352,7 @@ describe('ScannerCommand tests', () => {
         cmd: 'modify_agent_control_scan_config',
         agent_control_id: '123',
         attempts: 5,
-        'scheduler_cron_times:': '0 2 * * *',
+        'scheduler_cron_times:': ['0 2 * * *'],
       },
     });
   });
@@ -376,5 +377,30 @@ describe('ScannerCommand tests', () => {
         attempts: 5,
       },
     });
+  });
+
+  test('sends separate cron form fields preserving commas inside expressions', async () => {
+    const response = createActionResultResponse({
+      action: 'modify_agent_control_scan_config',
+      id: '123',
+      message: 'Config updated successfully',
+    });
+    const fakeHttp = createHttp(response);
+    const cmd = new ScannerCommand(fakeHttp);
+    const cronTimes = ['0 6,18 * * *', '0 0,12 1 */2 *'];
+    await cmd.modifyAgentControlConfig({
+      id: '123',
+      schedulerCronTimes: cronTimes,
+    });
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'modify_agent_control_scan_config',
+        agent_control_id: '123',
+        'scheduler_cron_times:': cronTimes,
+      },
+    });
+    const requestData = fakeHttp.request.mock.calls[0][1].data;
+    const formData = createFormData(requestData);
+    expect(formData.getAll('scheduler_cron_times:')).toEqual(cronTimes);
   });
 });

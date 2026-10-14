@@ -7,7 +7,7 @@ import {type ReactNode, useEffect, useState} from 'react';
 import type Scanner from 'gmp/models/scanner';
 import NumberField from 'web/components/form/NumberField';
 import Radio from 'web/components/form/Radio';
-import SchedulerCronField from 'web/components/form/SchedulerCronField';
+import SchedulerCronFields from 'web/components/form/SchedulerCronFields';
 import Column from 'web/components/layout/Column';
 import Layout from 'web/components/layout/Layout';
 import Row from 'web/components/layout/Row';
@@ -36,14 +36,14 @@ interface ConfigFieldDefinition {
   renderEdit: (
     value: FormValue,
     onChange: (value: FormValue) => void,
-    activeCronExpression?: string,
+    activeCronExpressions?: string[],
   ) => ReactNode;
   renderView: (value: FormValue) => ReactNode;
 }
 
 interface EditableConfigFieldProps {
   field: ConfigFieldDefinition;
-  activeCronExpression?: string;
+  activeCronExpressions?: string[];
   fieldValue: FormValue;
   editValue: FormValue | undefined;
   isEditMode: boolean;
@@ -58,8 +58,6 @@ const getScannerPayload = (scanner: Scanner) => {
   const agentDefaults = scanner.agentControlConfig?.agentDefaults;
   const agentControlDefaults = scanner.agentControlConfig?.agentControlDefaults;
   const cronTimes = agentDefaults?.agentScriptExecutor.schedulerCronTimes;
-  const firstCronTime =
-    Array.isArray(cronTimes) && cronTimes.length > 0 ? cronTimes[0] : undefined;
 
   return {
     attempts: agentDefaults?.agentControl.retry.attempts ?? 0,
@@ -70,7 +68,7 @@ const getScannerPayload = (scanner: Scanner) => {
     bulkThrottleTimeInMs:
       agentDefaults?.agentScriptExecutor.bulkThrottleTimeInMs ?? 0,
     indexerDirDepth: agentDefaults?.agentScriptExecutor.indexerDirDepth ?? 0,
-    schedulerCronTimes: firstCronTime ? [firstCronTime] : [],
+    schedulerCronTimes: [...(cronTimes ?? [])],
     intervalInSeconds: agentDefaults?.heartbeat.intervalInSeconds ?? 0,
     missUntilInactive: agentDefaults?.heartbeat.missUntilInactive ?? 0,
     updateToLatest: agentControlDefaults?.updateToLatest ?? false,
@@ -93,25 +91,18 @@ const renderNumberField = (
 );
 
 const renderCronField = (
-  activeCronExpression: string,
+  activeCronExpressions: string[],
   value: FormValue,
   onChange: (value: FormValue) => void,
-) => {
-  const cronValue = Array.isArray(value) ? (value[0] ?? '') : (value as string);
-  const handleChange = (newValue: string) => {
-    // Store as array with single value
-    onChange([newValue]);
-  };
-  return (
-    <SchedulerCronField
-      activeCronExpression={activeCronExpression}
-      name="schedulerCronTimes"
-      title=""
-      value={cronValue}
-      onChange={handleChange}
-    />
-  );
-};
+) => (
+  <SchedulerCronFields
+    activeCronExpressions={activeCronExpressions}
+    name="schedulerCronTimes"
+    title=""
+    value={Array.isArray(value) ? value : []}
+    onChange={onChange}
+  />
+);
 
 const renderRadioField = (
   value: FormValue,
@@ -137,7 +128,7 @@ const renderRadioField = (
 
 const EditableConfigField = ({
   field,
-  activeCronExpression = '',
+  activeCronExpressions = [],
   fieldValue,
   editValue,
   isEditMode,
@@ -152,7 +143,7 @@ const EditableConfigField = ({
   const editComponent = field.renderEdit(
     displayValue,
     onChangeValue,
-    activeCronExpression,
+    activeCronExpressions,
   );
 
   return (
@@ -185,8 +176,8 @@ const ScannerAgentConfigSettings = ({
 
   const agentDefaults = scanner.agentControlConfig?.agentDefaults;
   const agentControlDefaults = scanner.agentControlConfig?.agentControlDefaults;
-  const activeCronExpression =
-    agentDefaults?.agentScriptExecutor.schedulerCronTimes?.[0] ?? '';
+  const activeCronExpressions =
+    agentDefaults?.agentScriptExecutor.schedulerCronTimes ?? [];
 
   // Persistent state for field values (synced with scanner prop via useEffect)
   const [fieldValues, setFieldValues] = useState<Record<string, FormValue>>({});
@@ -199,10 +190,6 @@ const ScannerAgentConfigSettings = ({
   // Sync field values with scanner prop when it changes
   useEffect(() => {
     const cronTimes = agentDefaults?.agentScriptExecutor.schedulerCronTimes;
-    const firstCronTime =
-      Array.isArray(cronTimes) && cronTimes.length > 0
-        ? cronTimes[0]
-        : undefined;
 
     setFieldValues({
       attempts: agentDefaults?.agentControl.retry.attempts ?? 0,
@@ -213,7 +200,7 @@ const ScannerAgentConfigSettings = ({
       bulkThrottleTimeInMs:
         agentDefaults?.agentScriptExecutor.bulkThrottleTimeInMs ?? 0,
       indexerDirDepth: agentDefaults?.agentScriptExecutor.indexerDirDepth ?? 0,
-      schedulerCronTimes: firstCronTime ? [firstCronTime] : [],
+      schedulerCronTimes: [...(cronTimes ?? [])],
       intervalInSeconds: agentDefaults?.heartbeat.intervalInSeconds ?? 0,
       missUntilInactive: agentDefaults?.heartbeat.missUntilInactive ?? 0,
       updateToLatest: agentControlDefaults?.updateToLatest ?? false,
@@ -365,12 +352,12 @@ const ScannerAgentConfigSettings = ({
         },
         {
           key: 'schedulerCronTimes',
-          label: _('Scheduler Cron Time'),
-          title: _('Cron expression for scheduler'),
+          label: _('Scheduler Cron Times'),
+          title: _('Cron expressions for scheduler'),
           getValue: (scanner: Scanner) =>
             scanner.agentControlConfig?.agentDefaults?.agentScriptExecutor
               .schedulerCronTimes ?? [],
-          renderEdit: (value, onChange, cronExpr = '') =>
+          renderEdit: (value, onChange, cronExpr = []) =>
             renderCronField(cronExpr, value, onChange),
           renderView: val => {
             const displayValue = Array.isArray(val)
@@ -447,7 +434,7 @@ const ScannerAgentConfigSettings = ({
             {section.fields.map(field => (
               <EditableConfigField
                 key={field.key}
-                activeCronExpression={activeCronExpression}
+                activeCronExpressions={activeCronExpressions}
                 editValue={editValues[field.key]}
                 errorMessage={errorMessages[field.key]}
                 field={field}
