@@ -218,6 +218,47 @@ describe('useReportExport', () => {
     expect(result.current.jobs[0].view.kind).toBe('complete');
   });
 
+  test('uses refreshed inventory when a previously ready export is running', async () => {
+    const gmp = createGmp([exportData('done', 'completed')]);
+    const inventoryResponse = (status: string, progress: string) => ({
+      data: [
+        {
+          ...exportData(status, progress),
+          owner: {name: 'test-user'},
+          extension: 'xml',
+        },
+      ],
+      meta: {
+        counts: new CollectionCounts({
+          first: 1,
+          filtered: 1,
+          length: 1,
+          rows: 100,
+        }),
+      },
+    });
+    gmp.reportexports.get
+      .mockResolvedValueOnce(inventoryResponse('done', 'completed'))
+      .mockResolvedValueOnce(inventoryResponse('running', 'generating'));
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() =>
+      useReportExport({onError, onDownload: testing.fn()}),
+    );
+
+    await waitFor(() =>
+      expect(result.current.jobs[0]?.view.kind).toBe('ready'),
+    );
+    gmp.reportexport.get.mockResolvedValue({
+      data: exportData('running', 'generating'),
+    });
+    act(() => result.current.refreshDiscovery());
+
+    await waitFor(() => expect(gmp.reportexports.get).toHaveBeenCalledTimes(2));
+    await waitFor(() =>
+      expect(result.current.jobs[0]?.view.kind).toBe('generating'),
+    );
+  });
+
   test('discovers unfinished and ready exports after login', async () => {
     const activeExport = exportData('running');
     const gmp = createGmp([activeExport]);
@@ -265,6 +306,44 @@ describe('useReportExport', () => {
       result.current.jobs.filter(job => job.view.kind === 'ready'),
     ).toHaveLength(5);
     expect(onDownload).not.toHaveBeenCalled();
+  });
+
+  test('dismisses discovered exports for the current session only', async () => {
+    const gmp = createGmp([exportData('done', 'completed')]);
+    gmp.reportexports.get.mockResolvedValue({
+      data: [
+        {
+          ...exportData('done', 'completed'),
+          owner: {name: 'test-user'},
+          extension: 'xml',
+        },
+      ],
+      meta: {
+        counts: new CollectionCounts({
+          first: 1,
+          filtered: 1,
+          length: 1,
+          rows: 100,
+        }),
+      },
+    });
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() =>
+      useReportExport({onError, onDownload: testing.fn()}),
+    );
+
+    await waitFor(() =>
+      expect(result.current.jobs[0]?.view.kind).toBe('ready'),
+    );
+    const key = result.current.jobs[0].key;
+    act(() => result.current.dismiss(key));
+    expect(result.current.jobs).toHaveLength(0);
+
+    act(() => changeSession(gmp));
+    expect(result.current.jobs).toHaveLength(0);
+    act(() => changeSession(gmp, 'new-token', 'test-user'));
+    await waitFor(() => expect(result.current.jobs).toHaveLength(1));
+    expect(result.current.jobs[0].view.kind).toBe('ready');
   });
 
   test('claims explicit downloads before a second click can send another request', async () => {

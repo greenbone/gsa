@@ -20,14 +20,9 @@ import {
   isAttemptInStage,
   isPermanentReportExportError,
   retainReportExportJobs,
-  selectReportExportInventory,
   createReportExportJob,
 } from 'web/report-export/report-export-job-model';
 import {type ReportExportMutations} from 'web/report-export/useReportExportMutations';
-import {
-  createRecoveredReportExportAttempt,
-  isValidGmpIdentifier,
-} from 'web/report-export/utils/report-export-orchestrator-utils';
 
 export const REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL = 3000;
 const MAX_DOWNLOAD_RETRIES = 10;
@@ -88,7 +83,6 @@ export const createReportExportOperations = ({
 }: ReportExportOperationsOptions) => {
   const store = createReportExportAttemptStore();
   const runtimes = new Map<string, AttemptRuntime>();
-  const dismissed = new Set<string>();
   const directListeners = new Set<() => void>();
   let directDownloads: DirectDownload[] = [];
   let callbacks = initialCallbacks;
@@ -130,11 +124,20 @@ export const createReportExportOperations = ({
 
   const getJobs = () => store.getSnapshot().map(toJob);
 
-  const getActionableAttempt = (key: string, action: ReportExportJobAction) => {
-    const attempt = store.getAttempt(key);
+  const getActionableAttempt = (
+    key: string,
+    action: ReportExportJobAction,
+    fallbackAttempt?: ReportExportAttempt,
+  ) => {
+    const attempt = store.getAttempt(key) ?? fallbackAttempt;
     if (!attempt || !isLive()) return undefined;
     const job = toJob(attempt);
     return getReportExportActions(job)[action] ? {attempt, job} : undefined;
+  };
+
+  const ensureAttempt = (attempt: ReportExportAttempt) => {
+    if (!store.getAttempt(attempt.key)) store.dispatch({type: 'add', attempt});
+    return store.getAttempt(attempt.key);
   };
 
   const setDirectDownloads = (downloads: DirectDownload[]) => {
@@ -315,7 +318,6 @@ export const createReportExportOperations = ({
     }
     const actionable = getActionableAttempt(key, 'dismiss');
     if (!actionable) return;
-    if (actionable.attempt.exportId) dismissed.add(actionable.attempt.exportId);
     removeAttempt(key);
   };
 
@@ -379,7 +381,6 @@ export const createReportExportOperations = ({
           });
         removeAttempt(runtime.key);
       } else {
-        dismissed.delete(exportId);
         send(runtime, {type: 'created', key: runtime.key, exportId});
       }
       refreshInventory();
@@ -425,10 +426,11 @@ export const createReportExportOperations = ({
     return true;
   };
 
-  const cancel = async (key: string) => {
-    const actionable = getActionableAttempt(key, 'cancel');
+  const cancel = async (key: string, fallbackAttempt?: ReportExportAttempt) => {
+    const actionable = getActionableAttempt(key, 'cancel', fallbackAttempt);
     if (!actionable) return;
-    const {attempt} = actionable;
+    const attempt = ensureAttempt(actionable.attempt);
+    if (!attempt) return;
     const runtime = runtimeFor(attempt);
     if (!attempt.exportId) {
       send(runtime, {type: 'queue-cancel', key});
@@ -437,10 +439,11 @@ export const createReportExportOperations = ({
     await requestCancellation(runtime);
   };
 
-  const retry = async (key: string) => {
-    const actionable = getActionableAttempt(key, 'retry');
+  const retry = async (key: string, fallbackAttempt?: ReportExportAttempt) => {
+    const actionable = getActionableAttempt(key, 'retry', fallbackAttempt);
     if (!actionable) return;
-    const {attempt} = actionable;
+    const attempt = ensureAttempt(actionable.attempt);
+    if (!attempt) return;
     const runtime = runtimeFor(attempt);
     if (runtime.buffer !== undefined) {
       handoff(runtime);
@@ -453,10 +456,15 @@ export const createReportExportOperations = ({
     });
   };
 
-  const download = async (key: string) => {
-    const actionable = getActionableAttempt(key, 'download');
+  const download = async (
+    key: string,
+    fallbackAttempt?: ReportExportAttempt,
+  ) => {
+    const actionable = getActionableAttempt(key, 'download', fallbackAttempt);
     if (!actionable) return;
-    const {attempt, job} = actionable;
+    const attempt = ensureAttempt(actionable.attempt);
+    if (!attempt) return;
+    const {job} = actionable;
     const runtime = runtimeFor(attempt);
     runtime.mimetype = job.exportData?.contentType;
     send(runtime, {type: 'auto-download', key});
@@ -480,7 +488,6 @@ export const createReportExportOperations = ({
     },
     activate: () => {
       active = true;
-      dismissed.clear();
     },
     dispose: () => {
       active = false;
@@ -495,20 +502,6 @@ export const createReportExportOperations = ({
       queryClient.removeQueries({queryKey: reportExportQueryKey});
       void queryClient.cancelQueries({queryKey: inventoryKey()});
       queryClient.removeQueries({queryKey: inventoryKey()});
-    },
-    mergeInventory: (exports: ReportExport[]) => {
-      if (!isLive()) return;
-      const known = new Set(store.getSnapshot().map(item => item.exportId));
-      for (const item of selectReportExportInventory(exports)) {
-        if (!isValidGmpIdentifier(item.id)) continue;
-        queryClient.setQueryData(statusKey(item.id), item);
-        if (known.has(item.id) || dismissed.has(item.id)) continue;
-        store.dispatch({
-          type: 'add',
-          attempt: createRecoveredReportExportAttempt(item),
-        });
-        known.add(item.id);
-      }
     },
     // Reconciles runtimes, retention, and automatic downloads with the current state.
     sync: () => {

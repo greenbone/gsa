@@ -24,12 +24,17 @@ import {
   retainReportExportJobs,
   createReportExportJob,
   isReportExportGenerationActive,
+  selectReportExportInventory,
 } from 'web/report-export/report-export-job-model';
 import {
   createReportExportOperations,
   type ReportExportCallbacks,
 } from 'web/report-export/report-export-job-orchestrator';
 import {useReportExportMutations} from 'web/report-export/useReportExportMutations';
+import {
+  createRecoveredReportExportAttempt,
+  isValidGmpIdentifier,
+} from 'web/report-export/utils/report-export-orchestrator-utils';
 
 export type {
   ReportExportJob,
@@ -42,6 +47,7 @@ export {REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL} from 'web/report-export/report-ex
 
 const EMPTY_ATTEMPTS: ReportExportAttempt[] = [];
 const EMPTY_DIRECT: DirectDownload[] = [];
+const EMPTY_DISMISSED_EXPORTS: ReadonlySet<string> = new Set();
 
 const getReportDownloadIdentity = ({
   reportUrl,
@@ -84,6 +90,10 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
   if (session.owner !== owner) setSession(createSession());
   const {operations, sessionScope} = session;
   const isOwner = session.owner === owner;
+  const [dismissedExports, setDismissedExports] = useState(() => ({
+    sessionScope,
+    ids: new Set<string>(),
+  }));
   useEffect(() => {
     operations.setCallbacks({onDownload, onError});
     operations.setMutations(mutations);
@@ -107,17 +117,45 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
 
   const inventory = useReportExportInventory(sessionScope);
   useEffect(() => {
-    if (inventory.data) operations.mergeInventory(inventory.data.exports);
-  }, [operations, inventory.data]);
+    if (!isOwner || !inventory.data) return;
+    for (const item of selectReportExportInventory(inventory.data.exports)) {
+      if (!isValidGmpIdentifier(item.id)) continue;
+      queryClient.setQueryData(
+        ['get_report_export', username, sessionScope, item.id],
+        item,
+      );
+    }
+  }, [inventory.data, isOwner, queryClient, sessionScope, username]);
+  const dismissedIds =
+    dismissedExports.sessionScope === sessionScope
+      ? dismissedExports.ids
+      : EMPTY_DISMISSED_EXPORTS;
+  const localExportIds = new Set(
+    records.map(attempt => attempt.exportId).filter(Boolean),
+  );
+  const discoveredAttempts = (
+    isOwner ? selectReportExportInventory(inventory.data?.exports ?? []) : []
+  )
+    .filter(item => isValidGmpIdentifier(item.id))
+    .map(createRecoveredReportExportAttempt)
+    .filter(
+      attempt =>
+        !localExportIds.has(attempt.exportId) &&
+        !dismissedIds.has(attempt.exportId ?? ''),
+    );
+  const queryAttempts = [...records, ...discoveredAttempts];
 
   const statusQueries = useQueries({
-    queries: records.map(attempt => {
+    queries: queryAttempts.map(attempt => {
       const cachedExport = queryClient.getQueryData<{status?: string}>([
         'get_report_export',
         username,
         sessionScope,
         attempt.exportId,
       ]);
+      const inventoryExport = inventory.data?.exports.find(
+        item => item.id === attempt.exportId,
+      );
       return {
         ...reportExportQueryOptions(
           gmp,
@@ -126,13 +164,15 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
           sessionScope,
           attempt.exportId,
         ),
+        initialData: inventoryExport,
         enabled: Boolean(
           token &&
           attempt.exportId &&
           attempt.phase.stage !== 'handed-off' &&
           (attempt.origin !== 'discovered' ||
-            !cachedExport ||
-            isReportExportGenerationActive(cachedExport.status)) &&
+            isReportExportGenerationActive(
+              (inventoryExport ?? cachedExport)?.status,
+            )) &&
           !isAttemptInStage(
             attempt.phase,
             'creating',
@@ -149,7 +189,7 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
     operations.sync();
   }, [operations, records, statusQueries]);
 
-  const exportJobs = records.map((attempt, index) =>
+  const exportJobs = queryAttempts.map((attempt, index) =>
     createReportExportJob(
       attempt,
       statusQueries[index]?.data,
@@ -171,13 +211,27 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
     }),
     ...directJobs,
   ];
+  const attemptsByKey = new Map(
+    queryAttempts.map(attempt => [attempt.key, attempt]),
+  );
   return {
     start: operations.start,
     startDirect: operations.startDirect,
-    cancel: operations.cancel,
-    dismiss: operations.dismiss,
-    retry: operations.retry,
-    download: operations.download,
+    cancel: (key: string) => operations.cancel(key, attemptsByKey.get(key)),
+    dismiss: (key: string) => {
+      const job = jobs.find(item => item.key === key);
+      operations.dismiss(key);
+      if (job?.exportId)
+        setDismissedExports(current => ({
+          sessionScope,
+          ids: new Set([
+            ...(current.sessionScope === sessionScope ? current.ids : []),
+            job.exportId as string,
+          ]),
+        }));
+    },
+    retry: (key: string) => operations.retry(key, attemptsByKey.get(key)),
+    download: (key: string) => operations.download(key, attemptsByKey.get(key)),
     refreshDiscovery: operations.refreshInventory,
     jobs: retainReportExportJobs(jobs),
     isActive: jobs.some(job => getReportExportActions(job).active),

@@ -28,6 +28,15 @@ const useReportExportActivity = () => {
     .map((job, index) => ({job, index}))
     .filter(({job}) => !isComplete(job) || recentKeys.has(job.key))
     .sort((first, second) => {
+      const firstCreated = first.job.exportData?.creationTime?.valueOf();
+      const secondCreated = second.job.exportData?.creationTime?.valueOf();
+      if (firstCreated !== undefined && secondCreated !== undefined) {
+        if (firstCreated !== secondCreated) return secondCreated - firstCreated;
+      } else if (firstCreated !== undefined) {
+        return -1;
+      } else if (secondCreated !== undefined) {
+        return 1;
+      }
       if (first.job.autoDownload !== second.job.autoDownload)
         return first.job.autoDownload ? -1 : 1;
       return second.index - first.index;

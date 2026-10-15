@@ -21,6 +21,7 @@ import type * as UiLib from '@greenbone/ui-lib';
 import {vi} from 'vitest';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
+import date from 'gmp/models/date';
 import {createSession} from 'gmp/testing';
 import {ReportExportActivity} from 'web/pages/reports/report-export/ReportExportActivity';
 import ReportExportManager, {
@@ -439,6 +440,54 @@ describe('ReportExportManager', () => {
       screen.queryByText('Report export: Canceled report (.pdf)'),
     ).toBeNull();
     expect(gmp.reportexport.downloadReportExport).not.toHaveBeenCalled();
+  });
+
+  test('sorts discovered exports by newest server creation time', async () => {
+    const gmp = createGmp();
+    gmp.reportexports.get.mockResolvedValue({
+      data: [
+        {
+          id: 'newer-export',
+          status: 'done',
+          owner: {name: 'test-user'},
+          reportId: 'Newer report',
+          type: 'scan',
+          extension: 'pdf',
+          creationTime: date('2026-10-15T11:00:00Z'),
+        },
+        {
+          id: 'older-export',
+          status: 'done',
+          owner: {name: 'test-user'},
+          reportId: 'Older report',
+          type: 'scan',
+          extension: 'pdf',
+          creationTime: date('2026-10-15T10:00:00Z'),
+        },
+      ],
+      meta: {
+        counts: new CollectionCounts({
+          first: 1,
+          filtered: 2,
+          length: 2,
+          rows: 100,
+        }),
+      },
+    });
+    const {render} = rendererWith({gmp});
+    render(
+      <ReportExportManager>
+        <ReportExportActivity />
+      </ReportExportManager>,
+    );
+
+    const rows = await screen.findAllByTestId('report-export-job');
+    expect(
+      within(rows[0]).getByText('Report export: Newer report (.pdf)'),
+    ).toBeInTheDocument();
+    expect(
+      within(rows[1]).getByText('Report export: Older report (.pdf)'),
+    ).toBeInTheDocument();
   });
 
   test('does not add historical ready jobs to activity', async () => {
