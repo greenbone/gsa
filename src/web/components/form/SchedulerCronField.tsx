@@ -11,7 +11,7 @@ import InfoTip from 'web/components/info-tip/InfoTip';
 import Column from 'web/components/layout/Column';
 import useTranslation from 'web/hooks/useTranslation';
 
-interface SchedulerCronFieldProps {
+export interface SchedulerCronFieldProps {
   activeCronExpression?: string;
   compact?: boolean;
   name?: string;

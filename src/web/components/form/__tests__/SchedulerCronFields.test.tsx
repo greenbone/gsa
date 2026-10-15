@@ -7,7 +7,6 @@ import {useState} from 'react';
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen} from 'web/testing';
 import SchedulerCronFields from 'web/components/form/SchedulerCronFields';
-import {getSelectElement} from 'web/testing/custom-queries';
 
 const MultipleCronEditor = ({
   initialValues,
@@ -93,11 +92,11 @@ describe('SchedulerCronFields tests', () => {
     );
 
     fireEvent.click(screen.getByRole('button', {name: 'Remove schedule 1'}));
-    fireEvent.click(getSelectElement());
+    fireEvent.click(screen.getSelectElement());
     fireEvent.click(screen.getByText('Every hour'));
     expect(onChange).toHaveBeenLastCalledWith(['0 * * * *']);
 
-    fireEvent.click(getSelectElement());
+    fireEvent.click(screen.getSelectElement());
     fireEvent.click(screen.getByText('Custom cron expression'));
     expect(onChange).toHaveBeenLastCalledWith(['0 7 * * *']);
     expect(screen.getByDisplayValue('0 7 * * *')).toBeInTheDocument();
@@ -110,6 +109,29 @@ describe('SchedulerCronFields tests', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Add schedule'}));
     expect(onChange).toHaveBeenLastCalledWith(['0 * * * *']);
     expect(screen.getByDisplayValue('Every hour')).toBeInTheDocument();
+  });
+
+  test('handles schedules supplied by a parent after mounting', () => {
+    const onChange = testing.fn();
+    const {render} = rendererWith({});
+    const {rerender} = render(
+      <SchedulerCronFields value={['0 5 * * *']} onChange={onChange} />,
+    );
+    rerender(
+      <SchedulerCronFields
+        value={['0 5 * * *', '0 7 * * *']}
+        onChange={onChange}
+      />,
+    );
+    expect(screen.getByDisplayValue('0 7 * * *')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', {name: 'Add schedule'}));
+    expect(onChange).toHaveBeenLastCalledWith([
+      '0 5 * * *',
+      '0 7 * * *',
+      '0 * * * *',
+    ]);
+    fireEvent.click(screen.getByRole('button', {name: 'Remove schedule 2'}));
+    expect(onChange).toHaveBeenLastCalledWith(['0 5 * * *']);
   });
 
   test('disables all schedule controls', () => {
