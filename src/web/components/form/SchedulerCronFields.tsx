@@ -3,10 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type ComponentProps, useState} from 'react';
+import {useState} from 'react';
 import styled from 'styled-components';
 import FormGroup from 'web/components/form/FormGroup';
-import SchedulerCronField from 'web/components/form/SchedulerCronField';
+import SchedulerCronField, {
+  type SchedulerCronFieldProps,
+} from 'web/components/form/SchedulerCronField';
 import {PlusIcon, XIcon} from 'web/components/icon';
 import InfoTip from 'web/components/info-tip/InfoTip';
 import Column from 'web/components/layout/Column';
@@ -15,7 +17,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/theme';
 
 interface SchedulerCronFieldsProps extends Omit<
-  ComponentProps<typeof SchedulerCronField>,
+  SchedulerCronFieldProps,
   'value' | 'onChange' | 'activeCronExpression' | 'compact'
 > {
   value: string[];
