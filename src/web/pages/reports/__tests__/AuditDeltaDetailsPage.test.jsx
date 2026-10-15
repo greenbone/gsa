@@ -13,7 +13,7 @@ import {createSession} from 'gmp/testing';
 import {getMockAuditDeltaReport} from 'web/pages/reports/__fixtures__/MockAuditDeltaReport';
 import AuditDeltaReportDetailsPage from 'web/pages/reports/AuditDeltaReportDetailsPage';
 import DeltaReportDetailsContent from 'web/pages/reports/DeltaReportDetailsContent';
-import ReportExportManager from 'web/pages/reports/ReportExportManager';
+import ReportExportManager from 'web/pages/reports/report-export/ReportExportManager';
 
 const filter = QueryFilter.fromString(
   'apply_overrides=0 compliance_levels=ynui rows=10 min_qod=70 first=1 sort=compliant',

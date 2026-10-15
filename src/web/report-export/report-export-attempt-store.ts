@@ -3,20 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type ExportAttempt, inStage} from 'web/report-export/job';
+import {
+  type ReportExportAttempt,
+  isAttemptInStage,
+} from 'web/report-export/report-export-job';
 
-type AttemptMetadata = Pick<
-  ExportAttempt,
+type ReportExportAttemptMetadata = Pick<
+  ReportExportAttempt,
   'filename' | 'reportTitle' | 'reportUrl'
 >;
 
-export type ExportAttemptEvent =
-  | {type: 'add'; attempt: ExportAttempt}
+export type ReportExportAttemptEvent =
+  | {type: 'add'; attempt: ReportExportAttempt}
   | {type: 'remove'; key: string}
   | {type: 'retain'; keys: ReadonlySet<string>}
   | ({key: string} & (
       | {type: 'created'; exportId: string}
-      | {type: 'adopt'; metadata: AttemptMetadata}
+      | {type: 'adopt'; metadata: ReportExportAttemptMetadata}
       | {type: 'auto-download'}
       | {type: 'queue-cancel'}
       | {type: 'cancel'}
@@ -31,25 +34,25 @@ export type ExportAttemptEvent =
     ));
 
 type TransitionEvent = Exclude<
-  ExportAttemptEvent,
+  ReportExportAttemptEvent,
   {type: 'add' | 'remove' | 'retain'}
 >;
 
-const changeAttempt = (
-  attempt: ExportAttempt,
-  allowed: boolean,
-  changes: Partial<ExportAttempt>,
-) => (allowed ? {...attempt, ...changes} : attempt);
+const updateAttemptIfAllowed = (
+  attempt: ReportExportAttempt,
+  isAllowed: boolean,
+  updates: Partial<ReportExportAttempt>,
+) => (isAllowed ? {...attempt, ...updates} : attempt);
 
-const transitionAttempt = (
-  attempt: ExportAttempt,
+const applyAttemptEvent = (
+  attempt: ReportExportAttempt,
   event: TransitionEvent,
-): ExportAttempt => {
+): ReportExportAttempt => {
   const {phase} = attempt;
   if (attempt.disposition === 'handed-off') return attempt;
   switch (event.type) {
     case 'created':
-      return changeAttempt(attempt, phase.stage === 'creating', {
+      return updateAttemptIfAllowed(attempt, phase.stage === 'creating', {
         exportId: event.exportId,
         phase:
           phase.stage === 'creating' && phase.cancelRequested
@@ -64,74 +67,81 @@ const transitionAttempt = (
         origin: 'local',
       };
     case 'auto-download':
-      return changeAttempt(attempt, !attempt.autoDownload, {
+      return updateAttemptIfAllowed(attempt, !attempt.autoDownload, {
         autoDownload: true,
       });
     case 'queue-cancel':
-      return changeAttempt(
+      return updateAttemptIfAllowed(
         attempt,
         phase.stage === 'creating' && !phase.cancelRequested,
         {phase: {stage: 'creating', cancelRequested: true}},
       );
     case 'cancel':
-      return changeAttempt(
+      return updateAttemptIfAllowed(
         attempt,
         Boolean(attempt.exportId) &&
-          inStage(phase, 'tracking', 'waiting', 'creating'),
+          isAttemptInStage(phase, 'tracking', 'waiting', 'creating'),
         {phase: {stage: 'canceling'}, cancelError: undefined},
       );
     case 'cancel-accepted':
-      return changeAttempt(attempt, phase.stage === 'canceling', {
+      return updateAttemptIfAllowed(attempt, phase.stage === 'canceling', {
         phase: {stage: 'cancel-requested'},
       });
     case 'cancel-failed':
-      return changeAttempt(attempt, phase.stage === 'canceling', {
+      return updateAttemptIfAllowed(attempt, phase.stage === 'canceling', {
         phase: {stage: 'tracking'},
         cancelError: event.error,
       });
     case 'transfer':
-      return changeAttempt(
+      return updateAttemptIfAllowed(
         attempt,
         Boolean(attempt.exportId) &&
           attempt.disposition === 'awaiting' &&
-          inStage(phase, 'tracking', 'waiting', 'cancel-requested'),
+          isAttemptInStage(phase, 'tracking', 'waiting', 'cancel-requested'),
         {phase: {stage: 'transferring'}},
       );
     case 'wait':
-      return changeAttempt(attempt, inStage(phase, 'transferring', 'waiting'), {
-        phase: {stage: 'waiting', error: event.error},
-      });
-    case 'resume':
-      return changeAttempt(
+      return updateAttemptIfAllowed(
         attempt,
-        inStage(phase, 'tracking', 'waiting', 'abandoned'),
+        isAttemptInStage(phase, 'transferring', 'waiting'),
+        {
+          phase: {stage: 'waiting', error: event.error},
+        },
+      );
+    case 'resume':
+      return updateAttemptIfAllowed(
+        attempt,
+        isAttemptInStage(phase, 'tracking', 'waiting', 'abandoned'),
         {phase: {stage: 'tracking'}, disposition: 'awaiting'},
       );
     case 'handoff':
-      return changeAttempt(
+      return updateAttemptIfAllowed(
         attempt,
-        inStage(phase, 'transferring', 'handoff-failed'),
-        {phase: {stage: 'handed-off'}, disposition: 'handed-off'},
+        isAttemptInStage(phase, 'transferring', 'handoff-failed'),
+        {
+          phase: {stage: 'handed-off'},
+          disposition: 'handed-off',
+        },
       );
     case 'handoff-failed':
-      return changeAttempt(
+      return updateAttemptIfAllowed(
         attempt,
-        inStage(phase, 'transferring', 'handoff-failed'),
+        isAttemptInStage(phase, 'transferring', 'handoff-failed'),
         {phase: {stage: 'handoff-failed', error: event.error}},
       );
     case 'fail':
-      return changeAttempt(
+      return updateAttemptIfAllowed(
         attempt,
-        inStage(phase, 'creating', 'transferring'),
+        isAttemptInStage(phase, 'creating', 'transferring'),
         {phase: {stage: 'failed', error: event.error}},
       );
   }
 };
 
-export const reduceExportAttempts = (
-  attempts: ExportAttempt[],
-  event: ExportAttemptEvent,
-): ExportAttempt[] => {
+export const reduceReportExportAttempts = (
+  attempts: ReportExportAttempt[],
+  event: ReportExportAttemptEvent,
+): ReportExportAttempt[] => {
   if (event.type === 'add')
     return attempts.some(attempt => attempt.key === event.attempt.key)
       ? attempts
@@ -146,15 +156,17 @@ export const reduceExportAttempts = (
   }
   const index = attempts.findIndex(attempt => attempt.key === event.key);
   if (index === -1) return attempts;
-  const changed = transitionAttempt(attempts[index], event);
+  const changed = applyAttemptEvent(attempts[index], event);
   if (changed === attempts[index]) return attempts;
   return attempts.map((attempt, position) =>
     position === index ? changed : attempt,
   );
 };
 
-export const createExportAttemptStore = (initial: ExportAttempt[] = []) => {
-  let snapshot = initial;
+export const createReportExportAttemptStore = (
+  initialAttempts: ReportExportAttempt[] = [],
+) => {
+  let snapshot = initialAttempts;
   const listeners = new Set<() => void>();
   return {
     getSnapshot: () => snapshot,
@@ -165,8 +177,8 @@ export const createExportAttemptStore = (initial: ExportAttempt[] = []) => {
         listeners.delete(listener);
       };
     },
-    dispatch: (event: ExportAttemptEvent) => {
-      const next = reduceExportAttempts(snapshot, event);
+    dispatch: (event: ReportExportAttemptEvent) => {
+      const next = reduceReportExportAttempts(snapshot, event);
       if (next === snapshot) return false;
       snapshot = next;
       listeners.forEach(listener => listener());

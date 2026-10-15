@@ -15,7 +15,7 @@ import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import {getMockAuditReport} from 'web/pages/reports/__fixtures__/MockAuditReport';
 import AuditReportDetailsPage from 'web/pages/reports/AuditReportDetailsPage';
-import ReportExportManager from 'web/pages/reports/ReportExportManager';
+import ReportExportManager from 'web/pages/reports/report-export/ReportExportManager';
 
 interface CollectionResponse {
   data: unknown[];

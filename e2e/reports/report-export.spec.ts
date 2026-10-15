@@ -81,12 +81,12 @@ test.describe('report export', () => {
     const dialog = page.getByRole('dialog');
     await expect(dialog).toBeVisible();
 
-    const reportFormat = dialog.getByRole('textbox').first();
+    const reportFormat = dialog.getByRole('combobox').first();
     await expect(reportFormat).toBeVisible();
     await reportFormat.click();
     await page.getByRole('option').first().click();
 
-    const reportConfig = dialog.getByRole('textbox').nth(1);
+    const reportConfig = dialog.getByRole('combobox').nth(1);
     if (await reportConfig.count()) {
       await reportConfig.click();
       await page.getByRole('option').first().click();
@@ -122,6 +122,10 @@ test.describe('report export', () => {
     ).toBeLessThanOrEqual(popoverBounds.x + popoverBounds.width);
     await page.screenshot({path: testInfo.outputPath('activity-desktop.png')});
     await page.setViewportSize({width: 390, height: 844});
+    if ((await activityButton.getAttribute('aria-expanded')) === 'true')
+      await activityButton.click();
+    await activityButton.click();
+    await expect(activityButton).toHaveAttribute('aria-expanded', 'true');
     await expect(activityPopover).toBeVisible();
     const mobileBounds = await activityPopover.boundingBox();
     expect(mobileBounds?.x).toBeGreaterThanOrEqual(0);
@@ -153,14 +157,14 @@ test.describe('report export', () => {
 
       await page.getByTitle('Download filtered Report').click();
       const dialog = page.getByRole('dialog');
-      await dialog.getByRole('textbox').first().click();
+      await dialog.getByRole('combobox').first().click();
       const pdfOption = page.getByRole('option', {name: /PDF/i}).first();
       testInfo.skip(
         (await pdfOption.count()) === 0,
         'No PDF report format is available.',
       );
       await pdfOption.click();
-      const reportConfig = dialog.getByRole('textbox').nth(1);
+      const reportConfig = dialog.getByRole('combobox').nth(1);
       if (await reportConfig.count()) {
         await reportConfig.click();
         await page.getByRole('option').first().click();
@@ -294,7 +298,7 @@ test.describe('report export', () => {
     const dialog = page.getByRole('dialog');
     await expect(dialog).toBeVisible();
 
-    const reportFormat = dialog.getByRole('textbox').first();
+    const reportFormat = dialog.getByRole('combobox').first();
     await reportFormat.click();
     const pdfOption = page.getByRole('option', {name: /PDF/i}).first();
     testInfo.skip(
@@ -380,7 +384,7 @@ test.describe('report export', () => {
       await route.fallback();
     });
 
-    const reportConfig = dialog.getByRole('textbox').nth(1);
+    const reportConfig = dialog.getByRole('combobox').nth(1);
     if (await reportConfig.count()) {
       await reportConfig.click();
       await page.getByRole('option').first().click();
@@ -413,7 +417,7 @@ test.describe('report export', () => {
     await page.getByTitle('Download filtered Report').click();
     const retryDialog = page.getByRole('dialog');
     await expect(retryDialog).toBeVisible();
-    const retryFormat = retryDialog.getByRole('textbox').first();
+    const retryFormat = retryDialog.getByRole('combobox').first();
     await retryFormat.click();
     await page.getByRole('option', {name: /PDF/i}).first().click();
     const downloadPromise = page.waitForEvent('download');

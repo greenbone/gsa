@@ -14,7 +14,7 @@ export const isPdfReportFormat = (format?: ReportFormatContentType) =>
   'application/pdf';
 
 // gvmd only supports asynchronous export for PDF formats
-export const selectExportTransport = (
+export const getReportExportMode = (
   format?: ReportFormatContentType,
   capabilities?: Pick<Capabilities, 'mayOp'>,
   isAsyncFormat: (

@@ -8,8 +8,8 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import {
   isPdfReportFormat,
-  selectExportTransport,
-} from 'web/report-export/route';
+  getReportExportMode,
+} from 'web/report-export/export-mode';
 
 const PDF = {content_type: 'application/pdf'};
 
@@ -28,26 +28,26 @@ describe('isPdfReportFormat', () => {
   });
 });
 
-describe('selectExportTransport', () => {
+describe('getReportExportMode', () => {
   test('uses async export for PDF when reports are accessible', () => {
-    expect(selectExportTransport(PDF, new EverythingCapabilities())).toBe(
+    expect(getReportExportMode(PDF, new EverythingCapabilities())).toBe(
       'async',
     );
-    expect(selectExportTransport(PDF, new Capabilities(['get_reports']))).toBe(
+    expect(getReportExportMode(PDF, new Capabilities(['get_reports']))).toBe(
       'async',
     );
   });
 
   test('falls back to direct download without report access', () => {
-    expect(selectExportTransport(PDF, new Capabilities(['get_tasks']))).toBe(
+    expect(getReportExportMode(PDF, new Capabilities(['get_tasks']))).toBe(
       'direct',
     );
-    expect(selectExportTransport(PDF)).toBe('direct');
+    expect(getReportExportMode(PDF)).toBe('direct');
   });
 
   test('uses direct download for non-PDF formats', () => {
     expect(
-      selectExportTransport(
+      getReportExportMode(
         {content_type: 'text/xml'},
         new EverythingCapabilities(),
       ),
@@ -58,7 +58,7 @@ describe('selectExportTransport', () => {
     const isAsyncFormat = format => format?.content_type === 'text/xml';
 
     expect(
-      selectExportTransport(
+      getReportExportMode(
         {content_type: 'text/xml'},
         new EverythingCapabilities(),
         isAsyncFormat,

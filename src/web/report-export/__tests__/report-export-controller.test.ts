@@ -6,7 +6,7 @@
 import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
 import {QueryClient} from '@tanstack/react-query';
 import {createSession} from 'gmp/testing';
-import {createReportExportController} from 'web/report-export/controller';
+import {createReportExportOperations} from 'web/report-export/report-export-operations';
 import {type ReportExportMutations} from 'web/report-export/useReportExportMutations';
 
 const params = {
@@ -43,17 +43,18 @@ const setup = () => {
   };
   const onDownload = testing.fn();
   const onError = testing.fn();
-  const controller = createReportExportController({
+  const operations = createReportExportOperations({
     // @ts-expect-error partial gmp mock
     gmp,
     queryClient,
     token: 'token',
     username: 'user',
+    sessionScope: 'test-session',
     callbacks: {onDownload, onError},
     mutations,
   });
   return {
-    controller,
+    operations,
     gmp,
     mutations,
     queryClient,
@@ -62,24 +63,24 @@ const setup = () => {
   };
 };
 
-describe('createReportExportController', () => {
+describe('createReportExportOperations', () => {
   beforeEach(() => window.sessionStorage.clear());
 
   test('does nothing before activation', async () => {
-    const {controller, gmp} = setup();
-    expect(await controller.start(params)).toBe(false);
-    expect(controller.startDirect(params)).toBe(false);
+    const {operations, gmp} = setup();
+    expect(await operations.start(params)).toBe(false);
+    expect(operations.startDirect(params)).toBe(false);
     expect(gmp.reportexport.exportScanReport).not.toHaveBeenCalled();
   });
 
-  test('tracks a created export and persists its intent', async () => {
-    const {controller, resolve} = setup();
-    controller.activate();
-    const started = controller.start(params);
-    expect(controller.store.getSnapshot()[0].phase.stage).toBe('creating');
+  test('tracks a created export and persists its activity', async () => {
+    const {operations, resolve} = setup();
+    operations.activate();
+    const started = operations.start(params);
+    expect(operations.store.getSnapshot()[0].phase.stage).toBe('creating');
     resolve('export-1');
     expect(await started).toBe(true);
-    expect(controller.store.getSnapshot()[0]).toMatchObject({
+    expect(operations.store.getSnapshot()[0]).toMatchObject({
       exportId: 'export-1',
       phase: {stage: 'tracking'},
     });
@@ -89,31 +90,31 @@ describe('createReportExportController', () => {
   });
 
   test('does not write the ledger during unchanged synchronization', async () => {
-    const {controller, resolve} = setup();
-    controller.activate();
-    const started = controller.start(params);
+    const {operations, resolve} = setup();
+    operations.activate();
+    const started = operations.start(params);
     resolve('export-1');
     await started;
 
     const setItem = testing.spyOn(window.sessionStorage, 'setItem');
-    controller.sync();
-    controller.sync();
+    operations.sync();
+    operations.sync();
     expect(setItem).not.toHaveBeenCalled();
     setItem.mockRestore();
   });
 
-  test('persists a remote terminal status as an abandoned intent', async () => {
-    const {controller, queryClient, resolve} = setup();
-    controller.activate();
-    const started = controller.start(params);
+  test('persists a remote terminal status as abandoned activity', async () => {
+    const {operations, queryClient, resolve} = setup();
+    operations.activate();
+    const started = operations.start(params);
     resolve('export-1');
     await started;
-    queryClient.setQueryData(['get_report_export', 'token', 'export-1'], {
-      id: 'export-1',
-      status: 'expired',
-    });
+    queryClient.setQueryData(
+      ['get_report_export', 'user', 'test-session', 'export-1'],
+      {id: 'export-1', status: 'expired'},
+    );
 
-    controller.sync();
+    operations.sync();
 
     expect(
       window.sessionStorage.getItem('gsa-report-export-jobs:user'),
@@ -121,13 +122,13 @@ describe('createReportExportController', () => {
   });
 
   test('ignores a create response that arrives after dispose', async () => {
-    const {controller, onError, resolve} = setup();
-    controller.activate();
-    const started = controller.start(params);
-    controller.dispose();
+    const {operations, onError, resolve} = setup();
+    operations.activate();
+    const started = operations.start(params);
+    operations.dispose();
     resolve('export-1');
     expect(await started).toBe(false);
-    expect(controller.store.getSnapshot()[0].exportId).toBeUndefined();
+    expect(operations.store.getSnapshot()[0].exportId).toBeUndefined();
     expect(onError).not.toHaveBeenCalled();
   });
 });

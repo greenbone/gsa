@@ -9,7 +9,7 @@ import CollectionCounts from 'gmp/collection/collection-counts';
 import date from 'gmp/models/date';
 import {createSession} from 'gmp/testing';
 import Header from 'web/components/structure/Header';
-import ReportExportManager from 'web/pages/reports/ReportExportManager';
+import ReportExportManager from 'web/pages/reports/report-export/ReportExportManager';
 
 const createGmp = () => ({
   settings: {

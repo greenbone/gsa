@@ -8,7 +8,7 @@ import {type FilterType} from 'gmp/models/filter';
 import {
   type ReportExportKind,
   type StartReportExportParams,
-} from 'web/report-export/job';
+} from 'web/report-export/report-export-job';
 import {generateFilename} from 'web/utils/Render';
 
 interface ReportExportEntity {

@@ -7,34 +7,37 @@ import {type QueryClient} from '@tanstack/react-query';
 import {v4 as uuid} from 'uuid';
 import type Gmp from 'gmp/gmp';
 import type ReportExport from 'gmp/models/report-export';
-import {reportExportQueryOptions} from 'web/hooks/use-query/report-exports';
+import {reportExportQueryOptions} from 'web/hooks/use-query/report-export-queries';
 import {type DirectDownload} from 'web/report-export/direct-download';
 import {
-  type ExportAttempt,
+  createReportExportAttemptStore,
+  type ReportExportAttemptEvent,
+} from 'web/report-export/report-export-attempt-store';
+import {
+  type ReportExportAttempt,
   type StartReportExportParams,
   getReportExportActions,
-  inStage,
-  isPermanentExportError,
+  isAttemptInStage,
+  isPermanentReportExportError,
   retainReportExportJobs,
   selectReportExportInventory,
-  toReportExportJob,
-} from 'web/report-export/job';
-import {
-  readExportIntents,
-  serializeExportIntents,
-  writeExportIntents,
-} from 'web/report-export/storage';
-import {
-  createExportAttemptStore,
-  type ExportAttemptEvent,
-} from 'web/report-export/store';
+  createReportExportJob,
+} from 'web/report-export/report-export-job';
 import {type ReportExportMutations} from 'web/report-export/useReportExportMutations';
-import {ROUTES} from 'web/route-paths';
+import {writeStoredReportExportAttempts} from 'web/report-export/utils/report-export-attempt-store-utils';
+import {
+  createRecoveredReportExportAttempt,
+  isValidGmpIdentifier,
+  restoreReportExportAttempts,
+} from 'web/report-export/utils/report-export-operations-utils';
 
 export const REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL = 3000;
 const MAX_DOWNLOAD_RETRIES = 10;
+const TERMINAL_EXPORT_STATUSES = new Set(['canceled', 'error', 'expired']);
 
-type ControllerGmp = Pick<Gmp, 'session' | 'reportexport'>;
+type ReportExportJobAction = 'cancel' | 'dismiss' | 'download' | 'retry';
+
+type ReportExportGmp = Pick<Gmp, 'session' | 'reportexport'>;
 
 export interface ReportExportCallbacks {
   onDownload: (
@@ -45,11 +48,12 @@ export interface ReportExportCallbacks {
   onError?: (error: Error) => void;
 }
 
-interface ControllerOptions {
-  gmp: ControllerGmp;
+interface ReportExportOperationsOptions {
+  gmp: ReportExportGmp;
   queryClient: QueryClient;
   token?: string;
   username?: string;
+  sessionScope: string;
   callbacks: ReportExportCallbacks;
   mutations: ReportExportMutations;
 }
@@ -62,10 +66,11 @@ interface AttemptRuntime {
   mimetype?: string;
 }
 
-const toError = (error: unknown) =>
-  error instanceof Error ? error : new Error(String(error));
-
-const validId = (id?: string) => Boolean(id && /^[a-zA-Z0-9-]+$/.test(id));
+const toError = (error: unknown) => {
+  if (error instanceof Error) return error;
+  if (typeof error === 'string') return new Error(error);
+  return new Error('Unexpected report export error');
+};
 
 const release = (runtime: AttemptRuntime) => {
   if (runtime.timer) clearTimeout(runtime.timer);
@@ -74,63 +79,21 @@ const release = (runtime: AttemptRuntime) => {
   runtime.retries = 0;
 };
 
-const loadAttempts = (username?: string): ExportAttempt[] =>
-  readExportIntents(username).map(intent => {
-    let stage: 'tracking' | 'handed-off' | 'abandoned' = 'tracking';
-    if (intent.disposition === 'handed-off') stage = 'handed-off';
-    if (intent.disposition === 'abandoned') stage = 'abandoned';
-    return {...intent, phase: {stage}};
-  });
+const isTerminalExportStatus = (status?: string) =>
+  TERMINAL_EXPORT_STATUSES.has(status ?? '');
 
-const getRecoveredReportUrl = ({
-  type,
-  reportId,
-  deltaReportId,
-}: ReportExport) => {
-  if (!reportId || !validId(reportId)) return undefined;
-  const delta =
-    deltaReportId && validId(deltaReportId) ? deltaReportId : undefined;
-  switch (type) {
-    case 'scan':
-      return ROUTES.report.url(reportId);
-    case 'audit':
-      return ROUTES.auditReport.url(reportId);
-    case 'delta_scan':
-      return delta && ROUTES.reportDelta.url(reportId, delta);
-    case 'delta_audit':
-      return delta && ROUTES.auditReportDelta.url(reportId, delta);
-  }
-  return undefined;
-};
-
-const recoveredAttempt = (item: ReportExport): ExportAttempt => {
-  const extension = item.extension?.replace(/^\./, '');
-  return {
-    key: `recovered-${item.id}`,
-    origin: 'discovered',
-    exportId: item.id,
-    filename: `report-${item.id}.${extension && /^[a-zA-Z0-9]{1,16}$/.test(extension) ? extension : 'bin'}`,
-    reportTitle: item.name || item.reportId || item.id,
-    reportUrl: getRecoveredReportUrl(item),
-    autoDownload: false,
-    disposition: 'awaiting',
-    phase: {stage: 'tracking'},
-  };
-};
-
-// Side effects of one login session; session storage intents hand over to the next session.
-export const createReportExportController = ({
+// Owns one login session's report-export operations; attempts persist across sessions.
+export const createReportExportOperations = ({
   gmp,
   queryClient,
   token,
   username,
+  sessionScope,
   callbacks: initialCallbacks,
   mutations: initialMutations,
-}: ControllerOptions) => {
-  const initialAttempts = token ? loadAttempts(username) : [];
-  const store = createExportAttemptStore(initialAttempts);
-  let persistedIntents = JSON.stringify(readExportIntents(username));
-  let terminalStatusSnapshot = '[]';
+}: ReportExportOperationsOptions) => {
+  const initialAttempts = token ? restoreReportExportAttempts(username) : [];
+  const store = createReportExportAttemptStore(initialAttempts);
   const runtimes = new Map<string, AttemptRuntime>();
   const dismissed = new Set<string>();
   const directListeners = new Set<() => void>();
@@ -139,10 +102,11 @@ export const createReportExportController = ({
   let mutations = initialMutations;
   let active = false;
 
-  const inventoryKey = () => ['get_report_exports', token, username];
+  const inventoryKey = () => ['get_report_exports', username, sessionScope];
   const statusKey = (exportId: string | undefined) => [
     'get_report_export',
-    token,
+    username,
+    sessionScope,
     exportId,
   ];
 
@@ -158,7 +122,7 @@ export const createReportExportController = ({
     void queryClient.invalidateQueries({queryKey: inventoryKey()});
   };
 
-  const statusOf = (attempt: ExportAttempt) => {
+  const statusOf = (attempt: ReportExportAttempt) => {
     const queryKey = statusKey(attempt.exportId);
     return {
       data: queryClient.getQueryData<ReportExport>(queryKey),
@@ -166,16 +130,18 @@ export const createReportExportController = ({
     };
   };
 
-  const toJob = (attempt: ExportAttempt) => {
+  const toJob = (attempt: ReportExportAttempt) => {
     const {data, error} = statusOf(attempt);
-    return toReportExportJob(attempt, data, error);
+    return createReportExportJob(attempt, data, error);
   };
 
   const getJobs = () => store.getSnapshot().map(toJob);
 
-  const jobFor = (key: string) => {
+  const getActionableAttempt = (key: string, action: ReportExportJobAction) => {
     const attempt = store.getAttempt(key);
-    return attempt && isLive() ? toJob(attempt) : undefined;
+    if (!attempt || !isLive()) return undefined;
+    const job = toJob(attempt);
+    return getReportExportActions(job)[action] ? {attempt, job} : undefined;
   };
 
   const setDirectDownloads = (downloads: DirectDownload[]) => {
@@ -183,7 +149,7 @@ export const createReportExportController = ({
     directListeners.forEach(listener => listener());
   };
 
-  const runtimeFor = (attempt: ExportAttempt) => {
+  const runtimeFor = (attempt: ReportExportAttempt) => {
     let runtime = runtimes.get(attempt.key);
     if (!runtime) {
       runtime = {key: attempt.key, retries: 0};
@@ -197,7 +163,7 @@ export const createReportExportController = ({
     Boolean(store.getAttempt(runtime.key)) &&
     runtimes.get(runtime.key) === runtime;
 
-  const send = (runtime: AttemptRuntime, event: ExportAttemptEvent) =>
+  const send = (runtime: AttemptRuntime, event: ReportExportAttemptEvent) =>
     isCurrent(runtime) && store.dispatch(event);
 
   const removeAttempt = (key: string) => {
@@ -216,34 +182,26 @@ export const createReportExportController = ({
     }
   };
 
-  const persist = () => {
+  const persistAttempts = () => {
     if (!username) return;
-    const intents = store.getSnapshot().map<ExportAttempt>(attempt => {
+    const attempts = store.getSnapshot().map<ReportExportAttempt>(attempt => {
       const status = statusOf(attempt).data?.status;
-      return status === 'canceled' || status === 'error' || status === 'expired'
+      return isTerminalExportStatus(status)
         ? {...attempt, disposition: 'abandoned' as const}
         : attempt;
     });
-    const serialized = serializeExportIntents(intents);
-    if (serialized === persistedIntents) return;
-    writeExportIntents(username, intents);
-    persistedIntents = serialized;
+    writeStoredReportExportAttempts(username, attempts);
   };
 
   const persistTerminalStatuses = () => {
-    const terminalStatuses = store.getSnapshot().flatMap(attempt => {
+    const hasTerminalStatus = store.getSnapshot().some(attempt => {
       const status = statusOf(attempt).data?.status;
-      return status === 'canceled' || status === 'error' || status === 'expired'
-        ? [[attempt.key, status]]
-        : [];
+      return isTerminalExportStatus(status);
     });
-    const serialized = JSON.stringify(terminalStatuses);
-    if (serialized === terminalStatusSnapshot) return;
-    terminalStatusSnapshot = serialized;
-    if (terminalStatuses.length) persist();
+    if (hasTerminalStatus) persistAttempts();
   };
 
-  store.subscribe(persist);
+  store.subscribe(persistAttempts);
 
   const handoff = (runtime: AttemptRuntime) => {
     const attempt = store.getAttempt(runtime.key);
@@ -251,7 +209,7 @@ export const createReportExportController = ({
       !attempt ||
       !isCurrent(runtime) ||
       runtime.buffer === undefined ||
-      !inStage(attempt.phase, 'transferring', 'handoff-failed')
+      !isAttemptInStage(attempt.phase, 'transferring', 'handoff-failed')
     )
       return;
     try {
@@ -283,7 +241,13 @@ export const createReportExportController = ({
     if (!isCurrent(runtime)) return;
     try {
       const data = await queryClient.query({
-        ...reportExportQueryOptions(gmp, token, reportExportId),
+        ...reportExportQueryOptions(
+          gmp,
+          token,
+          username,
+          sessionScope,
+          reportExportId,
+        ),
         staleTime: 0,
       });
       if (!isCurrent(runtime)) return;
@@ -316,7 +280,7 @@ export const createReportExportController = ({
     } catch (error) {
       if (!isCurrent(runtime)) return;
       if (
-        isPermanentExportError(error) ||
+        isPermanentReportExportError(error) ||
         runtime.retries++ >= MAX_DOWNLOAD_RETRIES
       ) {
         const failure = toError(error);
@@ -339,8 +303,8 @@ export const createReportExportController = ({
         attempt.disposition !== 'awaiting' ||
         !attempt.autoDownload ||
         data?.status !== 'done' ||
-        isPermanentExportError(error) ||
-        !inStage(attempt.phase, 'tracking', 'cancel-requested')
+        isPermanentReportExportError(error) ||
+        !isAttemptInStage(attempt.phase, 'tracking', 'cancel-requested')
       )
         continue;
       const runtime = runtimeFor(attempt);
@@ -378,9 +342,9 @@ export const createReportExportController = ({
       setDirectDownloads(directDownloads.filter(item => item.key !== key));
       return;
     }
-    const job = jobFor(key);
-    if (!job || !getReportExportActions(job).dismiss) return;
-    if (job.exportId) dismissed.add(job.exportId);
+    const actionable = getActionableAttempt(key, 'dismiss');
+    if (!actionable) return;
+    if (actionable.attempt.exportId) dismissed.add(actionable.attempt.exportId);
     removeAttempt(key);
   };
 
@@ -393,7 +357,7 @@ export const createReportExportController = ({
       )
         dismiss(job.key);
     }
-    const attempt: ExportAttempt = {
+    const attempt: ReportExportAttempt = {
       key: `report-export-${uuid()}`,
       origin: 'local',
       filename: params.filename,
@@ -492,9 +456,9 @@ export const createReportExportController = ({
   };
 
   const cancel = async (key: string) => {
-    const attempt = store.getAttempt(key);
-    const job = jobFor(key);
-    if (!attempt || !job || !getReportExportActions(job).cancel) return;
+    const actionable = getActionableAttempt(key, 'cancel');
+    if (!actionable) return;
+    const {attempt} = actionable;
     const runtime = runtimeFor(attempt);
     if (!attempt.exportId) {
       send(runtime, {type: 'queue-cancel', key});
@@ -504,9 +468,9 @@ export const createReportExportController = ({
   };
 
   const retry = async (key: string) => {
-    const attempt = store.getAttempt(key);
-    const job = jobFor(key);
-    if (!attempt || !job || !getReportExportActions(job).retry) return;
+    const actionable = getActionableAttempt(key, 'retry');
+    if (!actionable) return;
+    const {attempt} = actionable;
     const runtime = runtimeFor(attempt);
     if (runtime.buffer !== undefined) {
       handoff(runtime);
@@ -520,9 +484,9 @@ export const createReportExportController = ({
   };
 
   const download = async (key: string) => {
-    const attempt = store.getAttempt(key);
-    const job = jobFor(key);
-    if (!attempt || !job || !getReportExportActions(job).download) return;
+    const actionable = getActionableAttempt(key, 'download');
+    if (!actionable) return;
+    const {attempt, job} = actionable;
     const runtime = runtimeFor(attempt);
     runtime.mimetype = job.exportData?.contentType;
     send(runtime, {type: 'auto-download', key});
@@ -552,17 +516,27 @@ export const createReportExportController = ({
       active = false;
       runtimes.forEach(release);
       runtimes.clear();
-      void queryClient.cancelQueries({queryKey: ['get_report_export', token]});
+      const reportExportQueryKey = [
+        'get_report_export',
+        username,
+        sessionScope,
+      ];
+      void queryClient.cancelQueries({queryKey: reportExportQueryKey});
+      queryClient.removeQueries({queryKey: reportExportQueryKey});
       void queryClient.cancelQueries({queryKey: inventoryKey()});
+      queryClient.removeQueries({queryKey: inventoryKey()});
     },
     mergeInventory: (exports: ReportExport[]) => {
       if (!isLive()) return;
       const known = new Set(store.getSnapshot().map(item => item.exportId));
       for (const item of selectReportExportInventory(exports)) {
-        if (!validId(item.id)) continue;
+        if (!isValidGmpIdentifier(item.id)) continue;
         queryClient.setQueryData(statusKey(item.id), item);
         if (known.has(item.id) || dismissed.has(item.id)) continue;
-        store.dispatch({type: 'add', attempt: recoveredAttempt(item)});
+        store.dispatch({
+          type: 'add',
+          attempt: createRecoveredReportExportAttempt(item),
+        });
         known.add(item.id);
       }
     },
@@ -587,6 +561,6 @@ export const createReportExportController = ({
   };
 };
 
-export type ReportExportController = ReturnType<
-  typeof createReportExportController
+export type ReportExportOperations = ReturnType<
+  typeof createReportExportOperations
 >;

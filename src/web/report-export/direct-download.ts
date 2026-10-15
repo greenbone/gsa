@@ -7,7 +7,7 @@ import type Gmp from 'gmp/gmp';
 import {
   type ReportExportJob,
   type StartReportExportParams,
-} from 'web/report-export/job';
+} from 'web/report-export/report-export-job';
 
 export interface DirectDownload {
   key: string;
@@ -23,13 +23,8 @@ export const fetchDirectDownload = async (
   gmp: Pick<Gmp, 'report' | 'auditreport'>,
   {kind, payload}: Pick<StartReportExportParams, 'kind' | 'payload'>,
 ) => {
-  const {
-    reportId,
-    reportFormatId,
-    reportConfigId,
-    deltaReportId,
-    filter,
-  } = payload;
+  const {reportId, reportFormatId, reportConfigId, deltaReportId, filter} =
+    payload;
   const options = {
     reportFormatId,
     deltaReportId,
@@ -52,5 +47,5 @@ export const toDirectDownloadJob = (
   origin: 'local',
   autoDownload: true,
   disposition: download.view.kind === 'complete' ? 'handed-off' : 'awaiting',
-  transport: 'direct',
+  exportMode: 'direct',
 });

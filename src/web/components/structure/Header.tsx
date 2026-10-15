@@ -17,7 +17,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import useUserIsLoggedIn from 'web/hooks/useUserIsLoggedIn';
 import useUserName from 'web/hooks/useUserName';
 import useUserTimezone from 'web/hooks/useUserTimezone';
-import {ReportExportActivity} from 'web/pages/reports/ReportExportActivity';
+import {ReportExportActivity} from 'web/pages/reports/report-export/ReportExportActivity';
 import {ROUTES} from 'web/route-paths';
 import {type ApplianceLogo} from 'web/utils/appliance-data';
 import {saveLastVisitedPage} from 'web/utils/user-last-visited-page';

@@ -5,40 +5,41 @@
 
 import {useEffect, useState, useSyncExternalStore} from 'react';
 import {useQueries, useQueryClient} from '@tanstack/react-query';
+import {v4 as uuid} from 'uuid';
 import {
   reportExportQueryOptions,
   useReportExportInventory,
-} from 'web/hooks/use-query/report-exports';
+} from 'web/hooks/use-query/report-export-queries';
 import useGmp from 'web/hooks/useGmp';
 import useSessionToken from 'web/hooks/useSessionToken';
 import useUserName from 'web/hooks/useUserName';
-import {
-  createReportExportController,
-  type ReportExportCallbacks,
-} from 'web/report-export/controller';
 import {
   type DirectDownload,
   toDirectDownloadJob,
 } from 'web/report-export/direct-download';
 import {
-  type ExportAttempt,
+  type ReportExportAttempt,
   getReportExportActions,
-  inStage,
+  isAttemptInStage,
   retainReportExportJobs,
-  toReportExportJob,
-} from 'web/report-export/job';
+  createReportExportJob,
+} from 'web/report-export/report-export-job';
+import {
+  createReportExportOperations,
+  type ReportExportCallbacks,
+} from 'web/report-export/report-export-operations';
 import {useReportExportMutations} from 'web/report-export/useReportExportMutations';
 
 export type {
   ReportExportJob,
   ReportExportKind,
-  JobView,
+  ReportExportJobView,
   StartReportExportParams,
-} from 'web/report-export/job';
-export {REPORT_EXPORT_POLL_INTERVAL} from 'web/hooks/use-query/report-exports';
-export {REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL} from 'web/report-export/controller';
+} from 'web/report-export/report-export-job';
+export {REPORT_EXPORT_POLL_INTERVAL} from 'web/hooks/use-query/report-export-queries';
+export {REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL} from 'web/report-export/report-export-operations';
 
-const EMPTY_ATTEMPTS: ExportAttempt[] = [];
+const EMPTY_ATTEMPTS: ReportExportAttempt[] = [];
 const EMPTY_DIRECT: DirectDownload[] = [];
 
 const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
@@ -46,58 +47,69 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
   const token = useSessionToken();
   const username = useUserName();
   const queryClient = useQueryClient();
-  const mutations = useReportExportMutations(token);
+  const mutations = useReportExportMutations(username);
 
   const owner = `${token ?? ''}\0${username ?? ''}`;
-  const createSession = () => ({
-    owner,
-    controller: createReportExportController({
-      gmp,
-      queryClient,
-      token,
-      username,
-      callbacks: {onDownload, onError},
-      mutations,
-    }),
-  });
+  const createSession = () => {
+    const sessionScope = uuid();
+    return {
+      owner,
+      sessionScope,
+      operations: createReportExportOperations({
+        gmp,
+        queryClient,
+        token,
+        username,
+        sessionScope,
+        callbacks: {onDownload, onError},
+        mutations,
+      }),
+    };
+  };
   const [session, setSession] = useState(createSession);
   if (session.owner !== owner) setSession(createSession());
-  const {controller} = session;
+  const {operations, sessionScope} = session;
   const isOwner = session.owner === owner;
   useEffect(() => {
-    controller.setCallbacks({onDownload, onError});
-    controller.setMutations(mutations);
-  }, [controller, onDownload, onError, mutations]);
+    operations.setCallbacks({onDownload, onError});
+    operations.setMutations(mutations);
+  }, [operations, onDownload, onError, mutations]);
 
   const attempts = useSyncExternalStore(
-    controller.store.subscribe,
-    controller.store.getSnapshot,
+    operations.store.subscribe,
+    operations.store.getSnapshot,
   );
   const downloads = useSyncExternalStore(
-    controller.subscribeDirect,
-    controller.getDirectDownloads,
+    operations.subscribeDirect,
+    operations.getDirectDownloads,
   );
   const records = isOwner ? attempts : EMPTY_ATTEMPTS;
   const directDownloads = isOwner ? downloads : EMPTY_DIRECT;
 
   useEffect(() => {
-    controller.activate();
-    return () => controller.dispose();
-  }, [controller]);
+    operations.activate();
+    return () => operations.dispose();
+  }, [operations]);
 
-  const inventory = useReportExportInventory();
+  const inventory = useReportExportInventory(sessionScope);
   useEffect(() => {
-    if (inventory.data) controller.mergeInventory(inventory.data.exports);
-  }, [controller, inventory.data]);
+    if (inventory.data) operations.mergeInventory(inventory.data.exports);
+  }, [operations, inventory.data]);
 
   const statusQueries = useQueries({
     queries: records.map(attempt => ({
-      ...reportExportQueryOptions(gmp, token, attempt.exportId),
+      ...reportExportQueryOptions(
+        gmp,
+        token,
+        username,
+        sessionScope,
+        attempt.exportId,
+      ),
       enabled: Boolean(
         token &&
         attempt.exportId &&
         attempt.disposition === 'awaiting' &&
-        !inStage(
+        !isAttemptInStage(
           attempt.phase,
           'creating',
           'handoff-failed',
@@ -109,12 +121,12 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
   });
 
   useEffect(() => {
-    controller.sync();
-  }, [controller, records, statusQueries]);
+    operations.sync();
+  }, [operations, records, statusQueries]);
 
   const jobs = [
     ...records.map((attempt, index) =>
-      toReportExportJob(
+      createReportExportJob(
         attempt,
         statusQueries[index]?.data,
         statusQueries[index]?.error,
@@ -123,13 +135,13 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
     ...directDownloads.map(toDirectDownloadJob),
   ];
   return {
-    start: controller.start,
-    startDirect: controller.startDirect,
-    cancel: controller.cancel,
-    dismiss: controller.dismiss,
-    retry: controller.retry,
-    download: controller.download,
-    refreshDiscovery: controller.refreshInventory,
+    start: operations.start,
+    startDirect: operations.startDirect,
+    cancel: operations.cancel,
+    dismiss: operations.dismiss,
+    retry: operations.retry,
+    download: operations.download,
+    refreshDiscovery: operations.refreshInventory,
     jobs: retainReportExportJobs(jobs),
     isActive: jobs.some(job => getReportExportActions(job).active),
     discoveryError: inventory.error,

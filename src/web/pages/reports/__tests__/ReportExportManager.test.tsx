@@ -22,10 +22,10 @@ import {vi} from 'vitest';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import {createSession} from 'gmp/testing';
-import {ReportExportActivity} from 'web/pages/reports/ReportExportActivity';
+import {ReportExportActivity} from 'web/pages/reports/report-export/ReportExportActivity';
 import ReportExportManager, {
   useReportExportManager,
-} from 'web/pages/reports/ReportExportManager';
+} from 'web/pages/reports/report-export/ReportExportManager';
 
 vi.mock('@greenbone/ui-lib', async importOriginal => ({
   ...(await importOriginal<typeof UiLib>()),
@@ -391,9 +391,7 @@ describe('ReportExportManager', () => {
         <ReportExportActivity />
       </ReportExportManager>,
     );
-    await waitFor(() =>
-      expect(gmp.reportexports.get).toHaveBeenCalled(),
-    );
+    await waitFor(() => expect(gmp.reportexports.get).toHaveBeenCalled());
     expect(
       screen.queryByTestId('report-export-activity-button'),
     ).not.toBeInTheDocument();

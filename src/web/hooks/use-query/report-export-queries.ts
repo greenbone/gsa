@@ -10,27 +10,25 @@ import useGmp from 'web/hooks/useGmp';
 import useSessionToken from 'web/hooks/useSessionToken';
 import useUserName from 'web/hooks/useUserName';
 import {
-  isGenerationActive,
-  isPermanentExportError,
+  isReportExportGenerationActive,
+  isPermanentReportExportError,
   ReportExportUnavailableError,
-} from 'web/report-export/job';
+} from 'web/report-export/report-export-job';
 
-// gvmd's export scheduler checks its queue once per second
 export const REPORT_EXPORT_POLL_INTERVAL = 1000;
 
 export const reportExportQueryOptions = (
   gmp: {
-    reportexport: Pick<
-      ReturnType<typeof useGmp>['reportexport'],
-      'get'
-    >;
+    reportexport: Pick<ReturnType<typeof useGmp>['reportexport'], 'get'>;
   },
   token: string | undefined,
+  username: string | undefined,
+  sessionScope: string,
   id?: string,
 ) =>
   queryOptions({
-    queryKey: ['get_report_export', token, id],
-    enabled: Boolean(token && id),
+    queryKey: ['get_report_export', username, sessionScope, id],
+    enabled: Boolean(token && username && sessionScope && id),
     queryFn: async () => {
       if (!id)
         throw new ReportExportUnavailableError('Report export ID is missing');
@@ -44,12 +42,12 @@ export const reportExportQueryOptions = (
         );
       return reportExport;
     },
-    retry: (count, error) => !isPermanentExportError(error) && count < 2,
+    retry: (count, error) => !isPermanentReportExportError(error) && count < 2,
     retryDelay: (count: number) => Math.min(1000 * 2 ** count, 30000),
     refetchInterval: query => {
-      if (isPermanentExportError(query.state.error)) return false;
+      if (isPermanentReportExportError(query.state.error)) return false;
       if (query.state.error) return 5000;
-      return !query.state.data || isGenerationActive(query.state.data.status)
+      return !query.state.data || isReportExportGenerationActive(query.state.data.status)
         ? REPORT_EXPORT_POLL_INTERVAL
         : false;
     },
@@ -96,19 +94,19 @@ export const discoverReportExports = async (
   return {exports: [...exports.values()], incomplete: true};
 };
 
-export const useReportExportInventory = () => {
+export const useReportExportInventory = (sessionScope: string) => {
   const gmp = useGmp();
   const token = useSessionToken();
   const username = useUserName();
   return useQuery({
-    queryKey: ['get_report_exports', token, username],
-    enabled: Boolean(token && username),
+    queryKey: ['get_report_exports', username, sessionScope],
+    enabled: Boolean(token && username && sessionScope),
     queryFn: ({signal}) => {
       if (!username)
         throw new ReportExportUnavailableError('No authenticated user');
       return discoverReportExports(gmp.reportexports, username, signal);
     },
-    retry: (count, error) => !isPermanentExportError(error) && count < 2,
+    retry: (count, error) => !isPermanentReportExportError(error) && count < 2,
     refetchOnWindowFocus: true,
     refetchInterval: false,
   });

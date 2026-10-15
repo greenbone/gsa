@@ -17,9 +17,9 @@ import {TASK_STATUS} from 'gmp/models/task';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
+import {ReportExportActivity} from 'web/pages/reports/report-export/ReportExportActivity';
+import ReportExportManager from 'web/pages/reports/report-export/ReportExportManager';
 import ReportDetailsPage from 'web/pages/reports/ReportDetailsPage';
-import {ReportExportActivity} from 'web/pages/reports/ReportExportActivity';
-import ReportExportManager from 'web/pages/reports/ReportExportManager';
 
 interface CollectionResponse {
   data: unknown[];

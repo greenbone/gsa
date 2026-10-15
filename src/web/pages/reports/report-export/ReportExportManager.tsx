@@ -24,9 +24,9 @@ import CapabilitiesContext from 'web/components/provider/CapabilitiesProvider';
 import useReportExport, {
   type ReportExportJob,
   type StartReportExportParams,
-} from 'web/hooks/useReportExport';
+} from 'web/hooks/useReportExports';
 import useTranslation from 'web/hooks/useTranslation';
-import {selectExportTransport} from 'web/report-export/route';
+import {getReportExportMode} from 'web/report-export/export-mode';
 
 interface ReportExportManagerContextValue {
   exportReport: (
@@ -92,7 +92,7 @@ const ReportExportManager = ({children}: ReportExportManagerProps) => {
         params: StartReportExportParams,
         format?: {content_type?: string},
       ) =>
-        selectExportTransport(format, capabilities) === 'async'
+        getReportExportMode(format, capabilities) === 'async'
           ? reportExport.start(params)
           : reportExport.startDirect(params),
       cancel: (key: string) =>

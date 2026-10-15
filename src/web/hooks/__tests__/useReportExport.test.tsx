@@ -14,16 +14,19 @@ import {
   discoverReportExports,
   REPORT_EXPORT_POLL_INTERVAL,
   reportExportQueryOptions,
-} from 'web/hooks/use-query/report-exports';
+} from 'web/hooks/use-query/report-export-queries';
 import useReportExport, {
   REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL,
-} from 'web/hooks/useReportExport';
+} from 'web/hooks/useReportExports';
+import {createReportExportAttemptStore} from 'web/report-export/report-export-attempt-store';
 import {
-  type ExportAttempt,
+  type ReportExportAttempt,
   getReportExportActions,
-} from 'web/report-export/job';
-import {readExportIntents, writeExportIntents} from 'web/report-export/storage';
-import {createExportAttemptStore} from 'web/report-export/store';
+} from 'web/report-export/report-export-job';
+import {
+  readStoredReportExportAttempts,
+  writeStoredReportExportAttempts,
+} from 'web/report-export/utils/report-export-attempt-store-utils';
 
 const onError = testing.fn();
 
@@ -99,10 +102,10 @@ const changeSession = (
   gmp.session.listener.forEach(listener => listener());
 };
 
-describe('export attempt store', () => {
+describe('report export attempt store', () => {
   const attempt = (
-    phase: ExportAttempt['phase'] = {stage: 'tracking'},
-  ): ExportAttempt => ({
+    phase: ReportExportAttempt['phase'] = {stage: 'tracking'},
+  ): ReportExportAttempt => ({
     key: 'attempt-1',
     origin: 'local',
     exportId: 'export-1',
@@ -115,7 +118,7 @@ describe('export attempt store', () => {
 
   test('keeps snapshots stable for rejected and missing transitions', () => {
     const initial = attempt();
-    const store = createExportAttemptStore([initial]);
+    const store = createReportExportAttemptStore([initial]);
     const listener = testing.fn();
     store.subscribe(listener);
     const snapshot = store.getSnapshot();
@@ -128,7 +131,7 @@ describe('export attempt store', () => {
 
   test('claims a transfer synchronously and prevents repeating a completed handoff', () => {
     const initial = attempt();
-    const store = createExportAttemptStore([initial]);
+    const store = createReportExportAttemptStore([initial]);
     expect(store.dispatch({type: 'transfer', key: initial.key})).toBe(true);
     expect(store.dispatch({type: 'transfer', key: initial.key})).toBe(false);
     expect(store.dispatch({type: 'cancel', key: initial.key})).toBe(false);
@@ -140,7 +143,7 @@ describe('export attempt store', () => {
 
   test('keeps queued cancellation blocking pickup and retains failures until retry', () => {
     const initial = attempt({stage: 'creating'});
-    const store = createExportAttemptStore([initial]);
+    const store = createReportExportAttemptStore([initial]);
     expect(store.dispatch({type: 'queue-cancel', key: initial.key})).toBe(true);
     expect(
       store.dispatch({type: 'created', key: initial.key, exportId: 'export-2'}),
@@ -156,7 +159,7 @@ describe('export attempt store', () => {
 
   test('publishes immutable snapshots and unsubscribes listeners', () => {
     const initial = attempt();
-    const store = createExportAttemptStore([initial]);
+    const store = createReportExportAttemptStore([initial]);
     const listener = testing.fn();
     const unsubscribe = store.subscribe(listener);
     const snapshot = store.getSnapshot();
@@ -169,11 +172,11 @@ describe('export attempt store', () => {
   });
 });
 
-describe('export intent storage', () => {
+describe('stored report export attempts', () => {
   beforeEach(() => window.sessionStorage.clear());
 
-  test('reads only complete intents and round-trips them', () => {
-    const intent = {
+  test('reads only complete attempt records and round-trips them', () => {
+    const storedAttempt = {
       exportId: 'export-1',
       filename: 'report.pdf',
       reportTitle: 'Report',
@@ -183,17 +186,22 @@ describe('export intent storage', () => {
     window.sessionStorage.setItem(
       'gsa-report-export-jobs:test-user',
       JSON.stringify([
-        {...intent, key: 'local', origin: 'local'},
+        {...storedAttempt, key: 'local', origin: 'local'},
         {
-          ...intent,
+          ...storedAttempt,
           key: 'discovered',
           exportId: 'export-2',
           origin: 'discovered',
         },
-        {...intent, key: 'no-origin', exportId: 'export-3'},
-        {...intent, key: 'invalid', exportId: 'export-4', origin: 'invalid'},
+        {...storedAttempt, key: 'no-origin', exportId: 'export-3'},
         {
-          ...intent,
+          ...storedAttempt,
+          key: 'invalid',
+          exportId: 'export-4',
+          origin: 'invalid',
+        },
+        {
+          ...storedAttempt,
           key: 'bad-disposition',
           exportId: 'export-5',
           origin: 'local',
@@ -201,10 +209,13 @@ describe('export intent storage', () => {
         },
       ]),
     );
-    const intents = readExportIntents('test-user');
-    expect(intents.map(item => item.key)).toEqual(['local', 'discovered']);
-    writeExportIntents('test-user', intents);
-    expect(readExportIntents('test-user')).toEqual(intents);
+    const attempts = readStoredReportExportAttempts('test-user');
+    expect(attempts.map(attempt => attempt.key)).toEqual([
+      'local',
+      'discovered',
+    ]);
+    writeStoredReportExportAttempts('test-user', attempts);
+    expect(readStoredReportExportAttempts('test-user')).toEqual(attempts);
   });
 });
 
@@ -371,9 +382,7 @@ describe('useReportExport', () => {
     const {result} = renderHook(() =>
       useReportExport({onError, onDownload: testing.fn()}),
     );
-    await waitFor(() =>
-      expect(gmp.reportexports.get).toHaveBeenCalledTimes(1),
-    );
+    await waitFor(() => expect(gmp.reportexports.get).toHaveBeenCalledTimes(1));
     vi.useFakeTimers();
     try {
       await act(async () => {
@@ -429,12 +438,12 @@ describe('useReportExport', () => {
       exports: [owned('one'), owned('two'), owned('three')],
       incomplete: false,
     });
-    expect(
-      filterString(command.get.mock.calls[1][0].filter),
-    ).toContain('first=3');
-    expect(
-      filterString(command.get.mock.calls[0][0].filter),
-    ).toContain('owner=test-user');
+    expect(filterString(command.get.mock.calls[1][0].filter)).toContain(
+      'first=3',
+    );
+    expect(filterString(command.get.mock.calls[0][0].filter)).toContain(
+      'owner=test-user',
+    );
     command.get.mockReset().mockResolvedValue({
       data: [owned('one'), owned('two')],
       meta: {
@@ -590,7 +599,7 @@ describe('useReportExport', () => {
         (intent: Record<string, unknown>) =>
           !('phase' in intent) &&
           !('view' in intent) &&
-          !('transport' in intent),
+          !('exportMode' in intent),
       ),
     ).toBe(true);
   });
@@ -676,9 +685,7 @@ describe('useReportExport', () => {
     await waitFor(() =>
       expect(result.current.jobs[0].view.kind).toBe('generating'),
     );
-    expect(gmp.reportexport.get.mock.calls.length).toBeGreaterThan(
-      1,
-    );
+    expect(gmp.reportexport.get.mock.calls.length).toBeGreaterThan(1);
     expect(onDownload).not.toHaveBeenCalled();
   });
 
@@ -691,13 +698,17 @@ describe('useReportExport', () => {
     const queryOptions = reportExportQueryOptions(
       gmp,
       'test-token',
+      'test-user',
+      'test-session',
       'export-uuid-1',
     );
     expect(queryOptions.queryKey).toEqual([
       'get_report_export',
-      'test-token',
+      'test-user',
+      'test-session',
       'export-uuid-1',
     ]);
+    expect(queryOptions.queryKey).not.toContain('test-token');
     const {result} = renderHook(() => useQuery(queryOptions));
 
     await waitFor(() =>
@@ -1115,9 +1126,7 @@ describe('useReportExport', () => {
 
     expect(gmp.reportexport.exportScanReport).toHaveBeenCalledTimes(2);
     await waitFor(() => expect(onDownload).toHaveBeenCalledTimes(1));
-    expect(
-      gmp.reportexport.get.mock.calls.length,
-    ).toBeGreaterThanOrEqual(3);
+    expect(gmp.reportexport.get.mock.calls.length).toBeGreaterThanOrEqual(3);
     expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(1);
     expect(onDownload).toHaveBeenCalledWith(new ArrayBuffer(8), 'report.xml');
     await waitFor(() => expect(result.current.jobs).toHaveLength(1));
@@ -1179,9 +1188,7 @@ describe('useReportExport', () => {
       () => expect(result.current.jobs[0].view.kind).toBe('generating'),
       {timeout: 10000},
     );
-    expect(gmp.reportexport.get.mock.calls.length).toBeGreaterThan(
-      1,
-    );
+    expect(gmp.reportexport.get.mock.calls.length).toBeGreaterThan(1);
     expect(result.current.jobs[0].statusError).toBeUndefined();
   }, 15000);
 
@@ -1268,13 +1275,12 @@ describe('useReportExport', () => {
     );
 
     const setItem = vi.spyOn(window.sessionStorage, 'setItem');
-    const initialStatusCalls =
-      gmp.reportexport.get.mock.calls.length;
+    const initialStatusCalls = gmp.reportexport.get.mock.calls.length;
     await waitFor(
       () =>
-        expect(
-          gmp.reportexport.get.mock.calls.length,
-        ).toBeGreaterThan(initialStatusCalls),
+        expect(gmp.reportexport.get.mock.calls.length).toBeGreaterThan(
+          initialStatusCalls,
+        ),
       {timeout: REPORT_EXPORT_POLL_INTERVAL * 3},
     );
     expect(setItem).not.toHaveBeenCalled();

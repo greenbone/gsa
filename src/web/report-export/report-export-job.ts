@@ -5,13 +5,12 @@
 
 import {type ReportExportPayload} from 'gmp/commands/report-export';
 import type ReportExport from 'gmp/models/report-export';
-import {
-  type ReportExportProgress,
-} from 'gmp/models/report-export';
+
+type ReportExportProgress = NonNullable<ReportExport['progress']>;
 
 export type ReportExportKind = 'scan' | 'audit' | 'delta_scan' | 'delta_audit';
 
-export const MAX_RETAINED_RECEIPTS = 50;
+export const MAX_RETAINED_EXPORT_RECEIPT_COUNT = 50;
 
 export interface StartReportExportParams {
   kind: ReportExportKind;
@@ -21,7 +20,7 @@ export interface StartReportExportParams {
   reportUrl?: string;
 }
 
-export interface ExportIntent {
+export interface ReportExportAttemptRecord {
   key: string;
   origin: 'local' | 'discovered';
   exportId?: string;
@@ -32,7 +31,7 @@ export interface ExportIntent {
   disposition: 'awaiting' | 'handed-off' | 'abandoned';
 }
 
-export type AttemptPhase =
+export type ReportExportAttemptPhase =
   | {stage: 'creating'; cancelRequested?: boolean}
   | {stage: 'tracking'}
   | {stage: 'canceling'}
@@ -44,20 +43,25 @@ export type AttemptPhase =
   | {stage: 'failed'; error: Error}
   | {stage: 'abandoned'};
 
-export interface ExportAttempt extends ExportIntent {
-  phase: AttemptPhase;
+export interface ReportExportAttempt extends ReportExportAttemptRecord {
+  phase: ReportExportAttemptPhase;
   cancelError?: Error;
 }
 
-export const inStage = (
-  phase: AttemptPhase,
-  ...stages: AttemptPhase['stage'][]
+export const isAttemptInStage = (
+  phase: ReportExportAttemptPhase,
+  ...stages: ReportExportAttemptPhase['stage'][]
 ) => stages.includes(phase.stage);
 
 // 'gone': the download was rejected permanently; gvmd deletes the file after the first full response.
-type FailureReason = 'export' | 'expired' | 'download' | 'gone' | 'unavailable';
+type ReportExportFailureReason =
+  | 'export'
+  | 'expired'
+  | 'download'
+  | 'gone'
+  | 'unavailable';
 
-export type JobView =
+export type ReportExportJobView =
   | {
       kind:
         | 'creating'
@@ -73,19 +77,19 @@ export type JobView =
   | {kind: 'generating'; progress?: ReportExportProgress}
   | {
       kind: 'failed';
-      reason: FailureReason;
+      reason: ReportExportFailureReason;
       error: Error;
     };
 
-export interface ReportExportJob extends ExportIntent {
-  transport: 'async' | 'direct';
-  view: JobView;
+export interface ReportExportJob extends ReportExportAttemptRecord {
+  exportMode: 'async' | 'direct';
+  view: ReportExportJobView;
   exportData?: ReportExport;
   cancelError?: Error;
   statusError?: Error;
 }
 
-const ACTIVE_KINDS = new Set<JobView['kind']>([
+const ACTIVE_JOB_VIEW_KINDS = new Set<ReportExportJobView['kind']>([
   'creating',
   'checking',
   'queued',
@@ -95,21 +99,21 @@ const ACTIVE_KINDS = new Set<JobView['kind']>([
   'downloading',
 ]);
 
-export const isGenerationActive = (
+export const isReportExportGenerationActive = (
   status?: string,
 ): status is 'pending' | 'running' | 'cancel_requested' =>
   status === 'pending' || status === 'running' || status === 'cancel_requested';
 
-export const getReportExportActions = ({transport, view}: ReportExportJob) => {
-  const active = ACTIVE_KINDS.has(view.kind);
+export const getReportExportActions = ({exportMode, view}: ReportExportJob) => {
+  const isActive = ACTIVE_JOB_VIEW_KINDS.has(view.kind);
   return {
-    active,
+    active: isActive,
     cancel:
-      transport === 'async' &&
+      exportMode === 'async' &&
       (view.kind === 'creating' ||
         view.kind === 'queued' ||
         view.kind === 'generating'),
-    dismiss: !active || view.kind === 'checking',
+    dismiss: !isActive || view.kind === 'checking',
     download: view.kind === 'ready',
     retry:
       view.kind === 'failed' &&
@@ -119,81 +123,97 @@ export const getReportExportActions = ({transport, view}: ReportExportJob) => {
 
 export class ReportExportUnavailableError extends Error {}
 
-const getStatus = (error: unknown) =>
+const getHttpStatus = (error: unknown) =>
   error && typeof error === 'object' && 'status' in error
     ? error.status
     : undefined;
 
-export const isPermanentExportError = (error: unknown) =>
-  error instanceof ReportExportUnavailableError ||
-  [400, 401, 403, 404].some(code => getStatus(error) === code);
+export const isPermanentReportExportError = (error: unknown) => {
+  const httpStatus = getHttpStatus(error);
+  return (
+    error instanceof ReportExportUnavailableError ||
+    (typeof httpStatus === 'number' &&
+      [400, 401, 403, 404].includes(httpStatus))
+  );
+};
 
-const failed = (reason: FailureReason, error: Error): JobView => ({
+const createFailedJobView = (
+  reason: ReportExportFailureReason,
+  error: Error,
+): ReportExportJobView => ({
   kind: 'failed',
   reason,
   error,
 });
 
-const getLocalTerminalView = (
-  phase: AttemptPhase,
+const getLocalAttemptTerminalView = (
+  phase: ReportExportAttemptPhase,
   statusError?: Error | null,
-): JobView | undefined => {
+): ReportExportJobView | undefined => {
   if (phase.stage === 'handed-off') return {kind: 'complete'};
-  if (phase.stage === 'failed') return failed('export', phase.error);
+  if (phase.stage === 'failed')
+    return createFailedJobView('export', phase.error);
   if (phase.stage === 'creating')
     return {kind: phase.cancelRequested ? 'canceling' : 'creating'};
-  if (statusError && isPermanentExportError(statusError))
-    return failed('unavailable', statusError);
+  if (statusError && isPermanentReportExportError(statusError))
+    return createFailedJobView('unavailable', statusError);
   if (phase.stage === 'abandoned')
-    return failed('unavailable', new Error('Tracking stopped'));
+    return createFailedJobView('unavailable', new Error('Tracking stopped'));
   if (
     phase.stage === 'waiting' &&
     phase.error &&
-    isPermanentExportError(phase.error)
+    isPermanentReportExportError(phase.error)
   )
-    return failed(
-      getStatus(phase.error) === 404 ? 'gone' : 'unavailable',
+    return createFailedJobView(
+      getHttpStatus(phase.error) === 404 ? 'gone' : 'unavailable',
       phase.error,
     );
   return undefined;
 };
 
 // Precedence: local terminal phases, then remote terminal status, then transfer/cancel/progress.
-const getAttemptView = (
-  {phase, autoDownload}: ExportAttempt,
+const getReportExportJobView = (
+  {phase, autoDownload}: ReportExportAttempt,
   exportData?: ReportExport,
   statusError?: Error | null,
-): JobView => {
-  const localView = getLocalTerminalView(phase, statusError);
-  if (localView) return localView;
-  const status = exportData?.status;
-  switch (status) {
+): ReportExportJobView => {
+  const localTerminalView = getLocalAttemptTerminalView(phase, statusError);
+  if (localTerminalView) return localTerminalView;
+  const exportStatus = exportData?.status;
+  switch (exportStatus) {
     case 'error':
-      return failed(
+      return createFailedJobView(
         'export',
         new Error(exportData?.errorMessage || 'Export failed'),
       );
     case 'expired':
-      return failed(
+      return createFailedJobView(
         'expired',
         new Error(exportData?.errorMessage || 'Export expired'),
       );
     case 'canceled':
       return {kind: 'canceled'};
     case 'unknown':
-      return failed('unavailable', new Error('Unsupported export status'));
+      return createFailedJobView(
+        'unavailable',
+        new Error('Unsupported export status'),
+      );
   }
   if (
-    inStage(phase, 'waiting', 'handoff-failed') &&
+    isAttemptInStage(phase, 'waiting', 'handoff-failed') &&
     'error' in phase &&
     phase.error
   )
-    return failed('download', phase.error);
-  if (inStage(phase, 'transferring', 'waiting')) return {kind: 'downloading'};
+    return createFailedJobView('download', phase.error);
+  if (isAttemptInStage(phase, 'transferring', 'waiting'))
+    return {kind: 'downloading'};
   if (phase.stage === 'canceling') return {kind: 'canceling'};
-  if (phase.stage === 'cancel-requested' && isGenerationActive(status))
+  if (
+    phase.stage === 'cancel-requested' &&
+    isReportExportGenerationActive(exportStatus)
+  )
     return {kind: 'cancel-requested'};
-  switch (status) {
+  switch (exportStatus) {
     case 'pending':
       return {kind: 'queued'};
     case 'running':
@@ -206,26 +226,26 @@ const getAttemptView = (
   return {kind: 'checking'};
 };
 
-export const toReportExportJob = (
-  attempt: ExportAttempt,
+export const createReportExportJob = (
+  attempt: ReportExportAttempt,
   exportData?: ReportExport,
   statusError?: Error | null,
 ): ReportExportJob => {
-  const {phase: _phase, ...intent} = attempt;
+  const {phase: _phase, ...activityRecord} = attempt;
   return {
-    ...intent,
-    transport: 'async',
-    view: getAttemptView(attempt, exportData, statusError),
+    ...activityRecord,
+    exportMode: 'async',
+    view: getReportExportJobView(attempt, exportData, statusError),
     exportData,
     statusError:
-      statusError && !isPermanentExportError(statusError)
+      statusError && !isPermanentReportExportError(statusError)
         ? statusError
         : undefined,
   };
 };
 
 export const retainReportExportJobs = (jobs: ReportExportJob[]) => {
-  const unfinished = new Set(
+  const unfinishedJobKeys = new Set(
     jobs
       .filter(
         job =>
@@ -238,14 +258,18 @@ export const retainReportExportJobs = (jobs: ReportExportJob[]) => {
       )
       .map(job => job.key),
   );
-  const recent = new Set(
+  const recentJobKeys = new Set(
     jobs
-      .filter(job => !unfinished.has(job.key))
-      .slice(-MAX_RETAINED_RECEIPTS)
+      .filter(job => !unfinishedJobKeys.has(job.key))
+      .slice(-MAX_RETAINED_EXPORT_RECEIPT_COUNT)
       .map(job => job.key),
   );
-  return jobs.filter(job => unfinished.has(job.key) || recent.has(job.key));
+  return jobs.filter(
+    job => unfinishedJobKeys.has(job.key) || recentJobKeys.has(job.key),
+  );
 };
 
-export const selectReportExportInventory = (exports: ReportExport[]) =>
-  exports.filter(item => isGenerationActive(item.status));
+export const selectReportExportInventory = (reportExports: ReportExport[]) =>
+  reportExports.filter(reportExport =>
+    isReportExportGenerationActive(reportExport.status),
+  );

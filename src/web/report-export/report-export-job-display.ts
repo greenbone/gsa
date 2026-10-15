@@ -4,9 +4,12 @@
  */
 
 import {type TranslateFunc} from 'web/hooks/useTranslation';
-import {type JobView, type ReportExportJob} from 'web/report-export/job';
+import {
+  type ReportExportJobView,
+  type ReportExportJob,
+} from 'web/report-export/report-export-job';
 
-export type ActivityStatusTone =
+export type ReportExportStatusTone =
   | 'active'
   | 'queued'
   | 'downloading'
@@ -14,14 +17,14 @@ export type ActivityStatusTone =
   | 'error'
   | 'ready';
 
-export interface ActivityStatusPresentation {
+export interface ReportExportJobDisplay {
   label: string;
   detail?: string;
-  tone: ActivityStatusTone;
+  tone: ReportExportStatusTone;
 }
 
-const getFailedLabel = (
-  reason: Extract<JobView, {kind: 'failed'}>['reason'],
+const getReportExportFailureLabel = (
+  reason: Extract<ReportExportJobView, {kind: 'failed'}>['reason'],
   _: TranslateFunc,
 ) => {
   switch (reason) {
@@ -38,10 +41,10 @@ const getFailedLabel = (
   }
 };
 
-export const getJobPresentation = (
+export const getReportExportJobDisplay = (
   {view}: ReportExportJob,
   _: TranslateFunc,
-): ActivityStatusPresentation => {
+): ReportExportJobDisplay => {
   switch (view.kind) {
     case 'creating':
       return {label: _('Preparing'), tone: 'active'};
@@ -77,7 +80,7 @@ export const getJobPresentation = (
       return {label: _('Canceled'), tone: 'canceled'};
     case 'failed':
       return {
-        label: getFailedLabel(view.reason, _),
+        label: getReportExportFailureLabel(view.reason, _),
         detail:
           view.reason === 'gone'
             ? _(
@@ -89,8 +92,11 @@ export const getJobPresentation = (
   }
 };
 
-export const getJobTitle = (job: ReportExportJob, _: TranslateFunc) => {
-  const isDirect = job.transport === 'direct';
+export const getReportExportJobTitle = (
+  job: ReportExportJob,
+  _: TranslateFunc,
+) => {
+  const isDirect = job.exportMode === 'direct';
   let title = isDirect ? _('Report download') : _('Report export');
   if (job.reportTitle) {
     title = isDirect
@@ -105,7 +111,7 @@ export const getJobTitle = (job: ReportExportJob, _: TranslateFunc) => {
   return extension ? `${title} (.${extension})` : title;
 };
 
-export const getCancelButtonTitle = (
+export const getReportExportCancelTitle = (
   {view, cancelError}: ReportExportJob,
   _: TranslateFunc,
 ) => {
