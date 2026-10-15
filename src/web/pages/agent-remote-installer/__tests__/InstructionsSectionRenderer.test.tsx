@@ -128,7 +128,7 @@ describe('InstructionsSectionRenderer tests', () => {
   });
 
   describe('COLLAPSIBLE', () => {
-    test('should render collapsible with summary and child content', () => {
+    test('should render collapsible with summary and child content', async () => {
       const section: InstructionsSection = {
         id: 'collapsible-1',
         type: SectionType.COLLAPSIBLE,
@@ -141,9 +141,11 @@ describe('InstructionsSectionRenderer tests', () => {
           },
         ],
       };
-      render(<InstructionsSectionRenderer section={section} />);
-      expect(screen.getByText('Advanced Options')).toBeInTheDocument();
-      expect(screen.getByText('Child paragraph content')).toBeInTheDocument();
+      const {userEvent} = render(
+        <InstructionsSectionRenderer section={section} />,
+      );
+      await userEvent.click(screen.getByText('Advanced Options'));
+      expect(screen.getByText('Child paragraph content')).toBeVisible();
     });
   });
 

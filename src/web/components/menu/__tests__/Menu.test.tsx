@@ -4,7 +4,7 @@
  */
 
 import {describe, expect, test} from '@gsa/testing';
-import {rendererWith, screen} from 'web/testing';
+import {fireEvent, rendererWith, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Features, {type Feature} from 'gmp/capabilities/features';
@@ -30,7 +30,23 @@ const renderMenuWith = ({
     router: true,
     features: isDefined(features) ? new Features(features) : undefined,
   });
-  return render(<Menu />);
+  const result = render(<Menu />);
+  // Submenu content is mounted only after expansion with reduced motion.
+  for (const label of [
+    'Scans',
+    'Assets',
+    'Resilience',
+    'Security Information',
+    'Configuration',
+    'Administration',
+    'Help',
+  ]) {
+    const control = screen.queryByText(label);
+    if (control) {
+      fireEvent.click(control);
+    }
+  }
+  return result;
 };
 
 describe('Menu rendering', () => {
