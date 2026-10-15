@@ -1846,7 +1846,7 @@
   "Schedule Details": "Dettagli Pianificazione",
   "Schedule Unavailable. Name: {{name}}, ID: {{id}}": "Pianificazione non disponibile. Nome: {{name}}, ID: {{id}}",
   "Schedule: {{name}}": "Pianificazione: {{name}}",
-  "Scheduler Cron Times": "",
+  "Scheduler Cron Times": "Pianificazione orari cron",
   "Scheduler Options": "Opzioni Scheduler",
   "Schedules": "Pianificazioni",
   "Schedules Filter": "Filtro Pianificazioni",
