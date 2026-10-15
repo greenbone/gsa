@@ -663,42 +663,6 @@
       "fingerprint": "src/web/components/dialog/ComposerContent.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property is not nullish. This default assignment will never be used.|11|audit = false,"
     },
     {
-      "filename": "src/web/components/dialog/SaveDialog.tsx",
-      "code": "react(set-state-in-effect)",
-      "message": "Calling setState synchronously within an effect can trigger cascading renders",
-      "location": {
-        "line": 92,
-        "column": 5,
-        "offset": 3293
-      },
-      "sourceLine": "setPrevDisabled(currentStep === 0);",
-      "fingerprint": "src/web/components/dialog/SaveDialog.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setPrevDisabled(currentStep === 0);"
-    },
-    {
-      "filename": "src/web/components/dialog/SaveDialog.tsx",
-      "code": "react(set-state-in-effect)",
-      "message": "Calling setState synchronously within an effect can trigger cascading renders",
-      "location": {
-        "line": 97,
-        "column": 5,
-        "offset": 3434
-      },
-      "sourceLine": "setStateError(error);",
-      "fingerprint": "src/web/components/dialog/SaveDialog.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setStateError(error);"
-    },
-    {
-      "filename": "src/web/components/dialog/SaveDialog.tsx",
-      "code": "typescript(unbound-method)",
-      "message": "Avoid referencing unbound methods which may cause unintentional scoping of `this`.",
-      "location": {
-        "line": 114,
-        "column": 31,
-        "offset": 3820
-      },
-      "sourceLine": "if (isFunction(promise?.then)) {",
-      "fingerprint": "src/web/components/dialog/SaveDialog.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|31|if (isFunction(promise?.then)) {"
-    },
-    {
       "filename": "src/web/components/form/__tests__/useFormValues.test.tsx",
       "code": "react(refs)",
       "message": "Cannot access refs during render",
