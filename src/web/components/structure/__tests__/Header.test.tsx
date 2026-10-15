@@ -5,9 +5,11 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
+import CollectionCounts from 'gmp/collection/collection-counts';
 import date from 'gmp/models/date';
 import {createSession} from 'gmp/testing';
 import Header from 'web/components/structure/Header';
+import ReportExportManager from 'web/pages/reports/ReportExportManager';
 
 const createGmp = () => ({
   settings: {
@@ -19,7 +21,20 @@ const createGmp = () => ({
     sessionTimeout: date(Date.now() + 3600 * 1000),
   }),
   doLogout: testing.fn().mockResolvedValue(undefined),
+  reportexport: {
+    getReportExports: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {counts: new CollectionCounts({first: 1})},
+    }),
+  },
 });
+
+const renderHeader = (render: (element: React.ReactElement) => unknown) =>
+  render(
+    <ReportExportManager>
+      <Header />
+    </ReportExportManager>,
+  );
 
 describe('Header tests', () => {
   test('renders component', async () => {
@@ -28,7 +43,7 @@ describe('Header tests', () => {
       router: true,
     });
 
-    render(<Header />);
+    renderHeader(render);
 
     expect(screen.getByText('UTC')).toBeVisible();
 
@@ -72,7 +87,7 @@ describe('Header tests', () => {
       router: true,
     });
 
-    render(<Header />);
+    renderHeader(render);
 
     const settingsBtn = screen.getByText('testUser');
     fireEvent.mouseOver(settingsBtn);

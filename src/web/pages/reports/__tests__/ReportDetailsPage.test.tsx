@@ -11,12 +11,15 @@ import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/user';
 import type FilterType from 'gmp/models/filter/filter-type';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import Report from 'gmp/models/report';
+import ReportFormat from 'gmp/models/report-format';
 import {OPENVASD_SCANNER_TYPE} from 'gmp/models/scanner';
 import {TASK_STATUS} from 'gmp/models/task';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import ReportDetailsPage from 'web/pages/reports/ReportDetailsPage';
+import {ReportExportActivity} from 'web/pages/reports/ReportExportActivity';
+import ReportExportManager from 'web/pages/reports/ReportExportManager';
 
 interface CollectionResponse {
   data: unknown[];
@@ -91,6 +94,18 @@ const createGmp = () => ({
   reportformats: {
     get: testing.fn().mockResolvedValue(emptyCollectionResponse),
   },
+  reportexport: {
+    exportScanReport: testing
+      .fn()
+      .mockResolvedValue({data: {id: 'export-uuid'}}),
+    getReportExport: testing.fn().mockResolvedValue({
+      data: [{id: 'export-uuid', status: 'running', progress: 'generating'}],
+    }),
+    downloadReportExport: testing
+      .fn()
+      .mockResolvedValue({data: new ArrayBuffer(8)}),
+    cancelReportExport: testing.fn().mockResolvedValue({}),
+  },
   report: {
     get: testing.fn().mockResolvedValue({data: entity}),
     addAssets: testing.fn().mockResolvedValue({}),
@@ -154,9 +169,11 @@ const setupRenderer = (gmp = createGmp()) => {
 
 const renderPage = (render: ReturnType<typeof setupRenderer>['render']) =>
   render(
-    <Routes>
-      <Route element={<ReportDetailsPage />} path="/report/:id" />
-    </Routes>,
+    <ReportExportManager>
+      <Routes>
+        <Route element={<ReportDetailsPage />} path="/report/:id" />
+      </Routes>
+    </ReportExportManager>,
   );
 
 describe('ReportDetailsPage tests', () => {
@@ -453,6 +470,17 @@ describe('ReportDetailsPage tests', () => {
   describe('Report download flow', () => {
     test('should call report download when download dialog OK is clicked', async () => {
       const gmp = createGmp();
+      gmp.reportformats.get.mockResolvedValue({
+        data: [
+          new ReportFormat({
+            id: 'xml-format',
+            name: 'XML',
+            extension: 'xml',
+            content_type: 'text/xml',
+          }),
+        ],
+        meta: emptyCollectionResponse.meta,
+      });
 
       const {render} = setupRenderer(gmp);
       renderPage(render);
@@ -467,8 +495,131 @@ describe('ReportDetailsPage tests', () => {
       fireEvent.click(screen.getByRole('button', {name: 'OK'}));
 
       await waitFor(() => {
-        expect(gmp.report.download).toHaveBeenCalled();
+        expect(gmp.report.download).toHaveBeenCalledWith(
+          {id: entity.id},
+          expect.objectContaining({
+            reportFormatId: 'xml-format',
+            reportConfigId: '',
+          }),
+        );
       });
+      expect(gmp.reportexport.exportScanReport).not.toHaveBeenCalled();
+    });
+
+    test('uses async export for a PDF report format', async () => {
+      const gmp = createGmp();
+      gmp.reportformats.get.mockResolvedValue({
+        data: [
+          new ReportFormat({
+            id: 'pdf-format',
+            name: 'PDF',
+            extension: 'pdf',
+            content_type: 'application/pdf; charset=binary',
+          }),
+        ],
+        meta: emptyCollectionResponse.meta,
+      });
+
+      const {render} = setupRenderer(gmp);
+      renderPage(render);
+      await screen.findByTitle(/^Download filtered Report/);
+      fireEvent.click(screen.getByTitle(/^Download filtered Report/));
+      await screen.findByRole('heading', {
+        name: /Compose Content for Scan Report/,
+      });
+      fireEvent.click(screen.getByRole('button', {name: 'OK'}));
+
+      await waitFor(() => {
+        expect(gmp.reportexport.exportScanReport).toHaveBeenCalledWith(
+          expect.objectContaining({
+            report_id: entity.id,
+            format_id: 'pdf-format',
+          }),
+        );
+      });
+      expect(gmp.report.download).not.toHaveBeenCalled();
+    });
+
+    test('allows retrying a PDF export after canceling it', async () => {
+      const gmp = createGmp();
+      let exportCount = 0;
+      const exportStatuses: Record<string, string> = {};
+      gmp.reportformats.get.mockResolvedValue({
+        data: [
+          new ReportFormat({
+            id: 'pdf-format',
+            name: 'PDF',
+            extension: 'pdf',
+            content_type: 'application/pdf; charset=binary',
+          }),
+        ],
+        meta: emptyCollectionResponse.meta,
+      });
+      gmp.reportexport.exportScanReport.mockImplementation(async () => {
+        const id = `export-${++exportCount}`;
+        exportStatuses[id] = exportCount === 1 ? 'running' : 'done';
+        return {data: {id}};
+      });
+      gmp.reportexport.getReportExport.mockImplementation(
+        async ({reportExportId}: {reportExportId: string}) => ({
+          data: [
+            {
+              id: reportExportId,
+              status: exportStatuses[reportExportId],
+              progress: 'generating',
+            },
+          ],
+        }),
+      );
+
+      const {render} = setupRenderer(gmp);
+      render(
+        <ReportExportManager>
+          <>
+            <ReportExportActivity />
+            <Routes>
+              <Route element={<ReportDetailsPage />} path="/report/:id" />
+            </Routes>
+          </>
+        </ReportExportManager>,
+      );
+
+      await screen.findByTitle(/^Download filtered Report/);
+      fireEvent.click(screen.getByTitle(/^Download filtered Report/));
+      await screen.findByRole('heading', {
+        name: /Compose Content for Scan Report/,
+      });
+      fireEvent.click(screen.getByRole('button', {name: 'OK'}));
+      await waitFor(() =>
+        expect(gmp.reportexport.exportScanReport).toHaveBeenCalledTimes(1),
+      );
+
+      const activityPopover = await screen.findByTestId(
+        'report-export-activity-popover',
+      );
+      await within(activityPopover).findByText('Generating');
+      exportStatuses['export-1'] = 'canceled';
+      fireEvent.click(
+        within(activityPopover).getByRole('button', {
+          name: 'Cancel report export',
+          hidden: true,
+        }),
+      );
+      await within(activityPopover).findByText('Canceled');
+
+      fireEvent.click(screen.getByTitle(/^Download filtered Report/));
+      await screen.findByRole('heading', {
+        name: /Compose Content for Scan Report/,
+      });
+      fireEvent.click(screen.getByRole('button', {name: 'OK'}));
+
+      await waitFor(() => {
+        expect(gmp.reportexport.exportScanReport).toHaveBeenCalledTimes(2);
+        expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(1);
+      });
+      expect(
+        within(activityPopover).queryByText('Canceled'),
+      ).not.toBeInTheDocument();
     });
 
     test('should close download dialog after successful download', async () => {

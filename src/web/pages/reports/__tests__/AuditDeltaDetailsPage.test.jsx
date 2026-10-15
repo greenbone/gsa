@@ -5,12 +5,15 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, within} from 'web/testing';
+import {Route, Routes} from 'react-router';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import Filter from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {createSession} from 'gmp/testing';
 import {getMockAuditDeltaReport} from 'web/pages/reports/__fixtures__/MockAuditDeltaReport';
+import AuditDeltaReportDetailsPage from 'web/pages/reports/AuditDeltaReportDetailsPage';
 import DeltaReportDetailsContent from 'web/pages/reports/DeltaReportDetailsContent';
+import ReportExportManager from 'web/pages/reports/ReportExportManager';
 
 const filter = QueryFilter.fromString(
   'apply_overrides=0 compliance_levels=ynui rows=10 min_qod=70 first=1 sort=compliant',
@@ -68,6 +71,73 @@ const createGmp = ({reportResultsThreshold = 10} = {}) => ({
       },
     }),
   },
+  filters: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        filter: QueryFilter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  },
+  reportconfigs: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        filter: QueryFilter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  },
+  reportformats: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {
+        filter: QueryFilter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  },
+  auditreport: {
+    getDelta: testing.fn().mockReturnValue(new Promise(() => {})),
+  },
+  reportexport: {
+    getReportExports: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {counts: new CollectionCounts({first: 1})},
+    }),
+  },
+});
+
+describe('AuditDeltaReportDetailsPage', () => {
+  test('loads the delta report IDs from the route', () => {
+    const reportId = '5567b85d-bf96-4e0e-8edf-c3b3b213e849';
+    const deltaReportId = 'baec34db-a7ce-4a08-856c-edb5569587d6';
+    const gmp = createGmp();
+    const {render} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+      route: `/audit-report/delta/${reportId}/${deltaReportId}`,
+    });
+
+    render(
+      <ReportExportManager>
+        <Routes>
+          <Route
+            element={<AuditDeltaReportDetailsPage />}
+            path="/audit-report/delta/:id/:deltaid"
+          />
+        </Routes>
+      </ReportExportManager>,
+    );
+
+    expect(gmp.auditreport.getDelta).toHaveBeenCalledWith(
+      {id: reportId},
+      {id: deltaReportId},
+      expect.anything(),
+    );
+  });
 });
 
 describe('AuditDeltaDetailsContent tests', () => {
