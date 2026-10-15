@@ -70,7 +70,7 @@
     "prop-types": "^15.8.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "react-i18next": "^17.0.15",
+    "react-i18next": "^17.0.16",
     "react-is": "19.3.0",
     "react-markdown": "10.1.0",
     "react-redux": "^9.2.0",
