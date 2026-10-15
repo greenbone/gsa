@@ -49,7 +49,7 @@ const applyAttemptEvent = (
   event: TransitionEvent,
 ): ReportExportAttempt => {
   const {phase} = attempt;
-  if (attempt.disposition === 'handed-off') return attempt;
+  if (phase.stage === 'handed-off') return attempt;
   switch (event.type) {
     case 'created':
       return updateAttemptIfAllowed(attempt, phase.stage === 'creating', {
@@ -96,7 +96,6 @@ const applyAttemptEvent = (
       return updateAttemptIfAllowed(
         attempt,
         Boolean(attempt.exportId) &&
-          attempt.disposition === 'awaiting' &&
           isAttemptInStage(phase, 'tracking', 'waiting', 'cancel-requested'),
         {phase: {stage: 'transferring'}},
       );
@@ -112,7 +111,7 @@ const applyAttemptEvent = (
       return updateAttemptIfAllowed(
         attempt,
         isAttemptInStage(phase, 'tracking', 'waiting'),
-        {phase: {stage: 'tracking'}, disposition: 'awaiting'},
+        {phase: {stage: 'tracking'}},
       );
     case 'handoff':
       return updateAttemptIfAllowed(
@@ -120,7 +119,6 @@ const applyAttemptEvent = (
         isAttemptInStage(phase, 'transferring', 'handoff-failed'),
         {
           phase: {stage: 'handed-off'},
-          disposition: 'handed-off',
         },
       );
     case 'handoff-failed':

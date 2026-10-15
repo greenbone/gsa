@@ -110,7 +110,6 @@ describe('report export attempt store', () => {
     filename: 'report.pdf',
     reportTitle: 'Report',
     autoDownload: true,
-    disposition: 'awaiting',
     phase,
   });
 
@@ -522,7 +521,6 @@ describe('useReportExport', () => {
         filename: 'report.xml',
         reportTitle: 'Report',
         autoDownload: true,
-        disposition: 'handed-off',
         phase: {stage: 'handed-off'},
       }),
     );
@@ -534,7 +532,6 @@ describe('useReportExport', () => {
         filename: 'report.xml',
         reportTitle: 'Unfinished',
         autoDownload: false,
-        disposition: 'awaiting',
         phase: {stage: 'tracking'},
       },
       {

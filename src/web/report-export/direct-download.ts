@@ -46,6 +46,5 @@ export const toDirectDownloadJob = (
   ...download,
   origin: 'local',
   autoDownload: true,
-  disposition: download.view.kind === 'complete' ? 'handed-off' : 'awaiting',
   exportMode: 'direct',
 });

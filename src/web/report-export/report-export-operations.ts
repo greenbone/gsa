@@ -272,7 +272,6 @@ export const createReportExportOperations = ({
     for (const attempt of store.getSnapshot()) {
       const {data, error} = statusOf(attempt);
       if (
-        attempt.disposition !== 'awaiting' ||
         !attempt.autoDownload ||
         data?.status !== 'done' ||
         isPermanentReportExportError(error) ||
@@ -336,7 +335,6 @@ export const createReportExportOperations = ({
       reportTitle: params.reportTitle,
       reportUrl: params.reportUrl,
       autoDownload: true,
-      disposition: 'awaiting',
       phase: {stage: 'creating'},
     };
     const runtime = runtimeFor(attempt);
@@ -364,7 +362,7 @@ export const createReportExportOperations = ({
           candidate =>
             candidate.key !== runtime.key &&
             candidate.exportId === exportId &&
-            candidate.disposition === 'awaiting',
+            candidate.phase.stage !== 'handed-off',
         );
       let target = runtime;
       if (existing) {

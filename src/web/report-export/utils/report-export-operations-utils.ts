@@ -45,7 +45,6 @@ export const createRecoveredReportExportAttempt = (
     reportTitle: reportExport.reportId || 'Report',
     reportUrl: getReportUrlForExport(reportExport),
     autoDownload: false,
-    disposition: 'awaiting',
     phase: {stage: 'tracking'},
   };
 };

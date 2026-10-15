@@ -28,7 +28,6 @@ export interface ReportExportAttemptRecord {
   reportTitle: string;
   reportUrl?: string;
   autoDownload: boolean;
-  disposition: 'awaiting' | 'handed-off';
 }
 
 export type ReportExportAttemptPhase =
@@ -250,7 +249,7 @@ export const retainReportExportJobs = (jobs: ReportExportJob[]) => {
           (job.origin === 'discovered' && job.view.kind === 'ready') ||
           (job.autoDownload &&
             job.exportId &&
-            job.disposition === 'awaiting' &&
+            job.view.kind !== 'complete' &&
             job.view.kind !== 'failed' &&
             job.view.kind !== 'canceled'),
       )

@@ -129,7 +129,7 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
         enabled: Boolean(
           token &&
           attempt.exportId &&
-          attempt.disposition === 'awaiting' &&
+          attempt.phase.stage !== 'handed-off' &&
           (attempt.origin !== 'discovered' ||
             !cachedExport ||
             isReportExportGenerationActive(cachedExport.status)) &&
