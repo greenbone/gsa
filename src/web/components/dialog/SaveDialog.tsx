@@ -134,7 +134,6 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
         <SaveDialogFooter
           buttonTitle={buttonTitle}
           currentStep={currentStep}
-          handleSaveClick={() => handleSaveClick(childValues)}
           isLoading={isLoading}
           isSaving={isSaving}
           multiStep={multiStep}
@@ -142,6 +141,7 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
           prevDisabled={prevDisabled}
           setCurrentStep={setCurrentStep}
           onClose={onClose}
+          onSave={() => handleSaveClick(childValues)}
         />
       }
       title={title}

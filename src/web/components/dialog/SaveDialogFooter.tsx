@@ -16,7 +16,7 @@ interface SaveDialogFooterProps {
   currentStep: number;
   setCurrentStep: (step: number) => void;
   onClose?: () => void;
-  handleSaveClick: () => void;
+  onSave: () => void;
 }
 
 const SaveDialogFooter = ({
@@ -29,7 +29,7 @@ const SaveDialogFooter = ({
   currentStep,
   setCurrentStep,
   onClose,
-  handleSaveClick,
+  onSave,
 }: SaveDialogFooterProps) => {
   return multiStep > 0 ? (
     <MultiStepFooter
@@ -44,7 +44,7 @@ const SaveDialogFooter = ({
       onPreviousButtonClick={() =>
         setCurrentStep(currentStep > 0 ? currentStep - 1 : currentStep)
       }
-      onRightButtonClick={handleSaveClick}
+      onRightButtonClick={onSave}
     />
   ) : (
     <DialogTwoButtonFooter
@@ -52,7 +52,7 @@ const SaveDialogFooter = ({
       isSaving={isSaving}
       rightButtonTitle={buttonTitle}
       onLeftButtonClick={onClose}
-      onRightButtonClick={handleSaveClick}
+      onRightButtonClick={onSave}
     />
   );
 };

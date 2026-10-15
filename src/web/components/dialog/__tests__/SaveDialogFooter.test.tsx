@@ -18,7 +18,7 @@ describe('SaveDialogFooter', () => {
     currentStep: 0,
     setCurrentStep: testing.fn(),
     onClose: testing.fn(),
-    handleSaveClick: testing.fn(),
+    onSave: testing.fn(),
   };
 
   test('renders DialogTwoButtonFooter when multiStep is 0', () => {
@@ -35,15 +35,15 @@ describe('SaveDialogFooter', () => {
     'handles single-step buttons with isLoading=$isLoading and isSaving=$isSaving',
     ({isLoading, isSaving}) => {
       const onClose = testing.fn();
-      const handleSaveClick = testing.fn();
+      const onSave = testing.fn();
 
       render(
         <SaveDialogFooter
           {...defaultProps}
-          handleSaveClick={handleSaveClick}
           isLoading={isLoading}
           isSaving={isSaving}
           onClose={onClose}
+          onSave={onSave}
         />,
       );
 
@@ -68,9 +68,7 @@ describe('SaveDialogFooter', () => {
       fireEvent.click(saveButton);
 
       expect(onClose).toHaveBeenCalledTimes(isSaving ? 0 : 1);
-      expect(handleSaveClick).toHaveBeenCalledTimes(
-        isLoading || isSaving ? 0 : 1,
-      );
+      expect(onSave).toHaveBeenCalledTimes(isLoading || isSaving ? 0 : 1);
     },
   );
 
@@ -102,6 +100,6 @@ describe('SaveDialogFooter', () => {
   test('calls handleSaveClick when right button is clicked', () => {
     render(<SaveDialogFooter {...defaultProps} />);
     fireEvent.click(screen.getByText('Save'));
-    expect(defaultProps.handleSaveClick).toHaveBeenCalled();
+    expect(defaultProps.onSave).toHaveBeenCalled();
   });
 });
