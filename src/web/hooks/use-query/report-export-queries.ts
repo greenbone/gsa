@@ -15,7 +15,7 @@ import {
   ReportExportUnavailableError,
 } from 'web/report-export/report-export-job';
 
-export const REPORT_EXPORT_POLL_INTERVAL = 1000;
+export const REPORT_EXPORT_POLL_INTERVAL = 5000;
 
 export const reportExportQueryOptions = (
   gmp: {
@@ -47,7 +47,8 @@ export const reportExportQueryOptions = (
     refetchInterval: query => {
       if (isPermanentReportExportError(query.state.error)) return false;
       if (query.state.error) return 5000;
-      return !query.state.data || isReportExportGenerationActive(query.state.data.status)
+      return !query.state.data ||
+        isReportExportGenerationActive(query.state.data.status)
         ? REPORT_EXPORT_POLL_INTERVAL
         : false;
     },
