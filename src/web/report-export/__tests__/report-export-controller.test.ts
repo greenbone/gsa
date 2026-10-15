@@ -64,8 +64,6 @@ const setup = () => {
 };
 
 describe('createReportExportOperations', () => {
-  beforeEach(() => window.sessionStorage.clear());
-
   test('does nothing before activation', async () => {
     const {operations, gmp} = setup();
     expect(await operations.start(params)).toBe(false);
@@ -73,7 +71,7 @@ describe('createReportExportOperations', () => {
     expect(gmp.reportexport.exportScanReport).not.toHaveBeenCalled();
   });
 
-  test('tracks a created export and persists its activity', async () => {
+  test('tracks a created export in memory', async () => {
     const {operations, resolve} = setup();
     operations.activate();
     const started = operations.start(params);
@@ -84,41 +82,8 @@ describe('createReportExportOperations', () => {
       exportId: 'export-1',
       phase: {stage: 'tracking'},
     });
-    expect(
-      window.sessionStorage.getItem('gsa-report-export-jobs:user'),
-    ).toContain('export-1');
-  });
-
-  test('does not write the ledger during unchanged synchronization', async () => {
-    const {operations, resolve} = setup();
-    operations.activate();
-    const started = operations.start(params);
-    resolve('export-1');
-    await started;
-
-    const setItem = testing.spyOn(window.sessionStorage, 'setItem');
-    operations.sync();
-    operations.sync();
-    expect(setItem).not.toHaveBeenCalled();
-    setItem.mockRestore();
-  });
-
-  test('persists a remote terminal status as abandoned activity', async () => {
-    const {operations, queryClient, resolve} = setup();
-    operations.activate();
-    const started = operations.start(params);
-    resolve('export-1');
-    await started;
-    queryClient.setQueryData(
-      ['get_report_export', 'user', 'test-session', 'export-1'],
-      {id: 'export-1', status: 'expired'},
-    );
-
-    operations.sync();
-
-    expect(
-      window.sessionStorage.getItem('gsa-report-export-jobs:user'),
-    ).toContain('"disposition":"abandoned"');
+    expect(operations.store.getSnapshot()).toHaveLength(1);
+    expect(operations.store.getSnapshot()[0].exportId).toBe('export-1');
   });
 
   test('ignores a create response that arrives after dispose', async () => {

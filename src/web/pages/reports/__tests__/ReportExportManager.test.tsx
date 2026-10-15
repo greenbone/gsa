@@ -203,10 +203,7 @@ const PageSwitcher = () => {
 };
 
 describe('ReportExportManager', () => {
-  beforeEach(() => {
-    testing.clearAllMocks();
-    window.sessionStorage.clear();
-  });
+  beforeEach(() => testing.clearAllMocks());
 
   test.each([
     ['report.PDF', 'Release.1', 'Report export: Release.1 (.pdf)'],
@@ -282,25 +279,29 @@ describe('ReportExportManager', () => {
     },
   );
 
-  test('restores an unfinished intent once under StrictMode', async () => {
+  test('discovers an unfinished server export once under StrictMode', async () => {
     const gmp = createGmp();
+    gmp.reportexports.get.mockResolvedValue({
+      data: [
+        {
+          id: 'export-1',
+          status: 'running',
+          owner: {name: 'test-user'},
+          extension: 'pdf',
+        },
+      ],
+      meta: {
+        counts: new CollectionCounts({
+          first: 1,
+          filtered: 1,
+          length: 1,
+          rows: 100,
+        }),
+      },
+    });
     gmp.reportexport.get.mockResolvedValue({
       data: {id: 'export-1', status: 'done'},
     });
-    window.sessionStorage.setItem(
-      'gsa-report-export-jobs:test-user',
-      JSON.stringify([
-        {
-          key: 'local-intent',
-          exportId: 'export-1',
-          origin: 'local',
-          filename: 'report.pdf',
-          reportTitle: 'Local intent',
-          autoDownload: true,
-          disposition: 'awaiting',
-        },
-      ]),
-    );
     const {render} = rendererWith({gmp});
     render(
       <StrictMode>
@@ -309,37 +310,50 @@ describe('ReportExportManager', () => {
         </ReportExportManager>
       </StrictMode>,
     );
+    const button = await screen.findByTestId('report-export-activity-button');
+    await waitFor(() =>
+      expect(button).toHaveAttribute('aria-expanded', 'true'),
+    );
+    expect(await screen.findByText('Ready')).toBeInTheDocument();
+    expect(gmp.reportexport.downloadReportExport).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByLabelText('Download report'));
     await waitFor(() =>
       expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(1),
     );
-    const button = await screen.findByTestId('report-export-activity-button');
-    fireEvent.click(button);
-    expect(await screen.findByText('Complete')).toBeInTheDocument();
     expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(1);
+    await waitFor(() =>
+      expect(screen.getAllByTestId('report-export-job')).toHaveLength(1),
+    );
+    expect(screen.getByText('Complete')).toBeInTheDocument();
+    expect(screen.queryByText('Ready')).not.toBeInTheDocument();
     expect(gmp.reportexport.exportScanReport).not.toHaveBeenCalled();
   });
 
-  test('opens activity for a restored local intent after login', async () => {
+  test('discovers an active server export after login', async () => {
     const gmp = createGmp();
     gmp.session.token = undefined;
     gmp.session.username = undefined;
+    gmp.reportexports.get.mockResolvedValue({
+      data: [
+        {
+          id: 'export-1',
+          status: 'running',
+          owner: {name: 'test-user'},
+          extension: 'pdf',
+        },
+      ],
+      meta: {
+        counts: new CollectionCounts({
+          first: 1,
+          filtered: 1,
+          length: 1,
+          rows: 100,
+        }),
+      },
+    });
     gmp.reportexport.get.mockResolvedValue({
       data: {id: 'export-1', status: 'running'},
     });
-    window.sessionStorage.setItem(
-      'gsa-report-export-jobs:test-user',
-      JSON.stringify([
-        {
-          key: 'local-intent',
-          exportId: 'export-1',
-          origin: 'local',
-          filename: 'report.pdf',
-          reportTitle: 'Local intent',
-          autoDownload: true,
-          disposition: 'awaiting',
-        },
-      ]),
-    );
     const {render} = rendererWith({gmp});
     render(
       <ReportExportManager>
@@ -354,12 +368,74 @@ describe('ReportExportManager', () => {
       gmp.session.username = 'test-user';
       gmp.session.listener.forEach(listener => listener());
     });
+    const activityButton = await screen.findByTestId(
+      'report-export-activity-button',
+    );
     await waitFor(() =>
-      expect(
-        screen.getByTestId('report-export-activity-button'),
-      ).toHaveAttribute('aria-expanded', 'true'),
+      expect(activityButton).toHaveAttribute('aria-expanded', 'true'),
     );
     expect(await screen.findByText('Generating')).toBeInTheDocument();
+  });
+
+  test('opens all completed exports as ready after login', async () => {
+    const gmp = createGmp();
+    gmp.session.token = undefined;
+    gmp.session.username = undefined;
+    const completedExports = Array.from({length: 60}, (_, index) => ({
+      id: `done-${index}`,
+      status: 'done',
+      owner: {name: 'test-user'},
+      name: `Report ${index}`,
+      extension: 'pdf',
+    }));
+    gmp.reportexports.get.mockResolvedValue({
+      data: [
+        ...completedExports,
+        {
+          id: 'canceled-export',
+          status: 'canceled',
+          owner: {name: 'test-user'},
+          name: 'Canceled report',
+          extension: 'pdf',
+        },
+      ],
+      meta: {
+        counts: new CollectionCounts({
+          first: 1,
+          filtered: 61,
+          length: 61,
+          rows: 100,
+        }),
+      },
+    });
+    gmp.reportexport.get.mockImplementation(async ({reportExportId}) => ({
+      data: {id: reportExportId, status: 'done'},
+    }));
+    const {render} = rendererWith({gmp});
+    render(
+      <ReportExportManager>
+        <ReportExportActivity />
+      </ReportExportManager>,
+    );
+    act(() => {
+      gmp.session.token = 'new-token';
+      gmp.session.username = 'test-user';
+      gmp.session.listener.forEach(listener => listener());
+    });
+
+    const activityButton = await screen.findByTestId(
+      'report-export-activity-button',
+    );
+    await waitFor(() =>
+      expect(activityButton).toHaveAttribute('aria-expanded', 'true'),
+    );
+    expect(await screen.findAllByText('Ready')).toHaveLength(60);
+    expect(screen.getByText('Report export: Report 0 (.pdf)')).toBeInTheDocument();
+    expect(screen.getByText('UUID: done-59')).toBeInTheDocument();
+    expect(
+      screen.queryByText('Report export: Canceled report (.pdf)'),
+    ).toBeNull();
+    expect(gmp.reportexport.downloadReportExport).not.toHaveBeenCalled();
   });
 
   test('does not add historical ready jobs to activity', async () => {
@@ -400,7 +476,7 @@ describe('ReportExportManager', () => {
     expect(gmp.reportexport.downloadReportExport).not.toHaveBeenCalled();
   });
 
-  test('hides completed rows when activity closes but preserves the handoff receipt', async () => {
+  test('hides completed rows after activity closes and the manager remounts', async () => {
     const gmp = createGmp();
     gmp.reportexport.exportScanReport.mockResolvedValue({
       data: {id: 'export-1'},
@@ -423,9 +499,6 @@ describe('ReportExportManager', () => {
     expect(
       screen.queryByTestId('report-export-activity-button'),
     ).not.toBeInTheDocument();
-    expect(
-      window.sessionStorage.getItem('gsa-report-export-jobs:test-user'),
-    ).toContain('handed-off');
     view.unmount();
     render(
       <ReportExportManager>

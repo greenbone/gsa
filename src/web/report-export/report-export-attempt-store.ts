@@ -111,7 +111,7 @@ const applyAttemptEvent = (
     case 'resume':
       return updateAttemptIfAllowed(
         attempt,
-        isAttemptInStage(phase, 'tracking', 'waiting', 'abandoned'),
+        isAttemptInStage(phase, 'tracking', 'waiting'),
         {phase: {stage: 'tracking'}, disposition: 'awaiting'},
       );
     case 'handoff':

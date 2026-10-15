@@ -24,16 +24,13 @@ import {
   createReportExportJob,
 } from 'web/report-export/report-export-job';
 import {type ReportExportMutations} from 'web/report-export/useReportExportMutations';
-import {writeStoredReportExportAttempts} from 'web/report-export/utils/report-export-attempt-store-utils';
 import {
   createRecoveredReportExportAttempt,
   isValidGmpIdentifier,
-  restoreReportExportAttempts,
 } from 'web/report-export/utils/report-export-operations-utils';
 
 export const REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL = 3000;
 const MAX_DOWNLOAD_RETRIES = 10;
-const TERMINAL_EXPORT_STATUSES = new Set(['canceled', 'error', 'expired']);
 
 type ReportExportJobAction = 'cancel' | 'dismiss' | 'download' | 'retry';
 
@@ -79,10 +76,7 @@ const release = (runtime: AttemptRuntime) => {
   runtime.retries = 0;
 };
 
-const isTerminalExportStatus = (status?: string) =>
-  TERMINAL_EXPORT_STATUSES.has(status ?? '');
-
-// Owns one login session's report-export operations; attempts persist across sessions.
+// Owns one login session's report-export operations.
 export const createReportExportOperations = ({
   gmp,
   queryClient,
@@ -92,8 +86,7 @@ export const createReportExportOperations = ({
   callbacks: initialCallbacks,
   mutations: initialMutations,
 }: ReportExportOperationsOptions) => {
-  const initialAttempts = token ? restoreReportExportAttempts(username) : [];
-  const store = createReportExportAttemptStore(initialAttempts);
+  const store = createReportExportAttemptStore();
   const runtimes = new Map<string, AttemptRuntime>();
   const dismissed = new Set<string>();
   const directListeners = new Set<() => void>();
@@ -181,27 +174,6 @@ export const createReportExportOperations = ({
       runtimes.delete(key);
     }
   };
-
-  const persistAttempts = () => {
-    if (!username) return;
-    const attempts = store.getSnapshot().map<ReportExportAttempt>(attempt => {
-      const status = statusOf(attempt).data?.status;
-      return isTerminalExportStatus(status)
-        ? {...attempt, disposition: 'abandoned' as const}
-        : attempt;
-    });
-    writeStoredReportExportAttempts(username, attempts);
-  };
-
-  const persistTerminalStatuses = () => {
-    const hasTerminalStatus = store.getSnapshot().some(attempt => {
-      const status = statusOf(attempt).data?.status;
-      return isTerminalExportStatus(status);
-    });
-    if (hasTerminalStatus) persistAttempts();
-  };
-
-  store.subscribe(persistAttempts);
 
   const handoff = (runtime: AttemptRuntime) => {
     const attempt = store.getAttempt(runtime.key);
@@ -540,7 +512,7 @@ export const createReportExportOperations = ({
         known.add(item.id);
       }
     },
-    // Reconciles runtimes, retention, persistence and automatic downloads with the current state.
+    // Reconciles runtimes, retention, and automatic downloads with the current state.
     sync: () => {
       if (!isLive()) return;
       releaseRemovedRuntimes();
@@ -548,7 +520,6 @@ export const createReportExportOperations = ({
         type: 'retain',
         keys: new Set(retainReportExportJobs(getJobs()).map(job => job.key)),
       });
-      persistTerminalStatuses();
       pickUpCompletedExports();
     },
     refreshInventory,

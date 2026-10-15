@@ -5,21 +5,10 @@
 
 import type ReportExport from 'gmp/models/report-export';
 import {type ReportExportAttempt} from 'web/report-export/report-export-job';
-import {readStoredReportExportAttempts} from 'web/report-export/utils/report-export-attempt-store-utils';
 import {ROUTES} from 'web/route-paths';
 
 export const isValidGmpIdentifier = (identifier?: string) =>
   Boolean(identifier && /^[a-zA-Z0-9-]+$/.test(identifier));
-
-export const restoreReportExportAttempts = (
-  username?: string,
-): ReportExportAttempt[] =>
-  readStoredReportExportAttempts(username).map(record => {
-    let stage: 'tracking' | 'handed-off' | 'abandoned' = 'tracking';
-    if (record.disposition === 'handed-off') stage = 'handed-off';
-    if (record.disposition === 'abandoned') stage = 'abandoned';
-    return {...record, phase: {stage}};
-  });
 
 const getReportUrlForExport = ({
   type,

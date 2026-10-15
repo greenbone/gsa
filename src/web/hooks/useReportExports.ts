@@ -23,6 +23,7 @@ import {
   isAttemptInStage,
   retainReportExportJobs,
   createReportExportJob,
+  isReportExportGenerationActive,
 } from 'web/report-export/report-export-job';
 import {
   createReportExportOperations,
@@ -97,27 +98,38 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
   }, [operations, inventory.data]);
 
   const statusQueries = useQueries({
-    queries: records.map(attempt => ({
-      ...reportExportQueryOptions(
-        gmp,
-        token,
+    queries: records.map(attempt => {
+      const cachedExport = queryClient.getQueryData<{status?: string}>([
+        'get_report_export',
         username,
         sessionScope,
         attempt.exportId,
-      ),
-      enabled: Boolean(
-        token &&
-        attempt.exportId &&
-        attempt.disposition === 'awaiting' &&
-        !isAttemptInStage(
-          attempt.phase,
-          'creating',
-          'handoff-failed',
-          'transferring',
-          'failed',
+      ]);
+      return {
+        ...reportExportQueryOptions(
+          gmp,
+          token,
+          username,
+          sessionScope,
+          attempt.exportId,
         ),
-      ),
-    })),
+        enabled: Boolean(
+          token &&
+          attempt.exportId &&
+          attempt.disposition === 'awaiting' &&
+          (attempt.origin !== 'discovered' ||
+            !cachedExport ||
+            isReportExportGenerationActive(cachedExport.status)) &&
+          !isAttemptInStage(
+            attempt.phase,
+            'creating',
+            'handoff-failed',
+            'transferring',
+            'failed',
+          ),
+        ),
+      };
+    }),
   });
 
   useEffect(() => {

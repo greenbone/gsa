@@ -42,18 +42,13 @@ const useReportExportActivity = () => {
   };
 
   useEffect(() => {
-    if (
-      jobs.some(
-        job => job.origin === 'local' && !previousJobKeys.current.has(job.key),
-      )
-    ) {
-      setActivityOpen(true);
-    }
     const additions = jobs
       .filter(job => !previousJobKeys.current.has(job.key) && !isComplete(job))
       .map(job => job.key);
-    if (additions.length)
+    if (additions.length) {
       setRecentKeys(current => new Set([...current, ...additions]));
+      setActivityOpen(true);
+    }
     previousJobKeys.current = new Set(jobs.map(job => job.key));
   }, [jobs, setActivityOpen]);
 

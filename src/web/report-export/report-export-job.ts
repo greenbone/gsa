@@ -10,7 +10,7 @@ type ReportExportProgress = NonNullable<ReportExport['progress']>;
 
 export type ReportExportKind = 'scan' | 'audit' | 'delta_scan' | 'delta_audit';
 
-export const MAX_RETAINED_EXPORT_RECEIPT_COUNT = 50;
+export const MAX_RETAINED_EXPORT_HISTORY_COUNT = 50;
 
 export interface StartReportExportParams {
   kind: ReportExportKind;
@@ -28,7 +28,7 @@ export interface ReportExportAttemptRecord {
   reportTitle: string;
   reportUrl?: string;
   autoDownload: boolean;
-  disposition: 'awaiting' | 'handed-off' | 'abandoned';
+  disposition: 'awaiting' | 'handed-off';
 }
 
 export type ReportExportAttemptPhase =
@@ -40,8 +40,7 @@ export type ReportExportAttemptPhase =
   | {stage: 'waiting'; error?: Error}
   | {stage: 'handoff-failed'; error: Error}
   | {stage: 'handed-off'}
-  | {stage: 'failed'; error: Error}
-  | {stage: 'abandoned'};
+  | {stage: 'failed'; error: Error};
 
 export interface ReportExportAttempt extends ReportExportAttemptRecord {
   phase: ReportExportAttemptPhase;
@@ -157,8 +156,6 @@ const getLocalAttemptTerminalView = (
     return {kind: phase.cancelRequested ? 'canceling' : 'creating'};
   if (statusError && isPermanentReportExportError(statusError))
     return createFailedJobView('unavailable', statusError);
-  if (phase.stage === 'abandoned')
-    return createFailedJobView('unavailable', new Error('Tracking stopped'));
   if (
     phase.stage === 'waiting' &&
     phase.error &&
@@ -245,11 +242,12 @@ export const createReportExportJob = (
 };
 
 export const retainReportExportJobs = (jobs: ReportExportJob[]) => {
-  const unfinishedJobKeys = new Set(
+  const retainedJobKeys = new Set(
     jobs
       .filter(
         job =>
           getReportExportActions(job).active ||
+          (job.origin === 'discovered' && job.view.kind === 'ready') ||
           (job.autoDownload &&
             job.exportId &&
             job.disposition === 'awaiting' &&
@@ -260,16 +258,21 @@ export const retainReportExportJobs = (jobs: ReportExportJob[]) => {
   );
   const recentJobKeys = new Set(
     jobs
-      .filter(job => !unfinishedJobKeys.has(job.key))
-      .slice(-MAX_RETAINED_EXPORT_RECEIPT_COUNT)
+      .filter(job => !retainedJobKeys.has(job.key))
+      .slice(-MAX_RETAINED_EXPORT_HISTORY_COUNT)
       .map(job => job.key),
   );
   return jobs.filter(
-    job => unfinishedJobKeys.has(job.key) || recentJobKeys.has(job.key),
+    job => retainedJobKeys.has(job.key) || recentJobKeys.has(job.key),
   );
 };
 
-export const selectReportExportInventory = (reportExports: ReportExport[]) =>
-  reportExports.filter(reportExport =>
+export const selectReportExportInventory = (reportExports: ReportExport[]) => {
+  const activeExports = reportExports.filter(reportExport =>
     isReportExportGenerationActive(reportExport.status),
   );
+  const readyExports = reportExports.filter(
+    reportExport => reportExport.status === 'done',
+  );
+  return [...activeExports, ...readyExports];
+};
