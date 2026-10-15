@@ -13,7 +13,7 @@ import {
   isReportExportGenerationActive,
   isPermanentReportExportError,
   ReportExportUnavailableError,
-} from 'web/report-export/report-export-job';
+} from 'web/report-export/report-export-job-model';
 
 export const REPORT_EXPORT_POLL_INTERVAL = 5000;
 

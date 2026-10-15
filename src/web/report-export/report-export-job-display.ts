@@ -7,7 +7,7 @@ import {type TranslateFunc} from 'web/hooks/useTranslation';
 import {
   type ReportExportJobView,
   type ReportExportJob,
-} from 'web/report-export/report-export-job';
+} from 'web/report-export/report-export-job-model';
 
 export type ReportExportStatusTone =
   | 'active'

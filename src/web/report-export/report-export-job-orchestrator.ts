@@ -22,12 +22,12 @@ import {
   retainReportExportJobs,
   selectReportExportInventory,
   createReportExportJob,
-} from 'web/report-export/report-export-job';
+} from 'web/report-export/report-export-job-model';
 import {type ReportExportMutations} from 'web/report-export/useReportExportMutations';
 import {
   createRecoveredReportExportAttempt,
   isValidGmpIdentifier,
-} from 'web/report-export/utils/report-export-operations-utils';
+} from 'web/report-export/utils/report-export-orchestrator-utils';
 
 export const REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL = 3000;
 const MAX_DOWNLOAD_RETRIES = 10;

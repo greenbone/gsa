@@ -6,7 +6,7 @@
 import {
   type ReportExportAttempt,
   isAttemptInStage,
-} from 'web/report-export/report-export-job';
+} from 'web/report-export/report-export-job-model';
 
 type ReportExportAttemptMetadata = Pick<
   ReportExportAttempt,

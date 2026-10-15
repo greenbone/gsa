@@ -24,7 +24,7 @@ import {
   createReportExportJob,
   getReportExportActions,
   retainReportExportJobs,
-} from 'web/report-export/report-export-job';
+} from 'web/report-export/report-export-job-model';
 
 const onError = testing.fn();
 

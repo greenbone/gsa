@@ -5,7 +5,7 @@
 
 import {useEffect, useRef, useState} from 'react';
 import {useReportExportManager} from 'web/pages/reports/report-export/ReportExportManager';
-import {type ReportExportJob} from 'web/report-export/report-export-job';
+import {type ReportExportJob} from 'web/report-export/report-export-job-model';
 
 type IndicatorState = 'error' | 'active' | 'complete';
 

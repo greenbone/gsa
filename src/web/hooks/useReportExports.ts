@@ -24,11 +24,11 @@ import {
   retainReportExportJobs,
   createReportExportJob,
   isReportExportGenerationActive,
-} from 'web/report-export/report-export-job';
+} from 'web/report-export/report-export-job-model';
 import {
   createReportExportOperations,
   type ReportExportCallbacks,
-} from 'web/report-export/report-export-operations';
+} from 'web/report-export/report-export-job-orchestrator';
 import {useReportExportMutations} from 'web/report-export/useReportExportMutations';
 
 export type {
@@ -36,9 +36,9 @@ export type {
   ReportExportKind,
   ReportExportJobView,
   StartReportExportParams,
-} from 'web/report-export/report-export-job';
+} from 'web/report-export/report-export-job-model';
 export {REPORT_EXPORT_POLL_INTERVAL} from 'web/hooks/use-query/report-export-queries';
-export {REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL} from 'web/report-export/report-export-operations';
+export {REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL} from 'web/report-export/report-export-job-orchestrator';
 
 const EMPTY_ATTEMPTS: ReportExportAttempt[] = [];
 const EMPTY_DIRECT: DirectDownload[] = [];

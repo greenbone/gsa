@@ -7,7 +7,7 @@ import type Gmp from 'gmp/gmp';
 import {
   type ReportExportJob,
   type StartReportExportParams,
-} from 'web/report-export/report-export-job';
+} from 'web/report-export/report-export-job-model';
 
 export interface DirectDownload {
   key: string;

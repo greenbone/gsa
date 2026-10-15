@@ -7,7 +7,7 @@ import {useMemo} from 'react';
 import {useMutation} from '@tanstack/react-query';
 import useGmp from 'web/hooks/useGmp';
 import {fetchDirectDownload} from 'web/report-export/direct-download';
-import {type StartReportExportParams} from 'web/report-export/report-export-job';
+import {type StartReportExportParams} from 'web/report-export/report-export-job-model';
 
 const EXPORT_METHODS = {
   scan: 'exportScanReport',

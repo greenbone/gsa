@@ -6,7 +6,7 @@
 import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
 import {QueryClient} from '@tanstack/react-query';
 import {createSession} from 'gmp/testing';
-import {createReportExportOperations} from 'web/report-export/report-export-operations';
+import {createReportExportOperations} from 'web/report-export/report-export-job-orchestrator';
 import {type ReportExportMutations} from 'web/report-export/useReportExportMutations';
 
 const params = {

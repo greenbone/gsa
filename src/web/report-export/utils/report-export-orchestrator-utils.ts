@@ -4,7 +4,7 @@
  */
 
 import type ReportExport from 'gmp/models/report-export';
-import {type ReportExportAttempt} from 'web/report-export/report-export-job';
+import {type ReportExportAttempt} from 'web/report-export/report-export-job-model';
 import {ROUTES} from 'web/route-paths';
 
 export const isValidGmpIdentifier = (identifier?: string) =>

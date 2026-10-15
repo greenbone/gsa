@@ -31,15 +31,15 @@ import {
 } from 'web/pages/reports/report-export/report-export-activity-styles';
 import {useReportExportManager} from 'web/pages/reports/report-export/ReportExportManager';
 import {
-  getReportExportActions,
-  type ReportExportJob,
-} from 'web/report-export/report-export-job';
-import {
   type ReportExportStatusTone,
   getReportExportCancelTitle,
   getReportExportJobDisplay,
   getReportExportJobTitle,
 } from 'web/report-export/report-export-job-display';
+import {
+  getReportExportActions,
+  type ReportExportJob,
+} from 'web/report-export/report-export-job-model';
 import Theme from 'web/utils/theme';
 
 const getActivityStatusIcon = (tone: ReportExportStatusTone) => {
