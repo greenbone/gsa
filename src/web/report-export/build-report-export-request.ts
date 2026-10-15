@@ -65,13 +65,13 @@ export const buildReportExportRequest = ({
   reportTitle: entity.task?.name || fallbackReportTitle,
   reportUrl,
   payload: {
-    report_id: entity.id,
-    format_id: format.id,
-    config_id:
+    reportId: entity.id,
+    reportFormatId: format.id,
+    reportConfigId:
       kind === 'scan' || kind === 'delta_scan'
         ? reportConfigId || undefined
         : undefined,
-    delta_report_id:
+    deltaReportId:
       kind === 'delta_scan' || kind === 'delta_audit'
         ? deltaReportId
         : undefined,

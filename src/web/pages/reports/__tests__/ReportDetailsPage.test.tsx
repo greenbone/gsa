@@ -98,8 +98,8 @@ const createGmp = () => ({
     exportScanReport: testing
       .fn()
       .mockResolvedValue({data: {id: 'export-uuid'}}),
-    getReportExport: testing.fn().mockResolvedValue({
-      data: [{id: 'export-uuid', status: 'running', progress: 'generating'}],
+    get: testing.fn().mockResolvedValue({
+      data: {id: 'export-uuid', status: 'running', progress: 'generating'},
     }),
     downloadReportExport: testing
       .fn()
@@ -560,15 +560,13 @@ describe('ReportDetailsPage tests', () => {
         exportStatuses[id] = exportCount === 1 ? 'running' : 'done';
         return {data: {id}};
       });
-      gmp.reportexport.getReportExport.mockImplementation(
+      gmp.reportexport.get.mockImplementation(
         async ({reportExportId}: {reportExportId: string}) => ({
-          data: [
-            {
-              id: reportExportId,
-              status: exportStatuses[reportExportId],
-              progress: 'generating',
-            },
-          ],
+          data: {
+            id: reportExportId,
+            status: exportStatuses[reportExportId],
+            progress: 'generating',
+          },
         }),
       );
 

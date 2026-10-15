@@ -11,7 +11,7 @@ import {type ReportExportMutations} from 'web/report-export/useReportExportMutat
 
 const params = {
   kind: 'scan' as const,
-  payload: {report_id: 'report-uuid', format_id: 'format-uuid'},
+  payload: {reportId: 'report-uuid', reportFormatId: 'format-uuid'},
   filename: 'report.pdf',
   reportTitle: 'Report',
 };

@@ -41,15 +41,15 @@ describe('buildReportExportRequest', () => {
         reportTitle: 'Task report',
         reportUrl: '/reports/report-id',
         payload: {
-          report_id: 'report-id',
-          format_id: 'format-id',
+          reportId: 'report-id',
+          reportFormatId: 'format-id',
           filter,
         },
       });
-      expect(request.payload.config_id).toBe(
+      expect(request.payload.reportConfigId).toBe(
         includesConfig ? 'config-id' : undefined,
       );
-      expect(request.payload.delta_report_id).toBe(
+      expect(request.payload.deltaReportId).toBe(
         includesDelta ? 'delta-id' : undefined,
       );
     },

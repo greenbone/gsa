@@ -23,18 +23,24 @@ export const fetchDirectDownload = async (
   gmp: Pick<Gmp, 'report' | 'auditreport'>,
   {kind, payload}: Pick<StartReportExportParams, 'kind' | 'payload'>,
 ) => {
-  const {report_id, format_id, config_id, delta_report_id, filter} = payload;
+  const {
+    reportId,
+    reportFormatId,
+    reportConfigId,
+    deltaReportId,
+    filter,
+  } = payload;
   const options = {
-    reportFormatId: format_id,
-    deltaReportId: delta_report_id,
+    reportFormatId,
+    deltaReportId,
     filter,
   };
   const response =
     kind === 'audit' || kind === 'delta_audit'
-      ? await gmp.auditreport.download({id: report_id}, options)
+      ? await gmp.auditreport.download({id: reportId}, options)
       : await gmp.report.download(
-          {id: report_id},
-          {...options, reportConfigId: config_id ?? ''},
+          {id: reportId},
+          {...options, reportConfigId: reportConfigId ?? ''},
         );
   return response.data;
 };

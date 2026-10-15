@@ -6,7 +6,7 @@
 import {type QueryClient} from '@tanstack/react-query';
 import {v4 as uuid} from 'uuid';
 import type Gmp from 'gmp/gmp';
-import {type ReportExport} from 'gmp/models/report-export';
+import type ReportExport from 'gmp/models/report-export';
 import {reportExportQueryOptions} from 'web/hooks/use-query/report-exports';
 import {type DirectDownload} from 'web/report-export/direct-download';
 import {

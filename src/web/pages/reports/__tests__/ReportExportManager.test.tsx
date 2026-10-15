@@ -34,27 +34,29 @@ vi.mock('@greenbone/ui-lib', async importOriginal => ({
 }));
 
 const exportPayload = {
-  report_id: 'report-uuid',
-  format_id: 'format-uuid',
+  reportId: 'report-uuid',
+  reportFormatId: 'format-uuid',
 };
 
 const createGmp = () => ({
   session: createSession({token: 'test-token', username: 'test-user'}),
   settings: {},
   reportexport: {
-    getReportExports: testing.fn().mockResolvedValue({
-      data: [],
-      meta: {counts: new CollectionCounts({first: 1})},
-    }),
     exportScanReport: testing.fn(),
     exportAuditReport: testing.fn(),
     exportDeltaScanReport: testing.fn(),
     exportDeltaAuditReport: testing.fn(),
-    getReportExport: testing.fn(),
+    get: testing.fn(),
     cancelReportExport: testing.fn().mockResolvedValue({}),
     downloadReportExport: testing
       .fn()
       .mockResolvedValue({data: new ArrayBuffer(8)}),
+  },
+  reportexports: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {counts: new CollectionCounts({first: 1})},
+    }),
   },
   report: {
     download: testing.fn().mockResolvedValue({data: new ArrayBuffer(8)}),
@@ -127,7 +129,7 @@ const DifferentReportStarter = () => {
         void exportReport(
           {
             kind: 'scan',
-            payload: {...exportPayload, report_id: 'other-report-uuid'},
+            payload: {...exportPayload, reportId: 'other-report-uuid'},
             filename: 'other-report.xml',
             reportTitle: 'Other report',
           },
@@ -149,10 +151,10 @@ const DirectDownloadStarter = () => {
           {
             kind: 'delta_scan',
             payload: {
-              report_id: 'report-uuid',
-              format_id: 'format-uuid',
-              config_id: 'config-uuid',
-              delta_report_id: 'delta-uuid',
+              reportId: 'report-uuid',
+              reportFormatId: 'format-uuid',
+              reportConfigId: 'config-uuid',
+              deltaReportId: 'delta-uuid',
             },
             filename: 'report.xml',
             reportTitle: 'Direct report',
@@ -250,15 +252,13 @@ describe('ReportExportManager', () => {
       gmp.reportexport.exportScanReport.mockResolvedValue({
         data: {id: 'export-1'},
       });
-      gmp.reportexport.getReportExport.mockResolvedValue({
-        data: [
-          {
-            id: 'export-1',
-            status,
-            progress: 'queued',
-            errorMessage: 'Generation detail',
-          },
-        ],
+      gmp.reportexport.get.mockResolvedValue({
+        data: {
+          id: 'export-1',
+          status,
+          progress: 'queued',
+          errorMessage: 'Generation detail',
+        },
       });
       const {render} = rendererWith({gmp, capabilities: true});
       render(
@@ -284,8 +284,8 @@ describe('ReportExportManager', () => {
 
   test('restores an unfinished intent once under StrictMode', async () => {
     const gmp = createGmp();
-    gmp.reportexport.getReportExport.mockResolvedValue({
-      data: [{id: 'export-1', status: 'done'}],
+    gmp.reportexport.get.mockResolvedValue({
+      data: {id: 'export-1', status: 'done'},
     });
     window.sessionStorage.setItem(
       'gsa-report-export-jobs:test-user',
@@ -323,8 +323,8 @@ describe('ReportExportManager', () => {
     const gmp = createGmp();
     gmp.session.token = undefined;
     gmp.session.username = undefined;
-    gmp.reportexport.getReportExport.mockResolvedValue({
-      data: [{id: 'export-1', status: 'running'}],
+    gmp.reportexport.get.mockResolvedValue({
+      data: {id: 'export-1', status: 'running'},
     });
     window.sessionStorage.setItem(
       'gsa-report-export-jobs:test-user',
@@ -364,7 +364,7 @@ describe('ReportExportManager', () => {
 
   test('does not add historical ready jobs to activity', async () => {
     const gmp = createGmp();
-    gmp.reportexport.getReportExports.mockResolvedValue({
+    gmp.reportexports.get.mockResolvedValue({
       data: [
         {
           id: 'export-1',
@@ -382,8 +382,8 @@ describe('ReportExportManager', () => {
         }),
       },
     });
-    gmp.reportexport.getReportExport.mockResolvedValue({
-      data: [{id: 'export-1', status: 'done'}],
+    gmp.reportexport.get.mockResolvedValue({
+      data: {id: 'export-1', status: 'done'},
     });
     const {render} = rendererWith({gmp});
     render(
@@ -392,13 +392,13 @@ describe('ReportExportManager', () => {
       </ReportExportManager>,
     );
     await waitFor(() =>
-      expect(gmp.reportexport.getReportExports).toHaveBeenCalled(),
+      expect(gmp.reportexports.get).toHaveBeenCalled(),
     );
     expect(
       screen.queryByTestId('report-export-activity-button'),
     ).not.toBeInTheDocument();
     expect(screen.queryByTestId('report-export-job')).not.toBeInTheDocument();
-    expect(gmp.reportexport.getReportExport).not.toHaveBeenCalled();
+    expect(gmp.reportexport.get).not.toHaveBeenCalled();
     expect(gmp.reportexport.downloadReportExport).not.toHaveBeenCalled();
   });
 
@@ -407,8 +407,8 @@ describe('ReportExportManager', () => {
     gmp.reportexport.exportScanReport.mockResolvedValue({
       data: {id: 'export-1'},
     });
-    gmp.reportexport.getReportExport.mockResolvedValue({
-      data: [{id: 'export-1', status: 'done'}],
+    gmp.reportexport.get.mockResolvedValue({
+      data: {id: 'export-1', status: 'done'},
     });
     const {render} = rendererWith({gmp, capabilities: true});
     const view = render(
@@ -479,10 +479,8 @@ describe('ReportExportManager', () => {
           resolveCreate = resolve;
         }),
     );
-    gmp.reportexport.getReportExport.mockResolvedValue({
-      data: [
-        {id: 'export-preparing', status: 'running', progress: 'generating'},
-      ],
+    gmp.reportexport.get.mockResolvedValue({
+      data: {id: 'export-preparing', status: 'running', progress: 'generating'},
     });
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -521,14 +519,12 @@ describe('ReportExportManager', () => {
     gmp.reportexport.exportScanReport.mockResolvedValue({
       data: {id: 'export-canceled'},
     });
-    gmp.reportexport.getReportExport.mockImplementation(async () => ({
-      data: [
-        {
-          id: 'export-canceled',
-          status,
-          progress: 'generating',
-        },
-      ],
+    gmp.reportexport.get.mockImplementation(async () => ({
+      data: {
+        id: 'export-canceled',
+        status,
+        progress: 'generating',
+      },
     }));
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -580,15 +576,13 @@ describe('ReportExportManager', () => {
       exportStatuses[id] = 'running';
       return {data: {id}};
     });
-    gmp.reportexport.getReportExport.mockImplementation(
+    gmp.reportexport.get.mockImplementation(
       async ({reportExportId}: {reportExportId: string}) => ({
-        data: [
-          {
-            id: reportExportId,
-            status: exportStatuses[reportExportId],
-            progress: 'generating',
-          },
-        ],
+        data: {
+          id: reportExportId,
+          status: exportStatuses[reportExportId],
+          progress: 'generating',
+        },
       }),
     );
     const {render} = rendererWith({gmp, capabilities: true});
@@ -635,8 +629,8 @@ describe('ReportExportManager', () => {
     gmp.reportexport.exportScanReport.mockResolvedValue({
       data: {id: 'export-uuid'},
     });
-    gmp.reportexport.getReportExport.mockResolvedValue({
-      data: [{id: 'export-uuid', status: 'running', progress: 'generating'}],
+    gmp.reportexport.get.mockResolvedValue({
+      data: {id: 'export-uuid', status: 'running', progress: 'generating'},
     });
     gmp.reportexport.cancelReportExport.mockRejectedValue(
       new Error('Unknown command'),
@@ -715,8 +709,8 @@ describe('ReportExportManager', () => {
     gmp.reportexport.exportScanReport.mockResolvedValue({
       data: {id: 'export-1'},
     });
-    gmp.reportexport.getReportExport.mockResolvedValue({
-      data: [{id: 'export-1', status: 'running'}],
+    gmp.reportexport.get.mockResolvedValue({
+      data: {id: 'export-1', status: 'running'},
     });
     let rejectCancellation: ((error: Error) => void) | undefined;
     gmp.reportexport.cancelReportExport.mockImplementationOnce(
@@ -771,15 +765,13 @@ describe('ReportExportManager', () => {
       return Promise.resolve({data: {id: `export-${exportCount}`}});
     });
     gmp.reportexport.exportScanReport = createExport;
-    gmp.reportexport.getReportExport.mockImplementation(
+    gmp.reportexport.get.mockImplementation(
       async ({reportExportId}: {reportExportId: string}) => ({
-        data: [
-          {
-            id: reportExportId,
-            status: reportExportId === 'export-1' ? 'running' : 'pending',
-            progress: reportExportId === 'export-1' ? 'generating' : 'queued',
-          },
-        ],
+        data: {
+          id: reportExportId,
+          status: reportExportId === 'export-1' ? 'running' : 'pending',
+          progress: reportExportId === 'export-1' ? 'generating' : 'queued',
+        },
       }),
     );
     const {render} = rendererWith({gmp, capabilities: true});
@@ -825,8 +817,8 @@ describe('ReportExportManager', () => {
     gmp.reportexport.exportScanReport.mockResolvedValue({
       data: {id: 'export-completed'},
     });
-    gmp.reportexport.getReportExport.mockResolvedValue({
-      data: [{id: 'export-completed', status: 'done', progress: 'completed'}],
+    gmp.reportexport.get.mockResolvedValue({
+      data: {id: 'export-completed', status: 'done', progress: 'completed'},
     });
     let resolveDownload: ((response: {data: ArrayBuffer}) => void) | undefined;
     gmp.reportexport.downloadReportExport.mockImplementation(
@@ -1006,7 +998,7 @@ describe('ReportExportManager', () => {
         filter: undefined,
       },
     );
-    expect(gmp.reportexport.getReportExport).not.toHaveBeenCalled();
+    expect(gmp.reportexport.get).not.toHaveBeenCalled();
 
     await act(async () => {
       resolveDownload?.({data: new ArrayBuffer(8)});
@@ -1040,8 +1032,8 @@ describe('ReportExportManager', () => {
     gmp.reportexport.exportScanReport.mockResolvedValue({
       data: {id: 'export-unsupported-cancel'},
     });
-    gmp.reportexport.getReportExport.mockResolvedValue({
-      data: [{id: 'export-unsupported-cancel', status: 'running'}],
+    gmp.reportexport.get.mockResolvedValue({
+      data: {id: 'export-unsupported-cancel', status: 'running'},
     });
     const {render} = rendererWith({
       gmp,
@@ -1075,14 +1067,12 @@ describe('ReportExportManager', () => {
     gmp.reportexport.exportScanReport.mockResolvedValue({
       data: {id: 'export-failed'},
     });
-    gmp.reportexport.getReportExport.mockResolvedValue({
-      data: [
-        {
-          id: 'export-failed',
-          status: 'error',
-          errorMessage: 'Export failed',
-        },
-      ],
+    gmp.reportexport.get.mockResolvedValue({
+      data: {
+        id: 'export-failed',
+        status: 'error',
+        errorMessage: 'Export failed',
+      },
     });
     const {render} = rendererWith({gmp});
 

@@ -5,7 +5,7 @@
 
 import {queryOptions, useQuery} from '@tanstack/react-query';
 import QueryFilter from 'gmp/models/filter/query-filter';
-import {type ReportExport} from 'gmp/models/report-export';
+import type ReportExport from 'gmp/models/report-export';
 import useGmp from 'web/hooks/useGmp';
 import useSessionToken from 'web/hooks/useSessionToken';
 import useUserName from 'web/hooks/useUserName';
@@ -22,7 +22,7 @@ export const reportExportQueryOptions = (
   gmp: {
     reportexport: Pick<
       ReturnType<typeof useGmp>['reportexport'],
-      'getReportExport'
+      'get'
     >;
   },
   token: string | undefined,
@@ -34,11 +34,11 @@ export const reportExportQueryOptions = (
     queryFn: async () => {
       if (!id)
         throw new ReportExportUnavailableError('Report export ID is missing');
-      const response = await gmp.reportexport.getReportExport({
+      const response = await gmp.reportexport.get({
         reportExportId: id,
       });
-      const reportExport = response.data.find(item => item?.id === id);
-      if (!reportExport)
+      const reportExport = response.data;
+      if (reportExport?.id !== id)
         throw new ReportExportUnavailableError(
           'Report export is no longer available',
         );
@@ -56,7 +56,7 @@ export const reportExportQueryOptions = (
   });
 
 export const discoverReportExports = async (
-  command: Pick<ReturnType<typeof useGmp>['reportexport'], 'getReportExports'>,
+  command: Pick<ReturnType<typeof useGmp>['reportexports'], 'get'>,
   username: string,
   signal?: AbortSignal,
 ) => {
@@ -70,7 +70,7 @@ export const discoverReportExports = async (
       .set('first', first)
       .set('rows', 100)
       .set('sort', 'id');
-    const response = await command.getReportExports({filter});
+    const response = await command.get({filter});
     signal?.throwIfAborted();
     const counts = response.meta.counts;
     if (
@@ -106,7 +106,7 @@ export const useReportExportInventory = () => {
     queryFn: ({signal}) => {
       if (!username)
         throw new ReportExportUnavailableError('No authenticated user');
-      return discoverReportExports(gmp.reportexport, username, signal);
+      return discoverReportExports(gmp.reportexports, username, signal);
     },
     retry: (count, error) => !isPermanentExportError(error) && count < 2,
     refetchOnWindowFocus: true,

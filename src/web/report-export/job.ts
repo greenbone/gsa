@@ -4,8 +4,8 @@
  */
 
 import {type ReportExportPayload} from 'gmp/commands/report-export';
+import type ReportExport from 'gmp/models/report-export';
 import {
-  type ReportExport,
   type ReportExportProgress,
 } from 'gmp/models/report-export';
 
