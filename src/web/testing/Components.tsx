@@ -23,6 +23,8 @@ export const Main = ({children}: {children: React.ReactNode}) => {
       env="test"
       theme={{
         ...theme,
+        // Test mode still runs Mantine's transition hook; disable its timers too.
+        respectReducedMotion: true,
         components: {
           ...theme.components,
           Modal: {

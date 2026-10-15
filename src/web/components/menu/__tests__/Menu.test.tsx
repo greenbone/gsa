@@ -4,7 +4,7 @@
  */
 
 import {describe, expect, test} from '@gsa/testing';
-import {rendererWith, screen} from 'web/testing';
+import {fireEvent, rendererWith, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Features, {type Feature} from 'gmp/capabilities/features';
@@ -58,43 +58,43 @@ describe('Menu rendering', () => {
   });
 
   test.each([
-    'Alerts',
-    'CERT-Bund Advisories',
-    'Compliance Audit Reports',
-    'Compliance Audits',
-    'Compliance Policies',
-    'CPEs',
-    'Credentials',
-    'CVEs',
-    'CVSS Calculator',
-    'DFN-CERT Advisories',
-    'Feed Status',
-    'Filters',
-    'Groups',
-    'LDAP',
-    'Notes',
-    'NVTs',
-    'Overrides',
-    'Performance',
-    'Permissions',
-    'Port Lists',
-    'RADIUS',
-    'Remediation Tickets',
-    'Report Configs',
-    'Report Formats',
-    'Reports',
-    'Results',
-    'Roles',
-    'Scan Configs',
-    'Scanners',
-    'Schedules',
-    'Tags',
-    'Targets',
-    'Tasks',
-    'Trashcan',
-    'Users',
-    'Vulnerabilities',
-  ])('should render sub-menu: %s', async label => {
+    ['Alerts', 'Configuration'],
+    ['CERT-Bund Advisories', 'Security Information'],
+    ['Compliance Audit Reports', 'Resilience'],
+    ['Compliance Audits', 'Resilience'],
+    ['Compliance Policies', 'Resilience'],
+    ['CPEs', 'Security Information'],
+    ['Credentials', 'Configuration'],
+    ['CVEs', 'Security Information'],
+    ['CVSS Calculator', 'Help'],
+    ['DFN-CERT Advisories', 'Security Information'],
+    ['Feed Status', 'Administration'],
+    ['Filters', 'Configuration'],
+    ['Groups', 'Administration'],
+    ['LDAP', 'Administration'],
+    ['Notes', 'Scans'],
+    ['NVTs', 'Security Information'],
+    ['Overrides', 'Scans'],
+    ['Performance', 'Administration'],
+    ['Permissions', 'Administration'],
+    ['Port Lists', 'Configuration'],
+    ['RADIUS', 'Administration'],
+    ['Remediation Tickets', 'Resilience'],
+    ['Report Configs', 'Configuration'],
+    ['Report Formats', 'Configuration'],
+    ['Reports', 'Scans'],
+    ['Results', 'Scans'],
+    ['Roles', 'Administration'],
+    ['Scan Configs', 'Configuration'],
+    ['Scanners', 'Configuration'],
+    ['Schedules', 'Configuration'],
+    ['Tags', 'Configuration'],
+    ['Targets', 'Configuration'],
+    ['Tasks', 'Scans'],
+    ['Trashcan', 'Administration'],
+    ['Users', 'Administration'],
+    ['Vulnerabilities', 'Scans'],
+  ])('should render sub-menu: %s', async (label, section) => {
     renderMenuWith({
       capabilities: new EverythingCapabilities(),
       gmpSettings: {
@@ -104,6 +104,7 @@ describe('Menu rendering', () => {
         reloadIntervalInactive: 5000,
       },
     });
+    fireEvent.click(screen.getByText(section));
 
     expect(screen.getByText(label)).toBeInTheDocument();
   });
@@ -118,6 +119,7 @@ describe('Menu rendering', () => {
           enableAssetManagement: false,
         },
       });
+      fireEvent.click(screen.getByText('Configuration'));
 
       expect(screen.getByText(label)).toBeInTheDocument();
     },
