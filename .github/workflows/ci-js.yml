@@ -17,7 +17,7 @@ jobs:
     env:
       REPORT_DIR: reports
     name: Run tests
-    runs-on: 'ubuntu-latest'
+    runs-on: "ubuntu-latest"
     strategy:
       matrix:
         node-version:
@@ -30,7 +30,7 @@ jobs:
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # 7.1.0
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: "npm"
       - name: Install dependencies
         run: npm ci
       - name: Run JavaScript tests
@@ -42,7 +42,7 @@ jobs:
     env:
       REPORT_DIR: reports
     name: Upload coverage
-    runs-on: 'ubuntu-latest'
+    runs-on: "ubuntu-latest"
     strategy:
       matrix:
         node-version:
@@ -53,7 +53,7 @@ jobs:
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # 7.1.0
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: "npm"
       - name: Install dependencies
         run: npm ci
       - name: Run JavaScript tests
@@ -66,7 +66,7 @@ jobs:
 
   linting:
     name: Linting
-    runs-on: 'ubuntu-latest'
+    runs-on: "ubuntu-latest"
     strategy:
       matrix:
         node-version:
@@ -79,7 +79,7 @@ jobs:
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # 7.1.0
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: "npm"
       - name: Install dependencies
         run: npm ci
       - name: Lint files
@@ -93,7 +93,7 @@ jobs:
 
   typecheck:
     name: Typecheck
-    runs-on: 'ubuntu-latest'
+    runs-on: "ubuntu-latest"
     strategy:
       matrix:
         node-version:
@@ -106,7 +106,7 @@ jobs:
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # 7.1.0
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: "npm"
       - name: Install dependencies
         run: npm ci
       - name: Run TypeScript typecheck
@@ -114,7 +114,7 @@ jobs:
 
   translations:
     name: Check translations
-    runs-on: 'ubuntu-latest'
+    runs-on: "ubuntu-latest"
     strategy:
       matrix:
         node-version:
@@ -125,7 +125,7 @@ jobs:
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # 7.1.0
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: "npm"
       - name: Install dependencies
         run: npm ci
       - name: Check if translations need an update
@@ -138,7 +138,7 @@ jobs:
 
   format:
     name: Check formatting
-    runs-on: 'ubuntu-latest'
+    runs-on: "ubuntu-latest"
     strategy:
       matrix:
         node-version:
@@ -149,7 +149,7 @@ jobs:
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # 7.1.0
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: "npm"
       - name: Install dependencies
         run: npm ci
       - name: Check code formatting
