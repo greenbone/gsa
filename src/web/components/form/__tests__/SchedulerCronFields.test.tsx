@@ -121,11 +121,13 @@ describe('SchedulerCronFields tests', () => {
         onChange={testing.fn()}
       />,
     );
-    for (const button of screen.getAllByRole('button')) {
-      expect(button).toBeDisabled();
-    }
-    for (const input of screen.getAllByRole('textbox')) {
-      expect(input).toBeDisabled();
+    screen
+      .getAllByRole('button')
+      .forEach(button => expect(button).toBeDisabled());
+    screen
+      .getAllByRole('textbox')
+      .forEach(input => expect(input).toBeDisabled());
+  });
     }
   });
 });
