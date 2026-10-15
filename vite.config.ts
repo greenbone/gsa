@@ -1,4 +1,3 @@
-import legacy from '@vitejs/plugin-legacy';
 import react from '@vitejs/plugin-react';
 import path from 'node:path';
 import {defineConfig} from 'vite';
@@ -17,7 +16,6 @@ export default defineConfig({
   },
   plugins: [
     react({include: /\.(mdx|js|jsx|ts|tsx)$/}),
-    legacy(),
     checker({
       typescript: {
         tsconfigPath: './tsconfig.json',
