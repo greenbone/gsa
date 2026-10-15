@@ -34,9 +34,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Run JavaScript tests
+        id: tests
         env:
           JEST_JUNIT_OUTPUT_DIR: ${{ env.REPORT_DIR }}
         run: npm run test
+      - name: Diagnose web tests serially after failure
+        if: failure() && steps.tests.outcome == 'failure'
+        continue-on-error: true
+        run: npm run test -- --run --project web --no-file-parallelism --maxWorkers=1 --reporter=verbose
 
   coverage:
     env:
