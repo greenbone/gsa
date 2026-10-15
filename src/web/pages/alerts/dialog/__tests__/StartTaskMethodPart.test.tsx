@@ -45,9 +45,7 @@ describe('StartTaskMethodPart tests', () => {
       />,
     );
 
-    const select = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Start Task',
-    });
+    const select = screen.getSelectElementByLabel('Start Task');
     expect(select).toHaveValue(task1.name);
     const options = await getSelectItemElementsForSelect(select);
     expect(options).toHaveLength(2);

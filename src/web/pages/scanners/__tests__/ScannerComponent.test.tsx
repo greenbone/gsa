@@ -77,7 +77,7 @@ describe('ScannerComponent tests', () => {
       fireEvent.click(screen.getByTitle('Create a new Credential'));
 
       expect(screen.getByText('New Credential')).toBeVisible();
-      expect(screen.getByRole('textbox', {name: 'Type'})).toHaveValue(
+      expect(screen.getSelectElementByLabel('Type')).toHaveValue(
         'Client Certificate',
       );
     },
@@ -119,7 +119,7 @@ describe('ScannerComponent tests', () => {
         screen.queryByTitle('Create a new Credential'),
       ).not.toBeInTheDocument();
       expect(
-        screen.queryByRole('textbox', {name: 'Credential'}),
+        screen.querySelectElementByLabel('Credential'),
       ).not.toBeInTheDocument();
       expect(screen.queryByName('caCertificate')).not.toBeInTheDocument();
     },

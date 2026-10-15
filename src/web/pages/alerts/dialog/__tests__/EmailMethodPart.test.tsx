@@ -144,9 +144,7 @@ describe('EmailMethodPart tests', () => {
     expect(screen.getByRole('textbox', {name: 'Subject'})).toHaveValue(
       'Some Message',
     );
-    expect(screen.getByRole('textbox', {name: 'Email Encryption'})).toHaveValue(
-      '',
-    );
+    expect(screen.getSelectElementByLabel('Email Encryption')).toHaveValue('');
 
     expect(screen.getByLabelText('Simple Notice')).toBeChecked();
     expect(screen.getByLabelText('Include report')).not.toBeChecked();
@@ -196,9 +194,7 @@ describe('EmailMethodPart tests', () => {
     expect(screen.getByRole('textbox', {name: 'Subject'})).toHaveValue(
       'Some Message',
     );
-    expect(screen.getByRole('textbox', {name: 'Email Encryption'})).toHaveValue(
-      '',
-    );
+    expect(screen.getSelectElementByLabel('Email Encryption')).toHaveValue('');
 
     expect(screen.getByLabelText('Simple Notice')).not.toBeChecked();
     expect(screen.getByLabelText('Include report')).toBeChecked();
@@ -255,9 +251,7 @@ describe('EmailMethodPart tests', () => {
     expect(screen.getByRole('textbox', {name: 'Subject'})).toHaveValue(
       'Some Message',
     );
-    expect(screen.getByRole('textbox', {name: 'Email Encryption'})).toHaveValue(
-      '',
-    );
+    expect(screen.getSelectElementByLabel('Email Encryption')).toHaveValue('');
 
     expect(screen.getByLabelText('Simple Notice')).not.toBeChecked();
     expect(screen.getByLabelText('Include report')).not.toBeChecked();
@@ -342,11 +336,8 @@ describe('EmailMethodPart tests', () => {
       />,
     );
 
-    const noticeReportFormatSelect = screen.getByRole<HTMLSelectElement>(
-      'textbox',
-      {
-        name: 'Include Report Format',
-      },
+    const noticeReportFormatSelect = screen.getSelectElementByLabel(
+      'Include Report Format',
     );
     const noticeReportFormatOptions = await getSelectItemElementsForSelect(
       noticeReportFormatSelect,
@@ -378,11 +369,8 @@ describe('EmailMethodPart tests', () => {
       />,
     );
 
-    const noticeAttachFormatSelect = screen.getByRole<HTMLSelectElement>(
-      'textbox',
-      {
-        name: 'Attach Report Format',
-      },
+    const noticeAttachFormatSelect = screen.getSelectElementByLabel(
+      'Attach Report Format',
     );
     const noticeAttachFormatOptions = await getSelectItemElementsForSelect(
       noticeAttachFormatSelect,
@@ -440,11 +428,8 @@ describe('EmailMethodPart tests', () => {
       />,
     );
 
-    const noticeIncludeReportConfigSelect = screen.getByRole<HTMLSelectElement>(
-      'textbox',
-      {
-        name: 'Include Report Config',
-      },
+    const noticeIncludeReportConfigSelect = screen.getSelectElementByLabel(
+      'Include Report Config',
     );
     const noticeIncludeReportConfigOptions =
       await getSelectItemElementsForSelect(noticeIncludeReportConfigSelect);
@@ -494,12 +479,8 @@ describe('EmailMethodPart tests', () => {
       />,
     );
 
-    const noticeAttachReportConfigSelect = screen.getByRole<HTMLSelectElement>(
-      'textbox',
-      {
-        name: 'Report Config',
-      },
-    );
+    const noticeAttachReportConfigSelect =
+      screen.getSelectElementByLabel('Report Config');
     const noticeAttachReportConfigOptions =
       await getSelectItemElementsForSelect(noticeAttachReportConfigSelect);
     expect(noticeAttachReportConfigOptions.length).toEqual(3);
@@ -542,9 +523,7 @@ describe('EmailMethodPart tests', () => {
       />,
     );
 
-    const credentialSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Email Encryption',
-    });
+    const credentialSelect = screen.getSelectElementByLabel('Email Encryption');
     const credentialOptions =
       await getSelectItemElementsForSelect(credentialSelect);
     expect(credentialOptions.length).toEqual(3);

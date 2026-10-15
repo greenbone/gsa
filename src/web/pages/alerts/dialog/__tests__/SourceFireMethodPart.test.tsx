@@ -44,9 +44,8 @@ describe('SourceFireMethodPart tests', () => {
     );
 
     expect(screen.getByName('pkcs12_credential')).toBeInTheDocument();
-    const credentialSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'PKCS12 Credential',
-    });
+    const credentialSelect =
+      screen.getSelectElementByLabel('PKCS12 Credential');
     const credentialOptions =
       await getSelectItemElementsForSelect(credentialSelect);
     expect(credentialOptions).toHaveLength(1);
@@ -87,9 +86,8 @@ describe('SourceFireMethodPart tests', () => {
     );
 
     expect(screen.getByName('test_pkcs12_credential')).toBeInTheDocument();
-    const credentialSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'PKCS12 Credential',
-    });
+    const credentialSelect =
+      screen.getSelectElementByLabel('PKCS12 Credential');
     const credentialOptions =
       await getSelectItemElementsForSelect(credentialSelect);
     expect(credentialOptions).toHaveLength(1);
@@ -149,9 +147,8 @@ describe('SourceFireMethodPart tests', () => {
       />,
     );
 
-    const credentialSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'PKCS12 Credential',
-    });
+    const credentialSelect =
+      screen.getSelectElementByLabel('PKCS12 Credential');
     const credentialOptions =
       await getSelectItemElementsForSelect(credentialSelect);
     expect(credentialOptions).toHaveLength(3);

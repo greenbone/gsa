@@ -123,9 +123,7 @@ describe('VeriniceMethodPart tests', () => {
       />,
     );
 
-    const credentialSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Credential',
-    });
+    const credentialSelect = screen.getSelectElementByLabel('Credential');
     const credentialOptions =
       await getSelectItemElementsForSelect(credentialSelect);
     expect(credentialOptions).toHaveLength(2);
@@ -191,9 +189,9 @@ describe('VeriniceMethodPart tests', () => {
       />,
     );
 
-    const reportFormatSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'verinice.PRO Report',
-    });
+    const reportFormatSelect = screen.getSelectElementByLabel(
+      'verinice.PRO Report',
+    );
     expect(reportFormatSelect).toHaveValue(reportFormat1.name);
 
     const reportFormatOptions =
@@ -250,9 +248,7 @@ describe('VeriniceMethodPart tests', () => {
       />,
     );
 
-    const reportConfigSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Report Config',
-    });
+    const reportConfigSelect = screen.getSelectElementByLabel('Report Config');
     expect(reportConfigSelect).toHaveValue(reportConfig1.name);
     const reportConfigOptions =
       await getSelectItemElementsForSelect(reportConfigSelect);

@@ -53,6 +53,17 @@ globalThis.URL.createObjectURL = testing.fn();
 
 globalThis.ResizeObserver = ResizeObserverModule.default;
 
+// Mantine v9 Textarea autosizing subscribes to font-loading events.
+if (!document.fonts) {
+  Object.defineProperty(document, 'fonts', {
+    configurable: true,
+    value: {
+      addEventListener: testing.fn(),
+      removeEventListener: testing.fn(),
+    },
+  });
+}
+
 // Avoid matchMedia errors for Mantine components.
 globalThis.matchMedia = testing.fn().mockImplementation(query => {
   return {

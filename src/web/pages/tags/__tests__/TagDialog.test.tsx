@@ -111,9 +111,7 @@ describe('TagDialog tests', () => {
     changeInputValue(screen.getByLabelText('Value'), 'Changed Value');
 
     // Change resource type
-    const resourceTypeSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Resource Type',
-    });
+    const resourceTypeSelect = screen.getSelectElementByLabel('Resource Type');
     const resourceTypeOptions =
       await getSelectItemElementsForSelect(resourceTypeSelect);
     fireEvent.click(resourceTypeOptions[1]); // select 'report'
@@ -152,9 +150,7 @@ describe('TagDialog tests', () => {
     await wait();
 
     // Select resource ID from dropdown
-    const resourceIdsSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Select Resource',
-    });
+    const resourceIdsSelect = screen.getSelectElementByLabel('Select Resource');
     const resourceIdOptions =
       await getSelectItemElementsForSelect(resourceIdsSelect);
     fireEvent.click(resourceIdOptions[0]); // select first option

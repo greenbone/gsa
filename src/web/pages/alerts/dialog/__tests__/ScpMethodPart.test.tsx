@@ -63,7 +63,7 @@ describe('ScpMethodPart tests', () => {
       />,
     );
 
-    expect(screen.getByRole('textbox', {name: 'Credential'})).toHaveValue(
+    expect(screen.getSelectElementByLabel('Credential')).toHaveValue(
       credential1.name,
     );
     expect(screen.getByRole('textbox', {name: 'Host'})).toHaveValue(
@@ -76,10 +76,10 @@ describe('ScpMethodPart tests', () => {
     expect(screen.getByRole('textbox', {name: 'Path'})).toHaveValue(
       '/path/to/file',
     );
-    expect(screen.getByRole('textbox', {name: 'Report'})).toHaveValue(
+    expect(screen.getSelectElementByLabel('Report')).toHaveValue(
       reportFormat1.name,
     );
-    expect(screen.getByRole('textbox', {name: 'Report Config'})).toHaveValue(
+    expect(screen.getSelectElementByLabel('Report Config')).toHaveValue(
       reportConfig1.name,
     );
   });
@@ -148,9 +148,7 @@ describe('ScpMethodPart tests', () => {
       />,
     );
 
-    const credentialSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Credential',
-    });
+    const credentialSelect = screen.getSelectElementByLabel('Credential');
     const credentialOptions =
       await getSelectItemElementsForSelect(credentialSelect);
     expect(credentialOptions.length).toEqual(2);
@@ -185,9 +183,7 @@ describe('ScpMethodPart tests', () => {
     expect(onChange).toHaveBeenCalledWith('/path/to/file', 'scp_path');
 
     onChange.mockReset();
-    const reportFormatSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Report',
-    });
+    const reportFormatSelect = screen.getSelectElementByLabel('Report');
     const reportFormatOptions =
       await getSelectItemElementsForSelect(reportFormatSelect);
     expect(reportFormatOptions.length).toEqual(2);
@@ -198,9 +194,7 @@ describe('ScpMethodPart tests', () => {
       'scp_report_format',
     );
 
-    const reportConfigSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Report Config',
-    });
+    const reportConfigSelect = screen.getSelectElementByLabel('Report Config');
     const reportConfigOptions =
       await getSelectItemElementsForSelect(reportConfigSelect);
     expect(reportConfigOptions.length).toEqual(2);
@@ -270,9 +264,7 @@ describe('ScpMethodPart tests', () => {
       />,
     );
 
-    const credentialSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Credential',
-    });
+    const credentialSelect = screen.getSelectElementByLabel('Credential');
     const credentialOptions =
       await getSelectItemElementsForSelect(credentialSelect);
     expect(credentialOptions.length).toEqual(1);

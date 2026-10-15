@@ -125,7 +125,7 @@ describe('ScheduleDialog component tests', () => {
     expect(commentInput).toHaveAttribute('name', 'comment');
     expect(commentInput).toHaveValue('hello world'); // comment field
 
-    const defaultTimezone = screen.getByRole('textbox', {name: 'Timezone'});
+    const defaultTimezone = screen.getSelectElementByLabel('Timezone');
     expect(defaultTimezone).toHaveValue('UTC');
 
     checkElementVisibilityAndContent(
@@ -143,7 +143,7 @@ describe('ScheduleDialog component tests', () => {
       '19:45',
     );
 
-    const recurrence = screen.getByRole('textbox', {name: 'Recurrence'});
+    const recurrence = screen.getSelectElementByLabel('Recurrence');
     expect(recurrence).toHaveValue('Weekly');
   });
 
@@ -224,12 +224,8 @@ describe('ScheduleDialog component tests', () => {
     );
 
     let selectItems;
-    const timezoneSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Timezone',
-    });
-    const recurrenceSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Recurrence',
-    });
+    const timezoneSelect = screen.getSelectElementByLabel('Timezone');
+    const recurrenceSelect = screen.getSelectElementByLabel('Recurrence');
     expect(timezoneSelect).toHaveValue('UTC');
     expect(recurrenceSelect).toHaveValue('Weekly');
 
@@ -530,9 +526,7 @@ describe('ScheduleDialog component tests', () => {
       expect(startTimeInput).toHaveValue('15:00');
 
       // Change timezone to America/New_York
-      const timezoneSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-        name: 'Timezone',
-      });
+      const timezoneSelect = screen.getSelectElementByLabel('Timezone');
       const selectItems = await getSelectItemElementsForSelect(timezoneSelect);
       const nyTimezone = selectItems.find(
         item => item.textContent === 'America/New_York',
@@ -826,9 +820,7 @@ describe('ScheduleDialog component tests', () => {
       );
 
       // Default recurrence is "Once" when no freq is provided
-      const recurrenceSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-        name: 'Recurrence',
-      });
+      const recurrenceSelect = screen.getSelectElementByLabel('Recurrence');
       expect(recurrenceSelect).toHaveValue('Once');
 
       const saveButton = screen.getDialogSaveButton();
@@ -862,9 +854,7 @@ describe('ScheduleDialog component tests', () => {
       );
 
       // Select "Workweek" recurrence
-      const recurrenceSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-        name: 'Recurrence',
-      });
+      const recurrenceSelect = screen.getSelectElementByLabel('Recurrence');
       const selectItems =
         await getSelectItemElementsForSelect(recurrenceSelect);
       const workweekOption = selectItems.find(
@@ -932,12 +922,7 @@ describe('ScheduleDialog component tests', () => {
         );
 
         // Select the pre-defined recurrence
-        const recurrenceSelect = screen.getByRole<HTMLSelectElement>(
-          'textbox',
-          {
-            name: 'Recurrence',
-          },
-        );
+        const recurrenceSelect = screen.getSelectElementByLabel('Recurrence');
         const selectItems =
           await getSelectItemElementsForSelect(recurrenceSelect);
         const option = selectItems.find(

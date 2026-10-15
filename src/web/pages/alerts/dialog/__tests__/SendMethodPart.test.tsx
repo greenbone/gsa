@@ -59,9 +59,7 @@ describe('SendMethodPart tests', () => {
       />,
     );
 
-    const reportFormatSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Report Format',
-    });
+    const reportFormatSelect = screen.getSelectElementByLabel('Report Format');
     expect(reportFormatSelect).toHaveValue(reportFormat1.name);
 
     const reportFormatOptions =
@@ -70,9 +68,7 @@ describe('SendMethodPart tests', () => {
     expect(reportFormatOptions[0]).toHaveTextContent('Format 1');
     expect(reportFormatOptions[1]).toHaveTextContent('Format 2');
 
-    const reportConfigSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Report Config',
-    });
+    const reportConfigSelect = screen.getSelectElementByLabel('Report Config');
     expect(reportConfigSelect).toHaveValue(UNSET_LABEL);
 
     fireEvent.click(reportFormatOptions[1]);
@@ -108,9 +104,7 @@ describe('SendMethodPart tests', () => {
       />,
     );
 
-    const reportConfigSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Report Config',
-    });
+    const reportConfigSelect = screen.getSelectElementByLabel('Report Config');
     expect(reportConfigSelect).toHaveValue(reportConfig1.name);
 
     const reportConfigOptions =

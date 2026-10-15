@@ -619,18 +619,6 @@
       "code": "react(refs)",
       "message": "Cannot access refs during render",
       "location": {
-        "line": 180,
-        "column": 6,
-        "offset": 5423
-      },
-      "sourceLine": "}, [",
-      "fingerprint": "src/web/components/dashboard/DashboardView.tsx|react(refs)|Cannot access refs during render|6|}, ["
-    },
-    {
-      "filename": "src/web/components/dashboard/DashboardView.tsx",
-      "code": "react(refs)",
-      "message": "Cannot access refs during render",
-      "location": {
         "line": 131,
         "column": 7,
         "offset": 4028
@@ -1520,18 +1508,6 @@
       "message": "Cannot access refs during render",
       "location": {
         "line": 48,
-        "column": 10,
-        "offset": 1694
-      },
-      "sourceLine": "return [ref.current, setInstanceVariable];",
-      "fingerprint": "src/web/hooks/useInstanceVariable.ts|react(refs)|Cannot access refs during render|10|return [ref.current, setInstanceVariable];"
-    },
-    {
-      "filename": "src/web/hooks/useInstanceVariable.ts",
-      "code": "react(refs)",
-      "message": "Cannot access refs during render",
-      "location": {
-        "line": 48,
         "column": 11,
         "offset": 1695
       },
@@ -1639,9 +1615,9 @@
       "code": "typescript(await-thenable)",
       "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.",
       "location": {
-        "line": 85,
+        "line": 80,
         "column": 25,
-        "offset": 2897
+        "offset": 2743
       },
       "sourceLine": "await Promise.all(source.map(e => df(e)));",
       "fingerprint": "src/web/pages/agent-groups/AgentGroupsListPage.tsx|typescript(await-thenable)|Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator.|25|await Promise.all(source.map(e => df(e)));"
@@ -1651,9 +1627,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `AgentGroup[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 67,
+        "line": 62,
         "column": 34,
-        "offset": 2485
+        "offset": 2331
       },
       "sourceLine": "selected: selectedEntities = [],",
       "fingerprint": "src/web/pages/agent-groups/AgentGroupsListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `AgentGroup[]` (not nullish). This default assignment will never be used.|34|selected: selectedEntities = [],"
@@ -1663,9 +1639,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 82,
+        "line": 76,
         "column": 5,
-        "offset": 2963
+        "offset": 2772
       },
       "sourceLine": "setAgentInstallers(",
       "fingerprint": "src/web/pages/agent-installers/AgentInstallerListPage.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setAgentInstallers("
@@ -1675,9 +1651,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `AgentInstaller[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 62,
+        "line": 56,
         "column": 34,
-        "offset": 2567
+        "offset": 2376
       },
       "sourceLine": "selected: selectedEntities = [],",
       "fingerprint": "src/web/pages/agent-installers/AgentInstallerListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `AgentInstaller[]` (not nullish). This default assignment will never be used.|34|selected: selectedEntities = [],"
@@ -1687,9 +1663,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 81,
+        "line": 75,
         "column": 5,
-        "offset": 3312
+        "offset": 3121
       },
       "sourceLine": "setAgents(previousAgents => {",
       "fingerprint": "src/web/pages/agents/AgentListPage.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setAgents(previousAgents => {"
@@ -1699,9 +1675,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Agent[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 100,
+        "line": 94,
         "column": 34,
-        "offset": 3828
+        "offset": 3637
       },
       "sourceLine": "selected: selectedEntities = [],",
       "fingerprint": "src/web/pages/agents/AgentListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Agent[]` (not nullish). This default assignment will never be used.|34|selected: selectedEntities = [],"
@@ -1723,9 +1699,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 218,
+        "line": 217,
         "column": 7,
-        "offset": 6941
+        "offset": 6894
       },
       "sourceLine": "setTitle(_('Edit Audit {{- name}}', {name: audit.name}));",
       "fingerprint": "src/web/pages/audits/AuditComponent.jsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|7|setTitle(_('Edit Audit {{- name}}', {name: audit.name}));"
@@ -1735,9 +1711,9 @@
       "code": "typescript(no-floating-promises)",
       "message": "Promises must be awaited, add void operator to ignore.",
       "location": {
-        "line": 285,
+        "line": 284,
         "column": 7,
-        "offset": 8418
+        "offset": 8371
       },
       "sourceLine": "gmp.audit.resume(audit).then(onResumed, onResumeError);",
       "fingerprint": "src/web/pages/audits/AuditComponent.jsx|typescript(no-floating-promises)|Promises must be awaited, add void operator to ignore.|7|gmp.audit.resume(audit).then(onResumed, onResumeError);"
@@ -1747,9 +1723,9 @@
       "code": "typescript(no-floating-promises)",
       "message": "Promises must be awaited, add void operator to ignore.",
       "location": {
-        "line": 273,
+        "line": 272,
         "column": 7,
-        "offset": 8144
+        "offset": 8097
       },
       "sourceLine": "gmp.audit.start(audit).then(onStarted, onStartError);",
       "fingerprint": "src/web/pages/audits/AuditComponent.jsx|typescript(no-floating-promises)|Promises must be awaited, add void operator to ignore.|7|gmp.audit.start(audit).then(onStarted, onStartError);"
@@ -1759,9 +1735,9 @@
       "code": "typescript(no-floating-promises)",
       "message": "Promises must be awaited, add void operator to ignore.",
       "location": {
-        "line": 279,
+        "line": 278,
         "column": 7,
-        "offset": 8281
+        "offset": 8234
       },
       "sourceLine": "gmp.audit.stop(audit).then(onStopped, onStopError);",
       "fingerprint": "src/web/pages/audits/AuditComponent.jsx|typescript(no-floating-promises)|Promises must be awaited, add void operator to ignore.|7|gmp.audit.stop(audit).then(onStopped, onStopError);"
@@ -1771,9 +1747,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `OciImageTarget[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 106,
+        "line": 100,
         "column": 34,
-        "offset": 3989
+        "offset": 3798
       },
       "sourceLine": "selected: selectedEntities = [],",
       "fingerprint": "src/web/pages/container-image-targets/ContainerImageTargetsListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `OciImageTarget[]` (not nullish). This default assignment will never be used.|34|selected: selectedEntities = [],"
@@ -2323,9 +2299,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Filter[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 237,
+        "line": 235,
         "column": 15,
-        "offset": 8009
+        "offset": 7875
       },
       "sourceLine": "filters = [],",
       "fingerprint": "src/web/pages/reports/DeltaDetailsPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Filter[]` (not nullish). This default assignment will never be used.|15|filters = [],"
@@ -2335,9 +2311,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `ReportConfig[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 242,
+        "line": 240,
         "column": 21,
-        "offset": 8123
+        "offset": 7989
       },
       "sourceLine": "reportConfigs = [],",
       "fingerprint": "src/web/pages/reports/DeltaDetailsPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `ReportConfig[]` (not nullish). This default assignment will never be used.|21|reportConfigs = [],"
@@ -2347,9 +2323,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `ReportFormat[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 241,
+        "line": 239,
         "column": 21,
-        "offset": 8099
+        "offset": 7965
       },
       "sourceLine": "reportFormats = [],",
       "fingerprint": "src/web/pages/reports/DeltaDetailsPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `ReportFormat[]` (not nullish). This default assignment will never be used.|21|reportFormats = [],"
@@ -3019,9 +2995,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Tag[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 102,
+        "line": 96,
         "column": 34,
-        "offset": 3534
+        "offset": 3343
       },
       "sourceLine": "selected: selectedEntities = [],",
       "fingerprint": "src/web/pages/tags/TagListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Tag[]` (not nullish). This default assignment will never be used.|34|selected: selectedEntities = [],"
@@ -3079,9 +3055,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Ticket[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 122,
+        "line": 119,
         "column": 34,
-        "offset": 3850
+        "offset": 3658
       },
       "sourceLine": "selected: selectedEntities = [],",
       "fingerprint": "src/web/pages/tickets/TicketsListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Ticket[]` (not nullish). This default assignment will never be used.|34|selected: selectedEntities = [],"
@@ -3091,9 +3067,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 202,
+        "line": 197,
         "column": 5,
-        "offset": 7083
+        "offset": 6929
       },
       "sourceLine": "loadTrash();",
       "fingerprint": "src/web/pages/trashcan/TrashCanPage.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|loadTrash();"
@@ -3535,9 +3511,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Vulnerability[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 104,
+        "line": 98,
         "column": 34,
-        "offset": 3747
+        "offset": 3556
       },
       "sourceLine": "selected: selectedEntities = [],",
       "fingerprint": "src/web/pages/vulnerabilities/VulnerabilitiesListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Vulnerability[]` (not nullish). This default assignment will never be used.|34|selected: selectedEntities = [],"
@@ -3547,9 +3523,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `WebApplicationTarget[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 109,
+        "line": 103,
         "column": 34,
-        "offset": 4228
+        "offset": 4037
       },
       "sourceLine": "selected: selectedEntities = [],",
       "fingerprint": "src/web/pages/web-application-targets/WebApplicationTargetsListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `WebApplicationTarget[]` (not nullish). This default assignment will never be used.|34|selected: selectedEntities = [],"
@@ -3559,9 +3535,9 @@
       "code": "typescript(no-base-to-string)",
       "message": "'container' will use Object's default stringification format ('[object Object]') when stringified.",
       "location": {
-        "line": 379,
+        "line": 412,
         "column": 44,
-        "offset": 13001
+        "offset": 13959
       },
       "sourceLine": "`Unable to find checkboxes within: ${container}.`,",
       "fingerprint": "src/web/testing/custom-queries.ts|typescript(no-base-to-string)|'container' will use Object's default stringification format ('[object Object]') when stringified.|44|`Unable to find checkboxes within: ${container}.`,"
@@ -3571,9 +3547,9 @@
       "code": "typescript(restrict-template-expressions)",
       "message": "Invalid type used in template literal expression.",
       "location": {
-        "line": 379,
+        "line": 412,
         "column": 44,
-        "offset": 13001
+        "offset": 13959
       },
       "sourceLine": "`Unable to find checkboxes within: ${container}.`,",
       "fingerprint": "src/web/testing/custom-queries.ts|typescript(restrict-template-expressions)|Invalid type used in template literal expression.|44|`Unable to find checkboxes within: ${container}.`,"

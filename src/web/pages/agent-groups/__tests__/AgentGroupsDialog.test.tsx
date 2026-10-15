@@ -91,9 +91,7 @@ describe('AgentGroupsDialog tests', () => {
 
     render(<AgentGroupsDialog onClose={onClose} onSave={onSave} />);
 
-    const select = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Agent Controller',
-    });
+    const select = screen.getSelectElementByLabel('Agent Controller');
 
     const items = await getSelectItemElementsForSelect(select);
     const item = items.find(i =>
@@ -141,9 +139,7 @@ describe('AgentGroupsDialog tests', () => {
 
     render(<AgentGroupsDialog onClose={onClose} onSave={onSave} />);
 
-    const select = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Agent Controller',
-    });
+    const select = screen.getSelectElementByLabel('Agent Controller');
 
     const items = await getSelectItemElementsForSelect(select);
     const item = items.find(i =>
@@ -172,9 +168,7 @@ describe('AgentGroupsDialog tests', () => {
 
     render(<AgentGroupsDialog onClose={onClose} onSave={onSave} />);
 
-    const select = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Agent Controller',
-    });
+    const select = screen.getSelectElementByLabel('Agent Controller');
 
     const items = await getSelectItemElementsForSelect(select);
     const item = items.find(i =>
@@ -205,9 +199,7 @@ describe('AgentGroupsDialog tests', () => {
 
     render(<AgentGroupsDialog onClose={onClose} onSave={onSave} />);
 
-    const select = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Agent Controller',
-    });
+    const select = screen.getSelectElementByLabel('Agent Controller');
 
     const items = await getSelectItemElementsForSelect(select);
     const item = items.find(i =>
@@ -259,9 +251,7 @@ describe('AgentGroupsDialog tests', () => {
     const nameField = screen.getByName('name');
     changeInputValue(nameField, 'Custom Group');
 
-    const select = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Agent Controller',
-    });
+    const select = screen.getSelectElementByLabel('Agent Controller');
 
     const items = await getSelectItemElementsForSelect(select);
     const item = items.find(i =>

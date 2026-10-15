@@ -238,9 +238,8 @@ describe('AlembavFireMethodPart tests', () => {
       />,
     );
 
-    const reportFormatsSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Report Formats',
-    });
+    const reportFormatsSelect =
+      screen.getSelectElementByLabel('Report Formats');
     const reportFormatOptions =
       await getSelectItemElementsForSelect(reportFormatsSelect);
     expect(reportFormatOptions).toHaveLength(2);
@@ -289,9 +288,7 @@ describe('AlembavFireMethodPart tests', () => {
       />,
     );
 
-    const credentialSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Credential',
-    });
+    const credentialSelect = screen.getSelectElementByLabel('Credential');
     const credentialOptions =
       await getSelectItemElementsForSelect(credentialSelect);
     expect(credentialOptions).toHaveLength(2);

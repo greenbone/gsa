@@ -148,7 +148,7 @@ describe('CredentialComponent tests', () => {
     expect(screen.getByRole('textbox', {name: 'Comment'})).toHaveValue(
       'A comment',
     );
-    expect(screen.getByRole('textbox', {name: 'Type'})).toHaveValue(
+    expect(screen.getSelectElementByLabel('Type')).toHaveValue(
       'Client Certificate',
     );
     expect(

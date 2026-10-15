@@ -132,9 +132,7 @@ describe('TippingPointMethodPart tests', () => {
       />,
     );
 
-    const select = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Credential',
-    });
+    const select = screen.getSelectElementByLabel('Credential');
     const options = await getSelectItemElementsForSelect(select);
     expect(options).toHaveLength(2);
     expect(options[0]).toHaveTextContent('Credential 1');

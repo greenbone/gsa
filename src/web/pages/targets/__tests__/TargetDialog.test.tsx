@@ -11,7 +11,6 @@ import {
   fireEvent,
   wait,
   rendererWith,
-  changeSelectInput,
 } from 'web/testing';
 import Response from 'gmp/http/response';
 import Credential, {
@@ -37,7 +36,6 @@ import TargetDialog, {
   DEFAULT_PORT_LIST_ID,
   DEFAULT_PORT_LIST_NAME,
 } from 'web/pages/targets/TargetDialog';
-import {UNSET_LABEL} from 'web/utils/Render';
 
 const cred1 = new Credential({
   id: '5678',
@@ -452,7 +450,7 @@ describe('TargetDialog tests', () => {
     },
     {
       name: 'smb credential should disable kerberos credential dropdown',
-      credentialValue: 'OpenVAS Default',
+      credentialValue: 'up2',
       getDisabledElement: () =>
         screen.getByTestId<HTMLSelectElement>('krb5-credential-select'),
       getSelectElement: () =>
@@ -473,6 +471,8 @@ describe('TargetDialog tests', () => {
       const handleChange = testing.fn();
       const handleSave = testing.fn();
       const handleCreate = testing.fn();
+      const onKrb5CredentialChange = testing.fn();
+      const onSmbCredentialChange = testing.fn();
 
       const krb5Gmp = {
         ...gmp,
@@ -482,8 +482,10 @@ describe('TargetDialog tests', () => {
         },
       };
       const {render} = rendererWith({gmp: krb5Gmp, capabilities: true});
-
-      render(
+      const renderDialog = (
+        krb5CredentialId?: string,
+        smbCredentialId?: string,
+      ) => (
         <TargetDialog
           aliveTests={[SCAN_CONFIG_DEFAULT]}
           allowSimultaneousIPs={false}
@@ -491,29 +493,47 @@ describe('TargetDialog tests', () => {
           excludeHosts={[]}
           hosts={['123.455.67.434']}
           inUse={false}
-          krb5CredentialId="2345"
+          krb5CredentialId={krb5CredentialId}
           name="target"
           reverseLookupOnly={false}
           reverseLookupUnify={false}
-          smbCredentialId="5463"
+          smbCredentialId={smbCredentialId}
           onClose={handleClose}
+          onKrb5CredentialChange={onKrb5CredentialChange}
           onNewCredentialsClick={handleCreate}
           onNewPortListClick={handleCreate}
           onPortListChange={handleChange}
           onSave={handleSave}
-        />,
+          onSmbCredentialChange={onSmbCredentialChange}
+        />
       );
+      const {rerender} = render(renderDialog());
 
       const selectElement = getSelectElement();
       const disabledElement = getDisabledElement();
 
-      changeSelectInput(UNSET_LABEL, selectElement);
-      expect(selectElement).toHaveValue(UNSET_LABEL);
+      const options = await getSelectItemElementsForSelect(selectElement);
+      const credentialOption = options.find(
+        option => option.textContent === credentialValue,
+      );
+      expect(credentialOption).toBeDefined();
+      fireEvent.click(credentialOption as HTMLElement);
 
-      changeSelectInput(credentialValue, selectElement);
-      expect(selectElement).toHaveValue(credentialValue);
-
-      await wait();
+      const selectedCredentialId = credentialOption?.getAttribute('value');
+      expect(selectedCredentialId).toBeTruthy();
+      if (selectElement.dataset.testid === 'krb5-credential-select') {
+        expect(onKrb5CredentialChange).toHaveBeenCalledWith(
+          selectedCredentialId,
+          'krb5CredentialId',
+        );
+        rerender(renderDialog(selectedCredentialId ?? undefined));
+      } else {
+        expect(onSmbCredentialChange).toHaveBeenCalledWith(
+          selectedCredentialId,
+          'smbCredentialId',
+        );
+        rerender(renderDialog(undefined, selectedCredentialId ?? undefined));
+      }
 
       expect(disabledElement).toBeDisabled();
     },

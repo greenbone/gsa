@@ -76,9 +76,8 @@ describe('AgentTaskDialog component tests', () => {
     const {onAgentGroupChange} = commonHandlers();
     renderDialog({onAgentGroupChange});
 
-    const agentGroupSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Scan Agent Groups',
-    });
+    const agentGroupSelect =
+      screen.getSelectElementByLabel('Scan Agent Groups');
     fireEvent.click(agentGroupSelect);
 
     const items = await getSelectItemElementsForSelect(agentGroupSelect);

@@ -53,7 +53,7 @@ describe('SmbMethodPart tests', () => {
     const smbMaxProtocolSelect = screen.getByName('smb_max_protocol');
     expect(smbMaxProtocolSelect).toBeInTheDocument();
 
-    expect(screen.getByRole('textbox', {name: 'Report Config'})).toHaveValue(
+    expect(screen.getSelectElementByLabel('Report Config')).toHaveValue(
       UNSET_LABEL,
     );
   });
@@ -115,9 +115,7 @@ describe('SmbMethodPart tests', () => {
       />,
     );
 
-    const credentialSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Credential',
-    });
+    const credentialSelect = screen.getSelectElementByLabel('Credential');
     expect(credentialSelect).toBeInTheDocument();
 
     const options = await getSelectItemElementsForSelect(credentialSelect);
@@ -149,9 +147,7 @@ describe('SmbMethodPart tests', () => {
       />,
     );
 
-    const credentialSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Credential',
-    });
+    const credentialSelect = screen.getSelectElementByLabel('Credential');
 
     const options = await getSelectItemElementsForSelect(credentialSelect);
     expect(options).toHaveLength(2);
@@ -202,9 +198,7 @@ describe('SmbMethodPart tests', () => {
       />,
     );
 
-    const reportFormatSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Report Format',
-    });
+    const reportFormatSelect = screen.getSelectElementByLabel('Report Format');
     expect(reportFormatSelect).toHaveValue(reportFormat1.name);
 
     const reportFormatOptions =
@@ -249,9 +243,7 @@ describe('SmbMethodPart tests', () => {
       />,
     );
 
-    const reportConfigSelect = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Report Config',
-    });
+    const reportConfigSelect = screen.getSelectElementByLabel('Report Config');
     expect(reportConfigSelect).toHaveValue(reportConfig1.name);
 
     const reportConfigOptions =

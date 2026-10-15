@@ -77,7 +77,7 @@ export const getSelectItemElements = (element?: HTMLElement) => {
  * Get the input box of a Select component
  *
  * This function first attempts to find an element with the test ID 'form-select'.
- * If no such element is found, it falls back to finding an element with the role 'textbox'.
+ * If no such element is found, it falls back to finding an element with the role 'combobox'.
  *
  * @param element - The optional element to search within.
  * @returns The found select element
@@ -88,8 +88,41 @@ export const getSelectElement = (element?: HTMLElement) => {
   if (select) {
     return select as HTMLSelectElement;
   }
-  return getByRole(element, 'textbox') as HTMLSelectElement;
+  return getByRole(element, 'combobox') as HTMLSelectElement;
 };
+
+/**
+ * Get a Select component by its accessible label.
+ *
+ * Keep the Mantine-specific role mapping here so tests can use a stable
+ * Select query if its underlying accessible role changes in the future.
+ *
+ * @param container - The root element to search within.
+ * @param label - The accessible name of the Select.
+ * @returns The matching select input.
+ */
+export const getSelectElementByLabel = (
+  container: HTMLElement,
+  label: string,
+) =>
+  getByRole(container, 'combobox', {
+    name: label,
+  }) as HTMLSelectElement;
+
+/**
+ * Query a Select component by its accessible label.
+ *
+ * @param container - The root element to search within.
+ * @param label - The accessible name of the Select.
+ * @returns The matching select input, or null if it was not found.
+ */
+export const querySelectElementByLabel = (
+  container: HTMLElement,
+  label: string,
+) =>
+  queryByRole(container, 'combobox', {
+    name: label,
+  }) as HTMLSelectElement | null;
 
 /**
  * Get all select components
@@ -124,7 +157,7 @@ export const getMultiSelectElements = (element?: HTMLElement) => {
  */
 export const getMultiSelectElement = (element?: HTMLElement) => {
   element = getElementOrReturnDocument(element);
-  return getByRole(element, 'textbox');
+  return getByRole(element, 'combobox');
 };
 
 /**

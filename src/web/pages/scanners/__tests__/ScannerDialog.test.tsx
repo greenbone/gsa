@@ -64,14 +64,14 @@ describe('ScannerDialog tests', () => {
     expect(screen.getByName('name')).toHaveValue('Unnamed');
     expect(screen.getByName('comment')).toHaveValue(''); // comment field
 
-    const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toHaveValue('');
 
     expect(screen.queryByName('host')).not.toBeInTheDocument();
     expect(screen.queryByName('port')).not.toBeInTheDocument();
     expect(screen.queryByName('caCertificate')).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('textbox', {name: 'Credential'}),
+      screen.querySelectElementByLabel('Credential'),
     ).not.toBeInTheDocument();
 
     fireEvent.click(screen.getDialogSaveButton());
@@ -104,13 +104,13 @@ describe('ScannerDialog tests', () => {
     expect(screen.getByName('comment')).toHaveValue(''); // comment field
 
     expect(screen.getDialog()).toBeInTheDocument();
-    const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toHaveValue('Greenbone Sensor');
     expect(screen.getByName('host')).toHaveValue('localhost');
     expect(screen.queryByName('port')).not.toBeInTheDocument();
     expect(screen.queryByName('caCertificate')).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('textbox', {name: 'Credential'}),
+      screen.querySelectElementByLabel('Credential'),
     ).not.toBeInTheDocument();
 
     fireEvent.click(screen.getDialogSaveButton());
@@ -144,13 +144,13 @@ describe('ScannerDialog tests', () => {
     );
 
     expect(screen.getDialog()).toBeInTheDocument();
-    const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toHaveValue('Agent Sensor');
     expect(screen.getByName('host')).toHaveValue('localhost');
     expect(screen.queryByName('port')).not.toBeInTheDocument();
     expect(screen.queryByName('caCertificate')).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('textbox', {name: 'Credential'}),
+      screen.querySelectElementByLabel('Credential'),
     ).not.toBeInTheDocument();
 
     fireEvent.click(screen.getDialogSaveButton());
@@ -181,13 +181,13 @@ describe('ScannerDialog tests', () => {
     expect(screen.getByName('name')).toHaveValue('Unnamed');
     expect(screen.getByName('comment')).toHaveValue('');
 
-    const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toHaveValue('OpenVAS Scanner');
 
     expect(screen.getByName('host')).toHaveValue('localhost');
     expect(screen.getByName('port')).toHaveValue('');
     expect(screen.getByName('caCertificate')).toHaveValue('');
-    expect(screen.getByRole('textbox', {name: 'Credential'})).toHaveValue('');
+    expect(screen.getSelectElementByLabel('Credential')).toHaveValue('');
 
     fireEvent.click(screen.getDialogSaveButton());
     expect(handleSave).toHaveBeenCalledWith({
@@ -230,7 +230,7 @@ describe('ScannerDialog tests', () => {
       screen.queryByTitle('Create a new Credential'),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('textbox', {name: 'Credential'}),
+      screen.querySelectElementByLabel('Credential'),
     ).not.toBeInTheDocument();
     expect(screen.queryByName('caCertificate')).not.toBeInTheDocument();
   });
@@ -252,9 +252,9 @@ describe('ScannerDialog tests', () => {
     expect(screen.getByName('host')).toHaveValue('localhost');
     expect(screen.getByName('port')).toHaveValue('443');
 
-    const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toHaveValue('OpenVASD Scanner');
-    expect(screen.getByRole('textbox', {name: 'Credential'})).toHaveValue('');
+    expect(screen.getSelectElementByLabel('Credential')).toHaveValue('');
     expect(screen.getByName('caCertificate')).toHaveValue('');
 
     fireEvent.click(screen.getDialogSaveButton());
@@ -292,9 +292,9 @@ describe('ScannerDialog tests', () => {
     expect(screen.getByName('host')).toHaveValue('localhost');
     expect(screen.getByName('port')).toHaveValue('8080');
 
-    const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toHaveValue('Agent Controller');
-    expect(screen.getByRole('textbox', {name: 'Credential'})).toHaveValue('');
+    expect(screen.getSelectElementByLabel('Credential')).toHaveValue('');
     expect(screen.getByName('caCertificate')).toHaveValue('');
 
     fireEvent.click(screen.getDialogSaveButton());
@@ -329,9 +329,9 @@ describe('ScannerDialog tests', () => {
     expect(screen.getByName('host')).toHaveValue('localhost');
     expect(screen.getByName('port')).toHaveValue('443');
 
-    const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toHaveValue('Container Image Scanner');
-    expect(screen.getByRole('textbox', {name: 'Credential'})).toHaveValue('');
+    expect(screen.getSelectElementByLabel('Credential')).toHaveValue('');
     expect(screen.getByName('caCertificate')).toHaveValue('');
     expect(screen.getByTitle('Create a new Credential')).toBeVisible();
 
@@ -367,9 +367,9 @@ describe('ScannerDialog tests', () => {
     expect(screen.getByName('host')).toHaveValue('localhost');
     expect(screen.getByName('port')).toHaveValue('443');
 
-    const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toHaveValue('Web Application Scanner');
-    expect(screen.getByRole('textbox', {name: 'Credential'})).toHaveValue('');
+    expect(screen.getSelectElementByLabel('Credential')).toHaveValue('');
     expect(screen.getByName('caCertificate')).toHaveValue('');
     expect(screen.getByTitle('Create a new Credential')).toBeVisible();
 
@@ -415,7 +415,7 @@ describe('ScannerDialog tests', () => {
     expect(inputs[2]).toHaveAttribute('name', 'host');
     expect(inputs[2]).toHaveAttribute('value', 'mypc');
 
-    const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toHaveValue('Greenbone Sensor');
   });
 
@@ -496,9 +496,7 @@ describe('ScannerDialog tests', () => {
     changeInputValue(portInput, '2222');
     expect(portInput).toHaveValue('2222');
 
-    const scannerType = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Scanner Type',
-    });
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toHaveValue('Agent Controller');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
     fireEvent.click(scannerTypeItems[2]); // select Agent Sensor
@@ -530,9 +528,7 @@ describe('ScannerDialog tests', () => {
     render(<ScannerDialog />);
 
     expect(screen.getDialog()).toBeInTheDocument();
-    const scannerType = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Scanner Type',
-    });
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toHaveValue('');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
     expect(scannerTypeItems.length).toBe(5); // OpenVAS Scanner, OpenVASD Scanner, OpenVASD Sensor, Agent Controller, Agent Sensor
@@ -572,7 +568,7 @@ describe('ScannerDialog tests', () => {
     expect(portInput).toBeDisabled();
     changeInputValue(portInput, '2222');
 
-    const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toBeDisabled();
     const scannerTypeItems = screen.queryAllByRole('option');
     expect(scannerTypeItems.length).toBe(0);
@@ -650,9 +646,7 @@ describe('ScannerDialog tests', () => {
     render(<ScannerDialog type={GREENBONE_SENSOR_SCANNER_TYPE} />);
 
     expect(screen.getDialog()).toBeInTheDocument();
-    const scannerType = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Scanner Type',
-    });
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toHaveValue('Greenbone Sensor');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
     expect(scannerTypeItems.length).toEqual(2); // OpenVAS Scanner and Greenbone Sensor
@@ -671,9 +665,7 @@ describe('ScannerDialog tests', () => {
     render(<ScannerDialog type={GREENBONE_SENSOR_SCANNER_TYPE} />);
 
     expect(screen.getDialog()).toBeInTheDocument();
-    const scannerType = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Scanner Type',
-    });
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toHaveValue('Greenbone Sensor');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
     expect(scannerTypeItems.length).toEqual(2); // OpenVAS Scanner, OpenVASD Scanner and Greenbone Sensor
@@ -692,9 +684,7 @@ describe('ScannerDialog tests', () => {
     render(<ScannerDialog type={AGENT_CONTROLLER_SCANNER_TYPE} />);
 
     expect(screen.getDialog()).toBeInTheDocument();
-    const scannerType = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Scanner Type',
-    });
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toHaveValue('Agent Controller');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
     expect(scannerTypeItems.length).toEqual(3); // OpenVAS Scanner, Agent Controller and Agent Sensor
@@ -756,9 +746,7 @@ describe('ScannerDialog tests', () => {
     render(<ScannerDialog type={OPENVASD_SCANNER_TYPE} />);
 
     expect(screen.getDialog()).toBeInTheDocument();
-    const scannerType = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Scanner Type',
-    });
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toHaveValue('OpenVASD Scanner');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
     expect(scannerTypeItems.length).toEqual(3); // OpenVAS Scanner, OpenVASD Scanner and OpenVASD Sensor
@@ -778,9 +766,7 @@ describe('ScannerDialog tests', () => {
     render(<ScannerDialog type={OPENVASD_SCANNER_TYPE} />);
 
     expect(screen.getDialog()).toBeInTheDocument();
-    const scannerType = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Scanner Type',
-    });
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toHaveValue('');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
     expect(scannerTypeItems.length).toEqual(2); // OpenVAS Scanner and Greenbone Sensor
@@ -801,21 +787,19 @@ describe('ScannerDialog tests', () => {
 
     render(<ScannerDialog onClose={handleClose} onSave={handleSave} />);
 
-    expect(screen.getByRole('textbox', {name: 'Scanner Type'})).toBeVisible();
+    expect(screen.getSelectElementByLabel('Scanner Type')).toBeVisible();
     expect(screen.getByName('name')).toBeVisible();
     expect(screen.getByName('comment')).toBeVisible();
-    expect(screen.getByRole('textbox', {name: 'Scanner Type'})).toBeVisible();
+    expect(screen.getSelectElementByLabel('Scanner Type')).toBeVisible();
 
     expect(screen.queryByName('host')).not.toBeInTheDocument();
     expect(screen.queryByName('port')).not.toBeInTheDocument();
     expect(screen.queryByName('caCertificate')).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('textbox', {name: 'Credential'}),
+      screen.querySelectElementByLabel('Credential'),
     ).not.toBeInTheDocument();
 
-    const scannerType = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Scanner Type',
-    });
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
     expect(scannerTypeItems[1]).toHaveTextContent('Agent Controller');
 
@@ -823,7 +807,7 @@ describe('ScannerDialog tests', () => {
     expect(screen.getByName('host')).toBeVisible();
     expect(screen.getByName('port')).toBeVisible();
     expect(screen.getByName('caCertificate')).toBeInTheDocument();
-    expect(screen.getByRole('textbox', {name: 'Credential'})).toBeVisible();
+    expect(screen.getSelectElementByLabel('Credential')).toBeVisible();
   });
 
   test('should show current scanner type even if feature is disabled', async () => {
@@ -837,9 +821,7 @@ describe('ScannerDialog tests', () => {
     render(<ScannerDialog id="123" type={AGENT_CONTROLLER_SCANNER_TYPE} />);
 
     expect(screen.getDialog()).toBeInTheDocument();
-    const scannerType = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Scanner Type',
-    });
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toHaveValue('Agent Controller');
     const scannerTypeItems = await getSelectItemElementsForSelect(scannerType);
     expect(scannerTypeItems.length).toBe(3); // OpenVAS Scanner, Greenbone Sensor and Agent Controller
@@ -862,7 +844,7 @@ describe('ScannerDialog tests', () => {
     );
 
     expect(screen.getDialog()).toBeInTheDocument();
-    const scannerType = screen.getByRole('textbox', {name: 'Scanner Type'});
+    const scannerType = screen.getSelectElementByLabel('Scanner Type');
     expect(scannerType).toHaveValue('Greenbone Sensor');
   });
 });

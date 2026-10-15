@@ -42,9 +42,7 @@ describe('ScannerFilterDialog tests', () => {
     expect(screen.getDialog()).toBeInTheDocument();
     expect(screen.getDialogTitle()).toHaveTextContent('Update Filter');
     expect(screen.getByName('filterString')).toHaveValue('');
-    const select = screen.getByRole('textbox', {
-      name: 'Scanner Type',
-    }) as HTMLSelectElement;
+    const select = screen.getSelectElementByLabel('Scanner Type');
     expect(select).toHaveValue('');
     const selectItems = await getSelectItemElementsForSelect(select);
     expect(selectItems).toHaveLength(6);
@@ -158,9 +156,7 @@ describe('ScannerFilterDialog tests', () => {
     render(<ScannerFilterDialog filter={filter} />);
 
     expect(screen.getByName('filterString')).toHaveValue('foo=bar');
-    const select = screen.getByRole('textbox', {
-      name: 'Scanner Type',
-    }) as HTMLSelectElement;
+    const select = screen.getSelectElementByLabel('Scanner Type');
     expect(select).toHaveValue(scannerTypeName(OPENVASD_SCANNER_TYPE));
   });
 });

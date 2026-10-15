@@ -11,7 +11,6 @@ import {
   render,
   fireEvent,
   getSelectItemElementsForSelect,
-  changeInputValue,
   wait,
 } from 'web/testing';
 import Select from 'web/components/form/Select';
@@ -184,10 +183,10 @@ describe('Select component tests', () => {
     expect(screen.getSelectItemElements().length).toEqual(3);
 
     const input = screen.getSelectElement();
-    changeInputValue(input, 'ba');
+    fireEvent.change(input, {target: {value: 'ba'}});
     expect(screen.getSelectItemElements().length).toEqual(2);
 
-    changeInputValue(input, 'F');
+    fireEvent.change(input, {target: {value: 'F'}});
     expect(screen.getSelectItemElements().length).toEqual(1);
   });
 
@@ -369,13 +368,9 @@ describe('Select component tests', () => {
       </>,
     );
 
-    const select1 = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Select 1',
-    });
+    const select1 = screen.getSelectElementByLabel('Select 1');
     expect(select1).toHaveValue('Bar');
-    const select2 = screen.getByRole<HTMLSelectElement>('textbox', {
-      name: 'Select 2',
-    });
+    const select2 = screen.getSelectElementByLabel('Select 2');
     expect(select2).toHaveValue('Foo');
 
     const select1Items = await getSelectItemElementsForSelect(select1);
@@ -406,7 +401,7 @@ describe('Select component tests', () => {
       />,
     );
 
-    const select = screen.getByRole('textbox', {name: 'Test Label'});
+    const select = screen.getSelectElementByLabel('Test Label');
     expect(select).toBeInTheDocument();
     expect(select).toHaveValue('Bar');
   });

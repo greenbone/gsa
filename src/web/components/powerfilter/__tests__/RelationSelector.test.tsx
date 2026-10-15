@@ -9,7 +9,7 @@ import {
   screen,
   render,
   fireEvent,
-  changeInputValue,
+  userEvent,
 } from 'web/testing';
 import RelationSelector from 'web/components/powerfilter/RelationSelector';
 
@@ -73,14 +73,17 @@ describe('Relation Selector Tests', () => {
     const onChange = testing.fn();
     render(<RelationSelector relation="=" onChange={onChange} />);
 
-    fireEvent.click(screen.getByRole('textbox'));
+    fireEvent.click(screen.getSelectElement());
 
     expect(screen.getAllByRole('option').length).toEqual(4);
 
-    changeInputValue(screen.getByRole('textbox'), 'than');
+    const select = screen.getSelectElement();
+    await userEvent.clear(select);
+    await userEvent.type(select, 'than');
     expect(screen.getAllByRole('option').length).toEqual(2);
 
-    changeInputValue(screen.getByRole('textbox'), 'to');
+    await userEvent.clear(select);
+    await userEvent.type(select, 'to');
     expect(screen.getAllByRole('option').length).toEqual(1);
   });
 });
