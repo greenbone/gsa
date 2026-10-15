@@ -4,7 +4,7 @@
  */
 
 import {type ComponentProps, useState} from 'react';
-import {Text} from '@mantine/core';
+import styled from 'styled-components';
 import FormGroup from 'web/components/form/FormGroup';
 import SchedulerCronField from 'web/components/form/SchedulerCronField';
 import {PlusIcon, XIcon} from 'web/components/icon';
@@ -12,6 +12,7 @@ import InfoTip from 'web/components/info-tip/InfoTip';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
+import Theme from 'web/utils/theme';
 
 interface SchedulerCronFieldsProps extends Omit<
   ComponentProps<typeof SchedulerCronField>,
@@ -26,6 +27,12 @@ interface SchedulerCronRow {
   id: number;
   activeCronExpression: string | undefined;
 }
+
+const Description = styled.p`
+  margin: 0;
+  color: ${Theme.mediumGray};
+  font-size: var(--mantine-font-size-xs);
+`;
 
 const SchedulerCronFields = ({
   value,
@@ -91,11 +98,11 @@ const SchedulerCronFields = ({
         </>
       }
     >
-      <Text c="dimmed" size="xs">
+      <Description>
         {_(
           "Choose from the dropdown of common schedules, or select 'Custom cron expression' in the list to enter your own cron schedule.",
         )}
-      </Text>
+      </Description>
       <Column gap="sm">
         {displayedRows.map((row, index) => (
           <Row key={row.id} align="flex-start" gap="sm">

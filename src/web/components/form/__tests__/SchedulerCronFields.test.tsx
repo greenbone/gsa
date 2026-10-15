@@ -128,6 +128,4 @@ describe('SchedulerCronFields tests', () => {
       .getAllByRole('textbox')
       .forEach(input => expect(input).toBeDisabled());
   });
-    }
-  });
 });
