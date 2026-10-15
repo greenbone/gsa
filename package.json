@@ -110,7 +110,7 @@
     "jsdom": "30.1.2",
     "oxc-parser": "0.153.0",
     "oxfmt": "0.68.0",
-    "oxlint": "1.85.0",
+    "oxlint": "1.87.0",
     "oxlint-tsgolint": "7.0.2003",
     "typescript": "7.0.2",
     "vite": "^8.3.3",
