@@ -41,6 +41,7 @@ export const StatusBadge = styled(Badge)<{$tone: ReportExportStatusTone}>`
   flex: 0 0 auto;
   font-size: 12px;
   font-weight: 600;
+  justify-content: flex-start;
   line-height: 1;
   white-space: nowrap;
 `;
@@ -94,11 +95,13 @@ export const ActivityDropdown = styled.div`
 `;
 
 export const ActivityTitle = styled.span`
+  display: block;
   color: ${Theme.black};
   font-size: 14px;
   font-weight: 600;
   min-width: 0;
   overflow-wrap: anywhere;
+  width: 100%;
 `;
 
 export const ActivityErrorText = styled.div`
@@ -112,15 +115,16 @@ export const ActivityStatusDetail = styled.span`
   overflow-wrap: anywhere;
 `;
 
-export const ActivityHeading = styled.div`
-  align-items: flex-start;
-  display: flex;
-  gap: 8px;
-  justify-content: space-between;
+export const ActivityTimestamp = styled.div`
+  color: ${Theme.darkGray};
+  font-size: 12px;
+  line-height: 1.3;
+  margin-left: auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
 
-  @media (max-width: 360px) {
-    align-items: stretch;
-    flex-direction: column;
+  span {
+    font-weight: 400;
   }
 `;
 
@@ -128,21 +132,70 @@ export const ActivityJob = styled.div`
   background: ${Theme.white};
   border: 1px solid ${Theme.lightGray};
   border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   min-width: 0;
-  padding: 8px;
+  padding: 16px;
 `;
 
 export const ActivityActions = styled.div`
   align-items: center;
-  border-top: 1px solid ${Theme.lightGray};
-  display: grid;
-  gap: 6px;
-  grid-template-columns: minmax(0, 1fr) auto;
-  padding-top: 6px;
+  display: flex;
+  flex: 1 1 auto;
+  gap: 12px;
+  justify-content: space-between;
+  min-width: 0;
+  width: 100%;
 
   a {
     font-size: 12px;
     min-width: 0;
     overflow-wrap: anywhere;
   }
+`;
+
+export const ActivityUtilityActions = styled.div`
+  flex: 0 0 auto;
+  margin-left: auto;
+`;
+
+export const ActivityContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  width: 100%;
+`;
+
+export const ActivityMetadata = styled.div`
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+`;
+
+export const ActivityMetadataSeparator = styled.span`
+  color: ${Theme.darkGray};
+  flex: 0 0 auto;
+`;
+
+export const ActivityStatus = styled.div`
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 auto;
+  min-width: 0;
+`;
+
+export const ActivityDivider = styled.div`
+  border-top: 1px solid ${Theme.lightGray};
+  width: 100%;
+`;
+
+export const ActivityFooter = styled.div`
+  align-items: center;
+  display: flex;
+  min-width: 0;
+  width: 100%;
 `;

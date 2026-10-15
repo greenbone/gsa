@@ -488,6 +488,95 @@ describe('ReportExportManager', () => {
     expect(
       within(rows[1]).getByText('Report export: Older report (.pdf)'),
     ).toBeInTheDocument();
+    expect(
+      within(rows[0]).getByTestId('report-export-created-at'),
+    ).toHaveTextContent('Created:');
+  });
+
+  test('groups title, status and creation time above the action zone', async () => {
+    const gmp = createGmp();
+    const exports = [
+      {
+        id: 'generating-export',
+        status: 'running',
+        progress: 'generating',
+        owner: {name: 'test-user'},
+        extension: 'pdf',
+        creationTime: date('2026-10-15T11:00:00Z'),
+      },
+      {
+        id: 'ready-export',
+        status: 'done',
+        owner: {name: 'test-user'},
+        extension: 'pdf',
+        creationTime: date('2026-10-15T10:00:00Z'),
+      },
+    ];
+    gmp.reportexports.get.mockResolvedValue({
+      data: exports,
+      meta: {
+        counts: new CollectionCounts({
+          first: 1,
+          filtered: 2,
+          length: 2,
+          rows: 100,
+        }),
+      },
+    });
+    const {render} = rendererWith({gmp});
+    render(
+      <ReportExportManager>
+        <ReportExportActivity />
+      </ReportExportManager>,
+    );
+
+    await screen.findByText('Generating');
+    await screen.findByText('Ready');
+    const firstRow = screen.getAllByTestId('report-export-job')[0];
+    const content = within(firstRow).getByTestId('report-export-content');
+    expect(content.children[0]).toHaveAttribute(
+      'data-testid',
+      'report-export-metadata',
+    );
+    expect(content.children[1]).toHaveAttribute(
+      'data-testid',
+      'report-export-title',
+    );
+    expect(
+      within(content).getByTestId('report-export-title'),
+    ).toHaveTextContent('Report export:');
+    expect(
+      within(firstRow).getByTestId('report-export-metadata'),
+    ).toContainElement(within(firstRow).getByTestId('report-export-status'));
+    expect(
+      within(firstRow).getByTestId('report-export-metadata'),
+    ).toContainElement(
+      within(firstRow).getByTestId('report-export-created-at'),
+    );
+    expect(
+      within(firstRow).getByTestId('report-export-created-at'),
+    ).toHaveStyle({marginLeft: 'auto'});
+    expect(
+      within(firstRow).getByTestId('report-export-created-at').firstChild,
+    ).toHaveAttribute('aria-hidden', 'true');
+    const readyRow = screen.getAllByTestId('report-export-job')[1];
+    const readyFooter = within(readyRow).getByTestId('report-export-footer');
+    expect(readyFooter.previousSibling).toHaveAttribute(
+      'data-testid',
+      'report-export-divider',
+    );
+    expect(
+      within(readyFooter).getByTestId('report-export-actions'),
+    ).toBeInTheDocument();
+    expect(
+      within(readyFooter).getByTestId('report-export-actions'),
+    ).toHaveStyle({justifyContent: 'space-between'});
+    expect(
+      within(readyFooter).getByLabelText('Remove from activity'),
+    ).toBeInTheDocument();
+    expect(
+      within(readyRow).getByTestId('report-export-created-at'),
+    ).toBeInTheDocument();
   });
 
   test('does not add historical ready jobs to activity', async () => {

@@ -45,7 +45,7 @@ export const ReportExportActivity = () => {
           maxWidth: 'calc(100vw - 24px)',
           maxHeight: 'min(70vh, 560px)',
           overflowY: 'auto',
-          width: 'min(360px, calc(100vw - 24px))',
+          width: 'min(560px, calc(100vw - 24px))',
         },
       }}
       transitionProps={{duration: 0}}

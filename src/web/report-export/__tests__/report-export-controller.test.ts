@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
+import {describe, expect, test, testing} from '@gsa/testing';
 import {QueryClient} from '@tanstack/react-query';
 import {createSession} from 'gmp/testing';
 import {createReportExportOperations} from 'web/report-export/report-export-job-orchestrator';

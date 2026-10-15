@@ -277,7 +277,7 @@ const DeltaReportDetails = () => {
   );
 
   const [startTimer, clearTimer] = useReload(memoizedReloadFn, timeoutFunc);
-  const {downloadComponent, download: onDownload} = useDownload();
+  const {downloadComponent} = useDownload();
   const {exportReport} = useReportExportManager();
 
   const {dialogNotification, showError, showErrorMessage, showSuccessMessage} =
