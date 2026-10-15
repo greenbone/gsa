@@ -48,7 +48,6 @@ export const buildReportExportRequest = ({
   reportUrl,
   fileNameFormat,
   username,
-  fallbackReportTitle,
 }: BuildReportExportRequestParams): StartReportExportParams => ({
   kind,
   filename: generateFilename({
@@ -62,7 +61,7 @@ export const buildReportExportRequest = ({
     resourceType: 'report',
     username,
   }),
-  reportTitle: entity.task?.name || fallbackReportTitle,
+  reportTitle: entity.id,
   reportUrl,
   payload: {
     reportId: entity.id,

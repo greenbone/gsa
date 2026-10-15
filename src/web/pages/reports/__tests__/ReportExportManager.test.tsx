@@ -385,7 +385,8 @@ describe('ReportExportManager', () => {
       id: `done-${index}`,
       status: 'done',
       owner: {name: 'test-user'},
-      name: `Report ${index}`,
+      reportId: `report-${index}`,
+      type: 'scan',
       extension: 'pdf',
     }));
     gmp.reportexports.get.mockResolvedValue({
@@ -430,8 +431,10 @@ describe('ReportExportManager', () => {
       expect(activityButton).toHaveAttribute('aria-expanded', 'true'),
     );
     expect(await screen.findAllByText('Ready')).toHaveLength(60);
-    expect(screen.getByText('Report export: Report 0 (.pdf)')).toBeInTheDocument();
-    expect(screen.getByText('UUID: done-59')).toBeInTheDocument();
+    expect(
+      screen.getByText('Report export: report-0 (.pdf)'),
+    ).toBeInTheDocument();
+    expect(screen.queryByText('UUID: done-59')).toBeNull();
     expect(
       screen.queryByText('Report export: Canceled report (.pdf)'),
     ).toBeNull();
@@ -1021,6 +1024,27 @@ describe('ReportExportManager', () => {
 
   test('retains direct download activity after browser handoff', async () => {
     const gmp = createGmp();
+    gmp.reportexports.get.mockResolvedValue({
+      data: [
+        {
+          id: 'generated-export-id',
+          status: 'done',
+          owner: {name: 'test-user'},
+          name: 'Unnamed',
+          reportId: 'report-uuid',
+          type: 'scan',
+          extension: 'xml',
+        },
+      ],
+      meta: {
+        counts: new CollectionCounts({
+          first: 1,
+          filtered: 1,
+          length: 1,
+          rows: 100,
+        }),
+      },
+    });
     let resolveDownload: ((response: {data: ArrayBuffer}) => void) | undefined;
     gmp.report.download.mockImplementation(
       () =>
@@ -1048,6 +1072,7 @@ describe('ReportExportManager', () => {
     expect(
       await screen.findByText('Report download: Direct report (.xml)'),
     ).toBeInTheDocument();
+    expect(screen.getAllByTestId('report-export-job')).toHaveLength(1);
     expect(screen.queryByText('Complete')).not.toBeInTheDocument();
     expect(
       screen
@@ -1093,9 +1118,8 @@ describe('ReportExportManager', () => {
         hidden: true,
       }),
     );
-    await waitFor(() =>
-      expect(screen.queryByTestId('report-export-activity-button')).toBeNull(),
-    );
+    expect(await screen.findByText('Ready')).toBeInTheDocument();
+    expect(screen.getAllByTestId('report-export-job')).toHaveLength(1);
   });
 
   test('allows cancellation for users with report access', async () => {

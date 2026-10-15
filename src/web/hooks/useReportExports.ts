@@ -43,6 +43,19 @@ export {REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL} from 'web/report-export/report-ex
 const EMPTY_ATTEMPTS: ReportExportAttempt[] = [];
 const EMPTY_DIRECT: DirectDownload[] = [];
 
+const getReportDownloadIdentity = ({
+  reportUrl,
+  filename,
+}: {
+  reportUrl?: string;
+  filename: string;
+}) => {
+  const extensionIndex = filename.lastIndexOf('.');
+  if (!reportUrl || extensionIndex <= 0) return undefined;
+  const extension = filename.slice(extensionIndex + 1).toLowerCase();
+  return extension ? `${reportUrl}\0${extension}` : undefined;
+};
+
 const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
   const gmp = useGmp();
   const token = useSessionToken();
@@ -136,15 +149,27 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
     operations.sync();
   }, [operations, records, statusQueries]);
 
-  const jobs = [
-    ...records.map((attempt, index) =>
-      createReportExportJob(
-        attempt,
-        statusQueries[index]?.data,
-        statusQueries[index]?.error,
-      ),
+  const exportJobs = records.map((attempt, index) =>
+    createReportExportJob(
+      attempt,
+      statusQueries[index]?.data,
+      statusQueries[index]?.error,
     ),
-    ...directDownloads.map(toDirectDownloadJob),
+  );
+  const directJobs = directDownloads.map(toDirectDownloadJob);
+  const activeDirectIdentities = new Set(
+    directDownloads
+      .filter(download => download.view.kind !== 'failed')
+      .map(getReportDownloadIdentity)
+      .filter((identity): identity is string => Boolean(identity)),
+  );
+  const jobs = [
+    ...exportJobs.filter(job => {
+      if (job.origin !== 'discovered' || job.view.kind !== 'ready') return true;
+      const identity = getReportDownloadIdentity(job);
+      return !identity || !activeDirectIdentities.has(identity);
+    }),
+    ...directJobs,
   ];
   return {
     start: operations.start,

@@ -150,11 +150,6 @@ const ReportExportJobRow = ({job}: ReportExportJobRowProps) => {
             </output>
           </StatusBadge>
         </ActivityHeading>
-        {job.exportId && (
-          <ActivityStatusDetail>
-            {_('UUID: {{id}}', {id: job.exportId})}
-          </ActivityStatusDetail>
-        )}
         {status.detail && (
           <ActivityStatusDetail>{status.detail}</ActivityStatusDetail>
         )}

@@ -42,7 +42,7 @@ export const createRecoveredReportExportAttempt = (
     origin: 'discovered',
     exportId: reportExport.id,
     filename: `report-${reportExport.id}.${extension && /^[a-zA-Z0-9]{1,16}$/.test(extension) ? extension : 'bin'}`,
-    reportTitle: reportExport.name || reportExport.reportId || reportExport.id,
+    reportTitle: reportExport.reportId || 'Report',
     reportUrl: getReportUrlForExport(reportExport),
     autoDownload: false,
     disposition: 'awaiting',

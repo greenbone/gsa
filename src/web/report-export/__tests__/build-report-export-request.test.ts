@@ -38,7 +38,7 @@ describe('buildReportExportRequest', () => {
       expect(request).toMatchObject({
         kind: expectedKind,
         filename: 'Task report.xml',
-        reportTitle: 'Task report',
+        reportTitle: 'report-id',
         reportUrl: '/reports/report-id',
         payload: {
           reportId: 'report-id',
