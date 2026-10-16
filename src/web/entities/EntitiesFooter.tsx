@@ -8,7 +8,7 @@ import {showInfoNotification, showSuccessNotification} from '@greenbone/ui-lib';
 import type Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
-import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
+import DialogDangerFooter from 'web/components/dialog/DialogDangerFooter';
 import Select from 'web/components/form/Select';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
@@ -235,7 +235,7 @@ const EntitiesFooter = <TEntity = Model,>({
           configDialog && (
             <ConfirmationDialog
               content={configDialog.dialogText}
-              rightButtonAction={DELETE_ACTION}
+              footer={DialogDangerFooter}
               rightButtonTitle={configDialog.dialogButtonTitle}
               title={configDialog.dialogTitle}
               width="500px"

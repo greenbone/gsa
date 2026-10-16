@@ -9,7 +9,7 @@ import type Agent from 'gmp/models/agent';
 import {AGENTS_FILTER_FILTER, type FilterType} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
-import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
+import DialogDangerFooter from 'web/components/dialog/DialogDangerFooter';
 import useDownload from 'web/components/form/useDownload';
 import {HatAndGlassesIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -360,8 +360,8 @@ const AgentListPage = () => {
                   'Are you certain you want to permanently remove the agent "{{name}}"?\nThis operation is irreversible.\nAfter removal, reinstalling the agent will be necessary.',
                   {name: deleteAgent.name ?? 'Unknown Agent'},
                 )}
+                footer={DialogDangerFooter}
                 loading={isDeleting}
-                rightButtonAction={DELETE_ACTION}
                 rightButtonTitle={_('Delete')}
                 title={_('Confirm Deletion')}
                 onClose={closeConfirmDeleteDialog}

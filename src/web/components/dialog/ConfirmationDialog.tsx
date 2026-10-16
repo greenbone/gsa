@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {type ComponentType} from 'react';
 import Dialog from 'web/components/dialog/Dialog';
 import DialogContent from 'web/components/dialog/DialogContent';
 import DialogTwoButtonFooter, {
-  type DELETE_ACTION,
+  type DialogTwoButtonFooterProps,
 } from 'web/components/dialog/DialogTwoButtonFooter';
 import useTranslation from 'web/hooks/useTranslation';
 
@@ -14,7 +15,7 @@ interface ConfirmationDialogProps {
   content?: React.ReactNode;
   title: string;
   rightButtonTitle?: string;
-  rightButtonAction?: typeof DELETE_ACTION;
+  footer?: ComponentType<DialogTwoButtonFooterProps>;
   width?: string;
   onClose?: () => void;
   onResumeClick?: () => void;
@@ -28,7 +29,7 @@ const ConfirmationDialog = ({
   content,
   title,
   rightButtonTitle,
-  rightButtonAction,
+  footer: FooterComponent = DialogTwoButtonFooter,
   onClose,
   onResumeClick,
   loading,
@@ -40,9 +41,8 @@ const ConfirmationDialog = ({
   return (
     <Dialog
       footer={
-        <DialogTwoButtonFooter
+        <FooterComponent
           isLoading={loading}
-          rightButtonAction={rightButtonAction}
           rightButtonTitle={rightButtonTitle}
           onLeftButtonClick={onClose}
           onRightButtonClick={onResumeClick}
