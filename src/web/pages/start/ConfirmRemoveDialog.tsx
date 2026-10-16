@@ -6,9 +6,7 @@
 import styled from 'styled-components';
 import Dialog from 'web/components/dialog/Dialog';
 import DialogContent from 'web/components/dialog/DialogContent';
-import DialogTwoButtonFooter, {
-  DELETE_ACTION,
-} from 'web/components/dialog/DialogTwoButtonFooter';
+import DialogDangerFooter from 'web/components/dialog/DialogDangerFooter';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface ConfirmRemoveDialogProps {
@@ -42,8 +40,7 @@ const ConfirmRemoveDialog = ({
             {name: dashboardTitle},
           )}
         </Content>
-        <DialogTwoButtonFooter
-          rightButtonAction={DELETE_ACTION}
+        <DialogDangerFooter
           rightButtonTitle={_('Remove')}
           onLeftButtonClick={onDeny}
           onRightButtonClick={() => onConfirm(dashboardId)}

@@ -7,8 +7,16 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {closeDialog, screen, render, fireEvent} from 'web/testing';
 import {KeyCode} from 'gmp/utils/event';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
+import DialogDangerFooter from 'web/components/dialog/DialogDangerFooter';
 
-describe('ConfirmationDialog component tests', () => {
+describe.each([
+  {name: 'default footer', FooterComponent: undefined, rightVariant: 'filled'},
+  {
+    name: 'danger footer',
+    FooterComponent: DialogDangerFooter,
+    rightVariant: 'danger',
+  },
+])('ConfirmationDialog with $name', ({FooterComponent, rightVariant}) => {
   test('should render ConfirmationDialog with text and title', () => {
     const handleClose = testing.fn();
     const handleResumeClick = testing.fn();
@@ -16,6 +24,7 @@ describe('ConfirmationDialog component tests', () => {
     render(
       <ConfirmationDialog
         content="foo"
+        footer={FooterComponent}
         title="bar"
         onClose={handleClose}
         onResumeClick={handleResumeClick}
@@ -23,6 +32,10 @@ describe('ConfirmationDialog component tests', () => {
     );
 
     expect(screen.queryDialog()).toBeInTheDocument();
+    expect(screen.getByTestId('dialog-save-button')).toHaveAttribute(
+      'data-variant',
+      rightVariant,
+    );
 
     expect(screen.queryDialogContent()).toHaveTextContent('foo');
     expect(screen.queryDialogTitle()).toHaveTextContent('bar');
@@ -35,6 +48,7 @@ describe('ConfirmationDialog component tests', () => {
     render(
       <ConfirmationDialog
         content={<div>foo</div>}
+        footer={FooterComponent}
         title="bar"
         onClose={handleClose}
         onResumeClick={handleResumeClick}
@@ -42,6 +56,10 @@ describe('ConfirmationDialog component tests', () => {
     );
 
     expect(screen.queryDialog()).toBeInTheDocument();
+    expect(screen.getByTestId('dialog-save-button')).toHaveAttribute(
+      'data-variant',
+      rightVariant,
+    );
 
     expect(screen.queryDialogContent()).toHaveTextContent('foo');
     expect(screen.queryDialogTitle()).toHaveTextContent('bar');
@@ -53,6 +71,7 @@ describe('ConfirmationDialog component tests', () => {
 
     render(
       <ConfirmationDialog
+        footer={FooterComponent}
         title="bar"
         onClose={handleClose}
         onResumeClick={handleResumeClick}
@@ -70,6 +89,7 @@ describe('ConfirmationDialog component tests', () => {
 
     render(
       <ConfirmationDialog
+        footer={FooterComponent}
         title="bar"
         onClose={handleClose}
         onResumeClick={handleResumeClick}
@@ -86,6 +106,7 @@ describe('ConfirmationDialog component tests', () => {
 
     render(
       <ConfirmationDialog
+        footer={FooterComponent}
         title="bar"
         onClose={handleClose}
         onResumeClick={handleResumeClick}
@@ -96,12 +117,33 @@ describe('ConfirmationDialog component tests', () => {
     expect(handleResumeClick).toHaveBeenCalled();
   });
 
+  test('should forward the custom title and loading state to the footer', () => {
+    const onResumeClick = testing.fn();
+    render(
+      <ConfirmationDialog
+        footer={FooterComponent}
+        loading={true}
+        rightButtonTitle="Proceed"
+        title="Confirm"
+        onResumeClick={onResumeClick}
+      />,
+    );
+
+    const rightButton = screen.getByRole('button', {name: 'Proceed'});
+    expect(rightButton).toBeDisabled();
+    expect(rightButton).toHaveAttribute('data-loading', 'true');
+    expect(screen.getByRole('button', {name: 'Cancel'})).toBeEnabled();
+    fireEvent.click(rightButton);
+    expect(onResumeClick).not.toHaveBeenCalled();
+  });
+
   test('should close ConfirmationDialog on escape key', () => {
     const handleClose = testing.fn();
     const handleResumeClick = testing.fn();
 
     render(
       <ConfirmationDialog
+        footer={FooterComponent}
         title="bar"
         onClose={handleClose}
         onResumeClick={handleResumeClick}

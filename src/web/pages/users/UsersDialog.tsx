@@ -18,7 +18,7 @@ import {
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
-import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
+import DialogDangerFooter from 'web/components/dialog/DialogDangerFooter';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import FormGroup from 'web/components/form/FormGroup';
 import MultiSelect from 'web/components/form/MultiSelect';
@@ -374,7 +374,7 @@ const UsersDialog = ({
                   'the data will be saved when clicking OK, and you will be logged ' +
                   'out immediately.',
               )}
-              rightButtonAction={DELETE_ACTION}
+              footer={DialogDangerFooter}
               title={_('Save Super Admin User')}
               width="400px"
               onClose={closeConfirmationDialogSuperAdmin}
@@ -388,7 +388,7 @@ const UsersDialog = ({
                   'without a role. This user will not have any ' +
                   'permissions and as a result will not be able to login.',
               )}
-              rightButtonAction={DELETE_ACTION}
+              footer={DialogDangerFooter}
               title={_('User without a role')}
               width="400px"
               onClose={closeConfirmationDialog}

@@ -14,7 +14,7 @@ import type Rejection from 'gmp/http/rejection';
 import type Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
-import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
+import DialogDangerFooter from 'web/components/dialog/DialogDangerFooter';
 import {TrashcanIcon} from 'web/components/icon';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -230,8 +230,8 @@ const TrashCan = () => {
                     'An error occurred while emptying the trash, please try again.',
                   )
             }
+            footer={DialogDangerFooter}
             loading={isEmptyingTrash || isLoading}
-            rightButtonAction={DELETE_ACTION}
             rightButtonTitle={_('Confirm')}
             title={_('Empty Trash')}
             width="500px"
