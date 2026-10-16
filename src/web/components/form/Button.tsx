@@ -4,22 +4,26 @@
  */
 
 import React, {type ReactNode, type MouseEvent} from 'react';
-import {Button as OpenSightButton} from '@greenbone/ui-lib';
+import {Button as OpenSightButton, type TButtonProps} from '@greenbone/ui-lib';
 import useValueChange from 'web/components/form/useValueChange';
 
-interface ButtonProps {
+type ButtonValue = string | number | readonly string[] | undefined;
+
+interface ButtonProps<
+  TOutputValue,
+  TInputValue extends ButtonValue = string,
+> extends Omit<TButtonProps, 'onClick'> {
   title?: string;
   children?: ReactNode;
-  convert?: (value: unknown) => unknown;
+  convert?: (value: TInputValue) => TOutputValue;
   disabled?: boolean;
   isLoading?: boolean;
   name?: string;
-  value?: string | number | string[] | undefined;
-  onClick?: (value: unknown) => void;
-  [key: string]: unknown;
+  value?: TInputValue;
+  onClick?: (value: TOutputValue) => void;
 }
 
-const Button: React.FC<ButtonProps> = ({
+const Button = <TOutputValue, TInputValue extends ButtonValue = string>({
   title,
   children = title,
   convert,
@@ -29,7 +33,7 @@ const Button: React.FC<ButtonProps> = ({
   value,
   onClick,
   ...other
-}) => {
+}: ButtonProps<TOutputValue, TInputValue>) => {
   const handleChange = useValueChange({
     disabled,
     onChange: onClick,
