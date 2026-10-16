@@ -11,10 +11,15 @@ import Radio from 'web/components/form/Radio';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
 
+interface AgentSupportBundleDialogDownloadData {
+  encryption: boolean;
+  anonymized: boolean;
+}
+
 interface AgentSupportBundleDialogProps {
   loading?: boolean;
   onClose: () => void;
-  onDownload: (encryption: boolean, anonymized: boolean) => void;
+  onDownload: (data: AgentSupportBundleDialogDownloadData) => void;
 }
 
 const AgentSupportBundleDialog = ({
@@ -80,7 +85,7 @@ const AgentSupportBundleDialog = ({
       rightButtonTitle={_('Download')}
       title={_('Download Agent Support Bundle')}
       onClose={onClose}
-      onResumeClick={() => onDownload(encryption, anonymized)}
+      onResumeClick={() => onDownload({encryption, anonymized})}
     />
   );
 };
