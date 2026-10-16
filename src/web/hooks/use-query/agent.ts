@@ -4,7 +4,10 @@
  */
 
 import {useQueryClient} from '@tanstack/react-query';
-import {type AgentModifyParams} from 'gmp/commands/agent';
+import {
+  type AgentModifyParams,
+  type AgentSupportBundleParams,
+} from 'gmp/commands/agent';
 import type Response from 'gmp/http/response';
 import {isArray} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
@@ -22,11 +25,7 @@ interface UseDownloadAgentSupportBundleParams {
   onError?: (error: Error) => void;
 }
 
-export interface DownloadAgentSupportBundleInput {
-  id: string;
-  encryption?: boolean;
-  anonymized?: boolean;
-}
+export type DownloadAgentSupportBundleInput = AgentSupportBundleParams;
 
 export const useModifyAgent = ({
   onError,
@@ -77,8 +76,7 @@ export const useDownloadAgentSupportBundle = ({
 
   return useGmpMutation<DownloadAgentSupportBundleInput, Response<ArrayBuffer>>(
     {
-      gmpMethod: ({id, encryption, anonymized}) =>
-        gmp.agent.downloadSupportBundle(id, encryption, anonymized),
+      gmpMethod: data => gmp.agent.downloadSupportBundle(data),
       onSuccess,
       onError,
     },

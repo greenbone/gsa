@@ -127,7 +127,7 @@ describe('AgentCommand tests', () => {
     const http = createHttp(fakeFile);
     const command = new AgentCommand(http);
 
-    const result = await command.downloadSupportBundle('324');
+    const result = await command.downloadSupportBundle({id: '324'});
 
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {
@@ -178,11 +178,11 @@ describe('AgentCommand tests', () => {
       const http = createHttp(fakeFile);
       const command = new AgentCommand(http);
 
-      const result = await command.downloadSupportBundle(
-        '324',
+      const result = await command.downloadSupportBundle({
+        id: '324',
         encryption,
         anonymized,
-      );
+      });
 
       expect(http.request).toHaveBeenCalledWith('get', {
         args: {

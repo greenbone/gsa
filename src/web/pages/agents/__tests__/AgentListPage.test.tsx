@@ -354,7 +354,11 @@ describe('AgentListPage tests', () => {
     fireEvent.click(screen.getByTestId('dialog-save-button'));
 
     await waitFor(() =>
-      expect(downloadSupportBundleMock).toHaveBeenCalledWith('1', true, false),
+      expect(downloadSupportBundleMock).toHaveBeenCalledWith({
+        id: '1',
+        encryption: true,
+        anonymized: false,
+      }),
     );
   });
 
@@ -420,11 +424,11 @@ describe('AgentListPage tests', () => {
       fireEvent.click(screen.getByTestId('dialog-save-button'));
 
       await waitFor(() => {
-        expect(downloadSupportBundleMock).toHaveBeenCalledWith(
-          '1',
+        expect(downloadSupportBundleMock).toHaveBeenCalledWith({
+          id: '1',
           encryption,
           anonymized,
-        );
+        });
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
       });
 
@@ -464,7 +468,11 @@ describe('AgentListPage tests', () => {
     ).toBeChecked();
     fireEvent.click(screen.getByTestId('dialog-save-button'));
     await waitFor(() =>
-      expect(downloadSupportBundleMock).toHaveBeenCalledWith('2', true, false),
+      expect(downloadSupportBundleMock).toHaveBeenCalledWith({
+        id: '2',
+        encryption: true,
+        anonymized: false,
+      }),
     );
   });
 });
