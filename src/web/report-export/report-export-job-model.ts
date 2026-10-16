@@ -267,11 +267,9 @@ export const retainReportExportJobs = (jobs: ReportExportJob[]) => {
 };
 
 export const selectReportExportInventory = (reportExports: ReportExport[]) => {
-  const activeExports = reportExports.filter(reportExport =>
-    isReportExportGenerationActive(reportExport.status),
+  return reportExports.filter(
+    reportExport =>
+      reportExport.status !== 'canceled' &&
+      reportExport.status !== 'expired',
   );
-  const readyExports = reportExports.filter(
-    reportExport => reportExport.status === 'done',
-  );
-  return [...activeExports, ...readyExports];
 };

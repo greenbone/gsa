@@ -52,7 +52,12 @@ const useReportExportActivity = () => {
 
   useEffect(() => {
     const additions = jobs
-      .filter(job => !previousJobKeys.current.has(job.key) && !isComplete(job))
+      .filter(
+        job =>
+          !previousJobKeys.current.has(job.key) &&
+          !isComplete(job) &&
+          job.view.kind !== 'ready',
+      )
       .map(job => job.key);
     if (additions.length) {
       setRecentKeys(current => new Set([...current, ...additions]));

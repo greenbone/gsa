@@ -373,40 +373,71 @@ describe('ReportExportManager', () => {
     expect(await screen.findByText('Generating')).toBeInTheDocument();
   });
 
-  test('opens all completed exports as ready after login', async () => {
+  test('restores active, ready, and failed exports but hides canceled and expired', async () => {
     const gmp = createGmp();
-    gmp.session.token = undefined;
-    gmp.session.username = undefined;
-    const completedExports = Array.from({length: 60}, (_, index) => ({
-      id: `done-${index}`,
-      status: 'done',
-      owner: {name: 'test-user'},
-      reportId: `report-${index}`,
-      type: 'scan',
-      extension: 'pdf',
-    }));
+    const exports = [
+      {
+        id: 'queued-export',
+        status: 'pending',
+        owner: {name: 'test-user'},
+        reportId: 'Queued report',
+        type: 'scan',
+        extension: 'pdf',
+      },
+      {
+        id: 'running-export',
+        status: 'running',
+        owner: {name: 'test-user'},
+        reportId: 'Running report',
+        type: 'scan',
+        extension: 'pdf',
+      },
+      {
+        id: 'failed-export',
+        status: 'error',
+        owner: {name: 'test-user'},
+        reportId: 'Failed report',
+        type: 'scan',
+        extension: 'pdf',
+      },
+      {
+        id: 'expired-export',
+        status: 'expired',
+        owner: {name: 'test-user'},
+        reportId: 'Expired report',
+        type: 'scan',
+        extension: 'pdf',
+      },
+      {
+        id: 'ready-export',
+        status: 'done',
+        owner: {name: 'test-user'},
+        reportId: 'Ready report',
+        type: 'scan',
+        extension: 'pdf',
+      },
+      {
+        id: 'canceled-export',
+        status: 'canceled',
+        owner: {name: 'test-user'},
+        reportId: 'Canceled report',
+        type: 'scan',
+        extension: 'pdf',
+      },
+    ];
     gmp.reportexports.get.mockResolvedValue({
-      data: [
-        ...completedExports,
-        {
-          id: 'canceled-export',
-          status: 'canceled',
-          owner: {name: 'test-user'},
-          name: 'Canceled report',
-          extension: 'pdf',
-        },
-      ],
+      data: exports,
       meta: {
         counts: new CollectionCounts({
           first: 1,
-          filtered: 61,
-          length: 61,
+          filtered: exports.length,
+          length: exports.length,
           rows: 100,
         }),
       },
     });
     gmp.reportexport.get.mockImplementation(async ({reportExportId}) => ({
-      data: {id: reportExportId, status: 'done'},
+      data: exports.find(item => item.id === reportExportId),
     }));
     const {render} = rendererWith({gmp});
     render(
@@ -414,27 +445,69 @@ describe('ReportExportManager', () => {
         <ReportExportActivity />
       </ReportExportManager>,
     );
-    act(() => {
-      gmp.session.token = 'new-token';
-      gmp.session.username = 'test-user';
-      gmp.session.listener.forEach(listener => listener());
-    });
 
     const activityButton = await screen.findByTestId(
       'report-export-activity-button',
     );
-    await waitFor(() =>
-      expect(activityButton).toHaveAttribute('aria-expanded', 'true'),
-    );
-    expect(await screen.findAllByText('Ready')).toHaveLength(60);
+    expect(activityButton).toHaveAttribute('aria-expanded', 'true');
+    expect(await screen.findByText('Queued')).toBeInTheDocument();
+    expect(await screen.findByText('Generating')).toBeInTheDocument();
+    expect(await screen.findByText('Ready')).toBeInTheDocument();
+    expect(await screen.findAllByText('Export failed')).toHaveLength(2);
     expect(
-      screen.getByText('Report export: report-0 (.pdf)'),
+      screen.getByText('Report export: Queued report (.pdf)'),
     ).toBeInTheDocument();
-    expect(screen.queryByText('UUID: done-59')).toBeNull();
+    expect(
+      screen.getByText('Report export: Ready report (.pdf)'),
+    ).toBeInTheDocument();
     expect(
       screen.queryByText('Report export: Canceled report (.pdf)'),
-    ).toBeNull();
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Report export: Expired report (.pdf)'),
+    ).not.toBeInTheDocument();
     expect(gmp.reportexport.downloadReportExport).not.toHaveBeenCalled();
+  });
+
+  test('renders the activity manager closed for ready exports after login', async () => {
+    const gmp = createGmp();
+    gmp.reportexports.get.mockResolvedValue({
+      data: [
+        {
+          id: 'ready-export',
+          status: 'done',
+          owner: {name: 'test-user'},
+          reportId: 'Ready report',
+          type: 'scan',
+          extension: 'pdf',
+        },
+      ],
+      meta: {
+        counts: new CollectionCounts({
+          first: 1,
+          filtered: 1,
+          length: 1,
+          rows: 100,
+        }),
+      },
+    });
+    const {render} = rendererWith({gmp});
+
+    render(
+      <ReportExportManager>
+        <ReportExportActivity />
+      </ReportExportManager>,
+    );
+
+    const activityButton = await screen.findByTestId(
+      'report-export-activity-button',
+    );
+    expect(activityButton).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.click(activityButton);
+    expect(await screen.findByText('Ready')).toBeInTheDocument();
+    expect(
+      screen.getByText('Report export: Ready report (.pdf)'),
+    ).toBeInTheDocument();
   });
 
   test('sorts discovered exports by newest server creation time', async () => {
@@ -443,7 +516,8 @@ describe('ReportExportManager', () => {
       data: [
         {
           id: 'newer-export',
-          status: 'done',
+          status: 'running',
+          progress: 'generating',
           owner: {name: 'test-user'},
           reportId: 'Newer report',
           type: 'scan',
@@ -452,7 +526,8 @@ describe('ReportExportManager', () => {
         },
         {
           id: 'older-export',
-          status: 'done',
+          status: 'running',
+          progress: 'generating',
           owner: {name: 'test-user'},
           reportId: 'Older report',
           type: 'scan',
@@ -469,6 +544,17 @@ describe('ReportExportManager', () => {
         }),
       },
     });
+    gmp.reportexport.get.mockImplementation(async ({reportExportId}) => ({
+      data: {
+        id: reportExportId,
+        status: 'running',
+        progress: 'generating',
+        creationTime:
+          reportExportId === 'newer-export'
+            ? date('2026-10-15T11:00:00Z')
+            : date('2026-10-15T10:00:00Z'),
+      },
+    }));
     const {render} = rendererWith({gmp});
     render(
       <ReportExportManager>
@@ -500,8 +586,9 @@ describe('ReportExportManager', () => {
         creationTime: date('2026-10-15T11:00:00Z'),
       },
       {
-        id: 'ready-export',
-        status: 'done',
+        id: 'failed-export',
+        status: 'error',
+        errorMessage: 'Report failed',
         owner: {name: 'test-user'},
         extension: 'pdf',
         creationTime: date('2026-10-15T10:00:00Z'),
@@ -526,7 +613,7 @@ describe('ReportExportManager', () => {
     );
 
     await screen.findByText('Generating');
-    await screen.findByText('Ready');
+  await screen.findByText('Export failed');
     const firstRow = screen.getAllByTestId('report-export-job')[0];
     const content = within(firstRow).getByTestId('report-export-content');
     expect(content.children[0]).toHaveAttribute(
@@ -554,23 +641,23 @@ describe('ReportExportManager', () => {
     expect(
       within(firstRow).getByTestId('report-export-created-at').firstChild,
     ).toHaveAttribute('aria-hidden', 'true');
-    const readyRow = screen.getAllByTestId('report-export-job')[1];
-    const readyFooter = within(readyRow).getByTestId('report-export-footer');
-    expect(readyFooter.previousSibling).toHaveAttribute(
+    const failedRow = screen.getAllByTestId('report-export-job')[1];
+    const failedFooter = within(failedRow).getByTestId('report-export-footer');
+    expect(failedFooter.previousSibling).toHaveAttribute(
       'data-testid',
       'report-export-divider',
     );
     expect(
-      within(readyFooter).getByTestId('report-export-actions'),
+      within(failedFooter).getByTestId('report-export-actions'),
     ).toBeInTheDocument();
     expect(
-      within(readyFooter).getByTestId('report-export-actions'),
+      within(failedFooter).getByTestId('report-export-actions'),
     ).toHaveStyle({justifyContent: 'space-between'});
     expect(
-      within(readyFooter).getByLabelText('Remove from activity'),
+      within(failedFooter).getByLabelText('Remove from activity'),
     ).toBeInTheDocument();
     expect(
-      within(readyRow).getByTestId('report-export-created-at'),
+      within(failedRow).getByTestId('report-export-created-at'),
     ).toBeInTheDocument();
   });
 
