@@ -372,7 +372,7 @@ const AgentListPage = () => {
               <AgentSupportBundleDialog
                 loading={downloadSupportBundleMutation.isPending}
                 onClose={closeDownloadDialog}
-                onDownload={(encryption, anonymized) =>
+                onDownload={({encryption, anonymized}) =>
                   handleDownloadSupportBundleWithFormat(
                     downloadAgent,
                     encryption,

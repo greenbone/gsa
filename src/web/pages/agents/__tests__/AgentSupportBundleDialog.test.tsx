@@ -29,7 +29,10 @@ describe('AgentSupportBundleDialog tests', () => {
     expect(onDownload).not.toHaveBeenCalled();
 
     fireEvent.click(screen.getByRole('button', {name: 'Download'}));
-    expect(onDownload).toHaveBeenCalledWith(true, false);
+    expect(onDownload).toHaveBeenCalledWith({
+      encryption: true,
+      anonymized: false,
+    });
   });
 
   test.each([
@@ -85,10 +88,10 @@ describe('AgentSupportBundleDialog tests', () => {
       ).toHaveProperty('checked', anonymized);
       fireEvent.click(screen.getByRole('button', {name: 'Download'}));
 
-      expect(onDownload).toHaveBeenCalledExactlyOnceWith(
+      expect(onDownload).toHaveBeenCalledExactlyOnceWith({
         encryption,
         anonymized,
-      );
+      });
       expect(onClose).not.toHaveBeenCalled();
     },
   );
