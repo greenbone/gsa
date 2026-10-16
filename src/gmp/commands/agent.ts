@@ -19,6 +19,12 @@ export interface AgentModifyParams {
   intervalInSeconds?: number;
 }
 
+export interface AgentSupportBundleParams {
+  id: string;
+  encryption?: boolean;
+  anonymized?: boolean;
+}
+
 const log = logger.getLogger('gmp.commands.agent');
 
 class AgentCommand extends EntityCommand<Agent, AgentElement> {
@@ -57,11 +63,11 @@ class AgentCommand extends EntityCommand<Agent, AgentElement> {
     await this.action(data);
   }
 
-  async downloadSupportBundle(
-    id: string,
+  async downloadSupportBundle({
+    id,
     encryption = true,
     anonymized = false,
-  ) {
+  }: AgentSupportBundleParams) {
     return await this.httpRequestWithRejectionTransform<ArrayBuffer>('get', {
       args: {
         cmd: 'get_agent_support_bundle',

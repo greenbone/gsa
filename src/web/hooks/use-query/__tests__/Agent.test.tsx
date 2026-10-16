@@ -129,11 +129,7 @@ describe('useDownloadAgentSupportBundle', () => {
       render(<TestComponent />);
       fireEvent.click(screen.getByRole('button', {name: 'Download'}));
       await waitFor(() => {
-        expect(gmp.agent.downloadSupportBundle).toHaveBeenCalledWith(
-          'agent-1',
-          input.encryption,
-          input.anonymized,
-        );
+        expect(gmp.agent.downloadSupportBundle).toHaveBeenCalledWith(input);
       });
     },
   );
