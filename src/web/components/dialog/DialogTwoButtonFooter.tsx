@@ -8,25 +8,29 @@ import Button from 'web/components/form/Button';
 import useTranslation from 'web/hooks/useTranslation';
 
 interface DialogTwoButtonFooterProps {
+  isLoading?: boolean;
+  isSaving?: boolean;
+  leftButtonDisabled?: boolean;
   leftButtonTitle?: string;
+  rightButtonAction?: typeof DELETE_ACTION;
+  rightButtonDisabled?: boolean;
   rightButtonTitle: string;
   onLeftButtonClick?: () => void;
   onRightButtonClick?: () => void;
-  isLoading?: boolean;
-  isSaving?: boolean;
-  rightButtonAction?: typeof DELETE_ACTION;
 }
 
 export const DELETE_ACTION = 'delete';
 
 const DialogTwoButtonFooter = ({
+  isLoading = false,
+  isSaving = false,
+  leftButtonDisabled = false,
   leftButtonTitle,
+  rightButtonAction,
+  rightButtonDisabled = false,
   rightButtonTitle,
   onLeftButtonClick,
   onRightButtonClick,
-  isLoading = false,
-  isSaving = false,
-  rightButtonAction,
 }: DialogTwoButtonFooterProps) => {
   const [_] = useTranslation();
   leftButtonTitle = leftButtonTitle || _('Cancel');
@@ -35,7 +39,7 @@ const DialogTwoButtonFooter = ({
     <DialogFooterLayout align={['space-between', 'center']} shrink="0">
       <Button
         data-testid="dialog-close-button"
-        disabled={isSaving}
+        disabled={leftButtonDisabled || isSaving}
         variant={isRightButtonAction ? 'default' : 'outline'}
         onClick={onLeftButtonClick}
       >
@@ -43,6 +47,7 @@ const DialogTwoButtonFooter = ({
       </Button>
       <Button
         data-testid="dialog-save-button"
+        disabled={rightButtonDisabled || isSaving || isLoading}
         isLoading={isSaving || isLoading}
         variant={isRightButtonAction ? 'danger' : 'filled'}
         onClick={onRightButtonClick}
