@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {isDefined, isFunction} from 'gmp/utils/identity';
 import Dialog from 'web/components/dialog/Dialog';
 import DialogContent from 'web/components/dialog/DialogContent';
@@ -79,13 +79,7 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
   buttonTitle = buttonTitle || _('Save');
 
   const [isSaving, setIsSaving] = useState(false);
-  const [stateError, setStateError] = useState<string | undefined>(error);
-
-  useEffect(() => {
-    // oxlint-disable-next-line react/set-state-in-effect
-    setStateError(error);
-    setIsSaving(false);
-  }, [error]);
+  const [stateError, setStateError] = useState<string | undefined>();
 
   const setError = (err: Error) => {
     setIsSaving(false);
@@ -97,13 +91,19 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
     }
   };
 
-  const handleSaveClick = (state: TValues & TDefaultValues) => {
+  const handleSaveClick = async (state: TValues & TDefaultValues) => {
     if (onSave && !isLoading) {
       const promise = onSave(state);
       // oxlint-disable-next-line typescript/unbound-method
       if (isFunction(promise?.then)) {
         setIsSaving(true);
-        return promise.catch(error => setError(error));
+        try {
+          return await promise;
+        } catch (error) {
+          setError(error as Error);
+        } finally {
+          setIsSaving(false);
+        }
       }
     }
   };
@@ -123,7 +123,7 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
       footer={
         <DialogTwoButtonFooter
           isLoading={isLoading}
-          isSaving={isSaving}
+          isSaving={!isDefined(error) && isSaving}
           rightButtonTitle={buttonTitle}
           onLeftButtonClick={onClose}
           onRightButtonClick={() => handleSaveClick(childValues)}
@@ -134,8 +134,11 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
       onClose={onClose}
     >
       <DialogContent>
-        {stateError && (
-          <DialogError error={stateError} onCloseClick={handleErrorClose} />
+        {(isDefined(stateError) || isDefined(error)) && (
+          <DialogError
+            error={error ?? stateError}
+            onCloseClick={handleErrorClose}
+          />
         )}
         <ErrorBoundary message={_('An error occurred in this dialog.')}>
           {isFunction(children)
