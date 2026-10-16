@@ -10,6 +10,8 @@ import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
 
 interface FormGroupProps {
+  'aria-label'?: React.AriaAttributes['aria-label'];
+  role?: React.AriaRole;
   children?: React.ReactNode;
   'data-testid'?: string;
   direction?: 'row' | 'column';
@@ -33,6 +35,8 @@ const StyledLabel = styled.label`
 `;
 
 const FormGroup = ({
+  'aria-label': ariaLabel,
+  role,
   children,
   htmlFor,
   title,
@@ -42,7 +46,7 @@ const FormGroup = ({
 }: FormGroupProps) => {
   const Layout = direction === 'column' ? Column : Row;
   return (
-    <Wrapper data-testid={dataTestId}>
+    <Wrapper aria-label={ariaLabel} data-testid={dataTestId} role={role}>
       {isDefined(title) && (
         <StyledLabel data-testid={`${dataTestId}-label`} htmlFor={htmlFor}>
           {title}
