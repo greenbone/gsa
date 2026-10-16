@@ -38,6 +38,9 @@ const createGmp = ({
     delete: deleteRole,
     export: exportRole,
   },
+  permissions: {
+    getAll: testing.fn().mockResolvedValue({data: []}),
+  },
   users: {
     get: testing.fn().mockResolvedValue({
       data: [],
