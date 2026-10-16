@@ -4,7 +4,14 @@
  */
 
 import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
-import {fireEvent, rendererWith, screen, wait} from 'web/testing';
+import {
+  fireEvent,
+  rendererWith,
+  screen,
+  wait,
+  waitFor,
+  within,
+} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Agent from 'gmp/models/agent';
 import Date, {type Date as GmpDate} from 'gmp/models/date';
@@ -341,31 +348,123 @@ describe('AgentListPage tests', () => {
     expect(
       screen.getByRole('radio', {name: 'Encrypted support bundle'}),
     ).toBeChecked();
+    expect(
+      screen.getByRole('radio', {name: 'Non-anonymized support bundle'}),
+    ).toBeChecked();
     fireEvent.click(screen.getByTestId('dialog-save-button'));
 
-    await wait();
-
-    expect(downloadSupportBundleMock).toHaveBeenCalledWith('1', true);
+    await waitFor(() =>
+      expect(downloadSupportBundleMock).toHaveBeenCalledWith('1', true, false),
+    );
   });
 
-  test('should download a plain support bundle when selected', async () => {
-    const gmp = createGmp();
+  test.each([
+    {encryption: true, anonymized: false},
+    {encryption: false, anonymized: false},
+    {encryption: true, anonymized: true},
+    {encryption: false, anonymized: true},
+  ])(
+    'should download with encryption=$encryption and anonymized=$anonymized',
+    async ({encryption, anonymized}) => {
+      const gmp = createGmp();
+      const {render} = rendererWith({gmp, capabilities: true});
 
-    const {render} = rendererWith({
-      gmp,
-      capabilities: true,
-    });
+      render(<AgentListPage />);
+      await screen.findByText('Agent 1');
+
+      fireEvent.click(screen.getAllByTitle('Download Agent Support Bundle')[0]);
+
+      const encryptionGroup = within(
+        screen.getByRole('radiogroup', {name: 'Encryption'}),
+      );
+      const anonymizedGroup = within(
+        screen.getByRole('radiogroup', {name: 'Anonymized operation'}),
+      );
+      expect(encryptionGroup.getAllByRole('radio')).toHaveLength(2);
+      expect(anonymizedGroup.getAllByRole('radio')).toHaveLength(2);
+
+      fireEvent.click(
+        encryptionGroup.getByRole('radio', {
+          name: encryption
+            ? 'Encrypted support bundle'
+            : 'Plain support bundle',
+        }),
+      );
+      fireEvent.click(
+        anonymizedGroup.getByRole('radio', {
+          name: anonymized
+            ? 'Anonymized support bundle'
+            : 'Non-anonymized support bundle',
+        }),
+      );
+
+      expect(
+        encryptionGroup.getByRole('radio', {
+          name: 'Encrypted support bundle',
+        }),
+      ).toHaveProperty('checked', encryption);
+      expect(
+        encryptionGroup.getByRole('radio', {name: 'Plain support bundle'}),
+      ).toHaveProperty('checked', !encryption);
+      expect(
+        anonymizedGroup.getByRole('radio', {
+          name: 'Anonymized support bundle',
+        }),
+      ).toHaveProperty('checked', anonymized);
+      expect(
+        anonymizedGroup.getByRole('radio', {
+          name: 'Non-anonymized support bundle',
+        }),
+      ).toHaveProperty('checked', !anonymized);
+
+      fireEvent.click(screen.getByTestId('dialog-save-button'));
+
+      await waitFor(() => {
+        expect(downloadSupportBundleMock).toHaveBeenCalledWith(
+          '1',
+          encryption,
+          anonymized,
+        );
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getAllByTitle('Download Agent Support Bundle')[1]);
+      expect(
+        screen.getByRole('radio', {name: 'Encrypted support bundle'}),
+      ).toBeChecked();
+      expect(
+        screen.getByRole('radio', {name: 'Non-anonymized support bundle'}),
+      ).toBeChecked();
+    },
+  );
+
+  test('should reset support bundle options after cancellation', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, capabilities: true});
 
     render(<AgentListPage />);
 
     await screen.findByText('Agent 1');
-
     fireEvent.click(screen.getAllByTitle('Download Agent Support Bundle')[0]);
     fireEvent.click(screen.getByRole('radio', {name: 'Plain support bundle'}));
+    fireEvent.click(
+      screen.getByRole('radio', {name: 'Anonymized support bundle'}),
+    );
+    fireEvent.click(screen.getByTestId('dialog-close-button'));
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(downloadSupportBundleMock).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getAllByTitle('Download Agent Support Bundle')[1]);
+    expect(
+      screen.getByRole('radio', {name: 'Encrypted support bundle'}),
+    ).toBeChecked();
+    expect(
+      screen.getByRole('radio', {name: 'Non-anonymized support bundle'}),
+    ).toBeChecked();
     fireEvent.click(screen.getByTestId('dialog-save-button'));
-
-    await wait();
-
-    expect(downloadSupportBundleMock).toHaveBeenCalledWith('1', false);
+    await waitFor(() =>
+      expect(downloadSupportBundleMock).toHaveBeenCalledWith('2', true, false),
+    );
   });
 });

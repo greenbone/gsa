@@ -57,12 +57,17 @@ class AgentCommand extends EntityCommand<Agent, AgentElement> {
     await this.action(data);
   }
 
-  async downloadSupportBundle(id: string, encryption = true) {
+  async downloadSupportBundle(
+    id: string,
+    encryption = true,
+    anonymized = false,
+  ) {
     return await this.httpRequestWithRejectionTransform<ArrayBuffer>('get', {
       args: {
         cmd: 'get_agent_support_bundle',
         agent_uuid: id,
         encryption: parseYesNo(encryption),
+        anonymized: parseYesNo(anonymized),
       },
       responseType: 'arraybuffer',
     });

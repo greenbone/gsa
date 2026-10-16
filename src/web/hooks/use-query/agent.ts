@@ -25,6 +25,7 @@ interface UseDownloadAgentSupportBundleParams {
 export interface DownloadAgentSupportBundleInput {
   id: string;
   encryption?: boolean;
+  anonymized?: boolean;
 }
 
 export const useModifyAgent = ({
@@ -76,8 +77,8 @@ export const useDownloadAgentSupportBundle = ({
 
   return useGmpMutation<DownloadAgentSupportBundleInput, Response<ArrayBuffer>>(
     {
-      gmpMethod: ({id, encryption}) =>
-        gmp.agent.downloadSupportBundle(id, encryption),
+      gmpMethod: ({id, encryption, anonymized}) =>
+        gmp.agent.downloadSupportBundle(id, encryption, anonymized),
       onSuccess,
       onError,
     },
