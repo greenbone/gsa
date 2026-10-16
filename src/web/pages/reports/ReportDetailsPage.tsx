@@ -33,7 +33,9 @@ import useGmp from 'web/hooks/useGmp';
 import usePageFilter from 'web/hooks/usePageFilter';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
-import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
+import DownloadReportDialog, {
+  type DownloadReportDialogValues,
+} from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsContent from 'web/pages/reports/ReportDetailsContent';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import TargetComponent from 'web/pages/targets/TargetComponent';
@@ -45,14 +47,6 @@ interface ReportComposerDefaults {
   defaultReportFormatId?: string;
   includeNotes?: boolean;
   includeOverrides?: boolean;
-}
-
-interface DownloadReportState {
-  includeNotes: boolean;
-  includeOverrides: boolean;
-  reportConfigId: string;
-  reportFormatId: string;
-  storeAsDefault: boolean;
 }
 
 interface ReportTargetRef {
@@ -289,17 +283,14 @@ const ReportDetailsPage = () => {
   }, []);
 
   const handleReportDownload = useCallback(
-    async (values: Record<string, unknown>) => {
-      const state = values as unknown as DownloadReportState;
+    async ({
+      includeNotes,
+      includeOverrides,
+      reportConfigId,
+      reportFormatId,
+      storeAsDefault,
+    }: DownloadReportDialogValues) => {
       if (!entity || !reportFilter) return;
-      const {
-        includeNotes,
-        includeOverrides,
-        reportConfigId,
-        reportFormatId,
-        storeAsDefault,
-      } = state;
-
       const newFilter = reportFilter
         .set('notes', includeNotes)
         .set('overrides', includeOverrides);
@@ -331,7 +322,7 @@ const ReportDetailsPage = () => {
       try {
         const [response, reportExportFileName] = await Promise.all([
           gmp.report.download(
-            {id: entity.id as string},
+            {id: entity.id},
             {
               reportConfigId,
               reportFormatId,

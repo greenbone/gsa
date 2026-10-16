@@ -32,7 +32,9 @@ import usePageFilter from 'web/hooks/usePageFilter';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
 import Page from 'web/pages/reports/AuditReportDetailsContent';
-import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
+import DownloadReportDialog, {
+  type DownloadReportDialogValues,
+} from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import {createPEMCertificate} from 'web/utils/certificates';
@@ -42,13 +44,6 @@ interface ReportComposerDefaults {
   defaultReportFormatId?: string;
   includeNotes?: boolean;
   includeOverrides?: boolean;
-}
-
-interface DownloadReportState {
-  includeNotes: boolean;
-  includeOverrides: boolean;
-  reportFormatId: string;
-  storeAsDefault: boolean;
 }
 
 interface ReportTargetRef {
@@ -285,12 +280,13 @@ const AuditReportDetailsPage = () => {
   }, []);
 
   const handleReportDownload = useCallback(
-    async (values: Record<string, unknown>) => {
-      const state = values as unknown as DownloadReportState;
+    async ({
+      includeNotes,
+      includeOverrides,
+      reportFormatId,
+      storeAsDefault,
+    }: DownloadReportDialogValues) => {
       if (!entity || !reportFilter) return;
-      const {includeNotes, includeOverrides, reportFormatId, storeAsDefault} =
-        state;
-
       const newFilter = reportFilter
         .set('notes', includeNotes)
         .set('overrides', includeOverrides);

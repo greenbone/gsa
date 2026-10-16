@@ -22,6 +22,14 @@ import ContainerScanningThresholdMessage from 'web/pages/reports/ContainerScanni
 import ThresholdMessage from 'web/pages/reports/ThresholdMessage';
 import {renderSelectItems, type RenderSelectItemProps} from 'web/utils/Render';
 
+export interface DownloadReportDialogValues {
+  includeNotes: boolean;
+  includeOverrides: boolean;
+  storeAsDefault?: boolean;
+  reportConfigId?: string;
+  reportFormatId: string;
+}
+
 interface DownloadReportDialogProps {
   audit?: boolean;
   defaultReportConfigId?: string;
@@ -37,7 +45,7 @@ interface DownloadReportDialogProps {
   threshold?: number;
   totalResultCount?: number;
   onClose: () => void;
-  onSave: (values: Record<string, unknown>) => Promise<void>;
+  onSave: (values: DownloadReportDialogValues) => Promise<void>;
 }
 
 const DownloadReportDialog = ({
@@ -75,12 +83,6 @@ const DownloadReportDialog = ({
     initialReportConfigId,
   );
 
-  const unControlledValues = {
-    includeNotes,
-    includeOverrides,
-    storeAsDefault,
-  };
-
   const handleReportFormatIdChange = (value: string) => {
     setReportConfigIdInState('');
     setReportFormatIdInState(value);
@@ -88,14 +90,6 @@ const DownloadReportDialog = ({
 
   const handleReportConfigIdChange = (value: string) => {
     setReportConfigIdInState(value);
-  };
-
-  const handleSave = async (values: Record<string, unknown>) => {
-    await onSave({
-      ...values,
-      reportConfigId: reportConfigIdInState,
-      reportFormatId: reportFormatIdInState,
-    });
   };
 
   const showContainerScanningWarning =
@@ -115,6 +109,16 @@ const DownloadReportDialog = ({
     });
   };
 
+  const unControlledValues: DownloadReportDialogValues = {
+    includeNotes,
+    includeOverrides,
+    storeAsDefault,
+    reportConfigId: reportConfigIdInState,
+    // reportFormatId can only be undefined on the initial render or if no report format is available
+    // in future it should not be allowed to save without a valid report format and then reportFormatId is always defined
+    reportFormatId: reportFormatIdInState as string,
+  };
+
   return (
     <SaveDialog
       buttonTitle={_('OK')}
@@ -125,7 +129,7 @@ const DownloadReportDialog = ({
           : _('Compose Content for Scan Report')
       }
       onClose={onClose}
-      onSave={handleSave}
+      onSave={onSave}
     >
       {({values, onValueChange}) => {
         const filteredReportConfigs = isDefined(reportConfigs)
