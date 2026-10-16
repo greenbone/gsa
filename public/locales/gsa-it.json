@@ -815,7 +815,7 @@
   "Enabling automatic update to latest": "Abilitazione aggiornamento automatico all'ultima versione in corso",
   "Encrypted Email to {{address}}": "Email cifrata a {{address}}",
   "Encrypted support bundle": "Pacchetto di supporto crittografato",
-  "Encryption": "",
+  "Encryption": "Crittografia",
   "End": "Fine",
   "End Date": "Data di fine",
   "End date is same or before start date. Please adjust you start and/or end date.": "La data di fine è uguale o precedente alla data di inizio. Correggi la data di inizio e/o di fine.",
