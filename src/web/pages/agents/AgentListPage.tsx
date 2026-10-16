@@ -49,6 +49,7 @@ const AgentListPage = () => {
     undefined,
   );
   const [downloadEncryption, setDownloadEncryption] = useState(true);
+  const [downloadAnonymized, setDownloadAnonymized] = useState(false);
   const [isTagsDialogVisible, setIsTagsDialogVisible] = useState(false);
   const [agents, setAgents] = useState<Agent[] | undefined>(undefined);
   const [entitiesCounts, setEntitiesCounts] = useState<
@@ -200,16 +201,19 @@ const AgentListPage = () => {
   const closeDownloadDialog = () => {
     setDownloadAgent(undefined);
     setDownloadEncryption(true);
+    setDownloadAnonymized(false);
   };
 
   const handleDownloadSupportBundle = (agent: Agent) => {
     setDownloadAgent(agent);
     setDownloadEncryption(true);
+    setDownloadAnonymized(false);
   };
 
   const handleDownloadSupportBundleWithFormat = (
     agent: Agent,
     encryption: boolean,
+    anonymized: boolean,
     onSuccess?: () => void,
   ) => {
     if (!agent.id) {
@@ -217,7 +221,7 @@ const AgentListPage = () => {
     }
 
     downloadSupportBundleMutation.mutate(
-      {id: agent.id, encryption},
+      {id: agent.id, encryption, anonymized},
       {
         onSuccess: response => {
           const formatUtcTimestamp = (date = new Date()) =>
@@ -245,6 +249,7 @@ const AgentListPage = () => {
     handleDownloadSupportBundleWithFormat(
       downloadAgent,
       downloadEncryption,
+      downloadAnonymized,
       closeDownloadDialog,
     );
   };
@@ -387,23 +392,52 @@ const AgentListPage = () => {
             {downloadAgent && (
               <ConfirmationDialog
                 content={
-                  <FormGroup title={_('Support Bundle Format')}>
-                    <Radio<boolean>
-                      checked={downloadEncryption}
-                      convert={parseBoolean}
-                      name="support-bundle-encryption"
-                      title={_('Encrypted support bundle')}
-                      value={true}
-                      onChange={setDownloadEncryption}
-                    />
-                    <Radio<boolean>
-                      checked={!downloadEncryption}
-                      convert={parseBoolean}
-                      name="support-bundle-encryption"
-                      title={_('Plain support bundle')}
-                      value={false}
-                      onChange={setDownloadEncryption}
-                    />
+                  <FormGroup>
+                    <div aria-label={_('Encryption')} role="radiogroup">
+                      <FormGroup title={<strong>{_('Encryption')}</strong>}>
+                        <Radio<boolean>
+                          checked={downloadEncryption}
+                          convert={parseBoolean}
+                          name="support-bundle-encryption"
+                          title={_('Encrypted support bundle')}
+                          value={true}
+                          onChange={setDownloadEncryption}
+                        />
+                        <Radio<boolean>
+                          checked={!downloadEncryption}
+                          convert={parseBoolean}
+                          name="support-bundle-encryption"
+                          title={_('Plain support bundle')}
+                          value={false}
+                          onChange={setDownloadEncryption}
+                        />
+                      </FormGroup>
+                    </div>
+                    <div
+                      aria-label={_('Anonymized operation')}
+                      role="radiogroup"
+                    >
+                      <FormGroup
+                        title={<strong>{_('Anonymized operation')}</strong>}
+                      >
+                        <Radio<boolean>
+                          checked={downloadAnonymized}
+                          convert={parseBoolean}
+                          name="support-bundle-anonymized"
+                          title={_('Anonymized support bundle')}
+                          value={true}
+                          onChange={setDownloadAnonymized}
+                        />
+                        <Radio<boolean>
+                          checked={!downloadAnonymized}
+                          convert={parseBoolean}
+                          name="support-bundle-anonymized"
+                          title={_('Non-anonymized support bundle')}
+                          value={false}
+                          onChange={setDownloadAnonymized}
+                        />
+                      </FormGroup>
+                    </div>
                   </FormGroup>
                 }
                 loading={downloadSupportBundleMutation.isPending}
