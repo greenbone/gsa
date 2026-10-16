@@ -31,6 +31,18 @@ describe('FormGroup tests', () => {
     expect(content).toHaveTextContent('Foo');
   });
 
+  test('should expose its role and accessible name on the group wrapper', () => {
+    render(
+      <FormGroup aria-label="Options" role="radiogroup" title="Options">
+        <input aria-label="First option" type="radio" />
+      </FormGroup>,
+    );
+
+    expect(screen.getByRole('radiogroup', {name: 'Options'})).toContainElement(
+      screen.getByRole('radio', {name: 'First option'}),
+    );
+  });
+
   test("should render with htmlFor and label's htmlFor should match", () => {
     render(
       <FormGroup htmlFor="input-id" title="Some Label">
