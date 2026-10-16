@@ -26,12 +26,10 @@ import useReportExport, {
   type StartReportExportParams,
 } from 'web/hooks/useReportExports';
 import useTranslation from 'web/hooks/useTranslation';
-import {getReportExportMode} from 'web/report-export/export-mode';
 
 interface ReportExportManagerContextValue {
   exportReport: (
     params: StartReportExportParams,
-    format?: {content_type?: string},
   ) => Promise<boolean>;
   cancel: (key: string) => Promise<void>;
   dismiss: (key: string) => void;
@@ -88,13 +86,8 @@ const ReportExportManager = ({children}: ReportExportManagerProps) => {
   }, [activityOpen, refreshDiscovery]);
   const contextValue = useMemo(
     () => ({
-      exportReport: async (
-        params: StartReportExportParams,
-        format?: {content_type?: string},
-      ) =>
-        getReportExportMode(format, capabilities) === 'async'
-          ? reportExport.start(params)
-          : reportExport.startDirect(params),
+      exportReport: (params: StartReportExportParams) =>
+        reportExport.start(params),
       cancel: (key: string) =>
         supportsCancellation ? reportExport.cancel(key) : Promise.resolve(),
       dismiss: reportExport.dismiss,
@@ -108,7 +101,7 @@ const ReportExportManager = ({children}: ReportExportManagerProps) => {
       setActivityOpen,
       jobs: reportExport.jobs,
     }),
-    [activityOpen, capabilities, reportExport, supportsCancellation],
+    [activityOpen, reportExport, supportsCancellation],
   );
 
   return (

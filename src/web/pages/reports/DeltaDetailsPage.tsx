@@ -448,7 +448,7 @@ const DeltaReportDetails = () => {
         username,
         fallbackReportTitle: _('Report'),
       });
-      if (await exportReport(request, reportFormat))
+      if (await exportReport(request))
         setShowDownloadReportDialog(false);
     } catch (error) {
       handleError(error as Error);

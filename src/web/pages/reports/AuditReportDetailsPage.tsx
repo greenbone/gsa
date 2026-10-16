@@ -328,7 +328,7 @@ const AuditReportDetailsPage = () => {
           username,
           fallbackReportTitle: _('Report'),
         });
-        if (await exportReport(request, reportFormat))
+        if (await exportReport(request))
           setShowDownloadReportDialog(false);
       } catch (error) {
         log.error(error);

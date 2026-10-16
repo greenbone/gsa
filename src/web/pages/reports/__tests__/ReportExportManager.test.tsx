@@ -86,7 +86,6 @@ const MultiExportStarter = ({
                 filename,
                 reportTitle,
               },
-              {content_type: 'application/pdf'},
             ),
           ),
         );
@@ -113,7 +112,6 @@ const CompletedExportStarter = ({
             reportTitle,
             reportUrl: '/report/report-uuid',
           },
-          {content_type: 'application/pdf'},
         );
       }}
     >
@@ -134,7 +132,6 @@ const DifferentReportStarter = () => {
             filename: 'other-report.xml',
             reportTitle: 'Other report',
           },
-          {content_type: 'application/pdf'},
         )
       }
     >
@@ -143,7 +140,7 @@ const DifferentReportStarter = () => {
   );
 };
 
-const DirectDownloadStarter = () => {
+const DeltaExportStarter = () => {
   const {exportReport} = useReportExportManager();
   return (
     <button
@@ -161,11 +158,10 @@ const DirectDownloadStarter = () => {
             reportTitle: 'Direct report',
             reportUrl: '/report/report-uuid',
           },
-          {content_type: 'text/xml'},
         )
       }
     >
-      Start direct download
+      Start delta export
     </button>
   );
 };
@@ -183,7 +179,6 @@ const ReportPage = ({onStarted}: {onStarted: () => void}) => {
             filename: 'report.xml',
             reportTitle: 'Test report',
           },
-          {content_type: 'application/pdf'},
         );
         if (started) onStarted();
       }}
@@ -303,7 +298,7 @@ describe('ReportExportManager', () => {
     gmp.reportexport.get.mockResolvedValue({
       data: {id: 'export-1', status: 'done'},
     });
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp, capabilities: true});
     render(
       <StrictMode>
         <ReportExportManager>
@@ -625,7 +620,7 @@ describe('ReportExportManager', () => {
     gmp.reportexport.get.mockResolvedValue({
       data: {id: 'export-1', status: 'done'},
     });
-    const {render} = rendererWith({gmp, capabilities: true});
+    const {render} = rendererWith({gmp});
     const view = render(
       <ReportExportManager>
         <ReportExportActivity />
@@ -654,7 +649,7 @@ describe('ReportExportManager', () => {
 
   test('distinguishes exports of the same report by extension', async () => {
     const gmp = createGmp();
-    const {render} = rendererWith({gmp, capabilities: true});
+    const {render} = rendererWith({gmp, capabilities: false});
 
     render(
       <ReportExportManager>
@@ -680,6 +675,8 @@ describe('ReportExportManager', () => {
         screen.getByText('Report export: Unnamed (.xml)'),
       ).toBeInTheDocument();
     });
+    expect(gmp.reportexport.exportScanReport).toHaveBeenCalledTimes(2);
+    expect(gmp.report.download).not.toHaveBeenCalled();
   });
 
   test('shows a preparing state while export creation is pending', async () => {
@@ -777,6 +774,29 @@ describe('ReportExportManager', () => {
         hidden: true,
       }),
     ).toBeInTheDocument();
+  });
+
+  test('uses async export for XML without report capability', async () => {
+    const gmp = createGmp();
+    gmp.reportexport.exportDeltaScanReport.mockResolvedValue({
+      data: {id: 'delta-export-id'},
+    });
+    const {render} = rendererWith({gmp, capabilities: false});
+
+    render(
+      <ReportExportManager>
+        <>
+          <ReportExportActivity />
+          <DeltaExportStarter />
+        </>
+      </ReportExportManager>,
+    );
+
+    fireEvent.click(screen.getByRole('button', {name: 'Start delta export'}));
+    await waitFor(() =>
+      expect(gmp.reportexport.exportDeltaScanReport).toHaveBeenCalledTimes(1),
+    );
+    expect(gmp.report.download).not.toHaveBeenCalled();
   });
 
   test('does not apply cancellation to another report export', async () => {
@@ -1119,147 +1139,6 @@ describe('ReportExportManager', () => {
     );
   });
 
-  test('notifies when a download starts while activity is closed', async () => {
-    const gmp = createGmp();
-    let resolveDownload: ((response: {data: ArrayBuffer}) => void) | undefined;
-    gmp.report.download.mockImplementation(
-      () =>
-        new Promise(resolve => {
-          resolveDownload = resolve;
-        }),
-    );
-    window.URL.createObjectURL = testing.fn().mockReturnValue('blob:report');
-    window.URL.revokeObjectURL = testing.fn();
-    const {render} = rendererWith({gmp, capabilities: true});
-
-    render(
-      <ReportExportManager>
-        <>
-          <ReportExportActivity />
-          <DirectDownloadStarter />
-        </>
-      </ReportExportManager>,
-    );
-
-    fireEvent.click(
-      screen.getByRole('button', {name: 'Start direct download'}),
-    );
-    await waitFor(() => expect(gmp.report.download).toHaveBeenCalledTimes(1));
-
-    const activityButton = screen.getByTestId('report-export-activity-button');
-    fireEvent.click(activityButton);
-    expect(activityButton).toHaveAttribute('aria-expanded', 'false');
-
-    await act(async () => {
-      resolveDownload?.({data: new ArrayBuffer(8)});
-    });
-
-    expect(showSuccessNotification).toHaveBeenCalledWith(
-      '',
-      'Report download started.',
-    );
-  });
-
-  test('retains direct download activity after browser handoff', async () => {
-    const gmp = createGmp();
-    gmp.reportexports.get.mockResolvedValue({
-      data: [
-        {
-          id: 'generated-export-id',
-          status: 'done',
-          owner: {name: 'test-user'},
-          name: 'Unnamed',
-          reportId: 'report-uuid',
-          type: 'scan',
-          extension: 'xml',
-        },
-      ],
-      meta: {
-        counts: new CollectionCounts({
-          first: 1,
-          filtered: 1,
-          length: 1,
-          rows: 100,
-        }),
-      },
-    });
-    let resolveDownload: ((response: {data: ArrayBuffer}) => void) | undefined;
-    gmp.report.download.mockImplementation(
-      () =>
-        new Promise(resolve => {
-          resolveDownload = resolve;
-        }),
-    );
-    window.URL.createObjectURL = testing.fn().mockReturnValue('blob:report');
-    window.URL.revokeObjectURL = testing.fn();
-    const {render} = rendererWith({gmp, capabilities: true});
-
-    render(
-      <ReportExportManager>
-        <>
-          <ReportExportActivity />
-          <DirectDownloadStarter />
-        </>
-      </ReportExportManager>,
-    );
-
-    fireEvent.click(
-      screen.getByRole('button', {name: 'Start direct download'}),
-    );
-
-    expect(
-      await screen.findByText('Report download: Direct report (.xml)'),
-    ).toBeInTheDocument();
-    expect(screen.getAllByTestId('report-export-job')).toHaveLength(1);
-    expect(screen.queryByText('Complete')).not.toBeInTheDocument();
-    expect(
-      screen
-        .getByText('Downloading')
-        .closest('[data-testid="report-export-status"]'),
-    ).toHaveAttribute('data-state', 'downloading');
-    expect(
-      screen.queryByRole('button', {
-        name: 'Cancel report export',
-        hidden: true,
-      }),
-    ).not.toBeInTheDocument();
-    expect(gmp.report.download).toHaveBeenCalledWith(
-      {id: 'report-uuid'},
-      {
-        reportFormatId: 'format-uuid',
-        reportConfigId: 'config-uuid',
-        deltaReportId: 'delta-uuid',
-        filter: undefined,
-      },
-    );
-    expect(gmp.reportexport.get).not.toHaveBeenCalled();
-
-    await act(async () => {
-      resolveDownload?.({data: new ArrayBuffer(8)});
-    });
-    expect(await screen.findByText('Complete')).toHaveAttribute(
-      'data-state',
-      'ready',
-    );
-    expect(
-      screen.getByText('Report download: Direct report (.xml)'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', {
-        name: 'Remove from activity',
-        hidden: true,
-      }),
-    ).toBeInTheDocument();
-    fireEvent.click(
-      screen.getByRole('button', {
-        name: 'Remove from activity',
-        hidden: true,
-      }),
-    );
-    expect(await screen.findByText('Ready')).toBeInTheDocument();
-    expect(screen.getAllByTestId('report-export-job')).toHaveLength(1);
-  });
-
   test('allows cancellation for users with report access', async () => {
     const gmp = createGmp();
     gmp.reportexport.exportScanReport.mockResolvedValue({
@@ -1307,7 +1186,7 @@ describe('ReportExportManager', () => {
         errorMessage: 'Export failed',
       },
     });
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({gmp, capabilities: false});
 
     render(
       <ReportExportManager>

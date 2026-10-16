@@ -303,7 +303,7 @@ const AuditDeltaReportDetails = props => {
       username,
       fallbackReportTitle: _('Report'),
     });
-    return exportReport(request, reportFormat).then(started => {
+    return exportReport(request).then(started => {
       if (started) setShowDownloadReportDialog(false);
     });
   };
