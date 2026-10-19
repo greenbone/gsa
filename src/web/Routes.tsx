@@ -62,6 +62,14 @@ const loggedInRoutes = [
         }),
       },
       {
+        path: ROUTES.agentControlMfe.path,
+        lazy: async () => ({
+          Component: (
+            await import('web/pages/agent-control-ui/AgentControlMfePage')
+          ).default,
+        }),
+      },
+      {
         path: ROUTES.agents.path,
         lazy: async () => ({
           Component: (await import('web/pages/agents/AgentListPage')).default,
