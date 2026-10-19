@@ -6,6 +6,7 @@
 import {AppNavigation} from '@greenbone/ui-lib';
 import {
   BarChart3,
+  Boxes,
   CircleHelp,
   FileCheck,
   Server,
@@ -18,6 +19,9 @@ import {useLocation, useMatch} from 'react-router';
 import {type EntityType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import Link from 'web/components/link/Link';
+import useAgentControlInventory, {
+  domainLabel,
+} from 'web/hooks/useAgentControlInventory';
 import useCapabilities from 'web/hooks/useCapabilities';
 import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
@@ -25,10 +29,11 @@ import useTranslation from 'web/hooks/useTranslation';
 import {routeMatch, ROUTES} from 'web/route-paths';
 
 const Menu = () => {
-  const [_] = useTranslation();
+  const [_, i18n] = useTranslation();
   const capabilities = useCapabilities();
   const features = useFeatures();
   const gmp = useGmp();
+  const acInventory = useAgentControlInventory();
 
   const dashboardsMatch = useMatch(routeMatch(ROUTES.dashboards.path));
   const isDashboardsActive = Boolean(dashboardsMatch);
@@ -155,6 +160,9 @@ const Menu = () => {
   const isAgentInstallersActive = Boolean(
     agentInstallersMatch || agentInstallerMatch,
   );
+
+  const mfeMatch = useMatch(routeMatch(ROUTES.agentControlMfe.path));
+  const activeMfeDomain = mfeMatch?.params?.['*'];
 
   const containerImageTargetsMatch = useMatch(
     routeMatch(ROUTES.ociImageTargets.path),
@@ -334,6 +342,19 @@ const Menu = () => {
           },
         ].filter(Boolean),
       },
+      capabilities.mayAccess('agent') &&
+        features.featureEnabled('ENABLE_AGENTS') && {
+          icon: Boxes,
+          label: _('Inventory'),
+          key: 'inventory',
+          defaultOpened: Boolean(activeMfeDomain),
+          subNav: (acInventory?.domains ?? []).map(inventoryDomain => ({
+            label: domainLabel(inventoryDomain, i18n.language),
+            to: ROUTES.agentControlMfe.url(inventoryDomain.id),
+            isPathMatch: activeMfeDomain === inventoryDomain.id,
+            active: activeMfeDomain === inventoryDomain.id,
+          })),
+        },
       mayOpAssets && {
         icon: Server,
         label: _('Assets'),
