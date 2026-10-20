@@ -7,6 +7,7 @@ import React from 'react';
 
 interface DownloadProps {
   filename?: string;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 }
 
 export type DownloadData = string | ArrayBuffer;
@@ -56,7 +57,7 @@ class Download extends React.Component<DownloadProps> {
   }
 
   render() {
-    const {filename} = this.props;
+    const {filename, onClick} = this.props;
     return (
       <a
         ref={ref => {
@@ -65,6 +66,7 @@ class Download extends React.Component<DownloadProps> {
         aria-hidden
         download={filename}
         style={{display: 'none'}}
+        onClick={onClick}
       >
         Download
       </a>

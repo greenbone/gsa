@@ -51,6 +51,29 @@ interface GetReportExportResponseData extends XmlResponseData {
 
 const log = logger.getLogger('gmp.commands.report-export');
 
+const CONTENT_REGEX = /<content>([\s\S]*?)<\/content>/;
+
+// gsad answers a download either with the raw file bytes or with the GMP
+// XML document carrying the file base64 encoded in <content>. Normalize to
+// raw file bytes.
+const decodeReportExportFile = (data: ArrayBuffer): ArrayBuffer => {
+  const text = new TextDecoder().decode(data);
+  const match = CONTENT_REGEX.exec(text);
+  if (!match) {
+    return data;
+  }
+  try {
+    const binary = atob(match[1].replace(/\s+/g, ''));
+    const bytes = new Uint8Array(binary.length);
+    for (let index = 0; index < binary.length; index++) {
+      bytes[index] = binary.charCodeAt(index);
+    }
+    return bytes.buffer;
+  } catch {
+    throw new Error('Invalid base64 file content in the download response');
+  }
+};
+
 class ReportExportCommand extends HttpCommand {
   constructor(http: Http) {
     super(http);
@@ -132,14 +155,18 @@ class ReportExportCommand extends HttpCommand {
     return response.setData(entity);
   }
 
-  downloadReportExport({reportExportId}: ReportExportParams) {
-    return this.httpRequestWithRejectionTransform<ArrayBuffer>('get', {
-      args: {
-        cmd: 'download_report_export',
-        report_export_id: reportExportId,
+  async downloadReportExport({reportExportId}: ReportExportParams) {
+    const response = await this.httpRequestWithRejectionTransform<ArrayBuffer>(
+      'get',
+      {
+        args: {
+          cmd: 'download_report_export',
+          report_export_id: reportExportId,
+        },
+        responseType: 'arraybuffer',
       },
-      responseType: 'arraybuffer',
-    });
+    );
+    return response.setData(decodeReportExportFile(response.data));
   }
 
   cancelReportExport({reportExportId}: ReportExportParams) {

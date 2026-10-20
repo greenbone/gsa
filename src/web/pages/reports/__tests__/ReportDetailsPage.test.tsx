@@ -5,18 +5,29 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith, fireEvent, screen, within, waitFor} from 'web/testing';
+import {showErrorNotification} from '@greenbone/ui-lib';
+import type * as UiLib from '@greenbone/ui-lib';
 import {Route, Routes} from 'react-router';
+import {vi} from 'vitest';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/user';
 import type FilterType from 'gmp/models/filter/filter-type';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import Report from 'gmp/models/report';
+import ReportFormat from 'gmp/models/report-format';
 import {OPENVASD_SCANNER_TYPE} from 'gmp/models/scanner';
 import {TASK_STATUS} from 'gmp/models/task';
 import {createSession} from 'gmp/testing';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
 import {getMockReport} from 'web/pages/reports/__fixtures__/MockReport';
 import ReportDetailsPage from 'web/pages/reports/ReportDetailsPage';
+import {ReportExportActivity} from 'web/report-export/ReportExportActivity';
+import ReportExportManager from 'web/report-export/ReportExportManager';
+
+vi.mock('@greenbone/ui-lib', async importOriginal => ({
+  ...(await importOriginal<typeof UiLib>()),
+  showErrorNotification: vi.fn<typeof showErrorNotification>(),
+}));
 
 interface CollectionResponse {
   data: unknown[];
@@ -91,6 +102,24 @@ const createGmp = () => ({
   reportformats: {
     get: testing.fn().mockResolvedValue(emptyCollectionResponse),
   },
+  reportexport: {
+    exportScanReport: testing
+      .fn()
+      .mockResolvedValue({data: {id: 'export-uuid'}}),
+    get: testing.fn().mockResolvedValue({
+      data: {id: 'export-uuid', status: 'running', progress: 'generating'},
+    }),
+    downloadReportExport: testing
+      .fn()
+      .mockResolvedValue({data: new ArrayBuffer(8)}),
+    cancelReportExport: testing.fn().mockResolvedValue({}),
+  },
+  reportexports: {
+    get: testing.fn().mockResolvedValue({
+      data: [],
+      meta: {counts: new CollectionCounts({first: 1, rows: 100})},
+    }),
+  },
   report: {
     get: testing.fn().mockResolvedValue({data: entity}),
     addAssets: testing.fn().mockResolvedValue({}),
@@ -154,9 +183,11 @@ const setupRenderer = (gmp = createGmp()) => {
 
 const renderPage = (render: ReturnType<typeof setupRenderer>['render']) =>
   render(
-    <Routes>
-      <Route element={<ReportDetailsPage />} path="/report/:id" />
-    </Routes>,
+    <ReportExportManager>
+      <Routes>
+        <Route element={<ReportDetailsPage />} path="/report/:id" />
+      </Routes>
+    </ReportExportManager>,
   );
 
 describe('ReportDetailsPage tests', () => {
@@ -451,8 +482,19 @@ describe('ReportDetailsPage tests', () => {
   });
 
   describe('Report download flow', () => {
-    test('should call report download when download dialog OK is clicked', async () => {
+    test('uses async export for an XML report format', async () => {
       const gmp = createGmp();
+      gmp.reportformats.get.mockResolvedValue({
+        data: [
+          new ReportFormat({
+            id: 'xml-format',
+            name: 'XML',
+            extension: 'xml',
+            content_type: 'text/xml',
+          }),
+        ],
+        meta: emptyCollectionResponse.meta,
+      });
 
       const {render} = setupRenderer(gmp);
       renderPage(render);
@@ -467,8 +509,132 @@ describe('ReportDetailsPage tests', () => {
       fireEvent.click(screen.getByRole('button', {name: 'OK'}));
 
       await waitFor(() => {
-        expect(gmp.report.download).toHaveBeenCalled();
+        expect(gmp.reportexport.exportScanReport).toHaveBeenCalledWith(
+          expect.objectContaining({
+            reportId: entity.id,
+            reportFormatId: 'xml-format',
+          }),
+        );
       });
+      expect(gmp.report.download).not.toHaveBeenCalled();
+    });
+
+    test('uses async export for a PDF report format', async () => {
+      const gmp = createGmp();
+      gmp.reportformats.get.mockResolvedValue({
+        data: [
+          new ReportFormat({
+            id: 'pdf-format',
+            name: 'PDF',
+            extension: 'pdf',
+            content_type: 'application/pdf; charset=binary',
+          }),
+        ],
+        meta: emptyCollectionResponse.meta,
+      });
+
+      const {render} = setupRenderer(gmp);
+      renderPage(render);
+      await screen.findByTitle(/^Download filtered Report/);
+      fireEvent.click(screen.getByTitle(/^Download filtered Report/));
+      await screen.findByRole('heading', {
+        name: /Compose Content for Scan Report/,
+      });
+      fireEvent.click(screen.getByRole('button', {name: 'OK'}));
+
+      await waitFor(() => {
+        expect(gmp.reportexport.exportScanReport).toHaveBeenCalledWith(
+          expect.objectContaining({
+            reportId: entity.id,
+            reportFormatId: 'pdf-format',
+          }),
+        );
+      });
+      expect(gmp.report.download).not.toHaveBeenCalled();
+    });
+
+    test('allows retrying a PDF export after canceling it', async () => {
+      const gmp = createGmp();
+      let exportCount = 0;
+      const exportStatuses: Record<string, string> = {};
+      gmp.reportformats.get.mockResolvedValue({
+        data: [
+          new ReportFormat({
+            id: 'pdf-format',
+            name: 'PDF',
+            extension: 'pdf',
+            content_type: 'application/pdf; charset=binary',
+          }),
+        ],
+        meta: emptyCollectionResponse.meta,
+      });
+      gmp.reportexport.exportScanReport.mockImplementation(async () => {
+        const id = `export-${++exportCount}`;
+        exportStatuses[id] = exportCount === 1 ? 'running' : 'done';
+        return {data: {id}};
+      });
+      gmp.reportexport.get = testing
+        .fn()
+        .mockImplementation(
+          async ({reportExportId}: {reportExportId: string}) => ({
+            data: {
+              id: reportExportId,
+              status: exportStatuses[reportExportId],
+              progress: 'generating',
+              owner: {name: 'admin'},
+            },
+          }),
+        );
+
+      const {render} = setupRenderer(gmp);
+      render(
+        <ReportExportManager>
+          <>
+            <ReportExportActivity />
+            <Routes>
+              <Route element={<ReportDetailsPage />} path="/report/:id" />
+            </Routes>
+          </>
+        </ReportExportManager>,
+      );
+
+      await screen.findByTitle(/^Download filtered Report/);
+      fireEvent.click(screen.getByTitle(/^Download filtered Report/));
+      await screen.findByRole('heading', {
+        name: /Compose Content for Scan Report/,
+      });
+      fireEvent.click(screen.getByRole('button', {name: 'OK'}));
+      await waitFor(() =>
+        expect(gmp.reportexport.exportScanReport).toHaveBeenCalledTimes(1),
+      );
+
+      const activityPopover = await screen.findByTestId(
+        'report-export-activity-popover',
+      );
+      await within(activityPopover).findByText('Generating');
+      exportStatuses['export-1'] = 'canceled';
+      fireEvent.click(
+        within(activityPopover).getByRole('button', {
+          name: 'Cancel report export',
+          hidden: true,
+        }),
+      );
+      await within(activityPopover).findByText('Canceled');
+
+      fireEvent.click(screen.getByTitle(/^Download filtered Report/));
+      await screen.findByRole('heading', {
+        name: /Compose Content for Scan Report/,
+      });
+      fireEvent.click(screen.getByRole('button', {name: 'OK'}));
+
+      await waitFor(() => {
+        expect(gmp.reportexport.exportScanReport).toHaveBeenCalledTimes(2);
+        expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(1);
+      });
+      // the canceled row stays visible until it is removed; the fresh
+      // export downloads automatically
+      expect(within(activityPopover).getByText('Canceled')).toBeInTheDocument();
+      expect(within(activityPopover).getByText('Complete')).toBeInTheDocument();
     });
 
     test('should close download dialog after successful download', async () => {
@@ -495,10 +661,10 @@ describe('ReportDetailsPage tests', () => {
       });
     });
 
-    test('should show error when download fails', async () => {
+    test('shows an error notification when the export creation fails', async () => {
       testing.spyOn(console, 'error').mockImplementation(() => {});
       const gmp = createGmp();
-      gmp.report.download = testing
+      gmp.reportexport.exportScanReport = testing
         .fn()
         .mockRejectedValue(new Error('Download failed'));
 
@@ -514,7 +680,11 @@ describe('ReportDetailsPage tests', () => {
 
       fireEvent.click(screen.getByRole('button', {name: 'OK'}));
 
-      await screen.findByText(/Download failed/);
+      // the creation failure is surfaced via the activity manager's
+      // error notification
+      await waitFor(() =>
+        expect(showErrorNotification).toHaveBeenCalledWith('Download failed'),
+      );
     });
   });
 
