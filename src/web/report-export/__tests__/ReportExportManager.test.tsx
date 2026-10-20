@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
 import {
   act,
@@ -27,7 +27,7 @@ import {
 } from 'web/report-export/__fixtures__/report-export-mocks';
 import {ReportExportActivity} from 'web/report-export/ReportExportActivity';
 import ReportExportManager, {
-  useReportExportManager,
+  useReportExportActions,
 } from 'web/report-export/ReportExportManager';
 
 vi.mock('@greenbone/ui-lib', async importOriginal => ({
@@ -42,7 +42,7 @@ const MultiExportStarter = ({
     {reportTitle: 'Report B', filename: 'Report B.xml'},
   ],
 }) => {
-  const {exportReport} = useReportExportManager();
+  const {exportReport} = useReportExportActions();
   return (
     <button
       onClick={() => {
@@ -67,7 +67,7 @@ const CompletedExportStarter = ({
   filename = 'completed-report.xml',
   reportTitle = 'Completed report',
 }) => {
-  const {exportReport} = useReportExportManager();
+  const {exportReport} = useReportExportActions();
   return (
     <button
       onClick={() => {
@@ -86,7 +86,7 @@ const CompletedExportStarter = ({
 };
 
 const DifferentReportStarter = () => {
-  const {exportReport} = useReportExportManager();
+  const {exportReport} = useReportExportActions();
   return (
     <button
       onClick={() =>
@@ -104,7 +104,7 @@ const DifferentReportStarter = () => {
 };
 
 const DeltaExportStarter = () => {
-  const {exportReport} = useReportExportManager();
+  const {exportReport} = useReportExportActions();
   return (
     <button
       onClick={() =>
@@ -128,7 +128,7 @@ const DeltaExportStarter = () => {
 };
 
 const ReportPage = ({onStarted}: {onStarted: () => void}) => {
-  const {exportReport} = useReportExportManager();
+  const {exportReport} = useReportExportActions();
 
   return (
     <button
@@ -159,6 +159,61 @@ const PageSwitcher = () => {
 
 describe('ReportExportManager', () => {
   beforeEach(() => testing.clearAllMocks());
+
+  test('does not re-render actions-only consumers while jobs are polled', async () => {
+    const onRender = testing.fn();
+    const ActionsOnlyProbe = () => {
+      const {exportReport} = useReportExportActions();
+      useEffect(() => {
+        onRender();
+      });
+      return (
+        <button
+          onClick={() =>
+            void exportReport({
+              kind: 'scan',
+              payload: exportPayload,
+              filename: 'report.pdf',
+              reportTitle: 'Test report',
+            })
+          }
+        >
+          Start export
+        </button>
+      );
+    };
+
+    const gmp = createGmp([
+      {
+        id: 'running-export',
+        status: 'running',
+        progress: 'generating',
+        owner: {name: 'test-user'},
+        extension: 'pdf',
+        creationTime: date('2026-10-15T11:00:00Z'),
+      },
+    ]);
+    gmp.reportexport.exportScanReport.mockResolvedValue({
+      data: {id: 'running-export'},
+    });
+    const {render} = rendererWith({gmp, capabilities: true});
+    render(
+      <ReportExportManager>
+        <ReportExportActivity />
+        <ActionsOnlyProbe />
+      </ReportExportManager>,
+    );
+    await waitFor(() => expect(onRender).toHaveBeenCalledTimes(1));
+
+    fireEvent.click(screen.getByRole('button', {name: 'Start export'}));
+    // the polled status of the running export arrives while the probe
+    // must stay untouched
+    await screen.findByText('Generating');
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 50));
+    });
+    expect(onRender).toHaveBeenCalledTimes(1);
+  });
 
   test.each([
     ['report.PDF', 'Release.1', 'Report export: Release.1 (.pdf)'],

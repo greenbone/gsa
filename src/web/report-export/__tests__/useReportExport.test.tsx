@@ -4,7 +4,8 @@
  */
 
 import {beforeEach, describe, expect, test, testing} from '@gsa/testing';
-import {act, rendererWith, waitFor} from 'web/testing';
+import {act, renderHook, rendererWith, waitFor} from 'web/testing';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {
   changeSession,
   createGmp,
@@ -15,11 +16,13 @@ import {
 import {
   createReportExportJob,
   getReportExportActions,
-  retainReportExportJobs,
+  ReportExportUnavailableError,
+  retainReportExportRecords,
 } from 'web/report-export/report-export-job-model';
 import useReportExport, {
   REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL,
 } from 'web/report-export/useReportExports';
+import {TestingGmpProvider} from 'web/testing/Components';
 
 const onError = testing.fn();
 
@@ -158,38 +161,150 @@ describe('useReportExport', () => {
     expect(gmp.reportexport.downloadReportExport).toHaveBeenCalledTimes(1);
   });
 
-  test('bounds completed activity while retaining unfinished jobs', () => {
-    const completedJobs = Array.from({length: 60}, (_, index) =>
-      createReportExportJob({
-        key: `receipt-${index}`,
-        exportId: `export-${index}`,
+  test('bounds completed records while retaining unfinished ones', () => {
+    const completedRecords = Array.from({length: 60}, (_, index) => ({
+      key: `receipt-${index}`,
+      exportId: `export-${index}`,
+      filename: 'report.xml',
+      reportTitle: 'Report',
+      downloaded: true,
+    }));
+    const unfinishedRecord = {
+      key: 'unfinished',
+      exportId: 'unfinished-export',
+      filename: 'report.xml',
+      reportTitle: 'Unfinished',
+    };
+
+    const retainedRecords = retainReportExportRecords(
+      [...completedRecords, unfinishedRecord],
+      record =>
+        record.exportId
+          ? {
+              data: exportData(
+                'running',
+                'generating',
+                record.exportId,
+              ) as never,
+            }
+          : {},
+    );
+
+    expect(retainedRecords).toHaveLength(51);
+    expect(retainedRecords).toContain(unfinishedRecord);
+    expect(retainedRecords).not.toContain(completedRecords[0]);
+  });
+
+  test('shows unavailable when a permanent status error follows cached status data', () => {
+    const job = createReportExportJob(
+      {
+        key: 'gone',
+        exportId: 'export-uuid-1',
         filename: 'report.xml',
         reportTitle: 'Report',
-        downloaded: true,
-      }),
-    );
-    const unfinishedJob = createReportExportJob(
-      {
-        key: 'unfinished',
-        exportId: 'unfinished-export',
-        filename: 'report.xml',
-        reportTitle: 'Unfinished',
       },
-      exportData('running', 'generating', 'unfinished-export') as never,
+      exportData('running', 'generating', 'export-uuid-1') as never,
+      new ReportExportUnavailableError('Report export is no longer available'),
     );
 
-    const retainedJobs = retainReportExportJobs([
-      ...completedJobs,
-      unfinishedJob,
-    ]);
+    expect(job.view).toMatchObject({kind: 'failed', reason: 'status'});
+    expect(getReportExportActions(job)).toMatchObject({
+      active: false,
+      dismiss: true,
+      retry: true,
+    });
+  });
 
-    expect(retainedJobs).toHaveLength(51);
-    expect(retainedJobs).toContain(unfinishedJob);
-    expect(retainedJobs).not.toContain(completedJobs[0]);
+  test('offers no retry for an expired export', () => {
+    const job = createReportExportJob(
+      {
+        key: 'expired',
+        exportId: 'export-uuid-1',
+        filename: 'report.xml',
+        reportTitle: 'Report',
+      },
+      exportData('expired', 'expired', 'export-uuid-1') as never,
+    );
+
+    expect(job.view).toMatchObject({kind: 'failed', reason: 'expired'});
+    expect(getReportExportActions(job)).toMatchObject({
+      active: false,
+      dismiss: true,
+      retry: false,
+    });
   });
 
   test('retries a not-ready download later than the status poll interval', () => {
     expect(REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL).toBe(3000);
+  });
+
+  test('marks a polled export as unavailable when the status query fails permanently', async () => {
+    const gmp = createGmp([ownedExportData('running')]);
+    const onDownload = testing.fn();
+    const {result} = renderReportExport(gmp, {onDownload});
+
+    await act(async () => {
+      await result.current.start(startParams);
+    });
+    await waitFor(() =>
+      expect(result.current.jobs[0].view.kind).toBe('generating'),
+    );
+
+    // the export vanishes on the server while the client still holds the
+    // last running status
+    gmp.inventory.exports = [];
+    await waitFor(
+      () =>
+        expect(result.current.jobs[0].view).toMatchObject({
+          kind: 'failed',
+          reason: 'status',
+        }),
+      {timeout: 7000},
+    );
+    expect(getReportExportActions(result.current.jobs[0]).dismiss).toBe(true);
+    expect(onDownload).not.toHaveBeenCalled();
+  });
+
+  test('prunes finished records beyond the history limit together with their status queries', async () => {
+    const gmp = createGmp(
+      Array.from({length: 60}, (_, index) =>
+        ownedExportData('canceled', 'canceled', `export-uuid-${index + 1}`),
+      ),
+    );
+    // the query client is created here so the cache can be inspected
+    const queryClient = new QueryClient({
+      //@ts-expect-error
+      logger: {log: () => {}, warn: () => {}, error: () => {}},
+      defaultOptions: {
+        queries: {retry: false, gcTime: 0},
+        mutations: {retry: false},
+      },
+    });
+    const onDownload = testing.fn();
+    const {result} = renderHook(
+      () => useReportExport({onError, onDownload: testing.fn()}),
+      {
+        wrapper: ({children}) => (
+          <TestingGmpProvider gmp={gmp}>
+            <QueryClientProvider client={queryClient}>
+              {children}
+            </QueryClientProvider>
+          </TestingGmpProvider>
+        ),
+      },
+    );
+
+    await act(async () => {
+      await Promise.all(
+        Array.from({length: 60}, () => result.current.start(startParams)),
+      );
+    });
+
+    await waitFor(() => expect(result.current.jobs).toHaveLength(50));
+    // every finished record beyond the history limit is dropped, including
+    // its status query cache entry / observer
+    expect(queryClient.getQueryCache().getAll().length).toBe(50);
+    expect(onDownload).not.toHaveBeenCalled();
   });
 
   test('fails when the export cannot be found by the status query', async () => {
@@ -204,11 +319,107 @@ describe('useReportExport', () => {
     await waitFor(() =>
       expect(result.current.jobs[0].view).toMatchObject({
         kind: 'failed',
-        reason: 'unavailable',
+        reason: 'status',
       }),
     );
     expect(onDownload).not.toHaveBeenCalled();
     expect(gmp.reportexport.downloadReportExport).not.toHaveBeenCalled();
+  });
+
+  test('re-checks the status query when retrying a failed status check', async () => {
+    const gmp = createGmp();
+    const {result} = renderReportExport(gmp);
+
+    await act(async () => {
+      await result.current.start(startParams);
+    });
+    await waitFor(() =>
+      expect(result.current.jobs[0].view).toMatchObject({
+        kind: 'failed',
+        reason: 'status',
+      }),
+    );
+    const getCallCount = gmp.reportexport.get.mock.calls.length;
+
+    // retry re-checks the status; the export is still gone, so the row
+    // stays failed and dismissable
+    await act(async () => {
+      await result.current.retry(result.current.jobs[0].key);
+    });
+    expect(gmp.reportexport.get.mock.calls.length).toBeGreaterThan(
+      getCallCount,
+    );
+    expect(result.current.jobs[0].view).toMatchObject({
+      kind: 'failed',
+      reason: 'status',
+    });
+    expect(getReportExportActions(result.current.jobs[0])).toMatchObject({
+      dismiss: true,
+      retry: true,
+    });
+  });
+
+  test('recovers a status-failed export when the export exists again', async () => {
+    const gmp = createGmp();
+    const onDownload = testing.fn();
+    const {result} = renderReportExport(gmp, {onDownload});
+
+    await act(async () => {
+      await result.current.start(startParams);
+    });
+    await waitFor(() =>
+      expect(result.current.jobs[0].view).toMatchObject({
+        kind: 'failed',
+        reason: 'status',
+      }),
+    );
+
+    gmp.inventory.exports = [ownedExportData('running')];
+    await act(async () => {
+      await result.current.retry(result.current.jobs[0].key);
+    });
+    await waitFor(() =>
+      expect(result.current.jobs[0].view.kind).toBe('generating'),
+    );
+
+    gmp.inventory.exports[0] = ownedExportData('done', 'completed');
+    // the re-check resumes the job and the poll completes the download
+    await waitFor(() => expect(onDownload).toHaveBeenCalledTimes(1), {
+      timeout: 7000,
+    });
+    expect(result.current.jobs[0].view.kind).toBe('complete');
+  }, 10000);
+
+  test('does not re-download when retrying an expired export', async () => {
+    const gmp = createGmp([ownedExportData('expired', 'expired')]);
+    const onDownload = testing.fn();
+    const {result} = renderReportExport(gmp, {onDownload});
+
+    await act(async () => {
+      await result.current.start(startParams);
+    });
+    await waitFor(() =>
+      expect(result.current.jobs[0].view).toMatchObject({
+        kind: 'failed',
+        reason: 'expired',
+      }),
+    );
+
+    await act(async () => {
+      await result.current.retry(result.current.jobs[0].key);
+    });
+
+    // the expired file is gone; retry must not attempt a download and the
+    // row stays removable
+    expect(gmp.reportexport.downloadReportExport).not.toHaveBeenCalled();
+    expect(result.current.jobs[0].view).toMatchObject({
+      kind: 'failed',
+      reason: 'expired',
+    });
+    expect(getReportExportActions(result.current.jobs[0])).toMatchObject({
+      dismiss: true,
+      retry: false,
+    });
   });
 
   test('retains export creation errors and invokes the error callback', async () => {

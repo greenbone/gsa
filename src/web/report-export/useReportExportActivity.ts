@@ -5,7 +5,10 @@
 
 import {useEffect, useRef} from 'react';
 import {type ReportExportJob} from 'web/report-export/report-export-job-model';
-import {useReportExportManager} from 'web/report-export/ReportExportManager';
+import {
+  useReportExportActions,
+  useReportExportActivityState,
+} from 'web/report-export/ReportExportManager';
 
 type IndicatorState = 'error' | 'active' | 'complete';
 
@@ -26,8 +29,9 @@ const compareReportExportJobs = (
     getReportExportJobSortKey(first.job) || second.index - first.index;
 
 const useReportExportActivity = () => {
-  const {activityOpen, clearFinished, isActive, jobs, setActivityOpen} =
-    useReportExportManager();
+  const {clearFinished} = useReportExportActions();
+  const {activityOpen, isActive, jobs, setActivityOpen} =
+    useReportExportActivityState();
   const previousJobKeys = useRef(new Set(jobs.map(job => job.key)));
 
   // Every tracked row stays visible and counted until it is removed by the

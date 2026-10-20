@@ -214,23 +214,20 @@ describe('ReportExportCommand tests', () => {
     expect(response.data).toBe(data);
   });
 
-  test('should decode the base64 file content of a XML wrapped download', async () => {
-    const bytes = new Uint8Array([0x25, 0x50, 0x44, 0x46]); // "%PDF"
-    const base64 = btoa('%PDF');
-    const fakeHttp = createHttp(
-      createPlainResponse(
-        new TextEncoder().encode(
-          `<envelope><download_report_export_response status="200" status_text="OK"><report_export id="export-uuid"><content>${base64}</content></report_export></download_report_export_response></envelope>`,
-        ).buffer as ArrayBuffer,
-      ),
-    );
+  test('should pass the raw file bytes through unmodified', async () => {
+    // gsad decodes the base64 file content before answering. A raw report
+    // may itself contain a <content> tag and must never be touched.
+    const data = new TextEncoder().encode(
+      '<report><content>SGVsbG8=</content></report>',
+    ).buffer as ArrayBuffer;
+    const fakeHttp = createHttp(createPlainResponse(data));
     const exportCommand = new ReportExportCommand(fakeHttp);
 
     const response = await exportCommand.downloadReportExport({
       reportExportId: 'export-uuid',
     });
 
-    expect(response.data).toEqual(bytes.buffer as ArrayBuffer);
+    expect(response.data).toBe(data);
   });
 
   test('should cancel a report export', async () => {

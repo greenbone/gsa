@@ -41,7 +41,7 @@ import {
   getReportExportActions,
   type ReportExportJob,
 } from 'web/report-export/report-export-job-model';
-import {useReportExportManager} from 'web/report-export/ReportExportManager';
+import {useReportExportActions} from 'web/report-export/ReportExportManager';
 import Theme from 'web/utils/theme';
 import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
 
@@ -73,7 +73,7 @@ interface ReportExportJobRowProps {
 const ReportExportJobRow = ({job}: ReportExportJobRowProps) => {
   const [_] = useTranslation();
   const {supportsCancellation, cancel, dismiss, retry} =
-    useReportExportManager();
+    useReportExportActions();
   const actions = getReportExportActions(job);
   const canCancel = supportsCancellation && actions.cancel;
   const status = getReportExportJobDisplay(job, _);

@@ -32,6 +32,8 @@ const getReportExportFailureLabel = (
       return _('Export failed');
     case 'download':
       return _('Download failed');
+    case 'status':
+    case 'expired':
     case 'unavailable':
       return _('Unavailable');
   }
