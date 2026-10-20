@@ -7,7 +7,11 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {rendererWith} from 'web/testing';
 import {act} from '@testing-library/react';
 import {CONTAINER_IMAGE_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
-import Task, {AUTO_DELETE_KEEP, AUTO_DELETE_NO} from 'gmp/models/task';
+import Task, {
+  AUTO_DELETE_KEEP,
+  AUTO_DELETE_NO,
+  TASK_STATUS,
+} from 'gmp/models/task';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {useContainerImageTaskDialog} from 'web/pages/tasks/hooks/useContainerImageTaskDialog';
 
@@ -327,8 +331,20 @@ describe('useContainerImageTaskDialog', () => {
       }),
     );
 
+    const task = new Task({
+      id: 'task-123',
+      name: 'Test Task',
+      status: TASK_STATUS.new,
+      alterable: NO_VALUE,
+    });
+
+    act(() => {
+      result.current.openContainerImageTaskDialog(task);
+    });
+
     const taskData = {
       id: 'task-123',
+      task,
       name: 'Updated Task',
       comment: 'Updated comment',
       inAssets: true,
@@ -355,7 +371,7 @@ describe('useContainerImageTaskDialog', () => {
       comment: 'Updated comment',
       inAssets: true,
       name: 'Updated Task',
-      ociImageTargetId: undefined,
+      ociImageTargetId: 'target-456',
       scannerId: undefined,
       alertIds: ['alert-3'],
       scheduleId: 'schedule-456',
@@ -394,8 +410,20 @@ describe('useContainerImageTaskDialog', () => {
       }),
     );
 
+    const task = new Task({
+      id: 'task-123',
+      name: 'Test Task',
+      status: TASK_STATUS.done,
+      alterable: YES_VALUE,
+    });
+
+    act(() => {
+      result.current.openContainerImageTaskDialog(task);
+    });
+
     const taskData = {
       id: 'task-123',
+      task,
       name: 'Updated Task',
       comment: 'Updated comment',
       inAssets: true,
@@ -439,6 +467,44 @@ describe('useContainerImageTaskDialog', () => {
     expect(onContainerSaved).toHaveBeenCalledWith(saveResponse);
     expect(onContainerSaveError).not.toHaveBeenCalled();
     expect(result.current.containerImageTaskDialogVisible).toBe(false);
+  });
+
+  test('should omit target for completed non-alterable container image task', async () => {
+    const saveContainerImageTask = testing.fn().mockResolvedValue({});
+    const gmp = {task: {saveContainerImageTask}};
+    const {renderHook} = rendererWith({gmp, store: true});
+    const {result} = renderHook(() => useContainerImageTaskDialog({}));
+
+    const task = new Task({
+      id: 'task-123',
+      name: 'Test Task',
+      status: TASK_STATUS.done,
+      alterable: NO_VALUE,
+    });
+
+    act(() => {
+      result.current.openContainerImageTaskDialog(task);
+    });
+
+    await act(async () => {
+      await result.current.handleSaveContainerImageTask({
+        id: 'task-123',
+        task,
+        name: 'Updated Task',
+        comment: 'Updated comment',
+        inAssets: true,
+        ociImageTargetId: 'target-456',
+        alertIds: [],
+        alterable: false,
+      });
+    });
+
+    expect(saveContainerImageTask).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: 'task-123',
+        ociImageTargetId: undefined,
+      }),
+    );
   });
 
   test('should handle create error', async () => {
