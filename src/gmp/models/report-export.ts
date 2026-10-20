@@ -21,6 +21,20 @@ const STATUSES = [
   'expired',
 ] as const;
 
+// statuses of exports still being processed by gvmd
+export const ACTIVE_REPORT_EXPORT_STATUSES = [
+  'pending',
+  'running',
+  'cancel_requested',
+] as const;
+
+export const isReportExportStatusActive = (
+  status?: string,
+): status is (typeof ACTIVE_REPORT_EXPORT_STATUSES)[number] =>
+  (ACTIVE_REPORT_EXPORT_STATUSES as readonly string[]).includes(
+    status as string,
+  );
+
 const PROGRESSES = ['queued', 'preparing', 'generating', 'completed'] as const;
 
 const REPORT_TYPES = ['scan', 'audit', 'delta_scan', 'delta_audit'] as const;
@@ -171,5 +185,7 @@ class ReportExport extends BaseModel {
     };
   }
 }
+
+export type {ReportExport};
 
 export default ReportExport;

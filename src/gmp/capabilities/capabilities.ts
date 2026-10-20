@@ -99,6 +99,7 @@ const CAPABILITY_NAMES = [
   'get_preferences',
   'get_reports',
   'get_report_configs',
+  'get_report_exports',
   'get_report_formats',
   'get_results',
   'get_roles',
