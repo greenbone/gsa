@@ -32,7 +32,6 @@ describe('buildReportExportRequest', () => {
         reportUrl: '/reports/report-id',
         fileNameFormat: '%N',
         username: 'alice',
-        fallbackReportTitle: 'Report',
       });
 
       expect(request).toMatchObject({

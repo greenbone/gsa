@@ -35,7 +35,6 @@ interface BuildReportExportRequestParams {
   reportUrl?: string;
   fileNameFormat?: string;
   username?: string;
-  fallbackReportTitle: string;
 }
 
 export const buildReportExportRequest = ({

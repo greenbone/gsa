@@ -22,7 +22,6 @@ import type ReportFormat from 'gmp/models/report-format';
 import {isActive} from 'gmp/models/task';
 import {first} from 'gmp/utils/array';
 import {isDefined, hasValue} from 'gmp/utils/identity';
-import useDownload from 'web/components/form/useDownload';
 import {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
@@ -39,7 +38,7 @@ import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import {buildReportExportRequest} from 'web/report-export/build-report-export-request';
-import {useReportExportManager} from 'web/report-export/ReportExportManager';
+import {useReportExportActions} from 'web/report-export/ReportExportManager';
 import {ROUTES} from 'web/route-paths';
 import {
   loadAllEntities as loadFilters,
@@ -277,8 +276,7 @@ const DeltaReportDetails = () => {
   );
 
   const [startTimer, clearTimer] = useReload(memoizedReloadFn, timeoutFunc);
-  const {downloadComponent} = useDownload();
-  const {exportReport} = useReportExportManager();
+  const {exportReport} = useReportExportActions();
 
   const {dialogNotification, showError, showErrorMessage, showSuccessMessage} =
     useDialogNotification();
@@ -446,7 +444,6 @@ const DeltaReportDetails = () => {
           : undefined,
         fileNameFormat: reportExportFileName,
         username,
-        fallbackReportTitle: _('Report'),
       });
       if (await exportReport(request)) setShowDownloadReportDialog(false);
     } catch (error) {
@@ -567,7 +564,6 @@ const DeltaReportDetails = () => {
           onSave={handleReportDownload}
         />
       )}
-      {downloadComponent}
       {dialogNotification}
     </>
   );

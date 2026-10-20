@@ -29,18 +29,17 @@ export const useReportExportMutations = () => {
     gmpMethod: reportExportId =>
       gmp.reportexport.cancelReportExport({reportExportId}),
   });
-  const download = useGmpMutation<string, {data: ArrayBuffer}, Error>({
-    gmpMethod: reportExportId =>
-      gmp.reportexport.downloadReportExport({reportExportId}),
-  });
 
   return useMemo(
     () => ({
       create: create.mutateAsync,
       cancel: cancel.mutateAsync,
-      download: download.mutateAsync,
+      // downloads bypass React Query: the file bytes must not be retained
+      // in the mutation cache
+      download: (reportExportId: string) =>
+        gmp.reportexport.downloadReportExport({reportExportId}),
     }),
-    [create.mutateAsync, cancel.mutateAsync, download.mutateAsync],
+    [create.mutateAsync, cancel.mutateAsync, gmp.reportexport],
   );
 };
 

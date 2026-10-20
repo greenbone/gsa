@@ -29,7 +29,7 @@ import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import {buildReportExportRequest} from 'web/report-export/build-report-export-request';
-import {useReportExportManager} from 'web/report-export/ReportExportManager';
+import {useReportExportActions} from 'web/report-export/ReportExportManager';
 import {ROUTES} from 'web/route-paths';
 import {
   loadAllEntities as loadFilters,
@@ -85,16 +85,17 @@ const AuditDeltaReportDetails = props => {
   // eslint-disable-next-line no-unused-vars
   const [storeAsDefault] = useState();
 
+  const reportUrl =
+    reportId && deltaReportId
+      ? ROUTES.auditReportDelta.url(reportId, deltaReportId)
+      : undefined;
+
   const [sorting, setSorting] = useState({
     results: {
       sortField: 'compliant',
       sortReverse: true,
     },
     errors: {
-      reportUrl:
-        reportId && deltaReportId
-          ? ROUTES.auditReportDelta.url(reportId, deltaReportId)
-          : undefined,
       sortField: 'error',
       sortReverse: false,
     },
@@ -133,7 +134,7 @@ const AuditDeltaReportDetails = props => {
   });
   const isLoading = !isDefined(entity);
 
-  const {exportReport} = useReportExportManager();
+  const {exportReport} = useReportExportActions();
 
   useEffect(() => {
     dispatch(loadUserSettingDefaults(gmp)());
@@ -295,13 +296,9 @@ const AuditDeltaReportDetails = props => {
       format: reportFormat ?? {id: reportFormatId},
       filter: newFilter,
       deltaReportId,
-      reportUrl:
-        reportId && deltaReportId
-          ? ROUTES.auditReportDelta.url(reportId, deltaReportId)
-          : undefined,
+      reportUrl,
       fileNameFormat: reportExportFileName,
       username,
-      fallbackReportTitle: _('Report'),
     });
     return exportReport(request).then(started => {
       if (started) setShowDownloadReportDialog(false);

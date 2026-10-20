@@ -39,7 +39,12 @@ export interface ReportExportRecord {
   cancelError?: Error;
 }
 
-type ReportExportFailureReason = 'export' | 'download' | 'unavailable';
+type ReportExportFailureReason =
+  | 'export'
+  | 'download'
+  | 'status'
+  | 'expired'
+  | 'unavailable';
 
 export type ReportExportJobView =
   | {
@@ -93,7 +98,9 @@ export const getReportExportActions = ({
     dismiss: !isActive || view.kind === 'checking',
     retry:
       view.kind === 'failed' &&
-      (view.reason === 'unavailable' || view.reason === 'download'),
+      (view.reason === 'unavailable' ||
+        view.reason === 'download' ||
+        view.reason === 'status'),
   };
 };
 
@@ -145,6 +152,13 @@ const getServerStatusView = (
     case 'cancel_requested':
     case 'done':
       return undefined;
+    case 'expired':
+      // the generated file was removed by the server retention; there is
+      // nothing left to download or re-check
+      return createFailedView(
+        'expired',
+        new Error(exportData?.errorMessage || 'Export is expired'),
+      );
     default:
       return createFailedView(
         'unavailable',
@@ -176,6 +190,11 @@ const getReportExportJobView = (
   if (!record.exportId) {
     return record.cancelRequested ? {kind: 'canceling'} : {kind: 'creating'};
   }
+  // A permanent status failure outranks cached status data: the export is
+  // gone (e.g. 404) even though an earlier poll still reported it running.
+  if (statusError && isPermanentReportExportError(statusError)) {
+    return createFailedView('status', statusError);
+  }
   if (record.cancelRequested) return {kind: 'canceling'};
   switch (exportData?.status) {
     case 'cancel_requested':
@@ -187,11 +206,7 @@ const getReportExportJobView = (
     case 'done':
       return {kind: 'downloading'};
   }
-  // no status data yet: keep checking; a permanent status failure is
-  // terminal
-  if (statusError && isPermanentReportExportError(statusError)) {
-    return createFailedView(getDownloadFailureReason(statusError), statusError);
-  }
+  // no status data yet: keep checking
   return {kind: 'checking'};
 };
 
@@ -254,17 +269,30 @@ export const shouldAutoDownloadRecord = (
   !isDefined(record.downloadError) &&
   exportData?.status === 'done';
 
-export const retainReportExportJobs = (jobs: ReportExportJob[]) => {
-  const retainedJobKeys = new Set(
-    jobs.filter(job => getReportExportActions(job).active).map(job => job.key),
+// Retention bounds the tracked exports: active exports are always kept,
+// finished ones only as the most recent history entries. The status of a
+// record is resolved by the caller (query results or cache reads), so the
+// retention can be applied to the records themselves and not only to the
+// displayed jobs.
+export const retainReportExportRecords = (
+  records: ReportExportRecord[],
+  resolveStatus: (record: ReportExportRecord) => {
+    data?: ReportExport;
+    error?: Error | null;
+  },
+): ReportExportRecord[] => {
+  const activeIndexes = new Set<number>();
+  const finishedIndexes: number[] = [];
+  records.forEach((record, index) => {
+    const {data, error} = resolveStatus(record);
+    const job = createReportExportJob(record, data, error);
+    if (getReportExportActions(job).active) activeIndexes.add(index);
+    else finishedIndexes.push(index);
+  });
+  const retainedHistory = new Set(
+    finishedIndexes.slice(-MAX_RETAINED_EXPORT_HISTORY_COUNT),
   );
-  const recentJobKeys = new Set(
-    jobs
-      .filter(job => !retainedJobKeys.has(job.key))
-      .slice(-MAX_RETAINED_EXPORT_HISTORY_COUNT)
-      .map(job => job.key),
-  );
-  return jobs.filter(
-    job => retainedJobKeys.has(job.key) || recentJobKeys.has(job.key),
+  return records.filter(
+    (_, index) => activeIndexes.has(index) || retainedHistory.has(index),
   );
 };

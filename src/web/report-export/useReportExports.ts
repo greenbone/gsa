@@ -21,7 +21,7 @@ import {
   getReportExportActions,
   isPermanentReportExportError,
   isReportExportJobFinished,
-  retainReportExportJobs,
+  retainReportExportRecords,
   shouldAutoDownloadRecord,
 } from 'web/report-export/report-export-job-model';
 import {useReportExportMutations} from 'web/report-export/useReportExportMutations';
@@ -125,22 +125,42 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
     [],
   );
 
-  const statusQueries = useReportExportStatusQueries(records);
+  // Retention prunes the tracked records themselves so finished history
+  // beyond the limit cannot keep status query observers or cache entries
+  // alive. The record state is adjusted during render (React's documented
+  // derived-state pattern): the prune only removes records, so the
+  // adjustment converges after a single re-render.
+  const retainedRecords = retainReportExportRecords(records, record => {
+    const state = isDefined(record.exportId)
+      ? queryClient.getQueryState(
+          reportExportQueryKey(token, username, record.exportId),
+        )
+      : undefined;
+    return {
+      data: state?.data as ReportExport | undefined,
+      error: state?.error ?? undefined,
+    };
+  });
+  if (retainedRecords.length !== records.length) {
+    setRecords(retainedRecords);
+  }
+
+  const statusQueries = useReportExportStatusQueries(retainedRecords);
   const exportById = useMemo(() => {
     const exports = new Map<string, ReportExport>();
-    records.forEach((record, index) => {
+    retainedRecords.forEach((record, index) => {
       const data = statusQueries[index]?.data;
       if (isDefined(record.exportId) && isDefined(data)) {
         exports.set(record.exportId, data);
       }
     });
     return exports;
-  }, [records, statusQueries]);
+  }, [retainedRecords, statusQueries]);
 
   const jobsByKey = useMemo(
     () =>
       new Map(
-        records
+        retainedRecords
           .map((record, index) =>
             createReportExportJob(
               record,
@@ -152,7 +172,7 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
           )
           .map(job => [job.key, job] as const),
       ),
-    [records, exportById, statusQueries],
+    [retainedRecords, exportById, statusQueries],
   );
 
   const requestCancellation = useLatestCallback(
@@ -286,15 +306,15 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
   // Replay a cancellation that was queued while the export id did not exist
   // yet, whenever the record becomes bound.
   useEffect(() => {
-    for (const record of records) {
+    for (const record of retainedRecords) {
       if (!isDefined(record.exportId) || !record.cancelRequested) continue;
       requestCancellation(record.key, record.exportId).catch(() => {});
     }
-  }, [records, requestCancellation]);
+  }, [retainedRecords, requestCancellation]);
 
   // Pick up completed tracked exports and hand their file to the browser.
   useEffect(() => {
-    for (const record of records) {
+    for (const record of retainedRecords) {
       const exportId = record.exportId;
       if (!isDefined(exportId)) continue;
       const item = exportById.get(exportId);
@@ -305,9 +325,9 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
         item?.contentType ?? undefined,
       ).catch(() => {});
     }
-  }, [records, exportById, attemptDownload]);
+  }, [retainedRecords, exportById, attemptDownload]);
 
-  const start = async (params: StartReportExportParams) => {
+  const start = useLatestCallback(async (params: StartReportExportParams) => {
     if (!isLive(gmp)) {
       return false;
     }
@@ -347,9 +367,9 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
       notify(failure);
       return false;
     }
-  };
+  });
 
-  const cancel = async (key: string) => {
+  const cancel = useLatestCallback(async (key: string) => {
     const job = jobsByKey.get(key);
     const record = recordsRef.current.find(item => item.key === key);
     if (!job || !record || !getReportExportActions(job).cancel) return;
@@ -360,32 +380,56 @@ const useReportExport = ({onDownload, onError}: ReportExportCallbacks) => {
       return;
     }
     await requestCancellation(record.key, record.exportId);
-  };
+  });
 
-  const dismiss = (key: string) => {
+  const dismiss = useLatestCallback((key: string) => {
     const job = jobsByKey.get(key);
     if (!job || !getReportExportActions(job).dismiss) return;
     removeRecord(key);
-  };
+  });
 
-  const clearFinished = () => {
+  const clearFinished = useLatestCallback(() => {
     setRecords(previous =>
       previous.filter(record => {
         const job = jobsByKey.get(record.key);
         return !job || !isReportExportJobFinished(job);
       }),
     );
-  };
+  });
 
-  const retry = async (key: string) => {
+  const retry = useLatestCallback(async (key: string) => {
     const job = jobsByKey.get(key);
     if (!job || !getReportExportActions(job).retry) return;
-    if (isDefined(job.exportId))
+    if (isDefined(job.exportId) && job.view.kind === 'failed') {
+      if (job.view.reason === 'status') {
+        // the status check itself failed; a re-download cannot recover a
+        // missing export, but re-checking can resume it
+        await queryClient.refetchQueries({
+          queryKey: reportExportQueryKey(token, username, job.exportId),
+        });
+        return;
+      }
       // a re-download is always possible: gvmd retains the generated file
       await attemptDownload(key, job.exportId, undefined, false);
-  };
+    }
+  });
 
-  const jobs = retainReportExportJobs([...jobsByKey.values()]);
+  const jobs = [...jobsByKey.values()];
+
+  // Remove the status queries of records that left the tracked set, so
+  // pruned or dismissed history does not leave cache entries behind.
+  const previousRecordsRef = useRef<ReportExportRecord[]>([]);
+  useEffect(() => {
+    const previous = previousRecordsRef.current;
+    previousRecordsRef.current = records;
+    const trackedKeys = new Set(records.map(record => record.key));
+    for (const record of previous) {
+      if (trackedKeys.has(record.key) || !isDefined(record.exportId)) continue;
+      queryClient.removeQueries({
+        queryKey: reportExportQueryKey(token, username, record.exportId),
+      });
+    }
+  }, [records, queryClient, token, username]);
 
   return {
     start,

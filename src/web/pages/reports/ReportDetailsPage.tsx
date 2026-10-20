@@ -40,7 +40,7 @@ import ReportDetailsContent from 'web/pages/reports/ReportDetailsContent';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import {buildReportExportRequest} from 'web/report-export/build-report-export-request';
-import {useReportExportManager} from 'web/report-export/ReportExportManager';
+import {useReportExportActions} from 'web/report-export/ReportExportManager';
 import {ROUTES} from 'web/route-paths';
 import {createPEMCertificate} from 'web/utils/certificates';
 
@@ -49,14 +49,6 @@ interface ReportComposerDefaults {
   defaultReportFormatId?: string;
   includeNotes?: boolean;
   includeOverrides?: boolean;
-}
-
-interface DownloadReportState {
-  includeNotes: boolean;
-  includeOverrides: boolean;
-  reportConfigId: string;
-  reportFormatId: string;
-  storeAsDefault: boolean;
 }
 
 interface ReportTargetRef {
@@ -108,7 +100,7 @@ const ReportDetailsPage = () => {
     useState(false);
   const [reportComposerDefaults, setReportComposerDefaults] =
     useState<ReportComposerDefaults>({});
-  const {exportReport} = useReportExportManager();
+  const {exportReport} = useReportExportActions();
 
   // Filter management
   const [pageFilter, , {changeFilter}] = usePageFilter(
@@ -295,7 +287,6 @@ const ReportDetailsPage = () => {
 
   const handleReportDownload = useCallback(
     async (values: DownloadReportDialogValues) => {
-      const state = values as unknown as DownloadReportState;
       if (!entity || !reportFilter) return;
       const {
         includeNotes,
@@ -303,7 +294,7 @@ const ReportDetailsPage = () => {
         reportConfigId,
         reportFormatId,
         storeAsDefault,
-      } = state;
+      } = values;
 
       const newFilter = reportFilter
         .set('notes', includeNotes)
@@ -344,7 +335,6 @@ const ReportDetailsPage = () => {
           reportUrl: ROUTES.report.url(reportId),
           fileNameFormat: reportExportFileName,
           username,
-          fallbackReportTitle: _('Report'),
         });
         if (await exportReport(request)) setShowDownloadReportDialog(false);
       } catch (error) {
@@ -363,7 +353,6 @@ const ReportDetailsPage = () => {
       exportReport,
       showError,
       username,
-      _,
     ],
   );
 

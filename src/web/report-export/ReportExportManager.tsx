@@ -26,14 +26,17 @@ import useReportExport, {
   type StartReportExportParams,
 } from 'web/report-export/useReportExports';
 
-interface ReportExportManagerContextValue {
+interface ReportExportActionsContextValue {
   exportReport: (params: StartReportExportParams) => Promise<boolean>;
   cancel: (key: string) => Promise<void>;
   dismiss: (key: string) => void;
   retry: (key: string) => Promise<void>;
   clearFinished: () => void;
-  isActive: boolean;
   supportsCancellation: boolean;
+}
+
+interface ReportExportActivityContextValue {
+  isActive: boolean;
   activityOpen: boolean;
   setActivityOpen: Dispatch<SetStateAction<boolean>>;
   jobs: ReportExportJob[];
@@ -43,8 +46,12 @@ interface ReportExportManagerProps {
   children: ReactNode;
 }
 
-const ReportExportManagerContext = createContext<
-  ReportExportManagerContextValue | undefined
+const ReportExportActionsContext = createContext<
+  ReportExportActionsContextValue | undefined
+>(undefined);
+
+const ReportExportActivityContext = createContext<
+  ReportExportActivityContextValue | undefined
 >(undefined);
 
 const ReportExportManager = ({children}: ReportExportManagerProps) => {
@@ -72,37 +79,62 @@ const ReportExportManager = ({children}: ReportExportManagerProps) => {
       if (!activityOpen) showErrorNotification(error.message);
     },
   });
-  const contextValue = useMemo(
+  const {start, cancel, dismiss, retry, clearFinished} = reportExport;
+  const cancelAction = useCallback(
+    (key: string) => (supportsCancellation ? cancel(key) : Promise.resolve()),
+    [cancel, supportsCancellation],
+  );
+  // Actions are stable callbacks; consumers of only exportReport must not
+  // re-render on activity updates.
+  const actionsContextValue = useMemo(
     () => ({
-      exportReport: (params: StartReportExportParams) =>
-        reportExport.start(params),
-      cancel: (key: string) =>
-        supportsCancellation ? reportExport.cancel(key) : Promise.resolve(),
-      dismiss: reportExport.dismiss,
-      retry: reportExport.retry,
-      clearFinished: reportExport.clearFinished,
-      isActive: reportExport.isActive,
+      exportReport: start,
+      cancel: cancelAction,
+      dismiss,
+      retry,
+      clearFinished,
       supportsCancellation,
+    }),
+    [start, cancelAction, dismiss, retry, clearFinished, supportsCancellation],
+  );
+  const activityContextValue = useMemo(
+    () => ({
+      isActive: reportExport.isActive,
       activityOpen,
       setActivityOpen,
       jobs: reportExport.jobs,
     }),
-    [activityOpen, reportExport, supportsCancellation],
+    [reportExport.isActive, reportExport.jobs, activityOpen],
   );
 
   return (
-    <ReportExportManagerContext value={contextValue}>
-      <Download ref={downloadRef} onClick={event => event.stopPropagation()} />
-      {children}
-    </ReportExportManagerContext>
+    <ReportExportActionsContext value={actionsContextValue}>
+      <ReportExportActivityContext value={activityContextValue}>
+        <Download
+          ref={downloadRef}
+          onClick={event => event.stopPropagation()}
+        />
+        {children}
+      </ReportExportActivityContext>
+    </ReportExportActionsContext>
   );
 };
 
-export const useReportExportManager = () => {
-  const context = useContext(ReportExportManagerContext);
+export const useReportExportActions = () => {
+  const context = useContext(ReportExportActionsContext);
   if (!context) {
     throw new Error(
-      'useReportExportManager must be used within ReportExportManager',
+      'useReportExportActions must be used within ReportExportManager',
+    );
+  }
+  return context;
+};
+
+export const useReportExportActivityState = () => {
+  const context = useContext(ReportExportActivityContext);
+  if (!context) {
+    throw new Error(
+      'useReportExportActivityState must be used within ReportExportManager',
     );
   }
   return context;
