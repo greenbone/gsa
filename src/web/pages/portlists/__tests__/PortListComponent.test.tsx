@@ -296,6 +296,97 @@ describe('PortListComponent tests', () => {
     expect(screen.queryByText('Edit Port List foo')).not.toBeInTheDocument();
   });
 
+  test('should call onSaveError if saving a new port range fails', async () => {
+    const error = new Error('error');
+    const createPortRange = testing.fn().mockRejectedValue(error);
+    const gmp = createGmp({createPortRange});
+    const onSaved = testing.fn();
+    const onSaveError = testing.fn();
+    const {render} = rendererWith({gmp});
+    render(
+      <PortListComponent onSaveError={onSaveError} onSaved={onSaved}>
+        {({edit}) => (
+          <Button
+            data-testid="open"
+            onClick={() => edit(new PortList({id: '123'}))}
+          />
+        )}
+      </PortListComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open'));
+    await wait();
+
+    fireEvent.click(screen.getByTestId('new-port-range'));
+    await wait();
+    const dialogs = screen.queryDialogs();
+    const portListDialog = within(dialogs[0]);
+    const portRangeDialog = within(dialogs[1]);
+    changeInputValue(portRangeDialog.getByName('portRangeStart'), '1');
+    changeInputValue(portRangeDialog.getByName('portRangeEnd'), '20');
+    fireEvent.click(portRangeDialog.getDialogSaveButton());
+    await wait();
+
+    fireEvent.click(portListDialog.getDialogSaveButton());
+    await wait();
+
+    expect(createPortRange).toHaveBeenCalledExactlyOnceWith({
+      portListId: '123',
+      portRangeEnd: 20,
+      portRangeStart: 1,
+      portType: 'tcp',
+    });
+    expect(gmp.portlist.save).not.toHaveBeenCalled();
+    expect(onSaveError).toHaveBeenCalledExactlyOnceWith(error);
+    expect(onSaved).not.toHaveBeenCalled();
+    expect(screen.getByText('Edit Port List foo')).toBeInTheDocument();
+  });
+
+  test('should show an error if saving a new port range fails', async () => {
+    const error = new Error('port range error');
+    const createPortRange = testing.fn().mockRejectedValue(error);
+    const gmp = createGmp({createPortRange});
+    const onSaved = testing.fn();
+    const {render} = rendererWith({gmp});
+    render(
+      <PortListComponent onSaved={onSaved}>
+        {({edit}) => (
+          <Button
+            data-testid="open"
+            onClick={() => edit(new PortList({id: '123'}))}
+          />
+        )}
+      </PortListComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open'));
+    await wait();
+
+    fireEvent.click(screen.getByTestId('new-port-range'));
+    await wait();
+    const dialogs = screen.queryDialogs();
+    const portListDialog = within(dialogs[0]);
+    const portRangeDialog = within(dialogs[1]);
+    changeInputValue(portRangeDialog.getByName('portRangeStart'), '1');
+    changeInputValue(portRangeDialog.getByName('portRangeEnd'), '20');
+    fireEvent.click(portRangeDialog.getDialogSaveButton());
+    await wait();
+
+    fireEvent.click(portListDialog.getDialogSaveButton());
+    await wait();
+
+    expect(createPortRange).toHaveBeenCalledExactlyOnceWith({
+      portListId: '123',
+      portRangeEnd: 20,
+      portRangeStart: 1,
+      portType: 'tcp',
+    });
+    expect(gmp.portlist.save).not.toHaveBeenCalled();
+    expect(onSaved).not.toHaveBeenCalled();
+    expect(screen.getByText('port range error')).toBeInTheDocument();
+    expect(screen.getByText('Edit Port List foo')).toBeInTheDocument();
+  });
+
   test('should allow editing a port list and delete a port range', async () => {
     const portList = PortList.fromElement({
       _id: '123',
