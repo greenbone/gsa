@@ -38,6 +38,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import ReportDetailsPageToolBar from 'web/pages/reports/details/ReportDetailsPageToolBar';
 import {buildReportTabDefinitions} from 'web/pages/reports/details/ReportTabDefinitions';
 import ReportScannerContact from 'web/pages/reports/ReportScannerContact';
+import ReportScanType from 'web/pages/reports/details/ReportScanType';
 import StatusCellContent from 'web/pages/reports/StatusCellContent';
 
 interface ThresholdConfig {
@@ -180,8 +181,8 @@ const ReportDetailsContent = ({
     isLoading && !isDefined(reportError) && !showThresholdMessage;
 
   const HeaderTitle = (
-    <Divider>
-      <span style={{whiteSpace: 'nowrap'}}>{_('Report:')}</span>
+    <Divider margin="12px">
+      <ReportScanType heading={true} task={report?.task} />
       {showIsLoading ? (
         <span>{_('Loading')}</span>
       ) : (
