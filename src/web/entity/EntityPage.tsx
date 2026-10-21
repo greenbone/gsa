@@ -32,7 +32,7 @@ interface SectionComponentProps {
   children: React.ReactNode;
   extra: React.ReactNode;
   img: React.ReactElement;
-  title: string;
+  title: React.ReactNode;
 }
 
 interface EntityError {
@@ -53,6 +53,7 @@ interface EntityPageProps<TEntity extends Model> {
   sectionComponent?: React.ComponentType<SectionComponentProps> | false;
   sectionIcon: React.ReactElement;
   title: string;
+  titleAddon?: React.ReactNode;
   toolBarIcons:
     | React.ComponentType<ToolBarIconsComponentProps<TEntity>>
     | React.ReactElement;
@@ -80,6 +81,7 @@ const EntityPage = <TEntity extends Model>({
   entityType,
   isLoading = true,
   title,
+  titleAddon,
   toolBarIcons: ToolBarIconsComponent,
   ...props
 }: EntityPageProps<TEntity>) => {
@@ -135,9 +137,18 @@ const EntityPage = <TEntity extends Model>({
       return null;
     }
 
-    let sectionTitle = title;
+    let sectionTitle: React.ReactNode = title;
     if (isDefined(entity)) {
       sectionTitle = title + ': ' + shorten(entity.name, 80);
+    }
+
+    if (isDefined(titleAddon)) {
+      sectionTitle = (
+        <Layout align={['start', 'start']} flex="column">
+          <span>{sectionTitle}</span>
+          {titleAddon}
+        </Layout>
+      );
     }
 
     return (
