@@ -139,12 +139,15 @@ describe('DeltaReportDetailsContent tests', () => {
     expect(select).toHaveAttribute('title', 'Loaded filter');
     expect(select).toHaveValue('foo');
 
-    // Header
+    const header = screen.getByRole('banner');
     expect(
-      screen.getByRole('heading', {name: /Report: Mon/}),
-    ).toHaveTextContent(
-      'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
-    );
+      within(header).getByRole('heading', {name: 'Report'}),
+    ).toBeInTheDocument();
+    expect(
+      within(within(header).getByTestId('report-timestamp')).getByTitle(
+        'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
+      ),
+    ).toBeInTheDocument();
 
     const entityInfo = within(screen.getByTestId('entity-info'));
     expect(entityInfo.getByRole('row', {name: /^ID:/})).toHaveTextContent(

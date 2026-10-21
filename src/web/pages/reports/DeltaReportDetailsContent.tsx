@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import styled from 'styled-components';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import type AuditReport from 'gmp/models/audit-report';
 import {type default as Filter, type FilterType} from 'gmp/models/filter';
@@ -16,17 +15,12 @@ import type ReportReport from 'gmp/models/report/report';
 import type ReportTask from 'gmp/models/report/task';
 import {TASK_STATUS} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
-import StatusBar from 'web/components/bar/StatusBar';
 import ToolBar from 'web/components/bar/ToolBar';
-import DateTime from 'web/components/date/DateTime';
 import ErrorMessage from 'web/components/error/ErrorMessage';
-import {ReportIcon} from 'web/components/icon';
-import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
 import Powerfilter from 'web/components/powerfilter/PowerFilter';
 import Section from 'web/components/section/Section';
-import SectionHeader from 'web/components/section/SectionHeader';
 import Tab from 'web/components/tab/Tab';
 import TabLayout from 'web/components/tab/TabLayout';
 import TabList from 'web/components/tab/TabList';
@@ -38,8 +32,8 @@ import EntityInfo from 'web/entity/EntityInfo';
 import EntityTags from 'web/entity/Tags';
 import useTranslation from 'web/hooks/useTranslation';
 import DeltaResultsTab from 'web/pages/reports/details/DeltaResultsTab';
+import ReportDetailsHeader from 'web/pages/reports/details/ReportDetailsHeader';
 import ReportDetailsToolBarIcons from 'web/pages/reports/details/ReportDetailsPageToolBarIcons';
-import ReportScanType from 'web/pages/reports/details/ReportScanType';
 import Summary from 'web/pages/reports/details/Summary';
 import TabTitle from 'web/pages/reports/details/TabTitle';
 
@@ -74,10 +68,6 @@ interface DeltaReportDetailsContentProps {
   onTagSuccess?: () => void;
   onTargetEditClick?: () => void;
 }
-
-const Span = styled.span`
-  margin-top: 2px;
-`;
 
 const DeltaReportDetailsContent = ({
   audit = false,
@@ -131,30 +121,16 @@ const DeltaReportDetailsContent = ({
   const status = isImport ? TASK_STATUS.import : scan_run_status;
   const progress = isDefined(task) ? task.progress : 0;
 
-  const headerTitle = (
-    <Divider margin="12px">
-      {audit ? (
-        <span>{_('Audit Report:')}</span>
-      ) : (
-        <ReportScanType heading={true} task={report?.task} />
-      )}
-      {isLoading ? (
-        <span>{_('Loading')}</span>
-      ) : (
-        <Divider>
-          <DateTime date={timestamp} />
-          <Span>
-            <StatusBar progress={progress} status={status} />
-          </Span>
-        </Divider>
-      )}
-    </Divider>
-  );
-
   const header = (
-    <SectionHeader img={<ReportIcon size="large" />} title={headerTitle}>
-      {hasReport && <EntityInfo entity={entity} />}
-    </SectionHeader>
+    <ReportDetailsHeader
+      audit={audit}
+      isLoading={isLoading}
+      metadata={hasReport ? <EntityInfo entity={entity} /> : undefined}
+      progress={progress}
+      status={status ?? TASK_STATUS.unknown}
+      task={report?.task}
+      timestamp={timestamp}
+    />
   );
 
   const resultsCounts = results?.counts ?? new CollectionCounts();
