@@ -39,6 +39,7 @@ import EntityTags from 'web/entity/Tags';
 import useTranslation from 'web/hooks/useTranslation';
 import DeltaResultsTab from 'web/pages/reports/details/DeltaResultsTab';
 import ReportDetailsToolBarIcons from 'web/pages/reports/details/ReportDetailsPageToolBarIcons';
+import ReportScanType from 'web/pages/reports/details/ReportScanType';
 import Summary from 'web/pages/reports/details/Summary';
 import TabTitle from 'web/pages/reports/details/TabTitle';
 
@@ -131,8 +132,12 @@ const DeltaReportDetailsContent = ({
   const progress = isDefined(task) ? task.progress : 0;
 
   const headerTitle = (
-    <Divider>
-      {audit ? <span>{_('Audit Report:')}</span> : <span>{_('Report:')}</span>}
+    <Divider margin="12px">
+      {audit ? (
+        <span>{_('Audit Report:')}</span>
+      ) : (
+        <ReportScanType heading={true} task={report?.task} />
+      )}
       {isLoading ? (
         <span>{_('Loading')}</span>
       ) : (

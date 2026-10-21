@@ -29,6 +29,7 @@ import TableRow from 'web/components/table/TableRow';
 import useGetReportHosts from 'web/hooks/use-query/report-hosts';
 import useTranslation from 'web/hooks/useTranslation';
 import ReportScannerContact from 'web/pages/reports/ReportScannerContact';
+import ReportScanType from 'web/pages/reports/details/ReportScanType';
 import StatusCellContent from 'web/pages/reports/StatusCellContent';
 
 interface SummaryProps {
@@ -72,7 +73,6 @@ const Summary = ({
   } = report;
 
   const {id, name, comment, progress} = task ?? {};
-
   const {data: hostsData} = useGetReportHosts({reportId, filter});
   const hostsCount = hostsData?.entitiesCounts?.all ?? 0;
 
@@ -142,6 +142,12 @@ const Summary = ({
           <TableCol width="90%" />
         </colgroup>
         <TableBody>
+          <TableRow>
+            <TableData>{_('Scan Type')}</TableData>
+            <TableData>
+              <ReportScanType task={task} />
+            </TableData>
+          </TableRow>
           <TableRow>
             <TableData>{_('Task Name')}</TableData>
             <TableData>
