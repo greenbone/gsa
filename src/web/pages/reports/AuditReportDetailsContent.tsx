@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import styled from 'styled-components';
 import type AuditReport from 'gmp/models/audit-report';
 import type Filter from 'gmp/models/filter';
 import type FilterType from 'gmp/models/filter/filter-type';
@@ -14,17 +13,12 @@ import type ReportTask from 'gmp/models/report/task';
 import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {isActive, TASK_STATUS, type TaskStatus} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
-import StatusBar from 'web/components/bar/StatusBar';
 import ToolBar from 'web/components/bar/ToolBar';
-import DateTime from 'web/components/date/DateTime';
 import ErrorPanel from 'web/components/error/ErrorPanel';
-import {ReportIcon} from 'web/components/icon';
-import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
 import Powerfilter from 'web/components/powerfilter/PowerFilter';
 import Section from 'web/components/section/Section';
-import SectionHeader from 'web/components/section/SectionHeader';
 import Tab from 'web/components/tab/Tab';
 import TabLayout from 'web/components/tab/TabLayout';
 import TabList from 'web/components/tab/TabList';
@@ -41,6 +35,7 @@ import AuditThresholdPanel from 'web/pages/reports/details/AuditThresholdPanel';
 import ErrorsTab from 'web/pages/reports/details/error/ErrorsTab';
 import HostsTabContent from 'web/pages/reports/details/host/HostsTabContent';
 import OperatingSystemsTab from 'web/pages/reports/details/operating-system/OperatingSystemsTab';
+import ReportDetailsHeader from 'web/pages/reports/details/ReportDetailsHeader';
 import ReportDetailsToolBarIcons from 'web/pages/reports/details/ReportDetailsPageToolBarIcons';
 import ResultsTab from 'web/pages/reports/details/result/ResultsTab';
 import Summary from 'web/pages/reports/details/Summary';
@@ -76,10 +71,6 @@ interface AuditReportDetailsContentProps {
   onTargetEditClick: () => void;
   onTlsCertificateDownloadClick: (entity: ReportTLSCertificate) => void;
 }
-
-const Span = styled.span`
-  margin-top: 2px;
-`;
 
 const renderWithThreshold = (
   entityType: string,
@@ -351,26 +342,15 @@ const AuditReportDetailsContent = ({
     },
   ];
 
-  const header_title = (
-    <Divider>
-      <span>{_('Audit Report:')}</span>
-      {showIsLoading ? (
-        <span>{_('Loading')}</span>
-      ) : (
-        <Divider>
-          <DateTime date={timestamp} />
-          <Span>
-            <StatusBar progress={progress} status={status} />
-          </Span>
-        </Divider>
-      )}
-    </Divider>
-  );
-
   const header = (
-    <SectionHeader img={<ReportIcon size="large" />} title={header_title}>
-      {hasReport && <EntityInfo entity={entity} />}
-    </SectionHeader>
+    <ReportDetailsHeader
+      audit={true}
+      isLoading={showIsLoading}
+      metadata={hasReport ? <EntityInfo entity={entity} /> : undefined}
+      progress={progress}
+      status={status}
+      timestamp={timestamp}
+    />
   );
 
   return (

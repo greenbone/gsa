@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import styled from 'styled-components';
 import {type default as Filter, type FilterType} from 'gmp/models/filter';
 import type Report from 'gmp/models/report';
 import type ReportTask from 'gmp/models/report/task';
@@ -11,11 +10,7 @@ import type ReportTLSCertificate from 'gmp/models/report/tls-certificate';
 import {type ScannerType} from 'gmp/models/scanner';
 import {isActive, TASK_STATUS} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
-import StatusBar from 'web/components/bar/StatusBar';
-import DateTime from 'web/components/date/DateTime';
 import ErrorPanel from 'web/components/error/ErrorPanel';
-import {ReportIcon} from 'web/components/icon';
-import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import Loading from 'web/components/loading/Loading';
 import {
@@ -23,7 +18,6 @@ import {
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/Reload';
 import Section from 'web/components/section/Section';
-import SectionHeader from 'web/components/section/SectionHeader';
 import Tab from 'web/components/tab/Tab';
 import TabLayout from 'web/components/tab/TabLayout';
 import TabList from 'web/components/tab/TabList';
@@ -35,11 +29,10 @@ import EntityInfo from 'web/entity/EntityInfo';
 import useReportSubEntities from 'web/hooks/use-query/use-report-sub-entities';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
+import ReportDetailsHeader from 'web/pages/reports/details/ReportDetailsHeader';
 import ReportDetailsPageToolBar from 'web/pages/reports/details/ReportDetailsPageToolBar';
 import {buildReportTabDefinitions} from 'web/pages/reports/details/ReportTabDefinitions';
 import ReportScannerContact from 'web/pages/reports/ReportScannerContact';
-import ReportScanType from 'web/pages/reports/details/ReportScanType';
-import StatusCellContent from 'web/pages/reports/StatusCellContent';
 
 interface ThresholdConfig {
   showInitialLoading: boolean;
@@ -82,20 +75,6 @@ interface ReportDetailsContentProps {
   onTargetEditClick: () => void;
   onTlsCertificateDownloadClick: (entity: ReportTLSCertificate) => void;
 }
-
-const HeaderStatusCellContent = styled(StatusCellContent)`
-  margin-top: 2px;
-`;
-
-const HeaderContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-  white-space: normal;
-  word-break: normal;
-  word-wrap: break-word;
-`;
 
 const ReportDetailsContent = ({
   entity,
@@ -180,37 +159,22 @@ const ReportDetailsContent = ({
   const showInitialLoading =
     isLoading && !isDefined(reportError) && !showThresholdMessage;
 
-  const HeaderTitle = (
-    <Divider margin="12px">
-      <ReportScanType heading={true} task={report?.task} />
-      {showIsLoading ? (
-        <span>{_('Loading')}</span>
-      ) : (
-        <HeaderContainer>
-          <DateTime showTimezoneAsSeparateLine date={timestamp} />
-          <HeaderStatusCellContent
-            scannerContact={
-              <ReportScannerContact
-                isRunning={status === TASK_STATUS.running}
-                modificationTime={entity?.modificationTime}
-                scannerType={scannerType ?? task?.scanner?.scannerType}
-              />
-            }
-            statusBar={<StatusBar progress={progress} status={status} />}
-          />
-        </HeaderContainer>
-      )}
-    </Divider>
-  );
-
   const header = (
-    <SectionHeader
-      alignHeading={['start', 'baseline']}
-      img={<ReportIcon size="large" />}
-      title={HeaderTitle}
-    >
-      {hasReport && <EntityInfo entity={entity} />}
-    </SectionHeader>
+    <ReportDetailsHeader
+      isLoading={showIsLoading}
+      metadata={hasReport ? <EntityInfo entity={entity} /> : undefined}
+      progress={progress}
+      scannerContact={
+        <ReportScannerContact
+          isRunning={status === TASK_STATUS.running}
+          modificationTime={entity?.modificationTime}
+          scannerType={scannerType ?? task?.scanner?.scannerType}
+        />
+      }
+      status={status}
+      task={report?.task}
+      timestamp={timestamp}
+    />
   );
 
   const thresholdConfig: ThresholdConfig = {
