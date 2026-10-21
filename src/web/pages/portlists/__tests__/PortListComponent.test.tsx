@@ -355,6 +355,58 @@ describe('PortListComponent tests', () => {
     expect(screen.queryByText('Edit Port List foo')).not.toBeInTheDocument();
   });
 
+  test('should only save metadata for an in-use port list', async () => {
+    const portList = PortList.fromElement({
+      _id: '123',
+      comment: 'old comment',
+      in_use: 1,
+      name: 'foo',
+      writable: 0,
+      port_ranges: {
+        port_range: [
+          {
+            _id: '456',
+            start: 1,
+            end: 2,
+            type: 'tcp',
+          },
+        ],
+      },
+    });
+    const gmp = createGmp({getPortListResponse: {data: portList}});
+    const onSaved = testing.fn();
+    const {render} = rendererWith({gmp});
+    render(
+      <PortListComponent onSaved={onSaved}>
+        {({edit}) => (
+          <Button data-testid="open" onClick={() => edit(portList)} />
+        )}
+      </PortListComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('open'));
+    await wait();
+
+    expect(screen.getByText('Edit Port List foo')).toBeInTheDocument();
+    expect(screen.queryByTestId('new-port-range')).not.toBeInTheDocument();
+    expect(screen.queryByTitle('Delete Port Range')).not.toBeInTheDocument();
+
+    changeInputValue(screen.getByName('name'), 'renamed');
+    changeInputValue(screen.getByName('comment'), 'new comment');
+    fireEvent.click(screen.getDialogSaveButton());
+    await wait();
+
+    expect(gmp.portlist.save).toHaveBeenCalledExactlyOnceWith({
+      comment: 'new comment',
+      id: '123',
+      name: 'renamed',
+    });
+    expect(gmp.portlist.createPortRange).not.toHaveBeenCalled();
+    expect(gmp.portlist.deletePortRange).not.toHaveBeenCalled();
+    expect(onSaved).toHaveBeenCalledExactlyOnceWith({id: '123'});
+    expect(screen.queryByText('Edit Port List foo')).not.toBeInTheDocument();
+  });
+
   test('should call onSaveError if saving a port list fails', async () => {
     const portList = PortList.fromElement({
       _id: '123',
