@@ -28,8 +28,8 @@ import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useGetReportHosts from 'web/hooks/use-query/report-hosts';
 import useTranslation from 'web/hooks/useTranslation';
-import ReportScannerContact from 'web/pages/reports/ReportScannerContact';
 import ReportScanType from 'web/pages/reports/details/ReportScanType';
+import ReportScannerContact from 'web/pages/reports/ReportScannerContact';
 import StatusCellContent from 'web/pages/reports/StatusCellContent';
 
 interface SummaryProps {
