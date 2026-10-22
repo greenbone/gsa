@@ -48,7 +48,7 @@ describe('Header tests', () => {
     expect(screen.getByText('UTC')).toBeVisible();
 
     const langBtn = screen.getByRole('button', {
-      name: 'Switch language to German',
+      name: 'Select language',
     });
     expect(langBtn).toBeVisible();
 
