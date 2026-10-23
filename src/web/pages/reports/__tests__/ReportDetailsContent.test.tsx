@@ -346,7 +346,7 @@ describe('ReportDetailsContent tests', () => {
       const {render} = setupRenderer();
       render(<ReportDetailsContent {...props} />);
 
-      screen.getByText('Loading');
+      expect(screen.queryByText('Loading')).not.toBeInTheDocument();
       screen.getByRole('heading', {name: 'Report'});
     });
 

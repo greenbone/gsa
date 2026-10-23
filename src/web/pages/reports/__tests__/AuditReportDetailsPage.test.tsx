@@ -196,8 +196,7 @@ describe('AuditReportDetailsPage', () => {
       const {render} = setupRenderer(gmp);
       renderPage(render);
 
-      await screen.findByText('Loading');
-      screen.getByText('Audit Report:');
+      screen.getByRole('heading', {name: 'Audit Report'});
       screen.getByTestId('loading');
       expect(screen.queryByRole('tablist')).not.toBeInTheDocument();
     });
@@ -210,9 +209,13 @@ describe('AuditReportDetailsPage', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByRole('heading', {name: /Audit Report:/}),
-        ).toHaveTextContent(
-          'Audit Report:Mon, Jun 3, 2019 1:00 PM Central European Summer TimeDone',
+          screen.getByRole('heading', {name: 'Audit Report'}),
+        ).toHaveTextContent('Audit Report');
+        expect(screen.getByTestId('report-timestamp')).toHaveTextContent(
+          'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
+        );
+        expect(screen.getAllByTestId('statusbar-text')[0]).toHaveTextContent(
+          'Done',
         );
       });
     });
