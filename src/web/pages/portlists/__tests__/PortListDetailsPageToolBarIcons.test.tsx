@@ -8,6 +8,7 @@ import {fireEvent, rendererWith, screen} from 'web/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import PortList from 'gmp/models/port-list';
+import {NO_VALUE} from 'gmp/parser';
 import PortListDetailsPageToolBarIcons from 'web/pages/portlists/PortListDetailsPageToolBarIcons';
 
 const portList = new PortList({
@@ -116,6 +117,29 @@ describe('PortListDetailsPageToolBarIcons', () => {
 
     fireEvent.click(editIcon);
     expect(handleEdit).not.toHaveBeenCalled();
+  });
+
+  test('should allow editing an in-use port list reported as not writable', () => {
+    const portList = new PortList({
+      id: '1',
+      inUse: true,
+      name: 'Test PortList',
+      userCapabilities: new EverythingCapabilities(),
+      writable: NO_VALUE,
+    });
+    const handleEdit = testing.fn();
+    const {render} = rendererWith({capabilities: true, gmp});
+    render(
+      <PortListDetailsPageToolBarIcons
+        entity={portList}
+        onPortListEditClick={handleEdit}
+      />,
+    );
+
+    const editIcon = screen.getByRole('button', {name: /edit/i});
+    expect(editIcon).toBeEnabled();
+    fireEvent.click(editIcon);
+    expect(handleEdit).toHaveBeenCalledWith(portList);
   });
 
   test('should allow to delete a port list', () => {
