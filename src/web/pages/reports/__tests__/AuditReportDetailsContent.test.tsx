@@ -182,7 +182,7 @@ describe('AuditReportDetailsContent tests', () => {
       );
 
       screen.getByRole('heading', {name: 'Audit Report'});
-      expect(screen.getByText('Loading')).toBeInTheDocument();
+      expect(screen.queryByText('Loading')).not.toBeInTheDocument();
       expect(screen.getByTestId('loading')).toBeInTheDocument();
     });
 

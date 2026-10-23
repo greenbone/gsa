@@ -143,12 +143,6 @@ const Summary = ({
         </colgroup>
         <TableBody>
           <TableRow>
-            <TableData>{_('Scan Type')}</TableData>
-            <TableData>
-              <ReportScanType task={task} />
-            </TableData>
-          </TableRow>
-          <TableRow>
             <TableData>{_('Task Name')}</TableData>
             <TableData>
               <span>
@@ -160,6 +154,12 @@ const Summary = ({
                   {name}
                 </DetailsLink>
               </span>
+            </TableData>
+          </TableRow>
+          <TableRow>
+            <TableData>{_('Scan Type')}</TableData>
+            <TableData>
+              <ReportScanType task={task} />
             </TableData>
           </TableRow>
           {isDefined(comment) && (

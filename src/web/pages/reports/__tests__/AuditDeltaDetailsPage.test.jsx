@@ -203,10 +203,12 @@ describe('AuditDeltaDetailsContent tests', () => {
     expect(select).toHaveValue('foo');
 
     // Header
-    expect(
-      screen.getByRole('heading', {name: /Report: Mon/}),
-    ).toHaveTextContent(
-      'Mon, Jun 3, 2019 1:00 PM Central European Summer TimeDone',
+    screen.getByRole('heading', {name: 'Audit Report'});
+    expect(screen.getByTestId('report-timestamp')).toHaveTextContent(
+      'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
+    );
+    expect(screen.getAllByTestId('statusbar-text')[0]).toHaveTextContent(
+      'Done',
     );
 
     const entityInfo = within(screen.getByTestId('entity-info'));

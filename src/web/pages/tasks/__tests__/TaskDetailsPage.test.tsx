@@ -277,8 +277,9 @@ describe('TaskDetailsPage tests', () => {
 
     render(<TaskDetailsPage id={agentTask.id} />);
 
-    const progressBar = screen.getByTestId('progressbar-box');
-    expect(progressBar).toHaveTextContent('No results available');
+    const progressBars = screen.getAllByTestId('progressbar-box');
+    expect(progressBars[0]).toHaveTextContent('Done');
+    expect(progressBars[1]).toHaveTextContent('No results available');
   });
 
   test('should render full DetailsPage', () => {
