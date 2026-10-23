@@ -346,8 +346,8 @@ describe('ReportDetailsContent tests', () => {
       const {render} = setupRenderer();
       render(<ReportDetailsContent {...props} />);
 
-      screen.getByText('Loading');
-      screen.getByText('Report:');
+      expect(screen.queryByText('Loading')).not.toBeInTheDocument();
+      screen.getByRole('heading', {name: 'Report'});
     });
 
     test('should not show Loading spinner when entity is available', () => {
@@ -373,20 +373,24 @@ describe('ReportDetailsContent tests', () => {
   });
 
   describe('Report header and entity info', () => {
-    test('should render report date, status bar, and entity info', () => {
+    test('should render report summary, status panel, and entity info', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer();
       render(<ReportDetailsContent {...props} />);
 
-      // Header with date and status
-      expect(screen.getByRole('heading', {name: /Report:/})).toHaveTextContent(
-        'Mon, Jun 3, 2019 1:00 PMCentral European Summer TimeDone',
+      const header = screen.getByRole('banner');
+      expect(
+        within(header).getByRole('heading', {name: 'Report'}),
+      ).toBeInTheDocument();
+      expect(
+        within(within(header).getByTestId('report-timestamp')).getByTitle(
+          'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
+        ),
+      ).toBeInTheDocument();
+      expect(screen.getByTestId('report-status-panel')).toHaveTextContent(
+        'Done',
       );
-
-      // StatusBar
-      const bars = screen.getAllByTestId('progressbar-box');
-      expect(bars[0]).toHaveAttribute('title', 'Done');
 
       // EntityInfo
       const entityInfo = within(screen.getByTestId('entity-info'));
@@ -706,7 +710,7 @@ describe('ReportDetailsContent tests', () => {
   });
 
   describe('Import task status', () => {
-    test('should show Import status bar when task is an import task', () => {
+    test('should show Import status in the report summary when task is an import task', () => {
       const props = createMockProps({
         entity: importEntity,
         reportId: '7777',
@@ -717,20 +721,20 @@ describe('ReportDetailsContent tests', () => {
       const {render} = setupRenderer();
       render(<ReportDetailsContent {...props} />);
 
-      const bars = screen.getAllByTestId('progressbar-box');
-      expect(bars[0]).toHaveAttribute('title', 'Import Task');
-      expect(bars[0]).toHaveTextContent('Import Task');
+      expect(screen.getByTestId('report-status-panel')).toHaveTextContent(
+        'Import Task',
+      );
     });
 
-    test('should show Done status bar for normal task', () => {
+    test('should show Done status in the report summary for normal task', () => {
       const props = createMockProps();
 
       const {render} = setupRenderer();
       render(<ReportDetailsContent {...props} />);
 
-      const bars = screen.getAllByTestId('progressbar-box');
-      expect(bars[0]).toHaveAttribute('title', 'Done');
-      expect(bars[0]).toHaveTextContent('Done');
+      expect(screen.getByTestId('report-status-panel')).toHaveTextContent(
+        'Done',
+      );
     });
   });
 
@@ -746,7 +750,7 @@ describe('ReportDetailsContent tests', () => {
       const {render} = setupRenderer();
       render(<ReportDetailsContent {...props} />);
 
-      screen.getByText('Report:');
+      screen.getByRole('heading', {name: 'Report'});
       const tablist = screen.getByRole('tablist');
       expect(within(tablist).getAllByRole('tab')).toHaveLength(11);
     });
@@ -764,7 +768,7 @@ describe('ReportDetailsContent tests', () => {
       const {render} = setupRenderer();
       render(<ReportDetailsContent {...props} />);
 
-      screen.getByText('Report:');
+      screen.getByRole('heading', {name: 'Report'});
       const tablist = screen.getByRole('tablist');
       expect(within(tablist).getAllByRole('tab')).toHaveLength(11);
     });
@@ -833,10 +837,14 @@ describe('ReportDetailsContent tests', () => {
       const {render} = setupRenderer();
       render(<ReportDetailsContent {...props} />);
 
-      // Header
-      expect(screen.getByRole('heading', {name: /Report:/})).toHaveTextContent(
-        'Mon, Jun 3, 2019 1:00 PMCentral European Summer TimeDone',
+      const header = screen.getByRole('banner');
+      expect(
+        within(header).getByRole('heading', {name: 'Report'}),
+      ).toBeInTheDocument();
+      expect(screen.getByTestId('report-status-panel')).toHaveTextContent(
+        'Done',
       );
+      expect(screen.queryByText('Details')).not.toBeInTheDocument();
 
       // EntityInfo
       const entityInfo = within(screen.getByTestId('entity-info'));

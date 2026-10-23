@@ -210,8 +210,7 @@ describe('ReportDetailsPage tests', () => {
       const {render} = setupRenderer(gmp);
       renderPage(render);
 
-      await screen.findByText('Loading');
-      screen.getByText('Report:');
+      screen.getByRole('heading', {name: 'Report'});
       screen.getByTestId('loading');
       expect(screen.queryByRole('tablist')).not.toBeInTheDocument();
     });
@@ -223,10 +222,12 @@ describe('ReportDetailsPage tests', () => {
       renderPage(render);
 
       await waitFor(() => {
-        expect(
-          screen.getByRole('heading', {name: /Report:/}),
-        ).toHaveTextContent(
-          'Mon, Jun 3, 2019 1:00 PMCentral European Summer TimeDone',
+        screen.getByRole('heading', {name: 'Report'});
+        expect(screen.getByTestId('report-timestamp')).toHaveTextContent(
+          'Mon, Jun 3, 2019 1:00 PM Central European Summer Time',
+        );
+        expect(screen.getAllByTestId('statusbar-text')[0]).toHaveTextContent(
+          'Done',
         );
       });
     });

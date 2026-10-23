@@ -181,8 +181,8 @@ describe('AuditReportDetailsContent tests', () => {
         />,
       );
 
-      expect(screen.getByText('Audit Report:')).toBeInTheDocument();
-      expect(screen.getByText('Loading')).toBeInTheDocument();
+      screen.getByRole('heading', {name: 'Audit Report'});
+      expect(screen.queryByText('Loading')).not.toBeInTheDocument();
       expect(screen.getByTestId('loading')).toBeInTheDocument();
     });
 
@@ -326,23 +326,21 @@ describe('AuditReportDetailsContent tests', () => {
     test('should render report heading with timestamp and status', () => {
       renderContent();
 
-      expect(screen.getByText('Audit Report:')).toBeInTheDocument();
       expect(
-        screen.getByRole('heading', {name: /Audit Report:/}),
+        screen.getByRole('heading', {name: 'Audit Report'}),
       ).toBeInTheDocument();
+      expect(screen.getByTestId('report-status-panel')).toHaveTextContent(
+        'Done',
+      );
     });
 
     test('should show Import Task status when task is an import task', () => {
       const importTask = {isImport: () => true, progress: 0};
       renderContent({task: importTask});
 
-      // With import task, status becomes TASK_STATUS.import – the status bar
-      // shows "Import Task" rather than "Done"
-      const statusBarTitles = screen
-        .getAllByTestId('progressbar-box')
-        .map(bar => bar.getAttribute('title'));
-
-      expect(statusBarTitles).toContain('Import Task');
+      expect(screen.getByTestId('report-status-panel')).toHaveTextContent(
+        'Import Task',
+      );
     });
   });
 

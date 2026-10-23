@@ -13,7 +13,9 @@ import type Override from 'gmp/models/override';
 import type Permission from 'gmp/models/permission';
 import {type default as Task, USAGE_TYPE} from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
+import StatusBar from 'web/components/bar/StatusBar';
 import {TaskIcon} from 'web/components/icon';
+import Divider from 'web/components/layout/Divider';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import {
@@ -51,6 +53,7 @@ import TaskDetailsPageToolBarIcons from 'web/pages/tasks/icons/TaskDetailsPageTo
 import TaskComponent from 'web/pages/tasks/TaskComponent';
 import TaskDetails from 'web/pages/tasks/TaskDetails';
 import TaskStatus from 'web/pages/tasks/TaskStatus';
+import TaskTypeBadge from 'web/pages/tasks/TaskTypeBadge';
 import {ROUTES} from 'web/route-paths';
 import {
   selector as notesSelector,
@@ -199,6 +202,14 @@ const TaskDetailsPage = ({
           isLoading={isLoading}
           sectionIcon={<TaskIcon size="large" />}
           title={_('Task')}
+          titleAddon={
+            isDefined(entity) ? (
+              <Divider margin="5px">
+                <TaskTypeBadge task={entity} />
+                <StatusBar progress={entity.progress} status={entity.status} />
+              </Divider>
+            ) : undefined
+          }
           toolBarIcons={
             <TaskDetailsPageToolBarIcons
               entity={entity}

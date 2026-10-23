@@ -28,6 +28,7 @@ import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import useGetReportHosts from 'web/hooks/use-query/report-hosts';
 import useTranslation from 'web/hooks/useTranslation';
+import ReportScanType from 'web/pages/reports/details/ReportScanType';
 import ReportScannerContact from 'web/pages/reports/ReportScannerContact';
 import StatusCellContent from 'web/pages/reports/StatusCellContent';
 
@@ -72,7 +73,6 @@ const Summary = ({
   } = report;
 
   const {id, name, comment, progress} = task ?? {};
-
   const {data: hostsData} = useGetReportHosts({reportId, filter});
   const hostsCount = hostsData?.entitiesCounts?.all ?? 0;
 
@@ -154,6 +154,12 @@ const Summary = ({
                   {name}
                 </DetailsLink>
               </span>
+            </TableData>
+          </TableRow>
+          <TableRow>
+            <TableData>{_('Scan Type')}</TableData>
+            <TableData>
+              <ReportScanType task={task} />
             </TableData>
           </TableRow>
           {isDefined(comment) && (

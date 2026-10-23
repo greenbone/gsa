@@ -22,7 +22,7 @@ interface SectionProps extends UseFoldToggleProps {
   foldable?: boolean;
   header?: React.ReactNode;
   img?: React.ReactNode;
-  title?: string;
+  title?: React.ReactNode;
 }
 
 const FoldLayout = styled(Layout)`
