@@ -243,7 +243,7 @@ describe('ScannerAgentConfigSettings tests', () => {
       bulkSize: 100,
       bulkThrottleTimeInMs: 500,
       indexerDirDepth: 3,
-      schedulerCronTimes: ['0 */12 * * *'],
+      schedulerCronTimes: [{cron: '0 */12 * * *', maxDelaySeconds: 0}],
       intervalInSeconds: 300,
       missUntilInactive: 3,
       updateToLatest: YES_VALUE,
@@ -562,7 +562,10 @@ describe('ScannerAgentConfigSettings multiple schedules', () => {
     expect(gmp.scanner.modifyAgentControlConfig).toHaveBeenCalledWith(
       expect.objectContaining({
         attempts: 5,
-        schedulerCronTimes: ['0 5 * * *', '0 7 * * *'],
+        schedulerCronTimes: [
+          {cron: '0 5 * * *', maxDelaySeconds: 0},
+          {cron: '0 7 * * *', maxDelaySeconds: 0},
+        ],
       }),
     );
   });
@@ -585,7 +588,11 @@ describe('ScannerAgentConfigSettings multiple schedules', () => {
     await wait();
     expect(gmp.scanner.modifyAgentControlConfig).toHaveBeenCalledWith(
       expect.objectContaining({
-        schedulerCronTimes: ['0 5 * * *', '0 9 * * *', '0 * * * *'],
+        schedulerCronTimes: [
+          {cron: '0 5 * * *', maxDelaySeconds: 0},
+          {cron: '0 9 * * *', maxDelaySeconds: 0},
+          {cron: '0 * * * *', maxDelaySeconds: 0},
+        ],
       }),
     );
   });
@@ -635,7 +642,10 @@ describe('ScannerAgentConfigSettings saved and refreshed values', () => {
     expect(gmp.scanner.modifyAgentControlConfig).toHaveBeenLastCalledWith(
       expect.objectContaining({
         attempts: 5,
-        schedulerCronTimes: ['0 */12 * * *', '0 * * * *'],
+        schedulerCronTimes: [
+          {cron: '0 */12 * * *', maxDelaySeconds: 0},
+          {cron: '0 * * * *', maxDelaySeconds: 0},
+        ],
       }),
     );
 
