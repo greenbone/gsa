@@ -119,6 +119,7 @@ export const useContainerImageTaskDialog = ({
         schedulePeriods,
         acceptInvalidCerts,
         registryAllowInsecure,
+        task,
       } = data;
 
       if (isDefined(id)) {
@@ -128,7 +129,9 @@ export const useContainerImageTaskDialog = ({
             comment,
             inAssets,
             name,
-            ociImageTargetId: alterable ? ociImageTargetId : undefined,
+            ociImageTargetId: task?.isChangeable()
+              ? ociImageTargetId
+              : undefined,
             scannerId: alterable ? scannerId : undefined,
             alertIds,
             scheduleId,

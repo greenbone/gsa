@@ -21,7 +21,7 @@ import {
 import type User from 'gmp/models/user';
 import {isDefined} from 'gmp/utils/identity';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
-import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
+import DialogDangerFooter from 'web/components/dialog/DialogDangerFooter';
 import useDownload from 'web/components/form/useDownload';
 import {UserIcon} from 'web/components/icon';
 import PageTitle from 'web/components/layout/PageTitle';
@@ -363,8 +363,8 @@ const UsersListPage = () => {
                           onErrorClose={handleErrorClose}
                         />
                       }
+                      footer={DialogDangerFooter}
                       loading={isLoading}
-                      rightButtonAction={DELETE_ACTION}
                       rightButtonTitle={_('Delete')}
                       title={title ?? ''}
                       onClose={handleCloseConfirmDeleteDialog}

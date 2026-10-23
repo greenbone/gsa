@@ -127,34 +127,73 @@ describe('AgentCommand tests', () => {
     const http = createHttp(fakeFile);
     const command = new AgentCommand(http);
 
-    const result = await command.downloadSupportBundle('324');
+    const result = await command.downloadSupportBundle({id: '324'});
 
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {
         cmd: 'get_agent_support_bundle',
         agent_uuid: '324',
         encryption: 1,
+        anonymized: 0,
       },
       responseType: 'arraybuffer',
     });
     expect(result).toBe(fakeFile);
   });
 
-  test('should allow to download an unencrypted agent support bundle', async () => {
-    const fakeFile = new ArrayBuffer(8);
-    const http = createHttp(fakeFile);
-    const command = new AgentCommand(http);
+  test.each([
+    {
+      encryption: true,
+      anonymized: false,
+      expectedEncryption: 1,
+      expectedAnonymized: 0,
+    },
+    {
+      encryption: false,
+      anonymized: false,
+      expectedEncryption: 0,
+      expectedAnonymized: 0,
+    },
+    {
+      encryption: true,
+      anonymized: true,
+      expectedEncryption: 1,
+      expectedAnonymized: 1,
+    },
+    {
+      encryption: false,
+      anonymized: true,
+      expectedEncryption: 0,
+      expectedAnonymized: 1,
+    },
+  ])(
+    'should download a support bundle with encryption=$encryption and anonymized=$anonymized',
+    async ({
+      encryption,
+      anonymized,
+      expectedEncryption,
+      expectedAnonymized,
+    }) => {
+      const fakeFile = new ArrayBuffer(8);
+      const http = createHttp(fakeFile);
+      const command = new AgentCommand(http);
 
-    const result = await command.downloadSupportBundle('324', false);
+      const result = await command.downloadSupportBundle({
+        id: '324',
+        encryption,
+        anonymized,
+      });
 
-    expect(http.request).toHaveBeenCalledWith('get', {
-      args: {
-        cmd: 'get_agent_support_bundle',
-        agent_uuid: '324',
-        encryption: 0,
-      },
-      responseType: 'arraybuffer',
-    });
-    expect(result).toBe(fakeFile);
-  });
+      expect(http.request).toHaveBeenCalledWith('get', {
+        args: {
+          cmd: 'get_agent_support_bundle',
+          agent_uuid: '324',
+          encryption: expectedEncryption,
+          anonymized: expectedAnonymized,
+        },
+        responseType: 'arraybuffer',
+      });
+      expect(result).toBe(fakeFile);
+    },
+  );
 });

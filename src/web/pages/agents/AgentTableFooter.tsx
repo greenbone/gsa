@@ -9,7 +9,7 @@ import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Agent from 'gmp/models/agent';
 import type Filter from 'gmp/models/filter';
 import ConfirmationDialog from 'web/components/dialog/ConfirmationDialog';
-import {DELETE_ACTION} from 'web/components/dialog/DialogTwoButtonFooter';
+import DialogDangerFooter from 'web/components/dialog/DialogDangerFooter';
 import AuthorizeIcon from 'web/components/icon/AuthorizeIcon';
 import DisableUpdateToLatestIcon from 'web/components/icon/DisableUpdateToLatestIcon';
 import EnableUpdateToLatestIcon from 'web/components/icon/EnableUpdateToLatestIcon';
@@ -165,8 +165,8 @@ const AgentTableFooter = ({
       {dialogConfig && (
         <ConfirmationDialog
           content={dialogConfig.content}
+          footer={DialogDangerFooter}
           loading={isInProgress}
-          rightButtonAction={DELETE_ACTION}
           rightButtonTitle={dialogConfig.buttonTitle}
           title={dialogConfig.title}
           width="500px"

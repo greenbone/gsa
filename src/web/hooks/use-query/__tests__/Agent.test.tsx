@@ -7,6 +7,7 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
 import {createSession} from 'gmp/testing';
 import {
+  type DownloadAgentSupportBundleInput,
   useDeleteAgent,
   useDownloadAgentSupportBundle,
   useModifyAgent,
@@ -109,29 +110,29 @@ describe('useDeleteAgent', () => {
 });
 
 describe('useDownloadAgentSupportBundle', () => {
-  test('should download an agent support bundle', async () => {
-    const gmp = createGmp();
-    const {render} = rendererWith({gmp, router: true});
-    const TestComponent = () => {
-      const mutation = useDownloadAgentSupportBundle();
-      return (
-        <button
-          onClick={() => mutation.mutate({id: 'agent-1', encryption: false})}
-        >
-          Download
-        </button>
-      );
-    };
+  test.each<DownloadAgentSupportBundleInput>([
+    {id: 'agent-1'},
+    {id: 'agent-1', encryption: true, anonymized: false},
+    {id: 'agent-1', encryption: false, anonymized: false},
+    {id: 'agent-1', encryption: true, anonymized: true},
+    {id: 'agent-1', encryption: false, anonymized: true},
+  ])(
+    'should download an agent support bundle with $encryption encryption and $anonymized anonymization',
+    async input => {
+      const gmp = createGmp();
+      const {render} = rendererWith({gmp, router: true});
+      const TestComponent = () => {
+        const mutation = useDownloadAgentSupportBundle();
+        return <button onClick={() => mutation.mutate(input)}>Download</button>;
+      };
 
-    render(<TestComponent />);
-    fireEvent.click(screen.getByRole('button', {name: 'Download'}));
-    await waitFor(() => {
-      expect(gmp.agent.downloadSupportBundle).toHaveBeenCalledWith(
-        'agent-1',
-        false,
-      );
-    });
-  });
+      render(<TestComponent />);
+      fireEvent.click(screen.getByRole('button', {name: 'Download'}));
+      await waitFor(() => {
+        expect(gmp.agent.downloadSupportBundle).toHaveBeenCalledWith(input);
+      });
+    },
+  );
 
   test('should call onError when downloading an agent support bundle fails', async () => {
     const error = new Error('Download failed');

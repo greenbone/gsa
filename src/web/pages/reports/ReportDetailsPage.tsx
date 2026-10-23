@@ -33,26 +33,22 @@ import useGmp from 'web/hooks/useGmp';
 import usePageFilter from 'web/hooks/usePageFilter';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
-import DownloadReportDialog from 'web/pages/reports/DownloadReportDialog';
+import DownloadReportDialog, {
+  type DownloadReportDialogValues,
+} from 'web/pages/reports/DownloadReportDialog';
 import ReportDetailsContent from 'web/pages/reports/ReportDetailsContent';
 import ReportDetailsFilterDialog from 'web/pages/reports/ReportDetailsFilterDialog';
 import TargetComponent from 'web/pages/targets/TargetComponent';
+import {buildReportExportRequest} from 'web/report-export/build-report-export-request';
+import {useReportExportActions} from 'web/report-export/ReportExportManager';
+import {ROUTES} from 'web/route-paths';
 import {createPEMCertificate} from 'web/utils/certificates';
-import {generateFilename} from 'web/utils/Render';
 
 interface ReportComposerDefaults {
   defaultReportConfigId?: string;
   defaultReportFormatId?: string;
   includeNotes?: boolean;
   includeOverrides?: boolean;
-}
-
-interface DownloadReportState {
-  includeNotes: boolean;
-  includeOverrides: boolean;
-  reportConfigId: string;
-  reportFormatId: string;
-  storeAsDefault: boolean;
 }
 
 interface ReportTargetRef {
@@ -104,6 +100,7 @@ const ReportDetailsPage = () => {
     useState(false);
   const [reportComposerDefaults, setReportComposerDefaults] =
     useState<ReportComposerDefaults>({});
+  const {exportReport} = useReportExportActions();
 
   // Filter management
   const [pageFilter, , {changeFilter}] = usePageFilter(
@@ -289,8 +286,7 @@ const ReportDetailsPage = () => {
   }, []);
 
   const handleReportDownload = useCallback(
-    async (values: Record<string, unknown>) => {
-      const state = values as unknown as DownloadReportState;
+    async (values: DownloadReportDialogValues) => {
       if (!entity || !reportFilter) return;
       const {
         includeNotes,
@@ -298,7 +294,7 @@ const ReportDetailsPage = () => {
         reportConfigId,
         reportFormatId,
         storeAsDefault,
-      } = state;
+      } = values;
 
       const newFilter = reportFilter
         .set('notes', includeNotes)
@@ -320,41 +316,27 @@ const ReportDetailsPage = () => {
         }
       }
 
-      const reportFormat = reportFormats?.find(
-        format => reportFormatId === format.id,
-      );
-
-      const extension = isDefined(reportFormat)
-        ? reportFormat.extension
-        : 'unknown';
-
       try {
-        const [response, reportExportFileName] = await Promise.all([
-          gmp.report.download(
-            {id: entity.id as string},
-            {
-              reportConfigId,
-              reportFormatId,
-              filter: newFilter,
-            },
-          ),
-          reportExportFileNameQuery(),
-        ]);
-        setShowDownloadReportDialog(false);
-        const {data} = response;
-        const filename = generateFilename({
-          creationTime: entity.creationTime,
-          extension,
+        const reportFormat = reportFormats?.find(
+          format => format.id === reportFormatId,
+        );
+        const reportExportFileName = await reportExportFileNameQuery();
+        const request = buildReportExportRequest({
+          kind: 'scan',
+          entity: {
+            id: entity.id as string,
+            creationTime: entity.creationTime,
+            modificationTime: entity.modificationTime,
+            task: entity.task,
+          },
+          format: reportFormat ?? {id: reportFormatId},
+          filter: newFilter,
+          reportConfigId,
+          reportUrl: ROUTES.report.url(reportId),
           fileNameFormat: reportExportFileName,
-          id: entity.id as string,
-          modificationTime: entity.modificationTime,
-          reportFormat: reportFormat?.name,
-          resourceName: entity.task?.name,
-          resourceType: 'report',
           username,
         });
-
-        handleDownload({filename, data});
+        if (await exportReport(request)) setShowDownloadReportDialog(false);
       } catch (error) {
         log.error(error);
         showError(error as Error);
@@ -363,11 +345,12 @@ const ReportDetailsPage = () => {
     [
       entity,
       gmp,
-      handleDownload,
+      reportId,
       reportComposerDefaults,
       reportExportFileNameQuery,
       reportFilter,
       reportFormats,
+      exportReport,
       showError,
       username,
     ],

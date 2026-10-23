@@ -147,7 +147,7 @@ interface ScannerTask {
   usageType: 'scan' | 'audit';
 }
 
-interface AgentControlRetry {
+export interface AgentControlRetry {
   attempts: number;
   delayInSeconds: number;
   maxJitterInSeconds: number;
@@ -157,14 +157,14 @@ interface AgentControl {
   retry: AgentControlRetry;
 }
 
-interface AgentScriptExecutor {
+export interface AgentScriptExecutor {
   bulkSize: number;
   bulkThrottleTimeInMs: number;
   indexerDirDepth: number;
   schedulerCronTimes: string[];
 }
 
-interface Heartbeat {
+export interface Heartbeat {
   intervalInSeconds: number;
   missUntilInactive: number;
 }
@@ -175,7 +175,7 @@ interface AgentDefaults {
   heartbeat: Heartbeat;
 }
 
-interface AgentControlDefaults {
+export interface AgentControlDefaults {
   updateToLatest: boolean;
 }
 

@@ -166,8 +166,7 @@ class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
       data.indexer_dir_depth = indexerDirDepth;
     }
     if (schedulerCronTimes !== undefined && schedulerCronTimes.length > 0) {
-      // Join multiple cron times with comma for the API
-      data['scheduler_cron_times:'] = schedulerCronTimes.join(',');
+      data['scheduler_cron_times:'] = schedulerCronTimes;
     }
     if (intervalInSeconds !== undefined) {
       data.interval_in_seconds = intervalInSeconds;

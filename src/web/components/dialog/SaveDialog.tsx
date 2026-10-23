@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {isDefined, isFunction} from 'gmp/utils/identity';
 import Dialog from 'web/components/dialog/Dialog';
 import DialogContent from 'web/components/dialog/DialogContent';
 import DialogError from 'web/components/dialog/DialogError';
-import SaveDialogFooter from 'web/components/dialog/SaveDialogFooter';
+import DialogTwoButtonFooter from 'web/components/dialog/DialogTwoButtonFooter';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
 import useTranslation from 'web/hooks/useTranslation';
 
@@ -17,7 +17,6 @@ interface ValueChangeFunction<TValues> {
 }
 
 interface SaveDialogRenderProps<TValues, TDefaultValues> {
-  currentStep: number;
   values: TValues & TDefaultValues;
   onValueChange: ValueChangeFunction<TDefaultValues>;
 }
@@ -32,7 +31,6 @@ interface SaveDialogProps<TValues, TDefaultValues> {
   defaultValues?: TDefaultValues; // default values for uncontrolled values which are updated via the onValueChange function of the render props
   error?: string; // for errors controlled from parent (onErrorClose must be used if set)
   isLoading?: boolean; // for loading state controlled from parent. disables the save button
-  multiStep?: number; // number of steps for multi-step dialogs
   title: string;
   values?: TValues; // should be used for controlled values handles outside of the SaveDialog. They are expected to be updated via separate handler functions.
   width?: string; // width of the dialog, default is '40vw'
@@ -69,7 +67,6 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
   defaultValues,
   error,
   isLoading = false,
-  multiStep = 0,
   title,
   values,
   width = '40vw',
@@ -82,21 +79,7 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
   buttonTitle = buttonTitle || _('Save');
 
   const [isSaving, setIsSaving] = useState(false);
-  const [stateError, setStateError] = useState<string | undefined>(undefined);
-  const [currentStep, setCurrentStep] = useState(0);
-
-  const [prevDisabled, setPrevDisabled] = useState(true);
-  const [nextDisabled, setNextDisabled] = useState(false);
-
-  useEffect(() => {
-    setPrevDisabled(currentStep === 0);
-    setNextDisabled(currentStep === multiStep);
-  }, [currentStep, multiStep]);
-
-  useEffect(() => {
-    setStateError(error);
-    setIsSaving(false);
-  }, [error]);
+  const [stateError, setStateError] = useState<string | undefined>();
 
   const setError = (err: Error) => {
     setIsSaving(false);
@@ -108,12 +91,19 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
     }
   };
 
-  const handleSaveClick = (state: TValues & TDefaultValues) => {
+  const handleSaveClick = async (state: TValues & TDefaultValues) => {
     if (onSave && !isLoading) {
       const promise = onSave(state);
+      // oxlint-disable-next-line typescript/unbound-method
       if (isFunction(promise?.then)) {
         setIsSaving(true);
-        return promise.catch(error => setError(error));
+        try {
+          return await promise;
+        } catch (error) {
+          setError(error as Error);
+        } finally {
+          setIsSaving(false);
+        }
       }
     }
   };
@@ -131,17 +121,12 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
   return (
     <Dialog
       footer={
-        <SaveDialogFooter
-          buttonTitle={buttonTitle}
-          currentStep={currentStep}
-          handleSaveClick={() => handleSaveClick(childValues)}
+        <DialogTwoButtonFooter
           isLoading={isLoading}
-          isSaving={isSaving}
-          multiStep={multiStep}
-          nextDisabled={nextDisabled}
-          prevDisabled={prevDisabled}
-          setCurrentStep={setCurrentStep}
-          onClose={onClose}
+          isSaving={!isDefined(error) && isSaving}
+          rightButtonTitle={buttonTitle}
+          onLeftButtonClick={onClose}
+          onRightButtonClick={() => handleSaveClick(childValues)}
         />
       }
       title={title}
@@ -149,13 +134,15 @@ const SaveDialog = <TValues, TDefaultValues = {}>({
       onClose={onClose}
     >
       <DialogContent>
-        {stateError && (
-          <DialogError error={stateError} onCloseClick={handleErrorClose} />
+        {(isDefined(stateError) || isDefined(error)) && (
+          <DialogError
+            error={error ?? stateError}
+            onCloseClick={handleErrorClose}
+          />
         )}
         <ErrorBoundary message={_('An error occurred in this dialog.')}>
           {isFunction(children)
             ? children({
-                currentStep,
                 values: childValues,
                 onValueChange,
               })

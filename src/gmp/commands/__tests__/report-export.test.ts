@@ -8,6 +8,7 @@ import ReportExportCommand from 'gmp/commands/report-export';
 import {
   createActionResultResponse,
   createHttp,
+  createPlainResponse,
   createResponse,
 } from 'gmp/commands/testing';
 import date from 'gmp/models/date';
@@ -196,7 +197,7 @@ describe('ReportExportCommand tests', () => {
 
   test('should download a completed export', async () => {
     const data = new ArrayBuffer(8);
-    const fakeHttp = createHttp(data);
+    const fakeHttp = createHttp(createPlainResponse(data));
     const exportCommand = new ReportExportCommand(fakeHttp);
 
     const response = await exportCommand.downloadReportExport({
@@ -210,7 +211,23 @@ describe('ReportExportCommand tests', () => {
       },
       responseType: 'arraybuffer',
     });
-    expect(response).toBe(data);
+    expect(response.data).toBe(data);
+  });
+
+  test('should pass the raw file bytes through unmodified', async () => {
+    // gsad decodes the base64 file content before answering. A raw report
+    // may itself contain a <content> tag and must never be touched.
+    const data = new TextEncoder().encode(
+      '<report><content>SGVsbG8=</content></report>',
+    ).buffer as ArrayBuffer;
+    const fakeHttp = createHttp(createPlainResponse(data));
+    const exportCommand = new ReportExportCommand(fakeHttp);
+
+    const response = await exportCommand.downloadReportExport({
+      reportExportId: 'export-uuid',
+    });
+
+    expect(response.data).toBe(data);
   });
 
   test('should cancel a report export', async () => {

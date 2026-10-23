@@ -132,14 +132,18 @@ class ReportExportCommand extends HttpCommand {
     return response.setData(entity);
   }
 
-  downloadReportExport({reportExportId}: ReportExportParams) {
-    return this.httpRequestWithRejectionTransform<ArrayBuffer>('get', {
-      args: {
-        cmd: 'download_report_export',
-        report_export_id: reportExportId,
+  async downloadReportExport({reportExportId}: ReportExportParams) {
+    const response = await this.httpRequestWithRejectionTransform<ArrayBuffer>(
+      'get',
+      {
+        args: {
+          cmd: 'download_report_export',
+          report_export_id: reportExportId,
+        },
+        responseType: 'arraybuffer',
       },
-      responseType: 'arraybuffer',
-    });
+    );
+    return response;
   }
 
   cancelReportExport({reportExportId}: ReportExportParams) {

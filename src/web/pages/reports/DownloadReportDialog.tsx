@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState} from 'react';
 import {type FilterType} from 'gmp/models/filter';
 import type ReportConfig from 'gmp/models/report-config';
 import type ReportFormat from 'gmp/models/report-format';
@@ -22,6 +21,14 @@ import ContainerScanningThresholdMessage from 'web/pages/reports/ContainerScanni
 import ThresholdMessage from 'web/pages/reports/ThresholdMessage';
 import {renderSelectItems, type RenderSelectItemProps} from 'web/utils/Render';
 
+export interface DownloadReportDialogValues {
+  includeNotes: boolean;
+  includeOverrides: boolean;
+  storeAsDefault?: boolean;
+  reportConfigId?: string;
+  reportFormatId: string;
+}
+
 interface DownloadReportDialogProps {
   audit?: boolean;
   defaultReportConfigId?: string;
@@ -37,7 +44,7 @@ interface DownloadReportDialogProps {
   threshold?: number;
   totalResultCount?: number;
   onClose: () => void;
-  onSave: (values: Record<string, unknown>) => Promise<void>;
+  onSave: (values: DownloadReportDialogValues) => Promise<void>;
 }
 
 const DownloadReportDialog = ({
@@ -68,34 +75,20 @@ const DownloadReportDialog = ({
       selectSaveId(reportConfigs, defaultReportConfigId, '') ?? '';
   }
 
-  const [reportFormatIdInState, setReportFormatIdInState] = useState(
-    selectSaveId(reportFormats, defaultReportFormatId),
-  );
-  const [reportConfigIdInState, setReportConfigIdInState] = useState(
-    initialReportConfigId,
-  );
-
-  const unControlledValues = {
+  // The initial values are the only values of the dialog. Changing the
+  // format or config updates them via the onValueChange function of the
+  // SaveDialog render props.
+  const unControlledValues: DownloadReportDialogValues = {
     includeNotes,
     includeOverrides,
     storeAsDefault,
-  };
-
-  const handleReportFormatIdChange = (value: string) => {
-    setReportConfigIdInState('');
-    setReportFormatIdInState(value);
-  };
-
-  const handleReportConfigIdChange = (value: string) => {
-    setReportConfigIdInState(value);
-  };
-
-  const handleSave = async (values: Record<string, unknown>) => {
-    await onSave({
-      ...values,
-      reportConfigId: reportConfigIdInState,
-      reportFormatId: reportFormatIdInState,
-    });
+    reportConfigId: initialReportConfigId,
+    // reportFormatId can only be undefined on the initial render or if no report format is available
+    // in future it should not be allowed to save without a valid report format and then reportFormatId is always defined
+    reportFormatId: selectSaveId(
+      reportFormats,
+      defaultReportFormatId,
+    ) as string,
   };
 
   const showContainerScanningWarning =
@@ -125,16 +118,22 @@ const DownloadReportDialog = ({
           : _('Compose Content for Scan Report')
       }
       onClose={onClose}
-      onSave={handleSave}
+      onSave={onSave}
     >
       {({values, onValueChange}) => {
         const filteredReportConfigs = isDefined(reportConfigs)
           ? reportConfigs.filter(
-              config => config.reportFormat?.id === reportFormatIdInState,
+              config => config.reportFormat?.id === values.reportFormatId,
             )
           : [];
 
         const filteredReportFormats = getFilteredReportFormats();
+
+        const handleReportFormatIdChange = (value: string) => {
+          // a changed format invalidates the selected report config
+          onValueChange('', 'reportConfigId');
+          onValueChange(value, 'reportFormatId');
+        };
 
         return (
           <>
@@ -153,7 +152,7 @@ const DownloadReportDialog = ({
                   filteredReportFormats as RenderSelectItemProps[],
                 )}
                 name="reportFormatId"
-                value={reportFormatIdInState}
+                value={values.reportFormatId}
                 width="auto"
                 onChange={handleReportFormatIdChange}
               />
@@ -167,9 +166,9 @@ const DownloadReportDialog = ({
                     '',
                   )}
                   name="reportConfigId"
-                  value={reportConfigIdInState}
+                  value={values.reportConfigId}
                   width="auto"
-                  onChange={handleReportConfigIdChange}
+                  onChange={value => onValueChange(value, 'reportConfigId')}
                 />
               </FormGroup>
             )}

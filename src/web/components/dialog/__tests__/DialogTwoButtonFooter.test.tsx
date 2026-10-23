@@ -13,6 +13,15 @@ describe('DialogTwoButtonFooter tests', () => {
 
     expect(element).toBeInTheDocument();
 
+    expect(screen.getByTestId('dialog-close-button')).toHaveAttribute(
+      'data-variant',
+      'outline',
+    );
+    expect(screen.getByTestId('dialog-save-button')).toHaveAttribute(
+      'data-variant',
+      'filled',
+    );
+
     expect(screen.getByTestId('dialog-close-button')).toBeEnabled();
 
     expect(screen.getByTestId('dialog-save-button')).toHaveTextContent('Foo');
@@ -66,6 +75,50 @@ describe('DialogTwoButtonFooter tests', () => {
       expect(onLeftButtonClick).toHaveBeenCalledTimes(isSaving ? 0 : 1);
       expect(onRightButtonClick).toHaveBeenCalledTimes(
         isLoading || isSaving ? 0 : 1,
+      );
+    },
+  );
+
+  test.each([
+    {leftButtonDisabled: true, rightButtonDisabled: false},
+    {leftButtonDisabled: false, rightButtonDisabled: true},
+    {leftButtonDisabled: true, rightButtonDisabled: true},
+  ])(
+    'should respect explicit disabled states: %o',
+    ({leftButtonDisabled, rightButtonDisabled}) => {
+      const onLeftButtonClick = testing.fn();
+      const onRightButtonClick = testing.fn();
+
+      render(
+        <DialogTwoButtonFooter
+          leftButtonDisabled={leftButtonDisabled}
+          rightButtonDisabled={rightButtonDisabled}
+          rightButtonTitle="Foo"
+          onLeftButtonClick={onLeftButtonClick}
+          onRightButtonClick={onRightButtonClick}
+        />,
+      );
+
+      const leftButton = screen.getByTestId('dialog-close-button');
+      const rightButton = screen.getByTestId('dialog-save-button');
+      if (leftButtonDisabled) {
+        expect(leftButton).toBeDisabled();
+      } else {
+        expect(leftButton).toBeEnabled();
+      }
+      if (rightButtonDisabled) {
+        expect(rightButton).toBeDisabled();
+      } else {
+        expect(rightButton).toBeEnabled();
+      }
+
+      fireEvent.click(leftButton);
+      fireEvent.click(rightButton);
+      expect(onLeftButtonClick).toHaveBeenCalledTimes(
+        leftButtonDisabled ? 0 : 1,
+      );
+      expect(onRightButtonClick).toHaveBeenCalledTimes(
+        rightButtonDisabled ? 0 : 1,
       );
     },
   );
