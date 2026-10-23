@@ -10,6 +10,7 @@ import {
   type AgentControlRetry,
   type AgentScriptExecutor,
   type Heartbeat,
+  type SchedulerCronEntry,
 } from 'gmp/models/scanner';
 import NumberField from 'web/components/form/NumberField';
 import Radio from 'web/components/form/Radio';
@@ -41,6 +42,61 @@ interface ScannerConfigValues
 
 type ConfigFieldKey = keyof ScannerConfigValues;
 type FormValue = ScannerConfigValues[ConfigFieldKey];
+
+const renderConfigValue = (value: FormValue): ReactNode => {
+  if (Array.isArray(value)) {
+    return <Layout>{value.map(entry => entry.cron).join(', ')}</Layout>;
+  }
+
+  return <Layout>{value}</Layout>;
+};
+
+const mapCronExpressionsToEntries = (
+  cronTimes: string[],
+  existingEntries: SchedulerCronEntry[],
+): SchedulerCronEntry[] => {
+  const matchedIndexes = cronTimes.map(() => -1);
+  const usedIndexes = new Set<number>();
+
+  cronTimes.forEach((cron, index) => {
+    if (existingEntries[index]?.cron === cron) {
+      matchedIndexes[index] = index;
+      usedIndexes.add(index);
+    }
+  });
+
+  cronTimes.forEach((cron, index) => {
+    if (matchedIndexes[index] >= 0) {
+      return;
+    }
+
+    // First, preserve delays with matching cron entries that shifted rows.
+    let targetIndex = existingEntries.findIndex(
+      (entry, entryIndex) =>
+        entry.cron === cron && !usedIndexes.has(entryIndex),
+    );
+
+    // If the cron was edited in place, keep its delay with the same row.
+    if (
+      targetIndex < 0 &&
+      index < existingEntries.length &&
+      !usedIndexes.has(index)
+    ) {
+      targetIndex = index;
+    }
+
+    if (targetIndex >= 0) {
+      matchedIndexes[index] = targetIndex;
+      usedIndexes.add(targetIndex);
+    }
+  });
+
+  return cronTimes.map((cron, index) => ({
+    cron,
+    maxDelaySeconds:
+      existingEntries[matchedIndexes[index]]?.maxDelaySeconds ?? 0,
+  }));
+};
 
 interface ConfigFieldDefinition {
   key: ConfigFieldKey;
@@ -105,14 +161,16 @@ const renderNumberField = (
 
 const renderCronField = (
   activeCronExpressions: string[],
-  value: string[],
-  onChange: (value: string[]) => void,
+  value: SchedulerCronEntry[],
+  onChange: (value: SchedulerCronEntry[]) => void,
 ) => (
   <SchedulerCronFields
     activeCronExpressions={activeCronExpressions}
     name="schedulerCronTimes"
-    value={value}
-    onChange={onChange}
+    value={value.map(({cron}) => cron)}
+    onChange={cronTimes =>
+      onChange(mapCronExpressionsToEntries(cronTimes, value))
+    }
   />
 );
 
@@ -191,7 +249,9 @@ const ScannerAgentConfigSettings = ({
 
   const agentDefaults = scanner.agentControlConfig?.agentDefaults;
   const activeCronExpressions =
-    agentDefaults?.agentScriptExecutor.schedulerCronTimes ?? [];
+    agentDefaults?.agentScriptExecutor.schedulerCronTimes.map(
+      ({cron}) => cron,
+    ) ?? [];
 
   const [savedValues, setSavedValues] = useState<{
     scanner: Scanner;
@@ -283,7 +343,7 @@ const ScannerAgentConfigSettings = ({
           title: _('Number of retry attempts'),
           renderEdit: ({attempts}, onChange) =>
             renderNumberField('attempts', 0, attempts, onChange),
-          renderView: val => <Layout>{val}</Layout>,
+          renderView: renderConfigValue,
         },
         {
           key: 'delayInSeconds',
@@ -291,7 +351,7 @@ const ScannerAgentConfigSettings = ({
           title: _('Delay between retries in seconds'),
           renderEdit: ({delayInSeconds}, onChange) =>
             renderNumberField('delayInSeconds', 0, delayInSeconds, onChange),
-          renderView: val => <Layout>{val}</Layout>,
+          renderView: renderConfigValue,
         },
         {
           key: 'maxJitterInSeconds',
@@ -304,7 +364,7 @@ const ScannerAgentConfigSettings = ({
               maxJitterInSeconds,
               onChange,
             ),
-          renderView: val => <Layout>{val}</Layout>,
+          renderView: renderConfigValue,
         },
       ],
     },
@@ -317,7 +377,7 @@ const ScannerAgentConfigSettings = ({
           title: _('Bulk operation size'),
           renderEdit: ({bulkSize}, onChange) =>
             renderNumberField('bulkSize', 0, bulkSize, onChange),
-          renderView: val => <Layout>{val}</Layout>,
+          renderView: renderConfigValue,
         },
         {
           key: 'bulkThrottleTimeInMs',
@@ -330,7 +390,7 @@ const ScannerAgentConfigSettings = ({
               bulkThrottleTimeInMs,
               onChange,
             ),
-          renderView: val => <Layout>{val}</Layout>,
+          renderView: renderConfigValue,
         },
         {
           key: 'indexerDirDepth',
@@ -338,7 +398,7 @@ const ScannerAgentConfigSettings = ({
           title: _('Directory depth for indexer'),
           renderEdit: ({indexerDirDepth}, onChange) =>
             renderNumberField('indexerDirDepth', 0, indexerDirDepth, onChange),
-          renderView: val => <Layout>{val}</Layout>,
+          renderView: renderConfigValue,
         },
         {
           key: 'schedulerCronTimes',
@@ -348,7 +408,7 @@ const ScannerAgentConfigSettings = ({
             renderCronField(cronExpr, schedulerCronTimes, onChange),
           renderView: val => {
             const displayValue = Array.isArray(val)
-              ? val.join(', ') || _('Not set')
+              ? val.map(({cron}) => cron).join(', ') || _('Not set')
               : _('Not set');
             return <Layout>{displayValue}</Layout>;
           },
@@ -369,7 +429,7 @@ const ScannerAgentConfigSettings = ({
               intervalInSeconds,
               onChange,
             ),
-          renderView: val => <Layout>{val}</Layout>,
+          renderView: renderConfigValue,
         },
         {
           key: 'missUntilInactive',
@@ -382,7 +442,7 @@ const ScannerAgentConfigSettings = ({
               missUntilInactive,
               onChange,
             ),
-          renderView: val => <Layout>{val}</Layout>,
+          renderView: renderConfigValue,
         },
       ],
     },

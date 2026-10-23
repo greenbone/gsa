@@ -14,6 +14,7 @@ import {
 import {filter, map} from 'gmp/utils/array';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import MultiSelect from 'web/components/form/MultiSelect';
+import NumberField from 'web/components/form/NumberField';
 import SchedulerCronField from 'web/components/form/SchedulerCronField';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
@@ -40,6 +41,7 @@ interface AgentGroupsDialogDefaultValues {
   comment: string;
   name: string;
   schedulerCronExpression?: string;
+  maxDelayMinutes: number;
 }
 
 export type AgentGroupDialogData = AgentGroupsDialogDefaultValues &
@@ -100,6 +102,7 @@ const AgentGroupsDialog = ({
     agentGroup?.id ?? 'new',
     selectedAgents[0] || 'no-first',
     schedulerCron,
+    agentGroup?.maxDelaySeconds ?? 0,
   ].join('|');
 
   return (
@@ -110,6 +113,7 @@ const AgentGroupsDialog = ({
         comment: agentGroup?.comment ?? '',
         agentIds: selectedAgents,
         schedulerCronExpression: schedulerCron,
+        maxDelayMinutes: Math.ceil((agentGroup?.maxDelaySeconds ?? 0) / 60),
       }}
       title={title}
       values={{
@@ -163,6 +167,19 @@ const AgentGroupsDialog = ({
                 name="agentIds"
                 value={state.agentIds}
                 onChange={onValueChange}
+              />
+            )}
+
+            {state.agentController && agentsData && (
+              <NumberField
+                allowEmpty={false}
+                max={120}
+                min={0}
+                name="maxDelayMinutes"
+                title={_('Max delay (minutes)')}
+                type="int"
+                value={state.maxDelayMinutes ?? 0}
+                onChange={value => onValueChange(value, 'maxDelayMinutes')}
               />
             )}
 

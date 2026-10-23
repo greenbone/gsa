@@ -44,8 +44,18 @@ interface AgentScriptExecutorElement {
   bulk_throttle_time_in_ms?: number;
   indexer_dir_depth?: number;
   scheduler_cron_time?: {
-    item?: string | string[];
+    item?: SchedulerCronElement | SchedulerCronElement[] | string | string[];
   };
+}
+
+interface SchedulerCronElement {
+  cron?: string;
+  max_delay_seconds?: number | string;
+}
+
+export interface SchedulerCronEntry {
+  cron: string;
+  maxDelaySeconds: number;
 }
 
 interface HeartbeatElement {
@@ -161,7 +171,7 @@ export interface AgentScriptExecutor {
   bulkSize: number;
   bulkThrottleTimeInMs: number;
   indexerDirDepth: number;
-  schedulerCronTimes: string[];
+  schedulerCronTimes: SchedulerCronEntry[];
 }
 
 export interface Heartbeat {
@@ -385,11 +395,19 @@ class Scanner extends Model {
       if (isDefined(agentDefaults) || isDefined(agentControlDefaults)) {
         const cronTimes =
           agentDefaults?.agent_script_executor?.scheduler_cron_time?.item;
-        let schedulerCronTimes: string[] = [];
+        let schedulerCronTimes: SchedulerCronEntry[] = [];
         if (isDefined(cronTimes)) {
-          schedulerCronTimes = Array.isArray(cronTimes)
+          const items = Array.isArray(cronTimes)
             ? cronTimes
             : [cronTimes];
+          schedulerCronTimes = items.map(item =>
+            typeof item === 'string'
+              ? {cron: item, maxDelaySeconds: 0}
+              : {
+                  cron: item.cron ?? '',
+                  maxDelaySeconds: Number(item.max_delay_seconds ?? 0),
+                },
+          );
         }
 
         ret.agentControlConfig = {
