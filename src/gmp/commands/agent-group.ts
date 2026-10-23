@@ -15,6 +15,7 @@ export interface AgentGroupCreateParams {
   name: string;
   scannerId?: string;
   schedulerCronTime?: string;
+  maxDelaySeconds?: number;
 }
 
 export interface AgentGroupSaveParams extends Omit<
@@ -38,6 +39,7 @@ class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
     scannerId,
     agentIds,
     schedulerCronTime,
+    maxDelaySeconds = 0,
   }: AgentGroupCreateParams): Promise<EntityActionResponse> {
     const agentGroupData = {
       cmd: 'create_agent_group',
@@ -46,6 +48,7 @@ class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
       scanner_id: scannerId,
       'agent_ids:': agentIds,
       scheduler_cron_time: schedulerCronTime,
+      max_delay_seconds: maxDelaySeconds,
     };
 
     log.debug('Prepared data for create calls', {
@@ -63,6 +66,7 @@ class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
     scannerId,
     agentIds,
     schedulerCronTime,
+    maxDelaySeconds = 0,
   }: AgentGroupSaveParams): Promise<void> {
     // Build agent group payload
     const agentGroupData = {
@@ -73,6 +77,7 @@ class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
       scanner_id: scannerId,
       'agent_ids:': agentIds,
       scheduler_cron_time: schedulerCronTime,
+      max_delay_seconds: maxDelaySeconds,
     };
 
     log.debug('Prepared payload', agentGroupData);

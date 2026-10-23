@@ -539,8 +539,8 @@ describe('ScannerAgentConfigSettings multiple schedules', () => {
       throw new Error('Mock scanner is missing agent defaults');
     }
     agentDefaults.agentScriptExecutor.schedulerCronTimes = [
-      '0 5 * * *',
-      '0 7 * * *',
+      {cron: '0 5 * * *', maxDelaySeconds: 0},
+      {cron: '0 7 * * *', maxDelaySeconds: 0},
     ];
     return scanner;
   };
@@ -645,7 +645,9 @@ describe('ScannerAgentConfigSettings saved and refreshed values', () => {
       throw new Error('Mock scanner is missing agent defaults');
     }
     agentDefaults.agentControl.retry.attempts = 7;
-    agentDefaults.agentScriptExecutor.schedulerCronTimes = ['0 12 * * *'];
+    agentDefaults.agentScriptExecutor.schedulerCronTimes = [
+      {cron: '0 12 * * *', maxDelaySeconds: 0},
+    ];
     rerender(
       <ScannerAgentConfigSettings
         scanner={refreshedScanner}
