@@ -89,6 +89,7 @@ describe('AgentGroupsComponent tests', () => {
       scannerId: '',
       agentIds: [],
       schedulerCronTime: '0 */12 * * *',
+      maxDelaySeconds: 0,
     });
     expect(onSaved).toHaveBeenCalled();
   });

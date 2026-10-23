@@ -61,6 +61,7 @@ describe('AgentGroupCommand tests', () => {
         scanner_id: '12',
         'agent_ids:': ['1', '2', '3'],
         scheduler_cron_time: '0 0 * * *',
+        max_delay_seconds: 0,
       },
     });
 
@@ -91,6 +92,7 @@ describe('AgentGroupCommand tests', () => {
         scanner_id: '12',
         'agent_ids:': ['1', '2', '3'],
         scheduler_cron_time: '0 */12 * * *',
+        max_delay_seconds: 0,
       },
     });
 
