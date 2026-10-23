@@ -67,7 +67,7 @@ if (!document.fonts) {
 // Avoid matchMedia errors for Mantine components.
 globalThis.matchMedia = testing.fn().mockImplementation(query => {
   return {
-    matches: false,
+    matches: query === '(prefers-reduced-motion: reduce)',
     media: query,
     onchange: null,
     addListener: testing.fn(), // deprecated
