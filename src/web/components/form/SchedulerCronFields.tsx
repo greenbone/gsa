@@ -40,7 +40,7 @@ const Description = styled.p`
   font-size: var(--mantine-font-size-xs);
 `;
 
-const ScheduleCard = styled(Row)`
+export const SchedulerCronCard = styled(Row)`
   align-items: center;
   gap: var(--mantine-spacing-sm);
   padding: var(--mantine-spacing-sm);
@@ -178,7 +178,7 @@ const SchedulerCronFields = ({
       </Description>
       <Column gap="sm">
         {displayedRows.map((row, index) => (
-          <ScheduleCard key={row.id}>
+          <SchedulerCronCard key={row.id}>
             <Column flex={1} gap="xs" style={{minWidth: 0}}>
               <SchedulerCronField
                 compact
@@ -211,7 +211,7 @@ const SchedulerCronFields = ({
               title={_('Remove schedule')}
               onClick={() => handleRemove(index)}
             />
-          </ScheduleCard>
+          </SchedulerCronCard>
         ))}
         <Row justify="center" style={{marginTop: 4}}>
           <AddScheduleButton
