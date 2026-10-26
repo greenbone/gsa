@@ -54,7 +54,6 @@ const sortSchedulerCronTimes = (entries: SchedulerCronEntry[]) =>
 const SchedulerSummaryCard = styled.div`
   padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
   border: 1px solid ${Theme.lightBlue};
-  border-left: 3px solid ${Theme.mediumBlue};
   border-radius: 4px;
   background: ${Theme.white};
 `;
