@@ -129,6 +129,7 @@ describe('ScannerAgentConfigSettings tests', () => {
     expect(screen.getAllByText('3').length).toBeGreaterThan(0);
     expect(screen.getByText('Scheduler Cron Times')).toBeInTheDocument();
     expect(screen.getByText('0 */12 * * *')).toBeInTheDocument();
+    expect(screen.getByText('Max delay: 0 seconds')).toBeInTheDocument();
   });
 
   test('should display heartbeat settings', () => {
@@ -554,7 +555,9 @@ describe('ScannerAgentConfigSettings multiple schedules', () => {
         onError={testing.fn()}
       />,
     );
-    expect(screen.getByText('0 5 * * *, 0 7 * * *')).toBeInTheDocument();
+    expect(screen.getByText('0 5 * * *')).toBeInTheDocument();
+    expect(screen.getByText('0 7 * * *')).toBeInTheDocument();
+    expect(screen.getAllByText('Max delay: 0 seconds')).toHaveLength(2);
     fireEvent.click(screen.getAllByTestId('edit-icon')[0]);
     fireEvent.change(screen.getByDisplayValue('3'), {target: {value: '5'}});
     fireEvent.click(screen.getByTitle('Save'));
@@ -611,7 +614,8 @@ describe('ScannerAgentConfigSettings multiple schedules', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Add schedule'}));
     fireEvent.click(screen.getByTitle('Cancel'));
     await wait();
-    expect(screen.getByText('0 5 * * *, 0 7 * * *')).toBeInTheDocument();
+    expect(screen.getByText('0 5 * * *')).toBeInTheDocument();
+    expect(screen.getByText('0 7 * * *')).toBeInTheDocument();
     expect(gmp.scanner.modifyAgentControlConfig).not.toHaveBeenCalled();
     fireEvent.click(screen.getAllByTestId('edit-icon')[6]);
     expect(screen.getByDisplayValue('0 5 * * *')).toBeInTheDocument();
@@ -633,7 +637,8 @@ describe('ScannerAgentConfigSettings saved and refreshed values', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Add schedule'}));
     fireEvent.click(screen.getByTitle('Save'));
     await wait();
-    expect(screen.getByText('0 */12 * * *, 0 * * * *')).toBeInTheDocument();
+    expect(screen.getByText('0 */12 * * *')).toBeInTheDocument();
+    expect(screen.getByText('0 * * * *')).toBeInTheDocument();
 
     fireEvent.click(screen.getAllByTestId('edit-icon')[0]);
     fireEvent.change(screen.getByDisplayValue('3'), {target: {value: '5'}});
@@ -665,9 +670,7 @@ describe('ScannerAgentConfigSettings saved and refreshed values', () => {
       />,
     );
     expect(screen.getByText('0 12 * * *')).toBeInTheDocument();
-    expect(
-      screen.queryByText('0 */12 * * *, 0 * * * *'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('0 */12 * * *')).not.toBeInTheDocument();
     fireEvent.click(screen.getAllByTestId('edit-icon')[0]);
     expect(screen.getByDisplayValue('7')).toBeInTheDocument();
   });

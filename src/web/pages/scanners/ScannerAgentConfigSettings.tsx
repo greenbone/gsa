@@ -4,6 +4,7 @@
  */
 
 import {type ReactNode, useState} from 'react';
+import styled from 'styled-components';
 import {
   type default as Scanner,
   type AgentControlDefaults,
@@ -26,6 +27,7 @@ import TableRow from 'web/components/table/TableRow';
 import {useModifyScannerAgentControlConfig} from 'web/hooks/use-query/scanner';
 import useTranslation from 'web/hooks/useTranslation';
 import EditableSettingRow from 'web/pages/user-settings/EditableSettingRow';
+import Theme from 'web/utils/theme';
 
 interface ScannerAgentConfigSettingsProps {
   scanner: Scanner;
@@ -43,6 +45,31 @@ interface ScannerConfigValues
 
 type ConfigFieldKey = keyof ScannerConfigValues;
 type FormValue = ScannerConfigValues[ConfigFieldKey];
+
+const SchedulerSummaryCard = styled.div`
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  border: 1px solid ${Theme.lightBlue};
+  border-left: 3px solid ${Theme.mediumBlue};
+  border-radius: 4px;
+  background: ${Theme.white};
+`;
+
+const SchedulerSummaryLabel = styled.div`
+  margin-bottom: 2px;
+  color: ${Theme.mediumGray};
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 500;
+`;
+
+const SchedulerSummaryCron = styled.div`
+  color: ${Theme.black};
+`;
+
+const SchedulerSummaryDelay = styled.div`
+  margin-top: 2px;
+  color: ${Theme.darkGray};
+  font-size: var(--mantine-font-size-sm);
+`;
 
 const renderConfigValue = (value: FormValue): ReactNode => {
   if (Array.isArray(value)) {
@@ -431,15 +458,27 @@ const ScannerAgentConfigSettings = ({
           renderEdit: ({schedulerCronTimes}, onChange, cronExpr = []) =>
             renderCronField(cronExpr, schedulerCronTimes, onChange),
           renderView: val => {
-            const displayValue = Array.isArray(val)
-              ? val
-                  .map(
-                    ({cron, maxDelaySeconds}) =>
-                      `${cron} (${maxDelaySeconds} ${_('seconds max delay')})`,
-                  )
-                  .join(', ') || _('Not set')
-              : _('Not set');
-            return <Layout>{displayValue}</Layout>;
+            if (!Array.isArray(val) || val.length === 0) {
+              return <Layout>{_('Not set')}</Layout>;
+            }
+
+            return (
+              <Column gap="xs">
+                {val.map(({cron, maxDelaySeconds}, index) => (
+                  <SchedulerSummaryCard key={`${cron}-${index}`}>
+                    <SchedulerSummaryLabel>
+                      {_('Schedule {{number}}', {number: index + 1})}
+                    </SchedulerSummaryLabel>
+                    <SchedulerSummaryCron>{cron}</SchedulerSummaryCron>
+                    <SchedulerSummaryDelay>
+                      {_('Max delay: {{delay}} seconds', {
+                        delay: maxDelaySeconds,
+                      })}
+                    </SchedulerSummaryDelay>
+                  </SchedulerSummaryCard>
+                ))}
+              </Column>
+            );
           },
         },
       ],
