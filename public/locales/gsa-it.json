@@ -1239,7 +1239,7 @@
   "Maintenance Window": "Finestra di manutenzione",
   "Manual": "Manuale",
   "matches at least": "corrisponde ad almeno",
-  "Max delay (minutes)": "",
+  "Max delay (minutes)": "Attesa massima per l’avvio (minuti)",
   "Max High": "Max alto",
   "Max High per Host": "Max alto per host",
   "Max Jitter (seconds)": "Jitter massimo (secondi)",
