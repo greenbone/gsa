@@ -4,13 +4,14 @@
  */
 
 import {useState} from 'react';
+import {Plus as PlusGlyph} from 'lucide-react';
 import styled from 'styled-components';
 import FormGroup from 'web/components/form/FormGroup';
 import NumberField from 'web/components/form/NumberField';
 import SchedulerCronField, {
   type SchedulerCronFieldProps,
 } from 'web/components/form/SchedulerCronField';
-import {PlusIcon, XIcon} from 'web/components/icon';
+import {XIcon} from 'web/components/icon';
 import InfoTip from 'web/components/info-tip/InfoTip';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
@@ -37,6 +38,51 @@ const Description = styled.p`
   margin: 0;
   color: ${Theme.mediumGray};
   font-size: var(--mantine-font-size-xs);
+`;
+
+const ScheduleCard = styled(Row)`
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+  padding: var(--mantine-spacing-sm);
+  border: 1px solid var(--mantine-color-gray-3);
+  border-radius: 4px;
+  background: var(--mantine-color-gray-0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+`;
+
+const AddScheduleButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid ${Theme.inputBorderGray};
+  border-radius: 4px;
+  background: ${Theme.white};
+  color: ${Theme.darkGray};
+  font: inherit;
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+
+  &:hover {
+    border-color: ${Theme.green};
+    background: ${Theme.dialogGray};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${Theme.blue};
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    border-color: ${Theme.lightGray};
+    background: ${Theme.dialogGray};
+    color: ${Theme.mediumGray};
+    cursor: not-allowed;
+  }
 `;
 
 const SchedulerCronFields = ({
@@ -84,10 +130,15 @@ const SchedulerCronFields = ({
 
   const handleRemove = (index: number) => {
     setRows(displayedRows.filter((_, rowIndex) => rowIndex !== index));
-    onChange(
-      value.filter((_, cronIndex) => cronIndex !== index),
-      maxDelayValues?.filter((_, delayIndex) => delayIndex !== index),
-    );
+    const nextValues = value.filter((_, cronIndex) => cronIndex !== index);
+    if (maxDelayValues) {
+      onChange(
+        nextValues,
+        maxDelayValues.filter((_, delayIndex) => delayIndex !== index),
+      );
+    } else {
+      onChange(nextValues);
+    }
   };
 
   const handleAdd = () => {
@@ -98,10 +149,12 @@ const SchedulerCronFields = ({
         activeCronExpression: undefined,
       },
     ]);
-    onChange(
-      [...value, '0 * * * *'],
-      maxDelayValues && [...maxDelayValues, 0],
-    );
+    const nextValues = [...value, '0 * * * *'];
+    if (maxDelayValues) {
+      onChange(nextValues, [...maxDelayValues, 0]);
+    } else {
+      onChange(nextValues);
+    }
   };
 
   return (
@@ -125,51 +178,52 @@ const SchedulerCronFields = ({
       </Description>
       <Column gap="sm">
         {displayedRows.map((row, index) => (
-          <Column key={row.id} gap="xs">
-            <Row align="flex-start" gap="sm">
-              <Column flex={1} style={{minWidth: 0}}>
-                <SchedulerCronField
-                  compact
-                  activeCronExpression={row.activeCronExpression}
-                  disabled={disabled}
-                  name={`${name}-${row.id}`}
-                  value={value[index] ?? ''}
-                  onChange={newValue => handleChange(index, newValue)}
+          <ScheduleCard key={row.id}>
+            <Column flex={1} gap="xs" style={{minWidth: 0}}>
+              <SchedulerCronField
+                compact
+                activeCronExpression={row.activeCronExpression}
+                disabled={disabled}
+                name={`${name}-${row.id}`}
+                value={value[index] ?? ''}
+                onChange={newValue => handleChange(index, newValue)}
+              />
+              {maxDelayValues && (
+                <NumberField
+                  allowEmpty={false}
+                  max={maxDelayUnit === 'minutes' ? 120 : undefined}
+                  min={0}
+                  name={`${name}-maxDelay-${row.id}`}
+                  title={
+                    maxDelayUnit === 'minutes'
+                      ? _('Max delay (minutes)')
+                      : _('Max delay (seconds)')
+                  }
+                  type="int"
+                  value={maxDelayValues[index] ?? 0}
+                  onChange={newValue => handleMaxDelayChange(index, newValue)}
                 />
-              </Column>
-              <XIcon
-                aria-label={_('Remove schedule {{number}}', {number: index + 1})}
-                disabled={disabled || value.length <= 1}
-                mt={8}
-                title={_('Remove schedule')}
-                onClick={() => handleRemove(index)}
-              />
-            </Row>
-            {maxDelayValues && (
-              <NumberField
-                allowEmpty={false}
-                max={maxDelayUnit === 'minutes' ? 120 : undefined}
-                min={0}
-                name={`${name}-maxDelay-${row.id}`}
-                title={
-                  maxDelayUnit === 'minutes'
-                    ? _('Max delay (minutes)')
-                    : _('Max delay (seconds)')
-                }
-                type="int"
-                value={maxDelayValues[index] ?? 0}
-                onChange={newValue => handleMaxDelayChange(index, newValue)}
-              />
-            )}
-          </Column>
+              )}
+            </Column>
+            <XIcon
+              aria-label={_('Remove schedule {{number}}', {number: index + 1})}
+              disabled={disabled || value.length <= 1}
+              title={_('Remove schedule')}
+              onClick={() => handleRemove(index)}
+            />
+          </ScheduleCard>
         ))}
-        <Row>
-          <PlusIcon
+        <Row justify="center" style={{marginTop: 4}}>
+          <AddScheduleButton
             aria-label={_('Add schedule')}
             disabled={disabled}
             title={_('Add schedule')}
+            type="button"
             onClick={handleAdd}
-          />
+          >
+            <PlusGlyph aria-hidden="true" size={16} />
+            {_('Add another schedule')}
+          </AddScheduleButton>
         </Row>
       </Column>
     </FormGroup>
