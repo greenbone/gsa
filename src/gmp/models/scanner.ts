@@ -398,14 +398,23 @@ class Scanner extends Model {
         let schedulerCronTimes: SchedulerCronEntry[] = [];
         if (isDefined(cronTimes)) {
           const items = Array.isArray(cronTimes) ? cronTimes : [cronTimes];
-          schedulerCronTimes = items.map(item =>
-            typeof item === 'string'
-              ? {cron: item, maxDelaySeconds: 0}
-              : {
-                  cron: item.cron ?? '',
-                  maxDelaySeconds: Number(item.max_delay_seconds ?? 0),
-                },
-          );
+          schedulerCronTimes = items.map(item => {
+            const rawCron = typeof item === 'string' ? item : item.cron ?? '';
+            const [cron] = rawCron.split('|');
+            const rawDelay =
+              typeof item === 'string'
+                ? rawCron.split('|').at(-1)
+                : item.max_delay_seconds;
+            const parsedDelay = Number(rawDelay ?? 0);
+
+            return {
+              cron,
+              maxDelaySeconds:
+                Number.isInteger(parsedDelay) && parsedDelay >= 0
+                  ? parsedDelay
+                  : 0,
+            };
+          });
         }
 
         ret.agentControlConfig = {
