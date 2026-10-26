@@ -14,8 +14,7 @@ import {
 import {filter, map} from 'gmp/utils/array';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import MultiSelect from 'web/components/form/MultiSelect';
-import NumberField from 'web/components/form/NumberField';
-import SchedulerCronField from 'web/components/form/SchedulerCronField';
+import SchedulerCronFields from 'web/components/form/SchedulerCronFields';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import {useGetAgents} from 'web/hooks/use-query/agents';
@@ -171,21 +170,8 @@ const AgentGroupsDialog = ({
             )}
 
             {state.agentController && agentsData && (
-              <NumberField
-                allowEmpty={false}
-                max={120}
-                min={0}
-                name="maxDelayMinutes"
-                title={_('Max delay (minutes)')}
-                type="int"
-                value={state.maxDelayMinutes ?? 0}
-                onChange={value => onValueChange(value, 'maxDelayMinutes')}
-              />
-            )}
-
-            {state.agentController && agentsData && (
-              <SchedulerCronField
-                activeCronExpression={schedulerCron}
+              <SchedulerCronFields
+                activeCronExpressions={[schedulerCron]}
                 infoTip={
                   agentGroup
                     ? _(
@@ -196,10 +182,15 @@ const AgentGroupsDialog = ({
                 infoTipAriaLabel={_('More information about scheduler')}
                 name="schedulerCronExpression"
                 title={_('Scheduler Options')}
-                value={state.schedulerCronExpression ?? ''}
-                onChange={value =>
-                  onValueChange(value, 'schedulerCronExpression')
-                }
+                maxDelayUnit="minutes"
+                maxDelayValues={[state.maxDelayMinutes ?? 0]}
+                value={[state.schedulerCronExpression ?? '']}
+                onChange={([cron], [delay] = []) => {
+                  onValueChange(cron ?? '', 'schedulerCronExpression');
+                  if (delay !== undefined) {
+                    onValueChange(delay, 'maxDelayMinutes');
+                  }
+                }}
               />
             )}
 

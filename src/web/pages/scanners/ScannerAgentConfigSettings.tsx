@@ -29,6 +29,7 @@ import EditableSettingRow from 'web/pages/user-settings/EditableSettingRow';
 
 interface ScannerAgentConfigSettingsProps {
   scanner: Scanner;
+  isLoading?: boolean;
   onChanged?: () => void;
   onError: (error: Error) => void;
 }
@@ -167,10 +168,18 @@ const renderCronField = (
   <SchedulerCronFields
     activeCronExpressions={activeCronExpressions}
     name="schedulerCronTimes"
+    maxDelayValues={value.map(({maxDelaySeconds}) => maxDelaySeconds)}
     value={value.map(({cron}) => cron)}
-    onChange={cronTimes =>
-      onChange(mapCronExpressionsToEntries(cronTimes, value))
-    }
+    onChange={(cronTimes, maxDelayValues) => {
+      const entries = mapCronExpressionsToEntries(cronTimes, value);
+      onChange(
+        entries.map((entry, index) => ({
+          ...entry,
+          maxDelaySeconds:
+            maxDelayValues?.[index] ?? entry.maxDelaySeconds,
+        })),
+      );
+    }}
   />
 );
 
@@ -236,6 +245,7 @@ const EditableConfigField = ({
 
 const ScannerAgentConfigSettings = ({
   scanner,
+  isLoading = false,
   onChanged,
   onError,
 }: ScannerAgentConfigSettingsProps) => {
@@ -272,11 +282,22 @@ const ScannerAgentConfigSettings = ({
   >({});
 
   const setEditValue = (key: ConfigFieldKey, value: FormValue) => {
+    if (isLoading) {
+      return;
+    }
     setEditValues(prev => ({...prev, [key]: value}));
   };
 
   const handleEdit = (key: ConfigFieldKey, currentValue: FormValue) => {
-    setEditValue(key, currentValue);
+    if (isLoading) {
+      setEditValues(prev => {
+        const next = {...prev};
+        delete next[key];
+        return next;
+      });
+    } else {
+      setEditValue(key, currentValue);
+    }
     setEditModes(prev => ({...prev, [key]: true}));
   };
 
@@ -291,6 +312,9 @@ const ScannerAgentConfigSettings = ({
   };
 
   const handleSave = async (key: ConfigFieldKey) => {
+    if (isLoading) {
+      return;
+    }
     if (!scanner.id) {
       setErrorMessages(prev => ({
         ...prev,
@@ -408,7 +432,12 @@ const ScannerAgentConfigSettings = ({
             renderCronField(cronExpr, schedulerCronTimes, onChange),
           renderView: val => {
             const displayValue = Array.isArray(val)
-              ? val.map(({cron}) => cron).join(', ') || _('Not set')
+              ? val
+                  .map(
+                    ({cron, maxDelaySeconds}) =>
+                      `${cron} (${maxDelaySeconds} ${_('seconds max delay')})`,
+                  )
+                  .join(', ') || _('Not set')
               : _('Not set');
             return <Layout>{displayValue}</Layout>;
           },
