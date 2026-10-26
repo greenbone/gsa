@@ -46,10 +46,7 @@ describe('SchedulerCronFields tests', () => {
     ).toHaveLength(1);
     expect(screen.queryByText('Remove schedule')).not.toBeInTheDocument();
     expect(screen.queryByText('Add schedule')).not.toBeInTheDocument();
-    expect(screen.getByRole('button', {name: 'Add schedule'})).toHaveAttribute(
-      'title',
-      'Add schedule',
-    );
+    expect(screen.getByText('Add another schedule')).toBeInTheDocument();
     expect(
       screen.getByRole('button', {name: 'Remove schedule 1'}),
     ).toBeInTheDocument();
