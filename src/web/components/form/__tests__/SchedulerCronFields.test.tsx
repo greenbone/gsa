@@ -22,8 +22,9 @@ const MultipleCronEditor = ({
     <SchedulerCronFields
       activeCronExpressions={initialValues}
       disabled={disabled}
-      value={value}
-      onChange={values => {
+      value={value.map(cron => ({cron, maxDelaySeconds: 0}))}
+      onChange={entries => {
+        const values = entries.map(({cron}) => cron);
         setValue(values);
         onChange(values);
       }}
@@ -41,6 +42,8 @@ describe('SchedulerCronFields tests', () => {
       />,
     );
     expect(screen.getAllByText('Scheduler Options')).toHaveLength(1);
+    expect(screen.getByText('Schedule 1')).toBeInTheDocument();
+    expect(screen.getByText('Schedule 2')).toBeInTheDocument();
     expect(
       screen.getAllByText(/Choose from the dropdown of common schedules/),
     ).toHaveLength(1);
@@ -112,23 +115,31 @@ describe('SchedulerCronFields tests', () => {
     const onChange = testing.fn();
     const {render} = rendererWith({});
     const {rerender} = render(
-      <SchedulerCronFields value={['0 5 * * *']} onChange={onChange} />,
+      <SchedulerCronFields
+        value={[{cron: '0 5 * * *', maxDelaySeconds: 0}]}
+        onChange={onChange}
+      />,
     );
     rerender(
       <SchedulerCronFields
-        value={['0 5 * * *', '0 7 * * *']}
+        value={[
+          {cron: '0 5 * * *', maxDelaySeconds: 0},
+          {cron: '0 7 * * *', maxDelaySeconds: 0},
+        ]}
         onChange={onChange}
       />,
     );
     expect(screen.getByDisplayValue('0 7 * * *')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', {name: 'Add schedule'}));
     expect(onChange).toHaveBeenLastCalledWith([
-      '0 5 * * *',
-      '0 7 * * *',
-      '0 * * * *',
+      {cron: '0 5 * * *', maxDelaySeconds: 0},
+      {cron: '0 7 * * *', maxDelaySeconds: 0},
+      {cron: '0 * * * *', maxDelaySeconds: 0},
     ]);
     fireEvent.click(screen.getByRole('button', {name: 'Remove schedule 2'}));
-    expect(onChange).toHaveBeenLastCalledWith(['0 5 * * *']);
+    expect(onChange).toHaveBeenLastCalledWith([
+      {cron: '0 5 * * *', maxDelaySeconds: 0},
+    ]);
   });
 
   test('disables all schedule controls', () => {

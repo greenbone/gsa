@@ -40,7 +40,7 @@ interface AgentGroupsDialogDefaultValues {
   comment: string;
   name: string;
   schedulerCronExpression?: string;
-  maxDelayMinutes: number;
+  maxDelaySeconds: number;
 }
 
 export type AgentGroupDialogData = AgentGroupsDialogDefaultValues &
@@ -112,7 +112,7 @@ const AgentGroupsDialog = ({
         comment: agentGroup?.comment ?? '',
         agentIds: selectedAgents,
         schedulerCronExpression: schedulerCron,
-        maxDelayMinutes: Math.ceil((agentGroup?.maxDelaySeconds ?? 0) / 60),
+        maxDelaySeconds: agentGroup?.maxDelaySeconds ?? 0,
       }}
       title={title}
       values={{
@@ -183,13 +183,16 @@ const AgentGroupsDialog = ({
                 name="schedulerCronExpression"
                 title={_('Scheduler Options')}
                 allowMultipleSchedules={false}
-                maxDelayUnit="minutes"
-                maxDelayValues={[state.maxDelayMinutes ?? 0]}
-                value={[state.schedulerCronExpression ?? '']}
-                onChange={([cron], [delay] = []) => {
-                  onValueChange(cron ?? '', 'schedulerCronExpression');
-                  if (delay !== undefined) {
-                    onValueChange(delay, 'maxDelayMinutes');
+                value={[
+                  {
+                    cron: state.schedulerCronExpression ?? '',
+                    maxDelaySeconds: state.maxDelaySeconds ?? 0,
+                  },
+                ]}
+                onChange={([entry]) => {
+                  if (entry) {
+                    onValueChange(entry.cron, 'schedulerCronExpression');
+                    onValueChange(entry.maxDelaySeconds, 'maxDelaySeconds');
                   }
                 }}
               />

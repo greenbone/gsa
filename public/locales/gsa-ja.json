@@ -1239,7 +1239,7 @@
   "Maintenance Window": "メンテナンスウィンドウ",
   "Manual": "手動",
   "matches at least": "少なくとも一致",
-  "Max delay (minutes)": "",
+  "Max delay (seconds)": "",
   "Max High": "「高」の最大数",
   "Max High per Host": "ホストあたりの「高」の最大数",
   "Max Jitter (seconds)": "最大ジッター (秒)",

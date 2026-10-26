@@ -1239,7 +1239,7 @@
   "Maintenance Window": "",
   "Manual": "手动输入",
   "matches at least": "匹配至少",
-  "Max delay (minutes)": "",
+  "Max delay (seconds)": "",
   "Max High": "最高严重性",
   "Max High per Host": "单主机最高严重性",
   "Max Jitter (seconds)": "",

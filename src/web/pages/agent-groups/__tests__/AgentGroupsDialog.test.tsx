@@ -79,7 +79,7 @@ describe('AgentGroupsDialog tests', () => {
       agentController: '',
       agentIds: [],
       schedulerCronExpression: '0 */12 * * *',
-      maxDelayMinutes: 0,
+      maxDelaySeconds: 0,
     });
   });
 
@@ -125,7 +125,7 @@ describe('AgentGroupsDialog tests', () => {
       agentController: 's1',
       agentIds: ['a1'],
       schedulerCronExpression: '0 */12 * * *',
-      maxDelayMinutes: 0,
+      maxDelaySeconds: 0,
     });
   });
 
@@ -225,7 +225,7 @@ describe('AgentGroupsDialog tests', () => {
       agentController: 's1',
       agentIds: [],
       schedulerCronExpression: '0 */12 * * *',
-      maxDelayMinutes: 0,
+      maxDelaySeconds: 0,
     });
 
     const payload = onSave.mock.calls[0][0];
