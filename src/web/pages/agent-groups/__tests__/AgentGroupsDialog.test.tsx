@@ -155,7 +155,12 @@ describe('AgentGroupsDialog tests', () => {
       expect(screen.getByText('Scheduler Options')).toBeInTheDocument();
     });
 
-    expect(screen.getByName('schedulerCronExpression')).toBeInTheDocument();
+    expect(
+      screen.getByName('schedulerCronExpression-0'),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', {name: 'Add schedule'}),
+    ).not.toBeInTheDocument();
   });
 
   test('should not render heartbeat interval or port fields in agent groups dialog', async () => {

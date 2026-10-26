@@ -27,6 +27,7 @@ interface SchedulerCronFieldsProps extends Omit<
   onChange: (value: string[], maxDelayValues?: number[]) => void;
   maxDelayValues?: number[];
   maxDelayUnit?: 'seconds' | 'minutes';
+  allowMultipleSchedules?: boolean;
 }
 
 interface SchedulerCronRow {
@@ -96,6 +97,7 @@ const SchedulerCronFields = ({
   infoTipAriaLabel,
   maxDelayValues,
   maxDelayUnit = 'seconds',
+  allowMultipleSchedules = true,
 }: SchedulerCronFieldsProps) => {
   const [_] = useTranslation();
 
@@ -205,26 +207,32 @@ const SchedulerCronFields = ({
                 />
               )}
             </Column>
-            <XIcon
-              aria-label={_('Remove schedule {{number}}', {number: index + 1})}
-              disabled={disabled || value.length <= 1}
-              title={_('Remove schedule')}
-              onClick={() => handleRemove(index)}
-            />
+            {allowMultipleSchedules && (
+              <XIcon
+                aria-label={_('Remove schedule {{number}}', {
+                  number: index + 1,
+                })}
+                disabled={disabled || value.length <= 1}
+                title={_('Remove schedule')}
+                onClick={() => handleRemove(index)}
+              />
+            )}
           </SchedulerCronCard>
         ))}
-        <Row justify="center" style={{marginTop: 4}}>
-          <AddScheduleButton
-            aria-label={_('Add schedule')}
-            disabled={disabled}
-            title={_('Add schedule')}
-            type="button"
-            onClick={handleAdd}
-          >
-            <PlusGlyph aria-hidden="true" size={16} />
-            {_('Add another schedule')}
-          </AddScheduleButton>
-        </Row>
+        {allowMultipleSchedules && (
+          <Row justify="center" style={{marginTop: 4}}>
+            <AddScheduleButton
+              aria-label={_('Add schedule')}
+              disabled={disabled}
+              title={_('Add schedule')}
+              type="button"
+              onClick={handleAdd}
+            >
+              <PlusGlyph aria-hidden="true" size={16} />
+              {_('Add another schedule')}
+            </AddScheduleButton>
+          </Row>
+        )}
       </Column>
     </FormGroup>
   );
