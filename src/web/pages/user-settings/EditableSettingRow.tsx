@@ -80,7 +80,9 @@ const EditableSettingRow = ({
           {isEditMode ? (
             <StyledIconsRow>
               <SaveIcon title={_('Save')} onClick={onSave} />
-              <ResetIcon title={_('Clear')} onClick={onClear} />
+              {onClear && (
+                <ResetIcon title={_('Clear')} onClick={onClear} />
+              )}
               <XIcon title={_('Cancel')} onClick={onCancel} />
             </StyledIconsRow>
           ) : (
