@@ -397,9 +397,7 @@ class Scanner extends Model {
           agentDefaults?.agent_script_executor?.scheduler_cron_time?.item;
         let schedulerCronTimes: SchedulerCronEntry[] = [];
         if (isDefined(cronTimes)) {
-          const items = Array.isArray(cronTimes)
-            ? cronTimes
-            : [cronTimes];
+          const items = Array.isArray(cronTimes) ? cronTimes : [cronTimes];
           schedulerCronTimes = items.map(item =>
             typeof item === 'string'
               ? {cron: item, maxDelaySeconds: 0}

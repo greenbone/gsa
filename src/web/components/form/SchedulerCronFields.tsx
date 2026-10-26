@@ -66,9 +66,7 @@ const SchedulerCronFields = ({
 
   const handleChange = (index: number, newValue: string) => {
     onChange(
-      value.map((cron, cronIndex) =>
-        cronIndex === index ? newValue : cron,
-      ),
+      value.map((cron, cronIndex) => (cronIndex === index ? newValue : cron)),
     );
   };
 
