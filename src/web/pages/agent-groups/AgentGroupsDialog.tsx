@@ -182,6 +182,7 @@ const AgentGroupsDialog = ({
                 infoTipAriaLabel={_('More information about scheduler')}
                 name="schedulerCronExpression"
                 title={_('Scheduler Options')}
+                allowMultipleSchedules={false}
                 maxDelayUnit="minutes"
                 maxDelayValues={[state.maxDelayMinutes ?? 0]}
                 value={[state.schedulerCronExpression ?? '']}
