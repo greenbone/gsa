@@ -46,6 +46,11 @@ interface ScannerConfigValues
 type ConfigFieldKey = keyof ScannerConfigValues;
 type FormValue = ScannerConfigValues[ConfigFieldKey];
 
+const sortSchedulerCronTimes = (entries: SchedulerCronEntry[]) =>
+  [...entries].sort((first, second) =>
+    first.cron < second.cron ? -1 : first.cron > second.cron ? 1 : 0,
+  );
+
 const SchedulerSummaryCard = styled.div`
   padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
   border: 1px solid ${Theme.lightBlue};
@@ -77,53 +82,6 @@ const renderConfigValue = (value: FormValue): ReactNode => {
   }
 
   return <Layout>{value}</Layout>;
-};
-
-const mapCronExpressionsToEntries = (
-  cronTimes: string[],
-  existingEntries: SchedulerCronEntry[],
-): SchedulerCronEntry[] => {
-  const matchedIndexes = cronTimes.map(() => -1);
-  const usedIndexes = new Set<number>();
-
-  cronTimes.forEach((cron, index) => {
-    if (existingEntries[index]?.cron === cron) {
-      matchedIndexes[index] = index;
-      usedIndexes.add(index);
-    }
-  });
-
-  cronTimes.forEach((cron, index) => {
-    if (matchedIndexes[index] >= 0) {
-      return;
-    }
-
-    // First, preserve delays with matching cron entries that shifted rows.
-    let targetIndex = existingEntries.findIndex(
-      (entry, entryIndex) =>
-        entry.cron === cron && !usedIndexes.has(entryIndex),
-    );
-
-    // If the cron was edited in place, keep its delay with the same row.
-    if (
-      targetIndex < 0 &&
-      index < existingEntries.length &&
-      !usedIndexes.has(index)
-    ) {
-      targetIndex = index;
-    }
-
-    if (targetIndex >= 0) {
-      matchedIndexes[index] = targetIndex;
-      usedIndexes.add(targetIndex);
-    }
-  });
-
-  return cronTimes.map((cron, index) => ({
-    cron,
-    maxDelaySeconds:
-      existingEntries[matchedIndexes[index]]?.maxDelaySeconds ?? 0,
-  }));
 };
 
 interface ConfigFieldDefinition {
@@ -165,7 +123,7 @@ const getScannerPayload = (scanner: Scanner): ScannerConfigValues => {
     bulkThrottleTimeInMs:
       agentDefaults?.agentScriptExecutor.bulkThrottleTimeInMs ?? 0,
     indexerDirDepth: agentDefaults?.agentScriptExecutor.indexerDirDepth ?? 0,
-    schedulerCronTimes: cronTimes ?? [],
+    schedulerCronTimes: sortSchedulerCronTimes(cronTimes ?? []),
     intervalInSeconds: agentDefaults?.heartbeat.intervalInSeconds ?? 0,
     missUntilInactive: agentDefaults?.heartbeat.missUntilInactive ?? 0,
     updateToLatest: agentControlDefaults?.updateToLatest ?? false,
@@ -195,18 +153,8 @@ const renderCronField = (
   <SchedulerCronFields
     activeCronExpressions={activeCronExpressions}
     name="schedulerCronTimes"
-    maxDelayValues={value.map(({maxDelaySeconds}) => maxDelaySeconds)}
-    value={value.map(({cron}) => cron)}
-    onChange={(cronTimes, maxDelayValues) => {
-      const entries = mapCronExpressionsToEntries(cronTimes, value);
-      onChange(
-        entries.map((entry, index) => ({
-          ...entry,
-          maxDelaySeconds:
-            maxDelayValues?.[index] ?? entry.maxDelaySeconds,
-        })),
-      );
-    }}
+    value={value}
+    onChange={onChange}
   />
 );
 
@@ -285,11 +233,6 @@ const ScannerAgentConfigSettings = ({
     });
 
   const agentDefaults = scanner.agentControlConfig?.agentDefaults;
-  const activeCronExpressions =
-    agentDefaults?.agentScriptExecutor.schedulerCronTimes.map(
-      ({cron}) => cron,
-    ) ?? [];
-
   const [savedValues, setSavedValues] = useState<{
     scanner: Scanner;
     values: Partial<ScannerConfigValues>;
@@ -298,6 +241,9 @@ const ScannerAgentConfigSettings = ({
     ...getScannerPayload(scanner),
     ...(savedValues?.scanner === scanner ? savedValues.values : {}),
   };
+  const activeCronExpressions = fieldValues.schedulerCronTimes.map(
+    ({cron}) => cron,
+  );
   const [editValues, setEditValues] = useState<Partial<ScannerConfigValues>>(
     {},
   );
@@ -351,7 +297,11 @@ const ScannerAgentConfigSettings = ({
     }
 
     const payload = fieldValues;
-    const editedValue = editValues[key];
+    const editedValue =
+      key === 'schedulerCronTimes' &&
+      Array.isArray(editValues[key])
+        ? sortSchedulerCronTimes(editValues[key] as SchedulerCronEntry[])
+        : editValues[key];
     const updateToLatest =
       key === 'updateToLatest' ? editedValue : payload.updateToLatest;
 

@@ -101,7 +101,7 @@ const AgentGroupsComponent = ({
       agentIds: data.agentIds,
       comment: data.comment,
       schedulerCronTime: data.schedulerCronExpression,
-      maxDelaySeconds: data.maxDelayMinutes * 60,
+      maxDelaySeconds: data.maxDelaySeconds,
     };
 
     if (isDefined(selectedAgentGroup)) {
