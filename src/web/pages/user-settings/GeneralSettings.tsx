@@ -252,6 +252,10 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setTimezoneState(value);
   };
 
+  const clearTimezone = (): void => {
+    setTimezoneState('');
+  };
+
   const toggleDateTimeFormatEditMode = (): void => {
     setDateTimeFormatEditMode(!dateTimeFormatEditMode);
   };
@@ -337,6 +341,12 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     }
   };
 
+  const clearDateTimeFormat = (): void => {
+    setIsUserInterfaceTimeDateDefaultState(YES_VALUE);
+    setTimeFormatState(SYSTEM_DEFAULT);
+    setDateFormatState(SYSTEM_DEFAULT);
+  };
+
   const toggleLanguageEditMode = (): void => {
     setLanguageEditMode(!languageEditMode);
   };
@@ -366,6 +376,10 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
 
   const handleLanguageChange = (value: string): void => {
     setLanguageState(value);
+  };
+
+  const clearLanguage = (): void => {
+    setLanguageState('');
   };
 
   const toggleRowsPerPageEditMode = (): void => {
@@ -398,6 +412,10 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setRowsPerPageState(value);
   };
 
+  const clearRowsPerPage = (): void => {
+    setRowsPerPageState('');
+  };
+
   const toggleDetailsExportFileNameEditMode = (): void => {
     setDetailsExportFileNameEditMode(!detailsExportFileNameEditMode);
   };
@@ -426,6 +444,10 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
 
   const handleDetailsExportFileNameChange = (value: string): void => {
     setDetailsExportFileNameState(value);
+  };
+
+  const clearDetailsExportFileName = (): void => {
+    setDetailsExportFileNameState('');
   };
 
   const toggleListExportFileNameEditMode = (): void => {
@@ -458,6 +480,10 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setListExportFileNameState(value);
   };
 
+  const clearListExportFileName = (): void => {
+    setListExportFileNameState('');
+  };
+
   const toggleReportExportFileNameEditMode = (): void => {
     setReportExportFileNameEditMode(!reportExportFileNameEditMode);
   };
@@ -486,6 +512,10 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
 
   const handleReportExportFileNameChange = (value: string): void => {
     setReportExportFileNameState(value);
+  };
+
+  const clearReportExportFileName = (): void => {
+    setReportExportFileNameState('');
   };
 
   const toggleSecurityIntelligenceExportEditMode = (): void => {
@@ -518,6 +548,10 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setSecurityIntelligenceExportState(value);
   };
 
+  const clearSecurityIntelligenceExport = (): void => {
+    setSecurityIntelligenceExportState(NO_VALUE);
+  };
+
   const toggleAutoCacheRebuildEditMode = (): void => {
     setAutoCacheRebuildEditMode(!autoCacheRebuildEditMode);
   };
@@ -548,6 +582,10 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setAutoCacheRebuildState(value);
   };
 
+  const clearAutoCacheRebuild = (): void => {
+    setAutoCacheRebuildState(NO_VALUE);
+  };
+
   const togglePasswordEditMode = (): void => {
     setPasswordEditMode(!passwordEditMode);
   };
@@ -572,6 +610,12 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
     setConfPasswordState('');
     setPasswordEditMode(false);
     clearErrorMessage('Password');
+  };
+
+  const clearPassword = (): void => {
+    setOldPasswordState('');
+    setNewPasswordState('');
+    setConfPasswordState('');
   };
 
   const handlePasswordChange = (value: string, name?: string): void => {
@@ -639,6 +683,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
           title={_('Timezone')}
           viewComponent={<span>{timezoneState}</span>}
           onCancel={cancelTimezoneEdit}
+          onClear={clearTimezone}
           onEdit={toggleTimezoneEditMode}
           onSave={saveTimezone}
         />
@@ -694,6 +739,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
             </div>
           }
           onCancel={cancelDateTimeFormatEdit}
+          onClear={clearDateTimeFormat}
           onEdit={toggleDateTimeFormatEditMode}
           onSave={saveDateTimeFormat}
         />
@@ -744,6 +790,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
           title={_('Change your password')}
           viewComponent={<span>********</span>}
           onCancel={cancelPasswordEdit}
+          onClear={clearPassword}
           onEdit={togglePasswordEditMode}
           onSave={savePassword}
         />
@@ -766,6 +813,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
             <span>{getLangNameByCode(userInterfaceLanguage.value)}</span>
           }
           onCancel={cancelLanguageEdit}
+          onClear={clearLanguage}
           onEdit={toggleLanguageEditMode}
           onSave={saveLanguage}
         />
@@ -785,6 +833,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
           title={rowsPerPage.comment}
           viewComponent={<span>{rowsPerPage.value}</span>}
           onCancel={cancelRowsPerPageEdit}
+          onClear={clearRowsPerPage}
           onEdit={toggleRowsPerPageEditMode}
           onSave={saveRowsPerPage}
         />
@@ -810,6 +859,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
           title={detailsExportFileName.comment}
           viewComponent={<span>{detailsExportFileName.value}</span>}
           onCancel={cancelDetailsExportFileNameEdit}
+          onClear={clearDetailsExportFileName}
           onEdit={toggleDetailsExportFileNameEditMode}
           onSave={saveDetailsExportFileName}
         />
@@ -829,6 +879,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
           title={listExportFileName.comment}
           viewComponent={<span>{listExportFileName.value}</span>}
           onCancel={cancelListExportFileNameEdit}
+          onClear={clearListExportFileName}
           onEdit={toggleListExportFileNameEditMode}
           onSave={saveListExportFileName}
         />
@@ -848,6 +899,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
           title={reportExportFileName.comment}
           viewComponent={<span>{reportExportFileName.value}</span>}
           onCancel={cancelReportExportFileNameEdit}
+          onClear={clearReportExportFileName}
           onEdit={toggleReportExportFileNameEditMode}
           onSave={saveReportExportFileName}
         />
@@ -875,6 +927,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
               <span>{getYesNoValue(securityIntelligenceExport.value)}</span>
             }
             onCancel={cancelSecurityIntelligenceExportEdit}
+            onClear={clearSecurityIntelligenceExport}
             onEdit={toggleSecurityIntelligenceExportEditMode}
             onSave={saveSecurityIntelligenceExport}
           />
@@ -898,6 +951,7 @@ const GeneralSettings = ({disableEditIcon = false}: GeneralSettingsProps) => {
           title={autoCacheRebuild.comment}
           viewComponent={<span>{getYesNoValue(autoCacheRebuild.value)}</span>}
           onCancel={cancelAutoCacheRebuildEdit}
+          onClear={clearAutoCacheRebuild}
           onEdit={toggleAutoCacheRebuildEditMode}
           onSave={saveAutoCacheRebuild}
         />

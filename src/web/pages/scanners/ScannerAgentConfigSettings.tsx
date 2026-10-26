@@ -106,6 +106,7 @@ interface EditableConfigFieldProps {
   onEdit: (value: FormValue) => void;
   onCancel: () => void;
   onSave: () => Promise<void>;
+  onClear?: () => Promise<void>;
   onChangeValue: (value: FormValue) => void;
 }
 
@@ -190,6 +191,7 @@ const EditableConfigField = ({
   onEdit,
   onCancel,
   onSave,
+  onClear,
   onChangeValue,
 }: EditableConfigFieldProps) => {
   const fieldValue = fieldValues[field.key];
@@ -214,6 +216,7 @@ const EditableConfigField = ({
       onCancel={onCancel}
       onEdit={() => onEdit(fieldValue)}
       onSave={onSave}
+      onClear={onClear}
     />
   );
 };
@@ -284,7 +287,7 @@ const ScannerAgentConfigSettings = ({
     setErrorMessages(prev => ({...prev, [key]: ''}));
   };
 
-  const handleSave = async (key: ConfigFieldKey) => {
+  const handleSave = async (key: ConfigFieldKey, valueOverride?: FormValue) => {
     if (isLoading) {
       return;
     }
@@ -297,11 +300,12 @@ const ScannerAgentConfigSettings = ({
     }
 
     const payload = fieldValues;
+    const value = valueOverride ?? editValues[key];
     const editedValue =
       key === 'schedulerCronTimes' &&
-      Array.isArray(editValues[key])
-        ? sortSchedulerCronTimes(editValues[key] as SchedulerCronEntry[])
-        : editValues[key];
+      Array.isArray(value)
+        ? sortSchedulerCronTimes(value as SchedulerCronEntry[])
+        : value;
     const updateToLatest =
       key === 'updateToLatest' ? editedValue : payload.updateToLatest;
 
@@ -509,6 +513,15 @@ const ScannerAgentConfigSettings = ({
                 isEditMode={editModes[field.key] ?? false}
                 onCancel={() => handleCancel(field.key)}
                 onChangeValue={value => setEditValue(field.key, value)}
+                onClear={
+                  field.key === 'schedulerCronTimes'
+                    ? undefined
+                    : () =>
+                        handleSave(
+                          field.key,
+                          field.key === 'updateToLatest' ? false : 0,
+                        )
+                }
                 onEdit={value => handleEdit(field.key, value)}
                 onSave={() => handleSave(field.key)}
               />
