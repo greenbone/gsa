@@ -49,6 +49,7 @@ const PortListDetailsPageToolBarIcons = ({
         <EditIcon
           disabled={entity.predefined}
           entity={entity}
+          writable={entity.isWritable() || entity.isInUse()}
           onClick={onPortListEditClick}
         />
         <TrashIcon entity={entity} onClick={onPortListDeleteClick} />

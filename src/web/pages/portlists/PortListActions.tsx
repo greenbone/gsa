@@ -56,6 +56,7 @@ const PortListActions = ({
           displayName={_('Port List')}
           entity={entity}
           name="portlist"
+          writable={entity.isWritable() || entity.isInUse()}
           onClick={onPortListEditClick}
         />
         <CloneIcon

@@ -38,6 +38,7 @@ interface PortListsDialogProps<TPortRange extends PortRange> {
   portList?: PortList;
   portRange?: string;
   portRanges?: TPortRange[];
+  portRangesWritable?: boolean;
   title?: string;
   onClose?: () => void;
   onNewPortRangeClick?: () => void;
@@ -67,6 +68,7 @@ const PortListsDialog = <TPortRange extends PortRange>({
   portList,
   portRange = 'T:1-5,7,9,U:1-3,5,7,9',
   portRanges = [],
+  portRangesWritable = true,
   title,
   onClose,
   onNewPortRangeClick,
@@ -158,9 +160,13 @@ const PortListsDialog = <TPortRange extends PortRange>({
               </FormGroup>
             )}
             {isEdit && (
-              <Section extra={newRangeIcon} title={_('Port Ranges')}>
+              <Section
+                extra={portRangesWritable ? newRangeIcon : undefined}
+                title={_('Port Ranges')}
+              >
                 {isDefined(portList) && (
                   <PortRangesTable<TPortRange>
+                    actions={portRangesWritable}
                     portRanges={state.portRanges}
                     onDeleteClick={onTmpDeletePortRange}
                   />

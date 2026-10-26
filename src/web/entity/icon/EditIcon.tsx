@@ -31,6 +31,7 @@ interface EntityEditIconProps<TEntity extends EntityEdit> extends Omit<
   entity: TEntity;
   name?: EntityType;
   title?: string;
+  writable?: boolean;
   onClick?: (value: TEntity) => void | Promise<void>;
 }
 
@@ -40,6 +41,7 @@ const EntityEditIcon = <TEntity extends EntityEdit>({
   entity,
   name,
   title,
+  writable,
   onClick,
   ...props
 }: EntityEditIconProps<TEntity>) => {
@@ -55,13 +57,14 @@ const EntityEditIcon = <TEntity extends EntityEdit>({
 
   const mayEdit =
     capabilities?.mayEdit(name) && entity.userCapabilities.mayEdit(name);
+  const isWritable = writable ?? entity.isWritable();
 
-  const active = mayEdit && entity.isWritable() && !disabled;
+  const active = mayEdit && isWritable && !disabled;
 
   if (!isDefined(title)) {
     if (active) {
       title = _('Edit {{entity}}', {entity: displayName});
-    } else if (!entity.isWritable()) {
+    } else if (!isWritable) {
       title = _('{{entity}} is not writable', {entity: displayName});
     } else if (!mayEdit) {
       title = _('Permission to edit {{entity}} denied', {entity: displayName});
