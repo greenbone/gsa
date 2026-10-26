@@ -6,6 +6,7 @@
 import {useState} from 'react';
 import styled from 'styled-components';
 import FormGroup from 'web/components/form/FormGroup';
+import NumberField from 'web/components/form/NumberField';
 import SchedulerCronField, {
   type SchedulerCronFieldProps,
 } from 'web/components/form/SchedulerCronField';
@@ -22,7 +23,9 @@ interface SchedulerCronFieldsProps extends Omit<
 > {
   value: string[];
   activeCronExpressions?: string[];
-  onChange: (value: string[]) => void;
+  onChange: (value: string[], maxDelayValues?: number[]) => void;
+  maxDelayValues?: number[];
+  maxDelayUnit?: 'seconds' | 'minutes';
 }
 
 interface SchedulerCronRow {
@@ -45,6 +48,8 @@ const SchedulerCronFields = ({
   title,
   infoTip,
   infoTipAriaLabel,
+  maxDelayValues,
+  maxDelayUnit = 'seconds',
 }: SchedulerCronFieldsProps) => {
   const [_] = useTranslation();
 
@@ -70,9 +75,19 @@ const SchedulerCronFields = ({
     );
   };
 
+  const handleMaxDelayChange = (index: number, newValue: number) => {
+    const nextDelays = value.map((_, rowIndex) =>
+      rowIndex === index ? newValue : (maxDelayValues?.[rowIndex] ?? 0),
+    );
+    onChange(value, nextDelays);
+  };
+
   const handleRemove = (index: number) => {
     setRows(displayedRows.filter((_, rowIndex) => rowIndex !== index));
-    onChange(value.filter((_, cronIndex) => cronIndex !== index));
+    onChange(
+      value.filter((_, cronIndex) => cronIndex !== index),
+      maxDelayValues?.filter((_, delayIndex) => delayIndex !== index),
+    );
   };
 
   const handleAdd = () => {
@@ -83,7 +98,10 @@ const SchedulerCronFields = ({
         activeCronExpression: undefined,
       },
     ]);
-    onChange([...value, '0 * * * *']);
+    onChange(
+      [...value, '0 * * * *'],
+      maxDelayValues && [...maxDelayValues, 0],
+    );
   };
 
   return (
@@ -107,25 +125,43 @@ const SchedulerCronFields = ({
       </Description>
       <Column gap="sm">
         {displayedRows.map((row, index) => (
-          <Row key={row.id} align="flex-start" gap="sm">
-            <Column flex={1} style={{minWidth: 0}}>
-              <SchedulerCronField
-                compact
-                activeCronExpression={row.activeCronExpression}
-                disabled={disabled}
-                name={`${name}-${row.id}`}
-                value={value[index] ?? ''}
-                onChange={newValue => handleChange(index, newValue)}
+          <Column key={row.id} gap="xs">
+            <Row align="flex-start" gap="sm">
+              <Column flex={1} style={{minWidth: 0}}>
+                <SchedulerCronField
+                  compact
+                  activeCronExpression={row.activeCronExpression}
+                  disabled={disabled}
+                  name={`${name}-${row.id}`}
+                  value={value[index] ?? ''}
+                  onChange={newValue => handleChange(index, newValue)}
+                />
+              </Column>
+              <XIcon
+                aria-label={_('Remove schedule {{number}}', {number: index + 1})}
+                disabled={disabled || value.length <= 1}
+                mt={8}
+                title={_('Remove schedule')}
+                onClick={() => handleRemove(index)}
               />
-            </Column>
-            <XIcon
-              aria-label={_('Remove schedule {{number}}', {number: index + 1})}
-              disabled={disabled || value.length <= 1}
-              mt={8}
-              title={_('Remove schedule')}
-              onClick={() => handleRemove(index)}
-            />
-          </Row>
+            </Row>
+            {maxDelayValues && (
+              <NumberField
+                allowEmpty={false}
+                max={maxDelayUnit === 'minutes' ? 120 : undefined}
+                min={0}
+                name={`${name}-maxDelay-${row.id}`}
+                title={
+                  maxDelayUnit === 'minutes'
+                    ? _('Max delay (minutes)')
+                    : _('Max delay (seconds)')
+                }
+                type="int"
+                value={maxDelayValues[index] ?? 0}
+                onChange={newValue => handleMaxDelayChange(index, newValue)}
+              />
+            )}
+          </Column>
         ))}
         <Row>
           <PlusIcon

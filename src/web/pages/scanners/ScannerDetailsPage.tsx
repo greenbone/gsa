@@ -162,6 +162,7 @@ const ScannerDetailsPage = ({
                       {showAgentConfigTab && (
                         <TabPanel>
                           <ScannerAgentConfigSettings
+                            isLoading={isLoading}
                             scanner={entity}
                             onChanged={onChanged}
                             onError={onError}
