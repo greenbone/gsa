@@ -14,6 +14,7 @@ import {
   type SchedulerCronEntry,
 } from 'gmp/models/scanner';
 import NumberField from 'web/components/form/NumberField';
+import HighlightBox from 'web/components/highlight-box';
 import Radio from 'web/components/form/Radio';
 import SchedulerCronFields from 'web/components/form/SchedulerCronFields';
 import Column from 'web/components/layout/Column';
@@ -45,13 +46,6 @@ interface ScannerConfigValues
 
 type ConfigFieldKey = keyof ScannerConfigValues;
 type FormValue = ScannerConfigValues[ConfigFieldKey];
-
-const SchedulerSummaryCard = styled.div`
-  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
-  border: 1px solid ${Theme.lightBlue};
-  border-radius: 4px;
-  background: ${Theme.white};
-`;
 
 const SchedulerSummaryLabel = styled.div`
   margin-bottom: 2px;
@@ -408,7 +402,7 @@ const ScannerAgentConfigSettings = ({
             return (
               <Column gap="xs">
                 {val.map(({cron, maxDelaySeconds}, index) => (
-                  <SchedulerSummaryCard key={`${cron}-${index}`}>
+                  <HighlightBox key={`${cron}-${index}`}>
                     <SchedulerSummaryLabel>
                       {_('Schedule {{number}}', {number: index + 1})}
                     </SchedulerSummaryLabel>
@@ -418,7 +412,7 @@ const ScannerAgentConfigSettings = ({
                         delay: maxDelaySeconds,
                       })}
                     </SchedulerSummaryDelay>
-                  </SchedulerSummaryCard>
+                  </HighlightBox>
                 ))}
               </Column>
             );
