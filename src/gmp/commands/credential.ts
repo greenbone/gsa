@@ -10,6 +10,7 @@ import Credential, {
   type CredentialElement,
   type SNMPAuthAlgorithmType,
   type SNMPPrivacyAlgorithmType,
+  type ActiveDirectoryTlsMode,
 } from 'gmp/models/credential';
 import {type Element} from 'gmp/models/model';
 import {parseYesNo} from 'gmp/parser';
@@ -48,6 +49,24 @@ interface CredentialCommandSnmpFields {
   privacyHostIdentifier?: string;
 }
 
+interface CredentialCommandActiveDirectoryFields {
+  adHost?: string;
+  adPort?: string | null;
+  adBindDn?: string;
+  adBindPassword?: string;
+  adBaseDn?: string;
+  adTlsMode?: ActiveDirectoryTlsMode;
+  adCaCertificate?: File | null;
+}
+
+interface CredentialCommandActiveDirectoryCreateFields extends Omit<
+  CredentialCommandActiveDirectoryFields,
+  'adPort' | 'adCaCertificate'
+> {
+  adPort?: string;
+  adCaCertificate?: File;
+}
+
 // Create operation interfaces
 export type CredentialCommandCreateParams = CredentialCommandBaseArgs;
 
@@ -69,6 +88,11 @@ interface CredentialCommandCredentialStoreSnmpArgs
     CredentialCommandCredentialStoreFields,
     CredentialCommandSnmpFields {}
 
+interface CredentialCommandActiveDirectoryArgs
+  extends
+    CredentialCommandBaseArgs,
+    CredentialCommandActiveDirectoryCreateFields {}
+
 // Save operation interfaces (using utility types)
 type CredentialCommandSaveArgs = Omit<
   CredentialCommandBaseArgs,
@@ -88,6 +112,9 @@ type CredentialCommandSaveCredentialStoreKrb5Args = CredentialCommandSaveArgs &
 type CredentialCommandSaveCredentialStoreSnmpArgs = CredentialCommandSaveArgs &
   CredentialCommandCredentialStoreFields &
   CredentialCommandSnmpFields;
+
+type CredentialCommandSaveActiveDirectoryArgs = CredentialCommandSaveArgs &
+  CredentialCommandActiveDirectoryFields;
 
 const saveFile = (file: File | undefined | null): File | undefined | string => {
   if (file === null) {
@@ -157,6 +184,21 @@ class CredentialCommand extends EntityCommand<
       ...baseData,
       realm: args.realm,
       'kdcs:': args.kdcs?.length ? args.kdcs : '',
+    });
+  }
+
+  createActiveDirectory(args: CredentialCommandActiveDirectoryArgs) {
+    const baseData = this.createBase(args);
+
+    return this.action({
+      ...baseData,
+      ad_host: args.adHost,
+      ad_port: args.adPort,
+      ad_bind_dn: args.adBindDn,
+      ad_bind_password: args.adBindPassword,
+      ad_base_dn: args.adBaseDn,
+      ad_tls_mode: args.adTlsMode,
+      ad_ca_certificate: args.adCaCertificate,
     });
   }
 
@@ -243,6 +285,21 @@ class CredentialCommand extends EntityCommand<
       ...baseData,
       realm: args.realm,
       'kdcs:': args.kdcs?.length ? args.kdcs : '',
+    });
+  }
+
+  saveActiveDirectory(args: CredentialCommandSaveActiveDirectoryArgs) {
+    const baseData = this.saveBase(args);
+
+    return this.action({
+      ...baseData,
+      ad_host: args.adHost,
+      ad_port: args.adPort === null ? '' : args.adPort,
+      ad_bind_dn: args.adBindDn,
+      ad_bind_password: args.adBindPassword,
+      ad_base_dn: args.adBaseDn,
+      ad_tls_mode: args.adTlsMode,
+      ad_ca_certificate: saveFile(args.adCaCertificate),
     });
   }
 

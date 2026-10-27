@@ -17,6 +17,7 @@ export type CredentialType =
   | typeof PGP_CREDENTIAL_TYPE
   | typeof SMIME_CREDENTIAL_TYPE
   | typeof SNMP_CREDENTIAL_TYPE
+  | typeof ACTIVE_DIRECTORY_CREDENTIAL_TYPE
   | typeof USERNAME_PASSWORD_CREDENTIAL_TYPE
   | typeof USERNAME_SSH_KEY_CREDENTIAL_TYPE
   | typeof CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE
@@ -43,8 +44,16 @@ export type SNMPPrivacyAlgorithmType =
   | typeof SNMP_PRIVACY_ALGORITHM_AES
   | typeof SNMP_PRIVACY_ALGORITHM_DES;
 
+export type ActiveDirectoryTlsMode = 'ldaps' | 'starttls';
+
 export interface CredentialElement extends ModelElement {
   auth_algorithm?: SNMPAuthAlgorithmType;
+  host?: string;
+  port?: string;
+  bind_dn?: string;
+  base_dn?: string;
+  tls_mode?: ActiveDirectoryTlsMode;
+  ca_certificate?: string;
   certificate_info?: {
     activation_time?: string;
     expiration_time?: string;
@@ -111,6 +120,12 @@ interface PublicKeyInfo {
 
 interface CredentialProperties extends ModelProperties {
   authAlgorithm?: SNMPAuthAlgorithmType;
+  adHost?: string;
+  adPort?: string;
+  adBindDn?: string;
+  adBaseDn?: string;
+  adTlsMode?: ActiveDirectoryTlsMode;
+  adCaCertificate?: string;
   certificateInfo?: CertificateInfo;
   credentialStore?: CredentialStore;
   credentialType?: CredentialType;
@@ -133,6 +148,7 @@ export const PGP_CREDENTIAL_TYPE = 'pgp';
 export const PASSWORD_ONLY_CREDENTIAL_TYPE = 'pw';
 export const CERTIFICATE_CREDENTIAL_TYPE = 'cc';
 export const KRB5_CREDENTIAL_TYPE = 'krb5';
+export const ACTIVE_DIRECTORY_CREDENTIAL_TYPE = 'ad';
 
 // Credential Store credential types
 export const CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE = 'cs_up';
@@ -198,6 +214,7 @@ export const ALL_CREDENTIAL_TYPES: readonly CredentialType[] = [
   PASSWORD_ONLY_CREDENTIAL_TYPE,
   CERTIFICATE_CREDENTIAL_TYPE,
   KRB5_CREDENTIAL_TYPE,
+  ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
   CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE,
   CREDENTIAL_STORE_USERNAME_SSH_KEY_CREDENTIAL_TYPE,
   CREDENTIAL_STORE_CERTIFICATE_CREDENTIAL_TYPE,
@@ -255,6 +272,7 @@ const TYPE_NAMES = {
   [PASSWORD_ONLY_CREDENTIAL_TYPE]: _l('Password only'),
   [SMIME_CREDENTIAL_TYPE]: _l('S/MIME Certificate'),
   [KRB5_CREDENTIAL_TYPE]: _l('SMB (Kerberos)'),
+  [ACTIVE_DIRECTORY_CREDENTIAL_TYPE]: _l('Active Directory'),
   [CREDENTIAL_STORE_USERNAME_PASSWORD_CREDENTIAL_TYPE]: _l(
     'Credential Store Username + Password',
   ),
@@ -302,6 +320,12 @@ class Credential extends Model {
   static readonly entityType = 'credential';
 
   readonly authAlgorithm?: SNMPAuthAlgorithmType;
+  readonly adHost?: string;
+  readonly adPort?: string;
+  readonly adBindDn?: string;
+  readonly adBaseDn?: string;
+  readonly adTlsMode?: ActiveDirectoryTlsMode;
+  readonly adCaCertificate?: string;
   readonly certificateInfo?: CertificateInfo;
   readonly credentialStore?: CredentialStore;
   readonly credentialType?: CredentialType;
@@ -317,6 +341,12 @@ class Credential extends Model {
 
   constructor({
     authAlgorithm,
+    adHost,
+    adPort,
+    adBindDn,
+    adBaseDn,
+    adTlsMode,
+    adCaCertificate,
     certificateInfo,
     credentialStore,
     credentialType,
@@ -334,6 +364,12 @@ class Credential extends Model {
     super(properties);
 
     this.authAlgorithm = authAlgorithm;
+    this.adHost = adHost;
+    this.adPort = adPort;
+    this.adBindDn = adBindDn;
+    this.adBaseDn = adBaseDn;
+    this.adTlsMode = adTlsMode;
+    this.adCaCertificate = adCaCertificate;
     this.certificateInfo = certificateInfo;
     this.credentialStore = credentialStore;
     this.credentialType = credentialType;
@@ -356,6 +392,12 @@ class Credential extends Model {
     const ret = super.parseElement(element) as CredentialProperties;
 
     ret.authAlgorithm = element.auth_algorithm;
+    ret.adHost = element.host;
+    ret.adPort = element.port;
+    ret.adBindDn = element.bind_dn;
+    ret.adBaseDn = element.base_dn;
+    ret.adTlsMode = element.tls_mode;
+    ret.adCaCertificate = element.ca_certificate;
 
     if (isDefined(element.certificate_info)) {
       ret.certificateInfo = {

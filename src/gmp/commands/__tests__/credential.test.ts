@@ -8,6 +8,7 @@ import CredentialCommand from 'gmp/commands/credential';
 import {createHttp, createActionResultResponse} from 'gmp/commands/testing';
 import {
   CERTIFICATE_CREDENTIAL_TYPE,
+  ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
   CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
   CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
   KRB5_CREDENTIAL_TYPE,
@@ -18,6 +19,71 @@ const privateKey = new File(['private_key'], 'key.pem');
 const publicKey = new File(['public_key'], 'key.pub');
 
 describe('CredentialCommand tests', () => {
+  test('should create Active Directory credential', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new CredentialCommand(fakeHttp);
+    const adCaCertificate = new File(['ca-certificate'], 'ca.pem');
+
+    await cmd.createActiveDirectory({
+      name: 'ad-credential',
+      credentialType: ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
+      adHost: 'ad.example.com',
+      adPort: '636',
+      adBindDn: 'CN=Scanner,DC=example,DC=com',
+      adBindPassword: 'secret',
+      adBaseDn: 'DC=example,DC=com',
+      adTlsMode: 'ldaps',
+      adCaCertificate,
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith(
+      'post',
+      expect.objectContaining({
+        data: expect.objectContaining({
+          cmd: 'create_credential',
+          credential_type: ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
+          ad_host: 'ad.example.com',
+          ad_port: '636',
+          ad_bind_dn: 'CN=Scanner,DC=example,DC=com',
+          ad_bind_password: 'secret',
+          ad_base_dn: 'DC=example,DC=com',
+          ad_tls_mode: 'ldaps',
+          ad_ca_certificate: adCaCertificate,
+        }),
+      }),
+    );
+  });
+
+  test('should save Active Directory credential and clear optional fields', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new CredentialCommand(fakeHttp);
+
+    await cmd.saveActiveDirectory({
+      id: 'ad-id',
+      name: 'ad-credential',
+      credentialType: ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
+      adBindPassword: 'new-secret',
+      adPort: null,
+      adCaCertificate: null,
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith(
+      'post',
+      expect.objectContaining({
+        data: expect.objectContaining({
+          cmd: 'save_credential',
+          credential_id: 'ad-id',
+          credential_type: ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
+          ad_bind_password: 'new-secret',
+          ad_port: '',
+          ad_ca_certificate: '',
+        }),
+      }),
+    );
+  });
+
   test('should create KRB5 credential with empty kdcs', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
