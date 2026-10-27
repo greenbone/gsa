@@ -16,6 +16,7 @@ import {
 } from 'web/testing';
 import Features from 'gmp/capabilities/features';
 import Credential, {
+  ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
   ALL_CREDENTIAL_TYPES,
   CERTIFICATE_CREDENTIAL_TYPE,
   CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
@@ -394,6 +395,130 @@ describe('CredentialDialog tests', () => {
 
     const kdcs = screen.getByName('kdcs');
     expect(kdcs).toHaveValue('');
+  });
+
+  test('should only offer Active Directory when its feature is enabled', async () => {
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      features: new Features([]),
+    });
+
+    render(<CredentialDialog types={ALL_CREDENTIAL_TYPES} />);
+
+    const typeSelect = screen.getSelectElementByLabel('Type');
+    const options = await getSelectItemElementsForSelect(typeSelect);
+
+    expect(options.map(option => option.textContent)).not.toContain(
+      'Active Directory',
+    );
+  });
+
+  test('should render and save Active Directory fields', async () => {
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      features: new Features(['ENABLE_AD_INTEGRATION']),
+    });
+    const handleSave = testing.fn();
+
+    render(
+      <CredentialDialog
+        credentialType={ACTIVE_DIRECTORY_CREDENTIAL_TYPE}
+        types={ALL_CREDENTIAL_TYPES}
+        onSave={handleSave}
+      />,
+    );
+
+    expect(screen.getByName('adHost')).toBeVisible();
+    expect(screen.getByName('adPort')).toBeVisible();
+    expect(screen.getByName('adBindDn')).toBeVisible();
+    expect(screen.getByName('adBindPassword')).toBeVisible();
+    expect(screen.getByName('adBaseDn')).toBeVisible();
+    expect(screen.getSelectElementByLabel('TLS Mode')).toBeVisible();
+    expect(screen.getByName('adCaCertificate')).toBeInTheDocument();
+
+    const caCertificate = new File(
+      ['-----BEGIN CERTIFICATE-----\ncertificate'],
+      'ad-ca.pem',
+      {type: 'application/x-pem-file'},
+    );
+
+    changeInputValue(screen.getByName('name'), 'AD credential');
+    changeInputValue(screen.getByName('adHost'), 'ad.example.com');
+    changeInputValue(screen.getByName('adPort'), '636');
+    changeInputValue(
+      screen.getByName('adBindDn'),
+      'CN=Scanner,DC=example,DC=com',
+    );
+    changeInputValue(screen.getByName('adBindPassword'), 'bind-secret');
+    changeInputValue(screen.getByName('adBaseDn'), 'DC=example,DC=com');
+    fireEvent.change(screen.getByName('adCaCertificate'), {
+      target: {files: [caCertificate]},
+    });
+
+    const tlsMode = screen.getSelectElementByLabel('TLS Mode');
+    fireEvent.click(tlsMode);
+    const tlsOptions = await getSelectItemElementsForSelect(tlsMode);
+    fireEvent.click(tlsOptions[1]);
+
+    fireEvent.click(screen.getDialogSaveButton());
+
+    expect(handleSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        credentialType: ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
+        adHost: 'ad.example.com',
+        adPort: '636',
+        adBindDn: 'CN=Scanner,DC=example,DC=com',
+        adBindPassword: 'bind-secret',
+        adBaseDn: 'DC=example,DC=com',
+        adTlsMode: 'starttls',
+        adCaCertificate: caCertificate,
+      }),
+    );
+  });
+
+  test('should prefill Active Directory fields and keep password write-only', () => {
+    const adCredential = Credential.fromElement({
+      _id: 'ad-id',
+      name: 'AD credential',
+      comment: 'AD comment',
+      type: ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
+      host: 'ad.example.com',
+      port: '636',
+      bind_dn: 'CN=Scanner,DC=example,DC=com',
+      base_dn: 'DC=example,DC=com',
+      tls_mode: 'ldaps',
+      ca_certificate: '-----BEGIN CERTIFICATE-----',
+    });
+    const adCaCertificate = new File([], 'existing-ad-ca.pem');
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      features: new Features(['ENABLE_AD_INTEGRATION']),
+    });
+
+    render(
+      <CredentialDialog
+        adCaCertificate={adCaCertificate}
+        credential={adCredential}
+        credentialType={ACTIVE_DIRECTORY_CREDENTIAL_TYPE}
+        types={[ACTIVE_DIRECTORY_CREDENTIAL_TYPE]}
+      />,
+    );
+
+    expect(screen.getByName('adHost')).toHaveValue('ad.example.com');
+    expect(screen.getByName('adPort')).toHaveValue(636);
+    expect(screen.getByName('adBindDn')).toHaveValue(
+      'CN=Scanner,DC=example,DC=com',
+    );
+    expect(screen.getByName('adBindPassword')).toHaveValue('');
+    expect(screen.getByName('adBindPassword')).toBeDisabled();
+    expect(screen.getByName('adBaseDn')).toHaveValue('DC=example,DC=com');
+    expect(screen.getSelectElementByLabel('TLS Mode')).toHaveValue('LDAPS');
+    expect(
+      screen.getByRole('button', {name: 'CA Certificate (PEM)'}),
+    ).toHaveTextContent('existing-ad-ca.pem');
+
+    fireEvent.click(screen.getByLabelText('Replace existing password with'));
+    expect(screen.getByName('adBindPassword')).toBeEnabled();
   });
 
   test('should render form fields for Client Certificate', () => {

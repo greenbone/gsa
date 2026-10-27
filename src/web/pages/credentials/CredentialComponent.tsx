@@ -8,6 +8,7 @@ import {type CredentialDownloadFormat} from 'gmp/commands/credential';
 import {type EntityCommandParams} from 'gmp/commands/entity';
 import {
   ALL_CREDENTIAL_TYPES,
+  ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
   type SNMPAuthAlgorithmType,
   type default as Credential,
   type CredentialType,
@@ -89,6 +90,7 @@ const CredentialComponent = ({
 
   const [comment, setComment] = useState<string | undefined>();
   const [certificate, setCertificate] = useState<File | undefined>();
+  const [adCaCertificate, setAdCaCertificate] = useState<File | undefined>();
   const [credential, setCredential] = useState<Credential | undefined>();
   const [credentialType, setCredentialType] = useState<
     CredentialType | undefined
@@ -124,6 +126,11 @@ const CredentialComponent = ({
           ? createFakeFile('certificate', credential.id as string, 'pem')
           : undefined,
       );
+      setAdCaCertificate(
+        isDefined(credential.adCaCertificate)
+          ? createFakeFile('ad-ca-certificate', credential.id as string, 'pem')
+          : undefined,
+      );
       setPrivateKey(
         isDefined(credential.privateKeyInfo)
           ? createFakeFile('private-key', credential.id as string, 'key')
@@ -150,6 +157,7 @@ const CredentialComponent = ({
       // reset all values in state to not show values from last edit
       setAuthAlgorithm(undefined);
       setCertificate(undefined);
+      setAdCaCertificate(undefined);
       setComment(undefined);
       setCredential(undefined);
       setCredentialLogin(undefined);
@@ -203,6 +211,13 @@ const CredentialComponent = ({
       if (data.credentialType === KRB5_CREDENTIAL_TYPE) {
         return gmp.credential.saveKrb5({id: data.id as string, ...data});
       }
+      if (data.credentialType === ACTIVE_DIRECTORY_CREDENTIAL_TYPE) {
+        return gmp.credential.saveActiveDirectory({
+          ...data,
+          adCaCertificate: data.adCaCertificate ?? undefined,
+          id: data.id as string,
+        });
+      }
       // Regular credentials use the clean base save method
       return gmp.credential.save({id: data.id as string, ...data});
     },
@@ -216,6 +231,12 @@ const CredentialComponent = ({
       }
       if (data.credentialType === KRB5_CREDENTIAL_TYPE) {
         return gmp.credential.createKrb5(data);
+      }
+      if (data.credentialType === ACTIVE_DIRECTORY_CREDENTIAL_TYPE) {
+        return gmp.credential.createActiveDirectory({
+          ...data,
+          adCaCertificate: data.adCaCertificate ?? undefined,
+        });
       }
       // Regular credentials use the clean base create method
       return gmp.credential.create(data);
@@ -261,6 +282,7 @@ const CredentialComponent = ({
       {dialogVisible && (
         <CredentialDialog
           authAlgorithm={authAlgorithm}
+          adCaCertificate={adCaCertificate}
           certificate={certificate}
           comment={comment}
           credential={credential}

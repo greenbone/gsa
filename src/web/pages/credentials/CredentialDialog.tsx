@@ -3,12 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState} from 'react';
+import { useState } from "react";
 import {
   type default as Credential,
   type CredentialType,
   type SNMPAuthAlgorithmType,
   type SNMPPrivacyAlgorithmType,
+  type ActiveDirectoryTlsMode,
   ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
   CERTIFICATE_CREDENTIAL_TYPE,
   getCredentialTypeName,
@@ -24,29 +25,30 @@ import {
   SNMP_PRIVACY_ALGORITHM_NONE,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
-} from 'gmp/models/credential';
-import {parseBoolean} from 'gmp/parser';
-import {first, map} from 'gmp/utils/array';
-import {isDefined, isString} from 'gmp/utils/identity';
-import SaveDialog from 'web/components/dialog/SaveDialog';
-import Checkbox from 'web/components/form/Checkbox';
-import FileField from 'web/components/form/FileField';
-import FormGroup from 'web/components/form/FormGroup';
-import MultiValueTextField from 'web/components/form/MultiValueTextField';
-import PasswordField from 'web/components/form/PasswordField';
-import Radio from 'web/components/form/Radio';
-import Select from 'web/components/form/Select';
-import TextField from 'web/components/form/TextField';
-import YesNoRadio from 'web/components/form/YesNoRadio';
+} from "gmp/models/credential";
+import { parseBoolean } from "gmp/parser";
+import { first, map } from "gmp/utils/array";
+import { isDefined, isString } from "gmp/utils/identity";
+import SaveDialog from "web/components/dialog/SaveDialog";
+import Checkbox from "web/components/form/Checkbox";
+import FileField from "web/components/form/FileField";
+import FormGroup from "web/components/form/FormGroup";
+import MultiValueTextField from "web/components/form/MultiValueTextField";
+import PasswordField from "web/components/form/PasswordField";
+import Radio from "web/components/form/Radio";
+import Select from "web/components/form/Select";
+import TextField from "web/components/form/TextField";
+import YesNoRadio from "web/components/form/YesNoRadio";
 import useCredentialStore, {
   isCredentialStoreType,
-} from 'web/hooks/useCredentialStore';
-import useFeatures from 'web/hooks/useFeatures';
-import useGmp from 'web/hooks/useGmp';
-import useTranslation from 'web/hooks/useTranslation';
-import CredentialStoreDialogFields from 'web/pages/credentials/CredentialStoreDialogFields';
+} from "web/hooks/useCredentialStore";
+import useFeatures from "web/hooks/useFeatures";
+import useGmp from "web/hooks/useGmp";
+import useTranslation from "web/hooks/useTranslation";
+import CredentialStoreDialogFields from "web/pages/credentials/CredentialStoreDialogFields";
 
 interface CredentialDialogValues {
+  adCaCertificate?: File | null;
   autogenerate: boolean;
   certificate?: File | null;
   credentialType: CredentialType;
@@ -59,6 +61,12 @@ interface CredentialDialogValues {
 }
 
 interface CredentialDialogDefaultValues {
+  adBaseDn?: string;
+  adBindDn?: string;
+  adBindPassword?: string;
+  adHost?: string;
+  adPort?: string;
+  adTlsMode?: ActiveDirectoryTlsMode;
   authAlgorithm?: SNMPAuthAlgorithmType;
   comment?: string;
   community?: string;
@@ -79,6 +87,7 @@ export type CredentialDialogState = CredentialDialogValues &
   CredentialDialogDefaultValues;
 
 interface CredentialDialogProps {
+  adCaCertificate?: File;
   authAlgorithm?: SNMPAuthAlgorithmType;
   autogenerate?: boolean;
   certificate?: File;
@@ -129,18 +138,19 @@ const validateContent = (
   }
 };
 
-const PGP_PUBLIC_KEY_LINE = '-----BEGIN PGP PUBLIC KEY BLOCK-----';
-const CLIENT_CERTIFICATE_LINE = '-----BEGIN CERTIFICATE-----';
+const PGP_PUBLIC_KEY_LINE = "-----BEGIN PGP PUBLIC KEY BLOCK-----";
+const CLIENT_CERTIFICATE_LINE = "-----BEGIN CERTIFICATE-----";
 const CLIENT_ENCRYPTED_PRIVATE_KEY_LINE =
-  '-----BEGIN ENCRYPTED PRIVATE KEY-----';
+  "-----BEGIN ENCRYPTED PRIVATE KEY-----";
 const CLIENT_PRIVATE_KEY_REGEX = /-----BEGIN (?:ENCRYPTED )?PRIVATE KEY-----/;
 const SSH_KEY_REGEX = /-----BEGIN \w+ PRIVATE KEY-----/;
 
 const CredentialDialog = ({
+  adCaCertificate: initialAdCaCertificate,
   authAlgorithm = SNMP_AUTH_ALGORITHM_SHA1,
   autogenerate: initialAutogenerate = false,
   certificate: initialCertificate,
-  comment = '',
+  comment = "",
   community,
   credential,
   credentialLogin,
@@ -162,8 +172,8 @@ const CredentialDialog = ({
   onSave,
 }: CredentialDialogProps) => {
   const [_] = useTranslation();
-  title = title ?? _('New Credential');
-  name = name ?? _('Unnamed');
+  title = title ?? _("New Credential");
+  name = name ?? _("Unnamed");
 
   const [credentialType, setCredentialType] = useState<
     CredentialType | undefined
@@ -177,6 +187,9 @@ const CredentialDialog = ({
   const [certificate, setCertificate] = useState<File | undefined | null>(
     initialCertificate,
   );
+  const [adCaCertificate, setAdCaCertificate] = useState<
+    File | undefined | null
+  >(initialAdCaCertificate);
   const [privateKey, setPrivateKey] = useState<File | undefined | null>(
     initialPrivateKey,
   );
@@ -190,6 +203,8 @@ const CredentialDialog = ({
   const [changePassphrase, setChangePassphrase] = useState<boolean>(false);
   const [changePassword, setChangePassword] = useState<boolean>(false);
   const [changePrivacyPassword, setChangePrivacyPassword] =
+    useState<boolean>(false);
+  const [changeAdBindPassword, setChangeAdBindPassword] =
     useState<boolean>(false);
   // if we don't know if the private key is encrypted, we assume it is, so that the user can change the passphrase if they want to
   const [isEncryptedPrivateKey, setIsEncryptedPrivateKey] =
@@ -218,7 +233,7 @@ const CredentialDialog = ({
         await validateFile(
           file,
           PGP_PUBLIC_KEY_LINE,
-          _('Not a valid PGP file'),
+          _("Not a valid PGP file"),
         );
       }
       setPublicKey(file ?? null);
@@ -233,7 +248,7 @@ const CredentialDialog = ({
         await validateFile(
           file,
           CLIENT_CERTIFICATE_LINE,
-          _('Not a valid Client Certificate file'),
+          _("Not a valid Client Certificate file"),
         );
       }
       setCertificate(file ?? null);
@@ -246,6 +261,21 @@ const CredentialDialog = ({
     setCertificate(file ?? null);
   };
 
+  const handleAdCaCertificateChange = async (file: File | undefined) => {
+    try {
+      if (isDefined(file)) {
+        await validateFile(
+          file,
+          CLIENT_CERTIFICATE_LINE,
+          _("Not a valid CA Certificate file"),
+        );
+      }
+      setAdCaCertificate(file ?? null);
+    } catch (error) {
+      setError((error as Error).message);
+    }
+  };
+
   const handleClientKeyChange = async (file: File | undefined) => {
     try {
       if (isDefined(file)) {
@@ -253,7 +283,7 @@ const CredentialDialog = ({
         validateContent(
           content,
           CLIENT_PRIVATE_KEY_REGEX,
-          _('Not a valid Client Private Key file'),
+          _("Not a valid Client Private Key file"),
         );
         if (content.startsWith(CLIENT_ENCRYPTED_PRIVATE_KEY_LINE)) {
           setIsEncryptedPrivateKey(true);
@@ -276,7 +306,7 @@ const CredentialDialog = ({
         await validateFile(
           file,
           SSH_KEY_REGEX,
-          _('Not a valid Private SSH Key file'),
+          _("Not a valid Private SSH Key file"),
         );
       }
       setPrivateKey(file ?? null);
@@ -297,9 +327,9 @@ const CredentialDialog = ({
   };
 
   const validateKdc = (val: string) => {
-    const invalid = !val.includes(' ');
+    const invalid = !val.includes(" ");
     if (!invalid) {
-      setError(_('Invalid kdc value(s)'));
+      setError(_("Invalid kdc value(s)"));
     }
     return invalid;
   };
@@ -307,17 +337,17 @@ const CredentialDialog = ({
   const gmp = useGmp();
   const features = useFeatures();
 
-  const enabledTypes = types.filter(type => {
+  const enabledTypes = types.filter((type) => {
     return !(
       (type === KRB5_CREDENTIAL_TYPE && !gmp.settings.enableKrb5) ||
       (type === ACTIVE_DIRECTORY_CREDENTIAL_TYPE &&
-        !features.featureEnabled('ENABLE_AD_INTEGRATION')) ||
+        !features.featureEnabled("ENABLE_AD_INTEGRATION")) ||
       (isCredentialStoreType(type) &&
-        !features.featureEnabled('ENABLE_CREDENTIAL_STORES'))
+        !features.featureEnabled("ENABLE_CREDENTIAL_STORES"))
     );
   });
 
-  const typeOptions = map(enabledTypes, type => ({
+  const typeOptions = map(enabledTypes, (type) => ({
     label: getCredentialTypeName(type),
     value: type,
   }));
@@ -338,6 +368,12 @@ const CredentialDialog = ({
     <SaveDialog<CredentialDialogValues, CredentialDialogDefaultValues>
       defaultValues={{
         authAlgorithm,
+        adBaseDn: credential?.adBaseDn,
+        adBindDn: credential?.adBindDn,
+        adBindPassword: undefined,
+        adHost: credential?.adHost,
+        adPort: credential?.adPort,
+        adTlsMode: credential?.adTlsMode,
         comment,
         community,
         credentialLogin,
@@ -356,6 +392,7 @@ const CredentialDialog = ({
       title={title}
       values={{
         autogenerate,
+        adCaCertificate,
         credentialType: cType as CredentialType,
         passphrase,
         publicKey,
@@ -367,19 +404,19 @@ const CredentialDialog = ({
       onErrorClose={handleErrorClose}
       onSave={onSave}
     >
-      {({values: state, onValueChange}) => {
+      {({ values: state, onValueChange }) => {
         return (
           <>
             <TextField
               name="name"
-              title={_('Name')}
+              title={_("Name")}
               value={state.name}
               onChange={onValueChange}
             />
 
             <TextField
               name="comment"
-              title={_('Comment')}
+              title={_("Comment")}
               value={state.comment}
               onChange={onValueChange}
             />
@@ -387,9 +424,9 @@ const CredentialDialog = ({
             <Select
               disabled={isEdit || types.length < 2}
               items={typeOptions}
-              label={_('Type')}
+              label={_("Type")}
               value={state.credentialType}
-              onChange={value =>
+              onChange={(value) =>
                 setCredentialTypeAndAutoGenerate(
                   value as CredentialType,
                   state.autogenerate,
@@ -415,14 +452,14 @@ const CredentialDialog = ({
             {(state.credentialType === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
               state.credentialType === USERNAME_SSH_KEY_CREDENTIAL_TYPE) &&
               !isEdit && (
-                <FormGroup title={_('Auto-generate')}>
+                <FormGroup title={_("Auto-generate")}>
                   <YesNoRadio<boolean>
                     convert={parseBoolean}
                     name="autogenerate"
                     noValue={false}
                     value={state.autogenerate}
                     yesValue={true}
-                    onChange={value =>
+                    onChange={(value) =>
                       setCredentialTypeAndAutoGenerate(
                         state.credentialType,
                         value,
@@ -433,15 +470,15 @@ const CredentialDialog = ({
               )}
 
             {state.credentialType === SNMP_CREDENTIAL_TYPE && (
-              <FormGroup direction="row" title={_('SNMP Community')}>
+              <FormGroup direction="row" title={_("SNMP Community")}>
                 {isEdit && (
                   <Checkbox<boolean>
                     checked={changeCommunity}
                     checkedValue={true}
                     name="changeCommunity"
-                    title={_('Replace existing SNMP community with')}
+                    title={_("Replace existing SNMP community with")}
                     unCheckedValue={false}
-                    onChange={value => setChangeCommunity(value)}
+                    onChange={(value) => setChangeCommunity(value)}
                   />
                 )}
                 <PasswordField
@@ -460,7 +497,7 @@ const CredentialDialog = ({
               state.credentialType === KRB5_CREDENTIAL_TYPE) && (
               <TextField
                 name="credentialLogin"
-                title={_('Username')}
+                title={_("Username")}
                 value={state.credentialLogin}
                 onChange={onValueChange}
               />
@@ -470,15 +507,15 @@ const CredentialDialog = ({
               state.credentialType === SNMP_CREDENTIAL_TYPE ||
               state.credentialType === KRB5_CREDENTIAL_TYPE ||
               state.credentialType === PASSWORD_ONLY_CREDENTIAL_TYPE) && (
-              <FormGroup direction="row" title={_('Password')}>
+              <FormGroup direction="row" title={_("Password")}>
                 {isEdit && (
                   <Checkbox<boolean>
                     checked={changePassword}
                     checkedValue={true}
                     name="changePassword"
-                    title={_('Replace existing password with')}
+                    title={_("Replace existing password with")}
                     unCheckedValue={false}
-                    onChange={value => setChangePassword(value)}
+                    onChange={(value) => setChangePassword(value)}
                   />
                 )}
                 <PasswordField
@@ -497,23 +534,23 @@ const CredentialDialog = ({
                 <FileField
                   disabled={state.autogenerate}
                   name="privateKey"
-                  title={_('Private SSH Key')}
+                  title={_("Private SSH Key")}
                   value={state.privateKey}
                   onChange={handlePrivateKeyChange}
                 />
 
                 <FormGroup
                   direction="row"
-                  title={_('Passphrase for Private SSH Key')}
+                  title={_("Passphrase for Private SSH Key")}
                 >
                   {isEdit && (
                     <Checkbox<boolean>
                       checked={changePassphrase}
                       checkedValue={true}
                       name="changePassphrase"
-                      title={_('Replace existing passphrase with')}
+                      title={_("Replace existing passphrase with")}
                       unCheckedValue={false}
-                      onChange={value => setChangePassphrase(value)}
+                      onChange={(value) => setChangePassphrase(value)}
                     />
                   )}
                   <PasswordField
@@ -534,28 +571,28 @@ const CredentialDialog = ({
               <>
                 <FileField
                   name="certificate"
-                  title={_('Client Certificate')}
+                  title={_("Client Certificate")}
                   value={state.certificate}
                   onChange={handleClientCertificateChange}
                 />
                 <FileField
                   disabled={state.autogenerate}
                   name="privateKey"
-                  title={_('Client Private Key')}
+                  title={_("Client Private Key")}
                   value={state.privateKey}
                   onChange={handleClientKeyChange}
                 />
 
                 <FormGroup
                   direction="row"
-                  title={_('Passphrase for Client Private Key')}
+                  title={_("Passphrase for Client Private Key")}
                 >
                   {isEdit && isEncryptedPrivateKey && (
                     <Checkbox<boolean>
                       checked={changePassphrase}
                       checkedValue={true}
                       name="changePassphrase"
-                      title={_('Replace existing passphrase with')}
+                      title={_("Replace existing passphrase with")}
                       unCheckedValue={false}
                       onChange={setChangePassphrase}
                     />
@@ -569,9 +606,9 @@ const CredentialDialog = ({
                     name="passphrase"
                     toolTipTitle={
                       isEncryptedPrivateKey
-                        ? _('Passphrase for encrypted Client Private Key')
+                        ? _("Passphrase for encrypted Client Private Key")
                         : _(
-                            'The client private key is not encrypted, so no passphrase is required',
+                            "The client private key is not encrypted, so no passphrase is required",
                           )
                     }
                     value={passphrase}
@@ -583,15 +620,15 @@ const CredentialDialog = ({
 
             {state.credentialType === SNMP_CREDENTIAL_TYPE && (
               <>
-                <FormGroup direction="row" title={_('Privacy Password')}>
+                <FormGroup direction="row" title={_("Privacy Password")}>
                   {isEdit && (
                     <Checkbox<boolean>
                       checked={changePrivacyPassword}
                       checkedValue={true}
                       name="changePrivacyPassword"
-                      title={_('Replace existing privacy password with')}
+                      title={_("Replace existing privacy password with")}
                       unCheckedValue={false}
-                      onChange={value => setChangePrivacyPassword(value)}
+                      onChange={(value) => setChangePrivacyPassword(value)}
                     />
                   )}
                   <PasswordField
@@ -606,7 +643,7 @@ const CredentialDialog = ({
                   />
                 </FormGroup>
 
-                <FormGroup direction="row" title={_('Auth Algorithm')}>
+                <FormGroup direction="row" title={_("Auth Algorithm")}>
                   <Radio
                     checked={state.authAlgorithm === SNMP_AUTH_ALGORITHM_MD5}
                     name="authAlgorithm"
@@ -623,7 +660,7 @@ const CredentialDialog = ({
                   />
                 </FormGroup>
 
-                <FormGroup direction="row" title={_('Privacy Algorithm')}>
+                <FormGroup direction="row" title={_("Privacy Algorithm")}>
                   <Radio
                     checked={
                       state.privacyAlgorithm === SNMP_PRIVACY_ALGORITHM_AES
@@ -647,7 +684,7 @@ const CredentialDialog = ({
                       state.privacyAlgorithm === SNMP_PRIVACY_ALGORITHM_NONE
                     }
                     name="privacyAlgorithm"
-                    title={_('None')}
+                    title={_("None")}
                     value={SNMP_PRIVACY_ALGORITHM_NONE}
                     onChange={onValueChange}
                   />
@@ -658,7 +695,7 @@ const CredentialDialog = ({
             {state.credentialType === PGP_CREDENTIAL_TYPE && (
               <FileField
                 name="publicKey"
-                title={_('Public PGP Key')}
+                title={_("Public PGP Key")}
                 value={state.publicKey}
                 onChange={handlePublicGPGKeyChange}
               />
@@ -667,7 +704,7 @@ const CredentialDialog = ({
             {state.credentialType === SMIME_CREDENTIAL_TYPE && (
               <FileField
                 name="certificate"
-                title={_('S/MIME Certificate')}
+                title={_("S/MIME Certificate")}
                 value={state.certificate}
                 onChange={handleCertificateChange}
               />
@@ -677,19 +714,87 @@ const CredentialDialog = ({
               <>
                 <TextField
                   name="realm"
-                  title={_('Realm')}
+                  title={_("Realm")}
                   value={state.realm}
                   onChange={onValueChange}
                 />
                 <MultiValueTextField
                   name="kdcs"
                   placeholder={_(
-                    'Enter hostname or IP address, then press Enter to add KDC',
+                    "Enter hostname or IP address, then press Enter to add KDC",
                   )}
-                  title={_('Key Distribution Center')}
+                  title={_("Key Distribution Center")}
                   validate={validateKdc}
                   value={state.kdcs}
                   onChange={onValueChange}
+                />
+              </>
+            )}
+
+            {state.credentialType === ACTIVE_DIRECTORY_CREDENTIAL_TYPE && (
+              <>
+                <TextField
+                  name="adHost"
+                  title={_("Active Directory Host or Address")}
+                  value={state.adHost}
+                  onChange={onValueChange}
+                />
+                <TextField
+                  max={65535}
+                  min={1}
+                  name="adPort"
+                  title={_("Port")}
+                  type="number"
+                  value={state.adPort}
+                  onChange={onValueChange}
+                />
+                <TextField
+                  name="adBindDn"
+                  title={_("Bind DN")}
+                  value={state.adBindDn}
+                  onChange={onValueChange}
+                />
+                <FormGroup direction="row" title={_("Bind Password")}>
+                  {isEdit && (
+                    <Checkbox<boolean>
+                      checked={changeAdBindPassword}
+                      checkedValue={true}
+                      name="changeAdBindPassword"
+                      title={_("Replace existing password with")}
+                      unCheckedValue={false}
+                      onChange={(value) => setChangeAdBindPassword(value)}
+                    />
+                  )}
+                  <PasswordField
+                    autoComplete="new-password"
+                    disabled={isEdit && !changeAdBindPassword}
+                    grow="1"
+                    name="adBindPassword"
+                    value={state.adBindPassword}
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
+                <TextField
+                  name="adBaseDn"
+                  title={_("Base DN")}
+                  value={state.adBaseDn}
+                  onChange={onValueChange}
+                />
+                <Select<ActiveDirectoryTlsMode>
+                  items={[
+                    { label: _("LDAPS"), value: "ldaps" },
+                    { label: _("StartTLS"), value: "starttls" },
+                  ]}
+                  label={_("TLS Mode")}
+                  name="adTlsMode"
+                  value={state.adTlsMode}
+                  onChange={onValueChange}
+                />
+                <FileField
+                  name="adCaCertificate"
+                  title={_("CA Certificate (PEM)")}
+                  value={state.adCaCertificate}
+                  onChange={handleAdCaCertificateChange}
                 />
               </>
             )}
