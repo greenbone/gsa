@@ -4,7 +4,6 @@
  */
 
 import {useState} from 'react';
-import {Plus as PlusGlyph} from 'lucide-react';
 import styled from 'styled-components';
 import {type SchedulerCronEntry} from 'gmp/models/scanner';
 import FormGroup from 'web/components/form/FormGroup';
@@ -12,7 +11,7 @@ import NumberField from 'web/components/form/NumberField';
 import SchedulerCronField, {
   type SchedulerCronFieldProps,
 } from 'web/components/form/SchedulerCronField';
-import {XIcon} from 'web/components/icon';
+import {PlusIcon, XIcon} from 'web/components/icon';
 import InfoTip from 'web/components/info-tip/InfoTip';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
@@ -132,9 +131,7 @@ const SchedulerCronFields = ({
   const handleMaxDelayChange = (index: number, newValue: number) => {
     onChange(
       value.map((entry, entryIndex) =>
-        entryIndex === index
-          ? {...entry, maxDelaySeconds: newValue}
-          : entry,
+        entryIndex === index ? {...entry, maxDelaySeconds: newValue} : entry,
       ),
     );
   };
@@ -221,7 +218,7 @@ const SchedulerCronFields = ({
               type="button"
               onClick={handleAdd}
             >
-              <PlusGlyph aria-hidden="true" size={16} />
+              <PlusIcon size={['16px', '16px']} />
               {_('Add another schedule')}
             </AddScheduleButton>
           </Row>

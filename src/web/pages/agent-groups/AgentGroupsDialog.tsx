@@ -172,6 +172,7 @@ const AgentGroupsDialog = ({
             {state.agentController && agentsData && (
               <SchedulerCronFields
                 activeCronExpressions={[schedulerCron]}
+                allowMultipleSchedules={false}
                 infoTip={
                   agentGroup
                     ? _(
@@ -182,7 +183,6 @@ const AgentGroupsDialog = ({
                 infoTipAriaLabel={_('More information about scheduler')}
                 name="schedulerCronExpression"
                 title={_('Scheduler Options')}
-                allowMultipleSchedules={false}
                 value={[
                   {
                     cron: state.schedulerCronExpression ?? '',

@@ -46,11 +46,6 @@ interface ScannerConfigValues
 type ConfigFieldKey = keyof ScannerConfigValues;
 type FormValue = ScannerConfigValues[ConfigFieldKey];
 
-const sortSchedulerCronTimes = (entries: SchedulerCronEntry[]) =>
-  [...entries].sort((first, second) =>
-    first.cron < second.cron ? -1 : first.cron > second.cron ? 1 : 0,
-  );
-
 const SchedulerSummaryCard = styled.div`
   padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
   border: 1px solid ${Theme.lightBlue};
@@ -123,7 +118,7 @@ const getScannerPayload = (scanner: Scanner): ScannerConfigValues => {
     bulkThrottleTimeInMs:
       agentDefaults?.agentScriptExecutor.bulkThrottleTimeInMs ?? 0,
     indexerDirDepth: agentDefaults?.agentScriptExecutor.indexerDirDepth ?? 0,
-    schedulerCronTimes: sortSchedulerCronTimes(cronTimes ?? []),
+    schedulerCronTimes: cronTimes ?? [],
     intervalInSeconds: agentDefaults?.heartbeat.intervalInSeconds ?? 0,
     missUntilInactive: agentDefaults?.heartbeat.missUntilInactive ?? 0,
     updateToLatest: agentControlDefaults?.updateToLatest ?? false,
@@ -213,9 +208,9 @@ const EditableConfigField = ({
       title={field.title}
       viewComponent={field.renderView(fieldValue)}
       onCancel={onCancel}
+      onClear={onClear}
       onEdit={() => onEdit(fieldValue)}
       onSave={onSave}
-      onClear={onClear}
     />
   );
 };
@@ -234,7 +229,6 @@ const ScannerAgentConfigSettings = ({
       onError: error => onError(new Error(error.message)),
     });
 
-  const agentDefaults = scanner.agentControlConfig?.agentDefaults;
   const [savedValues, setSavedValues] = useState<{
     scanner: Scanner;
     values: Partial<ScannerConfigValues>;
@@ -300,11 +294,7 @@ const ScannerAgentConfigSettings = ({
 
     const payload = fieldValues;
     const value = valueOverride ?? editValues[key];
-    const editedValue =
-      key === 'schedulerCronTimes' &&
-      Array.isArray(value)
-        ? sortSchedulerCronTimes(value as SchedulerCronEntry[])
-        : value;
+    const editedValue = value;
     const updateToLatest =
       key === 'updateToLatest' ? editedValue : payload.updateToLatest;
 

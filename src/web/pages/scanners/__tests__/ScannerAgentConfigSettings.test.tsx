@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {fireEvent, rendererWith, screen, wait} from 'web/testing';
+import {fireEvent, rendererWith, screen, wait, within} from 'web/testing';
 import Scanner, {AGENT_CONTROLLER_SCANNER_TYPE} from 'gmp/models/scanner';
 import {YES_VALUE} from 'gmp/parser';
 import {createSession} from 'gmp/testing';
@@ -545,6 +545,86 @@ describe('ScannerAgentConfigSettings multiple schedules', () => {
     ];
     return scanner;
   };
+
+  test('preserves fetched schedule order and cron-delay pairs in view, edit, and save', async () => {
+    const schedules = [
+      {cron: '0 8 * * *', maxDelaySeconds: 44},
+      {cron: '0 2 * * *', maxDelaySeconds: 12},
+      {cron: '0 8 * * *', maxDelaySeconds: 7},
+    ];
+    let expectedSchedules = schedules;
+    const scanner = createMultiCronScanner();
+    const agentDefaults = scanner.agentControlConfig?.agentDefaults;
+    if (!agentDefaults) {
+      throw new Error('Mock scanner is missing agent defaults');
+    }
+    agentDefaults.agentScriptExecutor.schedulerCronTimes = schedules;
+
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, capabilities: true});
+    render(
+      <ScannerAgentConfigSettings scanner={scanner} onError={testing.fn()} />,
+    );
+
+    const expectViewOrder = () => {
+      expectedSchedules.forEach(({cron, maxDelaySeconds}, index) => {
+        const summary = screen.getByText(`Schedule ${index + 1}`).parentElement
+          ?.textContent;
+        expect(summary).toContain(cron);
+        expect(summary).toContain(`Max delay: ${maxDelaySeconds} seconds`);
+      });
+    };
+
+    const readEditOrder = () =>
+      expectedSchedules.map(({cron, maxDelaySeconds}, index) => {
+        const scheduleLabel = screen.getByText(`Schedule ${index + 1}`);
+        const scheduleFields = scheduleLabel.parentElement;
+        if (!scheduleFields) {
+          throw new Error('Schedule fields are missing');
+        }
+        return {
+          cron: (
+            within(scheduleFields).getByDisplayValue(cron) as HTMLInputElement
+          ).value,
+          maxDelaySeconds: Number(
+            (
+              within(scheduleFields).getByDisplayValue(
+                String(maxDelaySeconds),
+              ) as HTMLInputElement
+            ).value,
+          ),
+        };
+      });
+
+    expectViewOrder();
+    fireEvent.click(screen.getAllByTestId('edit-icon')[6]);
+    expect(readEditOrder()).toEqual(schedules);
+
+    const scheduleTwoFields = screen.getByText('Schedule 2').parentElement;
+    if (!scheduleTwoFields) {
+      throw new Error('Schedule 2 fields are missing');
+    }
+    fireEvent.change(within(scheduleTwoFields).getByDisplayValue('0 2 * * *'), {
+      target: {value: '0 1 * * *'},
+    });
+    fireEvent.change(within(scheduleTwoFields).getByDisplayValue('12'), {
+      target: {value: '21'},
+    });
+    expectedSchedules = [
+      schedules[0],
+      {cron: '0 1 * * *', maxDelaySeconds: 21},
+      schedules[2],
+    ];
+    expect(readEditOrder()).toEqual(expectedSchedules);
+
+    fireEvent.click(screen.getByTitle('Save'));
+    await wait();
+
+    expect(gmp.scanner.modifyAgentControlConfig).toHaveBeenCalledWith(
+      expect.objectContaining({schedulerCronTimes: expectedSchedules}),
+    );
+    expectViewOrder();
+  });
 
   test('preserves every schedule when saving another setting', async () => {
     const gmp = createGmp();
