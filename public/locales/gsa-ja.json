@@ -136,6 +136,7 @@
   "Activation": "有効化",
   "Active": "有効",
   "Active (unlimited)": "有効 (無期限)",
+  "Active Directory": "",
   "Active for > {{value}} days": "{{value}} 日以上有効",
   "Active for the next {{value}} days": "今後 {{value}} 日間有効",
   "Active until": "有効期限",

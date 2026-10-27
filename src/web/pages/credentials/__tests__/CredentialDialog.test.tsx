@@ -194,6 +194,35 @@ describe('CredentialDialog tests', () => {
     });
   });
 
+  test('should hide Active Directory when its feature is disabled', async () => {
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      features: new Features(),
+    });
+    render(<CredentialDialog types={ALL_CREDENTIAL_TYPES} />);
+
+    const options = await getSelectItemElementsForSelect(
+      screen.getSelectElement(),
+    );
+    expect(options.map(option => option.textContent)).not.toContain(
+      'Active Directory',
+    );
+  });
+
+  test('should show Active Directory when its feature is enabled', async () => {
+    const {render} = rendererWith({
+      gmp: createGmp(),
+      features: new Features(['ENABLE_AD_INTEGRATION']),
+    });
+    render(<CredentialDialog types={ALL_CREDENTIAL_TYPES} />);
+    const visibleAdOptions = await getSelectItemElementsForSelect(
+      screen.getSelectElement(),
+    );
+    expect(visibleAdOptions.map(option => option.textContent)).toContain(
+      'Active Directory',
+    );
+  });
+
   test('should allow to close the dialog', () => {
     const {render} = rendererWith({
       gmp: createGmp(),
