@@ -465,6 +465,7 @@
   "Complete": "Complete",
   "Complexity": "Complexity",
   "Compliance": "Compliance",
+  "Compliance Audit": "Compliance Audit",
   "Compliance Audit Reports": "Compliance Audit Reports",
   "Compliance Audits": "Compliance Audits",
   "Compliance is changed from {{deltaCompliance}}.": "Compliance is changed from {{deltaCompliance}}.",
