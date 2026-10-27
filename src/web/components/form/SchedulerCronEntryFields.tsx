@@ -4,15 +4,14 @@
  */
 
 import {type ReactNode} from 'react';
-import styled from 'styled-components';
 import {type SchedulerCronEntry} from 'gmp/models/scanner';
-import HighlightBox from 'web/components/highlight-box';
 import NumberField from 'web/components/form/NumberField';
 import SchedulerCronField from 'web/components/form/SchedulerCronField';
+import SchedulerCronLabel from 'web/components/form/SchedulerCronLabel';
+import HighlightBox from 'web/components/highlight-box';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
-import Theme from 'web/utils/theme';
 
 export const SchedulerCronCard = ({children}: {children: ReactNode}) => (
   <HighlightBox>
@@ -21,13 +20,6 @@ export const SchedulerCronCard = ({children}: {children: ReactNode}) => (
     </Row>
   </HighlightBox>
 );
-
-const ScheduleLabel = styled.div`
-  margin-bottom: 2px;
-  color: ${Theme.mediumGray};
-  font-size: var(--mantine-font-size-xs);
-  font-weight: 500;
-`;
 
 interface SchedulerCronEntryFieldsProps {
   value: SchedulerCronEntry;
@@ -53,9 +45,7 @@ const SchedulerCronEntryFields = ({
   return (
     <Column flex={1} gap="xs" style={{minWidth: 0}}>
       {scheduleNumber !== undefined && (
-        <ScheduleLabel>
-          {_('Schedule {{number}}', {number: scheduleNumber})}
-        </ScheduleLabel>
+        <SchedulerCronLabel number={scheduleNumber} />
       )}
       <SchedulerCronField
         compact

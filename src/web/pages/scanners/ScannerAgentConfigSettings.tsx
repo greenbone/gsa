@@ -14,9 +14,10 @@ import {
   type SchedulerCronEntry,
 } from 'gmp/models/scanner';
 import NumberField from 'web/components/form/NumberField';
-import HighlightBox from 'web/components/highlight-box';
 import Radio from 'web/components/form/Radio';
 import SchedulerCronFields from 'web/components/form/SchedulerCronFields';
+import SchedulerCronLabel from 'web/components/form/SchedulerCronLabel';
+import HighlightBox from 'web/components/highlight-box';
 import Column from 'web/components/layout/Column';
 import Layout from 'web/components/layout/Layout';
 import Row from 'web/components/layout/Row';
@@ -46,13 +47,6 @@ interface ScannerConfigValues
 
 type ConfigFieldKey = keyof ScannerConfigValues;
 type FormValue = ScannerConfigValues[ConfigFieldKey];
-
-const SchedulerSummaryLabel = styled.div`
-  margin-bottom: 2px;
-  color: ${Theme.mediumGray};
-  font-size: var(--mantine-font-size-xs);
-  font-weight: 500;
-`;
 
 const SchedulerSummaryCron = styled.div`
   color: ${Theme.black};
@@ -403,9 +397,7 @@ const ScannerAgentConfigSettings = ({
               <Column gap="xs">
                 {val.map(({cron, maxDelaySeconds}, index) => (
                   <HighlightBox key={`${cron}-${index}`}>
-                    <SchedulerSummaryLabel>
-                      {_('Schedule {{number}}', {number: index + 1})}
-                    </SchedulerSummaryLabel>
+                    <SchedulerCronLabel number={index + 1} />
                     <SchedulerSummaryCron>{cron}</SchedulerSummaryCron>
                     <SchedulerSummaryDelay>
                       {_('Max delay: {{delay}} seconds', {
