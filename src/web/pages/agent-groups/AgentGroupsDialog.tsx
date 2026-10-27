@@ -14,7 +14,10 @@ import {
 import {filter, map} from 'gmp/utils/array';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import MultiSelect from 'web/components/form/MultiSelect';
-import SchedulerCronFields from 'web/components/form/SchedulerCronFields';
+import SchedulerCronEntryFields, {
+  SchedulerCronCard,
+} from 'web/components/form/SchedulerCronEntryFields';
+import SchedulerCronGroup from 'web/components/form/SchedulerCronGroup';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import {useGetAgents} from 'web/hooks/use-query/agents';
@@ -170,9 +173,7 @@ const AgentGroupsDialog = ({
             )}
 
             {state.agentController && agentsData && (
-              <SchedulerCronFields
-                activeCronExpressions={[schedulerCron]}
-                allowMultipleSchedules={false}
+              <SchedulerCronGroup
                 infoTip={
                   agentGroup
                     ? _(
@@ -181,21 +182,25 @@ const AgentGroupsDialog = ({
                     : undefined
                 }
                 infoTipAriaLabel={_('More information about scheduler')}
-                name="schedulerCronExpression"
                 title={_('Scheduler Options')}
-                value={[
-                  {
-                    cron: state.schedulerCronExpression ?? '',
-                    maxDelaySeconds: state.maxDelaySeconds ?? 0,
-                  },
-                ]}
-                onChange={([entry]) => {
-                  if (entry) {
-                    onValueChange(entry.cron, 'schedulerCronExpression');
-                    onValueChange(entry.maxDelaySeconds, 'maxDelaySeconds');
-                  }
-                }}
-              />
+              >
+                <SchedulerCronCard>
+                  <SchedulerCronEntryFields
+                    activeCronExpression={schedulerCron}
+                    maxDelayName="schedulerCronExpression-maxDelay-0"
+                    name="schedulerCronExpression-0"
+                    scheduleNumber={1}
+                    value={{
+                      cron: state.schedulerCronExpression ?? '',
+                      maxDelaySeconds: state.maxDelaySeconds ?? 0,
+                    }}
+                    onChange={entry => {
+                      onValueChange(entry.cron, 'schedulerCronExpression');
+                      onValueChange(entry.maxDelaySeconds, 'maxDelaySeconds');
+                    }}
+                  />
+                </SchedulerCronCard>
+              </SchedulerCronGroup>
             )}
 
             {state.agentController && !agentsData && (

@@ -3,58 +3,34 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState} from 'react';
+import {type ReactNode, useState} from 'react';
 import styled from 'styled-components';
 import {type SchedulerCronEntry} from 'gmp/models/scanner';
-import FormGroup from 'web/components/form/FormGroup';
-import NumberField from 'web/components/form/NumberField';
-import SchedulerCronField, {
-  type SchedulerCronFieldProps,
-} from 'web/components/form/SchedulerCronField';
+import SchedulerCronEntryFields, {
+  SchedulerCronCard,
+} from 'web/components/form/SchedulerCronEntryFields';
+import SchedulerCronGroup from 'web/components/form/SchedulerCronGroup';
 import {PlusIcon, XIcon} from 'web/components/icon';
-import InfoTip from 'web/components/info-tip/InfoTip';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/theme';
 
-interface SchedulerCronFieldsProps extends Omit<
-  SchedulerCronFieldProps,
-  'value' | 'onChange' | 'activeCronExpression' | 'compact'
-> {
+interface SchedulerCronFieldsProps {
   value: SchedulerCronEntry[];
   activeCronExpressions?: string[];
   onChange: (value: SchedulerCronEntry[]) => void;
-  allowMultipleSchedules?: boolean;
+  disabled?: boolean;
+  name?: string;
+  title?: ReactNode;
+  infoTip?: ReactNode;
+  infoTipAriaLabel?: string;
 }
 
 interface SchedulerCronRow {
   id: number;
   activeCronExpression: string | undefined;
 }
-
-const Description = styled.p`
-  margin: 0;
-  color: ${Theme.mediumGray};
-  font-size: var(--mantine-font-size-xs);
-`;
-
-export const SchedulerCronCard = styled(Row)`
-  align-items: center;
-  gap: var(--mantine-spacing-sm);
-  padding: var(--mantine-spacing-sm);
-  border: 1px solid var(--mantine-color-gray-3);
-  border-radius: 4px;
-  background: var(--mantine-color-gray-0);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-`;
-
-const ScheduleLabel = styled.div`
-  margin-bottom: 2px;
-  color: ${Theme.mediumGray};
-  font-size: var(--mantine-font-size-xs);
-  font-weight: 500;
-`;
 
 const AddScheduleButton = styled.button`
   display: inline-flex;
@@ -100,7 +76,6 @@ const SchedulerCronFields = ({
   title,
   infoTip,
   infoTipAriaLabel,
-  allowMultipleSchedules = true,
 }: SchedulerCronFieldsProps) => {
   const [_] = useTranslation();
 
@@ -120,18 +95,10 @@ const SchedulerCronFields = ({
       },
   );
 
-  const handleChange = (index: number, newValue: string) => {
+  const handleChange = (index: number, newValue: SchedulerCronEntry) => {
     onChange(
       value.map((entry, entryIndex) =>
-        entryIndex === index ? {...entry, cron: newValue} : entry,
-      ),
-    );
-  };
-
-  const handleMaxDelayChange = (index: number, newValue: number) => {
-    onChange(
-      value.map((entry, entryIndex) =>
-        entryIndex === index ? {...entry, maxDelaySeconds: newValue} : entry,
+        entryIndex === index ? newValue : entry,
       ),
     );
   };
@@ -153,78 +120,47 @@ const SchedulerCronFields = ({
   };
 
   return (
-    <FormGroup
-      gap="xs"
-      title={
-        <>
-          {title || _('Scheduler Options')}
-          {infoTip && (
-            <InfoTip ariaLabel={infoTipAriaLabel ?? _('More information')}>
-              {infoTip}
-            </InfoTip>
-          )}
-        </>
-      }
+    <SchedulerCronGroup
+      infoTip={infoTip}
+      infoTipAriaLabel={infoTipAriaLabel}
+      title={title}
     >
-      <Description>
-        {_(
-          "Choose from the dropdown of common schedules, or select 'Custom cron expression' in the list to enter your own cron schedule.",
-        )}
-      </Description>
       <Column gap="sm">
         {displayedRows.map((row, index) => (
           <SchedulerCronCard key={row.id}>
-            <Column flex={1} gap="xs" style={{minWidth: 0}}>
-              <ScheduleLabel>
-                {_('Schedule {{number}}', {number: index + 1})}
-              </ScheduleLabel>
-              <SchedulerCronField
-                compact
-                activeCronExpression={row.activeCronExpression}
-                disabled={disabled}
-                name={`${name}-${row.id}`}
-                value={value[index]?.cron ?? ''}
-                onChange={newValue => handleChange(index, newValue)}
-              />
-              <NumberField
-                allowEmpty={false}
-                disabled={disabled}
-                min={0}
-                name={`${name}-maxDelay-${row.id}`}
-                title={_('Max delay (seconds)')}
-                type="int"
-                value={value[index]?.maxDelaySeconds ?? 0}
-                onChange={newValue => handleMaxDelayChange(index, newValue)}
-              />
-            </Column>
-            {allowMultipleSchedules && (
-              <XIcon
-                aria-label={_('Remove schedule {{number}}', {
-                  number: index + 1,
-                })}
-                disabled={disabled || value.length <= 1}
-                title={_('Remove schedule')}
-                onClick={() => handleRemove(index)}
-              />
-            )}
+            <SchedulerCronEntryFields
+              activeCronExpression={row.activeCronExpression}
+              disabled={disabled}
+              maxDelayName={`${name}-maxDelay-${row.id}`}
+              name={`${name}-${row.id}`}
+              scheduleNumber={index + 1}
+              value={value[index]}
+              onChange={newValue => handleChange(index, newValue)}
+            />
+            <XIcon
+              aria-label={_('Remove schedule {{number}}', {
+                number: index + 1,
+              })}
+              disabled={disabled || value.length <= 1}
+              title={_('Remove schedule')}
+              onClick={() => handleRemove(index)}
+            />
           </SchedulerCronCard>
         ))}
-        {allowMultipleSchedules && (
-          <Row justify="center" style={{marginTop: 4}}>
-            <AddScheduleButton
-              aria-label={_('Add schedule')}
-              disabled={disabled}
-              title={_('Add schedule')}
-              type="button"
-              onClick={handleAdd}
-            >
-              <PlusIcon size={['16px', '16px']} />
-              {_('Add another schedule')}
-            </AddScheduleButton>
-          </Row>
-        )}
+        <Row justify="center" style={{marginTop: 4}}>
+          <AddScheduleButton
+            aria-label={_('Add schedule')}
+            disabled={disabled}
+            title={_('Add schedule')}
+            type="button"
+            onClick={handleAdd}
+          >
+            <PlusIcon size={['16px', '16px']} />
+            {_('Add another schedule')}
+          </AddScheduleButton>
+        </Row>
       </Column>
-    </FormGroup>
+    </SchedulerCronGroup>
   );
 };
 
