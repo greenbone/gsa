@@ -399,7 +399,7 @@ class Scanner extends Model {
         if (isDefined(cronTimes)) {
           const items = Array.isArray(cronTimes) ? cronTimes : [cronTimes];
           schedulerCronTimes = items.map(item => {
-            const rawCron = typeof item === 'string' ? item : item.cron ?? '';
+            const rawCron = typeof item === 'string' ? item : (item.cron ?? '');
             const [cron] = rawCron.split('|');
             const rawDelay =
               typeof item === 'string'
