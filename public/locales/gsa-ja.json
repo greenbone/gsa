@@ -464,6 +464,7 @@
   "Complete": "完了",
   "Complexity": "複雑度",
   "Compliance": "コンプライアンス",
+  "Compliance Audit": "",
   "Compliance Audit Reports": "コンプライアンス監査レポート",
   "Compliance Audits": "コンプライアンス監査",
   "Compliance is changed from {{deltaCompliance}}.": "コンプライアンスは{{deltaCompliance}}から変更されています。",

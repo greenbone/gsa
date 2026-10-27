@@ -188,7 +188,7 @@ describe('AuditReportsPage tests', () => {
     // Table
     expect(header[0]).toHaveTextContent('Date');
     expect(header[1]).toHaveTextContent('Status');
-    expect(header[2]).toHaveTextContent('Task');
+    expect(header[2]).toHaveTextContent('Compliance Audit');
     expect(header[3]).toHaveTextContent('Compliant');
     expect(header[4]).toHaveTextContent('Yes');
     expect(header[5]).toHaveTextContent('No');

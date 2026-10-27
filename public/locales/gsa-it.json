@@ -464,6 +464,7 @@
   "Complete": "Completo",
   "Complexity": "Complessità",
   "Compliance": "Conformità",
+  "Compliance Audit": "Audit di conformità",
   "Compliance Audit Reports": "Report di audit di conformità",
   "Compliance Audits": "Audit di conformità",
   "Compliance is changed from {{deltaCompliance}}.": "La conformità è cambiata da {{deltaCompliance}}.",
