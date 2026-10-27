@@ -48,7 +48,7 @@ const AuditReportTableHeader = ({
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
           sortBy={sort ? 'task' : false}
-          title={_('Task')}
+          title={_('Compliance Audit')}
           width="33%"
           onSortChange={onSortChange}
         />
