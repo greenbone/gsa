@@ -8,17 +8,28 @@ import Features, {type Feature} from 'gmp/capabilities/features';
 
 describe('Features tests', () => {
   test('should check feature enabled', () => {
-    const featureList: Feature[] = ['CVSS3_RATINGS', 'ENABLE_OPENVASD'];
+    const featureList: Feature[] = [
+      'CVSS3_RATINGS',
+      'ENABLE_OPENVASD',
+      'ENABLE_AD_INTEGRATION',
+    ];
     const features = new Features(featureList);
 
     expect(features.featureEnabled('CVSS3_RATINGS')).toBe(true);
     expect(features.featureEnabled('ENABLE_OPENVASD')).toBe(true);
+    expect(features.featureEnabled('ENABLE_AD_INTEGRATION')).toBe(true);
     // @ts-expect-error
     expect(features.featureEnabled('enable_openvasd')).toBe(true);
     expect(features.featureEnabled('FEED_VT_METADATA')).toBe(false);
     expect(features.featureEnabled('ENABLE_AGENTS')).toBe(false);
     // @ts-expect-error
     expect(features.featureEnabled('enable_agents')).toBe(false);
+  });
+
+  test('should report AD integration disabled when absent', () => {
+    const features = new Features([]);
+
+    expect(features.featureEnabled('ENABLE_AD_INTEGRATION')).toBe(false);
   });
 
   test('should handle unknown features', () => {
