@@ -19,6 +19,7 @@ describe('route paths', () => {
     expect(ROUTES.auditReportDelta.path).toBe(
       'audit-report/delta/:id/:deltaid',
     );
+    expect(ROUTES.agentControlMfe.path).toBe('agent-control-mfe/:domain');
     expect(ROUTES.legacy.auditReport.path).toBe('auditreport/:id');
   });
 
@@ -28,6 +29,9 @@ describe('route paths', () => {
     );
     expect(ROUTES.auditReportDelta.url('report/id', 'delta#1')).toBe(
       '/audit-report/delta/report%2Fid/delta%231',
+    );
+    expect(ROUTES.agentControlMfe.url('network inventory')).toBe(
+      '/agent-control-mfe/network%20inventory',
     );
   });
 
@@ -74,6 +78,9 @@ describe('route paths', () => {
 
   test('derives menu wildcard patterns from route patterns', () => {
     expect(routeMatch(ROUTES.report.path)).toBe('/report/*');
+    expect(routeMatch(ROUTES.agentControlMfe.path)).toBe(
+      '/agent-control-mfe/*',
+    );
     expect(routeMatch(ROUTES.reports.path)).toBe('/reports');
   });
 });

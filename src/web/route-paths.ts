@@ -27,6 +27,10 @@ export const ROUTES = {
   omp: {path: 'omp', url: '/omp'},
   dashboards: {path: 'dashboards', url: '/dashboards'},
   agentInstallers: {path: 'agent-installers', url: '/agent-installers'},
+  agentControlMfe: {
+    path: 'agent-control-mfe/:domain',
+    url: (domain: string) => appendEncodedId('/agent-control-mfe', domain),
+  },
   agents: {path: 'agents', url: '/agents'},
   agentGroups: {path: 'agent-groups', url: '/agent-groups'},
   agent: {
