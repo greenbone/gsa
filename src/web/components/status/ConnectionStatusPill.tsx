@@ -16,6 +16,7 @@ import Theme from 'web/utils/theme';
 type ConnectionStatus = 'success' | 'failed' | 'testing' | undefined;
 
 interface ConnectionStatusPillProps {
+  labels?: Record<'idle' | 'testing' | 'success' | 'failed', string>;
   status?: ConnectionStatus;
   onClick?: () => void;
   disabled?: boolean;
@@ -118,6 +119,7 @@ const StyledPill = styled.button<{
 `;
 
 const ConnectionStatusPill = ({
+  labels,
   status,
   onClick,
   disabled = false,
@@ -125,6 +127,7 @@ const ConnectionStatusPill = ({
   const [_] = useTranslation();
 
   const getStatusText = () => {
+    if (labels) return labels[status ?? 'idle'];
     switch (status) {
       case 'success':
         return _('Connection successful');
@@ -151,6 +154,7 @@ const ConnectionStatusPill = ({
   };
 
   const getTitle = () => {
+    if (labels) return status === 'testing' ? labels.testing : labels.idle;
     if (status === 'testing') {
       return _('Testing in progress...');
     }
@@ -158,6 +162,7 @@ const ConnectionStatusPill = ({
   };
 
   const getAriaLabel = () => {
+    if (labels) return getStatusText();
     switch (status) {
       case 'success':
         return _('Connection test successful. Click to test again.');

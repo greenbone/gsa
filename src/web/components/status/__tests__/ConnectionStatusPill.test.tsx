@@ -5,7 +5,7 @@
 
 import {describe, test, expect, testing, beforeEach} from '@gsa/testing';
 import {screen, fireEvent, render} from 'web/testing';
-import ConnectionStatusPill from 'web/pages/credential-store/ConnectionStatusPill';
+import ConnectionStatusPill from 'web/components/status/ConnectionStatusPill';
 
 describe('ConnectionStatusPill', () => {
   let handleClick;

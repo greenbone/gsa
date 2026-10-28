@@ -15,9 +15,9 @@ import PasswordField from 'web/components/form/PasswordField';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import Row from 'web/components/layout/Row';
+import ConnectionStatusPill from 'web/components/status/ConnectionStatusPill';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import ConnectionStatusPill from 'web/pages/credential-store/ConnectionStatusPill';
 
 export interface ActiveDirectoryDialogValues {
   adHost?: string;
@@ -179,6 +179,12 @@ const ActiveDirectoryDialogFields = ({
       <Row justify="center" mb="md">
         <ConnectionStatusPill
           disabled={requiresPassword}
+          labels={{
+            idle: _('Verify credential'),
+            testing: _('Verifying credential...'),
+            success: _('Credential verified'),
+            failed: _('Credential verification failed'),
+          }}
           status={connectionStatus}
           onClick={() => void handleTestConnection()}
         />

@@ -508,7 +508,7 @@ describe('CredentialDialog tests', () => {
 
     fireEvent.click(
       screen.getByRole('button', {
-        name: 'Test connection button. Click to start connection test.',
+        name: 'Verify credential',
       }),
     );
     await waitFor(() =>
@@ -524,7 +524,7 @@ describe('CredentialDialog tests', () => {
     );
     expect(
       screen.getByRole('button', {
-        name: 'Connection test successful. Click to test again.',
+        name: 'Credential verified',
       }),
     ).toBeVisible();
   });
@@ -576,7 +576,7 @@ describe('CredentialDialog tests', () => {
 
     fireEvent.click(
       screen.getByRole('button', {
-        name: 'Test connection button. Click to start connection test.',
+        name: 'Verify credential',
       }),
     );
     await waitFor(() =>
@@ -610,7 +610,7 @@ describe('CredentialDialog tests', () => {
     );
     changeInputValue(screen.getByName('adHost'), 'edited.example.com');
     const button = screen.getByRole('button', {
-      name: 'Test connection button. Click to start connection test.',
+      name: 'Verify credential',
     });
     expect(button).toBeDisabled();
     fireEvent.click(button);
@@ -654,17 +654,17 @@ describe('CredentialDialog tests', () => {
     );
     fireEvent.click(
       screen.getByRole('button', {
-        name: 'Test connection button. Click to start connection test.',
+        name: 'Verify credential',
       }),
     );
     changeInputValue(screen.getByName('adHost'), 'changed.example.com');
     await act(async () => resolveVerification());
     expect(
       screen.getByRole('button', {
-        name: 'Test connection button. Click to start connection test.',
+        name: 'Verify credential',
       }),
     ).toBeEnabled();
-    expect(screen.queryByText('Connection successful')).not.toBeInTheDocument();
+    expect(screen.queryByText('Credential verified')).not.toBeInTheDocument();
   });
 
   test('should render form fields for Client Certificate', () => {
