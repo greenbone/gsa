@@ -8,6 +8,8 @@ import useGmp from 'web/hooks/useGmp';
 import useGmpMutation from 'web/queries/useGmpMutation';
 import {type StartReportExportParams} from 'web/report-export/report-export-job-model';
 
+export type ReportExportMutations = ReturnType<typeof useReportExportMutations>;
+
 const EXPORT_METHODS = {
   scan: 'exportScanReport',
   audit: 'exportAuditReport',
@@ -42,5 +44,3 @@ export const useReportExportMutations = () => {
     [create.mutateAsync, cancel.mutateAsync, gmp.reportexport],
   );
 };
-
-export type ReportExportMutations = ReturnType<typeof useReportExportMutations>;

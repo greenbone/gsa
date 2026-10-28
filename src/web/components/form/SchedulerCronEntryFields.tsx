@@ -13,14 +13,6 @@ import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
 
-export const SchedulerCronCard = ({children}: {children: ReactNode}) => (
-  <HighlightBox>
-    <Row align="center" gap="sm">
-      {children}
-    </Row>
-  </HighlightBox>
-);
-
 interface SchedulerCronEntryFieldsProps {
   value: SchedulerCronEntry;
   activeCronExpression?: string;
@@ -30,6 +22,14 @@ interface SchedulerCronEntryFieldsProps {
   scheduleNumber?: number;
   onChange: (value: SchedulerCronEntry) => void;
 }
+
+export const SchedulerCronCard = ({children}: {children: ReactNode}) => (
+  <HighlightBox>
+    <Row align="center" gap="sm">
+      {children}
+    </Row>
+  </HighlightBox>
+);
 
 const SchedulerCronEntryFields = ({
   value,

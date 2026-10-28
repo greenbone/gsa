@@ -46,25 +46,8 @@ interface ScannerConfigValues
     AgentControlDefaults {}
 
 type ConfigFieldKey = keyof ScannerConfigValues;
+
 type FormValue = ScannerConfigValues[ConfigFieldKey];
-
-const SchedulerSummaryCron = styled.div`
-  color: ${Theme.black};
-`;
-
-const SchedulerSummaryDelay = styled.div`
-  margin-top: 2px;
-  color: ${Theme.darkGray};
-  font-size: var(--mantine-font-size-sm);
-`;
-
-const renderConfigValue = (value: FormValue): ReactNode => {
-  if (Array.isArray(value)) {
-    return <Layout>{value.map(entry => entry.cron).join(', ')}</Layout>;
-  }
-
-  return <Layout>{value}</Layout>;
-};
 
 interface ConfigFieldDefinition {
   key: ConfigFieldKey;
@@ -91,6 +74,24 @@ interface EditableConfigFieldProps {
   onClear?: () => Promise<void>;
   onChangeValue: (value: FormValue) => void;
 }
+
+const SchedulerSummaryCron = styled.div`
+  color: ${Theme.black};
+`;
+
+const SchedulerSummaryDelay = styled.div`
+  margin-top: 2px;
+  color: ${Theme.darkGray};
+  font-size: var(--mantine-font-size-sm);
+`;
+
+const renderConfigValue = (value: FormValue): ReactNode => {
+  if (Array.isArray(value)) {
+    return <Layout>{value.map(entry => entry.cron).join(', ')}</Layout>;
+  }
+
+  return <Layout>{value}</Layout>;
+};
 
 const getScannerPayload = (scanner: Scanner): ScannerConfigValues => {
   const agentDefaults = scanner.agentControlConfig?.agentDefaults;

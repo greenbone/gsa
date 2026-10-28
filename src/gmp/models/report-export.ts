@@ -11,36 +11,10 @@ import {type Date as GmpDate} from 'gmp/models/date';
 import {type Owner, parseEntityModelProperties} from 'gmp/models/entity-model';
 import {parseDate, parseInt, parseToString} from 'gmp/parser';
 
-const STATUSES = [
-  'pending',
-  'running',
-  'done',
-  'error',
-  'cancel_requested',
-  'canceled',
-  'expired',
-] as const;
-
-// statuses of exports still being processed by gvmd
-export const ACTIVE_REPORT_EXPORT_STATUSES = [
-  'pending',
-  'running',
-  'cancel_requested',
-] as const;
-
-export const isReportExportStatusActive = (
-  status?: string,
-): status is (typeof ACTIVE_REPORT_EXPORT_STATUSES)[number] =>
-  (ACTIVE_REPORT_EXPORT_STATUSES as readonly string[]).includes(
-    status as string,
-  );
-
-const PROGRESSES = ['queued', 'preparing', 'generating', 'completed'] as const;
-
-const REPORT_TYPES = ['scan', 'audit', 'delta_scan', 'delta_audit'] as const;
-
 export type ReportExportStatus = (typeof STATUSES)[number] | 'unknown';
+
 export type ReportExportProgress = (typeof PROGRESSES)[number];
+
 export type ReportExportType = (typeof REPORT_TYPES)[number] | 'unknown';
 
 interface IdElement {
@@ -85,6 +59,34 @@ export interface ReportExportProperties extends BaseModelProperties {
   status: ReportExportStatus;
   type: ReportExportType;
 }
+
+const STATUSES = [
+  'pending',
+  'running',
+  'done',
+  'error',
+  'cancel_requested',
+  'canceled',
+  'expired',
+] as const;
+
+// statuses of exports still being processed by gvmd
+export const ACTIVE_REPORT_EXPORT_STATUSES = [
+  'pending',
+  'running',
+  'cancel_requested',
+] as const;
+
+export const isReportExportStatusActive = (
+  status?: string,
+): status is (typeof ACTIVE_REPORT_EXPORT_STATUSES)[number] =>
+  (ACTIVE_REPORT_EXPORT_STATUSES as readonly string[]).includes(
+    status as string,
+  );
+
+const PROGRESSES = ['queued', 'preparing', 'generating', 'completed'] as const;
+
+const REPORT_TYPES = ['scan', 'audit', 'delta_scan', 'delta_audit'] as const;
 
 const includes = <T extends string>(
   values: readonly T[],

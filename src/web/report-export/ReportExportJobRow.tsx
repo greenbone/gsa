@@ -45,6 +45,10 @@ import {useReportExportActions} from 'web/report-export/ReportExportManager';
 import Theme from 'web/utils/theme';
 import {formattedUserSettingLongDate} from 'web/utils/user-setting-time-date-formatters';
 
+interface ReportExportJobRowProps {
+  job: ReportExportJob;
+}
+
 const getActivityStatusIcon = (tone: ReportExportStatusTone) => {
   switch (tone) {
     case 'active':
@@ -65,10 +69,6 @@ const getActivityStatusIcon = (tone: ReportExportStatusTone) => {
       return <CheckIcon color="currentColor" size={BADGE_ICON_SIZE} />;
   }
 };
-
-interface ReportExportJobRowProps {
-  job: ReportExportJob;
-}
 
 const ReportExportJobRow = ({job}: ReportExportJobRowProps) => {
   const [_] = useTranslation();

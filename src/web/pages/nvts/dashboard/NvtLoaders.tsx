@@ -10,12 +10,6 @@ import Loader, {
 } from 'web/components/dashboard/display/Loader';
 import {type SeverityData} from 'web/components/dashboard/display/severity/severity-class-transform';
 
-export const NVTS_FAMILY = 'nvt-family';
-export const NVTS_SEVERITY = 'nvt-severity';
-export const NVTS_QOD = 'nvt-qod';
-export const NVTS_QOD_TYPE = 'nvt-qod-type';
-export const NVTS_CREATED = 'nvt-created';
-
 interface NvtFamilyGroup {
   count: number;
   value: string;
@@ -38,6 +32,12 @@ interface NvtQodGroup {
 export interface NvtQodData {
   groups?: NvtQodGroup[];
 }
+
+export const NVTS_FAMILY = 'nvt-family';
+export const NVTS_SEVERITY = 'nvt-severity';
+export const NVTS_QOD = 'nvt-qod';
+export const NVTS_QOD_TYPE = 'nvt-qod-type';
+export const NVTS_CREATED = 'nvt-created';
 
 const nvtFamilyLoadFunc = createLoadFunc(
   ({gmp, filter}) => gmp.nvts.getFamilyAggregates({filter}).then(r => r.data),

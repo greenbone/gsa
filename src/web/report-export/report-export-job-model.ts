@@ -11,8 +11,6 @@ type ReportExportProgress = NonNullable<ReportExport['progress']>;
 
 export type ReportExportKind = 'scan' | 'audit' | 'delta_scan' | 'delta_audit';
 
-export const MAX_RETAINED_EXPORT_HISTORY_COUNT = 50;
-
 export interface StartReportExportParams {
   kind: ReportExportKind;
   payload: ReportExportPayload;
@@ -64,6 +62,14 @@ export interface ReportExportJob extends ReportExportRecord {
   view: ReportExportJobView;
   exportData?: ReportExport;
 }
+
+export interface AdoptedExportMetadata {
+  filename: string;
+  reportTitle: string;
+  reportUrl?: string;
+}
+
+export const MAX_RETAINED_EXPORT_HISTORY_COUNT = 50;
 
 // kinds that end a job; every other kind is part of an active export
 const TERMINAL_JOB_VIEW_KINDS = new Set<ReportExportJobView['kind']>([
@@ -219,12 +225,6 @@ export const createReportExportJob = (
   view: getReportExportJobView(record, exportData, statusError),
   exportData,
 });
-
-export interface AdoptedExportMetadata {
-  filename: string;
-  reportTitle: string;
-  reportUrl?: string;
-}
 
 // Binds a create response to the record waiting for it. When gvmd reuses an
 // export id, the re-export intent (metadata and queued cancellation) carries
