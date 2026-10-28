@@ -59,6 +59,22 @@ interface CredentialCommandActiveDirectoryFields {
   adCaCertificate?: File | null;
 }
 
+type CredentialCommandVerifyActiveDirectoryFields = Required<
+  Pick<
+    CredentialCommandActiveDirectoryFields,
+    'adHost' | 'adBindDn' | 'adBindPassword' | 'adBaseDn' | 'adTlsMode'
+  >
+> & {
+  adPort?: string;
+  adCaCertificate?: File | null;
+};
+
+export type CredentialCommandVerifyActiveDirectoryParams =
+  | ({id: string} & {
+      [Key in keyof CredentialCommandActiveDirectoryFields]?: never;
+    })
+  | ({id?: never} & CredentialCommandVerifyActiveDirectoryFields);
+
 interface CredentialCommandActiveDirectoryCreateFields extends Omit<
   CredentialCommandActiveDirectoryFields,
   'adPort' | 'adCaCertificate'
@@ -300,6 +316,28 @@ class CredentialCommand extends EntityCommand<
       ad_base_dn: args.adBaseDn,
       ad_tls_mode: args.adTlsMode,
       ad_ca_certificate: saveFile(args.adCaCertificate),
+    });
+  }
+
+  verifyActiveDirectory(args: CredentialCommandVerifyActiveDirectoryParams) {
+    if ('id' in args && isDefined(args.id)) {
+      return this.action({
+        cmd: 'verify_active_directory_credential',
+        credential_id: args.id,
+      });
+    }
+
+    return this.action({
+      cmd: 'verify_active_directory_credential',
+      ad_host: args.adHost,
+      ad_bind_dn: args.adBindDn,
+      ad_bind_password: args.adBindPassword,
+      ad_base_dn: args.adBaseDn,
+      ad_tls_mode: args.adTlsMode,
+      ...(args.adPort ? {ad_port: args.adPort} : {}),
+      ...(args.adCaCertificate
+        ? {ad_ca_certificate: args.adCaCertificate}
+        : {}),
     });
   }
 

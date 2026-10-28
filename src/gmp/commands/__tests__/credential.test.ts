@@ -84,6 +84,80 @@ describe('CredentialCommand tests', () => {
     );
   });
 
+  test('should verify Active Directory credentials with supplied fields', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new CredentialCommand(fakeHttp);
+    const adCaCertificate = new File(['ca-certificate'], 'ca.pem');
+
+    await cmd.verifyActiveDirectory({
+      adHost: 'ad.example.com',
+      adPort: '636',
+      adBindDn: 'CN=Scanner,DC=example,DC=com',
+      adBindPassword: 'secret',
+      adBaseDn: 'DC=example,DC=com',
+      adTlsMode: 'ldaps',
+      adCaCertificate,
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith(
+      'post',
+      expect.objectContaining({
+        data: expect.objectContaining({
+          cmd: 'verify_active_directory_credential',
+          ad_host: 'ad.example.com',
+          ad_port: '636',
+          ad_bind_dn: 'CN=Scanner,DC=example,DC=com',
+          ad_bind_password: 'secret',
+          ad_base_dn: 'DC=example,DC=com',
+          ad_tls_mode: 'ldaps',
+          ad_ca_certificate: adCaCertificate,
+        }),
+      }),
+    );
+  });
+
+  test('should verify a stored Active Directory credential by id', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new CredentialCommand(fakeHttp);
+
+    await cmd.verifyActiveDirectory({id: 'ad-id'});
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'verify_active_directory_credential',
+        credential_id: 'ad-id',
+      },
+    });
+  });
+
+  test('should omit optional inline Active Directory verification fields', async () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+    const cmd = new CredentialCommand(fakeHttp);
+
+    await cmd.verifyActiveDirectory({
+      adHost: 'ad.example.com',
+      adBindDn: 'CN=Scanner,DC=example,DC=com',
+      adBindPassword: 'secret',
+      adBaseDn: 'DC=example,DC=com',
+      adTlsMode: 'starttls',
+    });
+
+    const requestData = fakeHttp.request.mock.calls[0][1].data;
+    expect(requestData).toEqual({
+      cmd: 'verify_active_directory_credential',
+      ad_host: 'ad.example.com',
+      ad_bind_dn: 'CN=Scanner,DC=example,DC=com',
+      ad_bind_password: 'secret',
+      ad_base_dn: 'DC=example,DC=com',
+      ad_tls_mode: 'starttls',
+    });
+    expect(requestData).not.toHaveProperty('ad_port');
+    expect(requestData).not.toHaveProperty('ad_ca_certificate');
+  });
+
   test('should create KRB5 credential with empty kdcs', async () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);

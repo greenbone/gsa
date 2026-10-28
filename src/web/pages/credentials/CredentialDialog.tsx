@@ -39,12 +39,14 @@ import Radio from "web/components/form/Radio";
 import Select from "web/components/form/Select";
 import TextField from "web/components/form/TextField";
 import YesNoRadio from "web/components/form/YesNoRadio";
+import Row from "web/components/layout/Row";
 import useCredentialStore, {
   isCredentialStoreType,
 } from "web/hooks/useCredentialStore";
 import useFeatures from "web/hooks/useFeatures";
 import useGmp from "web/hooks/useGmp";
 import useTranslation from "web/hooks/useTranslation";
+import ConnectionStatusPill from "web/pages/credential-store/ConnectionStatusPill";
 import CredentialStoreDialogFields from "web/pages/credentials/CredentialStoreDialogFields";
 
 interface CredentialDialogValues {
@@ -206,6 +208,9 @@ const CredentialDialog = ({
     useState<boolean>(false);
   const [changeAdBindPassword, setChangeAdBindPassword] =
     useState<boolean>(false);
+  const [adConnectionStatus, setAdConnectionStatus] = useState<
+    "success" | "failed" | "testing" | undefined
+  >();
   // if we don't know if the private key is encrypted, we assume it is, so that the user can change the passphrase if they want to
   const [isEncryptedPrivateKey, setIsEncryptedPrivateKey] =
     useState<boolean>(true);
@@ -271,6 +276,7 @@ const CredentialDialog = ({
         );
       }
       setAdCaCertificate(file ?? null);
+      setAdConnectionStatus(undefined);
     } catch (error) {
       setError((error as Error).message);
     }
@@ -363,6 +369,32 @@ const CredentialDialog = ({
   }
 
   const isCredentialStoreEnabled = useCredentialStore(cType as CredentialType);
+
+  const handleTestAdConnection = async (
+    state: CredentialDialogState,
+  ): Promise<void> => {
+    setAdConnectionStatus("testing");
+    try {
+      if (isEdit && !changeAdBindPassword) {
+        await gmp.credential.verifyActiveDirectory({
+          id: credential?.id as string,
+        });
+      } else {
+        await gmp.credential.verifyActiveDirectory({
+          adHost: state.adHost ?? '',
+          adPort: state.adPort,
+          adBindDn: state.adBindDn ?? '',
+          adBindPassword: state.adBindPassword ?? '',
+          adBaseDn: state.adBaseDn ?? '',
+          adTlsMode: state.adTlsMode ?? "ldaps",
+          adCaCertificate: state.adCaCertificate,
+        });
+      }
+      setAdConnectionStatus("success");
+    } catch {
+      setAdConnectionStatus("failed");
+    }
+  };
 
   return (
     <SaveDialog<CredentialDialogValues, CredentialDialogDefaultValues>
@@ -737,7 +769,10 @@ const CredentialDialog = ({
                   name="adHost"
                   title={_("Active Directory Host or Address")}
                   value={state.adHost}
-                  onChange={onValueChange}
+                  onChange={(value, name) => {
+                    setAdConnectionStatus(undefined);
+                    onValueChange(value, name);
+                  }}
                 />
                 <TextField
                   max={65535}
@@ -746,13 +781,19 @@ const CredentialDialog = ({
                   title={_("Port")}
                   type="number"
                   value={state.adPort}
-                  onChange={onValueChange}
+                  onChange={(value, name) => {
+                    setAdConnectionStatus(undefined);
+                    onValueChange(value, name);
+                  }}
                 />
                 <TextField
                   name="adBindDn"
                   title={_("Bind DN")}
                   value={state.adBindDn}
-                  onChange={onValueChange}
+                  onChange={(value, name) => {
+                    setAdConnectionStatus(undefined);
+                    onValueChange(value, name);
+                  }}
                 />
                 <FormGroup direction="row" title={_("Bind Password")}>
                   {isEdit && (
@@ -762,7 +803,10 @@ const CredentialDialog = ({
                       name="changeAdBindPassword"
                       title={_("Replace existing password with")}
                       unCheckedValue={false}
-                      onChange={(value) => setChangeAdBindPassword(value)}
+                      onChange={(value) => {
+                        setChangeAdBindPassword(value);
+                        setAdConnectionStatus(undefined);
+                      }}
                     />
                   )}
                   <PasswordField
@@ -771,14 +815,20 @@ const CredentialDialog = ({
                     grow="1"
                     name="adBindPassword"
                     value={state.adBindPassword}
-                    onChange={onValueChange}
+                    onChange={(value, name) => {
+                      setAdConnectionStatus(undefined);
+                      onValueChange(value, name);
+                    }}
                   />
                 </FormGroup>
                 <TextField
                   name="adBaseDn"
                   title={_("Base DN")}
                   value={state.adBaseDn}
-                  onChange={onValueChange}
+                  onChange={(value, name) => {
+                    setAdConnectionStatus(undefined);
+                    onValueChange(value, name);
+                  }}
                 />
                 <Select<ActiveDirectoryTlsMode>
                   items={[
@@ -788,7 +838,10 @@ const CredentialDialog = ({
                   label={_("TLS Mode")}
                   name="adTlsMode"
                   value={state.adTlsMode}
-                  onChange={onValueChange}
+                  onChange={(value, name) => {
+                    setAdConnectionStatus(undefined);
+                    onValueChange(value, name);
+                  }}
                 />
                 <FileField
                   name="adCaCertificate"
@@ -796,6 +849,12 @@ const CredentialDialog = ({
                   value={state.adCaCertificate}
                   onChange={handleAdCaCertificateChange}
                 />
+                <Row justify="center" mb="md">
+                  <ConnectionStatusPill
+                    status={adConnectionStatus}
+                    onClick={() => void handleTestAdConnection(state)}
+                  />
+                </Row>
               </>
             )}
           </>
