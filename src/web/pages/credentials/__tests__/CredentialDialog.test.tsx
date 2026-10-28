@@ -5,6 +5,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {
+  act,
   changeInputValue,
   closeDialog,
   getSelectItemElementsForSelect,
@@ -584,6 +585,86 @@ describe('CredentialDialog tests', () => {
 
     fireEvent.click(screen.getByLabelText('Replace existing password with'));
     expect(screen.getByName('adBindPassword')).toBeEnabled();
+  });
+
+  test('requires a password to test edited AD settings and clears a cancelled replacement', async () => {
+    const verifyActiveDirectory = testing.fn().mockResolvedValue({});
+    const adCredential = Credential.fromElement({
+      _id: 'ad-id',
+      type: ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
+      host: 'saved.example.com',
+      tls_mode: 'ldaps',
+    });
+    const onSave = testing.fn();
+    const {render} = rendererWith({
+      gmp: {...createGmp(), credential: {verifyActiveDirectory}},
+      features: new Features(['ENABLE_AD_INTEGRATION']),
+    });
+    render(
+      <CredentialDialog
+        credential={adCredential}
+        credentialType={ACTIVE_DIRECTORY_CREDENTIAL_TYPE}
+        types={[ACTIVE_DIRECTORY_CREDENTIAL_TYPE]}
+        onSave={onSave}
+      />,
+    );
+    changeInputValue(screen.getByName('adHost'), 'edited.example.com');
+    const button = screen.getByRole('button', {
+      name: 'Test connection button. Click to start connection test.',
+    });
+    expect(button).toBeDisabled();
+    fireEvent.click(button);
+    expect(verifyActiveDirectory).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByLabelText('Replace existing password with'));
+    changeInputValue(screen.getByName('adBindPassword'), 'replacement');
+    fireEvent.click(button);
+    await waitFor(() =>
+      expect(verifyActiveDirectory).toHaveBeenCalledWith(
+        expect.objectContaining({
+          adHost: 'edited.example.com',
+          adBindPassword: 'replacement',
+        }),
+      ),
+    );
+    fireEvent.click(screen.getByLabelText('Replace existing password with'));
+    expect(screen.getByName('adBindPassword')).toHaveValue('');
+    fireEvent.click(screen.getDialogSaveButton());
+    expect(onSave).toHaveBeenCalledWith(
+      expect.objectContaining({adBindPassword: undefined}),
+    );
+  });
+
+  test('ignores a connection result when settings change during the test', async () => {
+    let resolveVerification!: () => void;
+    const verifyActiveDirectory = testing.fn().mockImplementation(
+      () =>
+        new Promise<void>(resolve => {
+          resolveVerification = resolve;
+        }),
+    );
+    const {render} = rendererWith({
+      gmp: {...createGmp(), credential: {verifyActiveDirectory}},
+      features: new Features(['ENABLE_AD_INTEGRATION']),
+    });
+    render(
+      <CredentialDialog
+        credentialType={ACTIVE_DIRECTORY_CREDENTIAL_TYPE}
+        types={[ACTIVE_DIRECTORY_CREDENTIAL_TYPE]}
+      />,
+    );
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: 'Test connection button. Click to start connection test.',
+      }),
+    );
+    changeInputValue(screen.getByName('adHost'), 'changed.example.com');
+    await act(async () => resolveVerification());
+    expect(
+      screen.getByRole('button', {
+        name: 'Test connection button. Click to start connection test.',
+      }),
+    ).toBeEnabled();
+    expect(screen.queryByText('Connection successful')).not.toBeInTheDocument();
   });
 
   test('should render form fields for Client Certificate', () => {

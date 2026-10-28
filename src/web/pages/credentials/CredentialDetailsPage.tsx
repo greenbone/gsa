@@ -7,6 +7,7 @@ import {useNavigate} from 'react-router';
 import type Gmp from 'gmp/gmp';
 import {
   type default as Credential,
+  ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
   CERTIFICATE_STATUS_INACTIVE,
   CERTIFICATE_STATUS_EXPIRED,
 } from 'gmp/models/credential';
@@ -68,6 +69,19 @@ const Details = ({entity}: DetailsProps) => {
   return (
     <Layout flex="column">
       <CredentialDetails entity={entity} />
+      {entity.credentialType === ACTIVE_DIRECTORY_CREDENTIAL_TYPE && (
+        <InfoTable size="full">
+          <CredentialDetailsColGroup />
+          <TableBody>
+            <TableRow>
+              <TableData>{_('CA Certificate (PEM)')}</TableData>
+              <TableData>
+                {entity.adCaCertificate ? _('Configured') : _('Not configured')}
+              </TableData>
+            </TableRow>
+          </TableBody>
+        </InfoTable>
+      )}
       {isDefined(cert) && (
         <DetailsBlock title={_('Certificate')}>
           <InfoTable size="full">

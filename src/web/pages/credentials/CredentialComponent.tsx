@@ -214,7 +214,6 @@ const CredentialComponent = ({
       if (data.credentialType === ACTIVE_DIRECTORY_CREDENTIAL_TYPE) {
         return gmp.credential.saveActiveDirectory({
           ...data,
-          adCaCertificate: data.adCaCertificate ?? undefined,
           id: data.id as string,
         });
       }
@@ -281,8 +280,8 @@ const CredentialComponent = ({
       })}
       {dialogVisible && (
         <CredentialDialog
-          authAlgorithm={authAlgorithm}
           adCaCertificate={adCaCertificate}
+          authAlgorithm={authAlgorithm}
           certificate={certificate}
           comment={comment}
           credential={credential}

@@ -9,7 +9,6 @@ import {
   type CredentialType,
   type SNMPAuthAlgorithmType,
   type SNMPPrivacyAlgorithmType,
-  type ActiveDirectoryTlsMode,
   ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
   CERTIFICATE_CREDENTIAL_TYPE,
   getCredentialTypeName,
@@ -39,14 +38,15 @@ import Radio from 'web/components/form/Radio';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import YesNoRadio from 'web/components/form/YesNoRadio';
-import Row from 'web/components/layout/Row';
 import useCredentialStore, {
   isCredentialStoreType,
 } from 'web/hooks/useCredentialStore';
 import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-import ConnectionStatusPill from 'web/pages/credential-store/ConnectionStatusPill';
+import ActiveDirectoryDialogFields, {
+  type ActiveDirectoryDialogValues,
+} from 'web/pages/credentials/ActiveDirectoryDialogFields';
 import CredentialStoreDialogFields from 'web/pages/credentials/CredentialStoreDialogFields';
 
 interface CredentialDialogValues {
@@ -62,13 +62,10 @@ interface CredentialDialogValues {
   vaultId?: string;
 }
 
-interface CredentialDialogDefaultValues {
-  adBaseDn?: string;
-  adBindDn?: string;
-  adBindPassword?: string;
-  adHost?: string;
-  adPort?: string;
-  adTlsMode?: ActiveDirectoryTlsMode;
+interface CredentialDialogDefaultValues extends Omit<
+  ActiveDirectoryDialogValues,
+  'adCaCertificate'
+> {
   authAlgorithm?: SNMPAuthAlgorithmType;
   comment?: string;
   community?: string;
@@ -206,11 +203,6 @@ const CredentialDialog = ({
   const [changePassword, setChangePassword] = useState<boolean>(false);
   const [changePrivacyPassword, setChangePrivacyPassword] =
     useState<boolean>(false);
-  const [changeAdBindPassword, setChangeAdBindPassword] =
-    useState<boolean>(false);
-  const [adConnectionStatus, setAdConnectionStatus] = useState<
-    'success' | 'failed' | 'testing' | undefined
-  >();
   // if we don't know if the private key is encrypted, we assume it is, so that the user can change the passphrase if they want to
   const [isEncryptedPrivateKey, setIsEncryptedPrivateKey] =
     useState<boolean>(true);
@@ -276,7 +268,6 @@ const CredentialDialog = ({
         );
       }
       setAdCaCertificate(file ?? null);
-      setAdConnectionStatus(undefined);
     } catch (error) {
       setError((error as Error).message);
     }
@@ -369,32 +360,6 @@ const CredentialDialog = ({
   }
 
   const isCredentialStoreEnabled = useCredentialStore(cType as CredentialType);
-
-  const handleTestAdConnection = async (
-    state: CredentialDialogState,
-  ): Promise<void> => {
-    setAdConnectionStatus('testing');
-    try {
-      if (isEdit && !changeAdBindPassword) {
-        await gmp.credential.verifyActiveDirectory({
-          id: credential?.id as string,
-        });
-      } else {
-        await gmp.credential.verifyActiveDirectory({
-          adHost: state.adHost ?? '',
-          adPort: state.adPort,
-          adBindDn: state.adBindDn ?? '',
-          adBindPassword: state.adBindPassword ?? '',
-          adBaseDn: state.adBaseDn ?? '',
-          adTlsMode: state.adTlsMode ?? 'ldaps',
-          adCaCertificate: state.adCaCertificate,
-        });
-      }
-      setAdConnectionStatus('success');
-    } catch {
-      setAdConnectionStatus('failed');
-    }
-  };
 
   return (
     <SaveDialog<CredentialDialogValues, CredentialDialogDefaultValues>
@@ -764,98 +729,13 @@ const CredentialDialog = ({
             )}
 
             {state.credentialType === ACTIVE_DIRECTORY_CREDENTIAL_TYPE && (
-              <>
-                <TextField
-                  name="adHost"
-                  title={_('Active Directory Host or Address')}
-                  value={state.adHost}
-                  onChange={(value, name) => {
-                    setAdConnectionStatus(undefined);
-                    onValueChange(value, name);
-                  }}
-                />
-                <TextField
-                  max={65535}
-                  min={1}
-                  name="adPort"
-                  title={_('Port')}
-                  type="number"
-                  value={state.adPort}
-                  onChange={(value, name) => {
-                    setAdConnectionStatus(undefined);
-                    onValueChange(value, name);
-                  }}
-                />
-                <TextField
-                  name="adBindDn"
-                  title={_('Bind DN')}
-                  value={state.adBindDn}
-                  onChange={(value, name) => {
-                    setAdConnectionStatus(undefined);
-                    onValueChange(value, name);
-                  }}
-                />
-                <FormGroup direction="row" title={_('Bind Password')}>
-                  {isEdit && (
-                    <Checkbox<boolean>
-                      checked={changeAdBindPassword}
-                      checkedValue={true}
-                      name="changeAdBindPassword"
-                      title={_('Replace existing password with')}
-                      unCheckedValue={false}
-                      onChange={value => {
-                        setChangeAdBindPassword(value);
-                        setAdConnectionStatus(undefined);
-                      }}
-                    />
-                  )}
-                  <PasswordField
-                    autoComplete="new-password"
-                    disabled={isEdit && !changeAdBindPassword}
-                    grow="1"
-                    name="adBindPassword"
-                    value={state.adBindPassword}
-                    onChange={(value, name) => {
-                      setAdConnectionStatus(undefined);
-                      onValueChange(value, name);
-                    }}
-                  />
-                </FormGroup>
-                <TextField
-                  name="adBaseDn"
-                  title={_('Base DN')}
-                  value={state.adBaseDn}
-                  onChange={(value, name) => {
-                    setAdConnectionStatus(undefined);
-                    onValueChange(value, name);
-                  }}
-                />
-                <Select<ActiveDirectoryTlsMode>
-                  items={[
-                    {label: _('LDAPS'), value: 'ldaps'},
-                    {label: _('StartTLS'), value: 'starttls'},
-                  ]}
-                  label={_('TLS Mode')}
-                  name="adTlsMode"
-                  value={state.adTlsMode}
-                  onChange={(value, name) => {
-                    setAdConnectionStatus(undefined);
-                    onValueChange(value, name);
-                  }}
-                />
-                <FileField
-                  name="adCaCertificate"
-                  title={_('CA Certificate (PEM)')}
-                  value={state.adCaCertificate}
-                  onChange={handleAdCaCertificateChange}
-                />
-                <Row justify="center" mb="md">
-                  <ConnectionStatusPill
-                    status={adConnectionStatus}
-                    onClick={() => void handleTestAdConnection(state)}
-                  />
-                </Row>
-              </>
+              <ActiveDirectoryDialogFields
+                credential={credential}
+                initialCertificate={initialAdCaCertificate}
+                state={state}
+                onCertificateChange={handleAdCaCertificateChange}
+                onValueChange={onValueChange}
+              />
             )}
           </>
         );
