@@ -16,6 +16,7 @@ import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import Loading from 'web/components/loading/Loading';
 import Section from 'web/components/section/Section';
+import ConnectionStatusPill from 'web/components/status/ConnectionStatusPill';
 import Table from 'web/components/table/SimpleTable';
 import TableBody from 'web/components/table/TableBody';
 import TableCol from 'web/components/table/TableCol';
@@ -27,7 +28,6 @@ import {
 } from 'web/hooks/use-query/credential-store';
 import {useGetCredentialStores} from 'web/hooks/use-query/credential-stores';
 import useTranslation from 'web/hooks/useTranslation';
-import ConnectionStatusPill from 'web/pages/credential-store/ConnectionStatusPill';
 import CredentialStoreDialog, {
   type CredentialStoreDialogState,
 } from 'web/pages/credential-store/CredentialStoreDialog';
