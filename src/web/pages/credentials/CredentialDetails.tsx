@@ -5,6 +5,7 @@
 
 import {
   type default as Credential,
+  ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
   getCredentialTypeName,
   KRB5_CREDENTIAL_TYPE,
   SNMP_CREDENTIAL_TYPE,
@@ -122,6 +123,33 @@ const CredentialDetails = ({entity}: CredentialDetailsProps) => {
                     <TableData>
                       <TagListDisplay values={kdcs} />
                     </TableData>
+                  </TableRow>
+                </>
+              )}
+
+              {credentialType === ACTIVE_DIRECTORY_CREDENTIAL_TYPE && (
+                <>
+                  <TableRow>
+                    <TableData>
+                      {_('Active Directory Host or Address')}
+                    </TableData>
+                    <TableData>{entity.adHost}</TableData>
+                  </TableRow>
+                  <TableRow>
+                    <TableData>{_('Port')}</TableData>
+                    <TableData>{entity.adPort ?? _('Default')}</TableData>
+                  </TableRow>
+                  <TableRow>
+                    <TableData>{_('Bind DN')}</TableData>
+                    <TableData>{entity.adBindDn}</TableData>
+                  </TableRow>
+                  <TableRow>
+                    <TableData>{_('Base DN')}</TableData>
+                    <TableData>{entity.adBaseDn}</TableData>
+                  </TableRow>
+                  <TableRow>
+                    <TableData>{_('TLS Mode')}</TableData>
+                    <TableData>{entity.adTlsMode}</TableData>
                   </TableRow>
                 </>
               )}

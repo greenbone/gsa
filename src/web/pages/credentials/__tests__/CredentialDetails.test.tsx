@@ -71,6 +71,30 @@ describe('CredentialDetails', () => {
     expect(screen.getByText('None')).toBeVisible();
   });
 
+  test('should render Active Directory credential details', () => {
+    const entity = Credential.fromElement({
+      _id: 'cred-ad',
+      type: 'ad',
+      credential_type: 'ad',
+      host: 'ad.example.com',
+      port: '636',
+      bind_dn: 'CN=svc,DC=example,DC=com',
+      base_dn: 'DC=example,DC=com',
+      tls_mode: 'ldaps',
+      ca_certificate: '-----BEGIN CERTIFICATE-----',
+    });
+
+    const {render} = rendererWith({capabilities: true});
+    render(<CredentialDetails entity={entity} />);
+
+    expect(screen.getByText('ad.example.com')).toBeVisible();
+    expect(screen.getByText('636')).toBeVisible();
+    expect(screen.getByText('CN=svc,DC=example,DC=com')).toBeVisible();
+    expect(screen.getByText('DC=example,DC=com')).toBeVisible();
+    expect(screen.getByText('ldaps')).toBeVisible();
+    expect(screen.queryByText('CA Certificate (PEM)')).not.toBeInTheDocument();
+  });
+
   test('should render targets and scanners as links', () => {
     const {render} = rendererWith({capabilities: true});
     render(<CredentialDetails entity={defaultEntity} />);
