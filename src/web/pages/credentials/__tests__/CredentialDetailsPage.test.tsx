@@ -78,6 +78,29 @@ const createGmp = ({
 });
 
 describe('CredentialDetailsPage tests', () => {
+  test.each([
+    ['certificate', 'Configured'],
+    [undefined, 'Not configured'],
+  ])(
+    'shows AD certificate status on the details page (%s)',
+    async (certificate, status) => {
+      const entity = Credential.fromElement({
+        _id: 'ad-id',
+        type: 'ad',
+        name: 'AD credential',
+        ca_certificate: certificate,
+      });
+      const {render, store} = rendererWith({
+        gmp: createGmp({getCredentialResponse: {data: entity}}),
+        capabilities: true,
+      });
+      store.dispatch(entityLoadingActions.success('ad-id', entity));
+      render(<CredentialDetailsPage id="ad-id" />);
+      expect(await screen.findByText('CA Certificate (PEM)')).toBeVisible();
+      expect(screen.getByText(status)).toBeVisible();
+    },
+  );
+
   test('should render usk credential', async () => {
     const gmp = createGmp();
     const {render, store} = rendererWith({

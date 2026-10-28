@@ -27,7 +27,7 @@ test('creates and saves an Active Directory credential', async ({page}) => {
     await typeSelect.click();
     const adOption = page.getByText('Active Directory', {exact: true}).last();
     if (!(await adOption.isVisible().catch(() => false))) {
-      await test.skip(true, 'Active Directory integration is unavailable');
+      test.skip(true, 'Active Directory integration is unavailable');
     }
     await adOption.click();
 
@@ -54,6 +54,15 @@ test('creates and saves an Active Directory credential', async ({page}) => {
     await applyCredentialFilter(page, `name=${name}`);
     let row = page.getByRole('row', {name: new RegExp(name)}).first();
     await expect(row).toBeVisible();
+    await row.getByTestId('row-details-toggle').click();
+    await expect(page.getByText('CA Certificate (PEM)')).toHaveCount(0);
+    await page.getByTitle('Open all details').click();
+    await expect(page.getByText('Configured', {exact: true})).toBeVisible({
+      timeout: 15000,
+    });
+    await page.goto('/credentials');
+    await applyCredentialFilter(page, `name=${name}`);
+    row = page.getByRole('row', {name: new RegExp(name)}).first();
     await edit(row).click();
     const editDialog = page.getByRole('dialog');
     await expect(editDialog.locator('input[name="adHost"]')).toHaveValue(
@@ -118,13 +127,22 @@ test('creates and saves an Active Directory credential', async ({page}) => {
     await verifyDialog.locator('input[name="adPort"]').fill('');
     await verifyDialog.getByTestId('dialog-save-button').click();
     await expect(page.getByRole('dialog')).toHaveCount(0);
-    await edit(page.getByRole('row', {name: new RegExp(name)}).first()).click();
+    row = page.getByRole('row', {name: new RegExp(name)}).first();
+    await edit(row).click();
     await expect(
       page.getByRole('dialog').locator('input[name="adPort"]'),
     ).toHaveValue('');
+    await page.keyboard.press('Escape');
+    await row.getByTestId('row-details-toggle').click();
+    await expect(page.getByText('CA Certificate (PEM)')).toHaveCount(0);
+    await page.getByTitle('Open all details').click();
+    await expect(page.getByText('Not configured')).toBeVisible({
+      timeout: 15000,
+    });
   } finally {
     if (created) {
       await page.keyboard.press('Escape').catch(() => undefined);
+      await page.goto('/credentials').catch(() => undefined);
       await applyCredentialFilter(page, `name=${name}`).catch(() => undefined);
       const row = page.getByRole('row', {name: new RegExp(name)}).first();
       if (await row.isVisible().catch(() => false)) {
