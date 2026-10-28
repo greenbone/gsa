@@ -39,6 +39,7 @@
     "gsa/no-dynamic-i18n": "error",
     "gsa/no-restricted-imports": "warn",
     "gsa/prop-types": "off",
+    "gsa/ts-definitions-top": "warn",
     "import/consistent-type-specifier-style": ["warn", "prefer-inline"],
     "import/newline-after-import": ["warn", {"considerComments": false}],
     "import/no-amd": "error",

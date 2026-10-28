@@ -12,6 +12,11 @@ import * as ResizeObserverModule from 'resize-observer-polyfill';
 import 'web/testing/custom-matchers';
 import {expect} from 'vitest';
 
+interface JSDOMVirtualConsole {
+  removeAllListeners: (event: string) => void;
+  on: (event: string, listener: (error: Error) => void) => void;
+}
+
 // setup additional matchers for vitest
 expect.extend(jestDomMatchers);
 
@@ -21,10 +26,6 @@ expect.extend(jestDomMatchers);
  * We can ignore these errors by removing the default listener.
  */
 
-interface JSDOMVirtualConsole {
-  removeAllListeners: (event: string) => void;
-  on: (event: string, listener: (error: Error) => void) => void;
-}
 const virtualConsole = (
   globalThis as unknown as {
     jsdom?: {virtualConsole?: JSDOMVirtualConsole};

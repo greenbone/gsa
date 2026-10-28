@@ -10,18 +10,18 @@ import InfoTip from 'web/components/info-tip/InfoTip';
 import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/theme';
 
-const Description = styled.p`
-  margin: 0;
-  color: ${Theme.mediumGray};
-  font-size: var(--mantine-font-size-xs);
-`;
-
 interface SchedulerCronGroupProps {
   children: ReactNode;
   title?: ReactNode;
   infoTip?: ReactNode;
   infoTipAriaLabel?: string;
 }
+
+const Description = styled.p`
+  margin: 0;
+  color: ${Theme.mediumGray};
+  font-size: var(--mantine-font-size-xs);
+`;
 
 const SchedulerCronGroup = ({
   children,

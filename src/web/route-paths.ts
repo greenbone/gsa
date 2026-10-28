@@ -5,6 +5,10 @@
 
 import {type EntityType} from 'gmp/utils/entity-type';
 
+export type RoutePaths = typeof ROUTES;
+
+export type EntityListType = keyof typeof entityListRouteNames;
+
 // Builds a concrete detail URL and encodes the entity ID as one URL segment.
 const appendEncodedId = (path: string, id: string) =>
   `${path}/${encodeURIComponent(id)}`;
@@ -298,8 +302,6 @@ export const ROUTES = {
   notFound: {path: 'not-found', url: '/not-found'},
 } as const;
 
-export type RoutePaths = typeof ROUTES;
-
 // API entity type names do not always match route keys or URL segments.
 const entityRouteNames = {
   agent: 'agent',
@@ -390,8 +392,6 @@ const entityListRouteNames = {
   user: 'users',
   vulnerability: 'vulnerabilities',
 } as const satisfies Partial<Record<EntityType, keyof RoutePaths>>;
-
-export type EntityListType = keyof typeof entityListRouteNames;
 
 export const entityListURL = (type: EntityListType): string =>
   ROUTES[entityListRouteNames[type]].url;
