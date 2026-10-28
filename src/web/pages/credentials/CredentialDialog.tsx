@@ -9,6 +9,7 @@ import {
   type CredentialType,
   type SNMPAuthAlgorithmType,
   type SNMPPrivacyAlgorithmType,
+  ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
   CERTIFICATE_CREDENTIAL_TYPE,
   getCredentialTypeName,
   KRB5_CREDENTIAL_TYPE,
@@ -309,6 +310,8 @@ const CredentialDialog = ({
   const enabledTypes = types.filter(type => {
     return !(
       (type === KRB5_CREDENTIAL_TYPE && !gmp.settings.enableKrb5) ||
+      (type === ACTIVE_DIRECTORY_CREDENTIAL_TYPE &&
+        !features.featureEnabled('ENABLE_AD_INTEGRATION')) ||
       (isCredentialStoreType(type) &&
         !features.featureEnabled('ENABLE_CREDENTIAL_STORES'))
     );
