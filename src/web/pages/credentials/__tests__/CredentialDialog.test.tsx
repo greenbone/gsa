@@ -27,6 +27,9 @@ import Credential, {
 import CredentialDialog from 'web/pages/credentials/CredentialDialog';
 
 const createGmp = (settings = {}) => ({
+  credential: {
+    verifyActiveDirectory: testing.fn().mockResolvedValue({}),
+  },
   settings: {
     enableKrb5: false,
     ...settings,
@@ -476,7 +479,56 @@ describe('CredentialDialog tests', () => {
     );
   });
 
-  test('should prefill Active Directory fields and keep password write-only', () => {
+  test('should test new Active Directory credentials from the dialog', async () => {
+    const verifyActiveDirectory = testing.fn().mockResolvedValue({});
+    const {render} = rendererWith({
+      gmp: {credential: {verifyActiveDirectory}, settings: {enableKrb5: false}},
+      features: new Features(['ENABLE_AD_INTEGRATION']),
+    });
+
+    render(
+      <CredentialDialog
+        credentialType={ACTIVE_DIRECTORY_CREDENTIAL_TYPE}
+        types={[ACTIVE_DIRECTORY_CREDENTIAL_TYPE]}
+      />,
+    );
+    changeInputValue(screen.getByName('adHost'), 'ad.example.com');
+    changeInputValue(screen.getByName('adPort'), '636');
+    changeInputValue(
+      screen.getByName('adBindDn'),
+      'CN=Scanner,DC=example,DC=com',
+    );
+    changeInputValue(screen.getByName('adBindPassword'), 'secret');
+    changeInputValue(screen.getByName('adBaseDn'), 'DC=example,DC=com');
+    const tlsMode = screen.getSelectElementByLabel('TLS Mode');
+    fireEvent.click(tlsMode);
+    const tlsOptions = await getSelectItemElementsForSelect(tlsMode);
+    fireEvent.click(tlsOptions[0]);
+
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: 'Test connection button. Click to start connection test.',
+      }),
+    );
+    await waitFor(() =>
+      expect(verifyActiveDirectory).toHaveBeenCalledWith({
+        adHost: 'ad.example.com',
+        adPort: '636',
+        adBindDn: 'CN=Scanner,DC=example,DC=com',
+        adBindPassword: 'secret',
+        adBaseDn: 'DC=example,DC=com',
+        adTlsMode: 'ldaps',
+        adCaCertificate: undefined,
+      }),
+    );
+    expect(
+      screen.getByRole('button', {
+        name: 'Connection test successful. Click to test again.',
+      }),
+    ).toBeVisible();
+  });
+
+  test('should prefill Active Directory fields and keep password write-only', async () => {
     const adCredential = Credential.fromElement({
       _id: 'ad-id',
       name: 'AD credential',
@@ -490,8 +542,12 @@ describe('CredentialDialog tests', () => {
       ca_certificate: '-----BEGIN CERTIFICATE-----',
     });
     const adCaCertificate = new File([], 'existing-ad-ca.pem');
+    const verifyActiveDirectory = testing.fn().mockResolvedValue({});
     const {render} = rendererWith({
-      gmp: createGmp(),
+      gmp: {
+        ...createGmp(),
+        credential: {verifyActiveDirectory},
+      },
       features: new Features(['ENABLE_AD_INTEGRATION']),
     });
 
@@ -516,6 +572,15 @@ describe('CredentialDialog tests', () => {
     expect(
       screen.getByRole('button', {name: 'CA Certificate (PEM)'}),
     ).toHaveTextContent('existing-ad-ca.pem');
+
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: 'Test connection button. Click to start connection test.',
+      }),
+    );
+    await waitFor(() =>
+      expect(verifyActiveDirectory).toHaveBeenCalledWith({id: 'ad-id'}),
+    );
 
     fireEvent.click(screen.getByLabelText('Replace existing password with'));
     expect(screen.getByName('adBindPassword')).toBeEnabled();
