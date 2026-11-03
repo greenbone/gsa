@@ -13,6 +13,7 @@ import useGmp from 'web/hooks/useGmp';
 import useCloneMutation from 'web/queries/useCloneMutation';
 import useCreateMutation from 'web/queries/useCreateMutation';
 import useDeleteMutation from 'web/queries/useDeleteMutation';
+import useGetEntity from 'web/queries/useGetEntity';
 import useSaveMutation from 'web/queries/useSaveMutation';
 
 interface UseCreateAgentGroupParams {
@@ -24,6 +25,15 @@ interface UseModifyAgentGroupParams {
   onSuccess?: () => void;
   onError?: (error: Error) => void;
 }
+
+export const useGetAgentGroup = ({id}: {id: string | undefined}) => {
+  const gmp = useGmp();
+  return useGetEntity<AgentGroup>({
+    gmpMethod: data => gmp.agentgroup.get(data),
+    queryId: 'get_agent_group',
+    id,
+  });
+};
 
 export const useCreateAgentGroup = ({
   onSuccess,
@@ -69,7 +79,7 @@ export const useSaveAgentGroup = ({
       await gmp.agentgroup.save(data);
     },
     entityType: AgentGroup.entityType,
-    invalidateQueryIds: ['get_agent_groups'],
+    invalidateQueryIds: ['get_agent_groups', 'get_agent_group'],
     onError,
     onSuccess,
   });
@@ -83,7 +93,7 @@ export const useDeleteAgentGroup = ({
   return useDeleteMutation({
     gmpMethod: ({id}) => gmp.agentgroup.delete({id}),
     entityType: AgentGroup.entityType,
-    invalidateQueryIds: ['get_agent_groups'],
+    invalidateQueryIds: ['get_agent_groups', 'get_agent_group'],
     onSuccess,
     onError,
   });

@@ -27,7 +27,7 @@ interface AgentGroupsComponentRenderProps {
 
 interface AgentGroupsComponentProps {
   children: (actions: AgentGroupsComponentRenderProps) => React.ReactNode;
-  onCloned?: () => void;
+  onCloned?: (data: EntityActionData) => void;
   onCloneError?: (error: Error) => void;
   onCreated?: (data: EntityActionData) => void;
   onCreateError?: (error: Error) => void;

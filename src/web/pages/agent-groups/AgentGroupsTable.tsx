@@ -9,6 +9,8 @@ import createEntitiesFooter, {
   type CreateEntitiesFooterProps,
 } from 'web/entities/createEntitiesFooter';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
+import withRowDetails from 'web/entities/withRowDetails';
+import AgentGroupDetails from 'web/pages/agent-groups/AgentGroupDetails';
 import AgentGroupsTableHeader, {
   type AgentGroupsTableHeaderProps,
 } from 'web/pages/agent-groups/AgentGroupsTableHeader';
@@ -24,7 +26,7 @@ export default createEntitiesTable<
 >({
   emptyTitle: _l('No agent groups available'),
   row: AgentGroupsTableRow,
-  rowDetails: undefined,
+  rowDetails: withRowDetails<AgentGroup>('agentgroup', 5)(AgentGroupDetails),
   header: AgentGroupsTableHeader,
   footer: createEntitiesFooter({
     span: 5,

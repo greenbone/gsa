@@ -64,6 +64,7 @@ const TaskDetails = ({entity, links = true}: TaskDetailsProps) => {
   const dispatch = useDispatch();
   const features = useFeatures();
 
+  const isAgentScanning = features.featureEnabled('ENABLE_AGENTS');
   const isCredentialStore = features.featureEnabled('ENABLE_CREDENTIAL_STORES');
   const isContainerScanning = features.featureEnabled(
     'ENABLE_CONTAINER_SCANNING',
@@ -98,6 +99,7 @@ const TaskDetails = ({entity, links = true}: TaskDetailsProps) => {
 
   const {
     alerts,
+    agentGroup,
     apply_overrides: applyOverrides,
     auto_delete: autoDelete,
     auto_delete_data: autoDeleteData,
@@ -136,6 +138,14 @@ const TaskDetails = ({entity, links = true}: TaskDetailsProps) => {
 
   return (
     <Layout flex="column" grow="1">
+      {isAgentScanning && isDefined(agentGroup?.id) && (
+        <DetailsBlock title={_('Agent Group')}>
+          <DetailsLink id={agentGroup.id} textOnly={!links} type="agentgroup">
+            {agentGroup.name}
+          </DetailsLink>
+        </DetailsBlock>
+      )}
+
       {isDefined(target?.id) && (
         <DetailsBlock title={_('Target')}>
           <DetailsLink id={target.id} textOnly={!links} type="target">
