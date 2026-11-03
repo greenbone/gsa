@@ -75,6 +75,14 @@ const loggedInRoutes = [
           ).default,
         }),
       },
+      {
+        path: ROUTES.agentGroup.path,
+        lazy: async () => ({
+          Component: (
+            await import('web/pages/agent-groups/AgentGroupDetailsPage')
+          ).default,
+        }),
+      },
 
       // Alert routes
       {
