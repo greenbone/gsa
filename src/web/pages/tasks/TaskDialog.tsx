@@ -87,6 +87,13 @@ interface TaskDialogDefaultValues {
 
 export type TaskDialogData = TaskDialogValues & TaskDialogDefaultValues;
 
+export interface TaskModeDraft {
+  name: string;
+  targetId?: string;
+  configId?: string;
+  scannerId?: string;
+}
+
 interface TaskDialogProps {
   add_tag?: YesNo;
   alert_ids?: string[];
@@ -120,6 +127,7 @@ interface TaskDialogProps {
   targets?: RenderSelectItemProps[];
   task?: Task;
   title?: string;
+  showReviewMode?: boolean;
   onAlertsChange?: (value: string[]) => void;
   onClose: () => void;
   onNewAlertClick?: () => void;
@@ -130,6 +138,7 @@ interface TaskDialogProps {
   onScannerChange?: (value: string) => void;
   onScheduleChange?: (value: string) => void;
   onTargetChange?: (value: string) => void;
+  onUseReviewMode?: (draft: TaskModeDraft) => void;
 }
 
 const Title = styled.div`
@@ -224,6 +233,7 @@ const TaskDialog = ({
   targets,
   task,
   title,
+  showReviewMode = false,
   onAlertsChange,
   onClose,
   onNewAlertClick,
@@ -234,6 +244,7 @@ const TaskDialog = ({
   onScannerChange,
   onScheduleChange,
   onTargetChange,
+  onUseReviewMode,
 }: TaskDialogProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
@@ -333,6 +344,30 @@ const TaskDialog = ({
                 onChange={onValueChange}
               />
             </FormGroup>
+
+            {!hasTask && showReviewMode && (
+              <FormGroup title={_('Scan mode')}>
+                <Checkbox
+                  checked={false}
+                  title={_('Scan multiple targets')}
+                  onChange={enabled => {
+                    if (enabled) {
+                      onUseReviewMode?.({
+                        name: state.name,
+                        targetId: state.target_id,
+                        configId: state.config_id,
+                        scannerId: state.scanner_id,
+                      });
+                    }
+                  }}
+                />
+                <p>
+                  {_(
+                    'Off creates a standard single-target task. On creates one multi-target task with host scans and a combined report after completion.',
+                  )}
+                </p>
+              </FormGroup>
+            )}
 
             <FormGroup direction="row" title={_('Scan Targets')}>
               <Title

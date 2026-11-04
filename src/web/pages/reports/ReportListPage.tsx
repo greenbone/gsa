@@ -21,6 +21,7 @@ import {
   USE_DEFAULT_RELOAD_INTERVAL,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/Reload';
+import {MultiTargetTasksProvider} from 'web/credential-aware/MultiTargetTaskContext';
 import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer, {
   type WithEntitiesContainerComponentProps,
@@ -92,6 +93,7 @@ const ReportListPage = ({
   ...props
 }: ReportListPageProps) => {
   const gmp = useGmp();
+  const showMultiTargetTasks = gmp.settings.enableCredentialAwareTasks;
   const [_] = useTranslation();
   const navigate = useNavigate();
   const [importDialogVisible, setImportDialogVisible] = useState(false);
@@ -197,7 +199,7 @@ const ReportListPage = ({
     setTaskId(taskId);
   };
 
-  return (
+  const reportsPage = (
     <>
       <PageTitle title={_('Reports')} />
       <EntitiesPage<Report>
@@ -246,6 +248,11 @@ const ReportListPage = ({
         />
       )}
     </>
+  );
+  return showMultiTargetTasks ? (
+    <MultiTargetTasksProvider>{reportsPage}</MultiTargetTasksProvider>
+  ) : (
+    reportsPage
   );
 };
 

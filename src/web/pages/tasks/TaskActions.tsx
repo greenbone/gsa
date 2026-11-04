@@ -3,10 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useState} from 'react';
 import type Task from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
+import {StartIcon, StopIcon} from 'web/components/icon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
+import {useMultiTargetTasks} from 'web/credential-aware/MultiTargetTaskContext';
 import EntitiesActions, {
   type EntitiesActionsProps,
 } from 'web/entities/EntitiesActions';
@@ -51,6 +54,67 @@ const TaskActions = ({
   onTaskStopClick,
 }: TaskActionsProps) => {
   const [_] = useTranslation();
+  const {byTaskId, start, stop} = useMultiTargetTasks();
+  const [groupError, setGroupError] = useState('');
+  const group = byTaskId[entity.id];
+  const isMultiTarget =
+    Boolean(group) ||
+    entity.comment?.startsWith('Multi-target review task; group ');
+
+  if (isMultiTarget) {
+    const active = group?.children.some(child =>
+      ['Running', 'Requested', 'Queued'].includes(child.status),
+    );
+    const operate = async () => {
+      if (!group) {
+        return;
+      }
+      setGroupError('');
+      try {
+        if (active) {
+          await stop(group);
+        } else {
+          await start(group);
+        }
+      } catch (reason) {
+        setGroupError((reason as Error).message);
+      }
+    };
+    return (
+      <EntitiesActions<Task>
+        data-testid={dataTestId}
+        entity={entity}
+        selectionType={selectionType}
+        onEntityDeselected={onEntityDeselected}
+        onEntitySelected={onEntitySelected}
+      >
+        <IconDivider grow align={['center', 'center']}>
+          {!group ? (
+            <span title={_('Loading multi-target task controls')}>…</span>
+          ) : active ? (
+            <StopIcon
+              title={_('Stop all hosts')}
+              onClick={() => void operate()}
+            />
+          ) : (
+            <StartIcon
+              title={
+                group.report_count
+                  ? _('Run all hosts again')
+                  : _('Start all hosts')
+              }
+              onClick={() => void operate()}
+            />
+          )}
+          {groupError && (
+            <span role="alert" title={groupError}>
+              !
+            </span>
+          )}
+        </IconDivider>
+      </EntitiesActions>
+    );
+  }
   return (
     <EntitiesActions<Task>
       data-testid={dataTestId}

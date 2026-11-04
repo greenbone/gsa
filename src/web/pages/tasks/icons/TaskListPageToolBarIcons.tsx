@@ -17,10 +17,12 @@ interface TaskToolBarIconsProps {
   onModifyTaskWizardClick?: () => void;
   onImportTaskCreateClick?: () => void;
   onTaskCreateClick?: () => void;
+  onMultiTargetCreateClick?: () => void;
   onTaskWizardClick?: () => void;
   onNewAgentTaskClick?: () => void;
   onNewContainerImageTaskClick?: () => void;
   onNewWebApplicationTaskClick?: () => void;
+  showMultiTarget?: boolean;
 }
 
 const TaskToolBarIcons = ({
@@ -28,10 +30,12 @@ const TaskToolBarIcons = ({
   onModifyTaskWizardClick,
   onImportTaskCreateClick,
   onTaskCreateClick,
+  onMultiTargetCreateClick,
   onTaskWizardClick,
   onNewAgentTaskClick,
   onNewContainerImageTaskClick,
   onNewWebApplicationTaskClick,
+  showMultiTarget,
 }: TaskToolBarIconsProps) => {
   const capabilities = useCapabilities();
   const [_] = useTranslation();
@@ -72,10 +76,12 @@ const TaskToolBarIcons = ({
       )}
 
       <NewIconMenu
+        showMultiTarget={showMultiTarget}
         onNewAgentTaskClick={onNewAgentTaskClick}
         onNewClick={onTaskCreateClick}
         onNewContainerImageTaskClick={onNewContainerImageTaskClick}
         onNewImportTaskClick={onImportTaskCreateClick}
+        onNewMultiTargetClick={onMultiTargetCreateClick}
         onNewWebApplicationTaskClick={onNewWebApplicationTaskClick}
       />
     </IconDivider>
