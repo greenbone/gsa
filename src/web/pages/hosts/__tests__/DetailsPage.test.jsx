@@ -189,6 +189,23 @@ const createGmp = ({
 });
 
 describe('Host DetailsPage tests', () => {
+  test('shows integrated scan credentials for a host when enabled', () => {
+    const gmp = createGmp();
+    gmp.settings.enableCredentialAwareTasks = true;
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(entityLoadingActions.success('12345', host));
+    render(<DetailsPage id="12345" />);
+
+    fireEvent.click(screen.getByRole('tab', {name: 'Scan Credentials'}));
+    expect(screen.getByText('Scan credential overrides')).toBeInTheDocument();
+  });
+
   test('should render full DetailsPage', () => {
     const gmp = createGmp();
     const {render, store} = rendererWith({

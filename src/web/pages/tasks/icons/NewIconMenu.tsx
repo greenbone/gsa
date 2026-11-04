@@ -12,18 +12,22 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface NewIconMenuProps {
   onNewClick?: () => void;
+  onNewMultiTargetClick?: () => void;
   onNewImportTaskClick?: () => void;
   onNewAgentTaskClick?: () => void;
   onNewContainerImageTaskClick?: () => void;
   onNewWebApplicationTaskClick?: () => void;
+  showMultiTarget?: boolean;
 }
 
 const NewIconMenu = ({
   onNewClick,
+  onNewMultiTargetClick,
   onNewImportTaskClick,
   onNewAgentTaskClick,
   onNewContainerImageTaskClick,
   onNewWebApplicationTaskClick,
+  showMultiTarget = false,
 }: NewIconMenuProps) => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
@@ -36,6 +40,13 @@ const NewIconMenu = ({
           title={_('New Task')}
           onClick={onNewClick}
         />
+        {showMultiTarget && (
+          <MenuEntry
+            data-testid="new-multi-target-task-menu"
+            title={_('New Multi-Target Task')}
+            onClick={onNewMultiTargetClick}
+          />
+        )}
         <MenuEntry
           data-testid="new-import-task-menu"
           title={_('New Import Task')}

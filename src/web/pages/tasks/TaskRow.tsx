@@ -30,6 +30,7 @@ import DetailsLink from 'web/components/link/DetailsLink';
 import Link from 'web/components/link/Link';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
+import {useMultiTargetTasks} from 'web/credential-aware/MultiTargetTaskContext';
 import RowDetailsToggle from 'web/entities/RowDetailsToggle';
 import ObserverIcon from 'web/entity/icon/ObserverIcon';
 import useTranslation from 'web/hooks/useTranslation';
@@ -80,7 +81,9 @@ const TaskReportTotal = ({task, links = true}: TaskReportTotalProps) => {
         title={_(
           'View list of all reports for Task {{name}},' +
             ' including unfinished ones',
-          {name: task.name as string},
+          {
+            name: task.name as string,
+          },
         )}
         to={'reports'}
       >
@@ -98,6 +101,11 @@ const TaskRow = ({
   ...props
 }: TaskRowProps) => {
   const [_] = useTranslation();
+  const {byTaskId} = useMultiTargetTasks();
+  const group = byTaskId[entity.id];
+  const isMultiTarget =
+    Boolean(group) ||
+    entity.comment?.startsWith('Multi-target review task; group ');
   const username = useUserName() as string;
   const {scanner, observers, last_report: lastReport} = entity;
 
@@ -108,6 +116,9 @@ const TaskRow = ({
   };
 
   const renderTaskTypeIcon = (entity: Task) => {
+    if (isMultiTarget) {
+      return <RadarIcon size="small" title={_('Multi-target scan task')} />;
+    }
     if (entity.isContainerImage()) {
       return (
         <ContainerIcon
@@ -178,7 +189,10 @@ const TaskRow = ({
             >
               {entity.name}
             </RowDetailsToggle>
-            {entity.comment && <Comment>({entity.comment})</Comment>}
+            {group && <span> · {group.host_count} hosts</span>}
+            {!isMultiTarget && entity.comment && (
+              <Comment>({entity.comment})</Comment>
+            )}
           </div>
           <IconDivider>
             {entity.alterable === 1 && (
@@ -217,7 +231,15 @@ const TaskRow = ({
       </TableData>
       <TableData>{renderTaskTypeIcon(entity)}</TableData>
       <TableData>
-        <TaskStatus links={links} task={entity} />
+        {isMultiTarget ? (
+          <span>
+            {group
+              ? `${group.status} · ${group.done_count}/${group.host_count} hosts`
+              : 'Loading scan status…'}
+          </span>
+        ) : (
+          <TaskStatus links={links} task={entity} />
+        )}
       </TableData>
       <TableData>
         <TaskReportTotal links={links} task={entity} />

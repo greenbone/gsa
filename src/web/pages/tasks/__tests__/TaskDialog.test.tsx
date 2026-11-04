@@ -145,6 +145,70 @@ describe('TaskDialog component tests', () => {
     expect(onSave).toHaveBeenCalled();
   });
 
+  test('routes the enabled scan mode to the review dialog', () => {
+    const onUseReviewMode = testing.fn();
+    rendererWith({gmp, capabilities: true}).render(
+      <TaskDialog
+        {...commonHandlers()}
+        showReviewMode
+        name="Mode test"
+        scan_configs={[scanConfig]}
+        scanner_id={OPENVAS_DEFAULT_SCANNER_ID}
+        scanners={[
+          new Scanner({
+            id: OPENVAS_DEFAULT_SCANNER_ID,
+            scannerType: OPENVAS_SCANNER_TYPE,
+          }),
+        ]}
+        targets={[]}
+        onUseReviewMode={onUseReviewMode}
+      />,
+    );
+
+    expect(
+      screen.getByRole('checkbox', {
+        name: 'Scan multiple targets',
+      }),
+    ).not.toBeChecked();
+    expect(onUseReviewMode).not.toHaveBeenCalled();
+
+    fireEvent.click(
+      screen.getByRole('checkbox', {
+        name: 'Scan multiple targets',
+      }),
+    );
+    expect(onUseReviewMode).toHaveBeenCalledWith(
+      expect.objectContaining({name: 'Mode test'}),
+    );
+  });
+
+  test('keeps the existing save handler when review mode is off', async () => {
+    const onSave = testing.fn();
+    const onUseReviewMode = testing.fn();
+    rendererWith({gmp, capabilities: true}).render(
+      <TaskDialog
+        {...commonHandlers()}
+        showReviewMode
+        name="Standard mode"
+        scan_configs={[scanConfig]}
+        scanner_id={OPENVAS_DEFAULT_SCANNER_ID}
+        scanners={[
+          new Scanner({
+            id: OPENVAS_DEFAULT_SCANNER_ID,
+            scannerType: OPENVAS_SCANNER_TYPE,
+          }),
+        ]}
+        targets={[]}
+        onSave={onSave}
+        onUseReviewMode={onUseReviewMode}
+      />,
+    );
+    fireEvent.click(screen.getDialogSaveButton());
+    await wait();
+    expect(onSave).toHaveBeenCalled();
+    expect(onUseReviewMode).not.toHaveBeenCalled();
+  });
+
   test('should close dialog on close button click', () => {
     const onClose = testing.fn();
     const defaultProps = {

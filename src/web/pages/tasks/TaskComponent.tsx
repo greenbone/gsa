@@ -22,6 +22,7 @@ import {DEFAULT_TIMEZONE} from 'gmp/time-zones';
 import {map} from 'gmp/utils/array';
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
+import MultiTargetTaskDialog from 'web/credential-aware/MultiTargetTaskDialog';
 import actionFunction from 'web/entity/hooks/action-function';
 import useEntityClone, {
   type EntityCloneResponse,
@@ -53,7 +54,10 @@ import {useWebApplicationTaskDialog} from 'web/pages/tasks/hooks/useWebApplicati
 import ImportTaskDialog, {
   type ImportTaskDialogData,
 } from 'web/pages/tasks/ImportTaskDialog';
-import TaskDialog, {type TaskDialogData} from 'web/pages/tasks/TaskDialog';
+import TaskDialog, {
+  type TaskDialogData,
+  type TaskModeDraft,
+} from 'web/pages/tasks/TaskDialog';
 import WebApplicationTaskDialog from 'web/pages/tasks/WebApplicationTaskDialog';
 import WebApplicationTargetsComponent from 'web/pages/web-application-targets/WebApplicationTargetsComponent';
 import {
@@ -97,6 +101,7 @@ import TaskWizard from 'web/wizard/TaskWizard';
 
 interface TaskComponentRenderProps {
   create: () => void;
+  createMultiTarget: () => void;
   createImportTask: () => void;
   createContainerImage: () => void;
   clone: (task: Task) => void;
@@ -190,6 +195,9 @@ const TaskComponent = ({
   const [reportImportDialogVisible, setReportImportDialogVisible] =
     useState(false);
   const [taskDialogVisible, setTaskDialogVisible] = useState(false);
+  const [multiTargetDialogVisible, setMultiTargetDialogVisible] =
+    useState(false);
+  const [multiTargetDraft, setMultiTargetDraft] = useState<TaskModeDraft>();
   const [taskWizardVisible, setTaskWizardVisible] = useState(false);
   const [agentTaskDialogVisible, setAgentTaskDialogVisible] = useState(false);
 
@@ -1014,6 +1022,10 @@ const TaskComponent = ({
           delete: handleEntityDelete,
           download: handleEntityDownload,
           create: openTaskDialog,
+          createMultiTarget: () => {
+            setMultiTargetDraft(undefined);
+            setMultiTargetDialogVisible(true);
+          },
           createImportTask: openImportTaskDialog,
           createContainerImage: openContainerImageTaskDialog,
           edit: handleEditTask,
@@ -1064,6 +1076,7 @@ const TaskComponent = ({
                       schedule_id={scheduleId}
                       schedule_periods={schedulePeriods}
                       schedules={schedules}
+                      showReviewMode={gmp.settings.enableCredentialAwareTasks}
                       tags={tags}
                       target_id={targetId}
                       targets={targets}
@@ -1079,6 +1092,11 @@ const TaskComponent = ({
                       onScannerChange={handleScannerChange}
                       onScheduleChange={handleScheduleChange}
                       onTargetChange={handleTargetChange}
+                      onUseReviewMode={draft => {
+                        setMultiTargetDraft(draft);
+                        setTaskDialogVisible(false);
+                        setMultiTargetDialogVisible(true);
+                      }}
                     />
                   )}
                 </ScheduleComponent>
@@ -1086,6 +1104,25 @@ const TaskComponent = ({
             </AlertComponent>
           )}
         </TargetComponent>
+      )}
+
+      {gmp.settings.enableCredentialAwareTasks && multiTargetDialogVisible && (
+        <MultiTargetTaskDialog
+          initial={multiTargetDraft}
+          onClose={() => setMultiTargetDialogVisible(false)}
+          onCreated={() => {
+            onSaved?.();
+            window.dispatchEvent(new Event('credential-aware-groups-changed'));
+          }}
+          onUseStandard={draft => {
+            setMultiTargetDialogVisible(false);
+            openStandardTaskDialog();
+            setName(draft.name || undefined);
+            setTargetId(draft.target_ids[0]);
+            setScanConfigId(draft.config_id);
+            setScannerId(draft.scanner_id);
+          }}
+        />
       )}
 
       {importTaskDialogVisible && (

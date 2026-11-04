@@ -21,6 +21,8 @@ import DetailsTable from 'web/components/table/DetailsTable';
 import TableBody from 'web/components/table/TableBody';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
+import {useMultiTargetTasks} from 'web/credential-aware/MultiTargetTaskContext';
+import MultiTargetTaskPanel from 'web/credential-aware/MultiTargetTaskPanel';
 import DetailsBlock from 'web/entity/DetailsBlock';
 import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
@@ -63,6 +65,11 @@ const TaskDetails = ({entity, links = true}: TaskDetailsProps) => {
   const gmp = useGmp();
   const dispatch = useDispatch();
   const features = useFeatures();
+  const {byTaskId} = useMultiTargetTasks();
+  const group = byTaskId[entity.id];
+  const isMultiTarget =
+    Boolean(group) ||
+    entity.comment?.startsWith('Multi-target review task; group ');
 
   const isCredentialStore = features.featureEnabled('ENABLE_CREDENTIAL_STORES');
   const isContainerScanning = features.featureEnabled(
@@ -95,6 +102,14 @@ const TaskDetails = ({entity, links = true}: TaskDetailsProps) => {
       fetchSchedule(entity.schedule.id);
     }
   }, [entity.config, entity.schedule, fetchScanConfig, fetchSchedule]);
+
+  if (isMultiTarget) {
+    return group ? (
+      <MultiTargetTaskPanel group={group} />
+    ) : (
+      <p>Loading multi-target scan status…</p>
+    );
+  }
 
   const {
     alerts,

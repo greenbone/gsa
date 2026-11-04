@@ -16,6 +16,7 @@ interface SettingsOptions {
   apiServer?: string;
   disableLoginForm?: boolean;
   enableAssetManagement?: boolean;
+  enableCredentialAwareTasks?: boolean;
   enableCommunityFeedNotification?: boolean;
   enableEPSS?: boolean;
   enableGreenboneSensor?: boolean;
@@ -106,6 +107,7 @@ class Settings {
   public readonly apiServer!: string;
   public readonly disableLoginForm!: boolean;
   public readonly enableAssetManagement!: boolean;
+  public readonly enableCredentialAwareTasks!: boolean;
   public readonly enableCommunityFeedNotification: boolean;
   public readonly enableEPSS!: boolean;
   public readonly enableGreenboneSensor!: boolean;
@@ -131,6 +133,7 @@ class Settings {
       disableLoginForm = false,
       enableStoreDebugLog,
       enableAssetManagement = false,
+      enableCredentialAwareTasks = false,
       enableCommunityFeedNotification = true,
       guestUsername,
       guestPassword,
@@ -205,6 +208,11 @@ class Settings {
     setAndFreeze(this, 'apiServer', apiServer);
     setAndFreeze(this, 'disableLoginForm', disableLoginForm);
     setAndFreeze(this, 'enableAssetManagement', enableAssetManagement);
+    setAndFreeze(
+      this,
+      'enableCredentialAwareTasks',
+      enableCredentialAwareTasks,
+    );
     setAndFreeze(this, 'enableEPSS', enableEPSS);
     setAndFreeze(this, 'enableGreenboneSensor', enableGreenboneSensor);
     setAndFreeze(this, 'enableKrb5', enableKrb5);

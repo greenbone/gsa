@@ -10,6 +10,24 @@ import Features from 'gmp/capabilities/features';
 import NewIconMenu from 'web/pages/tasks/icons/NewIconMenu';
 
 describe('NewIconMenu tests', () => {
+  test('offers the integrated multi-target scan workflow when enabled', async () => {
+    const onNewMultiTargetClick = testing.fn();
+    const {render} = rendererWith({
+      capabilities: true,
+    });
+    render(
+      <NewIconMenu
+        showMultiTarget
+        onNewMultiTargetClick={onNewMultiTargetClick}
+      />,
+    );
+
+    fireEvent.click(screen.getByTitle('New Task Menu'));
+    const menuItem = await screen.findByTestId('new-multi-target-task-menu');
+    fireEvent.click(menuItem);
+    expect(onNewMultiTargetClick).toHaveBeenCalled();
+  });
+
   test('should render', async () => {
     const {render} = rendererWith({capabilities: true});
     render(<NewIconMenu />);

@@ -29,6 +29,7 @@ import TableBody from 'web/components/table/TableBody';
 import TableCol from 'web/components/table/TableCol';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
+import AssetCredentials from 'web/credential-aware/AssetCredentials';
 import EntitiesTab from 'web/entity/EntitiesTab';
 import EntityPage from 'web/entity/EntityPage';
 import EntityPermissions from 'web/entity/EntityPermissions';
@@ -40,6 +41,7 @@ import EntityTags from 'web/entity/Tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import HostDetails from 'web/pages/hosts/Details';
 import HostComponent from 'web/pages/hosts/HostComponent';
@@ -250,6 +252,7 @@ const Page = ({
   ...props
 }) => {
   const [_] = useTranslation();
+  const showCredentialOverrides = useGmp().settings.enableCredentialAwareTasks;
   const goto_host = goToDetails('host', props);
   return (
     <HostComponent
@@ -290,6 +293,9 @@ const Page = ({
                     <EntitiesTab entities={permissions}>
                       {_('Permissions')}
                     </EntitiesTab>
+                    {showCredentialOverrides && (
+                      <Tab>{_('Scan Credentials')}</Tab>
+                    )}
                   </TabList>
                 </TabLayout>
 
@@ -317,6 +323,14 @@ const Page = ({
                         onError={onError}
                       />
                     </TabPanel>
+                    {showCredentialOverrides && (
+                      <TabPanel>
+                        <AssetCredentials
+                          assetId={entity.id}
+                          hostName={entity.name}
+                        />
+                      </TabPanel>
+                    )}
                   </TabPanels>
                 </Tabs>
               </TabsContainer>

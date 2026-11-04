@@ -12,10 +12,12 @@ import {
   USE_DEFAULT_RELOAD_INTERVAL,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/Reload';
+import {MultiTargetTasksProvider} from 'web/credential-aware/MultiTargetTaskContext';
 import EntitiesPage from 'web/entities/EntitiesPage';
 import withEntitiesContainer, {
   type WithEntitiesContainerComponentProps,
 } from 'web/entities/withEntitiesContainer';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import TaskDashboard, {TASK_DASHBOARD_ID} from 'web/pages/tasks/dashboard';
 import TaskToolBarIcons from 'web/pages/tasks/icons/TaskListPageToolBarIcons';
@@ -39,6 +41,7 @@ interface TaskEntitiesPageProps {
   onReportImportClick?: (task: Task) => void;
   onTaskCloneClick?: (task: Task) => void;
   onTaskCreateClick?: () => void;
+  onMultiTargetCreateClick?: () => void;
   onTaskDeleteClick?: (task: Task) => void;
   onTaskDownloadClick?: (task: Task) => void;
   onTaskEditClick?: (task: Task) => void;
@@ -46,6 +49,7 @@ interface TaskEntitiesPageProps {
   onTaskStartClick?: (task: Task) => void;
   onTaskStopClick?: (task: Task) => void;
   onTaskWizardClick?: () => void;
+  showMultiTarget?: boolean;
 }
 
 const TaskListPage = ({
@@ -57,7 +61,8 @@ const TaskListPage = ({
   ...props
 }: TaskListPageProps) => {
   const [_] = useTranslation();
-  return (
+  const showCredentialAwareTasks = useGmp().settings.enableCredentialAwareTasks;
+  const taskList = (
     <TaskComponent
       onAdvancedTaskWizardSaved={onChanged}
       onCloneError={onError}
@@ -83,6 +88,7 @@ const TaskListPage = ({
       {({
         clone,
         create,
+        createMultiTarget,
         createImportTask,
         delete: deleteFunc,
         download,
@@ -111,10 +117,12 @@ const TaskListPage = ({
             dashboardControls={() => (
               <DashboardControlsContainer dashboardId={TASK_DASHBOARD_ID} />
             )}
+            entities={props.entities}
             filter={filter}
             filterEditDialog={TaskFilterDialog}
             filtersFilter={TASKS_FILTER_FILTER}
             sectionIcon={<TaskIcon size="large" />}
+            showMultiTarget={showCredentialAwareTasks}
             table={TaskTable}
             title={_('Tasks')}
             toolBarIcons={TaskToolBarIcons}
@@ -123,6 +131,7 @@ const TaskListPage = ({
             onFilterChanged={onFilterChanged}
             onImportTaskCreateClick={createImportTask}
             onModifyTaskWizardClick={modifyTaskWizard}
+            onMultiTargetCreateClick={createMultiTarget}
             onNewAgentTaskClick={onNewAgentTaskClick}
             onNewContainerImageTaskClick={onNewContainerImageTaskClick}
             onNewWebApplicationTaskClick={onNewWebApplicationTaskClick}
@@ -140,6 +149,11 @@ const TaskListPage = ({
         </>
       )}
     </TaskComponent>
+  );
+  return showCredentialAwareTasks ? (
+    <MultiTargetTasksProvider>{taskList}</MultiTargetTasksProvider>
+  ) : (
+    taskList
   );
 };
 

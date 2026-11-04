@@ -19,6 +19,7 @@ import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
+import {useMultiTargetTasks} from 'web/credential-aware/MultiTargetTaskContext';
 import withEntitiesActions, {
   type WithEntitiesActionsProps,
   type WithEntitiesActionsComponentProps,
@@ -104,16 +105,22 @@ const ReportTableRow = ({
   ...props
 }: ReportTableRowProps) => {
   const gmp = useGmp();
+  const {byTaskId} = useMultiTargetTasks();
   const {report} = entity;
   const scan_run_status = report?.scan_run_status;
   const task = report?.task;
+  const multiTargetGroup = task?.id ? byTaskId[task.id] : undefined;
   const fullTask = tasks?.find(taskEntity => taskEntity.id === task?.id);
 
   let status = scan_run_status;
   let progress: number | undefined = undefined;
 
   if (isDefined(task)) {
-    if (task.isImport() && status !== TASK_STATUS.processing) {
+    if (
+      task.isImport() &&
+      !multiTargetGroup &&
+      status !== TASK_STATUS.processing
+    ) {
       status =
         status === TASK_STATUS.interrupted
           ? TASK_STATUS.uploadinginterrupted
@@ -151,6 +158,7 @@ const ReportTableRow = ({
           <DetailsLink id={task?.id as string} textOnly={!links} type="task">
             {task?.name}
           </DetailsLink>
+          {multiTargetGroup && <span> · Combined multi-target report</span>}
         </span>
       </TableData>
       <AgentIdTableData agentId={task?.agentGroup?.id} />
