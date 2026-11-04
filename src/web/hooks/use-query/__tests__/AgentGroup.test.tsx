@@ -5,11 +5,13 @@
 
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
+import AgentGroup from 'gmp/models/agent-group';
 import {createSession} from 'gmp/testing';
 import {
   useCloneAgentGroup,
   useCreateAgentGroup,
   useDeleteAgentGroup,
+  useGetAgentGroup,
   useSaveAgentGroup,
 } from 'web/hooks/use-query/agent-group';
 
@@ -17,11 +19,41 @@ const createGmp = () => ({
   session: createSession({token: 'test-token'}),
   settings: {},
   agentgroup: {
+    get: testing.fn().mockResolvedValue({
+      data: new AgentGroup({id: 'group-1', name: 'Office agents'}),
+    }),
     create: testing.fn().mockResolvedValue({data: {id: 'group-2'}}),
     clone: testing.fn().mockResolvedValue({data: {id: 'group-2'}}),
     save: testing.fn().mockResolvedValue(undefined),
     delete: testing.fn().mockResolvedValue(undefined),
   },
+});
+
+describe('useGetAgentGroup', () => {
+  test('should fetch an agent group by ID', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp});
+    const TestComponent = () => {
+      const {data} = useGetAgentGroup({id: 'group-1'});
+      return <div>{data?.name}</div>;
+    };
+    render(<TestComponent />);
+
+    expect(await screen.findByText('Office agents')).toBeVisible();
+    expect(gmp.agentgroup.get).toHaveBeenCalledWith({id: 'group-1'});
+  });
+
+  test('should not fetch without an ID', () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp});
+    const TestComponent = () => {
+      useGetAgentGroup({id: undefined});
+      return null;
+    };
+    render(<TestComponent />);
+
+    expect(gmp.agentgroup.get).not.toHaveBeenCalled();
+  });
 });
 
 describe('useCreateAgentGroup', () => {

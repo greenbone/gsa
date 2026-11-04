@@ -250,7 +250,7 @@ describe('TaskDetailsPage tests', () => {
       owner: {name: 'admin'},
       name: 'agent task',
       status: TASK_STATUS.done,
-      agent_group: {_id: 'agent-group-id'},
+      agent_group: {_id: 'agent-group-id', name: 'Office agents'},
       last_report: {
         report: {
           _id: 'empty-report-id',
@@ -271,11 +271,17 @@ describe('TaskDetailsPage tests', () => {
       capabilities: true,
       router: true,
       store: true,
+      features: new Features(['ENABLE_AGENTS']),
     });
 
     store.dispatch(entityLoadingActions.success(agentTask.id, agentTask));
 
     render(<TaskDetailsPage id={agentTask.id} />);
+
+    expect(screen.getByRole('link', {name: 'Office agents'})).toHaveAttribute(
+      'href',
+      '/agent-group/agent-group-id',
+    );
 
     const progressBars = screen.getAllByTestId('progressbar-box');
     expect(progressBars[0]).toHaveTextContent('Done');
