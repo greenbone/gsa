@@ -173,7 +173,7 @@
   "Agent Controller": "Controller agente",
   "Agent Default Configuration": "Configurazione predefinita agente",
   "Agent Group": "Gruppo agente",
-  "Agent Group: {{name}}": "",
+  "Agent Group: {{name}}": "Gruppo agente: {{name}}",
   "Agent Groups": "Gruppi agente",
   "Agent Groups Filter": "Filtro gruppi agente",
   "Agent Groups List": "",
