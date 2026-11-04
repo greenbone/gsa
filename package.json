@@ -10,7 +10,7 @@
     "openvas"
   ],
   "license": "AGPL-3.0+",
-  "author": "Bj\u00f6rn Ricks <bjoern.ricks@greenbone.net>",
+  "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
   "repository": {
     "type": "git",
     "url": "https://github.com/greenbone/gsa/"
@@ -110,7 +110,7 @@
     "oxc-parser": "0.155.0",
     "oxfmt": "0.75.0",
     "oxlint": "1.90.0",
-    "oxlint-tsgolint": "7.0.2003",
+    "oxlint-tsgolint": "7.0.2005",
     "typescript": "7.0.2",
     "vite": "^8.3.3",
     "vite-plugin-checker": "0.14.5",
