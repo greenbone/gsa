@@ -4,6 +4,7 @@
  */
 
 import {useRef, useState} from 'react';
+import {ResponseRejection} from 'gmp/http/rejection';
 import {
   type default as Credential,
   type ActiveDirectoryTlsMode,
@@ -35,6 +36,7 @@ interface ActiveDirectoryDialogFieldsProps {
   initialCertificate?: File;
   onValueChange: (value: string | undefined, name?: string) => void;
   onCertificateChange: (file: File | undefined) => Promise<void>;
+  onError: (message?: string) => void;
 }
 
 const ActiveDirectoryDialogFields = ({
@@ -43,6 +45,7 @@ const ActiveDirectoryDialogFields = ({
   initialCertificate,
   onValueChange,
   onCertificateChange,
+  onError,
 }: ActiveDirectoryDialogFieldsProps) => {
   const [_] = useTranslation();
   const gmp = useGmp();
@@ -55,6 +58,7 @@ const ActiveDirectoryDialogFields = ({
   const invalidateConnection = () => {
     requestVersion.current += 1;
     setConnectionStatus(undefined);
+    onError(undefined);
   };
   const handleValueChange = (value: string | undefined, name?: string) => {
     invalidateConnection();
@@ -72,11 +76,40 @@ const ActiveDirectoryDialogFields = ({
       state.adBaseDn !== credential.adBaseDn ||
       state.adTlsMode !== credential.adTlsMode ||
       state.adCaCertificate !== initialCertificate);
+  const getVerificationErrorMessage = (error: unknown): string => {
+    const message =
+      error instanceof Error && error.message
+        ? error.message
+        : _('Credential verification failed');
+    let hint: string | undefined;
+    if (error instanceof ResponseRejection) {
+      switch (error.status) {
+        case 400:
+          hint = _(
+            'Review the credential settings and correct the reported problem.',
+          );
+          break;
+        case 503:
+          hint = _(
+            'Check the AD host, port, network access, TLS settings, CA certificate, bind DN and bind password.',
+          );
+          break;
+        case 500:
+          hint = _(
+            'Try again later. If the problem persists, contact your administrator.',
+          );
+          break;
+      }
+    }
+    return hint ? `${message}: ${hint}` : message;
+  };
+
   const requiresPassword = isEdit && !changeAdBindPassword && settingsChanged;
   const handleTestConnection = async () => {
     if (requiresPassword) return;
     const version = ++requestVersion.current;
     setConnectionStatus('testing');
+    onError(undefined);
     try {
       if (credential?.id && !changeAdBindPassword) {
         await gmp.credential.verifyActiveDirectory({id: credential.id});
@@ -96,8 +129,10 @@ const ActiveDirectoryDialogFields = ({
         });
       }
       if (version === requestVersion.current) setConnectionStatus('success');
-    } catch {
-      if (version === requestVersion.current) setConnectionStatus('failed');
+    } catch (error) {
+      if (version !== requestVersion.current) return;
+      setConnectionStatus('failed');
+      onError(getVerificationErrorMessage(error));
     }
   };
   return (

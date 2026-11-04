@@ -16,6 +16,7 @@ import {
   waitFor,
 } from 'web/testing';
 import Features from 'gmp/capabilities/features';
+import {ResponseRejection} from 'gmp/http/rejection';
 import Credential, {
   ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
   ALL_CREDENTIAL_TYPES,
@@ -527,6 +528,83 @@ describe('CredentialDialog tests', () => {
         name: 'Credential verified',
       }),
     ).toBeVisible();
+  });
+
+  test.each([
+    [
+      400,
+      'AD host is required',
+      'Review the credential settings and correct the reported problem.',
+    ],
+    [
+      503,
+      'Could not connect to Active Directory',
+      'Check the AD host, port, network access, TLS settings, CA certificate, bind DN and bind password.',
+    ],
+    [
+      503,
+      'Active Directory bind failed',
+      'Check the AD host, port, network access, TLS settings, CA certificate, bind DN and bind password.',
+    ],
+    [
+      500,
+      'Internal error',
+      'Try again later. If the problem persists, contact your administrator.',
+    ],
+    [403, 'Permission denied', ''],
+  ])(
+    'shows verification error %s (%s) with recovery guidance',
+    async (status, message, hint) => {
+      const request = new XMLHttpRequest();
+      Object.defineProperty(request, 'status', {value: status});
+      const verifyActiveDirectory = testing
+        .fn()
+        .mockRejectedValue(new ResponseRejection(request, message));
+      const {render} = rendererWith({
+        gmp: {...createGmp(), credential: {verifyActiveDirectory}},
+        features: new Features(['ENABLE_AD_INTEGRATION']),
+      });
+      render(
+        <CredentialDialog
+          credentialType={ACTIVE_DIRECTORY_CREDENTIAL_TYPE}
+          types={[ACTIVE_DIRECTORY_CREDENTIAL_TYPE]}
+        />,
+      );
+      fireEvent.click(screen.getByRole('button', {name: 'Verify credential'}));
+      expect(
+        await screen.findByText(hint ? `${message}: ${hint}` : message),
+      ).toBeVisible();
+      expect(
+        screen.getByRole('button', {name: 'Credential verification failed'}),
+      ).toBeVisible();
+    },
+  );
+
+  test('ignores a verification error after settings change', async () => {
+    let rejectVerification!: (error: Error) => void;
+    const verifyActiveDirectory = testing.fn().mockImplementation(
+      () =>
+        new Promise<void>((resolve, reject) => {
+          rejectVerification = reject;
+        }),
+    );
+    const {render} = rendererWith({
+      gmp: {...createGmp(), credential: {verifyActiveDirectory}},
+      features: new Features(['ENABLE_AD_INTEGRATION']),
+    });
+    render(
+      <CredentialDialog
+        credentialType={ACTIVE_DIRECTORY_CREDENTIAL_TYPE}
+        types={[ACTIVE_DIRECTORY_CREDENTIAL_TYPE]}
+      />,
+    );
+    fireEvent.click(screen.getByRole('button', {name: 'Verify credential'}));
+    changeInputValue(screen.getByName('adHost'), 'changed.example.com');
+    await act(async () => rejectVerification(new Error('Outdated failure')));
+    expect(screen.queryByText('Outdated failure')).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('button', {name: 'Verify credential'}),
+    ).toBeEnabled();
   });
 
   test('should prefill Active Directory fields and keep password write-only', async () => {

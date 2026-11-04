@@ -734,6 +734,7 @@ const CredentialDialog = ({
                 initialCertificate={initialAdCaCertificate}
                 state={state}
                 onCertificateChange={handleAdCaCertificateChange}
+                onError={setError}
                 onValueChange={onValueChange}
               />
             )}
