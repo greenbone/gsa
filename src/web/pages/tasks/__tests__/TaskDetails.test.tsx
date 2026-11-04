@@ -102,6 +102,55 @@ const gmp = {
 };
 
 describe('TaskDetails tests', () => {
+  test.each([true, false])(
+    'should display the agent group with links=%s',
+    links => {
+      const task = Task.fromElement({
+        _id: 'agent-task',
+        agent_group: {_id: 'group-1', name: 'Office agents'},
+      });
+      const {render} = rendererWith({
+        gmp,
+        capabilities: true,
+        features: new Features(['ENABLE_AGENTS']),
+      });
+      render(<Details entity={task} links={links} />);
+
+      expect(screen.getByRole('heading', {name: 'Agent Group'})).toBeVisible();
+      expect(
+        screen.queryByRole('heading', {name: 'Target'}),
+      ).not.toBeInTheDocument();
+      expect(screen.getByText('Office agents')).toBeVisible();
+      if (links) {
+        expect(
+          screen.getByRole('link', {name: 'Office agents'}),
+        ).toHaveAttribute('href', '/agent-group/group-1');
+      } else {
+        expect(
+          screen.queryByRole('link', {name: 'Office agents'}),
+        ).not.toBeInTheDocument();
+      }
+    },
+  );
+
+  test('should hide the agent group when agent scanning is disabled', () => {
+    const task = Task.fromElement({
+      _id: 'agent-task',
+      agent_group: {_id: 'group-1', name: 'Office agents'},
+    });
+    const {render} = rendererWith({
+      gmp,
+      capabilities: true,
+      features: new Features(),
+    });
+    render(<Details entity={task} />);
+
+    expect(
+      screen.queryByRole('heading', {name: 'Agent Group'}),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText('Office agents')).not.toBeInTheDocument();
+  });
+
   test('should render container image target link when container scanning is enabled', () => {
     const task = Task.fromElement({
       _id: 'cscan1',
@@ -166,6 +215,10 @@ describe('TaskDetails tests', () => {
     store.dispatch(scheduleActions.success('121314', schedule));
 
     const {element} = render(<Details entity={task} />);
+
+    expect(
+      screen.queryByRole('heading', {name: 'Agent Group'}),
+    ).not.toBeInTheDocument();
 
     const targetDetails = within(
       screen.getByRole('heading', {name: /^Target$/})

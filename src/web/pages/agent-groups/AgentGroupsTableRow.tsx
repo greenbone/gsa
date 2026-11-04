@@ -8,6 +8,7 @@ import DateTime from 'web/components/date/DateTime';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import {type RowComponentProps} from 'web/entities/EntitiesTable';
+import EntityNameTableData from 'web/entities/EntityNameTableData';
 import useTranslation from 'web/hooks/useTranslation';
 import AgentGroupsActions, {
   type AgentGroupsActionsProps,
@@ -28,11 +29,13 @@ export interface AgentGroupsRowActionsProps extends AgentGroupsActionsProps {
 export interface AgentGroupsTableRowProps
   extends AgentGroupsRowActionsProps, RowComponentProps<AgentGroup> {
   actionsComponent?: React.ComponentType<AgentGroupsRowActionsProps>;
+  links?: boolean;
 }
 
 const AgentGroupsTableRow = ({
   actionsComponent: ActionsComponent = AgentGroupsActions,
   entity,
+  links = true,
   onAgentGroupCloneClick,
   onAgentGroupDeleteClick,
   onAgentGroupEditClick,
@@ -57,7 +60,13 @@ const AgentGroupsTableRow = ({
 
   return (
     <TableRow data-testid={dataTestId}>
-      <TableData>{entity.name}</TableData>
+      <EntityNameTableData
+        displayName={_('Agent Group')}
+        entity={entity}
+        links={links}
+        type="agentgroup"
+        onToggleDetailsClick={onToggleDetailsClick}
+      />
       <TableData>{entity.scanner?.name ?? <i>{_('None')}</i>}</TableData>
       <TableData>{entity.getAgentCount()}</TableData>
       <TableData>{modificationTime}</TableData>
