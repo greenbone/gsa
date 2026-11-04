@@ -611,7 +611,7 @@
   "Credentials Filter": "Filtro credenziali",
   "Credentials for authenticated checks": "Credenziali per i controlli autenticati",
   "Critical": "Critico",
-  "Cron expression": "",
+  "Cron expression": "Espressione cron",
   "Cron expressions for scheduler": "Espressioni cron per il pianificatore",
   "Current": "Corrente",
   "Current Report for Audit {{- name}} from {{- date}}": "Report corrente per l'audit {{- name}} del {{- date}}",
