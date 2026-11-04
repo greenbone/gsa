@@ -6,10 +6,8 @@
 import {useEffect, useRef, useState} from 'react';
 import {useParams} from 'react-router';
 import useAgentControlInventory from 'web/hooks/useAgentControlInventory';
+import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
-
-const TOKEN_ENDPOINT = '/gvmd-sim/frontend-token';
-const SCRIPT_ID = 'ac-inventory-mfe';
 
 interface InventoryElement extends HTMLElement {
   getToken?: () => Promise<string>;
@@ -19,6 +17,8 @@ interface Agent {
   agentid: string;
   hostname: string;
 }
+
+const SCRIPT_ID = 'ac-inventory-mfe';
 
 let scriptLoad: Promise<void> | undefined;
 
@@ -48,22 +48,8 @@ const loadMfeScript = (src: string, elementName: string): Promise<void> => {
   return scriptLoad;
 };
 
-const fetchToken = async (): Promise<string> => {
-  const response = await fetch(TOKEN_ENDPOINT, {
-    method: 'POST',
-    credentials: 'include',
-  });
-  if (!response.ok) {
-    throw new Error(`token request failed: ${response.status}`);
-  }
-  const {token} = (await response.json()) as {token?: string};
-  if (!token) {
-    throw new Error('token missing from response');
-  }
-  return token;
-};
-
 const AgentControlMfePage = () => {
+  const gmp = useGmp();
   const {domain} = useParams<{domain: string}>();
   const [_, i18n] = useTranslation();
   const language = i18n.language;
@@ -114,7 +100,10 @@ const AgentControlMfePage = () => {
       inventory.elementName,
     ) as InventoryElement;
     // Keep the token off DOM attributes.
-    element.getToken = fetchToken;
+    element.getToken = async () => {
+      const response = await gmp.agents.getInventoryToken();
+      return response.data;
+    };
     element.addEventListener(
       inventory.agentsEvent ?? 'ac-inventory:agents',
       event => {
@@ -136,7 +125,7 @@ const AgentControlMfePage = () => {
     };
     // These are updated on the mounted element by separate effects.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isReady, domain, isKnown, inventory]);
+  }, [isReady, domain, isKnown, inventory, gmp]);
 
   useEffect(() => {
     const element = elementRef.current;
@@ -156,6 +145,9 @@ const AgentControlMfePage = () => {
 
   if (isStillDiscovering) {
     return <p>{_('Loading inventory pages…')}</p>;
+  }
+  if (inventory === null) {
+    return <p>{_('Could not load the agent-control inventory module.')}</p>;
   }
   if (!isKnown) {
     return <p>{_('Unknown inventory page.')}</p>;

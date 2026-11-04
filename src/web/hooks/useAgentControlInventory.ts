@@ -5,18 +5,11 @@
 
 import {useEffect, useState} from 'react';
 
-const MANIFEST_URL = '/agent-control/public/ui/mfe/manifest.json';
-
 export interface InventoryDomain {
   id: string;
   label: string;
   labels?: Record<string, string>;
 }
-
-export const domainLabel = (
-  domain: InventoryDomain,
-  language: string,
-): string => domain.labels?.[language] ?? domain.label;
 
 export interface AgentControlInventory {
   script: string;
@@ -33,14 +26,23 @@ interface Manifest {
   domains?: InventoryDomain[];
 }
 
+export const domainLabel = (
+  domain: InventoryDomain,
+  language: string,
+): string => domain.labels?.[language] ?? domain.label;
+
+const MANIFEST_URL = '/agent-control/public/ui/mfe/manifest.json';
 const SUPPORTED_VERSION = 1;
 
 let cached: AgentControlInventory | undefined;
 
-const useAgentControlInventory = (): AgentControlInventory | undefined => {
-  const [inventory, setInventory] = useState<AgentControlInventory | undefined>(
-    cached,
-  );
+const useAgentControlInventory = ():
+  | AgentControlInventory
+  | null
+  | undefined => {
+  const [inventory, setInventory] = useState<
+    AgentControlInventory | null | undefined
+  >(cached);
 
   useEffect(() => {
     if (cached) {
@@ -51,14 +53,14 @@ const useAgentControlInventory = (): AgentControlInventory | undefined => {
       try {
         const response = await fetch(MANIFEST_URL, {cache: 'no-store'});
         if (!response.ok) {
-          return;
+          throw new Error('Inventory manifest request failed');
         }
         const manifest = (await response.json()) as Manifest;
         if (manifest.version !== SUPPORTED_VERSION) {
-          return;
+          throw new Error('Unsupported inventory manifest version');
         }
         if (!manifest.script || !manifest.elementName) {
-          return;
+          throw new Error('Invalid inventory manifest');
         }
         const discovered: AgentControlInventory = {
           script: manifest.script,
@@ -76,7 +78,11 @@ const useAgentControlInventory = (): AgentControlInventory | undefined => {
         if (!cancelled) {
           setInventory(discovered);
         }
-      } catch {}
+      } catch {
+        if (!cancelled) {
+          setInventory(null);
+        }
+      }
     };
     void run();
     return () => {
