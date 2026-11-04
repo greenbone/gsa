@@ -7,16 +7,81 @@ import {describe, test, expect} from '@gsa/testing';
 import AgentsCommand from 'gmp/commands/agents';
 import {
   createHttp,
+  createHttpError,
+  createPlainResponse,
+  createResponse,
   createEntitiesResponse,
   createAggregatesResponse,
   createActionResultResponse,
   createHttpMany,
 } from 'gmp/commands/testing';
+import {ResponseRejection} from 'gmp/http/rejection';
 import Agent from 'gmp/models/agent';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 describe('AgentsCommand tests', () => {
+  test('should extract the inventory token from XML instead of the session token', async () => {
+    const http = createHttp(
+      createPlainResponse(
+        '<envelope><token>session-token</token>' +
+          '<get_agent_inventory_token>' +
+          '<get_agent_inventory_token_response status="200" status_text="OK">' +
+          '<token>inventory-payload.signature</token>' +
+          '</get_agent_inventory_token_response>' +
+          '</get_agent_inventory_token></envelope>',
+      ),
+    );
+    const response = await new AgentsCommand(http).getInventoryToken();
+    expect(response.data).toBe('inventory-payload.signature');
+    expect(http.request).toHaveBeenCalledWith('get', {
+      args: {cmd: 'get_agent_inventory_token'},
+    });
+  });
+
+  test.each([undefined, '', '   ', 123])(
+    'should reject an invalid inventory token: %s',
+    async token => {
+      const http = createHttp(
+        createResponse({
+          token: 'session-token',
+          get_agent_inventory_token: {
+            get_agent_inventory_token_response: {token},
+          },
+        }),
+      );
+      await expect(new AgentsCommand(http).getInventoryToken()).rejects.toThrow(
+        'Agent inventory token missing from response',
+      );
+    },
+  );
+
+  test('should reject a missing command response', async () => {
+    const http = createHttp(createResponse({token: 'session-token'}));
+    await expect(new AgentsCommand(http).getInventoryToken()).rejects.toThrow(
+      'Agent inventory token missing from response',
+    );
+  });
+
+  test.each([
+    [403, 'Permission denied'],
+    [503, 'Agent inventory token issuance is unavailable'],
+    [401, 'Session expired'],
+  ])('should propagate backend error %s', async (status, message) => {
+    const error = new ResponseRejection(
+      {status} as XMLHttpRequest,
+      undefined,
+      `<envelope><gsad_response><message>${message}</message></gsad_response></envelope>`,
+    );
+    const http = createHttpError(error);
+    await expect(
+      new AgentsCommand(http).getInventoryToken(),
+    ).rejects.toMatchObject({
+      status,
+      message,
+    });
+  });
+
   test('should fetch agent with default params', async () => {
     const response = createEntitiesResponse('agent', [
       {_id: '1', name: 'Agent1'},

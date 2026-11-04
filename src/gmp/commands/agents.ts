@@ -30,6 +30,23 @@ class AgentsCommand extends EntitiesCommand<Agent> {
     super(http, 'agent', Agent);
   }
 
+  async getInventoryToken(): Promise<Response<string, XmlMeta>> {
+    const response = await this.httpGetWithTransform({
+      cmd: 'get_agent_inventory_token',
+    });
+    const data = response.data as XmlResponseData & {
+      get_agent_inventory_token?: {
+        get_agent_inventory_token_response?: {token?: unknown};
+      };
+    };
+    const token =
+      data.get_agent_inventory_token?.get_agent_inventory_token_response?.token;
+    if (typeof token !== 'string' || !token.trim()) {
+      throw new Error('Agent inventory token missing from response');
+    }
+    return response.setData(token);
+  }
+
   async deleteByIds(
     ids: string[],
     extraParams: HttpCommandPostParams = {},
