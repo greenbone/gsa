@@ -83,6 +83,32 @@ const createGmp = ({
 };
 
 describe('TargetComponent tests', () => {
+  test('should prefill hosts only for new target creation without saving', async () => {
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, capabilities: true});
+    render(
+      <TargetComponent>
+        {({create}) => (
+          <Button
+            title="Create from AD"
+            onClick={() =>
+              create({
+                hosts: ['pc-042.domain.local', 'fs-01.domain.local'],
+                targetSource: 'manual',
+              })
+            }
+          />
+        )}
+      </TargetComponent>,
+    );
+    fireEvent.click(screen.getByRole('button', {name: 'Create from AD'}));
+    await wait();
+    expect(within(screen.getDialog()).getByName('hosts')).toHaveValue(
+      'pc-042.domain.local,fs-01.domain.local',
+    );
+    expect(gmp.target.create).not.toHaveBeenCalled();
+  });
+
   test('should render', async () => {
     const gmp = createGmp();
     const {render} = rendererWith({gmp});
