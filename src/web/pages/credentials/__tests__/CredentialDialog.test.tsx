@@ -570,12 +570,18 @@ describe('CredentialDialog tests', () => {
           types={[ACTIVE_DIRECTORY_CREDENTIAL_TYPE]}
         />,
       );
-      fireEvent.click(screen.getByRole('button', {name: 'Verify credential'}));
+      fireEvent.click(
+        screen.getByRole('button', {
+          name: 'Verify credential',
+        }),
+      );
       expect(
         await screen.findByText(hint ? `${message}: ${hint}` : message),
       ).toBeVisible();
       expect(
-        screen.getByRole('button', {name: 'Credential verification failed'}),
+        screen.getByRole('button', {
+          name: 'Credential verification failed',
+        }),
       ).toBeVisible();
     },
   );
@@ -598,12 +604,18 @@ describe('CredentialDialog tests', () => {
         types={[ACTIVE_DIRECTORY_CREDENTIAL_TYPE]}
       />,
     );
-    fireEvent.click(screen.getByRole('button', {name: 'Verify credential'}));
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: 'Verify credential',
+      }),
+    );
     changeInputValue(screen.getByName('adHost'), 'changed.example.com');
     await act(async () => rejectVerification(new Error('Outdated failure')));
     expect(screen.queryByText('Outdated failure')).not.toBeInTheDocument();
     expect(
-      screen.getByRole('button', {name: 'Verify credential'}),
+      screen.getByRole('button', {
+        name: 'Verify credential',
+      }),
     ).toBeEnabled();
   });
 
