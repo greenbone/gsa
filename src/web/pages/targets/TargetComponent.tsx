@@ -48,6 +48,7 @@ import TargetDialog, {
 import {UNSET_VALUE} from 'web/utils/Render';
 
 interface OpenTargetDialogData {
+  hosts?: string[];
   hostsCount?: number;
   hostsFilter?: Filter;
   targetSource?: TargetSource;
@@ -194,7 +195,13 @@ const TargetComponent = ({
 
   const openTargetDialog = async (
     entity?: Target,
-    {hostsCount, hostsFilter, targetSource, name}: OpenTargetDialogData = {},
+    {
+      hosts: initialHosts,
+      hostsCount,
+      hostsFilter,
+      targetSource,
+      name,
+    }: OpenTargetDialogData = {},
   ) => {
     if (isDefined(entity)) {
       setPort(entity?.sshCredential?.port);
@@ -236,7 +243,7 @@ const TargetComponent = ({
       setPortListId(DEFAULT_PORT_LIST_ID);
       setInUse(false);
       setExcludeHosts([]);
-      setHosts([]);
+      setHosts(initialHosts ?? []);
       setReverseLookupOnly(undefined);
       setReverseLookupUnify(undefined);
       setTargetSource(targetSource);
