@@ -370,7 +370,7 @@ const CredentialDialog = ({
         adBindPassword: undefined,
         adHost: credential?.adHost,
         adPort: credential?.adPort,
-        adTlsMode: credential?.adTlsMode,
+        adTlsMode: credential?.adTlsMode ?? 'ldaps',
         comment,
         community,
         credentialLogin,

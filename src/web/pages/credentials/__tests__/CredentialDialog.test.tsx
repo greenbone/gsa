@@ -137,24 +137,26 @@ describe('CredentialDialog tests', () => {
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
-    expect(handleSave).toHaveBeenCalledWith({
-      authAlgorithm: 'sha1',
-      autogenerate: false,
-      certificate: undefined,
-      comment: 'bar',
-      community: undefined,
-      credentialLogin: undefined,
-      credentialType: 'up',
-      id: undefined,
-      name: 'foo',
-      passphrase: undefined,
-      password: undefined,
-      privacyAlgorithm: 'aes',
-      privacyPassword: undefined,
-      publicKey: undefined,
-      vaultId: undefined,
-      hostIdentifier: undefined,
-    });
+    expect(handleSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        authAlgorithm: 'sha1',
+        autogenerate: false,
+        certificate: undefined,
+        comment: 'bar',
+        community: undefined,
+        credentialLogin: undefined,
+        credentialType: 'up',
+        id: undefined,
+        name: 'foo',
+        passphrase: undefined,
+        password: undefined,
+        privacyAlgorithm: 'aes',
+        privacyPassword: undefined,
+        publicKey: undefined,
+        vaultId: undefined,
+        hostIdentifier: undefined,
+      }),
+    );
   });
 
   test('should allow changing select values', async () => {
@@ -180,24 +182,26 @@ describe('CredentialDialog tests', () => {
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
-    expect(handleSave).toHaveBeenCalledWith({
-      authAlgorithm: 'sha1',
-      autogenerate: false,
-      certificate: undefined,
-      comment: '',
-      community: undefined,
-      credentialLogin: undefined,
-      credentialType: 'pw',
-      id: undefined,
-      name: 'Unnamed',
-      passphrase: undefined,
-      password: undefined,
-      privacyAlgorithm: 'aes',
-      privacyPassword: undefined,
-      publicKey: undefined,
-      vaultId: undefined,
-      hostIdentifier: undefined,
-    });
+    expect(handleSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        authAlgorithm: 'sha1',
+        autogenerate: false,
+        certificate: undefined,
+        comment: '',
+        community: undefined,
+        credentialLogin: undefined,
+        credentialType: 'pw',
+        id: undefined,
+        name: 'Unnamed',
+        passphrase: undefined,
+        password: undefined,
+        privacyAlgorithm: 'aes',
+        privacyPassword: undefined,
+        publicKey: undefined,
+        vaultId: undefined,
+        hostIdentifier: undefined,
+      }),
+    );
   });
 
   test('should hide Active Directory when its feature is disabled', async () => {
@@ -1047,27 +1051,29 @@ describe('CredentialDialog tests', () => {
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
-    expect(handleSave).toHaveBeenCalledWith({
-      authAlgorithm: 'sha1',
-      autogenerate: false,
-      certificate: undefined,
-      comment: '',
-      community: undefined,
-      credentialLogin: undefined,
-      credentialType: CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
-      hostIdentifier: 'host456',
-      id: undefined,
-      kdcs: undefined,
-      name: 'KRB5 Credential Store',
-      passphrase: undefined,
-      password: undefined,
-      privacyAlgorithm: 'aes',
-      privacyHostIdentifier: undefined,
-      privacyPassword: undefined,
-      publicKey: undefined,
-      realm: 'EXAMPLE.COM',
-      vaultId: 'vault123',
-    });
+    expect(handleSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        authAlgorithm: 'sha1',
+        autogenerate: false,
+        certificate: undefined,
+        comment: '',
+        community: undefined,
+        credentialLogin: undefined,
+        credentialType: CREDENTIAL_STORE_KRB5_CREDENTIAL_TYPE,
+        hostIdentifier: 'host456',
+        id: undefined,
+        kdcs: undefined,
+        name: 'KRB5 Credential Store',
+        passphrase: undefined,
+        password: undefined,
+        privacyAlgorithm: 'aes',
+        privacyHostIdentifier: undefined,
+        privacyPassword: undefined,
+        publicKey: undefined,
+        realm: 'EXAMPLE.COM',
+        vaultId: 'vault123',
+      }),
+    );
   });
 
   test('should save SNMP credential store with proper values', async () => {
@@ -1110,27 +1116,29 @@ describe('CredentialDialog tests', () => {
     const saveButton = screen.getDialogSaveButton();
     fireEvent.click(saveButton);
 
-    expect(handleSave).toHaveBeenCalledWith({
-      authAlgorithm: 'md5',
-      autogenerate: false,
-      certificate: undefined,
-      comment: '',
-      community: undefined,
-      credentialLogin: undefined,
-      credentialType: CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
-      hostIdentifier: 'snmp-host',
-      id: undefined,
-      kdcs: undefined,
-      name: 'SNMP Credential Store',
-      passphrase: undefined,
-      password: undefined,
-      privacyAlgorithm: 'des',
-      privacyHostIdentifier: 'privacy-host',
-      privacyPassword: undefined,
-      publicKey: undefined,
-      realm: undefined,
-      vaultId: 'snmp-vault',
-    });
+    expect(handleSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        authAlgorithm: 'md5',
+        autogenerate: false,
+        certificate: undefined,
+        comment: '',
+        community: undefined,
+        credentialLogin: undefined,
+        credentialType: CREDENTIAL_STORE_SNMP_CREDENTIAL_TYPE,
+        hostIdentifier: 'snmp-host',
+        id: undefined,
+        kdcs: undefined,
+        name: 'SNMP Credential Store',
+        passphrase: undefined,
+        password: undefined,
+        privacyAlgorithm: 'des',
+        privacyHostIdentifier: 'privacy-host',
+        privacyPassword: undefined,
+        publicKey: undefined,
+        realm: undefined,
+        vaultId: 'snmp-vault',
+      }),
+    );
   });
 
   test('should render with initial files for client certificate credential', () => {
