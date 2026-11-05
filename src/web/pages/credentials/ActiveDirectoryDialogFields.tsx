@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useRef, useState} from 'react';
+import {useId, useRef, useState} from 'react';
 import {ResponseRejection} from 'gmp/http/rejection';
 import {
   type default as Credential,
@@ -15,8 +15,9 @@ import FormGroup from 'web/components/form/FormGroup';
 import PasswordField from 'web/components/form/PasswordField';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
+import {VerifyIcon, VerifyNoIcon} from 'web/components/icon';
 import Row from 'web/components/layout/Row';
-import ConnectionStatusPill from 'web/components/status/ConnectionStatusPill';
+import StatusActionButton from 'web/components/status/StatusActionButton';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 
@@ -49,6 +50,7 @@ const ActiveDirectoryDialogFields = ({
 }: ActiveDirectoryDialogFieldsProps) => {
   const [_] = useTranslation();
   const gmp = useGmp();
+  const passwordHintId = useId();
   const isEdit = credential !== undefined;
   const [changeAdBindPassword, setChangeAdBindPassword] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<
@@ -205,15 +207,20 @@ const ActiveDirectoryDialogFields = ({
         onChange={handleAdCaCertificateChange}
       />
       {requiresPassword && (
-        <p>
+        <p id={passwordHintId}>
           {_(
             'Save the credential or enter the bind password to test changed settings.',
           )}
         </p>
       )}
       <Row justify="center" mb="md">
-        <ConnectionStatusPill
+        <StatusActionButton
+          aria-describedby={requiresPassword ? passwordHintId : undefined}
           disabled={requiresPassword}
+          icons={{
+            idle: <VerifyIcon color="currentColor" size="small" />,
+            failed: <VerifyNoIcon color="currentColor" size="small" />,
+          }}
           labels={{
             idle: _('Verify credential'),
             testing: _('Verifying credential...'),

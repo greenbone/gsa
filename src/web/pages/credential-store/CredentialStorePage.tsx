@@ -9,14 +9,14 @@ import {
   showErrorNotification,
 } from '@greenbone/ui-lib';
 import {isDefined} from 'gmp/utils/identity';
-import {CredentialIcon, EditIcon} from 'web/components/icon';
+import {CredentialIcon, EditIcon, PlugZapIcon} from 'web/components/icon';
 import ManualIcon from 'web/components/icon/ManualIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import Layout from 'web/components/layout/Layout';
 import PageTitle from 'web/components/layout/PageTitle';
 import Loading from 'web/components/loading/Loading';
 import Section from 'web/components/section/Section';
-import ConnectionStatusPill from 'web/components/status/ConnectionStatusPill';
+import StatusActionButton from 'web/components/status/StatusActionButton';
 import Table from 'web/components/table/SimpleTable';
 import TableBody from 'web/components/table/TableBody';
 import TableCol from 'web/components/table/TableCol';
@@ -58,7 +58,14 @@ const ToolBarIcons = ({
         title={_('Edit Credential Store')}
         onClick={onOpenDialogClick}
       />
-      <ConnectionStatusPill
+      <StatusActionButton
+        icons={{idle: <PlugZapIcon color="currentColor" size="small" />}}
+        labels={{
+          idle: _('Test Connection'),
+          testing: _('Testing connection...'),
+          success: _('Connection successful'),
+          failed: _('Connection failed'),
+        }}
         status={connectionStatus}
         onClick={onTestConnectionClick}
       />
