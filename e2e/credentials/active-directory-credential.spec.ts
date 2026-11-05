@@ -5,6 +5,8 @@
 
 import {login} from 'e2e/credentials';
 import {expect, test} from 'e2e/fixtures';
+import {execFileSync} from 'node:child_process';
+import {devNull} from 'node:os';
 
 const applyCredentialFilter = async (page, expression: string) => {
   const filter = page.locator('input[name="userFilterString"]');
@@ -31,6 +33,31 @@ test('creates and saves an Active Directory credential', async ({page}) => {
     }
     await adOption.click();
 
+    // Generate a disposable certificate instead of storing PEM data in the repo.
+    const caCertificate = {
+      name: 'ad-ca-certificate.pem',
+      mimeType: 'application/x-pem-file',
+      buffer: execFileSync(
+        'openssl',
+        [
+          'req',
+          '-x509',
+          '-newkey',
+          'ec',
+          '-pkeyopt',
+          'ec_paramgen_curve:P-256',
+          '-nodes',
+          '-keyout',
+          devNull,
+          '-subj',
+          '/CN=GSA E2E Test CA',
+          '-days',
+          '1',
+        ],
+        {stdio: ['ignore', 'pipe', 'pipe']},
+      ),
+    };
+
     await dialog.locator('input[name="name"]').fill(name);
     await dialog.locator('input[name="adHost"]').fill('ad.example.com');
     await dialog.locator('input[name="adPort"]').fill('636');
@@ -46,7 +73,7 @@ test('creates and saves an Active Directory credential', async ({page}) => {
     await page.getByText('StartTLS', {exact: true}).last().click();
     await dialog
       .locator('input[name="adCaCertificate"]')
-      .setInputFiles('e2e/credentials/ad-ca-certificate.pem');
+      .setInputFiles(caCertificate);
     await dialog.getByTestId('dialog-save-button').click();
     created = true;
     await expect(page.getByRole('dialog')).toHaveCount(0);
@@ -95,7 +122,7 @@ test('creates and saves an Active Directory credential', async ({page}) => {
       .fill('OU=Scanners,DC=example,DC=com');
     await editDialog
       .locator('input[name="adCaCertificate"]')
-      .setInputFiles('e2e/credentials/ad-ca-certificate.pem');
+      .setInputFiles(caCertificate);
     const editTlsMode = editDialog.getByRole('combobox', {name: 'TLS Mode'});
     await editTlsMode.click();
     await page.getByText('LDAPS', {exact: true}).last().click();
