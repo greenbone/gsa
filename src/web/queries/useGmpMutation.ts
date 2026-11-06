@@ -13,6 +13,8 @@ interface UseGmpMutationParams<TInput, TOutput, TError> {
   onSuccess?: (data: TOutput) => void;
   onError?: (error: TError) => void;
   invalidateQueryIds?: string[];
+  gcTime?: number;
+  retry?: boolean;
 }
 
 export function useGmpMutation<
@@ -25,10 +27,14 @@ export function useGmpMutation<
   onSuccess,
   onError,
   invalidateQueryIds,
+  gcTime,
+  retry,
 }: UseGmpMutationParams<TInput, TOutput, TError>) {
   const queryClient = useQueryClient();
   return useMutation<TOutput, TError, TInput>({
     mutationFn: gmpMethod,
+    ...(gcTime === undefined ? {} : {gcTime}),
+    ...(retry === undefined ? {} : {retry}),
     onSuccess: (data, variables) => {
       if (isDefined(invalidateQueryIds)) {
         /*

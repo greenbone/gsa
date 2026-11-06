@@ -44,6 +44,10 @@ interface UseGetEntitiesParams<
   keepPreviousData?: boolean;
   staleTime?: number;
   gcTime?: number;
+  queryKeyParts?: unknown[];
+  retry?: boolean;
+  refetchOnWindowFocus?: boolean;
+  refetchOnReconnect?: boolean;
 }
 
 const useGetEntities = <
@@ -58,6 +62,10 @@ const useGetEntities = <
   keepPreviousData = false,
   staleTime,
   gcTime,
+  queryKeyParts,
+  retry,
+  refetchOnWindowFocus,
+  refetchOnReconnect,
 }: UseGetEntitiesParams<TModel, TInput>) => {
   const gmp = useGmp();
   const token = useSessionToken();
@@ -95,7 +103,12 @@ const useGetEntities = <
     status,
   } = useQuery<UseGetEntitiesReturn<TModel>>({
     enabled: enabled && Boolean(token),
-    queryKey: [queryId, token, filter?.toFilterString()],
+    queryKey: [
+      queryId,
+      token,
+      filter?.toFilterString(),
+      ...(queryKeyParts ?? []),
+    ],
     queryFn: async () => {
       const response = await gmpMethod({filter} as TInput);
       const entities = response.data;
@@ -108,6 +121,9 @@ const useGetEntities = <
       };
     },
     refetchInterval: resolvedRefetchInterval,
+    ...(retry === undefined ? {} : {retry}),
+    ...(refetchOnWindowFocus === undefined ? {} : {refetchOnWindowFocus}),
+    ...(refetchOnReconnect === undefined ? {} : {refetchOnReconnect}),
     staleTime:
       staleTime ?? (resolvedRefetchInterval === false ? Infinity : undefined),
     gcTime:
