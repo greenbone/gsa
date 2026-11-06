@@ -53,6 +53,11 @@ const getColor = (errorContent: string | undefined) =>
   isDefined(errorContent) ? 'var(--mantine-color-red-5)' : 'var(--input-color)';
 
 const StyledMultiSelect = styled(MantineMultiSelect)<StyledMultiSelectProps>`
+  .mantine-InputWrapper-label {
+    font-weight: 500;
+    font-size: var(--mantine-font-size-md);
+    color: var(--label-color);
+  }
   .mantine-MultiSelect-input,
   .mantine-MultiSelect-item {
     min-height: ${({size}) => getSize(size)};
@@ -101,7 +106,14 @@ const MultiSelect = ({
         placeholder={_('Loading...')}
         readOnly={true}
         rightSection={<Loader size="xs" />}
-        styles={{root: {flexGrow: grow}}}
+        styles={{
+          label: {
+            fontWeight: 500,
+            fontSize: 'var(--mantine-font-size-md)',
+            color: 'var(--label-color)',
+          },
+          root: {flexGrow: grow},
+        }}
         title={toolTipTitle}
       />
     );

@@ -14,7 +14,10 @@ import {
 import {filter, map} from 'gmp/utils/array';
 import SaveDialog from 'web/components/dialog/SaveDialog';
 import MultiSelect from 'web/components/form/MultiSelect';
-import SchedulerCronField from 'web/components/form/SchedulerCronField';
+import SchedulerCronEntryFields, {
+  SchedulerCronCard,
+} from 'web/components/form/SchedulerCronEntryFields';
+import SchedulerCronGroup from 'web/components/form/SchedulerCronGroup';
 import Select from 'web/components/form/Select';
 import TextField from 'web/components/form/TextField';
 import {useGetAgents} from 'web/hooks/use-query/agents';
@@ -40,6 +43,7 @@ interface AgentGroupsDialogDefaultValues {
   comment: string;
   name: string;
   schedulerCronExpression?: string;
+  maxDelaySeconds: number;
 }
 
 export type AgentGroupDialogData = AgentGroupsDialogDefaultValues &
@@ -100,6 +104,7 @@ const AgentGroupsDialog = ({
     agentGroup?.id ?? 'new',
     selectedAgents[0] || 'no-first',
     schedulerCron,
+    agentGroup?.maxDelaySeconds ?? 0,
   ].join('|');
 
   return (
@@ -110,6 +115,7 @@ const AgentGroupsDialog = ({
         comment: agentGroup?.comment ?? '',
         agentIds: selectedAgents,
         schedulerCronExpression: schedulerCron,
+        maxDelaySeconds: agentGroup?.maxDelaySeconds ?? 0,
       }}
       title={title}
       values={{
@@ -167,8 +173,7 @@ const AgentGroupsDialog = ({
             )}
 
             {state.agentController && agentsData && (
-              <SchedulerCronField
-                activeCronExpression={schedulerCron}
+              <SchedulerCronGroup
                 infoTip={
                   agentGroup
                     ? _(
@@ -177,13 +182,25 @@ const AgentGroupsDialog = ({
                     : undefined
                 }
                 infoTipAriaLabel={_('More information about scheduler')}
-                name="schedulerCronExpression"
                 title={_('Scheduler Options')}
-                value={state.schedulerCronExpression ?? ''}
-                onChange={value =>
-                  onValueChange(value, 'schedulerCronExpression')
-                }
-              />
+              >
+                <SchedulerCronCard>
+                  <SchedulerCronEntryFields
+                    activeCronExpression={schedulerCron}
+                    maxDelayName="schedulerCronExpression-maxDelay-0"
+                    name="schedulerCronExpression-0"
+                    scheduleNumber={1}
+                    value={{
+                      cron: state.schedulerCronExpression ?? '',
+                      maxDelaySeconds: state.maxDelaySeconds ?? 0,
+                    }}
+                    onChange={entry => {
+                      onValueChange(entry.cron, 'schedulerCronExpression');
+                      onValueChange(entry.maxDelaySeconds, 'maxDelaySeconds');
+                    }}
+                  />
+                </SchedulerCronCard>
+              </SchedulerCronGroup>
             )}
 
             {state.agentController && !agentsData && (

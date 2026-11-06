@@ -3,10 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import EntityCommand, {type EntityActionResponse} from 'gmp/commands/entity';
+import AgentGroupsCommand from 'gmp/commands/agent-groups';
+import EntityCommand, {
+  type EntityActionResponse,
+  type EntityCommandParams,
+} from 'gmp/commands/entity';
 import type Http from 'gmp/http/http';
+import {_} from 'gmp/locale/lang';
 import logger from 'gmp/log';
 import AgentGroup, {type AgentGroupElement} from 'gmp/models/agent-group';
+import {type FilterType} from 'gmp/models/filter';
+import QueryFilter from 'gmp/models/filter/query-filter';
+import {filterString} from 'gmp/models/filter/utils';
 import {type Element} from 'gmp/models/model';
 
 export interface AgentGroupCreateParams {
@@ -15,6 +23,7 @@ export interface AgentGroupCreateParams {
   name: string;
   scannerId?: string;
   schedulerCronTime?: string;
+  maxDelaySeconds?: number;
 }
 
 export interface AgentGroupSaveParams extends Omit<
@@ -32,12 +41,32 @@ class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
     super(http, 'agent_group', AgentGroup);
   }
 
+  async get(
+    {id}: EntityCommandParams,
+    {filter}: {filter?: FilterType | string} = {},
+  ) {
+    const groups = new AgentGroupsCommand(this.http);
+    const response = await groups.getAll({
+      filter: QueryFilter.fromString(filterString(filter)).set('uuid', id),
+    });
+    const group = response.data.find(group => group.id === id);
+    if (!group) {
+      throw new Error(
+        _('The {{entity}} you were looking for could not be found.', {
+          entity: _('Agent Group'),
+        }),
+      );
+    }
+    return response.setData(group);
+  }
+
   async create({
     name,
     comment,
     scannerId,
     agentIds,
     schedulerCronTime,
+    maxDelaySeconds = 0,
   }: AgentGroupCreateParams): Promise<EntityActionResponse> {
     const agentGroupData = {
       cmd: 'create_agent_group',
@@ -46,6 +75,7 @@ class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
       scanner_id: scannerId,
       'agent_ids:': agentIds,
       scheduler_cron_time: schedulerCronTime,
+      max_delay_seconds: maxDelaySeconds,
     };
 
     log.debug('Prepared data for create calls', {
@@ -63,6 +93,7 @@ class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
     scannerId,
     agentIds,
     schedulerCronTime,
+    maxDelaySeconds = 0,
   }: AgentGroupSaveParams): Promise<void> {
     // Build agent group payload
     const agentGroupData = {
@@ -73,6 +104,7 @@ class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
       scanner_id: scannerId,
       'agent_ids:': agentIds,
       scheduler_cron_time: schedulerCronTime,
+      max_delay_seconds: maxDelaySeconds,
     };
 
     log.debug('Prepared payload', agentGroupData);
@@ -82,7 +114,7 @@ class AgentGroupCommand extends EntityCommand<AgentGroup, AgentGroupElement> {
 
   getElementFromRoot(root: Element): AgentGroupElement {
     // @ts-expect-error
-    return root.get_agent_group.get_agent_group_response.agent_group;
+    return root.get_agent_group.get_agent_groups_response.agent_group;
   }
 }
 

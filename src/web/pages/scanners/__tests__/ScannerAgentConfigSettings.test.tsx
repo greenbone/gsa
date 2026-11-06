@@ -4,7 +4,7 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {fireEvent, rendererWith, screen, wait} from 'web/testing';
+import {fireEvent, rendererWith, screen, wait, within} from 'web/testing';
 import Scanner, {AGENT_CONTROLLER_SCANNER_TYPE} from 'gmp/models/scanner';
 import {YES_VALUE} from 'gmp/parser';
 import {createSession} from 'gmp/testing';
@@ -129,6 +129,7 @@ describe('ScannerAgentConfigSettings tests', () => {
     expect(screen.getAllByText('3').length).toBeGreaterThan(0);
     expect(screen.getByText('Scheduler Cron Times')).toBeInTheDocument();
     expect(screen.getByText('0 */12 * * *')).toBeInTheDocument();
+    expect(screen.getByText('Max delay: 0 seconds')).toBeInTheDocument();
   });
 
   test('should display heartbeat settings', () => {
@@ -243,7 +244,7 @@ describe('ScannerAgentConfigSettings tests', () => {
       bulkSize: 100,
       bulkThrottleTimeInMs: 500,
       indexerDirDepth: 3,
-      schedulerCronTimes: ['0 */12 * * *'],
+      schedulerCronTimes: [{cron: '0 */12 * * *', maxDelaySeconds: 0}],
       intervalInSeconds: 300,
       missUntilInactive: 3,
       updateToLatest: YES_VALUE,
@@ -539,11 +540,91 @@ describe('ScannerAgentConfigSettings multiple schedules', () => {
       throw new Error('Mock scanner is missing agent defaults');
     }
     agentDefaults.agentScriptExecutor.schedulerCronTimes = [
-      '0 5 * * *',
-      '0 7 * * *',
+      {cron: '0 5 * * *', maxDelaySeconds: 0},
+      {cron: '0 7 * * *', maxDelaySeconds: 0},
     ];
     return scanner;
   };
+
+  test('preserves fetched schedule order and cron-delay pairs in view, edit, and save', async () => {
+    const schedules = [
+      {cron: '0 8 * * *', maxDelaySeconds: 44},
+      {cron: '0 2 * * *', maxDelaySeconds: 12},
+      {cron: '0 8 * * *', maxDelaySeconds: 7},
+    ];
+    let expectedSchedules = schedules;
+    const scanner = createMultiCronScanner();
+    const agentDefaults = scanner.agentControlConfig?.agentDefaults;
+    if (!agentDefaults) {
+      throw new Error('Mock scanner is missing agent defaults');
+    }
+    agentDefaults.agentScriptExecutor.schedulerCronTimes = schedules;
+
+    const gmp = createGmp();
+    const {render} = rendererWith({gmp, capabilities: true});
+    render(
+      <ScannerAgentConfigSettings scanner={scanner} onError={testing.fn()} />,
+    );
+
+    const expectViewOrder = () => {
+      expectedSchedules.forEach(({cron, maxDelaySeconds}, index) => {
+        const summary = screen.getByText(`Schedule ${index + 1}`).parentElement
+          ?.textContent;
+        expect(summary).toContain(cron);
+        expect(summary).toContain(`Max delay: ${maxDelaySeconds} seconds`);
+      });
+    };
+
+    const readEditOrder = () =>
+      expectedSchedules.map(({cron, maxDelaySeconds}, index) => {
+        const scheduleLabel = screen.getByText(`Schedule ${index + 1}`);
+        const scheduleFields = scheduleLabel.parentElement;
+        if (!scheduleFields) {
+          throw new Error('Schedule fields are missing');
+        }
+        return {
+          cron: (
+            within(scheduleFields).getByDisplayValue(cron) as HTMLInputElement
+          ).value,
+          maxDelaySeconds: Number(
+            (
+              within(scheduleFields).getByDisplayValue(
+                String(maxDelaySeconds),
+              ) as HTMLInputElement
+            ).value,
+          ),
+        };
+      });
+
+    expectViewOrder();
+    fireEvent.click(screen.getAllByTestId('edit-icon')[6]);
+    expect(readEditOrder()).toEqual(schedules);
+
+    const scheduleTwoFields = screen.getByText('Schedule 2').parentElement;
+    if (!scheduleTwoFields) {
+      throw new Error('Schedule 2 fields are missing');
+    }
+    fireEvent.change(within(scheduleTwoFields).getByDisplayValue('0 2 * * *'), {
+      target: {value: '0 1 * * *'},
+    });
+    fireEvent.change(within(scheduleTwoFields).getByDisplayValue('12'), {
+      target: {value: '21'},
+    });
+    expectedSchedules = [
+      schedules[0],
+      {cron: '0 1 * * *', maxDelaySeconds: 21},
+      schedules[2],
+    ];
+    expect(readEditOrder()).toEqual(expectedSchedules);
+
+    fireEvent.click(screen.getByTitle('Save'));
+    await wait();
+
+    expect(gmp.scanner.modifyAgentControlConfig).toHaveBeenCalledWith(
+      expect.objectContaining({schedulerCronTimes: expectedSchedules}),
+    );
+    expectViewOrder();
+  });
 
   test('preserves every schedule when saving another setting', async () => {
     const gmp = createGmp();
@@ -554,7 +635,9 @@ describe('ScannerAgentConfigSettings multiple schedules', () => {
         onError={testing.fn()}
       />,
     );
-    expect(screen.getByText('0 5 * * *, 0 7 * * *')).toBeInTheDocument();
+    expect(screen.getByText('0 5 * * *')).toBeInTheDocument();
+    expect(screen.getByText('0 7 * * *')).toBeInTheDocument();
+    expect(screen.getAllByText('Max delay: 0 seconds')).toHaveLength(2);
     fireEvent.click(screen.getAllByTestId('edit-icon')[0]);
     fireEvent.change(screen.getByDisplayValue('3'), {target: {value: '5'}});
     fireEvent.click(screen.getByTitle('Save'));
@@ -562,7 +645,10 @@ describe('ScannerAgentConfigSettings multiple schedules', () => {
     expect(gmp.scanner.modifyAgentControlConfig).toHaveBeenCalledWith(
       expect.objectContaining({
         attempts: 5,
-        schedulerCronTimes: ['0 5 * * *', '0 7 * * *'],
+        schedulerCronTimes: [
+          {cron: '0 5 * * *', maxDelaySeconds: 0},
+          {cron: '0 7 * * *', maxDelaySeconds: 0},
+        ],
       }),
     );
   });
@@ -585,7 +671,11 @@ describe('ScannerAgentConfigSettings multiple schedules', () => {
     await wait();
     expect(gmp.scanner.modifyAgentControlConfig).toHaveBeenCalledWith(
       expect.objectContaining({
-        schedulerCronTimes: ['0 5 * * *', '0 9 * * *', '0 * * * *'],
+        schedulerCronTimes: [
+          {cron: '0 5 * * *', maxDelaySeconds: 0},
+          {cron: '0 9 * * *', maxDelaySeconds: 0},
+          {cron: '0 * * * *', maxDelaySeconds: 0},
+        ],
       }),
     );
   });
@@ -604,7 +694,8 @@ describe('ScannerAgentConfigSettings multiple schedules', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Add schedule'}));
     fireEvent.click(screen.getByTitle('Cancel'));
     await wait();
-    expect(screen.getByText('0 5 * * *, 0 7 * * *')).toBeInTheDocument();
+    expect(screen.getByText('0 5 * * *')).toBeInTheDocument();
+    expect(screen.getByText('0 7 * * *')).toBeInTheDocument();
     expect(gmp.scanner.modifyAgentControlConfig).not.toHaveBeenCalled();
     fireEvent.click(screen.getAllByTestId('edit-icon')[6]);
     expect(screen.getByDisplayValue('0 5 * * *')).toBeInTheDocument();
@@ -626,7 +717,8 @@ describe('ScannerAgentConfigSettings saved and refreshed values', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Add schedule'}));
     fireEvent.click(screen.getByTitle('Save'));
     await wait();
-    expect(screen.getByText('0 */12 * * *, 0 * * * *')).toBeInTheDocument();
+    expect(screen.getByText('0 */12 * * *')).toBeInTheDocument();
+    expect(screen.getByText('0 * * * *')).toBeInTheDocument();
 
     fireEvent.click(screen.getAllByTestId('edit-icon')[0]);
     fireEvent.change(screen.getByDisplayValue('3'), {target: {value: '5'}});
@@ -635,7 +727,10 @@ describe('ScannerAgentConfigSettings saved and refreshed values', () => {
     expect(gmp.scanner.modifyAgentControlConfig).toHaveBeenLastCalledWith(
       expect.objectContaining({
         attempts: 5,
-        schedulerCronTimes: ['0 */12 * * *', '0 * * * *'],
+        schedulerCronTimes: [
+          {cron: '0 */12 * * *', maxDelaySeconds: 0},
+          {cron: '0 * * * *', maxDelaySeconds: 0},
+        ],
       }),
     );
 
@@ -645,7 +740,9 @@ describe('ScannerAgentConfigSettings saved and refreshed values', () => {
       throw new Error('Mock scanner is missing agent defaults');
     }
     agentDefaults.agentControl.retry.attempts = 7;
-    agentDefaults.agentScriptExecutor.schedulerCronTimes = ['0 12 * * *'];
+    agentDefaults.agentScriptExecutor.schedulerCronTimes = [
+      {cron: '0 12 * * *', maxDelaySeconds: 0},
+    ];
     rerender(
       <ScannerAgentConfigSettings
         scanner={refreshedScanner}
@@ -653,9 +750,7 @@ describe('ScannerAgentConfigSettings saved and refreshed values', () => {
       />,
     );
     expect(screen.getByText('0 12 * * *')).toBeInTheDocument();
-    expect(
-      screen.queryByText('0 */12 * * *, 0 * * * *'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('0 */12 * * *')).not.toBeInTheDocument();
     fireEvent.click(screen.getAllByTestId('edit-icon')[0]);
     expect(screen.getByDisplayValue('7')).toBeInTheDocument();
   });

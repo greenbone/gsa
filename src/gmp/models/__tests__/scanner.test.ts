@@ -390,7 +390,10 @@ describe('Scanner model function tests', () => {
     expect(
       scanner.agentControlConfig?.agentDefaults.agentScriptExecutor
         .schedulerCronTimes,
-    ).toEqual(['0 0 * * *', '0 12 * * *']);
+    ).toEqual([
+      {cron: '0 0 * * *', maxDelaySeconds: 0},
+      {cron: '0 12 * * *', maxDelaySeconds: 0},
+    ]);
     expect(
       scanner.agentControlConfig?.agentDefaults.heartbeat.intervalInSeconds,
     ).toEqual(60);
@@ -420,7 +423,7 @@ describe('Scanner model function tests', () => {
     expect(
       scanner.agentControlConfig?.agentDefaults.agentScriptExecutor
         .schedulerCronTimes,
-    ).toEqual(['0 3 * * *']);
+    ).toEqual([{cron: '0 3 * * *', maxDelaySeconds: 0}]);
   });
 
   test('should handle missing agent_control_config_defaults', () => {

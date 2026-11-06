@@ -9,6 +9,7 @@ import {
   type CredentialType,
   type SNMPAuthAlgorithmType,
   type SNMPPrivacyAlgorithmType,
+  ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
   CERTIFICATE_CREDENTIAL_TYPE,
   getCredentialTypeName,
   KRB5_CREDENTIAL_TYPE,
@@ -43,9 +44,13 @@ import useCredentialStore, {
 import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
+import ActiveDirectoryDialogFields, {
+  type ActiveDirectoryDialogValues,
+} from 'web/pages/credentials/ActiveDirectoryDialogFields';
 import CredentialStoreDialogFields from 'web/pages/credentials/CredentialStoreDialogFields';
 
 interface CredentialDialogValues {
+  adCaCertificate?: File | null;
   autogenerate: boolean;
   certificate?: File | null;
   credentialType: CredentialType;
@@ -57,7 +62,10 @@ interface CredentialDialogValues {
   vaultId?: string;
 }
 
-interface CredentialDialogDefaultValues {
+interface CredentialDialogDefaultValues extends Omit<
+  ActiveDirectoryDialogValues,
+  'adCaCertificate'
+> {
   authAlgorithm?: SNMPAuthAlgorithmType;
   comment?: string;
   community?: string;
@@ -78,6 +86,7 @@ export type CredentialDialogState = CredentialDialogValues &
   CredentialDialogDefaultValues;
 
 interface CredentialDialogProps {
+  adCaCertificate?: File;
   authAlgorithm?: SNMPAuthAlgorithmType;
   autogenerate?: boolean;
   certificate?: File;
@@ -136,6 +145,7 @@ const CLIENT_PRIVATE_KEY_REGEX = /-----BEGIN (?:ENCRYPTED )?PRIVATE KEY-----/;
 const SSH_KEY_REGEX = /-----BEGIN \w+ PRIVATE KEY-----/;
 
 const CredentialDialog = ({
+  adCaCertificate: initialAdCaCertificate,
   authAlgorithm = SNMP_AUTH_ALGORITHM_SHA1,
   autogenerate: initialAutogenerate = false,
   certificate: initialCertificate,
@@ -176,6 +186,9 @@ const CredentialDialog = ({
   const [certificate, setCertificate] = useState<File | undefined | null>(
     initialCertificate,
   );
+  const [adCaCertificate, setAdCaCertificate] = useState<
+    File | undefined | null
+  >(initialAdCaCertificate);
   const [privateKey, setPrivateKey] = useState<File | undefined | null>(
     initialPrivateKey,
   );
@@ -245,6 +258,21 @@ const CredentialDialog = ({
     setCertificate(file ?? null);
   };
 
+  const handleAdCaCertificateChange = async (file: File | undefined) => {
+    try {
+      if (isDefined(file)) {
+        await validateFile(
+          file,
+          CLIENT_CERTIFICATE_LINE,
+          _('Not a valid CA Certificate file.'),
+        );
+      }
+      setAdCaCertificate(file ?? null);
+    } catch (error) {
+      setError((error as Error).message);
+    }
+  };
+
   const handleClientKeyChange = async (file: File | undefined) => {
     try {
       if (isDefined(file)) {
@@ -309,6 +337,8 @@ const CredentialDialog = ({
   const enabledTypes = types.filter(type => {
     return !(
       (type === KRB5_CREDENTIAL_TYPE && !gmp.settings.enableKrb5) ||
+      (type === ACTIVE_DIRECTORY_CREDENTIAL_TYPE &&
+        !features.featureEnabled('ENABLE_AD_INTEGRATION')) ||
       (isCredentialStoreType(type) &&
         !features.featureEnabled('ENABLE_CREDENTIAL_STORES'))
     );
@@ -335,6 +365,12 @@ const CredentialDialog = ({
     <SaveDialog<CredentialDialogValues, CredentialDialogDefaultValues>
       defaultValues={{
         authAlgorithm,
+        adBaseDn: credential?.adBaseDn,
+        adBindDn: credential?.adBindDn,
+        adBindPassword: undefined,
+        adHost: credential?.adHost,
+        adPort: credential?.adPort,
+        adTlsMode: credential?.adTlsMode ?? 'ldaps',
         comment,
         community,
         credentialLogin,
@@ -353,6 +389,7 @@ const CredentialDialog = ({
       title={title}
       values={{
         autogenerate,
+        adCaCertificate,
         credentialType: cType as CredentialType,
         passphrase,
         publicKey,
@@ -689,6 +726,17 @@ const CredentialDialog = ({
                   onChange={onValueChange}
                 />
               </>
+            )}
+
+            {state.credentialType === ACTIVE_DIRECTORY_CREDENTIAL_TYPE && (
+              <ActiveDirectoryDialogFields
+                credential={credential}
+                initialCertificate={initialAdCaCertificate}
+                state={state}
+                onCertificateChange={handleAdCaCertificateChange}
+                onError={setError}
+                onValueChange={onValueChange}
+              />
             )}
           </>
         );

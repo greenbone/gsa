@@ -24,11 +24,6 @@ import ReportDetailsPage from 'web/pages/reports/ReportDetailsPage';
 import {ReportExportActivity} from 'web/report-export/ReportExportActivity';
 import ReportExportManager from 'web/report-export/ReportExportManager';
 
-vi.mock('@greenbone/ui-lib', async importOriginal => ({
-  ...(await importOriginal<typeof UiLib>()),
-  showErrorNotification: vi.fn<typeof showErrorNotification>(),
-}));
-
 interface CollectionResponse {
   data: unknown[];
   meta: {
@@ -36,6 +31,11 @@ interface CollectionResponse {
     counts: CollectionCounts;
   };
 }
+
+vi.mock('@greenbone/ui-lib', async importOriginal => ({
+  ...(await importOriginal<typeof UiLib>()),
+  showErrorNotification: vi.fn<typeof showErrorNotification>(),
+}));
 
 const manualUrl = 'test/';
 

@@ -10,6 +10,7 @@ import Credential, {
   type CredentialElement,
   type SNMPAuthAlgorithmType,
   type SNMPPrivacyAlgorithmType,
+  type ActiveDirectoryTlsMode,
 } from 'gmp/models/credential';
 import {type Element} from 'gmp/models/model';
 import {parseYesNo} from 'gmp/parser';
@@ -48,6 +49,40 @@ interface CredentialCommandSnmpFields {
   privacyHostIdentifier?: string;
 }
 
+interface CredentialCommandActiveDirectoryFields {
+  adHost?: string;
+  adPort?: string | null;
+  adBindDn?: string;
+  adBindPassword?: string;
+  adBaseDn?: string;
+  adTlsMode?: ActiveDirectoryTlsMode;
+  adCaCertificate?: File | null;
+}
+
+type CredentialCommandVerifyActiveDirectoryFields = Required<
+  Pick<
+    CredentialCommandActiveDirectoryFields,
+    'adHost' | 'adBindDn' | 'adBindPassword' | 'adBaseDn' | 'adTlsMode'
+  >
+> & {
+  adPort?: string;
+  adCaCertificate?: File | null;
+};
+
+export type CredentialCommandVerifyActiveDirectoryParams =
+  | ({id: string} & {
+      [Key in keyof CredentialCommandActiveDirectoryFields]?: never;
+    })
+  | ({id?: never} & CredentialCommandVerifyActiveDirectoryFields);
+
+interface CredentialCommandActiveDirectoryCreateFields extends Omit<
+  CredentialCommandActiveDirectoryFields,
+  'adPort' | 'adCaCertificate'
+> {
+  adPort?: string;
+  adCaCertificate?: File;
+}
+
 // Create operation interfaces
 export type CredentialCommandCreateParams = CredentialCommandBaseArgs;
 
@@ -69,6 +104,11 @@ interface CredentialCommandCredentialStoreSnmpArgs
     CredentialCommandCredentialStoreFields,
     CredentialCommandSnmpFields {}
 
+interface CredentialCommandActiveDirectoryArgs
+  extends
+    CredentialCommandBaseArgs,
+    CredentialCommandActiveDirectoryCreateFields {}
+
 // Save operation interfaces (using utility types)
 type CredentialCommandSaveArgs = Omit<
   CredentialCommandBaseArgs,
@@ -88,6 +128,9 @@ type CredentialCommandSaveCredentialStoreKrb5Args = CredentialCommandSaveArgs &
 type CredentialCommandSaveCredentialStoreSnmpArgs = CredentialCommandSaveArgs &
   CredentialCommandCredentialStoreFields &
   CredentialCommandSnmpFields;
+
+type CredentialCommandSaveActiveDirectoryArgs = CredentialCommandSaveArgs &
+  CredentialCommandActiveDirectoryFields;
 
 const saveFile = (file: File | undefined | null): File | undefined | string => {
   if (file === null) {
@@ -157,6 +200,21 @@ class CredentialCommand extends EntityCommand<
       ...baseData,
       realm: args.realm,
       'kdcs:': args.kdcs?.length ? args.kdcs : '',
+    });
+  }
+
+  createActiveDirectory(args: CredentialCommandActiveDirectoryArgs) {
+    const baseData = this.createBase(args);
+
+    return this.action({
+      ...baseData,
+      ad_host: args.adHost,
+      ad_port: args.adPort,
+      ad_bind_dn: args.adBindDn,
+      ad_bind_password: args.adBindPassword,
+      ad_base_dn: args.adBaseDn,
+      ad_tls_mode: args.adTlsMode,
+      ad_ca_certificate: args.adCaCertificate,
     });
   }
 
@@ -243,6 +301,43 @@ class CredentialCommand extends EntityCommand<
       ...baseData,
       realm: args.realm,
       'kdcs:': args.kdcs?.length ? args.kdcs : '',
+    });
+  }
+
+  saveActiveDirectory(args: CredentialCommandSaveActiveDirectoryArgs) {
+    const baseData = this.saveBase(args);
+
+    return this.action({
+      ...baseData,
+      ad_host: args.adHost,
+      ad_port: args.adPort === null ? '' : args.adPort,
+      ad_bind_dn: args.adBindDn,
+      ad_bind_password: args.adBindPassword,
+      ad_base_dn: args.adBaseDn,
+      ad_tls_mode: args.adTlsMode,
+      ad_ca_certificate: saveFile(args.adCaCertificate),
+    });
+  }
+
+  verifyActiveDirectory(args: CredentialCommandVerifyActiveDirectoryParams) {
+    if ('id' in args && isDefined(args.id)) {
+      return this.action({
+        cmd: 'verify_active_directory_credential',
+        credential_id: args.id,
+      });
+    }
+
+    return this.action({
+      cmd: 'verify_active_directory_credential',
+      ad_host: args.adHost,
+      ad_bind_dn: args.adBindDn,
+      ad_bind_password: args.adBindPassword,
+      ad_base_dn: args.adBaseDn,
+      ad_tls_mode: args.adTlsMode,
+      ...(args.adPort ? {ad_port: args.adPort} : {}),
+      ...(args.adCaCertificate
+        ? {ad_ca_certificate: args.adCaCertificate}
+        : {}),
     });
   }
 

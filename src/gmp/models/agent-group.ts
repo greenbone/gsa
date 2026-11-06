@@ -24,6 +24,7 @@ export interface AgentGroupElement extends ModelElement {
     agent?: AgentGroupAgentElement | AgentGroupAgentElement[];
   };
   scheduler_cron_time?: string;
+  max_delay_seconds?: number | string;
 }
 
 interface AgentGroupScanner {
@@ -40,6 +41,7 @@ interface AgentGroupProperties extends ModelProperties {
   scanner?: AgentGroupScanner;
   agents?: AgentGroupAgent[];
   schedulerCronTime?: string;
+  maxDelaySeconds?: number;
 }
 
 class AgentGroup extends Model {
@@ -48,11 +50,13 @@ class AgentGroup extends Model {
   readonly scanner?: AgentGroupScanner;
   readonly agents: AgentGroupAgent[];
   readonly schedulerCronTime?: string;
+  readonly maxDelaySeconds: number;
 
   constructor({
     scanner,
     agents = [],
     schedulerCronTime,
+    maxDelaySeconds = 0,
     ...properties
   }: AgentGroupProperties) {
     super(properties);
@@ -60,6 +64,7 @@ class AgentGroup extends Model {
     this.scanner = scanner;
     this.agents = agents;
     this.schedulerCronTime = schedulerCronTime;
+    this.maxDelaySeconds = maxDelaySeconds;
   }
 
   static fromElement(element: AgentGroupElement): AgentGroup {
@@ -84,6 +89,7 @@ class AgentGroup extends Model {
     }));
 
     copy.schedulerCronTime = parseToString(element.scheduler_cron_time);
+    copy.maxDelaySeconds = Number(element.max_delay_seconds ?? 0);
 
     return copy;
   }

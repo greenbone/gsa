@@ -27,12 +27,24 @@ type FilterDialogProps = {
   onFilterCreated: (filter: Filter) => void;
 };
 
-const filter = QueryFilter.fromString('name~task');
-const task = new Task({id: 'task-1', name: 'Task 1'});
-
 type GmpOverrides = {
   getFilters?: ReturnType<typeof testing.fn>;
 };
+
+type TableProps = {
+  entities: Task[];
+  entitiesCounts?: CollectionCounts;
+  filter?: FilterType;
+};
+
+type SectionProps = {
+  children?: React.ReactNode;
+  extra?: React.ReactNode;
+  title: string;
+};
+
+const filter = QueryFilter.fromString('name~task');
+const task = new Task({id: 'task-1', name: 'Task 1'});
 
 const createGmp = ({
   getFilters = testing.fn().mockResolvedValue({
@@ -116,12 +128,6 @@ const FilterDialog = ({
   );
 };
 
-type TableProps = {
-  entities: Task[];
-  entitiesCounts?: CollectionCounts;
-  filter?: FilterType;
-};
-
 const Table = ({entities, entitiesCounts, filter: tableFilter}: TableProps) => {
   return (
     <div data-testid="table">
@@ -143,12 +149,6 @@ const CustomSection = ({children, extra, title}: SectionProps) => {
 
 const ToolbarIcons = () => {
   return <span data-testid="toolbar-icons-component">Toolbar icons</span>;
-};
-
-type SectionProps = {
-  children?: React.ReactNode;
-  extra?: React.ReactNode;
-  title: string;
 };
 
 describe('EntitiesPage', () => {

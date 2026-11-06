@@ -3,20 +3,25 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {type ReactNode} from 'react';
 import styled, {css, keyframes} from 'styled-components';
 import {
-  PlugZapIcon,
-  VerifyIcon,
-  VerifyNoIcon,
-  ScheduleIcon,
+  StartIcon,
+  RefreshIcon,
+  CheckIcon,
+  AlertCircleIcon,
 } from 'web/components/icon';
-import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/theme';
 
-type ConnectionStatus = 'success' | 'failed' | 'testing' | undefined;
+export type StatusActionState = 'idle' | 'testing' | 'success' | 'failed';
 
-interface ConnectionStatusPillProps {
-  status?: ConnectionStatus;
+type ActionStatus = Exclude<StatusActionState, 'idle'>;
+
+interface StatusActionButtonProps {
+  labels: Record<StatusActionState, string>;
+  'aria-describedby'?: string;
+  icons?: Partial<Record<StatusActionState, ReactNode>>;
+  status?: ActionStatus;
   onClick?: () => void;
   disabled?: boolean;
 }
@@ -40,7 +45,7 @@ const pulse = keyframes`
 `;
 
 const StyledPill = styled.button<{
-  $status?: ConnectionStatus;
+  $status?: ActionStatus;
   $disabled?: boolean;
 }>`
   display: flex;
@@ -117,58 +122,28 @@ const StyledPill = styled.button<{
   }}
 `;
 
-const ConnectionStatusPill = ({
+const IconContainer = styled.span`
+  display: flex;
+  align-items: center;
+`;
+
+const StatusActionButton = ({
+  labels,
+  'aria-describedby': ariaDescribedBy,
+  icons,
   status,
   onClick,
   disabled = false,
-}: ConnectionStatusPillProps) => {
-  const [_] = useTranslation();
-
-  const getStatusText = () => {
-    switch (status) {
-      case 'success':
-        return _('Connection successful');
-      case 'failed':
-        return _('Connection failed');
-      case 'testing':
-        return _('Testing connection...');
-      default:
-        return _('Test Connection');
-    }
+}: StatusActionButtonProps) => {
+  const state = status ?? 'idle';
+  const defaultIcons: Record<StatusActionState, ReactNode> = {
+    idle: <StartIcon color="currentColor" size="small" />,
+    testing: <RefreshIcon color="currentColor" size="small" />,
+    success: <CheckIcon color="currentColor" size="small" />,
+    failed: <AlertCircleIcon color="currentColor" size="small" />,
   };
-
-  const getStatusIcon = () => {
-    switch (status) {
-      case 'success':
-        return <VerifyIcon size="small" />;
-      case 'failed':
-        return <VerifyNoIcon size="small" />;
-      case 'testing':
-        return <ScheduleIcon size="small" />;
-      default:
-        return <PlugZapIcon size="small" />;
-    }
-  };
-
-  const getTitle = () => {
-    if (status === 'testing') {
-      return _('Testing in progress...');
-    }
-    return _('Test Connection');
-  };
-
-  const getAriaLabel = () => {
-    switch (status) {
-      case 'success':
-        return _('Connection test successful. Click to test again.');
-      case 'failed':
-        return _('Connection test failed. Click to retry test.');
-      case 'testing':
-        return _('Connection test in progress. Please wait.');
-      default:
-        return _('Test connection button. Click to start connection test.');
-    }
-  };
+  const icon =
+    icons?.[state] === undefined ? defaultIcons[state] : icons[state];
 
   const handleClick = () => {
     if (!disabled && status !== 'testing' && onClick) {
@@ -189,17 +164,19 @@ const ConnectionStatusPill = ({
     <StyledPill
       $disabled={disabled || status === 'testing'}
       $status={status}
-      aria-label={getAriaLabel()}
+      aria-describedby={ariaDescribedBy}
       disabled={!isInteractive}
-      title={getTitle()}
+      title={status === 'testing' ? labels.testing : labels.idle}
       type="button"
       onClick={handleClick}
       onKeyDown={handleKeyDown}
     >
-      {getStatusIcon()}
-      <span>{getStatusText()}</span>
+      {icon !== null && icon !== undefined && (
+        <IconContainer aria-hidden="true">{icon}</IconContainer>
+      )}
+      <span>{labels[state]}</span>
     </StyledPill>
   );
 };
 
-export default ConnectionStatusPill;
+export default StatusActionButton;

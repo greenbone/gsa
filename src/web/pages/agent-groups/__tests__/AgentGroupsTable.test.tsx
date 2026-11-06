@@ -7,7 +7,10 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import AgentGroup from 'gmp/models/agent-group';
+import {createSession} from 'gmp/testing';
 import AgentGroupsTable from 'web/pages/agent-groups/AgentGroupsTable';
+
+const createGmp = () => ({session: createSession()});
 
 describe('AgentGroupsTable tests', () => {
   test('should render without crashing', () => {
@@ -16,20 +19,20 @@ describe('AgentGroupsTable tests', () => {
       new AgentGroup({id: '2', name: 'Group 2'}),
     ];
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<AgentGroupsTable entities={groups} />);
     expect(screen.getByTestId('entities-table')).toBeInTheDocument();
   });
 
   test('should render the empty title when no groups are available', () => {
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<AgentGroupsTable entities={[]} />);
     expect(screen.getByText('No agent groups available')).toBeInTheDocument();
     expect(screen.queryByTestId('entities-table')).not.toBeInTheDocument();
   });
 
   test("should not render anything if groups aren't provided", () => {
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<AgentGroupsTable />);
     expect(screen.queryByTestId('entities-table')).not.toBeInTheDocument();
   });
@@ -45,7 +48,7 @@ describe('AgentGroupsTable tests', () => {
       new AgentGroup({id: '2', name: 'Group 2'}),
     ];
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<AgentGroupsTable entities={groups} />);
 
     expect(screen.getByText('Group 1')).toBeInTheDocument();
@@ -55,6 +58,33 @@ describe('AgentGroupsTable tests', () => {
     expect(rows.length).toEqual(groups.length + 2); // header + footer
     const headers = screen.queryAllByRole('columnheader');
     expect(headers.length).toBeGreaterThan(0);
+  });
+
+  test('should expand and collapse group details and link to the details page', () => {
+    const group = new AgentGroup({
+      id: 'group-1',
+      name: 'Office agents',
+      agents: [{id: 'agent-1', name: 'Laptop'}],
+      schedulerCronTime: '0 */12 * * *',
+      maxDelaySeconds: 300,
+    });
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
+    render(<AgentGroupsTable entities={[group]} />);
+
+    expect(screen.queryByText('Laptop')).not.toBeInTheDocument();
+    const toggle = screen.getByText('Office agents');
+    fireEvent.click(toggle);
+
+    expect(screen.getByText('Laptop')).toBeVisible();
+    expect(screen.getByText('0 */12 * * *')).toBeVisible();
+    expect(screen.getByText('300')).toBeVisible();
+    expect(screen.getByRole('link', {name: 'Details Icon'})).toHaveAttribute(
+      'href',
+      '/agent-group/group-1',
+    );
+
+    fireEvent.click(toggle);
+    expect(screen.queryByText('Laptop')).not.toBeInTheDocument();
   });
 
   test('should call action handlers when provided', () => {
@@ -70,7 +100,7 @@ describe('AgentGroupsTable tests', () => {
     const handleDelete = testing.fn();
     const handleEdit = testing.fn();
 
-    const {render} = rendererWith({capabilities: true});
+    const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(
       <AgentGroupsTable
         entities={groups}

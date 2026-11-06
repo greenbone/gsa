@@ -19,6 +19,10 @@ import {
   useSaveUser,
 } from 'web/hooks/use-query/user';
 
+type GmpOverrides = Record<string, unknown> & {
+  token?: string;
+};
+
 const userData = {
   accessHosts: ['localhost', '127.0.0.1'],
   authMethod: 'password',
@@ -31,10 +35,6 @@ const userData = {
 };
 
 const user = new User({id: 'user-id', name: 'user'});
-
-type GmpOverrides = Record<string, unknown> & {
-  token?: string;
-};
 
 const createGmp = (
   {token, ...userMethods}: GmpOverrides = {token: 'test-token'},

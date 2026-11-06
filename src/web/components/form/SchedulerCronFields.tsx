@@ -3,26 +3,28 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState} from 'react';
+import {type ReactNode, useState} from 'react';
 import styled from 'styled-components';
-import FormGroup from 'web/components/form/FormGroup';
-import SchedulerCronField, {
-  type SchedulerCronFieldProps,
-} from 'web/components/form/SchedulerCronField';
+import {type SchedulerCronEntry} from 'gmp/models/scanner';
+import SchedulerCronEntryFields, {
+  SchedulerCronCard,
+} from 'web/components/form/SchedulerCronEntryFields';
+import SchedulerCronGroup from 'web/components/form/SchedulerCronGroup';
 import {PlusIcon, XIcon} from 'web/components/icon';
-import InfoTip from 'web/components/info-tip/InfoTip';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/theme';
 
-interface SchedulerCronFieldsProps extends Omit<
-  SchedulerCronFieldProps,
-  'value' | 'onChange' | 'activeCronExpression' | 'compact'
-> {
-  value: string[];
+interface SchedulerCronFieldsProps {
+  value: SchedulerCronEntry[];
   activeCronExpressions?: string[];
-  onChange: (value: string[]) => void;
+  onChange: (value: SchedulerCronEntry[]) => void;
+  disabled?: boolean;
+  name?: string;
+  title?: ReactNode;
+  infoTip?: ReactNode;
+  infoTipAriaLabel?: string;
 }
 
 interface SchedulerCronRow {
@@ -30,10 +32,39 @@ interface SchedulerCronRow {
   activeCronExpression: string | undefined;
 }
 
-const Description = styled.p`
-  margin: 0;
-  color: ${Theme.mediumGray};
-  font-size: var(--mantine-font-size-xs);
+const AddScheduleButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid ${Theme.inputBorderGray};
+  border-radius: 4px;
+  background: ${Theme.white};
+  color: ${Theme.darkGray};
+  font: inherit;
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+
+  &:hover {
+    border-color: ${Theme.green};
+    background: ${Theme.dialogGray};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${Theme.blue};
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    border-color: ${Theme.lightGray};
+    background: ${Theme.dialogGray};
+    color: ${Theme.mediumGray};
+    cursor: not-allowed;
+  }
 `;
 
 const SchedulerCronFields = ({
@@ -64,15 +95,17 @@ const SchedulerCronFields = ({
       },
   );
 
-  const handleChange = (index: number, newValue: string) => {
+  const handleChange = (index: number, newValue: SchedulerCronEntry) => {
     onChange(
-      value.map((cron, cronIndex) => (cronIndex === index ? newValue : cron)),
+      value.map((entry, entryIndex) =>
+        entryIndex === index ? newValue : entry,
+      ),
     );
   };
 
   const handleRemove = (index: number) => {
     setRows(displayedRows.filter((_, rowIndex) => rowIndex !== index));
-    onChange(value.filter((_, cronIndex) => cronIndex !== index));
+    onChange(value.filter((_, entryIndex) => entryIndex !== index));
   };
 
   const handleAdd = () => {
@@ -83,60 +116,51 @@ const SchedulerCronFields = ({
         activeCronExpression: undefined,
       },
     ]);
-    onChange([...value, '0 * * * *']);
+    onChange([...value, {cron: '0 * * * *', maxDelaySeconds: 0}]);
   };
 
   return (
-    <FormGroup
-      gap="xs"
-      title={
-        <>
-          {title || _('Scheduler Options')}
-          {infoTip && (
-            <InfoTip ariaLabel={infoTipAriaLabel ?? _('More information')}>
-              {infoTip}
-            </InfoTip>
-          )}
-        </>
-      }
+    <SchedulerCronGroup
+      infoTip={infoTip}
+      infoTipAriaLabel={infoTipAriaLabel}
+      title={title}
     >
-      <Description>
-        {_(
-          "Choose from the dropdown of common schedules, or select 'Custom cron expression' in the list to enter your own cron schedule.",
-        )}
-      </Description>
       <Column gap="sm">
         {displayedRows.map((row, index) => (
-          <Row key={row.id} align="flex-start" gap="sm">
-            <Column flex={1} style={{minWidth: 0}}>
-              <SchedulerCronField
-                compact
-                activeCronExpression={row.activeCronExpression}
-                disabled={disabled}
-                name={`${name}-${row.id}`}
-                value={value[index] ?? ''}
-                onChange={newValue => handleChange(index, newValue)}
-              />
-            </Column>
+          <SchedulerCronCard key={row.id}>
+            <SchedulerCronEntryFields
+              activeCronExpression={row.activeCronExpression}
+              disabled={disabled}
+              maxDelayName={`${name}-maxDelay-${row.id}`}
+              name={`${name}-${row.id}`}
+              scheduleNumber={index + 1}
+              value={value[index]}
+              onChange={newValue => handleChange(index, newValue)}
+            />
             <XIcon
-              aria-label={_('Remove schedule {{number}}', {number: index + 1})}
+              aria-label={_('Remove schedule {{number}}', {
+                number: index + 1,
+              })}
               disabled={disabled || value.length <= 1}
-              mt={8}
               title={_('Remove schedule')}
               onClick={() => handleRemove(index)}
             />
-          </Row>
+          </SchedulerCronCard>
         ))}
-        <Row>
-          <PlusIcon
+        <Row justify="center" style={{marginTop: 4}}>
+          <AddScheduleButton
             aria-label={_('Add schedule')}
             disabled={disabled}
             title={_('Add schedule')}
+            type="button"
             onClick={handleAdd}
-          />
+          >
+            <PlusIcon size={['16px', '16px']} />
+            {_('Add another schedule')}
+          </AddScheduleButton>
         </Row>
       </Column>
-    </FormGroup>
+    </SchedulerCronGroup>
   );
 };
 

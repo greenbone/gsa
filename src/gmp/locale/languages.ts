@@ -3,10 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-export const BROWSER_LANGUAGE = 'Browser Language';
-
-export const getLanguageCodes = () => Object.keys(Languages);
-
 export type Language = {
   readonly name: string;
   readonly native_name: string;
@@ -15,6 +11,9 @@ export type Language = {
 export type LanguagesType = {
   readonly [code: string]: Language;
 };
+export const BROWSER_LANGUAGE = 'Browser Language';
+
+export const getLanguageCodes = () => Object.keys(Languages);
 
 const Languages: LanguagesType = {
   de: {

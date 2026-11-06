@@ -4,9 +4,19 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
-import {screen, rendererWith, wait, fireEvent} from 'web/testing';
+import {
+  screen,
+  rendererWith,
+  wait,
+  fireEvent,
+  changeInputValue,
+} from 'web/testing';
+import Features from 'gmp/capabilities/features';
 import Response from 'gmp/http/response';
-import Credential, {CERTIFICATE_CREDENTIAL_TYPE} from 'gmp/models/credential';
+import Credential, {
+  ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
+  CERTIFICATE_CREDENTIAL_TYPE,
+} from 'gmp/models/credential';
 import {createSession} from 'gmp/testing';
 import Button from 'web/components/form/Button';
 import {currentSettingsDefaultResponse} from 'web/pages/__fixtures__/current-settings';
@@ -22,6 +32,8 @@ const createGmp = ({
   downloadInstallerResponse = {data: 'some-data'},
   getCredentialResponse = defaultGetCredentialResponse,
   saveCredentialResponse = {id: '123'},
+  createActiveDirectory = testing.fn().mockResolvedValue({id: 'ad-123'}),
+  saveActiveDirectory = testing.fn().mockResolvedValue({id: 'ad-123'}),
   cloneCredential = testing.fn().mockResolvedValue(cloneCredentialResponse),
   createCredential = testing.fn().mockResolvedValue(createCredentialResponse),
   deleteCredential = testing.fn().mockResolvedValue(deleteCredentialResponse),
@@ -42,11 +54,13 @@ const createGmp = ({
   credential: {
     clone: cloneCredential,
     create: createCredential,
+    createActiveDirectory,
     delete: deleteCredential,
     download: downloadInstaller,
     export: downloadCredential,
     get: getCredential,
     save: saveCredential,
+    saveActiveDirectory,
   },
   user: {
     currentSettings,
@@ -107,6 +121,84 @@ describe('CredentialComponent tests', () => {
     expect(screen.queryByText('New Credential')).not.toBeInTheDocument();
     expect(onCreateError).not.toHaveBeenCalled();
     expect(onCreated).toHaveBeenCalledWith({id: '123'});
+  });
+
+  test('should use the Active Directory create and save commands', async () => {
+    const createActiveDirectory = testing
+      .fn()
+      .mockResolvedValue({id: 'ad-123'});
+    const saveActiveDirectory = testing.fn().mockResolvedValue({id: 'ad-123'});
+    const credential = new Credential({
+      id: 'ad-123',
+      name: 'ad-credential',
+      comment: 'AD credential',
+      credentialType: ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
+      adHost: 'ad.example.com',
+      adPort: '636',
+      adBindDn: 'CN=Scanner,DC=example,DC=com',
+      adBaseDn: 'DC=example,DC=com',
+      adTlsMode: 'ldaps',
+    });
+    const gmp = createGmp({
+      createActiveDirectory,
+      getCredentialResponse: new Response(credential),
+      saveActiveDirectory,
+    });
+    const {render} = rendererWith({
+      gmp,
+      features: new Features(['ENABLE_AD_INTEGRATION']),
+    });
+    render(
+      <CredentialComponent>
+        {({create, edit}) => (
+          <>
+            <Button data-testid="create-ad" onClick={create} />
+            <Button data-testid="edit-ad" onClick={() => edit(credential)} />
+          </>
+        )}
+      </CredentialComponent>,
+    );
+
+    fireEvent.click(screen.getByTestId('create-ad'));
+    await wait();
+    fireEvent.click(screen.getSelectElementByLabel('Type'));
+    fireEvent.click(screen.getByText('Active Directory'));
+    changeInputValue(screen.getByName('name'), 'new-ad-credential');
+    changeInputValue(screen.getByName('adHost'), 'ad.example.com');
+    changeInputValue(
+      screen.getByName('adBindDn'),
+      'CN=Scanner,DC=example,DC=com',
+    );
+    changeInputValue(screen.getByName('adBindPassword'), 'secret');
+    changeInputValue(screen.getByName('adBaseDn'), 'DC=example,DC=com');
+    fireEvent.click(screen.getDialogSaveButton());
+    await wait();
+
+    expect(createActiveDirectory).toHaveBeenCalledWith(
+      expect.objectContaining({
+        credentialType: ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
+        adHost: 'ad.example.com',
+        adBindDn: 'CN=Scanner,DC=example,DC=com',
+        adBindPassword: 'secret',
+        adBaseDn: 'DC=example,DC=com',
+      }),
+    );
+
+    fireEvent.click(screen.getByTestId('edit-ad'));
+    await wait();
+    changeInputValue(screen.getByName('adHost'), 'ad-updated.example.com');
+    fireEvent.click(screen.getByLabelText('Replace existing password with'));
+    changeInputValue(screen.getByName('adBindPassword'), 'new-secret');
+    fireEvent.click(screen.getDialogSaveButton());
+
+    expect(saveActiveDirectory).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: 'ad-123',
+        credentialType: ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
+        adHost: 'ad-updated.example.com',
+        adBindPassword: 'new-secret',
+      }),
+    );
   });
 
   test('should allow to edit a credential', async () => {

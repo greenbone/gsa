@@ -1,0 +1,238 @@
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+import {useId, useRef, useState} from 'react';
+import {ResponseRejection} from 'gmp/http/rejection';
+import {
+  type default as Credential,
+  type ActiveDirectoryTlsMode,
+} from 'gmp/models/credential';
+import Checkbox from 'web/components/form/Checkbox';
+import FileField from 'web/components/form/FileField';
+import FormGroup from 'web/components/form/FormGroup';
+import PasswordField from 'web/components/form/PasswordField';
+import Select from 'web/components/form/Select';
+import TextField from 'web/components/form/TextField';
+import {VerifyIcon, VerifyNoIcon} from 'web/components/icon';
+import Row from 'web/components/layout/Row';
+import StatusActionButton from 'web/components/status/StatusActionButton';
+import useGmp from 'web/hooks/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
+
+export interface ActiveDirectoryDialogValues {
+  adHost?: string;
+  adPort?: string;
+  adBindDn?: string;
+  adBindPassword?: string;
+  adBaseDn?: string;
+  adTlsMode?: ActiveDirectoryTlsMode;
+  adCaCertificate?: File | null;
+}
+
+interface ActiveDirectoryDialogFieldsProps {
+  state: ActiveDirectoryDialogValues;
+  credential?: Credential;
+  initialCertificate?: File;
+  onValueChange: (value: string | undefined, name?: string) => void;
+  onCertificateChange: (file: File | undefined) => Promise<void>;
+  onError: (message?: string) => void;
+}
+
+const ActiveDirectoryDialogFields = ({
+  state,
+  credential,
+  initialCertificate,
+  onValueChange,
+  onCertificateChange,
+  onError,
+}: ActiveDirectoryDialogFieldsProps) => {
+  const [_] = useTranslation();
+  const gmp = useGmp();
+  const passwordHintId = useId();
+  const isEdit = credential !== undefined;
+  const [changeAdBindPassword, setChangeAdBindPassword] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState<
+    'success' | 'failed' | 'testing'
+  >();
+  const requestVersion = useRef(0);
+  const invalidateConnection = () => {
+    requestVersion.current += 1;
+    setConnectionStatus(undefined);
+    onError(undefined);
+  };
+  const handleValueChange = (value: string | undefined, name?: string) => {
+    invalidateConnection();
+    onValueChange(value, name);
+  };
+  const handleAdCaCertificateChange = (file: File | undefined) => {
+    invalidateConnection();
+    void onCertificateChange(file);
+  };
+  const settingsChanged =
+    credential !== undefined &&
+    (state.adHost !== credential.adHost ||
+      state.adPort !== credential.adPort ||
+      state.adBindDn !== credential.adBindDn ||
+      state.adBaseDn !== credential.adBaseDn ||
+      state.adTlsMode !== credential.adTlsMode ||
+      state.adCaCertificate !== initialCertificate);
+  const getVerificationErrorMessage = (error: unknown): string => {
+    const message =
+      error instanceof Error && error.message
+        ? error.message
+        : _('Credential verification failed');
+    let hint: string | undefined;
+    if (error instanceof ResponseRejection) {
+      switch (error.status) {
+        case 400:
+          hint = _(
+            'Review the credential settings and correct the reported problem.',
+          );
+          break;
+        case 503:
+          hint = _(
+            'Check the AD host, port, network access, TLS settings, CA certificate, bind DN and bind password.',
+          );
+          break;
+        case 500:
+          hint = _(
+            'Try again later. If the problem persists, contact your administrator.',
+          );
+          break;
+      }
+    }
+    return hint ? `${message}: ${hint}` : message;
+  };
+
+  const requiresPassword = isEdit && !changeAdBindPassword && settingsChanged;
+  const handleTestConnection = async () => {
+    if (requiresPassword) return;
+    const version = ++requestVersion.current;
+    setConnectionStatus('testing');
+    onError(undefined);
+    try {
+      if (credential?.id && !changeAdBindPassword) {
+        await gmp.credential.verifyActiveDirectory({id: credential.id});
+      } else {
+        await gmp.credential.verifyActiveDirectory({
+          adHost: state.adHost ?? '',
+          adPort: state.adPort,
+          adBindDn: state.adBindDn ?? '',
+          adBindPassword: state.adBindPassword ?? '',
+          adBaseDn: state.adBaseDn ?? '',
+          adTlsMode: state.adTlsMode ?? 'ldaps',
+          adCaCertificate:
+            state.adCaCertificate === initialCertificate &&
+            credential?.adCaCertificate
+              ? new File([credential.adCaCertificate], 'ad-ca.pem')
+              : state.adCaCertificate,
+        });
+      }
+      if (version === requestVersion.current) setConnectionStatus('success');
+    } catch (error) {
+      if (version !== requestVersion.current) return;
+      setConnectionStatus('failed');
+      onError(getVerificationErrorMessage(error));
+    }
+  };
+  return (
+    <>
+      <TextField
+        name="adHost"
+        title={_('Active Directory Host or Address')}
+        value={state.adHost}
+        onChange={handleValueChange}
+      />
+      <TextField
+        max={65535}
+        min={1}
+        name="adPort"
+        title={_('Port')}
+        type="number"
+        value={state.adPort}
+        onChange={handleValueChange}
+      />
+      <TextField
+        name="adBindDn"
+        title={_('Bind DN')}
+        value={state.adBindDn}
+        onChange={handleValueChange}
+      />
+      <FormGroup direction="row" title={_('Bind Password')}>
+        {isEdit && (
+          <Checkbox<boolean>
+            checked={changeAdBindPassword}
+            checkedValue={true}
+            name="changeAdBindPassword"
+            title={_('Replace existing password with')}
+            unCheckedValue={false}
+            onChange={value => {
+              setChangeAdBindPassword(value);
+              invalidateConnection();
+              if (!value) onValueChange(undefined, 'adBindPassword');
+            }}
+          />
+        )}
+        <PasswordField
+          autoComplete="new-password"
+          disabled={isEdit && !changeAdBindPassword}
+          grow="1"
+          name="adBindPassword"
+          value={state.adBindPassword ?? ''}
+          onChange={handleValueChange}
+        />
+      </FormGroup>
+      <TextField
+        name="adBaseDn"
+        title={_('Base DN')}
+        value={state.adBaseDn}
+        onChange={handleValueChange}
+      />
+      <Select<ActiveDirectoryTlsMode>
+        items={[
+          {label: _('LDAPS'), value: 'ldaps'},
+          {label: _('StartTLS'), value: 'starttls'},
+        ]}
+        label={_('TLS Mode')}
+        name="adTlsMode"
+        value={state.adTlsMode}
+        onChange={handleValueChange}
+      />
+      <FileField
+        name="adCaCertificate"
+        title={_('CA Certificate (PEM)')}
+        value={state.adCaCertificate}
+        onChange={handleAdCaCertificateChange}
+      />
+      {requiresPassword && (
+        <p id={passwordHintId}>
+          {_(
+            'Save the credential or enter the bind password to test changed settings.',
+          )}
+        </p>
+      )}
+      <Row justify="center" mb="md">
+        <StatusActionButton
+          aria-describedby={requiresPassword ? passwordHintId : undefined}
+          disabled={requiresPassword}
+          icons={{
+            idle: <VerifyIcon color="currentColor" size="small" />,
+            failed: <VerifyNoIcon color="currentColor" size="small" />,
+          }}
+          labels={{
+            idle: _('Verify credential'),
+            testing: _('Verifying credential...'),
+            success: _('Credential verified'),
+            failed: _('Credential verification failed'),
+          }}
+          status={connectionStatus}
+          onClick={() => void handleTestConnection()}
+        />
+      </Row>
+    </>
+  );
+};
+
+export default ActiveDirectoryDialogFields;

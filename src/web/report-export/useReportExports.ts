@@ -30,15 +30,6 @@ import {
   useReportExportStatusQueries,
 } from 'web/report-export/useReportExportQueries';
 
-export type {
-  ReportExportJob,
-  ReportExportKind,
-  ReportExportJobView,
-  StartReportExportParams,
-} from 'web/report-export/report-export-job-model';
-
-export const REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL = 3000;
-
 export interface ReportExportCallbacks {
   onDownload: (
     data: ArrayBuffer | string,
@@ -47,6 +38,15 @@ export interface ReportExportCallbacks {
   ) => void;
   onError?: (error: Error) => void;
 }
+
+export type {
+  ReportExportJob,
+  ReportExportKind,
+  ReportExportJobView,
+  StartReportExportParams,
+} from 'web/report-export/report-export-job-model';
+
+export const REPORT_EXPORT_DOWNLOAD_RETRY_INTERVAL = 3000;
 
 const toError = (error: unknown) => {
   if (error instanceof Error) return error;

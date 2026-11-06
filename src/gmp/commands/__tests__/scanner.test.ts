@@ -403,4 +403,37 @@ describe('ScannerCommand tests', () => {
     const formData = createFormData(requestData);
     expect(formData.getAll('scheduler_cron_times:')).toEqual(cronTimes);
   });
+
+  test('preserves submitted order and cron-delay pairs in repeated cron fields', async () => {
+    const response = createActionResultResponse({
+      action: 'modify_agent_control_scan_config',
+      id: '123',
+      message: 'Config updated successfully',
+    });
+    const fakeHttp = createHttp(response);
+    const cmd = new ScannerCommand(fakeHttp);
+    const cronTimes = [
+      {cron: '0 8 * * *', maxDelaySeconds: 44},
+      {cron: '0 2 * * *', maxDelaySeconds: 12},
+      {cron: '0 8 * * *', maxDelaySeconds: 7},
+    ];
+    const repeatedValues = ['0 8 * * *|44', '0 2 * * *|12', '0 8 * * *|7'];
+
+    await cmd.modifyAgentControlConfig({
+      id: '123',
+      schedulerCronTimes: cronTimes,
+    });
+
+    expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'modify_agent_control_scan_config',
+        agent_control_id: '123',
+        'scheduler_cron_times:': repeatedValues,
+      },
+    });
+
+    const requestData = fakeHttp.request.mock.calls[0][1].data;
+    const formData = createFormData(requestData);
+    expect(formData.getAll('scheduler_cron_times:')).toEqual(repeatedValues);
+  });
 });

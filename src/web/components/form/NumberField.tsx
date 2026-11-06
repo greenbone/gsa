@@ -46,6 +46,11 @@ const getColor = (errorContent: string | undefined) =>
   isDefined(errorContent) ? 'var(--mantine-color-red-5)' : 'var(--input-color)';
 
 const StyledNumberInput = styled(NumberInput<number>)<StyledNumberInputProps>`
+  .mantine-InputWrapper-label {
+    font-weight: 500;
+    font-size: var(--mantine-font-size-md);
+    color: var(--label-color);
+  }
   input,
   .mantine-NumberInput-controls {
     height: ${({size}) => getSize(size)};

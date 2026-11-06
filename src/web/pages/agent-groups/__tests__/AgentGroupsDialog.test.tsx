@@ -79,6 +79,7 @@ describe('AgentGroupsDialog tests', () => {
       agentController: '',
       agentIds: [],
       schedulerCronExpression: '0 */12 * * *',
+      maxDelaySeconds: 0,
     });
   });
 
@@ -124,6 +125,7 @@ describe('AgentGroupsDialog tests', () => {
       agentController: 's1',
       agentIds: ['a1'],
       schedulerCronExpression: '0 */12 * * *',
+      maxDelaySeconds: 0,
     });
   });
 
@@ -153,7 +155,10 @@ describe('AgentGroupsDialog tests', () => {
       expect(screen.getByText('Scheduler Options')).toBeInTheDocument();
     });
 
-    expect(screen.getByName('schedulerCronExpression')).toBeInTheDocument();
+    expect(screen.getByName('schedulerCronExpression-0')).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', {name: 'Add schedule'}),
+    ).not.toBeInTheDocument();
   });
 
   test('should not render heartbeat interval or port fields in agent groups dialog', async () => {
@@ -218,6 +223,7 @@ describe('AgentGroupsDialog tests', () => {
       agentController: 's1',
       agentIds: [],
       schedulerCronExpression: '0 */12 * * *',
+      maxDelaySeconds: 0,
     });
 
     const payload = onSave.mock.calls[0][0];

@@ -4,16 +4,20 @@
  */
 
 import {type ReactNode, useState} from 'react';
+import styled from 'styled-components';
 import {
   type default as Scanner,
   type AgentControlDefaults,
   type AgentControlRetry,
   type AgentScriptExecutor,
   type Heartbeat,
+  type SchedulerCronEntry,
 } from 'gmp/models/scanner';
 import NumberField from 'web/components/form/NumberField';
 import Radio from 'web/components/form/Radio';
 import SchedulerCronFields from 'web/components/form/SchedulerCronFields';
+import SchedulerCronLabel from 'web/components/form/SchedulerCronLabel';
+import HighlightBox from 'web/components/highlight-box';
 import Column from 'web/components/layout/Column';
 import Layout from 'web/components/layout/Layout';
 import Row from 'web/components/layout/Row';
@@ -25,9 +29,11 @@ import TableRow from 'web/components/table/TableRow';
 import {useModifyScannerAgentControlConfig} from 'web/hooks/use-query/scanner';
 import useTranslation from 'web/hooks/useTranslation';
 import EditableSettingRow from 'web/pages/user-settings/EditableSettingRow';
+import Theme from 'web/utils/theme';
 
 interface ScannerAgentConfigSettingsProps {
   scanner: Scanner;
+  isLoading?: boolean;
   onChanged?: () => void;
   onError: (error: Error) => void;
 }
@@ -40,6 +46,7 @@ interface ScannerConfigValues
     AgentControlDefaults {}
 
 type ConfigFieldKey = keyof ScannerConfigValues;
+
 type FormValue = ScannerConfigValues[ConfigFieldKey];
 
 interface ConfigFieldDefinition {
@@ -64,8 +71,27 @@ interface EditableConfigFieldProps {
   onEdit: (value: FormValue) => void;
   onCancel: () => void;
   onSave: () => Promise<void>;
+  onClear?: () => Promise<void>;
   onChangeValue: (value: FormValue) => void;
 }
+
+const SchedulerSummaryCron = styled.div`
+  color: ${Theme.black};
+`;
+
+const SchedulerSummaryDelay = styled.div`
+  margin-top: 2px;
+  color: ${Theme.darkGray};
+  font-size: var(--mantine-font-size-sm);
+`;
+
+const renderConfigValue = (value: FormValue): ReactNode => {
+  if (Array.isArray(value)) {
+    return <Layout>{value.map(entry => entry.cron).join(', ')}</Layout>;
+  }
+
+  return <Layout>{value}</Layout>;
+};
 
 const getScannerPayload = (scanner: Scanner): ScannerConfigValues => {
   const agentDefaults = scanner.agentControlConfig?.agentDefaults;
@@ -105,8 +131,8 @@ const renderNumberField = (
 
 const renderCronField = (
   activeCronExpressions: string[],
-  value: string[],
-  onChange: (value: string[]) => void,
+  value: SchedulerCronEntry[],
+  onChange: (value: SchedulerCronEntry[]) => void,
 ) => (
   <SchedulerCronFields
     activeCronExpressions={activeCronExpressions}
@@ -148,6 +174,7 @@ const EditableConfigField = ({
   onEdit,
   onCancel,
   onSave,
+  onClear,
   onChangeValue,
 }: EditableConfigFieldProps) => {
   const fieldValue = fieldValues[field.key];
@@ -170,6 +197,7 @@ const EditableConfigField = ({
       title={field.title}
       viewComponent={field.renderView(fieldValue)}
       onCancel={onCancel}
+      onClear={onClear}
       onEdit={() => onEdit(fieldValue)}
       onSave={onSave}
     />
@@ -178,6 +206,7 @@ const EditableConfigField = ({
 
 const ScannerAgentConfigSettings = ({
   scanner,
+  isLoading = false,
   onChanged,
   onError,
 }: ScannerAgentConfigSettingsProps) => {
@@ -189,10 +218,6 @@ const ScannerAgentConfigSettings = ({
       onError: error => onError(new Error(error.message)),
     });
 
-  const agentDefaults = scanner.agentControlConfig?.agentDefaults;
-  const activeCronExpressions =
-    agentDefaults?.agentScriptExecutor.schedulerCronTimes ?? [];
-
   const [savedValues, setSavedValues] = useState<{
     scanner: Scanner;
     values: Partial<ScannerConfigValues>;
@@ -201,6 +226,9 @@ const ScannerAgentConfigSettings = ({
     ...getScannerPayload(scanner),
     ...(savedValues?.scanner === scanner ? savedValues.values : {}),
   };
+  const activeCronExpressions = fieldValues.schedulerCronTimes.map(
+    ({cron}) => cron,
+  );
   const [editValues, setEditValues] = useState<Partial<ScannerConfigValues>>(
     {},
   );
@@ -212,11 +240,22 @@ const ScannerAgentConfigSettings = ({
   >({});
 
   const setEditValue = (key: ConfigFieldKey, value: FormValue) => {
+    if (isLoading) {
+      return;
+    }
     setEditValues(prev => ({...prev, [key]: value}));
   };
 
   const handleEdit = (key: ConfigFieldKey, currentValue: FormValue) => {
-    setEditValue(key, currentValue);
+    if (isLoading) {
+      setEditValues(prev => {
+        const next = {...prev};
+        delete next[key];
+        return next;
+      });
+    } else {
+      setEditValue(key, currentValue);
+    }
     setEditModes(prev => ({...prev, [key]: true}));
   };
 
@@ -230,7 +269,10 @@ const ScannerAgentConfigSettings = ({
     setErrorMessages(prev => ({...prev, [key]: ''}));
   };
 
-  const handleSave = async (key: ConfigFieldKey) => {
+  const handleSave = async (key: ConfigFieldKey, valueOverride?: FormValue) => {
+    if (isLoading) {
+      return;
+    }
     if (!scanner.id) {
       setErrorMessages(prev => ({
         ...prev,
@@ -240,7 +282,8 @@ const ScannerAgentConfigSettings = ({
     }
 
     const payload = fieldValues;
-    const editedValue = editValues[key];
+    const value = valueOverride ?? editValues[key];
+    const editedValue = value;
     const updateToLatest =
       key === 'updateToLatest' ? editedValue : payload.updateToLatest;
 
@@ -283,7 +326,7 @@ const ScannerAgentConfigSettings = ({
           title: _('Number of retry attempts'),
           renderEdit: ({attempts}, onChange) =>
             renderNumberField('attempts', 0, attempts, onChange),
-          renderView: val => <Layout>{val}</Layout>,
+          renderView: renderConfigValue,
         },
         {
           key: 'delayInSeconds',
@@ -291,7 +334,7 @@ const ScannerAgentConfigSettings = ({
           title: _('Delay between retries in seconds'),
           renderEdit: ({delayInSeconds}, onChange) =>
             renderNumberField('delayInSeconds', 0, delayInSeconds, onChange),
-          renderView: val => <Layout>{val}</Layout>,
+          renderView: renderConfigValue,
         },
         {
           key: 'maxJitterInSeconds',
@@ -304,7 +347,7 @@ const ScannerAgentConfigSettings = ({
               maxJitterInSeconds,
               onChange,
             ),
-          renderView: val => <Layout>{val}</Layout>,
+          renderView: renderConfigValue,
         },
       ],
     },
@@ -317,7 +360,7 @@ const ScannerAgentConfigSettings = ({
           title: _('Bulk operation size'),
           renderEdit: ({bulkSize}, onChange) =>
             renderNumberField('bulkSize', 0, bulkSize, onChange),
-          renderView: val => <Layout>{val}</Layout>,
+          renderView: renderConfigValue,
         },
         {
           key: 'bulkThrottleTimeInMs',
@@ -330,7 +373,7 @@ const ScannerAgentConfigSettings = ({
               bulkThrottleTimeInMs,
               onChange,
             ),
-          renderView: val => <Layout>{val}</Layout>,
+          renderView: renderConfigValue,
         },
         {
           key: 'indexerDirDepth',
@@ -338,7 +381,7 @@ const ScannerAgentConfigSettings = ({
           title: _('Directory depth for indexer'),
           renderEdit: ({indexerDirDepth}, onChange) =>
             renderNumberField('indexerDirDepth', 0, indexerDirDepth, onChange),
-          renderView: val => <Layout>{val}</Layout>,
+          renderView: renderConfigValue,
         },
         {
           key: 'schedulerCronTimes',
@@ -347,10 +390,25 @@ const ScannerAgentConfigSettings = ({
           renderEdit: ({schedulerCronTimes}, onChange, cronExpr = []) =>
             renderCronField(cronExpr, schedulerCronTimes, onChange),
           renderView: val => {
-            const displayValue = Array.isArray(val)
-              ? val.join(', ') || _('Not set')
-              : _('Not set');
-            return <Layout>{displayValue}</Layout>;
+            if (!Array.isArray(val) || val.length === 0) {
+              return <Layout>{_('Not set')}</Layout>;
+            }
+
+            return (
+              <Column gap="xs">
+                {val.map(({cron, maxDelaySeconds}, index) => (
+                  <HighlightBox key={`${cron}-${index}`}>
+                    <SchedulerCronLabel number={index + 1} />
+                    <SchedulerSummaryCron>{cron}</SchedulerSummaryCron>
+                    <SchedulerSummaryDelay>
+                      {_('Max delay: {{delay}} seconds', {
+                        delay: maxDelaySeconds,
+                      })}
+                    </SchedulerSummaryDelay>
+                  </HighlightBox>
+                ))}
+              </Column>
+            );
           },
         },
       ],
@@ -369,7 +427,7 @@ const ScannerAgentConfigSettings = ({
               intervalInSeconds,
               onChange,
             ),
-          renderView: val => <Layout>{val}</Layout>,
+          renderView: renderConfigValue,
         },
         {
           key: 'missUntilInactive',
@@ -382,7 +440,7 @@ const ScannerAgentConfigSettings = ({
               missUntilInactive,
               onChange,
             ),
-          renderView: val => <Layout>{val}</Layout>,
+          renderView: renderConfigValue,
         },
       ],
     },
@@ -431,6 +489,15 @@ const ScannerAgentConfigSettings = ({
                 isEditMode={editModes[field.key] ?? false}
                 onCancel={() => handleCancel(field.key)}
                 onChangeValue={value => setEditValue(field.key, value)}
+                onClear={
+                  field.key === 'schedulerCronTimes'
+                    ? undefined
+                    : () =>
+                        handleSave(
+                          field.key,
+                          field.key === 'updateToLatest' ? false : 0,
+                        )
+                }
                 onEdit={value => handleEdit(field.key, value)}
                 onSave={() => handleSave(field.key)}
               />

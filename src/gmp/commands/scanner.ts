@@ -10,6 +10,7 @@ import {type XmlMeta} from 'gmp/http/transform/fast-xml';
 import logger from 'gmp/log';
 import {type Element} from 'gmp/models/model';
 import Scanner, {
+  type SchedulerCronEntry,
   type ScannerElement,
   type ScannerType,
 } from 'gmp/models/scanner';
@@ -41,7 +42,7 @@ export interface ScannerAgentControlConfigParams {
   bulkSize?: number;
   bulkThrottleTimeInMs?: number;
   indexerDirDepth?: number;
-  schedulerCronTimes?: string[];
+  schedulerCronTimes?: Array<SchedulerCronEntry | string>;
   intervalInSeconds?: number;
   missUntilInactive?: number;
   updateToLatest?: number;
@@ -166,7 +167,11 @@ class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
       data.indexer_dir_depth = indexerDirDepth;
     }
     if (schedulerCronTimes !== undefined && schedulerCronTimes.length > 0) {
-      data['scheduler_cron_times:'] = schedulerCronTimes;
+      data['scheduler_cron_times:'] = schedulerCronTimes.map(entry =>
+        typeof entry === 'string'
+          ? entry
+          : `${entry.cron}|${entry.maxDelaySeconds ?? 0}`,
+      );
     }
     if (intervalInSeconds !== undefined) {
       data.interval_in_seconds = intervalInSeconds;

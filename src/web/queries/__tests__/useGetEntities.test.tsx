@@ -13,8 +13,10 @@ import QueryFilter from 'gmp/models/filter/query-filter';
 import {createSession} from 'gmp/testing';
 import useGetEntities from 'web/queries/useGetEntities';
 
-const filter = QueryFilter.fromString('name~entity');
 type TestEntity = {id: string; name: string};
+
+const filter = QueryFilter.fromString('name~entity');
+
 const entities: TestEntity[] = [{id: 'entity-1', name: 'Entity 1'}];
 const counts = new CollectionCounts({all: 1, filtered: 1, length: 1});
 

@@ -19,6 +19,7 @@ import Credential, {
   SMIME_CREDENTIAL_TYPE,
   PGP_CREDENTIAL_TYPE,
   getCredentialTypeName,
+  ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 import Model from 'gmp/models/model';
 import {testModel} from 'gmp/models/testing';
@@ -98,6 +99,39 @@ describe('Credential Model tests', () => {
       auth_algorithm: 'md5',
     });
     expect(credential.authAlgorithm).toEqual('md5');
+  });
+
+  test('should parse Active Directory fields', () => {
+    const credential = Credential.fromElement({
+      _id: 'ad-id',
+      type: ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
+      host: 'ad.example.com',
+      port: '636',
+      bind_dn: 'CN=Scanner,DC=example,DC=com',
+      base_dn: 'DC=example,DC=com',
+      tls_mode: 'ldaps',
+      ca_certificate: '-----BEGIN CERTIFICATE-----',
+    });
+
+    expect(credential.credentialType).toEqual(ACTIVE_DIRECTORY_CREDENTIAL_TYPE);
+    expect(credential.adHost).toEqual('ad.example.com');
+    expect(credential.adPort).toEqual('636');
+    expect(credential.adBindDn).toEqual('CN=Scanner,DC=example,DC=com');
+    expect(credential.adBaseDn).toEqual('DC=example,DC=com');
+    expect(credential.adTlsMode).toEqual('ldaps');
+    expect(credential.adCaCertificate).toEqual('-----BEGIN CERTIFICATE-----');
+
+    const withoutOptionalFields = Credential.fromElement({
+      _id: 'ad-id-no-optional-fields',
+      type: ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
+      host: 'ad.example.com',
+      bind_dn: 'CN=Scanner,DC=example,DC=com',
+      base_dn: 'DC=example,DC=com',
+      tls_mode: 'starttls',
+    });
+
+    expect(withoutOptionalFields.adPort).toBeUndefined();
+    expect(withoutOptionalFields.adCaCertificate).toBeUndefined();
   });
 
   test('should parse certificate_info', () => {
@@ -389,6 +423,9 @@ describe('getCredentialTypeName tests', () => {
     );
     expect(getCredentialTypeName(KRB5_CREDENTIAL_TYPE)).toEqual(
       'SMB (Kerberos)',
+    );
+    expect(getCredentialTypeName(ACTIVE_DIRECTORY_CREDENTIAL_TYPE)).toEqual(
+      'Active Directory',
     );
   });
 });

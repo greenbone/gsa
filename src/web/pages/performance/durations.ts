@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+export type Duration = keyof typeof DURATIONS;
 export const DURATION_HOUR = 60 * 60;
 export const DURATION_DAY = DURATION_HOUR * 24;
 export const DURATION_WEEK = DURATION_DAY * 7;
@@ -16,8 +17,6 @@ const DURATIONS = {
   month: DURATION_MONTH,
   year: DURATION_YEAR,
 } as const;
-
-export type Duration = keyof typeof DURATIONS;
 
 export const getDurationInSeconds = (duration: Duration): number => {
   return DURATIONS[duration];
