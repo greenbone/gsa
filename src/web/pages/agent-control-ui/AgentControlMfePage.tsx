@@ -8,6 +8,7 @@ import {useParams} from 'react-router';
 import useAgentControlInventory from 'web/hooks/useAgentControlInventory';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
+import loadMfeScript from 'web/pages/agent-control-ui/load-mfe-script';
 
 interface InventoryElement extends HTMLElement {
   getToken?: () => Promise<string>;
@@ -17,36 +18,6 @@ interface Agent {
   agentid: string;
   hostname: string;
 }
-
-const SCRIPT_ID = 'ac-inventory-mfe';
-
-let scriptLoad: Promise<void> | undefined;
-
-const loadMfeScript = (src: string, elementName: string): Promise<void> => {
-  if (customElements.get(elementName)) {
-    return Promise.resolve();
-  }
-  if (!scriptLoad) {
-    document.getElementById(SCRIPT_ID)?.remove();
-    scriptLoad = new Promise<void>((resolve, reject) => {
-      const script = document.createElement('script');
-      script.id = SCRIPT_ID;
-      script.src = src;
-      script.addEventListener('load', () => resolve(), {once: true});
-      script.addEventListener(
-        'error',
-        () => {
-          script.remove();
-          scriptLoad = undefined;
-          reject(new Error('load failed'));
-        },
-        {once: true},
-      );
-      document.head.appendChild(script);
-    });
-  }
-  return scriptLoad;
-};
 
 const AgentControlMfePage = () => {
   const gmp = useGmp();

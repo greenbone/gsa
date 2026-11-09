@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect, useState} from 'react';
+import {useEffect, useSyncExternalStore} from 'react';
 
 export interface InventoryDomain {
   id: string;
@@ -26,6 +26,8 @@ interface Manifest {
   domains?: InventoryDomain[];
 }
 
+type InventorySnapshot = AgentControlInventory | null | undefined;
+
 export const domainLabel = (
   domain: InventoryDomain,
   language: string,
@@ -34,62 +36,65 @@ export const domainLabel = (
 const MANIFEST_URL = '/agent-control/public/ui/mfe/manifest.json';
 const SUPPORTED_VERSION = 1;
 
-let cached: AgentControlInventory | undefined;
+let cached: InventorySnapshot;
+let discovery: Promise<void> | undefined;
+const listeners = new Set<() => void>();
+const getSnapshot = () => cached;
+const subscribe = (listener: () => void) => {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+};
+const publish = (inventory: InventorySnapshot) => {
+  cached = inventory;
+  listeners.forEach(listener => listener());
+};
 
-const useAgentControlInventory = ():
-  | AgentControlInventory
-  | null
-  | undefined => {
-  const [inventory, setInventory] = useState<
-    AgentControlInventory | null | undefined
-  >(cached);
-
-  useEffect(() => {
-    if (cached) {
-      return;
-    }
-    let cancelled = false;
-    const run = async () => {
-      try {
-        const response = await fetch(MANIFEST_URL, {cache: 'no-store'});
-        if (!response.ok) {
-          throw new Error('Inventory manifest request failed');
-        }
-        const manifest = (await response.json()) as Manifest;
-        if (manifest.version !== SUPPORTED_VERSION) {
-          throw new Error('Unsupported inventory manifest version');
-        }
-        if (!manifest.script || !manifest.elementName) {
-          throw new Error('Invalid inventory manifest');
-        }
-        const discovered: AgentControlInventory = {
-          script: manifest.script,
-          elementName: manifest.elementName,
-          agentsEvent: manifest.events?.agentsLoaded,
-          domains: (manifest.domains ?? [])
-            .filter(domain => Boolean(domain?.id) && Boolean(domain?.label))
-            .map(domain => ({
-              id: domain.id,
-              label: domain.label,
-              labels: domain.labels,
-            })),
-        };
-        cached = discovered;
-        if (!cancelled) {
-          setInventory(discovered);
-        }
-      } catch {
-        if (!cancelled) {
-          setInventory(null);
-        }
+const discover = () => {
+  if (cached || discovery) {
+    return;
+  }
+  // Defer the request until the shared promise is assigned.
+  discovery = Promise.resolve().then(async () => {
+    try {
+      const response = await fetch(MANIFEST_URL, {cache: 'no-store'});
+      if (!response.ok) {
+        throw new Error('Inventory manifest request failed');
       }
-    };
-    void run();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+      const manifest = (await response.json()) as Manifest;
+      if (manifest.version !== SUPPORTED_VERSION) {
+        throw new Error('Unsupported inventory manifest version');
+      }
+      if (!manifest.script || !manifest.elementName) {
+        throw new Error('Invalid inventory manifest');
+      }
+      publish({
+        script: manifest.script,
+        elementName: manifest.elementName,
+        agentsEvent: manifest.events?.agentsLoaded,
+        domains: (manifest.domains ?? [])
+          .filter(domain => Boolean(domain?.id) && Boolean(domain?.label))
+          .map(domain => ({
+            id: domain.id,
+            label: domain.label,
+            labels: domain.labels,
+          })),
+      });
+    } catch {
+      publish(null);
+    } finally {
+      discovery = undefined;
+    }
+  });
+  publish(undefined);
+};
 
+const useAgentControlInventory = (): InventorySnapshot => {
+  const inventory = useSyncExternalStore(subscribe, getSnapshot);
+  useEffect(() => {
+    discover();
+  }, []);
   return inventory;
 };
 
