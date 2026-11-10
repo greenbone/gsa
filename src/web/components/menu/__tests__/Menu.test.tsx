@@ -15,10 +15,12 @@ const renderMenuWith = ({
   capabilities,
   gmpSettings,
   features,
+  route,
 }: {
   capabilities: true | false | Capabilities;
   gmpSettings: Record<string, unknown>;
   features?: Feature[];
+  route?: string;
 }) => {
   const gmp = {
     settings: gmpSettings,
@@ -28,12 +30,72 @@ const renderMenuWith = ({
     capabilities,
     gmp,
     router: true,
+    route,
     features: isDefined(features) ? new Features(features) : undefined,
   });
   return render(<Menu />);
 };
 
 describe('Menu rendering', () => {
+  test.each([
+    '/active-directory',
+    '/active-directory/discovery/credential-id',
+  ])(
+    'shows Active Directory under Configuration on %s',
+    route => {
+      renderMenuWith({
+        capabilities: true,
+        gmpSettings: {},
+        features: ['ENABLE_AD_INTEGRATION'],
+        route,
+      });
+      expect(screen.getByText('Active Directory')).toBeVisible();
+      expect(screen.getByRole('link', {name: 'Configuration'})).toHaveAttribute(
+        'data-expanded',
+        'true',
+      );
+    },
+  );
+
+  test('links to Active Directory from Configuration', () => {
+    renderMenuWith({
+      capabilities: true,
+      gmpSettings: {},
+      features: ['ENABLE_AD_INTEGRATION'],
+    });
+    fireEvent.click(screen.getByText('Configuration'));
+    expect(
+      screen.getByRole('link', {name: 'Active Directory'}),
+    ).toHaveAttribute('href', '/active-directory');
+  });
+
+  test('keeps Active Directory clickable from its discovery page', () => {
+    renderMenuWith({
+      capabilities: true,
+      gmpSettings: {},
+      features: ['ENABLE_AD_INTEGRATION'],
+      route: '/active-directory/discovery/credential-id',
+    });
+    fireEvent.click(screen.getByText('Configuration'));
+    expect(
+      screen.getByRole('link', {name: 'Active Directory'}),
+    ).toHaveAttribute('href', '/active-directory');
+  });
+
+  test.each([
+    {capabilities: true as const, features: []},
+    {
+      capabilities: new Capabilities(['get_credentials']),
+      features: ['ENABLE_AD_INTEGRATION'] as Feature[],
+    },
+  ])('hides Active Directory when disabled or unauthorized: %j', options => {
+    renderMenuWith({...options, gmpSettings: {}});
+    fireEvent.click(screen.getByText('Configuration'));
+    expect(
+      screen.queryByRole('link', {name: 'Active Directory'}),
+    ).not.toBeInTheDocument();
+  });
+
   test.each([
     'Dashboards',
     'Scans',

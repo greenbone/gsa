@@ -128,6 +128,13 @@ const Menu = () => {
   const targetsMatch = useMatch(routeMatch(ROUTES.targets.path));
   const targetMatch = useMatch(routeMatch(ROUTES.target.path));
   const isTargetsActive = Boolean(targetsMatch || targetMatch);
+  const activeDirectoryMatch = useMatch(
+    `${ROUTES.activeDirectory.url}/discovery/*`,
+  );
+  const activeDirectoryListMatch = useMatch(ROUTES.activeDirectory.url);
+  const isActiveDirectoryActive = Boolean(
+    activeDirectoryMatch || activeDirectoryListMatch,
+  );
 
   const portlistsMatch = useMatch(routeMatch(ROUTES.portLists.path));
   const portlistMatch = useMatch(routeMatch(ROUTES.portList.path));
@@ -472,6 +479,7 @@ const Menu = () => {
         key: 'configuration',
         defaultOpened: [
           isTargetsActive,
+          isActiveDirectoryActive,
           isContainerImageTargetsActive,
           isPortlistsActive,
           isCredentialsActive,
@@ -488,6 +496,15 @@ const Menu = () => {
           isAgentInstallersActive,
         ].some(Boolean),
         subNav: [
+          capabilities.mayAccess('target') &&
+            features.featureEnabled('ENABLE_AD_INTEGRATION') && {
+              label: _('Active Directory'),
+              to: ROUTES.activeDirectory.url,
+              // Keep this as a link while the discovery route is active so
+              // clicking it can return to the connections table.
+              isPathMatch: false,
+              active: isActiveDirectoryActive,
+            },
           capabilities.mayAccess('target') && {
             label: _('Targets'),
             to: ROUTES.targets.url,

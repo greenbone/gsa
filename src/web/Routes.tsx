@@ -687,6 +687,22 @@ const loggedInRoutes = [
 
       // Target routes
       {
+        path: ROUTES.activeDirectoryBrowser.path,
+        lazy: async () => ({
+          Component: (
+            await import('web/pages/active-directory/ActiveDirectoryBrowserPage')
+          ).default,
+        }),
+      },
+      {
+        path: ROUTES.activeDirectory.path,
+        lazy: async () => ({
+          Component: (
+            await import('web/pages/active-directory/ActiveDirectoryPage')
+          ).default,
+        }),
+      },
+      {
         path: ROUTES.targets.path,
         lazy: async () => ({
           Component: (await import('web/pages/targets/TargetListPage')).default,
