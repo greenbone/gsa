@@ -342,19 +342,6 @@ const Menu = () => {
           },
         ].filter(Boolean),
       },
-      capabilities.mayAccess('agent') &&
-        features.featureEnabled('ENABLE_AGENTS') && {
-          icon: Boxes,
-          label: _('Inventory'),
-          key: 'inventory',
-          defaultOpened: Boolean(activeMfeDomain),
-          subNav: (acInventory?.domains ?? []).map(inventoryDomain => ({
-            label: domainLabel(inventoryDomain, i18n.language),
-            to: ROUTES.agentControlMfe.url(inventoryDomain.id),
-            isPathMatch: activeMfeDomain === inventoryDomain.id,
-            active: activeMfeDomain === inventoryDomain.id,
-          })),
-        },
       mayOpAssets && {
         icon: Server,
         label: _('Assets'),
@@ -385,6 +372,19 @@ const Menu = () => {
           },
         ].filter(Boolean),
       },
+      capabilities.mayAccess('agent') &&
+        features.featureEnabled('ENABLE_AGENTS') && {
+          icon: Boxes,
+          label: _('Inventory'),
+          key: 'inventory',
+          defaultOpened: Boolean(activeMfeDomain),
+          subNav: (acInventory?.domains ?? []).map(inventoryDomain => ({
+            label: domainLabel(inventoryDomain, i18n.language),
+            to: ROUTES.agentControlMfe.url(inventoryDomain.id),
+            isPathMatch: activeMfeDomain === inventoryDomain.id,
+            active: activeMfeDomain === inventoryDomain.id,
+          })),
+        },
       mayOpResilience && {
         icon: FileCheck,
         label: _('Resilience'),
