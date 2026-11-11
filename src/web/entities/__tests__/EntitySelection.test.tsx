@@ -30,3 +30,33 @@ describe('EntitySelection', () => {
     expect(onDeselected).toHaveBeenCalledWith(entity);
   });
 });
+
+test('reflects controlled selection, indeterminate and disabled state without retaining a local selection', () => {
+  const entity = {id: 'controlled'};
+  const onSelected = testing.fn();
+  const onDeselected = testing.fn();
+  const {rerender} = render(
+    <EntitySelection
+      aria-label="Select controlled"
+      entity={entity}
+      selected={false}
+      onDeselected={onDeselected}
+      onSelected={onSelected}
+    />,
+  );
+  const checkbox = screen.getByRole('checkbox', {name: 'Select controlled'});
+  fireEvent.click(checkbox);
+  expect(onSelected).toHaveBeenCalledWith(entity);
+  expect(checkbox).not.toBeChecked();
+  rerender(
+    <EntitySelection selected entity={entity} onDeselected={onDeselected} />,
+  );
+  expect(checkbox).toBeChecked();
+  fireEvent.click(checkbox);
+  expect(onDeselected).toHaveBeenCalledWith(entity);
+  rerender(
+    <EntitySelection disabled indeterminate entity={entity} selected={false} />,
+  );
+  expect(checkbox).toBeDisabled();
+  expect(checkbox).toBePartiallyChecked();
+});

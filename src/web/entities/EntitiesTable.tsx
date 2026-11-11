@@ -84,6 +84,7 @@ export interface EntitiesTableProps<
   TRowProps,
   TPaginationProps
 > {
+  'aria-label'?: string;
   'data-testid'?: string;
   doubleRow?: boolean;
   emptyTitle?: string;
@@ -134,6 +135,7 @@ function EntitiesTable<
   TRowProps extends RowComponentProps<TEntity> = RowComponentProps<TEntity>,
   TPaginationProps extends PaginationComponentProps = PaginationComponentProps,
 >({
+  'aria-label': ariaLabel,
   'data-testid': dataTestId = 'entities-table',
   body: BodyComponent = TableBody,
   doubleRow = false,
@@ -331,6 +333,7 @@ function EntitiesTable<
       <TableWrapper>
         <UpdatingStripedTable
           $isUpdating={isUpdating}
+          aria-label={ariaLabel}
           footer={footer}
           header={header}
         >
