@@ -14,11 +14,13 @@ import SortDirection, {type SortDirectionType} from 'web/utils/sort-direction';
 import Theme from 'web/utils/theme';
 
 interface TableHeadProps extends Omit<LayoutProps, 'title'> {
+  $backgroundColor?: string;
   className?: string;
   colSpan?: number;
   currentSortBy?: string;
   currentSortDir?: SortDirectionType;
   rowSpan?: number;
+  scope?: 'col' | 'colgroup' | 'row' | 'rowgroup';
   sort?: boolean;
   sortBy?: string;
   title?: ToString;
@@ -37,6 +39,7 @@ const TableHead = ({
   className,
   colSpan,
   rowSpan,
+  scope,
   currentSortBy,
   currentSortDir,
   sort = true,
@@ -75,7 +78,7 @@ const TableHead = ({
   }
 
   return (
-    <th className={className} colSpan={colSpan} rowSpan={rowSpan}>
+    <th className={className} colSpan={colSpan} rowSpan={rowSpan} scope={scope}>
       {sort && isDefined(sortBy) ? (
         <SortBy
           by={sortBy}
@@ -95,7 +98,7 @@ const TableHead = ({
 };
 
 export default styled(TableHead)`
-  background-color: ${Theme.white};
+  background-color: ${props => props.$backgroundColor ?? Theme.white};
   color: ${Theme.black};
   border-top: ${props =>
     props.withBorder ? `1px solid ${Theme.lightGray}` : 'none'};

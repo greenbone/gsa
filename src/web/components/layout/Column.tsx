@@ -17,7 +17,13 @@ const Column: React.FC<FlexProps> = ({
   ...props
 }) => {
   return (
-    <Flex {...props} align={align} direction="column" gap={gap}>
+    <Flex
+      {...props}
+      align={align}
+      direction="column"
+      gap={gap}
+      justify={justify}
+    >
       {children}
     </Flex>
   );
