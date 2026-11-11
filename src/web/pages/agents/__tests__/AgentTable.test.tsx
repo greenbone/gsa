@@ -59,7 +59,7 @@ describe('AgentTable tests', () => {
     expect(screen.getByText('Agent 2')).toBeInTheDocument();
 
     expect(screen.getByText('Agent')).toBeInTheDocument();
-    expect(screen.getByText('Network')).toBeInTheDocument();
+    expect(screen.getByText('Scanner')).toBeInTheDocument();
     expect(screen.getByText('Version')).toBeInTheDocument();
     expect(screen.getByText('Operating System')).toBeInTheDocument();
     expect(screen.getByText('Status')).toBeInTheDocument();
