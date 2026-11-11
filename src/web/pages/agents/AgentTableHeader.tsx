@@ -44,7 +44,7 @@ const AgentTableHeader = ({
           currentSortDir={currentSortDir}
           sort={sort}
           sortBy={'scanner'}
-          title={_('Network')}
+          title={_('Scanner')}
           width="12%"
           onSortChange={onSortChange}
         />
