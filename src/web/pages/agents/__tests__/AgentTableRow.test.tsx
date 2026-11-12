@@ -4,7 +4,7 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
-import {fireEvent, rendererWith, screen} from 'web/testing';
+import {fireEvent, rendererWith, screen, within} from 'web/testing';
 import dayjs from 'dayjs';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import Agent from 'gmp/models/agent';
@@ -31,6 +31,121 @@ describe('AgentTableRow tests', () => {
     expect(screen.getByText('OpenVAS Scanner')).toBeInTheDocument();
     expect(screen.getByText('22.4.0')).toBeInTheDocument();
     expect(screen.getByTitle(/Thu.*Jan.*2026/)).toBeInTheDocument();
+  });
+
+  test('should show the OS name, support status, and CPE title', () => {
+    const cpe = 'cpe:2.3:o:debian:debian:11:-:-:-:-:-:x86_64:-';
+    const agent = new Agent({
+      id: 'agent-1',
+      osCpe: cpe,
+      osStatus: 'supported',
+    });
+
+    const {render} = rendererWith({capabilities: true});
+    render(<AgentTableRow entity={agent} />);
+
+    const osName = screen.getByText('debian');
+    expect(osName).toBeInTheDocument();
+    expect(
+      screen.getByRole('img', {
+        name: 'Operating system support status: supported',
+      }),
+    ).toHaveStyle({backgroundColor: '#11ab51'});
+
+    expect(osName).toHaveAttribute('title', cpe);
+  });
+
+  test.each(['unsupported', 'unknown'] as const)(
+    'should show orange support status for %s operating systems',
+    status => {
+      const agent = new Agent({id: 'agent-1', osStatus: status});
+      const {render} = rendererWith({capabilities: true});
+      render(<AgentTableRow entity={agent} />);
+
+      expect(
+        screen.getByRole('img', {
+          name: `Operating system support status: ${status}`,
+        }),
+      ).toHaveStyle({backgroundColor: 'rgb(255, 165, 0)'});
+    },
+  );
+
+  test.each([
+    [
+      'cpe:2.3:o:canonical:ubuntu_linux:24.04:-:-:-:-:-:x86_64:-',
+      'ubuntu linux',
+    ],
+    ['cpe:2.3:o:almalinux:almalinux:9:-:-:-:-:-:x86_64:-', 'almalinux'],
+    ['cpe:2.3:o:somevendor:someproduct:37:-:-:-:-:-:x86_64:-', 'someproduct'],
+  ])('should display the distribution name for %s', (osCpe, name) => {
+    const {render} = rendererWith({capabilities: true});
+    render(
+      <AgentTableRow
+        entity={new Agent({id: 'agent-1', operatingSystem: 'linux', osCpe})}
+      />,
+    );
+
+    expect(screen.getByText(name)).toBeInTheDocument();
+    expect(screen.queryByText('linux')).not.toBeInTheDocument();
+  });
+
+  test.each([
+    undefined,
+    'not a CPE',
+    'cpe:2.3:o:vendor:*:1:-:-:-:-:-:x86_64:-',
+  ])('should fall back to the backend OS name for %s', osCpe => {
+    const {render} = rendererWith({capabilities: true});
+    render(
+      <AgentTableRow
+        entity={
+          new Agent({
+            id: 'agent-1',
+            operatingSystem: 'Backend OS name',
+            osCpe,
+          })
+        }
+      />,
+    );
+
+    expect(screen.getByText('Backend OS name')).toBeInTheDocument();
+  });
+
+  test.each([
+    {operatingSystem: 'linux', name: 'linux'},
+    {operatingSystem: undefined, name: 'Unknown'},
+  ])('should explain missing OS CPE for $name', ({operatingSystem, name}) => {
+    const {render} = rendererWith({capabilities: true});
+    render(
+      <AgentTableRow
+        entity={new Agent({id: 'agent-1', operatingSystem, osCpe: ''})}
+      />,
+    );
+
+    const status = screen.getByRole('img', {
+      name: 'Operating system support status: unknown',
+    });
+    const osName = within(status.parentElement!).getByText(name);
+    expect(osName).toBeInTheDocument();
+    expect(osName).toHaveAttribute(
+      'title',
+      'No OS CPE was reported.\nOperating system support status is unknown.',
+    );
+    expect(status).toHaveStyle({backgroundColor: 'rgb(255, 165, 0)'});
+  });
+
+  test('should retain the CPE when explaining unknown support status', () => {
+    const osCpe = 'cpe:2.3:o:debian:debian:11:-:-:-:-:-:x86_64:-';
+    const {render} = rendererWith({capabilities: true});
+    render(
+      <AgentTableRow
+        entity={new Agent({id: 'agent-1', osCpe, osStatus: 'unknown'})}
+      />,
+    );
+
+    expect(screen.getByText('debian')).toHaveAttribute(
+      'title',
+      `${osCpe}\nOperating system support status is unknown.`,
+    );
   });
 
   test('should call action handlers when icons are clicked', () => {
