@@ -15,6 +15,9 @@ import {
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
+export type OperatingSystemStatus =
+  (typeof OperatingSystemStatus)[keyof typeof OperatingSystemStatus];
+
 interface AgentScriptExecutorElement {
   bulk_size?: number;
   bulk_throttle_time_in_ms?: number;
@@ -51,7 +54,7 @@ export interface AgentElement extends ModelElement {
   agent_version?: string;
   operating_system?: string;
   os_cpe?: string;
-  os_status?: 'supported' | 'unsupported' | 'unknown';
+  os_status?: OperatingSystemStatus;
   architecture?: string;
   update_to_latest?: YesNo;
   agent_update_available?: YesNo;
@@ -111,7 +114,7 @@ interface AgentProperties extends ModelProperties {
   agentVersion?: string;
   operatingSystem?: string;
   osCpe?: string;
-  osStatus?: 'supported' | 'unsupported' | 'unknown';
+  osStatus?: OperatingSystemStatus;
   architecture?: string;
   updateToLatest?: boolean;
   agentUpdateAvailable?: boolean;
@@ -123,6 +126,12 @@ interface AgentProperties extends ModelProperties {
   scanner?: Scanner;
   config?: AgentConfig;
 }
+
+export const OperatingSystemStatus = {
+  supported: 'supported',
+  unsupported: 'unsupported',
+  unknown: 'unknown',
+} as const;
 
 const parseAgentScriptExecutor = (
   agentScriptExecutor?: AgentScriptExecutorElement,
@@ -159,7 +168,7 @@ class Agent extends Model {
   readonly agentVersion?: string;
   readonly operatingSystem?: string;
   readonly osCpe?: string;
-  readonly osStatus?: 'supported' | 'unsupported' | 'unknown';
+  readonly osStatus?: OperatingSystemStatus;
   readonly architecture?: string;
   readonly updateToLatest?: boolean;
   readonly agentUpdateAvailable?: boolean;

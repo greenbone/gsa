@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type Agent from 'gmp/models/agent';
+import {OperatingSystemStatus, type default as Agent} from 'gmp/models/agent';
 import {
   getConnectionStatusLabel,
   getAuthorizationLabel,
@@ -45,10 +45,10 @@ const AgentTableRow = ({
     getOperatingSystemNameFromCpe(entity.osCpe) ||
     entity.operatingSystem ||
     _('Unknown');
-  const supportStatus = entity.osStatus ?? 'unknown';
+  const supportStatus = entity.osStatus ?? OperatingSystemStatus.unknown;
   const operatingSystemTitle = [
     entity.osCpe || _('No OS CPE was reported.'),
-    supportStatus === 'unknown'
+    supportStatus === OperatingSystemStatus.unknown
       ? _('Operating system support status is unknown.')
       : undefined,
   ]
@@ -74,7 +74,11 @@ const AgentTableRow = ({
           <span title={operatingSystemTitle}>{operatingSystemName}</span>
           <HaloDot
             $animated={false}
-            $color={supportStatus === 'supported' ? Theme.green : 'orange'}
+            $color={
+              supportStatus === OperatingSystemStatus.supported
+                ? Theme.green
+                : Theme.severityWarnYellow
+            }
             $size="8px"
             aria-label={_('Operating system support status: {{status}}', {
               status: supportStatus,
