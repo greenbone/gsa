@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import styled, {keyframes} from 'styled-components';
+import styled, {css, keyframes} from 'styled-components';
 import Theme from 'web/utils/theme';
 
 const pulse = keyframes`
@@ -26,13 +26,20 @@ const pulse = keyframes`
   }
 `;
 
-const HaloDot = styled.span`
+interface HaloDotProps {
+  $animated?: boolean;
+  $color?: string;
+  $size?: string;
+}
+
+const HaloDot = styled.span<HaloDotProps>`
   display: inline-flex;
-  width: 12px;
-  height: 12px;
+  width: ${({$size = '12px'}) => $size};
+  height: ${({$size = '12px'}) => $size};
   border-radius: 50%;
-  background: ${Theme.green};
-  animation: ${pulse} 2.2s ease-out infinite;
+  background: ${({$color = Theme.green}) => $color};
+  animation: ${({$animated = true}) =>
+    $animated ? css`${pulse} 2.2s ease-out infinite` : 'none'};
   will-change: transform, box-shadow, opacity;
 
   @media (prefers-reduced-motion: reduce) {
