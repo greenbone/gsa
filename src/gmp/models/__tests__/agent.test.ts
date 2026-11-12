@@ -26,6 +26,8 @@ describe('Agent model tests', () => {
     expect(agent.updaterVersion).toBeUndefined();
     expect(agent.agentVersion).toBeUndefined();
     expect(agent.operatingSystem).toBeUndefined();
+    expect(agent.osCpe).toBeUndefined();
+    expect(agent.osStatus).toBeUndefined();
     expect(agent.architecture).toBeUndefined();
     expect(agent.updateToLatest).toBeUndefined();
     expect(agent.agentUpdateAvailable).toBeUndefined();
@@ -52,6 +54,8 @@ describe('Agent model tests', () => {
     expect(agent.updaterVersion).toBeUndefined();
     expect(agent.agentVersion).toBeUndefined();
     expect(agent.operatingSystem).toBeUndefined();
+    expect(agent.osCpe).toBeUndefined();
+    expect(agent.osStatus).toBeUndefined();
     expect(agent.architecture).toBeUndefined();
     expect(agent.updateToLatest).toBeUndefined();
     expect(agent.agentUpdateAvailable).toBeUndefined();
@@ -174,6 +178,17 @@ describe('Agent model tests', () => {
       operating_system: 'Linux',
     });
     expect(agent.operatingSystem).toEqual('Linux');
+  });
+
+  test('should parse OS CPE and support status', () => {
+    const agent = Agent.fromElement({
+      _id: 'test-id',
+      os_cpe: 'cpe:2.3:o:debian:debian:11:-:-:-:-:-:x86_64:-',
+      os_status: 'supported',
+    });
+
+    expect(agent.osCpe).toBe('cpe:2.3:o:debian:debian:11:-:-:-:-:-:x86_64:-');
+    expect(agent.osStatus).toBe('supported');
   });
 
   test('should parse architecture', () => {
