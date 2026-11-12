@@ -4,11 +4,12 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
-import {fireEvent, rendererWith, screen, within} from 'web/testing';
+import {fireEvent, rendererWith, screen} from 'web/testing';
 import dayjs from 'dayjs';
 import EverythingCapabilities from 'gmp/capabilities/everything';
-import Agent from 'gmp/models/agent';
+import Agent, {OperatingSystemStatus} from 'gmp/models/agent';
 import AgentTableRow from 'web/pages/agents/AgentTableRow';
+import Theme from 'web/utils/theme';
 
 describe('AgentTableRow tests', () => {
   test('should render authorized agent correctly', () => {
@@ -38,7 +39,7 @@ describe('AgentTableRow tests', () => {
     const agent = new Agent({
       id: 'agent-1',
       osCpe: cpe,
-      osStatus: 'supported',
+      osStatus: OperatingSystemStatus.supported,
     });
 
     const {render} = rendererWith({capabilities: true});
@@ -55,8 +56,11 @@ describe('AgentTableRow tests', () => {
     expect(osName).toHaveAttribute('title', cpe);
   });
 
-  test.each(['unsupported', 'unknown'] as const)(
-    'should show orange support status for %s operating systems',
+  test.each([
+    OperatingSystemStatus.unsupported,
+    OperatingSystemStatus.unknown,
+  ])(
+    'should show warning support status for %s operating systems',
     status => {
       const agent = new Agent({id: 'agent-1', osStatus: status});
       const {render} = rendererWith({capabilities: true});
@@ -66,7 +70,7 @@ describe('AgentTableRow tests', () => {
         screen.getByRole('img', {
           name: `Operating system support status: ${status}`,
         }),
-      ).toHaveStyle({backgroundColor: 'rgb(255, 165, 0)'});
+      ).toHaveStyle({backgroundColor: Theme.severityWarnYellow});
     },
   );
 
@@ -124,13 +128,13 @@ describe('AgentTableRow tests', () => {
     const status = screen.getByRole('img', {
       name: 'Operating system support status: unknown',
     });
-    const osName = within(status.parentElement!).getByText(name);
+    const osName = screen.getByText(name, {selector: 'span[title]'});
     expect(osName).toBeInTheDocument();
     expect(osName).toHaveAttribute(
       'title',
       'No OS CPE was reported.\nOperating system support status is unknown.',
     );
-    expect(status).toHaveStyle({backgroundColor: 'rgb(255, 165, 0)'});
+    expect(status).toHaveStyle({backgroundColor: Theme.severityWarnYellow});
   });
 
   test('should retain the CPE when explaining unknown support status', () => {
@@ -138,7 +142,13 @@ describe('AgentTableRow tests', () => {
     const {render} = rendererWith({capabilities: true});
     render(
       <AgentTableRow
-        entity={new Agent({id: 'agent-1', osCpe, osStatus: 'unknown'})}
+        entity={
+          new Agent({
+            id: 'agent-1',
+            osCpe,
+            osStatus: OperatingSystemStatus.unknown,
+          })
+        }
       />,
     );
 

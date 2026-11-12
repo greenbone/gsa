@@ -6,6 +6,12 @@
 import styled, {css, keyframes} from 'styled-components';
 import Theme from 'web/utils/theme';
 
+interface HaloDotProps {
+  $animated?: boolean;
+  $color?: string;
+  $size?: string;
+}
+
 const pulse = keyframes`
   0% {
     opacity: 0.85;
@@ -26,20 +32,14 @@ const pulse = keyframes`
   }
 `;
 
-interface HaloDotProps {
-  $animated?: boolean;
-  $color?: string;
-  $size?: string;
-}
-
 const HaloDot = styled.span<HaloDotProps>`
   display: inline-flex;
-  width: ${({$size = '12px'}) => $size};
-  height: ${({$size = '12px'}) => $size};
+  width: ${({$size: size = '12px'}) => size};
+  height: ${({$size: size = '12px'}) => size};
   border-radius: 50%;
-  background: ${({$color = Theme.green}) => $color};
-  animation: ${({$animated = true}) =>
-    $animated ? css`${pulse} 2.2s ease-out infinite` : 'none'};
+  background: ${({$color: color = Theme.green}) => color};
+  animation: ${({$animated: animated = true}) =>
+    animated ? css`${pulse} 2.2s ease-out infinite` : 'none'};
   will-change: transform, box-shadow, opacity;
 
   @media (prefers-reduced-motion: reduce) {
