@@ -50,6 +50,8 @@ export interface AgentElement extends ModelElement {
   updater_version?: string;
   agent_version?: string;
   operating_system?: string;
+  os_cpe?: string;
+  os_status?: 'supported' | 'unsupported' | 'unknown';
   architecture?: string;
   update_to_latest?: YesNo;
   agent_update_available?: YesNo;
@@ -108,6 +110,8 @@ interface AgentProperties extends ModelProperties {
   updaterVersion?: string;
   agentVersion?: string;
   operatingSystem?: string;
+  osCpe?: string;
+  osStatus?: 'supported' | 'unsupported' | 'unknown';
   architecture?: string;
   updateToLatest?: boolean;
   agentUpdateAvailable?: boolean;
@@ -154,6 +158,8 @@ class Agent extends Model {
   readonly updaterVersion?: string;
   readonly agentVersion?: string;
   readonly operatingSystem?: string;
+  readonly osCpe?: string;
+  readonly osStatus?: 'supported' | 'unsupported' | 'unknown';
   readonly architecture?: string;
   readonly updateToLatest?: boolean;
   readonly agentUpdateAvailable?: boolean;
@@ -175,6 +181,8 @@ class Agent extends Model {
     updaterVersion,
     agentVersion,
     operatingSystem,
+    osCpe,
+    osStatus,
     architecture,
     updateToLatest,
     agentUpdateAvailable,
@@ -198,6 +206,8 @@ class Agent extends Model {
     this.updaterVersion = updaterVersion;
     this.agentVersion = agentVersion;
     this.operatingSystem = operatingSystem;
+    this.osCpe = osCpe;
+    this.osStatus = osStatus;
     this.architecture = architecture;
     this.updateToLatest = updateToLatest;
     this.agentUpdateAvailable = agentUpdateAvailable;
@@ -231,6 +241,8 @@ class Agent extends Model {
     copy.updaterVersion = parseToString(element.updater_version);
     copy.agentVersion = parseToString(element.agent_version);
     copy.operatingSystem = parseToString(element.operating_system);
+    copy.osCpe = parseToString(element.os_cpe);
+    copy.osStatus = element.os_status;
     copy.architecture = parseToString(element.architecture);
     copy.updateToLatest = isDefined(element.update_to_latest)
       ? parseBoolean(element.update_to_latest)
