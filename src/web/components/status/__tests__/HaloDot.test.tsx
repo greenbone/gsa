@@ -25,5 +25,31 @@ describe('HaloDot tests', () => {
       'aria-label',
       'Last Contact',
     );
+    expect(screen.getByTestId('halo-dot')).toHaveStyle({
+      backgroundColor: 'rgb(17, 171, 81)',
+      width: '12px',
+      height: '12px',
+    });
+    expect(
+      window.getComputedStyle(screen.getByTestId('halo-dot')).animation,
+    ).toContain('2.2s ease-out infinite');
+  });
+
+  test('should support a static colored dot with a custom size', () => {
+    render(
+      <HaloDot
+        $animated={false}
+        $color="orange"
+        $size="8px"
+        data-testid="static-dot"
+      />,
+    );
+
+    expect(screen.getByTestId('static-dot')).toHaveStyle({
+      animation: 'none',
+      backgroundColor: 'rgb(255, 165, 0)',
+      width: '8px',
+      height: '8px',
+    });
   });
 });
