@@ -43,7 +43,7 @@ const AgentsFilterDialog = ({
     },
     {
       name: 'scanner',
-      displayName: _('Network'),
+      displayName: _('Scanner'),
     },
     {
       name: 'agent_version',
