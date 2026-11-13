@@ -56,10 +56,7 @@ describe('AgentTableRow tests', () => {
     expect(osName).toHaveAttribute('title', cpe);
   });
 
-  test.each([
-    OperatingSystemStatus.unsupported,
-    OperatingSystemStatus.unknown,
-  ])(
+  test.each([OperatingSystemStatus.unsupported, OperatingSystemStatus.unknown])(
     'should show warning support status for %s operating systems',
     status => {
       const agent = new Agent({id: 'agent-1', osStatus: status});
