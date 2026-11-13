@@ -57,6 +57,27 @@ describe('Menu rendering', () => {
     expect(screen.getByText(label)).toBeInTheDocument();
   });
 
+  test('should render Inventory below Assets', () => {
+    renderMenuWith({
+      capabilities: new EverythingCapabilities(),
+      features: ['ENABLE_AGENTS'],
+      gmpSettings: {
+        enableAssetManagement: true,
+        reloadInterval: 5000,
+        reloadIntervalActive: 5000,
+        reloadIntervalInactive: 5000,
+      },
+    });
+
+    const topLevelLabels = screen
+      .getAllByRole('link')
+      .map(button => button.textContent?.trim());
+
+    expect(topLevelLabels.indexOf('Assets')).toBeLessThan(
+      topLevelLabels.indexOf('Inventory'),
+    );
+  });
+
   test.each([
     ['Alerts', 'Configuration'],
     ['CERT-Bund Advisories', 'Security Information'],
