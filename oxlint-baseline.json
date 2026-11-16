@@ -271,9 +271,9 @@
       "code": "typescript(restrict-template-expressions)",
       "message": "Invalid type used in template literal expression.",
       "location": {
-        "line": 283,
+        "line": 301,
         "column": 6,
-        "offset": 9287
+        "offset": 9827
       },
       "sourceLine": "`${TYPE_NAMES[type]}`;",
       "fingerprint": "src/gmp/models/credential.ts|typescript(restrict-template-expressions)|Invalid type used in template literal expression.|6|`${TYPE_NAMES[type]}`;"
@@ -697,6 +697,18 @@
       },
       "sourceLine": "ref.current++;",
       "fingerprint": "src/web/components/form/__tests__/useFormValues.test.tsx|react(refs)|Cannot access refs during render|6|ref.current++;"
+    },
+    {
+      "filename": "src/web/components/form/SchedulerCronFields.tsx",
+      "code": "react(immutability)",
+      "message": "Cannot reassign variable after render completes",
+      "location": {
+        "line": 93,
+        "column": 13,
+        "offset": 2360
+      },
+      "sourceLine": "id: nextRowId++,",
+      "fingerprint": "src/web/components/form/SchedulerCronFields.tsx|react(immutability)|Cannot reassign variable after render completes|13|id: nextRowId++,"
     },
     {
       "filename": "src/web/components/icon/Icon.tsx",
@@ -1315,9 +1327,9 @@
       "code": "react(immutability)",
       "message": "Cannot reassign variable after render completes",
       "location": {
-        "line": 132,
+        "line": 134,
         "column": 7,
-        "offset": 3252
+        "offset": 3307
       },
       "sourceLine": "SectionComponent = Section;",
       "fingerprint": "src/web/entity/EntityPage.tsx|react(immutability)|Cannot reassign variable after render completes|7|SectionComponent = Section;"
@@ -1327,9 +1339,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property is not nullish. This default assignment will never be used.",
       "location": {
-        "line": 81,
+        "line": 82,
         "column": 15,
-        "offset": 2117
+        "offset": 2158
       },
       "sourceLine": "isLoading = true,",
       "fingerprint": "src/web/entity/EntityPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property is not nullish. This default assignment will never be used.|15|isLoading = true,"
@@ -1627,9 +1639,9 @@
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
       "location": {
-        "line": 75,
+        "line": 72,
         "column": 5,
-        "offset": 3121
+        "offset": 2990
       },
       "sourceLine": "setAgents(previousAgents => {",
       "fingerprint": "src/web/pages/agents/AgentListPage.tsx|react(set-state-in-effect)|Calling setState synchronously within an effect can trigger cascading renders|5|setAgents(previousAgents => {"
@@ -1639,9 +1651,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Agent[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 94,
+        "line": 91,
         "column": 34,
-        "offset": 3637
+        "offset": 3506
       },
       "sourceLine": "selected: selectedEntities = [],",
       "fingerprint": "src/web/pages/agents/AgentListPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Agent[]` (not nullish). This default assignment will never be used.|34|selected: selectedEntities = [],"
@@ -1723,9 +1735,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Model[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 47,
+        "line": 48,
         "column": 15,
-        "offset": 1591
+        "offset": 1627
       },
       "sourceLine": "targets = [],",
       "fingerprint": "src/web/pages/credentials/CredentialDetails.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Model[]` (not nullish). This default assignment will never be used.|15|targets = [],"
@@ -1735,9 +1747,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Model[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 46,
+        "line": 47,
         "column": 16,
-        "offset": 1573
+        "offset": 1609
       },
       "sourceLine": "scanners = [],",
       "fingerprint": "src/web/pages/credentials/CredentialDetails.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Model[]` (not nullish). This default assignment will never be used.|16|scanners = [],"
@@ -1747,9 +1759,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `string[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 42,
+        "line": 43,
         "column": 12,
-        "offset": 1510
+        "offset": 1546
       },
       "sourceLine": "kdcs = [],",
       "fingerprint": "src/web/pages/credentials/CredentialDetails.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `string[]` (not nullish). This default assignment will never be used.|12|kdcs = [],"
@@ -2263,9 +2275,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `Filter[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 235,
+        "line": 236,
         "column": 15,
-        "offset": 7875
+        "offset": 7971
       },
       "sourceLine": "filters = [],",
       "fingerprint": "src/web/pages/reports/DeltaDetailsPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `Filter[]` (not nullish). This default assignment will never be used.|15|filters = [],"
@@ -2275,9 +2287,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `ReportConfig[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 240,
+        "line": 241,
         "column": 21,
-        "offset": 7989
+        "offset": 8085
       },
       "sourceLine": "reportConfigs = [],",
       "fingerprint": "src/web/pages/reports/DeltaDetailsPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `ReportConfig[]` (not nullish). This default assignment will never be used.|21|reportConfigs = [],"
@@ -2287,9 +2299,9 @@
       "code": "typescript(no-useless-default-assignment)",
       "message": "Default value is useless because the property has type `ReportFormat[]` (not nullish). This default assignment will never be used.",
       "location": {
-        "line": 239,
+        "line": 240,
         "column": 21,
-        "offset": 7965
+        "offset": 8061
       },
       "sourceLine": "reportFormats = [],",
       "fingerprint": "src/web/pages/reports/DeltaDetailsPage.tsx|typescript(no-useless-default-assignment)|Default value is useless because the property has type `ReportFormat[]` (not nullish). This default assignment will never be used.|21|reportFormats = [],"
@@ -2625,7 +2637,7 @@
       "location": {
         "line": 118,
         "column": 21,
-        "offset": 3247
+        "offset": 3317
       },
       "sourceLine": "isDefined(task?.isImport) && task.isImport()",
       "fingerprint": "src/web/pages/reports/details/Summary.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|isDefined(task?.isImport) && task.isImport()"
@@ -3523,12 +3535,12 @@
       "code": "gsa(filename-convention)",
       "message": "HOC filename \"compose.js\" should be in camelCase with \"with\" prefix.",
       "location": {
-        "line": 39,
+        "line": 1,
         "column": 1,
-        "offset": 788
+        "offset": 0
       },
-      "sourceLine": "const compose = (...funcs) => {",
-      "fingerprint": "src/web/utils/compose.js|gsa(filename-convention)|HOC filename \"compose.js\" should be in camelCase with \"with\" prefix.|1|const compose = (...funcs) => {"
+      "sourceLine": "/* SPDX-FileCopyrightText: 2024 Greenbone AG",
+      "fingerprint": "src/web/utils/compose.js|gsa(filename-convention)|HOC filename \"compose.js\" should be in camelCase with \"with\" prefix.|1|/* SPDX-FileCopyrightText: 2024 Greenbone AG"
     },
     {
       "filename": "src/web/utils/Render.tsx",
