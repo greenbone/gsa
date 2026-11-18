@@ -3,22 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect, useRef, useState} from 'react';
-import type d3 from 'd3';
-import d3cloud, {type Word as d3Word} from 'd3-cloud';
+import {useEffect, useState} from 'react';
+import CloudLayout, {type PlacedSprite} from 'd3-cloud';
 import {scaleLinear} from 'd3-scale';
 import {isDefined} from 'gmp/utils/identity';
 import ChartWithEmptyState from 'web/components/chart/base/ChartWithEmptyState';
 import Group from 'web/components/chart/base/Group';
 import {type LegendData} from 'web/components/chart/base/Legend';
 import Svg, {type SvgRef} from 'web/components/chart/base/Svg';
-
-interface Word extends d3Word {
-  color?: string;
-  filterValue: string;
-}
-
-type Cloud = d3.layout.Cloud<Word>;
 
 interface WordCloudChartData extends LegendData {
   value: number;
@@ -45,15 +37,15 @@ const MIN_FONT_SIZE = 8;
 const MAX_FONT_SIZE = 20;
 const HOVER_TRANSITION = 'opacity 180ms ease-in-out';
 
-const createCloud = (onEnd: (words: Word[]) => void): Cloud =>
-  d3cloud<Word>()
-    .fontSize(d => d.size as number)
-    .rotate(0)
-    .padding(2)
-    .font('Sans')
-    .on('end', onEnd);
+const placeWords = (
+  data: WordCloudChartData[] | undefined,
+  width: number,
+  height: number,
+): PlacedSprite<WordCloudChartData>[] => {
+  if (!data?.length || width <= 0 || height <= 0) {
+    return [];
+  }
 
-const createWords = (data: WordCloudChartData[]): Word[] => {
   let values = data.map(d => d.value).sort((a, b) => a - b);
 
   if (values.length > DEFAULT_MAX_WORDS) {
@@ -67,14 +59,30 @@ const createWords = (data: WordCloudChartData[]): Word[] => {
     .domain([min, max])
     .range([MIN_FONT_SIZE, MAX_FONT_SIZE]);
 
-  const origWords = data.map(word => ({
-    size: wordScale(word.value),
-    text: word.label,
-    color: word.color,
-    filterValue: word.filterValue,
-  })) as Word[];
+  const prepared = data
+    .map(datum => ({datum, size: Math.trunc(wordScale(datum.value))}))
+    .filter(word => Number.isFinite(word.size))
+    .sort((a, b) => b.size - a.size);
 
-  return origWords;
+  const cloud = new CloudLayout().size([width, height]).overflow(false);
+  const placedWords: PlacedSprite<WordCloudChartData>[] = [];
+  for (const {datum, size} of prepared) {
+    const sprite = cloud.getSprite(String(datum.label), {
+      datum,
+      font: 'Sans',
+      padding: 2,
+      rotate: 0,
+      size,
+    });
+    if (sprite) {
+      const word = cloud.place(sprite);
+      if (word) {
+        placedWords.push(word);
+      }
+    }
+  }
+
+  return placedWords;
 };
 
 const WordCloudChart = ({
@@ -84,32 +92,15 @@ const WordCloudChart = ({
   svgRef,
   onDataClick,
 }: WordCloudChartProps) => {
-  const [words, setWords] = useState<Word[]>([]);
+  const [words, setWords] = useState<PlacedSprite<WordCloudChartData>[]>([]);
   const [hoveredWordIndex, setHoveredWordIndex] = useState<number>();
-  const cloudRef = useRef<Cloud | null>(null);
 
   useEffect(() => {
-    if (!cloudRef.current) {
-      cloudRef.current = createCloud(setWords);
-    }
-    const cloud = cloudRef.current;
     const maxWidth = width - margin.left - margin.right;
     const maxHeight = height - margin.top - margin.bottom;
 
-    cloud.size([maxWidth, maxHeight]);
-    cloud.stop();
-    cloud.words(createWords(data ?? []));
-
-    if (isDefined(data) && data.length > 0) {
-      cloud.start();
-    } else {
-      // oxlint-disable-next-line react/set-state-in-effect
-      setWords([]);
-    }
-
-    return () => {
-      cloud.stop();
-    };
+    // oxlint-disable-next-line react/set-state-in-effect -- Rasterization uses a browser canvas.
+    setWords(placeWords(data, maxWidth, maxHeight));
   }, [data, height, width]);
 
   return (
@@ -126,36 +117,39 @@ const WordCloudChart = ({
         width={width}
       >
         <Group left={width / 2 + margin.left} top={height / 2 + margin.top}>
-          {words.map((word, index) => (
-            <Group
-              key={word.text}
-              data-testid={`word-cloud-word-${word.text}`}
-              onClick={
-                isDefined(onDataClick)
-                  ? () => onDataClick(word.filterValue)
-                  : undefined
-              }
-              onMouseEnter={() => setHoveredWordIndex(index)}
-              onMouseLeave={() => setHoveredWordIndex(undefined)}
-            >
-              <text
-                fill={word.color}
-                fontFamily={word.font}
-                fontSize={`${word.size}px`}
-                fontWeight={word.weight}
-                opacity={
-                  isDefined(hoveredWordIndex) && hoveredWordIndex !== index
-                    ? 0.35
-                    : 1
+          {words.map((word, index) => {
+            const {color, filterValue} = word.datum;
+            return (
+              <Group
+                key={word.text}
+                data-testid={`word-cloud-word-${word.text}`}
+                onClick={
+                  isDefined(onDataClick) && isDefined(filterValue)
+                    ? () => onDataClick(filterValue)
+                    : undefined
                 }
-                style={{transition: HOVER_TRANSITION}}
-                textAnchor="middle"
-                transform={`translate(${word.x},${word.y})rotate(${word.rotate})`}
+                onMouseEnter={() => setHoveredWordIndex(index)}
+                onMouseLeave={() => setHoveredWordIndex(undefined)}
               >
-                {word.text}
-              </text>
-            </Group>
-          ))}
+                <text
+                  fill={String(color)}
+                  fontFamily={word.font}
+                  fontSize={`${word.size}px`}
+                  fontWeight={word.weight}
+                  opacity={
+                    isDefined(hoveredWordIndex) && hoveredWordIndex !== index
+                      ? 0.35
+                      : 1
+                  }
+                  style={{transition: HOVER_TRANSITION}}
+                  textAnchor="middle"
+                  transform={`translate(${word.x},${word.y})rotate(${word.rotate})`}
+                >
+                  {word.text}
+                </text>
+              </Group>
+            );
+          })}
         </Group>
       </ChartWithEmptyState>
     </Svg>

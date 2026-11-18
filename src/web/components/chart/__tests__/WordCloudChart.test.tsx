@@ -11,7 +11,7 @@ import {
   test,
   testing,
 } from '@gsa/testing';
-import {fireEvent, rendererWith, screen, wait} from 'web/testing';
+import {fireEvent, rendererWith, screen} from 'web/testing';
 import WordCloudChart from 'web/components/chart/WordCloudChart';
 
 const data = [
@@ -40,12 +40,16 @@ describe('WordCloudChart', () => {
       fillText: () => {},
       fillStyle: '',
       font: '',
-      getImageData: () => ({data: new Uint8ClampedArray(4)}),
+      getImageData: (_x: number, _y: number, width: number, height: number) => {
+        const pixels = new Uint8ClampedArray(width * height * 4);
+        const center = Math.floor(height / 2) * width + Math.floor(width / 2);
+        pixels[center * 4 + 3] = 255;
+        return {data: pixels};
+      },
       measureText: () => ({width: 10}),
       restore: () => {},
       rotate: () => {},
       save: () => {},
-      scale: () => {},
       strokeText: () => {},
       translate: () => {},
     } as unknown as CanvasRenderingContext2D);
@@ -69,19 +73,17 @@ describe('WordCloudChart', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('should render data words after the cloud layout completes', async () => {
+  test('should render placed words', () => {
     const {render} = rendererWith();
 
     render(<WordCloudChart data={singleWordData} height={300} width={400} />);
-
-    await wait();
 
     expect(screen.getByTestId('word-cloud-word-First')).toHaveTextContent(
       'First',
     );
   });
 
-  test('should call onDataClick with the selected word filter', async () => {
+  test('should call onDataClick with the selected word filter', () => {
     const onDataClick = testing.fn();
     const {render} = rendererWith();
 
@@ -94,19 +96,17 @@ describe('WordCloudChart', () => {
       />,
     );
 
-    await wait();
     fireEvent.click(screen.getByTestId('word-cloud-word-First'));
 
     expect(onDataClick).toHaveBeenCalledExactlyOnceWith('first-filter');
   });
 
-  test('should recalculate words when the data prop changes', async () => {
+  test('should recalculate words when the data prop changes', () => {
     const {render} = rendererWith();
     const {rerender} = render(
       <WordCloudChart data={singleWordData} height={300} width={400} />,
     );
 
-    await wait();
     expect(screen.getByTestId('word-cloud-word-First')).toBeInTheDocument();
 
     const replacementData = [
@@ -122,12 +122,29 @@ describe('WordCloudChart', () => {
       <WordCloudChart data={replacementData} height={300} width={400} />,
     );
 
-    await wait();
     expect(
       screen.queryByTestId('word-cloud-word-First'),
     ).not.toBeInTheDocument();
     expect(
       screen.getByTestId('word-cloud-word-Replacement'),
     ).toBeInTheDocument();
+  });
+
+  test('should clear the cloud when the drawing area becomes too small', () => {
+    const {render} = rendererWith();
+    const {rerender} = render(
+      <WordCloudChart data={singleWordData} height={300} width={400} />,
+    );
+
+    expect(screen.getByTestId('word-cloud-word-First')).toBeInTheDocument();
+
+    rerender(<WordCloudChart data={singleWordData} height={300} width={8} />);
+
+    expect(screen.getByTestId('word-cloud-empty')).toHaveTextContent(
+      'No data available',
+    );
+    expect(
+      screen.queryByTestId('word-cloud-word-First'),
+    ).not.toBeInTheDocument();
   });
 });
