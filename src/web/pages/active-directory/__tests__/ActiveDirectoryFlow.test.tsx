@@ -6,6 +6,7 @@
 import {describe, expect, test, testing} from '@gsa/testing';
 import {fireEvent, rendererWith, screen, waitFor, within} from 'web/testing';
 import {Route, Routes, useNavigate} from 'react-router';
+import Capabilities from 'gmp/capabilities/capabilities';
 import Features from 'gmp/capabilities/features';
 import CollectionCounts from 'gmp/collection/collection-counts';
 import ActiveDirectoryCommand from 'gmp/commands/active-directory';
@@ -32,7 +33,11 @@ const BrowserHistory = () => {
   return <button onClick={() => void navigate(-1)}>Browser back</button>;
 };
 
-const setup = (route = '/active-directory', allowed = true) => {
+const setup = (
+  route = '/active-directory',
+  capabilities: boolean | Capabilities = true,
+  features = new Features(['ENABLE_AD_INTEGRATION']),
+) => {
   const http = createDirectoryHttp();
   const command = new ActiveDirectoryCommand(http);
   const credentials = new CredentialsCommand(http);
@@ -51,8 +56,8 @@ const setup = (route = '/active-directory', allowed = true) => {
   };
   const {render} = rendererWith({
     route,
-    capabilities: allowed,
-    features: new Features(['ENABLE_AD_INTEGRATION']),
+    capabilities,
+    features,
     gmp,
   });
   const renderPages = () =>
@@ -301,15 +306,48 @@ describe('Active Directory two-page flow', () => {
     expect(gmp.activedirectory.getOverview).toHaveBeenCalledTimes(1);
   });
 
-  test('guards direct browser-page access before fetching credentials', () => {
+  test('lets delegated users browse without target access or creation permission', async () => {
     const {gmp, renderPages} = setup(
-      ROUTES.activeDirectoryBrowser.url(AD_SOURCE),
-      false,
+      ROUTES.activeDirectory.url,
+      new Capabilities(['get_active_directory_objects', 'get_credentials']),
     );
     renderPages();
-    expect(screen.getByRole('alert')).toHaveTextContent(
-      'Active Directory is not available.',
+    fireEvent.click(await openAdministration());
+    fireEvent.click(await screen.findByRole('checkbox', {name: 'Clients'}));
+    expect(
+      await screen.findByRole('button', {name: 'Add 5 hosts to new target'}),
+    ).toBeDisabled();
+    expect(gmp.credentials.get).toHaveBeenCalled();
+    expect(gmp.credential.get).toHaveBeenCalledWith({id: AD_SOURCE});
+    expect(gmp.activedirectory.getOverview).toHaveBeenCalledTimes(1);
+  });
+
+  describe.each([
+    ROUTES.activeDirectory.url,
+    ROUTES.activeDirectoryBrowser.url(AD_SOURCE),
+  ])('direct Active Directory access at %s', route => {
+    test.each([
+      ['target access only', new Capabilities(['get_targets']), true],
+      ['credential access only', new Capabilities(['get_credentials']), true],
+      [
+        'discovery access only',
+        new Capabilities(['get_active_directory_objects']),
+        true,
+      ],
+      ['feature disabled', true, false],
+    ] as const)(
+      'blocks %s before making any Active Directory requests',
+      (_scenario, capabilities, enabled) => {
+        const features = new Features(enabled ? ['ENABLE_AD_INTEGRATION'] : []);
+        const {gmp, renderPages} = setup(route, capabilities, features);
+        renderPages();
+        expect(screen.getByRole('alert')).toHaveTextContent(
+          'Active Directory is not available.',
+        );
+        expect(gmp.credentials.get).not.toHaveBeenCalled();
+        expect(gmp.credential.get).not.toHaveBeenCalled();
+        expect(gmp.activedirectory.getOverview).not.toHaveBeenCalled();
+      },
     );
-    expect(gmp.credential.get).not.toHaveBeenCalled();
   });
 });

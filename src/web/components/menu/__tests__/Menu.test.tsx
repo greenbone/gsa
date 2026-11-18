@@ -37,10 +37,7 @@ const renderMenuWith = ({
 };
 
 describe('Menu rendering', () => {
-  test.each([
-    '/active-directory',
-    '/active-directory/discovery/credential-id',
-  ])(
+  test.each(['/active-directory', '/active-directory/discovery/credential-id'])(
     'shows Active Directory under Configuration on %s',
     route => {
       renderMenuWith({
@@ -59,7 +56,10 @@ describe('Menu rendering', () => {
 
   test('links to Active Directory from Configuration', () => {
     renderMenuWith({
-      capabilities: true,
+      capabilities: new Capabilities([
+        'get_active_directory_objects',
+        'get_credentials',
+      ]),
       gmpSettings: {},
       features: ['ENABLE_AD_INTEGRATION'],
     });
@@ -76,7 +76,6 @@ describe('Menu rendering', () => {
       features: ['ENABLE_AD_INTEGRATION'],
       route: '/active-directory/discovery/credential-id',
     });
-    fireEvent.click(screen.getByText('Configuration'));
     expect(
       screen.getByRole('link', {name: 'Active Directory'}),
     ).toHaveAttribute('href', '/active-directory');
@@ -88,9 +87,18 @@ describe('Menu rendering', () => {
       capabilities: new Capabilities(['get_credentials']),
       features: ['ENABLE_AD_INTEGRATION'] as Feature[],
     },
+    {
+      capabilities: new Capabilities(['get_targets']),
+      features: ['ENABLE_AD_INTEGRATION'] as Feature[],
+    },
+    {
+      capabilities: new Capabilities(['get_active_directory_objects']),
+      features: ['ENABLE_AD_INTEGRATION'] as Feature[],
+    },
   ])('hides Active Directory when disabled or unauthorized: %j', options => {
     renderMenuWith({...options, gmpSettings: {}});
-    fireEvent.click(screen.getByText('Configuration'));
+    const configuration = screen.queryByText('Configuration');
+    if (configuration) fireEvent.click(configuration);
     expect(
       screen.queryByRole('link', {name: 'Active Directory'}),
     ).not.toBeInTheDocument();

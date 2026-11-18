@@ -27,6 +27,7 @@ import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import {routeMatch, ROUTES} from 'web/route-paths';
+import {mayAccessActiveDirectory} from 'web/utils/active-directory-access';
 
 const Menu = () => {
   const [_, i18n] = useTranslation();
@@ -496,15 +497,14 @@ const Menu = () => {
           isAgentInstallersActive,
         ].some(Boolean),
         subNav: [
-          capabilities.mayAccess('target') &&
-            features.featureEnabled('ENABLE_AD_INTEGRATION') && {
-              label: _('Active Directory'),
-              to: ROUTES.activeDirectory.url,
-              // Keep this as a link while the discovery route is active so
-              // clicking it can return to the connections table.
-              isPathMatch: false,
-              active: isActiveDirectoryActive,
-            },
+          mayAccessActiveDirectory(capabilities, features) && {
+            label: _('Active Directory'),
+            to: ROUTES.activeDirectory.url,
+            // Keep this as a link while the discovery route is active so
+            // clicking it can return to the connections table.
+            isPathMatch: false,
+            active: isActiveDirectoryActive,
+          },
           capabilities.mayAccess('target') && {
             label: _('Targets'),
             to: ROUTES.targets.url,
