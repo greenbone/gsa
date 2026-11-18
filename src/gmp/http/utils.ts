@@ -9,7 +9,10 @@ type HttpMethodUpperCase = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 export type HttpMethod = HttpMethodUpperCase | Lowercase<HttpMethodUpperCase>;
 
 export type UrlParamValue = string | number | boolean | undefined;
-export type UrlParams = Record<string, UrlParamValue>;
+export type UrlParams = Record<
+  string,
+  UrlParamValue | string[] | number[] | boolean[]
+>;
 
 export type DataValue = string | number | boolean | Blob | undefined | null;
 export type Data = Record<string, DataValue | string[] | number[] | boolean[]>;
@@ -18,7 +21,9 @@ export const buildUrlParams = (params: UrlParams): string => {
   const urlParams = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
     if (isDefined(value)) {
-      urlParams.append(key, String(value));
+      for (const item of Array.isArray(value) ? value : [value]) {
+        urlParams.append(key, String(item));
+      }
     }
   }
   return String(urlParams);
