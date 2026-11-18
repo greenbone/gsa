@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {connect} from 'react-redux';
+import {legacy_connect as connect} from 'react-redux';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {isDefined} from 'gmp/utils/identity';
 import withDownload from 'web/components/form/withDownload';

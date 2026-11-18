@@ -165,6 +165,12 @@
       }
     },
     {
+      "files": ["src/web/utils/compose.js"],
+      "rules": {
+        "gsa/filename-convention": "off"
+      }
+    },
+    {
       "files": ["e2e/**/*.ts"],
       "rules": {
         "gsa/no-restricted-imports": "off"

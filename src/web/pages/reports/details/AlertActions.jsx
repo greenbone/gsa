@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {connect} from 'react-redux';
+import {legacy_connect as connect} from 'react-redux';
 import logger from 'gmp/log';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {StartIcon} from 'web/components/icon';

@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {connect} from 'react-redux';
+import {legacy_connect as connect} from 'react-redux';
 import {MANUAL} from 'gmp/models/override';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';

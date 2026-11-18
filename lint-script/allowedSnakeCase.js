@@ -301,6 +301,7 @@ const allowedSnakeCase = [
   'last_seen',
   'latest_severity',
   'ldaps_only',
+  'legacy_connect',
   'list_fname',
   'load_formats',
   'lsc_password',

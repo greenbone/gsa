@@ -699,18 +699,6 @@
       "fingerprint": "src/web/components/form/__tests__/useFormValues.test.tsx|react(refs)|Cannot access refs during render|6|ref.current++;"
     },
     {
-      "filename": "src/web/components/form/SchedulerCronFields.tsx",
-      "code": "react(immutability)",
-      "message": "Cannot reassign variable after render completes",
-      "location": {
-        "line": 93,
-        "column": 13,
-        "offset": 2360
-      },
-      "sourceLine": "id: nextRowId++,",
-      "fingerprint": "src/web/components/form/SchedulerCronFields.tsx|react(immutability)|Cannot reassign variable after render completes|13|id: nextRowId++,"
-    },
-    {
       "filename": "src/web/components/icon/Icon.tsx",
       "code": "react(set-state-in-effect)",
       "message": "Calling setState synchronously within an effect can trigger cascading renders",
@@ -981,7 +969,7 @@
       "location": {
         "line": 256,
         "column": 21,
-        "offset": 8926
+        "offset": 8944
       },
       "sourceLine": "onError: this.handleError,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|21|onError: this.handleError,"
@@ -993,7 +981,7 @@
       "location": {
         "line": 255,
         "column": 23,
-        "offset": 8891
+        "offset": 8909
       },
       "sourceLine": "onSuccess: this.handleChanged,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|23|onSuccess: this.handleChanged,"
@@ -1005,7 +993,7 @@
       "location": {
         "line": 623,
         "column": 25,
-        "offset": 18484
+        "offset": 18502
       },
       "sourceLine": "onError: this.handleError,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|25|onError: this.handleError,"
@@ -1017,7 +1005,7 @@
       "location": {
         "line": 617,
         "column": 26,
-        "offset": 18210
+        "offset": 18228
       },
       "sourceLine": "onDelete: this.handleDelete,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|26|onDelete: this.handleDelete,"
@@ -1029,7 +1017,7 @@
       "location": {
         "line": 649,
         "column": 26,
-        "offset": 19522
+        "offset": 19540
       },
       "sourceLine": "onSave={this.handleAddMultiTag}",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|26|onSave={this.handleAddMultiTag}"
@@ -1041,7 +1029,7 @@
       "location": {
         "line": 659,
         "column": 26,
-        "offset": 19845
+        "offset": 19863
       },
       "sourceLine": "onSave={this.handleCreateTag}",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|26|onSave={this.handleCreateTag}"
@@ -1053,7 +1041,7 @@
       "location": {
         "line": 616,
         "column": 27,
-        "offset": 18170
+        "offset": 18188
       },
       "sourceLine": "onChanged: this.handleChanged,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|27|onChanged: this.handleChanged,"
@@ -1065,7 +1053,7 @@
       "location": {
         "line": 658,
         "column": 27,
-        "offset": 19798
+        "offset": 19816
       },
       "sourceLine": "onClose={this.handleCloseTagDialog}",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|27|onClose={this.handleCloseTagDialog}"
@@ -1077,7 +1065,7 @@
       "location": {
         "line": 647,
         "column": 27,
-        "offset": 19427
+        "offset": 19445
       },
       "sourceLine": "onClose={this.handleCloseTagsDialog}",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|27|onClose={this.handleCloseTagsDialog}"
@@ -1089,7 +1077,7 @@
       "location": {
         "line": 634,
         "column": 28,
-        "offset": 19014
+        "offset": 19032
       },
       "sourceLine": "onTagsBulk: this.openTagsDialog,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|28|onTagsBulk: this.openTagsDialog,"
@@ -1101,7 +1089,7 @@
       "location": {
         "line": 629,
         "column": 29,
-        "offset": 18775
+        "offset": 18793
       },
       "sourceLine": "onLastClick: this.handleLast,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|29|onLastClick: this.handleLast,"
@@ -1113,7 +1101,7 @@
       "location": {
         "line": 630,
         "column": 29,
-        "offset": 18815
+        "offset": 18833
       },
       "sourceLine": "onNextClick: this.handleNext,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|29|onNextClick: this.handleNext,"
@@ -1125,7 +1113,7 @@
       "location": {
         "line": 618,
         "column": 30,
-        "offset": 18253
+        "offset": 18271
       },
       "sourceLine": "onDeleteBulk: this.handleDeleteBulk,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|30|onDeleteBulk: this.handleDeleteBulk,"
@@ -1137,7 +1125,7 @@
       "location": {
         "line": 628,
         "column": 30,
-        "offset": 18734
+        "offset": 18752
       },
       "sourceLine": "onFirstClick: this.handleFirst,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|30|onFirstClick: this.handleFirst,"
@@ -1149,7 +1137,7 @@
       "location": {
         "line": 632,
         "column": 30,
-        "offset": 18904
+        "offset": 18922
       },
       "sourceLine": "onSortChange: this.handleSortChange,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|30|onSortChange: this.handleSortChange,"
@@ -1161,7 +1149,7 @@
       "location": {
         "line": 627,
         "column": 31,
-        "offset": 18686
+        "offset": 18704
       },
       "sourceLine": "onFilterReset: this.handleFilterReset,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|31|onFilterReset: this.handleFilterReset,"
@@ -1173,7 +1161,7 @@
       "location": {
         "line": 619,
         "column": 32,
-        "offset": 18302
+        "offset": 18320
       },
       "sourceLine": "onDownloadBulk: this.handleDownloadBulk,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|32|onDownloadBulk: this.handleDownloadBulk,"
@@ -1185,7 +1173,7 @@
       "location": {
         "line": 650,
         "column": 32,
-        "offset": 19572
+        "offset": 19590
       },
       "sourceLine": "onTagChanged={this.handleTagChange}",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|32|onTagChanged={this.handleTagChange}"
@@ -1197,7 +1185,7 @@
       "location": {
         "line": 624,
         "column": 33,
-        "offset": 18529
+        "offset": 18547
       },
       "sourceLine": "onFilterChanged: this.handleFilterChanged,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|33|onFilterChanged: this.handleFilterChanged,"
@@ -1209,7 +1197,7 @@
       "location": {
         "line": 625,
         "column": 33,
-        "offset": 18582
+        "offset": 18600
       },
       "sourceLine": "onFilterCreated: this.handleFilterCreated,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|33|onFilterCreated: this.handleFilterCreated,"
@@ -1221,7 +1209,7 @@
       "location": {
         "line": 626,
         "column": 33,
-        "offset": 18635
+        "offset": 18653
       },
       "sourceLine": "onFilterRemoved: this.handleFilterRemoved,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|33|onFilterRemoved: this.handleFilterRemoved,"
@@ -1233,7 +1221,7 @@
       "location": {
         "line": 648,
         "column": 33,
-        "offset": 19482
+        "offset": 19500
       },
       "sourceLine": "onNewTagClick={this.openTagDialog}",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|33|onNewTagClick={this.openTagDialog}"
@@ -1245,7 +1233,7 @@
       "location": {
         "line": 631,
         "column": 33,
-        "offset": 18859
+        "offset": 18877
       },
       "sourceLine": "onPreviousClick: this.handlePrevious,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|33|onPreviousClick: this.handlePrevious,"
@@ -1257,7 +1245,7 @@
       "location": {
         "line": 621,
         "column": 34,
-        "offset": 18391
+        "offset": 18409
       },
       "sourceLine": "onEntitySelected: this.handleSelected,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|34|onEntitySelected: this.handleSelected,"
@@ -1269,7 +1257,7 @@
       "location": {
         "line": 622,
         "column": 36,
-        "offset": 18442
+        "offset": 18460
       },
       "sourceLine": "onEntityDeselected: this.handleDeselected,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|36|onEntityDeselected: this.handleDeselected,"
@@ -1281,7 +1269,7 @@
       "location": {
         "line": 633,
         "column": 39,
-        "offset": 18960
+        "offset": 18978
       },
       "sourceLine": "onSelectionTypeChange: this.handleSelectionTypeChange,",
       "fingerprint": "src/web/entities/EntitiesContainer.tsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|39|onSelectionTypeChange: this.handleSelectionTypeChange,"
@@ -2325,7 +2313,7 @@
       "location": {
         "line": 166,
         "column": 30,
-        "offset": 4811
+        "offset": 4829
       },
       "sourceLine": "onSave={this.handleTriggerAlert}",
       "fingerprint": "src/web/pages/reports/details/AlertActions.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|30|onSave={this.handleTriggerAlert}"
@@ -2337,7 +2325,7 @@
       "location": {
         "line": 164,
         "column": 31,
-        "offset": 4710
+        "offset": 4728
       },
       "sourceLine": "onClose={this.handleCloseTriggerAlertDialog}",
       "fingerprint": "src/web/pages/reports/details/AlertActions.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|31|onClose={this.handleCloseTriggerAlertDialog}"
@@ -2349,7 +2337,7 @@
       "location": {
         "line": 147,
         "column": 33,
-        "offset": 3970
+        "offset": 3988
       },
       "sourceLine": "onClick={this.handleOpenTriggerAlertDialog}",
       "fingerprint": "src/web/pages/reports/details/AlertActions.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|33|onClick={this.handleOpenTriggerAlertDialog}"
@@ -2361,7 +2349,7 @@
       "location": {
         "line": 163,
         "column": 37,
-        "offset": 4661
+        "offset": 4679
       },
       "sourceLine": "onAlertChange={this.handleAlertChange}",
       "fingerprint": "src/web/pages/reports/details/AlertActions.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|37|onAlertChange={this.handleAlertChange}"
@@ -2373,7 +2361,7 @@
       "location": {
         "line": 140,
         "column": 39,
-        "offset": 3729
+        "offset": 3747
       },
       "sourceLine": "<AlertComponent onCreated={this.onAlertCreated} onError={showError}>",
       "fingerprint": "src/web/pages/reports/details/AlertActions.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|39|<AlertComponent onCreated={this.onAlertCreated} onError={showError}>"
@@ -2697,7 +2685,7 @@
       "location": {
         "line": 349,
         "column": 49,
-        "offset": 13060
+        "offset": 13078
       },
       "sourceLine": "onResultDownloadClick={this.handleDownload}",
       "fingerprint": "src/web/pages/results/DetailsPage.jsx|typescript(unbound-method)|Avoid referencing unbound methods which may cause unintentional scoping of `this`.|49|onResultDownloadClick={this.handleDownload}"
@@ -3529,18 +3517,6 @@
       },
       "sourceLine": "`Unable to find checkboxes within: ${container}.`,",
       "fingerprint": "src/web/testing/custom-queries.ts|typescript(restrict-template-expressions)|Invalid type used in template literal expression.|44|`Unable to find checkboxes within: ${container}.`,"
-    },
-    {
-      "filename": "src/web/utils/compose.js",
-      "code": "gsa(filename-convention)",
-      "message": "HOC filename \"compose.js\" should be in camelCase with \"with\" prefix.",
-      "location": {
-        "line": 1,
-        "column": 1,
-        "offset": 0
-      },
-      "sourceLine": "/* SPDX-FileCopyrightText: 2024 Greenbone AG",
-      "fingerprint": "src/web/utils/compose.js|gsa(filename-convention)|HOC filename \"compose.js\" should be in camelCase with \"with\" prefix.|1|/* SPDX-FileCopyrightText: 2024 Greenbone AG"
     },
     {
       "filename": "src/web/utils/Render.tsx",
