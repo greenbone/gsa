@@ -155,7 +155,9 @@ class LazyTranslateImpl implements LazyTranslate {
   }
 
   toString(): string {
-    return i18next.t(this.key, this.options);
+    return this.options === undefined
+      ? i18next.t(this.key)
+      : i18next.t(this.key, this.options);
   }
 }
 
@@ -167,7 +169,7 @@ class LazyTranslateImpl implements LazyTranslate {
  */
 
 export const _ = (key: string, options?: TranslateOptions): string =>
-  i18next.t(key, options);
+  options === undefined ? i18next.t(key) : i18next.t(key, options);
 
 /**
  * Localizes a given string lazily.

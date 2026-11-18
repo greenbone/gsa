@@ -348,7 +348,7 @@ describe('ResultDetailsPage tests', () => {
     ).toHaveTextContent('DFN-CERT-2019-1234');
     expect(
       nvtReferences.getByTitle(
-        'View details of CERT-Bund Advisory CB-K12&#x2F;3456',
+        'View details of CERT-Bund Advisory CB-K12/3456',
       ),
     ).toHaveTextContent('CB-K12/3456');
     expect(nvtReferences.getByRole('row', {name: /^Other/})).toHaveTextContent(
