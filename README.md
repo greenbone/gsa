@@ -150,6 +150,17 @@ For HTTPS only the protocol property must be `'https'` accordingly.
 After changing the `config.js` file, the browser window should be reloaded
 manually.
 
+Active Directory discovery uses the configured gsad API. Enable Active Directory
+integration in gvmd, allowlist the directory endpoint, and save an Active
+Directory credential.
+
+The `/active-directory` page lists saved connections. Open one to browse hosts
+at `/active-directory/discovery/:credentialId`, then add selected hosts to the
+New Target dialog. Discovery loads one level per expansion and reports partial
+results when gvmd truncates a listing. Enable **Show containers** to browse
+container objects. Computer details use fields and scan target relationships
+returned with the listing.
+
 ### Linting
 
 GSA uses [Oxlint](https://oxc.rs/docs/guide/usage/linter) for JavaScript and
