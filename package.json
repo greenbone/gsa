@@ -107,7 +107,7 @@
     "globals": "^17.12.0",
     "i18next-cli": "^1.87.0",
     "jsdom": "30.1.3",
-    "oxc-parser": "0.155.0",
+    "oxc-parser": "0.158.0",
     "oxfmt": "0.78.0",
     "oxlint": "1.93.0",
     "oxlint-tsgolint": "7.0.2006",
