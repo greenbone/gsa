@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {showSuccessNotification} from '@greenbone/ui-lib';
-import {connect} from 'react-redux';
+import {legacy_connect as connect} from 'react-redux';
 import {type Location} from 'react-router';
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import type EntitiesCommand from 'gmp/commands/entities';

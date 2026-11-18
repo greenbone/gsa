@@ -86,11 +86,11 @@ const SchedulerCronFields = ({
     })),
   );
 
-  let nextRowId = Math.max(-1, ...rows.map(row => row.id)) + 1;
+  const firstNewRowId = Math.max(-1, ...rows.map(row => row.id)) + 1;
   const displayedRows = value.map(
     (_, index) =>
       rows[index] ?? {
-        id: nextRowId++,
+        id: firstNewRowId + (index - rows.length),
         activeCronExpression: activeCronExpressions[index],
       },
   );
@@ -112,7 +112,7 @@ const SchedulerCronFields = ({
     setRows([
       ...displayedRows,
       {
-        id: nextRowId,
+        id: firstNewRowId + Math.max(0, value.length - rows.length),
         activeCronExpression: undefined,
       },
     ]);

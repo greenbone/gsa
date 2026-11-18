@@ -5,7 +5,7 @@
 
 import React from 'react';
 import {type Action, type ThunkDispatch} from '@reduxjs/toolkit';
-import {connect} from 'react-redux';
+import {legacy_connect as connect} from 'react-redux';
 import type Gmp from 'gmp/gmp';
 import {type FilterType} from 'gmp/models/filter';
 import {isDefined, hasValue} from 'gmp/utils/identity';

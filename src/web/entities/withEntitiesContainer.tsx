@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {connect} from 'react-redux';
+import {legacy_connect as connect} from 'react-redux';
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import type Gmp from 'gmp/gmp';
 import type Rejection from 'gmp/http/rejection';

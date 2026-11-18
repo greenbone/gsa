@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {connect} from 'react-redux';
+import {legacy_connect as connect} from 'react-redux';
 import {isDefined} from 'gmp/utils/identity';
 import DateTime from 'web/components/date/DateTime';
 import Layout from 'web/components/layout/Layout';

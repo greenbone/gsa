@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {connect} from 'react-redux';
+import {legacy_connect as connect} from 'react-redux';
 import {duration} from 'gmp/models/date';
 import {scannerTypeName} from 'gmp/models/scanner';
 import {isDefined} from 'gmp/utils/identity';
