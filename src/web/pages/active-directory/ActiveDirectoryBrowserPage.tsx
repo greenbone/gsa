@@ -28,6 +28,7 @@ import {
 import DirectoryBrowser from 'web/pages/active-directory/DirectoryBrowser';
 import {BrowserViewport} from 'web/pages/active-directory/DirectoryLayout';
 import TargetComponent from 'web/pages/targets/TargetComponent';
+import {mayAccessActiveDirectory} from 'web/utils/active-directory-access';
 
 const BrowserContent = ({credentialId}: {credentialId: string}) => {
   const [_] = useTranslation();
@@ -127,10 +128,7 @@ const ActiveDirectoryBrowserPage = () => {
   const features = useFeatures();
   const {credentialId} = useParams<{credentialId: string}>();
 
-  if (
-    !features.featureEnabled('ENABLE_AD_INTEGRATION') ||
-    !capabilities.mayAccess('target')
-  ) {
+  if (!mayAccessActiveDirectory(capabilities, features)) {
     return (
       <ErrorMessage
         message={_('Active Directory is not available.')}

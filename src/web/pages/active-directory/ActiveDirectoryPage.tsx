@@ -31,6 +31,7 @@ import ActiveDirectoryTable from 'web/pages/active-directory/ActiveDirectoryTabl
 import CredentialFilterDialog from 'web/pages/credentials/CredentialFilterDialog';
 import {ROUTES} from 'web/route-paths';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+import {mayAccessActiveDirectory} from 'web/utils/active-directory-access';
 import SortDirection from 'web/utils/sort-direction';
 
 const ActiveDirectoryConnections = () => {
@@ -191,10 +192,7 @@ const ActiveDirectoryPage = () => {
   const capabilities = useCapabilities();
   const features = useFeatures();
 
-  if (
-    !features.featureEnabled('ENABLE_AD_INTEGRATION') ||
-    !capabilities.mayAccess('target')
-  ) {
+  if (!mayAccessActiveDirectory(capabilities, features)) {
     return (
       <ErrorMessage
         message={_('Active Directory is not available.')}
