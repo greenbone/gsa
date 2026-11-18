@@ -24,6 +24,10 @@ updates:
       oxlint:
         patterns:
           - "oxlint"
+      vitest:
+        patterns:
+          - "vitest"
+          - "@vitest/coverage-v8"
       patch-updates:
         patterns:
           - "*"
