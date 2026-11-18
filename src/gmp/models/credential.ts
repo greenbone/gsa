@@ -6,7 +6,7 @@
 import {_l} from 'gmp/locale/lang';
 import {type Date} from 'gmp/models/date';
 import Model, {type ModelElement, type ModelProperties} from 'gmp/models/model';
-import {parseDate} from 'gmp/parser';
+import {parseDate, parseToString} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -48,8 +48,8 @@ export type ActiveDirectoryTlsMode = 'ldaps' | 'starttls';
 
 export interface CredentialElement extends ModelElement {
   auth_algorithm?: SNMPAuthAlgorithmType;
-  host?: string;
-  port?: string;
+  host?: string | number | boolean;
+  port?: string | number;
   bind_dn?: string;
   base_dn?: string;
   tls_mode?: ActiveDirectoryTlsMode;
@@ -392,8 +392,8 @@ class Credential extends Model {
     const ret = super.parseElement(element) as CredentialProperties;
 
     ret.authAlgorithm = element.auth_algorithm;
-    ret.adHost = element.host;
-    ret.adPort = element.port;
+    ret.adHost = parseToString(element.host);
+    ret.adPort = parseToString(element.port);
     ret.adBindDn = element.bind_dn;
     ret.adBaseDn = element.base_dn;
     ret.adTlsMode = element.tls_mode;
