@@ -103,7 +103,11 @@ const BrowserContent = ({credentialId}: {credentialId: string}) => {
                     sourceId={credentialId}
                     onApply={hosts => {
                       setTargetError(undefined);
-                      create({hosts, targetSource: 'manual'});
+                      create({
+                        hosts,
+                        source: 'active_directory',
+                        targetSource: 'manual',
+                      });
                       showSuccessNotification(
                         '',
                         _('{{count}} hosts transferred to New Target.', {

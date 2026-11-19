@@ -4,7 +4,15 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {fireEvent, rendererWith, screen, wait, within} from 'web/testing';
+import {
+  fireEvent,
+  rendererWith,
+  screen,
+  userEvent,
+  wait,
+  waitFor,
+  within,
+} from 'web/testing';
 import {createActionResultResponse} from 'gmp/commands/testing';
 import Response from 'gmp/http/response';
 import type Model from 'gmp/models/model';
@@ -94,6 +102,7 @@ describe('TargetComponent tests', () => {
             onClick={() =>
               create({
                 hosts: ['pc-042.domain.local', 'fs-01.domain.local'],
+                source: 'active_directory',
                 targetSource: 'manual',
               })
             }
@@ -108,6 +117,67 @@ describe('TargetComponent tests', () => {
     );
     expect(gmp.target.create).not.toHaveBeenCalled();
   });
+
+  test.each([
+    ['prefilled hosts', 'manual', 'active_directory'],
+    ['edited hosts', 'manual', 'active_directory'],
+    ['file input', 'file', undefined],
+    ['asset filter', 'asset_hosts', undefined],
+  ] as const)(
+    'records the source when saving %s',
+    async (scenario, mode, source) => {
+      const gmp = createGmp();
+      const {render} = rendererWith({gmp, capabilities: true});
+      render(
+        <TargetComponent>
+          {({create}) => (
+            <Button
+              title="Create from AD"
+              onClick={() =>
+                create({
+                  hosts: ['pc-042.domain.local'],
+                  hostsCount: 2,
+                  source: 'active_directory',
+                  targetSource: 'manual',
+                })
+              }
+            />
+          )}
+        </TargetComponent>,
+      );
+      fireEvent.click(screen.getByRole('button', {name: 'Create from AD'}));
+      const dialog = within(await screen.findByRole('dialog'));
+      if (scenario === 'edited hosts') {
+        const user = userEvent.setup();
+        await user.type(
+          dialog.getAllByTestId('form-multi-input')[0],
+          'pc-043.domain.local{Enter}',
+        );
+      } else if (mode === 'file') {
+        fireEvent.click(dialog.getAllByName('targetSource')[1]);
+        fireEvent.change(dialog.getByName('file'), {
+          target: {files: [new File(['pc-043.domain.local'], 'hosts.txt')]},
+        });
+      } else if (mode === 'asset_hosts') {
+        fireEvent.click(
+          dialog.getByRole('radio', {name: 'From host assets (2 hosts)'}),
+        );
+      }
+      fireEvent.click(screen.getDialogSaveButton());
+      await waitFor(() => expect(gmp.target.create).toHaveBeenCalledTimes(1));
+      const [data] = gmp.target.create.mock.calls[0];
+      expect(data.targetSource).toBe(mode);
+      if (scenario === 'edited hosts')
+        expect(data.hosts).toEqual([
+          'pc-042.domain.local',
+          'pc-043.domain.local',
+        ]);
+      if (mode === 'file')
+        expect(data.file).toHaveProperty('name', 'hosts.txt');
+      if (source) expect(data.source).toBe(source);
+      else expect(data).not.toHaveProperty('source');
+    },
+  );
 
   test('should render', async () => {
     const gmp = createGmp();
