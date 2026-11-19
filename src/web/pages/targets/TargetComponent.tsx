@@ -6,8 +6,10 @@
 import {useState, useRef} from 'react';
 import {type EntityActionData} from 'gmp/commands/entity';
 import {
+  type TargetCommandCreateParams,
   type TargetCommandSaveParams,
   type TargetExcludeSource,
+  type TargetOrigin,
   type TargetSource,
 } from 'gmp/commands/target';
 import {type CredentialType} from 'gmp/models/credential';
@@ -51,6 +53,7 @@ interface OpenTargetDialogData {
   hosts?: string[];
   hostsCount?: number;
   hostsFilter?: Filter;
+  source?: TargetOrigin;
   targetSource?: TargetSource;
   name?: string;
 }
@@ -154,6 +157,7 @@ const TargetComponent = ({
   const [targetSource, setTargetSource] = useState<TargetSource | undefined>(
     undefined,
   );
+  const [targetOrigin, setTargetOrigin] = useState<TargetOrigin>();
   const [targetId, setTargetId] = useState<string | undefined>(undefined);
   const [hostsCount, setHostsCount] = useState<number | undefined>(undefined);
   const [hostsFilter, setHostsFilter] = useState<Filter | undefined>(undefined);
@@ -199,6 +203,7 @@ const TargetComponent = ({
       hosts: initialHosts,
       hostsCount,
       hostsFilter,
+      source,
       targetSource,
       name,
     }: OpenTargetDialogData = {},
@@ -252,6 +257,7 @@ const TargetComponent = ({
     }
     setHostsCount(hostsCount);
     setHostsFilter(hostsFilter);
+    setTargetOrigin(isDefined(entity) ? undefined : source);
     setTargetDialogVisible(true);
   };
 
@@ -351,7 +357,7 @@ const TargetComponent = ({
     onSuccess: onCreated,
     onError: onCreateError,
   });
-  const createTarget = async (data: TargetDialogData) => {
+  const createTarget = async (data: TargetCommandCreateParams) => {
     await createTargetMutation.mutateAsync(data);
   };
 
@@ -379,7 +385,12 @@ const TargetComponent = ({
                 id: data.id as string,
               },
         )
-      : createTarget(data);
+      : createTarget({
+          ...data,
+          ...(data.targetSource === 'manual' && isDefined(targetOrigin)
+            ? {source: targetOrigin}
+            : {}),
+        });
     await promise;
     closeTargetDialog();
   };
