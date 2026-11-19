@@ -55,31 +55,43 @@ export const replaceDirectorySnapshot = (
 export const getDirectoryMembers = (
   graph: DirectoryGraph,
   id: string,
-  path = new Set<string>(),
 ): {computers: DirectoryComputer[]; complete: boolean} => {
-  if (path.has(id)) return {computers: [], complete: true};
   const snapshot = graph.branches[id];
   if (!snapshot) return {computers: [], complete: false};
-  const nextPath = new Set([...path, id]);
+
+  const visited = new Set([id]);
+  const pending = [...snapshot.children].reverse();
   let complete = snapshot.complete;
   const computers: DirectoryComputer[] = [];
-  for (const childId of snapshot.children) {
+
+  while (pending.length > 0) {
+    const childId = pending.pop();
+    if (childId === undefined || visited.has(childId)) continue;
+    visited.add(childId);
+
     const node = graph.nodes[childId];
     if (!node) {
       complete = false;
       continue;
     }
-    if (node.kind === 'computer') computers.push(node);
-    else {
-      const members = getDirectoryMembers(graph, childId, nextPath);
-      computers.push(...members.computers);
-      complete = complete && members.complete;
+    if (node.kind === 'computer') {
+      computers.push(node);
+      continue;
+    }
+
+    const branch = graph.branches[childId];
+    if (!branch) {
+      complete = false;
+      continue;
+    }
+    complete = complete && branch.complete;
+    // The stack visits children in their original order.
+    for (let index = branch.children.length - 1; index >= 0; index--) {
+      pending.push(branch.children[index]);
     }
   }
-  return {
-    computers: [...new Map(computers.map(node => [node.id, node])).values()],
-    complete,
-  };
+
+  return {computers, complete};
 };
 
 /** Resolution snapshots replace branch edges; unrelated branch snapshots survive. */

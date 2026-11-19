@@ -24,18 +24,23 @@ describe('Directory selection', () => {
       kind: 'ou',
     });
     const selected = mergeSelection([], computers, false);
+    const selectedIds = new Set(selected.map(computer => computer.id));
     expect(selected).toHaveLength(5);
-    expect(getBranchSelectionSummary(computers, selected, false)).toMatchObject(
-      {checked: true, indeterminate: false, total: 5},
-    );
     expect(
-      getBranchSelectionSummary(computers, selected.slice(1), false),
+      getBranchSelectionSummary(computers, selectedIds, false),
+    ).toMatchObject({checked: true, indeterminate: false, total: 5});
+    expect(
+      getBranchSelectionSummary(
+        computers,
+        new Set(selected.slice(1).map(computer => computer.id)),
+        false,
+      ),
     ).toMatchObject({checked: false, indeterminate: true});
     expect(mergeSelection(selected, computers, false)).toHaveLength(5);
     expect(selectedHostnames([...selected, ...selected])).toHaveLength(5);
     expect(mergeSelection(selected, computers, true)).toHaveLength(6);
-    expect(getBranchSelectionSummary(undefined, selected, false)).toMatchObject(
-      {checked: false, total: undefined},
-    );
+    expect(
+      getBranchSelectionSummary(undefined, selectedIds, false),
+    ).toMatchObject({checked: false, total: undefined});
   });
 });
