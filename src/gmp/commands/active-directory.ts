@@ -150,7 +150,7 @@ class ActiveDirectoryCommand extends HttpCommand {
       include_disabled_computers: Number(includeDisabledComputers),
       targets: Number(targets || tasks),
       tasks: Number(tasks),
-      details: Number(details),
+      ...(details ? {details: 1} : {}),
       ...(baseDn === undefined ? {} : {base_dn: baseDn}),
       ...(groupDn === undefined ? {} : {group_dn: groupDn}),
       ...(objectTypes === undefined ? {} : {'object_types:': objectTypes}),
@@ -199,7 +199,35 @@ class ActiveDirectoryCommand extends HttpCommand {
   }
 
   getOverview(params: DirectorySourceParams) {
-    return this.getObjects({...params, tasks: true, details: true});
+    return this.getObjects({...params, tasks: true});
+  }
+
+  async getComputerDetails({
+    sourceId,
+    computerDn,
+  }: {
+    sourceId: string;
+    computerDn: string;
+  }) {
+    const response = await this.getObjects({
+      sourceId,
+      baseDn: computerDn,
+      scope: 'base',
+      objectTypes: ['computer'],
+      details: true,
+      targets: false,
+    });
+    const {roots, truncated} = response.data;
+    const [computer] = roots;
+    if (
+      truncated ||
+      roots.length !== 1 ||
+      computer?.kind !== 'computer' ||
+      computer.id !== computerDn
+    ) {
+      throw new Error('Active Directory computer details are unavailable.');
+    }
+    return response.setData(computer);
   }
 
   getChildren({
@@ -216,7 +244,6 @@ class ActiveDirectoryCommand extends HttpCommand {
         ? {groupDn: branchId, scope: 'subtree' as const}
         : {baseDn: branchId}),
       tasks: true,
-      details: true,
       maxResults,
     });
   }
@@ -273,7 +300,6 @@ class ActiveDirectoryCommand extends HttpCommand {
         scope: 'subtree',
         showContainers,
         tasks: true,
-        details: true,
       });
       requireComplete(listing);
       const branchIds = [

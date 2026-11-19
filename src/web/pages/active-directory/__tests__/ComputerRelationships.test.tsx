@@ -4,26 +4,49 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
-import {fireEvent, rendererWith, screen, userEvent, within} from 'web/testing';
+import {
+  act,
+  fireEvent,
+  rendererWith,
+  screen,
+  userEvent,
+  within,
+} from 'web/testing';
 import ActiveDirectoryCommand from 'gmp/commands/active-directory';
 import {AD_SOURCE, AD_ACCOUNTING} from 'gmp/commands/fixtures/active-directory';
 import {createDirectoryHttp} from 'gmp/commands/fixtures/active-directory-http';
+import Response from 'gmp/http/response';
+import {type DirectoryComputer} from 'gmp/models/active-directory';
+import {createSession} from 'gmp/testing';
 import ComputerDetails from 'web/pages/active-directory/ComputerDetails';
 import ComputerRelationships from 'web/pages/active-directory/ComputerRelationships';
 import ComputerRow from 'web/pages/active-directory/ComputerRow';
 import DirectoryTree from 'web/pages/active-directory/DirectoryTree';
 
+const createDetailsGmp = (
+  getComputerDetails: ActiveDirectoryCommand['getComputerDetails'],
+) => ({
+  settings: {},
+  session: createSession({token: 'ad-details-token'}),
+  activedirectory: {getComputerDetails},
+});
+
 describe('Computer relationship table', () => {
   test('shows a concise summary without a table for zero matches', async () => {
-    const result = await new ActiveDirectoryCommand(
+    const command = new ActiveDirectoryCommand(
       createDirectoryHttp('relationships'),
-    ).getChildren({
+    );
+    const result = await command.getChildren({
       sourceId: AD_SOURCE,
       branchId: AD_ACCOUNTING,
       kind: 'ou',
       maxResults: 100,
     });
-    const {render} = rendererWith({capabilities: true, router: true});
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      gmp: createDetailsGmp(command.getComputerDetails.bind(command)),
+    });
     render(
       <DirectoryTree
         knownMembers={{}}
@@ -50,7 +73,7 @@ describe('Computer relationship table', () => {
     fireEvent.click(details);
     expect(within(row).getByText('Active Directory information')).toBeVisible();
     expect(within(row).getByText('Distinguished name')).toBeVisible();
-    expect(within(row).getByText('OS version')).toBeVisible();
+    expect(await within(row).findByText('OS version')).toBeVisible();
     expect(within(row).getByText('10.0 (22631)')).toBeVisible();
     expect(within(row).getByText('HOST/example.domain.local')).toBeVisible();
     expect(
@@ -70,13 +93,13 @@ describe('Computer relationship table', () => {
       const {render} = rendererWith({capabilities: true, router: true});
       render(
         <ComputerDetails
+          details={{servicePrincipalNames: spns}}
           node={{
             id: 'computer',
             kind: 'computer',
             name: 'workstation',
             parentDn: '',
             disabled: false,
-            servicePrincipalNames: spns,
           }}
         />,
       );
@@ -136,16 +159,21 @@ describe('Computer relationship table', () => {
     expect(screen.getByText('Full and fast')).toBeVisible();
     expect(screen.queryAllByRole('link')).toHaveLength(0);
   });
-  test('shows target, task, and config columns without changing selection or fetching', async () => {
+  test('shows target, task, and config columns without changing selection', async () => {
     const http = createDirectoryHttp('relationships');
-    const result = await new ActiveDirectoryCommand(http).getChildren({
+    const command = new ActiveDirectoryCommand(http);
+    const result = await command.getChildren({
       sourceId: AD_SOURCE,
       branchId: AD_ACCOUNTING,
       kind: 'ou',
       maxResults: 100,
     });
     const onSelect = testing.fn();
-    const {render} = rendererWith({capabilities: true, router: true});
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      gmp: createDetailsGmp(command.getComputerDetails.bind(command)),
+    });
     render(
       <DirectoryTree
         knownMembers={{}}
@@ -167,6 +195,7 @@ describe('Computer relationship table', () => {
     });
     expect(disclosure).toHaveAttribute('aria-expanded', 'false');
     expect(within(row).queryByRole('table')).not.toBeInTheDocument();
+    expect(http.request).toHaveBeenCalledTimes(1);
     disclosure.focus();
     await userEvent.keyboard('{Enter}');
     expect(disclosure).toHaveAttribute('aria-expanded', 'true');
@@ -201,7 +230,7 @@ describe('Computer relationship table', () => {
     expect(within(row).queryByText('Story 4')).not.toBeInTheDocument();
     expect(within(row).queryByText('Story 8')).not.toBeInTheDocument();
     expect(onSelect).not.toHaveBeenCalled();
-    expect(http.request).toHaveBeenCalledTimes(1);
+    expect(http.request).toHaveBeenCalledTimes(2);
     fireEvent.click(within(row).getByRole('checkbox'));
     expect(onSelect).toHaveBeenCalledWith(
       expect.objectContaining({name: 'pc-multiple-targets.domain.local'}),
@@ -234,7 +263,6 @@ describe('Computer relationship table', () => {
     expect(disclosure).toHaveFocus();
     expect(disclosure).toHaveAttribute('aria-expanded', 'false');
     expect(within(row).queryByRole('table')).not.toBeInTheDocument();
-    expect(http.request).toHaveBeenCalledTimes(1);
     expect(onSelect).toHaveBeenCalledTimes(1);
     expect(within(row).getAllByRole('button')).toHaveLength(1);
     fireEvent.click(within(row).getByText('pc-multiple-targets.domain.local'));
@@ -249,19 +277,26 @@ describe('Computer relationship table', () => {
 
 test('keeps details available for computers without a hostname or optional Active Directory attributes', async () => {
   const onSelect = testing.fn();
-  const {render} = rendererWith({capabilities: true, router: true});
+  const node: DirectoryComputer = {
+    id: 'CN=missing,DC=domain,DC=local',
+    kind: 'computer',
+    name: 'missing',
+    parentDn: 'DC=domain,DC=local',
+    disabled: false,
+  };
+  const getComputerDetails = testing.fn().mockResolvedValue(new Response(node));
+  const {render} = rendererWith({
+    capabilities: true,
+    router: true,
+    gmp: createDetailsGmp(getComputerDetails),
+  });
   render(
     <ul>
       <ComputerRow
         checked={false}
-        node={{
-          id: 'CN=missing,DC=domain,DC=local',
-          kind: 'computer',
-          name: 'missing',
-          parentDn: 'DC=domain,DC=local',
-          disabled: false,
-        }}
+        node={node}
         selectionPending={false}
+        sourceId={AD_SOURCE}
         onSelect={onSelect}
       />
     </ul>,
@@ -273,6 +308,7 @@ test('keeps details available for computers without a hostname or optional Activ
   const panel = screen.getByRole('region', {
     name: 'Computer details for missing',
   });
+  expect(await within(panel).findByText('OS version')).toBeVisible();
   expect(within(panel).getAllByText('Not provided')).toHaveLength(3);
   expect(
     within(panel).getByText('CN=missing,DC=domain,DC=local'),
@@ -283,4 +319,77 @@ test('keeps details available for computers without a hostname or optional Activ
   expect(within(panel).getByText('Description')).toBeVisible();
   expect(within(panel).getByText(/may contain personal data/)).toBeVisible();
   expect(onSelect).not.toHaveBeenCalled();
+});
+
+test('keeps selection and target links usable during a details failure and retries on demand', async () => {
+  const node: DirectoryComputer = {
+    id: `CN=pc-043,${AD_ACCOUNTING}`,
+    kind: 'computer',
+    name: 'workstation',
+    parentDn: AD_ACCOUNTING,
+    hostname: 'pc-043.domain.local',
+    disabled: false,
+    operatingSystem: 'Windows 11',
+    matchedTargets: [{id: 'office', name: 'Office network'}],
+  };
+  let failDetails!: (error: Error) => void;
+  const pendingDetails = new Promise<Response<DirectoryComputer>>(
+    (_, reject) => {
+      failDetails = reject;
+    },
+  );
+  const getComputerDetails = testing
+    .fn()
+    .mockReturnValueOnce(pendingDetails)
+    .mockResolvedValue(
+      new Response({...node, operatingSystemVersion: '22631'}),
+    );
+  const onSelect = testing.fn();
+  const {render} = rendererWith({
+    capabilities: true,
+    router: true,
+    gmp: createDetailsGmp(getComputerDetails),
+  });
+  render(
+    <ul>
+      <ComputerRow
+        checked={false}
+        node={node}
+        selectionPending={false}
+        sourceId={AD_SOURCE}
+        onSelect={onSelect}
+      />
+    </ul>,
+  );
+  expect(getComputerDetails).not.toHaveBeenCalled();
+  const disclosure = screen.getByRole('button', {
+    name: 'Computer details for workstation',
+  });
+  fireEvent.click(disclosure);
+  const panel = within(
+    screen.getByRole('region', {name: 'Computer details for workstation'}),
+  );
+  expect(
+    panel.getByRole('status', {name: 'Loading computer details...'}),
+  ).toBeVisible();
+  expect(panel.getByText('Windows 11')).toBeVisible();
+  expect(panel.queryByText('OS version')).not.toBeInTheDocument();
+  expect(getComputerDetails).toHaveBeenCalledTimes(1);
+  await act(async () => failDetails(new Error('Computer moved')));
+  expect(await panel.findByRole('alert')).toHaveTextContent(
+    'Could not load computer details.',
+  );
+  expect(panel.getByRole('link', {name: 'Office network'})).toHaveAttribute(
+    'href',
+    '/target/office',
+  );
+  fireEvent.click(screen.getByRole('checkbox', {name: 'workstation'}));
+  expect(onSelect).toHaveBeenCalledWith(true);
+  fireEvent.click(panel.getByRole('button', {name: 'Retry'}));
+  expect(await panel.findByText('22631')).toBeVisible();
+  expect(getComputerDetails).toHaveBeenCalledTimes(2);
+  fireEvent.click(disclosure);
+  fireEvent.click(disclosure);
+  expect(await screen.findByText('22631')).toBeVisible();
+  expect(getComputerDetails).toHaveBeenCalledTimes(3);
 });

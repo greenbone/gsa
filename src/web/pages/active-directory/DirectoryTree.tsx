@@ -338,6 +338,7 @@ const DirectoryTree = ({
                       depth={path?.length ?? 0}
                       node={node}
                       selectionPending={selectionPending}
+                      sourceId={sourceId}
                       onSelect={checked => onSelect(node, checked, path)}
                     />,
                   ]
