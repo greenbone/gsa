@@ -102,11 +102,34 @@ test('selects AD computers and transfers them to a new target without saving', a
   await page.getByRole('checkbox', {name: 'Clients', exact: true}).click();
   const apply = page.getByRole('button', {name: 'Add 5 hosts to new target'});
   await expect(apply).toBeEnabled();
-  await page.getByRole('button', {name: 'Expand Clients'}).click();
-  await page.getByRole('button', {name: 'Expand Accounting'}).click();
+  const clientsToggle = page.getByRole('button', {
+    name: /^(Expand|Collapse) Clients$/,
+  });
+  const accountingToggle = page.getByRole('button', {
+    name: /^(Expand|Collapse) Accounting$/,
+  });
+  const clientsLeft = await clientsToggle.evaluate(
+    button => button.getBoundingClientRect().left,
+  );
+  await clientsToggle.click();
+  const accountingLeft = await accountingToggle.evaluate(
+    button => button.getBoundingClientRect().left,
+  );
+  expect(accountingLeft - clientsLeft).toBeGreaterThanOrEqual(20);
+  await accountingToggle.click();
   await expect(
     page.getByRole('checkbox', {name: 'pc-043.domain.local'}),
   ).toBeChecked();
+  expect(
+    await clientsToggle.evaluate(button => button.getBoundingClientRect().left),
+  ).toBeCloseTo(clientsLeft);
+  expect(
+    await accountingToggle.evaluate(
+      button => button.getBoundingClientRect().left,
+    ),
+  ).toBeCloseTo(accountingLeft);
+  await clientsToggle.scrollIntoViewIfNeeded();
+  await page.screenshot({path: testInfo.outputPath('nested-groups.png')});
   await expect(
     page.getByRole('checkbox', {name: 'pc-legacy.domain.local'}),
   ).toBeChecked();

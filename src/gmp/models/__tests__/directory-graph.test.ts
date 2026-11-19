@@ -64,6 +64,47 @@ describe('directory graph snapshots', () => {
     expect(getDirectoryMembers(graph, AD_ACCOUNTING).computers).toHaveLength(1);
     expect(graph.branches[AD_ACCOUNTING].owner).toBe('second');
   });
+
+  test('keeps depth-first member order across shared and incomplete branches', () => {
+    const computers = nodes.filter(node => node.kind === 'computer');
+    const [first, second, third] = computers;
+    const [left, right, shared] = ['left', 'right', 'shared'].map(
+      (id): DirectoryNode => ({id, kind: 'group', name: id, parentDn: 'root'}),
+    );
+    let graph = replaceDirectorySnapshot(
+      emptyDirectoryGraph(),
+      'directory-root',
+      'root',
+      [left, right],
+      true,
+    );
+    graph = replaceDirectorySnapshot(
+      graph,
+      left.id,
+      'left',
+      [shared, second],
+      true,
+    );
+    graph = replaceDirectorySnapshot(
+      graph,
+      right.id,
+      'right',
+      [third, shared],
+      true,
+    );
+    graph = replaceDirectorySnapshot(
+      graph,
+      shared.id,
+      'shared',
+      [first],
+      false,
+    );
+
+    expect(getDirectoryMembers(graph, 'directory-root')).toEqual({
+      computers: [first, second, third],
+      complete: false,
+    });
+  });
 });
 
 test('shows a shared computer once inside its nested group, including cyclic membership', () => {

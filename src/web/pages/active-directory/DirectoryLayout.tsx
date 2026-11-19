@@ -8,6 +8,7 @@ import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
 
 export const disclosureWidth = '32px';
+const directoryIndent = 'var(--mantine-spacing-lg)';
 
 // Expanded branches scroll inside the available page height rather than
 // increasing the page's intrinsic height.
@@ -17,6 +18,7 @@ export const BrowserViewport = styled(Column)`
 
 export const DirectoryScrollArea = styled(Column)`
   overflow: auto;
+  scrollbar-gutter: stable;
 `;
 
 export const DirectoryFooter = styled(Row)`
@@ -44,7 +46,7 @@ export const DirectoryRow = styled.div<{$depth: number}>`
     padding-inline: var(--mantine-spacing-xs);
   }
   > :first-child {
-    padding-inline-start: ${({$depth}) => `calc(${$depth} * var(--mantine-spacing-md))`};
+    padding-inline-start: ${({$depth}) => `calc(${$depth} * ${directoryIndent})`};
   }
   > :last-child {
     display: flex;
@@ -55,7 +57,7 @@ export const DirectoryRow = styled.div<{$depth: number}>`
 export const BranchRow = styled(DirectoryRow)`
   padding-block: var(--mantine-spacing-xs);
   > :first-child {
-    font-weight: 600;
+    font-weight: ${({$depth}) => ($depth === 0 ? 600 : 500)};
   }
   > :nth-child(2) {
     grid-column: span 2;
@@ -68,8 +70,10 @@ export const DirectoryHeader = styled(DirectoryRow)`
 `;
 
 export const ComputerDetailsInset = styled.div<{$depth: number}>`
-  margin: var(--mantine-spacing-xs) var(--mantine-spacing-sm) 0
-    ${({$depth}) => `calc(${disclosureWidth} + var(--mantine-spacing-sm) + ${$depth} * var(--mantine-spacing-md))`};
+  margin-block-start: var(--mantine-spacing-xs);
+  margin-inline-end: var(--mantine-spacing-sm);
+  margin-inline-start: ${({$depth}) =>
+    `calc(${disclosureWidth} + var(--mantine-spacing-sm) + ${$depth} * ${directoryIndent})`};
 `;
 
 export const DirectoryHeading = styled.h3`

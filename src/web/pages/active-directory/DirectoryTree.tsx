@@ -31,7 +31,7 @@ import DirectoryPanel from 'web/pages/active-directory/DirectoryPanel';
 interface DirectoryTreeProps {
   nodes: DirectoryNode[];
   sourceId: string;
-  selected: DirectoryComputer[];
+  selectedIds: ReadonlySet<string>;
   showDisabled: boolean;
   showContainers?: boolean;
   selectionPending: boolean;
@@ -57,7 +57,7 @@ interface ExpandedBranchProps extends Omit<DirectoryTreeProps, 'nodes'> {
 const ExpandedBranch = ({
   node,
   sourceId,
-  selected,
+  selectedIds,
   showDisabled,
   showContainers,
   selectionPending,
@@ -90,7 +90,7 @@ const ExpandedBranch = ({
     if (listing) onLoaded(opening, node.id, listing);
   }, [listing, node.id, onLoaded, opening]);
   return (
-    <Column aria-busy={isFetching} gap="xs" miw={0} pt="sm">
+    <Column aria-busy={isFetching} gap="xs" miw={0} pb="xs">
       {isFetching && (
         <output aria-label={_('Loading {{- name}}', {name: node.name})}>
           <Loading />
@@ -125,7 +125,7 @@ const ExpandedBranch = ({
           nodes={listing.roots}
           path={[...(path ?? []), node.id]}
           redundantBranchSummaries={redundantBranchSummaries}
-          selected={selected}
+          selectedIds={selectedIds}
           selectionPending={selectionPending}
           showContainers={showContainers}
           showDisabled={showDisabled}
@@ -141,7 +141,7 @@ const ExpandedBranch = ({
 const DirectoryTreeNode = ({
   node,
   sourceId,
-  selected,
+  selectedIds,
   showDisabled,
   showContainers,
   selectionPending,
@@ -158,12 +158,12 @@ const DirectoryTreeNode = ({
 
   const branchSelection = getBranchSelectionSummary(
     memberships[node.id],
-    selected,
+    selectedIds,
     showDisabled,
   );
   if (memberships[node.id] === undefined) {
     branchSelection.indeterminate = (knownMembers[node.id] ?? []).some(member =>
-      selected.some(computer => computer.id === member.id),
+      selectedIds.has(member.id),
     );
   }
   const cycle = path?.includes(node.id) ?? false;
@@ -217,43 +217,49 @@ const DirectoryTreeNode = ({
     </BranchRow>
   );
 
+  const accordion = (
+    <DirectoryAccordion
+      value={expanded ? 'details' : null}
+      onChange={value => setExpanded(value !== null)}
+    >
+      <Accordion.Item value="details">
+        {row}
+        {cycle ? (
+          <p>
+            {_(
+              'Circular group membership; this branch is already shown above.',
+            )}
+          </p>
+        ) : (
+          <Accordion.Panel>
+            <ExpandedBranch
+              computerPaths={computerPaths}
+              knownMembers={knownMembers}
+              memberships={memberships}
+              node={node}
+              path={path}
+              redundantBranchSummaries={redundantBranchSummaries}
+              selectedIds={selectedIds}
+              selectionPending={selectionPending}
+              showContainers={showContainers}
+              showDisabled={showDisabled}
+              sourceId={sourceId}
+              onLoaded={onLoaded}
+              onSelect={onSelect}
+            />
+          </Accordion.Panel>
+        )}
+      </Accordion.Item>
+    </DirectoryAccordion>
+  );
+
   return (
     <li>
-      <DirectoryPanel paddingInline="0">
-        <DirectoryAccordion
-          value={expanded ? 'details' : null}
-          onChange={value => setExpanded(value !== null)}
-        >
-          <Accordion.Item value="details">
-            {row}
-            {cycle ? (
-              <p>
-                {_(
-                  'Circular group membership; this branch is already shown above.',
-                )}
-              </p>
-            ) : (
-              <Accordion.Panel>
-                <ExpandedBranch
-                  computerPaths={computerPaths}
-                  knownMembers={knownMembers}
-                  memberships={memberships}
-                  node={node}
-                  path={path}
-                  redundantBranchSummaries={redundantBranchSummaries}
-                  selected={selected}
-                  selectionPending={selectionPending}
-                  showContainers={showContainers}
-                  showDisabled={showDisabled}
-                  sourceId={sourceId}
-                  onLoaded={onLoaded}
-                  onSelect={onSelect}
-                />
-              </Accordion.Panel>
-            )}
-          </Accordion.Item>
-        </DirectoryAccordion>
-      </DirectoryPanel>
+      {path?.length ? (
+        accordion
+      ) : (
+        <DirectoryPanel paddingInline="0">{accordion}</DirectoryPanel>
+      )}
     </li>
   );
 };
@@ -261,7 +267,7 @@ const DirectoryTreeNode = ({
 const DirectoryTree = ({
   nodes,
   sourceId,
-  selected,
+  selectedIds,
   showDisabled,
   showContainers,
   selectionPending,
@@ -274,12 +280,12 @@ const DirectoryTree = ({
   onSelect,
 }: DirectoryTreeProps) => {
   const [_] = useTranslation();
+  const pathKey = JSON.stringify(path ?? []);
   const visible = nodes.filter(
     node =>
       node.kind !== 'computer' ||
       ((showDisabled || !node.disabled) &&
-        (!computerPaths ||
-          computerPaths[node.id] === JSON.stringify(path ?? []))),
+        (!computerPaths || computerPaths[node.id] === pathKey)),
   );
   return visible.length === 0 ? (
     <p>
@@ -287,15 +293,15 @@ const DirectoryTree = ({
         node =>
           node.kind === 'computer' &&
           computerPaths?.[node.id] !== undefined &&
-          computerPaths[node.id] !== JSON.stringify(path ?? []),
+          computerPaths[node.id] !== pathKey,
       )
         ? _('These computers are shown in another directory group.')
         : _('No visible directory objects.')}
     </p>
   ) : (
-    <Column gap="xs" miw="36rem">
+    <Column gap="xs" miw={path?.length ? 0 : '36rem'}>
       {visible.some(node => node.kind !== 'computer') && (
-        <DirectoryList $spacing="sm">
+        <DirectoryList $spacing={path?.length ? 'xs' : 'sm'}>
           {visible
             .filter(node => node.kind !== 'computer')
             .map(node => (
@@ -307,7 +313,7 @@ const DirectoryTree = ({
                 node={node}
                 path={path}
                 redundantBranchSummaries={redundantBranchSummaries}
-                selected={selected}
+                selectedIds={selectedIds}
                 selectionPending={selectionPending}
                 showContainers={showContainers}
                 showDisabled={showDisabled}
@@ -332,9 +338,7 @@ const DirectoryTree = ({
                 ? [
                     <ComputerRow
                       key={node.id}
-                      checked={selected.some(
-                        selected => selected.id === node.id,
-                      )}
+                      checked={selectedIds.has(node.id)}
                       depth={path?.length ?? 0}
                       node={node}
                       selectionPending={selectionPending}

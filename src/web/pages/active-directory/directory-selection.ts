@@ -7,23 +7,21 @@ import {type DirectoryComputer} from 'gmp/models/active-directory';
 
 export const getBranchSelectionSummary = (
   members: DirectoryComputer[] | undefined,
-  selected: DirectoryComputer[],
+  selectedIds: ReadonlySet<string>,
   showDisabled: boolean,
 ) => {
-  const eligible = members?.filter(
-    computer => computer.hostname && (showDisabled || !computer.disabled),
-  );
-  const selectedIds = new Set(selected.map(computer => computer.id));
-  const count =
-    eligible?.filter(computer => selectedIds.has(computer.id)).length ?? 0;
+  let eligibleCount = 0;
+  let selectedCount = 0;
+  for (const computer of members ?? []) {
+    if (!computer.hostname || (!showDisabled && computer.disabled)) continue;
+    eligibleCount++;
+    if (selectedIds.has(computer.id)) selectedCount++;
+  }
   return {
-    total: eligible?.length,
-    selectedCount: count,
-    checked:
-      eligible !== undefined &&
-      eligible.length > 0 &&
-      count === eligible.length,
-    indeterminate: count > 0 && count < (eligible?.length ?? 0),
+    total: members === undefined ? undefined : eligibleCount,
+    selectedCount,
+    checked: eligibleCount > 0 && selectedCount === eligibleCount,
+    indeterminate: selectedCount > 0 && selectedCount < eligibleCount,
   };
 };
 

@@ -80,6 +80,7 @@ export const DirectoryBrowser = ({
     const node = currentGraph.nodes[id];
     return node?.kind === 'computer' ? [node] : [];
   });
+  const selectedComputerIds = new Set(selected.map(computer => computer.id));
   const setSelected = (
     update: (previous: DirectoryComputer[]) => DirectoryComputer[],
   ) => {
@@ -134,16 +135,13 @@ export const DirectoryBrowser = ({
     setSelectionError(undefined);
     setResolutionError(undefined);
     if (!checked) {
+      const memberIds = new Set(
+        node.kind === 'computer'
+          ? [node.id]
+          : (knownMembers[node.id] ?? []).map(member => member.id),
+      );
       setSelected(previous =>
-        previous.filter(computer =>
-          node.kind === 'computer'
-            ? computer.id !== node.id
-            : !(
-                completeMemberships[node.id] ??
-                knownMembers[node.id] ??
-                []
-              ).some(member => member.id === computer.id),
-        ),
+        previous.filter(computer => !memberIds.has(computer.id)),
       );
       return;
     }
@@ -198,17 +196,13 @@ export const DirectoryBrowser = ({
     if (branchChildren.length !== 1) return [];
     const parentMembers = knownMembers[id] ?? [];
     const childMembers = knownMembers[branchChildren[0].id] ?? [];
-    const sameMembers =
-      parentMembers.length === childMembers.length &&
-      parentMembers.every(parent =>
-        childMembers.some(child => child.id === parent.id),
-      );
-    return sameMembers ? [id] : [];
+    if (parentMembers.length !== childMembers.length) return [];
+    const childIds = new Set(childMembers.map(child => child.id));
+    return parentMembers.every(parent => childIds.has(parent.id)) ? [id] : [];
   });
   const computerPaths = getDirectoryComputerPaths(currentGraph);
   const hosts = selectedHostnames(selected);
-  const rootMembers = getDirectoryMembers(currentGraph, 'directory-root');
-  const computers = rootMembers.computers;
+  const computers = knownMembers['directory-root'] ?? [];
   const isPartial = Object.values(currentGraph.branches).some(
     branch => !branch.complete,
   );
@@ -332,7 +326,7 @@ export const DirectoryBrowser = ({
               memberships={completeMemberships}
               nodes={overview.roots}
               redundantBranchSummaries={redundantBranchSummaries}
-              selected={selected}
+              selectedIds={selectedComputerIds}
               selectionPending={resolving}
               showContainers={showContainers}
               showDisabled={showDisabled}
