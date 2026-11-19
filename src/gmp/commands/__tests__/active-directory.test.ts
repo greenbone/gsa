@@ -33,7 +33,8 @@ describe('ActiveDirectoryCommand wire contract', () => {
     const multiple = result.data.computers.find(
       node => node.name === 'pc-multiple-targets.domain.local',
     );
-    expect(multiple?.operatingSystemVersion).toBe('10.0 (22631)');
+    expect(multiple?.operatingSystemVersion).toBeUndefined();
+    expect(multiple?.servicePrincipalNames).toBeUndefined();
     expect(
       result.data.computers.find(node => node.name === 'pc-043.domain.local')
         ?.description,
@@ -51,8 +52,9 @@ describe('ActiveDirectoryCommand wire contract', () => {
     expect(unavailable?.matchedTargets?.[0].tasks).toBeUndefined();
     for (const [, options] of http.request.mock.calls) {
       expect(options.args).toEqual(
-        expect.objectContaining({targets: 1, tasks: 1, details: 1}),
+        expect.objectContaining({targets: 1, tasks: 1}),
       );
+      expect(options.args).not.toHaveProperty('details');
     }
   });
   test('opts into containers and resolves nested container members', async () => {
@@ -116,6 +118,44 @@ describe('ActiveDirectoryCommand wire contract', () => {
     expect(http.request).toHaveBeenLastCalledWith('get', {
       args: expect.objectContaining({scope: 'onelevel', base_dn: AD_CLIENTS}),
     });
+    for (const [, {args}] of http.request.mock.calls)
+      expect(args).not.toHaveProperty('details');
+  });
+
+  test('requests extended attributes for only the selected computer', async () => {
+    const http = createDirectoryHttp();
+    const computerDn = `CN=pc-043,${AD_ACCOUNTING}`;
+    const result = await new ActiveDirectoryCommand(http).getComputerDetails({
+      sourceId,
+      computerDn,
+    });
+    expect(http.request).toHaveBeenCalledExactlyOnceWith('get', {
+      args: expect.objectContaining({
+        credential_id: sourceId,
+        base_dn: computerDn,
+        scope: 'base',
+        'object_types:': ['computer'],
+        details: 1,
+        targets: 0,
+        tasks: 0,
+      }),
+    });
+    expect(result.data).toMatchObject({
+      id: computerDn,
+      operatingSystemVersion: '10.0 (22631)',
+      servicePrincipalNames: ['HOST/example.domain.local'],
+      matchedTargets: undefined,
+    });
+  });
+
+  test('rejects details when the selected computer no longer exists', async () => {
+    const command = new ActiveDirectoryCommand(createDirectoryHttp());
+    await expect(
+      command.getComputerDetails({
+        sourceId,
+        computerDn: `CN=missing,${AD_ACCOUNTING}`,
+      }),
+    ).rejects.toThrow('computer details are unavailable');
   });
 
   test('preserves descriptions for every object type without requesting details', async () => {
@@ -137,9 +177,7 @@ describe('ActiveDirectoryCommand wire contract', () => {
       scope: 'subtree',
       details: false,
     });
-    expect(http.request).toHaveBeenCalledWith('get', {
-      args: expect.objectContaining({details: 0}),
-    });
+    expect(http.request.mock.calls[0][1].args).not.toHaveProperty('details');
     expect(
       result.data.roots
         .filter(node => node.kind === 'ou')

@@ -7,7 +7,10 @@ import {type ReactNode, useState} from 'react';
 import {Accordion} from '@mantine/core';
 import {type DirectoryComputer} from 'gmp/models/active-directory';
 import HighlightBox from 'web/components/highlight-box';
+import Loading from 'web/components/loading/Loading';
+import InlineNotification from 'web/components/notification/InlineNotification';
 import EntitySelection from 'web/entities/EntitySelection';
+import {useGetActiveDirectoryComputerDetails} from 'web/hooks/use-query/active-directory';
 import useTranslation from 'web/hooks/useTranslation';
 import ComputerDetails from 'web/pages/active-directory/ComputerDetails';
 import DirectoryAccordion from 'web/pages/active-directory/DirectoryAccordion';
@@ -16,14 +19,55 @@ import {
   DirectoryRow,
 } from 'web/pages/active-directory/DirectoryLayout';
 
+const ExpandedComputerDetails = ({
+  node,
+  sourceId,
+}: {
+  node: DirectoryComputer;
+  sourceId: string;
+}) => {
+  const [_] = useTranslation();
+  const {data, isError, isFetching, refetch} =
+    useGetActiveDirectoryComputerDetails(sourceId, node.id);
+
+  return (
+    <ComputerDetails
+      details={data}
+      feedback={
+        <>
+          {isFetching && (
+            <output aria-label={_('Loading computer details...')}>
+              <Loading />
+            </output>
+          )}
+          {isError && (
+            <InlineNotification
+              action={{
+                label: _('Retry'),
+                onClick: () => void refetch(),
+                isLoading: isFetching,
+              }}
+              message={_('Could not load computer details.')}
+              severity="error"
+            />
+          )}
+        </>
+      }
+      node={node}
+    />
+  );
+};
+
 const ComputerRow = ({
   node,
+  sourceId,
   checked,
   selectionPending,
   depth = 0,
   onSelect,
 }: {
   node: DirectoryComputer;
+  sourceId: string;
   checked: boolean;
   selectionPending: boolean;
   depth?: number;
@@ -95,7 +139,9 @@ const ComputerRow = ({
           <Accordion.Panel>
             <ComputerDetailsInset $depth={depth}>
               <HighlightBox>
-                <ComputerDetails node={node} />
+                {expanded && (
+                  <ExpandedComputerDetails node={node} sourceId={sourceId} />
+                )}
               </HighlightBox>
             </ComputerDetailsInset>
           </Accordion.Panel>

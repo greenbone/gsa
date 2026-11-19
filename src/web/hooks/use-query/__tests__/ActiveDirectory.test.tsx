@@ -13,7 +13,11 @@ import {
 import ActiveDirectoryCommand from 'gmp/commands/active-directory';
 import CredentialCommand from 'gmp/commands/credential';
 import CredentialsCommand from 'gmp/commands/credentials';
-import {AD_SOURCE, AD_CLIENTS} from 'gmp/commands/fixtures/active-directory';
+import {
+  AD_SOURCE,
+  AD_CLIENTS,
+  AD_ACCOUNTING,
+} from 'gmp/commands/fixtures/active-directory';
 import {createDirectoryHttp} from 'gmp/commands/fixtures/active-directory-http';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {createSession} from 'gmp/testing';
@@ -23,6 +27,7 @@ import {
   activeDirectoryCredentialFilter,
   useGetActiveDirectoryOverview,
   useGetActiveDirectoryChildren,
+  useGetActiveDirectoryComputerDetails,
   useResolveActiveDirectorySubtree,
 } from 'web/hooks/use-query/active-directory';
 
@@ -39,6 +44,7 @@ const createGmp = (token?: string) => {
     activedirectory: {
       getOverview: testing.fn(command.getOverview.bind(command)),
       getChildren: testing.fn(command.getChildren.bind(command)),
+      getComputerDetails: testing.fn(command.getComputerDetails.bind(command)),
       resolveSubtree: testing.fn(command.resolveSubtree.bind(command)),
     },
   };
@@ -173,6 +179,28 @@ describe('Active Directory GMP hooks', () => {
       expect.any(String),
     ]);
     expect(gmp.activedirectory.resolveSubtree).not.toHaveBeenCalled();
+  });
+
+  test('scopes computer details to the session, source, DN, and opening', async () => {
+    const gmp = createGmp('token');
+    const computerDn = `CN=pc-043,${AD_ACCOUNTING}`;
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() => ({
+      query: useGetActiveDirectoryComputerDetails(AD_SOURCE, computerDn),
+      client: useQueryClient(),
+    }));
+    await waitFor(() => expect(result.current.query.data?.id).toBe(computerDn));
+    expect(gmp.activedirectory.getComputerDetails).toHaveBeenCalledWith({
+      sourceId: AD_SOURCE,
+      computerDn,
+    });
+    expect(result.current.client.getQueryCache().getAll()[0].queryKey).toEqual([
+      'get_active_directory_computer_details',
+      'token',
+      AD_SOURCE,
+      computerDn,
+      expect.any(String),
+    ]);
   });
 
   test('resolves a selection through the shared GMP mutation and releases consumed results', async () => {

@@ -15,17 +15,32 @@ import DetailsBlock from 'web/entity/DetailsBlock';
 import useTranslation from 'web/hooks/useTranslation';
 import ComputerRelationships from 'web/pages/active-directory/ComputerRelationships';
 
-const ComputerDetails = ({node}: {node: DirectoryComputer}) => {
+const ComputerDetails = ({
+  node,
+  details,
+  feedback,
+}: {
+  node: DirectoryComputer;
+  details?: Pick<
+    DirectoryComputer,
+    'operatingSystemVersion' | 'servicePrincipalNames'
+  >;
+  feedback?: ReactNode;
+}) => {
   const [_] = useTranslation();
   const attributes: {label: string; value: ReactNode}[] = [
     {
       label: _('Operating system'),
       value: node.operatingSystem || _('Not provided'),
     },
-    {
-      label: _('OS version'),
-      value: node.operatingSystemVersion || _('Not provided'),
-    },
+    ...(details
+      ? [
+          {
+            label: _('OS version'),
+            value: details.operatingSystemVersion || _('Not provided'),
+          },
+        ]
+      : []),
     {
       label: _('Distinguished name'),
       value: <pre style={{margin: 0}}>{node.id}</pre>,
@@ -37,7 +52,7 @@ const ComputerDetails = ({node}: {node: DirectoryComputer}) => {
       ),
     },
   ];
-  const spns = node.servicePrincipalNames;
+  const spns = details?.servicePrincipalNames;
   if (spns !== undefined) {
     attributes.push({
       label: _('Service principal names (SPNs)'),
@@ -90,6 +105,7 @@ const ComputerDetails = ({node}: {node: DirectoryComputer}) => {
             </TableBody>
           </InfoTable>
         </Column>
+        {feedback}
         <p>
           {_(
             'Descriptions are maintained by Active Directory administrators and may contain personal data.',
