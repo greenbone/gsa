@@ -8,6 +8,7 @@ import {fireEvent, rendererWith, screen, userEvent, within} from 'web/testing';
 import ActiveDirectoryCommand from 'gmp/commands/active-directory';
 import {AD_SOURCE, AD_ACCOUNTING} from 'gmp/commands/fixtures/active-directory';
 import {createDirectoryHttp} from 'gmp/commands/fixtures/active-directory-http';
+import ComputerDetails from 'web/pages/active-directory/ComputerDetails';
 import ComputerRelationships from 'web/pages/active-directory/ComputerRelationships';
 import ComputerRow from 'web/pages/active-directory/ComputerRow';
 import DirectoryTree from 'web/pages/active-directory/DirectoryTree';
@@ -51,12 +52,58 @@ describe('Computer relationship table', () => {
     expect(within(row).getByText('Distinguished name')).toBeVisible();
     expect(within(row).getByText('OS version')).toBeVisible();
     expect(within(row).getByText('10.0 (22631)')).toBeVisible();
+    expect(within(row).getByText('HOST/example.domain.local')).toBeVisible();
     expect(
       within(row).getByText(
         'CN=pc-no-target,OU=Accounting,OU=Clients,DC=domain,DC=local',
       ),
     ).toBeVisible();
   });
+
+  test.each([
+    {spns: ['HOST/workstation', 'HTTP/workstation'], empty: false},
+    {spns: [], empty: true},
+    {spns: undefined, empty: false},
+  ])(
+    'displays reported SPNs in the computer details ($spns)',
+    ({spns, empty}) => {
+      const {render} = rendererWith({capabilities: true, router: true});
+      render(
+        <ComputerDetails
+          node={{
+            id: 'computer',
+            kind: 'computer',
+            name: 'workstation',
+            parentDn: '',
+            disabled: false,
+            servicePrincipalNames: spns,
+          }}
+        />,
+      );
+      const details = within(
+        screen.getByRole('table', {name: 'Active Directory information'}),
+      );
+      if (spns === undefined) {
+        expect(
+          details.queryByText('Service principal names (SPNs)'),
+        ).not.toBeInTheDocument();
+        return;
+      }
+      expect(details.getByText('Service principal names (SPNs)')).toBeVisible();
+      if (empty) {
+        expect(details.getByText('No SPNs registered')).toBeVisible();
+      } else {
+        expect(
+          details.getAllByRole('listitem').map(item => item.textContent),
+        ).toEqual(spns);
+        expect(
+          details.getByText(
+            'SPNs can indicate service roles, but may be incomplete.',
+          ),
+        ).toBeVisible();
+      }
+    },
+  );
 
   test('shows relationship names as plain text without detail permissions', () => {
     const {render} = rendererWith({capabilities: false, router: true});
