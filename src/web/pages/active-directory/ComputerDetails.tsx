@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {type ReactNode} from 'react';
 import {type DirectoryComputer} from 'gmp/models/active-directory';
 import Column from 'web/components/layout/Column';
 import InfoTable from 'web/components/table/InfoTable';
@@ -16,7 +17,7 @@ import ComputerRelationships from 'web/pages/active-directory/ComputerRelationsh
 
 const ComputerDetails = ({node}: {node: DirectoryComputer}) => {
   const [_] = useTranslation();
-  const attributes = [
+  const attributes: {label: string; value: ReactNode}[] = [
     {
       label: _('Operating system'),
       value: node.operatingSystem || _('Not provided'),
@@ -36,6 +37,28 @@ const ComputerDetails = ({node}: {node: DirectoryComputer}) => {
       ),
     },
   ];
+  const spns = node.servicePrincipalNames;
+  if (spns !== undefined) {
+    attributes.push({
+      label: _('Service principal names (SPNs)'),
+      value: spns.length ? (
+        <Column gap="xxs" style={{overflowWrap: 'anywhere'}}>
+          <ul
+            style={{margin: 0, paddingInlineStart: 'var(--mantine-spacing-md)'}}
+          >
+            {spns.map(spn => (
+              <li key={spn}>{spn}</li>
+            ))}
+          </ul>
+          <small>
+            {_('SPNs can indicate service roles, but may be incomplete.')}
+          </small>
+        </Column>
+      ) : (
+        _('No SPNs registered')
+      ),
+    });
+  }
   return (
     <Column gap="md">
       <DetailsBlock title={_('Active Directory information')}>
