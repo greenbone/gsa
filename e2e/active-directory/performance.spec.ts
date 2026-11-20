@@ -199,6 +199,22 @@ test('measures Active Directory with 10,000 computers at one level', async ({
       .toBe(true);
     expect(await rows.count()).toBeLessThan(100);
   }
+  const stickyHeader = directory.locator('[data-directory-header-sticky]');
+  await expect(stickyHeader).toHaveCount(1);
+  await expect(stickyHeader.getByRole('button')).toHaveAccessibleName(
+    `Collapse ${AD_LARGE_LEVEL_NAME}`,
+  );
+  await expect
+    .poll(() =>
+      directory.evaluate(element => {
+        const header = element.querySelector('[data-directory-header-sticky]');
+        const top = element.getBoundingClientRect().top + element.clientTop;
+        return header
+          ? Math.abs(header.getBoundingClientRect().top - top)
+          : Infinity;
+      }),
+    )
+    .toBeLessThanOrEqual(1);
 
   const lastComputer = computer(AD_LARGE_LEVEL_SIZE);
   await directory.evaluate(element => {

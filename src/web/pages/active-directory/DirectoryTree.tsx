@@ -182,7 +182,7 @@ const DirectoryTreeNode = ({
   }
   const selection = branchSelection;
   const row = (
-    <BranchRow $depth={path?.length ?? 0}>
+    <BranchRow $depth={path?.length ?? 0} data-directory-branch-header="">
       <div>
         {cycle ? (
           node.name
@@ -260,7 +260,9 @@ const DirectoryTreeNode = ({
     </DirectoryAccordion>
   );
 
-  return <li>{accordion}</li>;
+  return (
+    <li data-directory-branch-open={expanded ? '' : undefined}>{accordion}</li>
+  );
 };
 
 const DirectoryTree = ({

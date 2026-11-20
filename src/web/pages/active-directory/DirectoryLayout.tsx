@@ -150,6 +150,14 @@ export const ComputerMetadataLabel = styled.strong`
 export const BranchRow = styled(DirectoryRow)`
   min-block-size: 2.5rem;
   border-bottom: 1px solid ${directoryRowBorder};
+
+  &[data-directory-header-sticky] {
+    position: sticky;
+    inset-block-start: calc(-1 * var(--directory-sticky-top-padding, 0px));
+    z-index: 2;
+    background-color: var(--mantine-color-body);
+  }
+
   > :first-child {
     font-weight: ${({$depth}) => ($depth === 0 ? 600 : 500)};
   }

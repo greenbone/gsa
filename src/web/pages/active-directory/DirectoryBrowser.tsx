@@ -44,6 +44,7 @@ import {
 } from 'web/pages/active-directory/DirectoryLayout';
 import DirectoryTree from 'web/pages/active-directory/DirectoryTree';
 import DiscoverySummary from 'web/pages/active-directory/DiscoverySummary';
+import useDirectoryStickyHeader from 'web/pages/active-directory/useDirectoryStickyHeader';
 
 interface DirectoryBrowserProps {
   sourceId: string;
@@ -58,6 +59,7 @@ export const DirectoryBrowser = ({
   const capabilities = useCapabilities();
   const [showContainers, setShowContainers] = useState(false);
   const [listingVersion, setListingVersion] = useState(0);
+  const directoryScrollAreaRef = useDirectoryStickyHeader(listingVersion);
   const listingVersionRef = useRef(0);
   const {
     data: overview,
@@ -290,6 +292,7 @@ export const DirectoryBrowser = ({
           </Row>
         </DirectoryToolbar>
         <DirectoryScrollArea
+          ref={directoryScrollAreaRef}
           aria-label={_('Directory objects')}
           data-directory-scroll-area=""
           flex={1}
