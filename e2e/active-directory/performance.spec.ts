@@ -44,7 +44,12 @@ test('measures Active Directory with 10,000 computers at one level', async ({
       branchRequests += 1;
       responseBytes = Buffer.byteLength(xml);
     }
-    if (params.get('details') === '1') detailRequests += 1;
+    if (params.get('details') === '1') {
+      detailRequests += 1;
+      if (detailRequests === 1) {
+        await new Promise(resolve => setTimeout(resolve, 90));
+      }
+    }
     await route.fulfill({contentType: 'application/xml', body: xml});
   });
 
@@ -86,33 +91,45 @@ test('measures Active Directory with 10,000 computers at one level', async ({
   await page.keyboard.press('Shift+Tab');
   await expect(computer(edgeIndex)).toBeFocused();
 
-  const toggleFirstComputer = async () => {
+  const toggleFirstComputer = async (animated = true) => {
     await disclosure(1).scrollIntoViewIfNeeded();
     await expect(computer(2)).toBeAttached();
-    const largestGapError = await disclosure(1).evaluate(async button => {
-      const row = button.closest('li');
-      const nextRow = row?.nextElementSibling;
-      if (
-        !(button instanceof HTMLButtonElement) ||
-        !row?.parentElement ||
-        nextRow?.getAttribute('aria-posinset') !== '2'
-      ) {
-        throw new Error('The first two computer rows must be mounted.');
-      }
-      const gap = parseFloat(getComputedStyle(row.parentElement).rowGap);
-      button.click();
+    const {largestGapError, distinctHeights} = await disclosure(1).evaluate(
+      async button => {
+        const row = button.closest('li');
+        const nextRow = row?.nextElementSibling;
+        if (
+          !(button instanceof HTMLButtonElement) ||
+          !row?.parentElement ||
+          nextRow?.getAttribute('aria-posinset') !== '2'
+        ) {
+          throw new Error('The first two computer rows must be mounted.');
+        }
+        const gap = parseFloat(getComputedStyle(row.parentElement).rowGap);
+        button.click();
 
-      let largestError = 0;
-      for (let frame = 0; frame < 6; frame += 1) {
-        await new Promise(resolve => requestAnimationFrame(resolve));
-        const actualGap =
-          nextRow.getBoundingClientRect().top -
-          row.getBoundingClientRect().bottom;
-        largestError = Math.max(largestError, Math.abs(actualGap - gap));
-      }
-      return largestError;
-    });
+        let largestGapError = 0;
+        const heights = new Set<number>();
+        const started = performance.now();
+        while (performance.now() - started < 380) {
+          await new Promise(resolve => requestAnimationFrame(resolve));
+          const bounds = row.getBoundingClientRect();
+          heights.add(Math.round(bounds.height));
+          const actualGap = nextRow.getBoundingClientRect().top - bounds.bottom;
+          largestGapError = Math.max(
+            largestGapError,
+            Math.abs(actualGap - gap),
+          );
+        }
+        return {largestGapError, distinctHeights: heights.size};
+      },
+    );
     expect(largestGapError).toBeLessThanOrEqual(1);
+    if (animated) {
+      expect(distinctHeights).toBeGreaterThan(2);
+    } else {
+      expect(distinctHeights).toBe(1);
+    }
   };
 
   await toggleFirstComputer();
@@ -122,9 +139,66 @@ test('measures Active Directory with 10,000 computers at one level', async ({
   await toggleFirstComputer();
   await expect(page.getByText('10.0 (22631)')).toBeVisible();
   expect(detailRequests).toBe(2);
+  await disclosure(1).evaluate(async button => {
+    if (!(button instanceof HTMLButtonElement))
+      throw new Error('Expected a button');
+    button.click();
+    for (let frame = 0; frame < 4; frame += 1) {
+      await new Promise(resolve => requestAnimationFrame(resolve));
+    }
+    button.click();
+  });
+  const detailsPanel = page.getByRole('region', {
+    name: `Computer details for ${largeLevelComputerName(1)}.domain.local`,
+    exact: true,
+  });
+  await expect(page.getByText('10.0 (22631)')).toBeVisible();
+  await expect
+    .poll(() =>
+      detailsPanel.evaluate(panel => panel.scrollHeight - panel.clientHeight),
+    )
+    .toBeLessThanOrEqual(1);
+  expect(detailRequests).toBe(3);
   const selectedComputer = computer(3);
   await selectedComputer.check();
   await selectedComputer.blur();
+
+  await directory.hover();
+  const scrollStart = await directory.evaluate(element => element.scrollTop);
+  for (let step = 1; step <= 6; step += 1) {
+    await page.mouse.wheel(0, 900);
+    await expect
+      .poll(
+        async () => {
+          const {scrollTop, covered} = await directory.evaluate(element => {
+            const top = element.getBoundingClientRect().top + element.clientTop;
+            const bottom = top + element.clientHeight;
+            const mounted = Array.from(
+              element.querySelectorAll('li[data-index]'),
+            );
+            const visible = mounted
+              .map(row => row.getBoundingClientRect())
+              .filter(row => row.bottom > top && row.top < bottom);
+            const list = mounted[0]?.parentElement;
+            if (!list) return {scrollTop: element.scrollTop, covered: false};
+            const gap = parseFloat(getComputedStyle(list).rowGap) + 1;
+            const covered =
+              visible.length > 0 &&
+              visible[0].top <= top + gap &&
+              visible[visible.length - 1].bottom >= bottom - gap &&
+              visible.every(
+                (row, index) =>
+                  index === 0 || row.top - visible[index - 1].bottom <= gap,
+              );
+            return {scrollTop: element.scrollTop, covered};
+          });
+          return scrollTop > scrollStart + step * 600 && covered;
+        },
+        {message: 'The computer rows cover the scrolled viewport'},
+      )
+      .toBe(true);
+    expect(await rows.count()).toBeLessThan(100);
+  }
 
   const lastComputer = computer(AD_LARGE_LEVEL_SIZE);
   await directory.evaluate(element => {
@@ -154,6 +228,23 @@ test('measures Active Directory with 10,000 computers at one level', async ({
   await expect(disclosure(1)).toHaveAttribute('aria-expanded', 'false');
   await toggleFirstComputer();
   await expect(page.getByText('10.0 (22631)')).toBeVisible();
+  await disclosure(1).evaluate(async button => {
+    if (!(button instanceof HTMLButtonElement))
+      throw new Error('Expected a button');
+    button.click();
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    button.closest('main')?.scrollBy(0, 900);
+  });
+  await expect(page.getByText('10.0 (22631)')).toHaveCount(0);
+  await main.evaluate(element => {
+    element.scrollTop = 0;
+  });
+  await page.emulateMedia({reducedMotion: 'reduce'});
+  await disclosure(1).click();
+  await expect(detailsPanel).toHaveCSS('transition-duration', '0s');
+  await expect(page.getByText('10.0 (22631)')).toBeVisible();
+  await toggleFirstComputer(false);
+  await expect(page.getByText('10.0 (22631)')).toHaveCount(0);
   await selectedComputer.scrollIntoViewIfNeeded();
   await expect(selectedComputer).toBeChecked();
   await main.evaluate(element => {
@@ -163,7 +254,7 @@ test('measures Active Directory with 10,000 computers at one level', async ({
   await expect(lastComputer).toBeChecked();
   expect(await rows.count()).toBeLessThan(100);
   expect(branchRequests).toBe(1);
-  expect(detailRequests).toBe(3);
+  expect(detailRequests).toBe(5);
 
   process.stdout.write(
     `AD performance: ${responseBytes} XML bytes, ${expandMs} ms to expand, ${selectMs} ms to select, ${mounted} rows mounted on open.\n`,

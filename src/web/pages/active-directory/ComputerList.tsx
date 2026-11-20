@@ -110,6 +110,21 @@ const ComputerList = ({
     (index: number) => computers[index].id,
     [computers],
   );
+  const onExpandedChange = useCallback((id: string, expanded: boolean) => {
+    setExpandedIds(previous => {
+      const next = new Set(previous);
+      if (expanded) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  }, []);
+  const onFocusChange = useCallback((id: string, focused: boolean) => {
+    setFocusedId(previous => {
+      if (focused) return id;
+      return previous === id ? undefined : previous;
+    });
+  }, []);
+
   // oxlint-disable-next-line react/incompatible-library -- TanStack Virtual exposes live scroll measurements.
   const virtualizer = useVirtualizer({
     count: computers.length,
@@ -160,6 +175,7 @@ const ComputerList = ({
       style={virtual ? {overflowAnchor: 'none'} : undefined}
     >
       {(virtual ? virtualItems : computers).map((item, index) => {
+        const virtualIndex = 'index' in item ? item.index : undefined;
         const node = 'index' in item ? computers[item.index] : item;
         const previous = virtualItems[index - 1];
         // Keep mounted rows in flow so a disclosure immediately pushes its
@@ -173,34 +189,16 @@ const ComputerList = ({
             key={node.id}
             checked={selectedIds.has(node.id)}
             depth={depth}
+            measure={virtual ? virtualizer.measureElement : undefined}
             node={node}
             selectionPending={selectionPending}
             sourceId={sourceId}
-            virtualRow={
-              'index' in item
-                ? {
-                    index: item.index,
-                    spaceBefore,
-                    total: computers.length,
-                    measure: virtualizer.measureElement,
-                  }
-                : undefined
-            }
-            onExpandedChange={expanded =>
-              setExpandedIds(previous => {
-                const next = new Set(previous);
-                if (expanded) next.add(node.id);
-                else next.delete(node.id);
-                return next;
-              })
-            }
-            onFocusChange={focused =>
-              setFocusedId(previous => {
-                if (focused) return node.id;
-                return previous === node.id ? undefined : previous;
-              })
-            }
-            onSelect={checked => onSelect(node, checked)}
+            spaceBefore={spaceBefore}
+            virtualIndex={virtualIndex}
+            virtualTotal={virtual ? computers.length : undefined}
+            onExpandedChange={onExpandedChange}
+            onFocusChange={onFocusChange}
+            onSelect={onSelect}
           />
         );
       })}

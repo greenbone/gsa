@@ -410,7 +410,7 @@ test('keeps selection and target links usable during a details failure and retri
     '/target/office',
   );
   fireEvent.click(screen.getByRole('checkbox', {name: 'workstation'}));
-  expect(onSelect).toHaveBeenCalledWith(true);
+  expect(onSelect).toHaveBeenCalledWith(node, true);
   const retry = panel.getByRole('button', {name: 'Retry'});
   fireEvent.click(retry);
   await waitFor(() => expect(retry).toBeDisabled());

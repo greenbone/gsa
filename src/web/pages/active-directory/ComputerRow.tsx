@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type ReactNode, useState} from 'react';
+import {memo, type ReactNode, useState} from 'react';
 import {Accordion} from '@mantine/core';
 import styled from 'styled-components';
 import {type DirectoryComputer} from 'gmp/models/active-directory';
@@ -21,13 +21,6 @@ import {
   ComputerDirectoryRow,
   ComputerMetadataLabel,
 } from 'web/pages/active-directory/DirectoryLayout';
-
-interface VirtualComputerRow {
-  index: number;
-  total: number;
-  spaceBefore?: number;
-  measure: (element: HTMLLIElement | null) => void;
-}
 
 const HostnameBadge = styled(Badge)`
   height: auto;
@@ -80,13 +73,16 @@ const ExpandedComputerDetails = ({
   );
 };
 
-const ComputerRow = ({
+const ComputerRow = memo(function ComputerRow({
   node,
   sourceId,
   checked,
   selectionPending,
   depth = 0,
-  virtualRow,
+  measure,
+  spaceBefore,
+  virtualIndex,
+  virtualTotal,
   onExpandedChange,
   onFocusChange,
   onSelect,
@@ -96,13 +92,18 @@ const ComputerRow = ({
   checked: boolean;
   selectionPending: boolean;
   depth?: number;
-  virtualRow?: VirtualComputerRow;
-  onExpandedChange?: (expanded: boolean) => void;
-  onFocusChange?: (focused: boolean) => void;
-  onSelect: (checked: boolean) => void;
-}) => {
+  measure?: (element: HTMLLIElement | null) => void;
+  spaceBefore?: number;
+  virtualIndex?: number;
+  virtualTotal?: number;
+  onExpandedChange?: (id: string, expanded: boolean) => void;
+  onFocusChange?: (id: string, focused: boolean) => void;
+  onSelect: (computer: DirectoryComputer, checked: boolean) => void;
+}) {
   const [_] = useTranslation();
   const [expanded, setExpanded] = useState(false);
+  const [opening, setOpening] = useState(0);
+  const [transitionDuration, setTransitionDuration] = useState(0);
   const missingHostnameLabel = node.hostname ? undefined : _('No DNS hostname');
   const selectionDisabledReason =
     missingHostnameLabel ??
@@ -135,31 +136,38 @@ const ComputerRow = ({
   }
   return (
     <li
-      ref={virtualRow?.measure}
-      aria-posinset={virtualRow ? virtualRow.index + 1 : undefined}
-      aria-setsize={virtualRow?.total}
-      data-index={virtualRow?.index}
+      ref={measure}
+      aria-posinset={virtualIndex === undefined ? undefined : virtualIndex + 1}
+      aria-setsize={virtualTotal}
+      data-index={virtualIndex}
       style={
-        virtualRow?.spaceBefore === undefined
-          ? undefined
-          : {marginBlockStart: virtualRow.spaceBefore}
+        spaceBefore === undefined ? undefined : {marginBlockStart: spaceBefore}
       }
       onBlurCapture={
         onFocusChange
           ? event => {
               if (!event.currentTarget.contains(event.relatedTarget))
-                onFocusChange(false);
+                onFocusChange(node.id, false);
             }
           : undefined
       }
-      onFocusCapture={onFocusChange ? () => onFocusChange(true) : undefined}
+      onFocusCapture={
+        onFocusChange ? () => onFocusChange(node.id, true) : undefined
+      }
     >
       <DirectoryAccordion
+        transitionDuration={transitionDuration}
         value={expanded ? 'details' : null}
         onChange={value => {
           const open = value !== null;
+          const reducedMotion = window.matchMedia(
+            '(prefers-reduced-motion: reduce)',
+          ).matches;
+          setTransitionDuration(reducedMotion ? 0 : 150);
+          // Reopening starts a fresh query even during the closing transition.
+          if (open) setOpening(previous => previous + 1);
           setExpanded(open);
-          onExpandedChange?.(open);
+          onExpandedChange?.(node.id, open);
         }}
       >
         <Accordion.Item value="details">
@@ -201,16 +209,20 @@ const ComputerRow = ({
                 disabled={selectionPending || !node.hostname}
                 entity={node}
                 selected={checked}
-                onDeselected={() => onSelect(false)}
-                onSelected={() => onSelect(true)}
+                onDeselected={() => onSelect(node, false)}
+                onSelected={() => onSelect(node, true)}
               />
             </div>
           </ComputerDirectoryRow>
           <Accordion.Panel>
             <ComputerDetailsInset $depth={depth}>
               <HighlightBox>
-                {expanded && (
-                  <ExpandedComputerDetails node={node} sourceId={sourceId} />
+                {opening > 0 && (
+                  <ExpandedComputerDetails
+                    key={opening}
+                    node={node}
+                    sourceId={sourceId}
+                  />
                 )}
               </HighlightBox>
             </ComputerDetailsInset>
@@ -219,6 +231,6 @@ const ComputerRow = ({
       </DirectoryAccordion>
     </li>
   );
-};
+});
 
 export default ComputerRow;

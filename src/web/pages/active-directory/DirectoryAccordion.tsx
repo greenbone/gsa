@@ -10,6 +10,7 @@ import {disclosureWidth} from 'web/pages/active-directory/DirectoryLayout';
 
 interface DirectoryAccordionProps {
   children: ReactNode;
+  transitionDuration?: number;
   value: string | null;
   onChange: (value: string | null) => void;
 }
@@ -26,6 +27,7 @@ const DirectoryAccordionWrapper = styled(AccordionWrapper)`
 // header alignment and the existing cards own backgrounds and spacing.
 const DirectoryAccordion = ({
   children,
+  transitionDuration = 0,
   value,
   onChange,
 }: DirectoryAccordionProps) => (
@@ -51,7 +53,7 @@ const DirectoryAccordion = ({
       },
       content: {padding: 0},
     }}
-    transitionDuration={0}
+    transitionDuration={transitionDuration}
     value={value}
     variant="default"
     onChange={onChange}
