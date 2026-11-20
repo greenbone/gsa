@@ -52,6 +52,7 @@ interface ThemeInterface {
   severityClassCritical: string;
   statusNewGreen: string;
   statusRunGreen: string;
+  statusLogGray: string;
   paleGreen: string;
   darkGreen: string;
   darkGreenTransparent: string;
@@ -103,6 +104,7 @@ const Theme: ThemeInterface = {
 
   statusNewGreen: '#99be48', // used by: progressbar
   statusRunGreen: '#70c000', // used by: progressbar
+  statusLogGray: '#808080', // used by: progressbar
 
   paleGreen: '#99BE48', // used by: compliance status bar
 

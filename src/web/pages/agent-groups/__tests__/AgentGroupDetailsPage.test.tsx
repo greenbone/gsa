@@ -92,8 +92,8 @@ describe('AgentGroupDetailsPage', () => {
     expect(screen.getByText('0 */12 * * *')).toBeVisible();
     expect(screen.getByText('300')).toBeVisible();
     expect(screen.getByRole('tab', {name: 'Information'})).toBeVisible();
-    expect(screen.getByRole('tab', {name: 'User Tags(0)'})).toBeVisible();
-    expect(screen.getByRole('tab', {name: 'Permissions(0)'})).toBeVisible();
+    expect(screen.getByRole('tab', {name: 'User Tags (0)'})).toBeVisible();
+    expect(screen.getByRole('tab', {name: 'Permissions (0)'})).toBeVisible();
     expect(screen.getByTestId('list-link-icon')).toHaveAttribute(
       'href',
       ROUTES.agentGroups.url,

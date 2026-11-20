@@ -7,6 +7,8 @@ import {describe, test, expect} from '@gsa/testing';
 import {render, screen} from 'web/testing';
 import {COMPLIANCE} from 'gmp/models/compliance';
 import ComplianceBar from 'web/components/bar/ComplianceBar';
+import {cssColorToRgb} from 'web/testing/custom-matchers';
+import Theme from 'web/utils/theme';
 
 describe('ComplianceBar tests', () => {
   test.each([
@@ -36,35 +38,20 @@ describe('ComplianceBar tests', () => {
     expect(progressBarBox).toHaveAttribute('title', 'Custom tooltip');
   });
 
-  test('should set correct background color for no compliance', () => {
-    render(<ComplianceBar compliance="no" />);
-    const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyle(
-      'background-image: linear-gradient(90deg, #D80000 0%, #D80000 100%)',
-    );
-  });
-
-  test('should set correct background color for incomplete compliance', () => {
-    render(<ComplianceBar compliance="incomplete" />);
-    const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyle(
-      'background-image: linear-gradient(90deg, orange 0%, orange 100%)',
-    );
-  });
-
-  test('should set correct background color for yes compliance', () => {
-    render(<ComplianceBar compliance="yes" />);
-    const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyle(
-      'background-image: linear-gradient(90deg, #4cb045 0%, #4cb045 100%)',
-    );
-  });
-
-  test('should set correct background color for undefined compliance', () => {
-    render(<ComplianceBar compliance="undefined" />);
-    const progress = screen.getByTestId('progress');
-    expect(progress).toHaveStyle(
-      'background-image: linear-gradient(90deg, silver 0%, silver 100%)',
-    );
-  });
+  test.each([
+    [COMPLIANCE.NO, Theme.complianceNo],
+    [COMPLIANCE.INCOMPLETE, Theme.complianceIncomplete],
+    [COMPLIANCE.YES, Theme.complianceYes],
+    [COMPLIANCE.UNDEFINED, Theme.complianceUndefined],
+  ])(
+    'should set the correct background color for %s compliance',
+    (compliance, color) => {
+      render(<ComplianceBar compliance={compliance} />);
+      const progress = screen.getByTestId('progress');
+      const rgb = cssColorToRgb(color);
+      expect(progress).toHaveStyle(
+        `background-image: linear-gradient(90deg, ${rgb} 0%, ${rgb} 100%)`,
+      );
+    },
+  );
 });

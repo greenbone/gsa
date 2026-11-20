@@ -7,6 +7,8 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {act, fireEvent, render, screen} from 'web/testing';
 import useReload from 'web/hooks/useReload';
 
+const timeoutMs = 900;
+
 const TestComponent = ({reload, timeout}) => {
   const [startTimer, clearTimer, isRunning] = useReload(reload, timeout);
   return (
@@ -20,7 +22,7 @@ const TestComponent = ({reload, timeout}) => {
 
 const runTimers = async () => {
   await act(async () => {
-    await testing.advanceTimersToNextTimerAsync();
+    await testing.advanceTimersByTimeAsync(timeoutMs);
   });
 };
 
@@ -29,7 +31,7 @@ describe('useTiming', () => {
     testing.useFakeTimers();
 
     const reload = testing.fn();
-    const timeout = testing.fn().mockImplementation(() => 900);
+    const timeout = testing.fn().mockReturnValue(timeoutMs);
 
     render(<TestComponent reload={reload} timeout={timeout} />);
 
@@ -58,7 +60,7 @@ describe('useTiming', () => {
     testing.useFakeTimers();
 
     const reload = testing.fn().mockResolvedValue(undefined);
-    const timeout = testing.fn().mockImplementation(() => 900);
+    const timeout = testing.fn().mockReturnValue(timeoutMs);
 
     render(<TestComponent reload={reload} timeout={timeout} />);
 
@@ -96,7 +98,7 @@ describe('useTiming', () => {
     testing.useFakeTimers();
 
     const reload = testing.fn().mockRejectedValue(new Error('Loading failed'));
-    const timeout = testing.fn().mockImplementation(() => 900);
+    const timeout = testing.fn().mockReturnValue(timeoutMs);
 
     render(<TestComponent reload={reload} timeout={timeout} />);
 
@@ -125,7 +127,7 @@ describe('useTiming', () => {
     testing.useFakeTimers();
 
     const reload = testing.fn().mockResolvedValue(undefined);
-    const timeout = testing.fn().mockImplementation(() => 900);
+    const timeout = testing.fn().mockReturnValue(timeoutMs);
 
     render(<TestComponent reload={reload} timeout={timeout} />);
 

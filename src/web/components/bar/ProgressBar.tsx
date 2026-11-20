@@ -93,7 +93,7 @@ const Progress = styled.div<ProgressProps>`
     } else if ($background === BACKGROUND_STATES.RUN) {
       $background = Theme.statusRunGreen;
     } else if ($background === BACKGROUND_STATES.LOG) {
-      $background = 'gray';
+      $background = Theme.statusLogGray;
     }
 
     $progress = adjustProgress($progress);
