@@ -10,6 +10,7 @@ import {
   rendererWith,
   screen,
   userEvent,
+  waitFor,
   within,
 } from 'web/testing';
 import ActiveDirectoryCommand from 'gmp/commands/active-directory';
@@ -73,8 +74,8 @@ describe('Computer relationship table', () => {
     fireEvent.click(details);
     expect(within(row).getByText('Active Directory information')).toBeVisible();
     expect(within(row).getByText('Distinguished name')).toBeVisible();
-    expect(await within(row).findByText('OS version')).toBeVisible();
-    expect(within(row).getByText('10.0 (22631)')).toBeVisible();
+    expect(await within(row).findByText('10.0 (22631)')).toBeVisible();
+    expect(within(row).getByText('OS version')).toBeVisible();
     expect(within(row).getByText('HOST/example.domain.local')).toBeVisible();
     expect(
       within(row).getByText(
@@ -308,7 +309,8 @@ test('keeps details available for computers without a hostname or optional Activ
   const panel = screen.getByRole('region', {
     name: 'Computer details for missing',
   });
-  expect(await within(panel).findByText('OS version')).toBeVisible();
+  const versionRow = within(panel).getByRole('row', {name: /OS version/});
+  expect(await within(versionRow).findByText('Not provided')).toBeVisible();
   expect(within(panel).getAllByText('Not provided')).toHaveLength(3);
   expect(
     within(panel).getByText('CN=missing,DC=domain,DC=local'),
@@ -338,12 +340,20 @@ test('keeps selection and target links usable during a details failure and retri
       failDetails = reject;
     },
   );
+  let completeRetry!: (response: Response<DirectoryComputer>) => void;
+  const retryDetails = new Promise<Response<DirectoryComputer>>(resolve => {
+    completeRetry = resolve;
+  });
+  const details = new Response({
+    ...node,
+    operatingSystemVersion: '22631',
+    servicePrincipalNames: ['HOST/pc-043.domain.local'],
+  });
   const getComputerDetails = testing
     .fn()
     .mockReturnValueOnce(pendingDetails)
-    .mockResolvedValue(
-      new Response({...node, operatingSystemVersion: '22631'}),
-    );
+    .mockReturnValueOnce(retryDetails)
+    .mockResolvedValue(details);
   const onSelect = testing.fn();
   const {render} = rendererWith({
     capabilities: true,
@@ -369,24 +379,37 @@ test('keeps selection and target links usable during a details failure and retri
   const panel = within(
     screen.getByRole('region', {name: 'Computer details for workstation'}),
   );
+  const versionRow = within(panel.getByRole('row', {name: /OS version/}));
   expect(
-    panel.getByRole('status', {name: 'Loading computer details...'}),
-  ).toBeVisible();
+    versionRow.getByRole('status', {name: 'Loading computer details...'}),
+  ).toHaveTextContent('Loading...');
+  expect(
+    panel.getByRole('row', {name: /Service principal names/}),
+  ).toHaveTextContent('Loading...');
+  expect(panel.queryByTestId('loading')).not.toBeInTheDocument();
   expect(panel.getByText('Windows 11')).toBeVisible();
-  expect(panel.queryByText('OS version')).not.toBeInTheDocument();
+  expect(panel.getByRole('link', {name: 'Office network'})).toBeVisible();
   expect(getComputerDetails).toHaveBeenCalledTimes(1);
   await act(async () => failDetails(new Error('Computer moved')));
   expect(await panel.findByRole('alert')).toHaveTextContent(
     'Could not load computer details.',
   );
+  expect(panel.queryByRole('status')).not.toBeInTheDocument();
   expect(panel.getByRole('link', {name: 'Office network'})).toHaveAttribute(
     'href',
     '/target/office',
   );
   fireEvent.click(screen.getByRole('checkbox', {name: 'workstation'}));
   expect(onSelect).toHaveBeenCalledWith(true);
-  fireEvent.click(panel.getByRole('button', {name: 'Retry'}));
+  const retry = panel.getByRole('button', {name: 'Retry'});
+  fireEvent.click(retry);
+  await waitFor(() => expect(retry).toBeDisabled());
+  expect(panel.queryByRole('status')).not.toBeInTheDocument();
+  await act(async () => completeRetry(details));
   expect(await panel.findByText('22631')).toBeVisible();
+  expect(panel.getByText('HOST/pc-043.domain.local')).toBeVisible();
+  expect(panel.queryByRole('status')).not.toBeInTheDocument();
+  expect(panel.queryByRole('alert')).not.toBeInTheDocument();
   expect(getComputerDetails).toHaveBeenCalledTimes(2);
   fireEvent.click(disclosure);
   fireEvent.click(disclosure);

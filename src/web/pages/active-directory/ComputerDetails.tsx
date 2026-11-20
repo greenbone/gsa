@@ -14,11 +14,13 @@ import TableRow from 'web/components/table/TableRow';
 import DetailsBlock from 'web/entity/DetailsBlock';
 import useTranslation from 'web/hooks/useTranslation';
 import ComputerRelationships from 'web/pages/active-directory/ComputerRelationships';
+import Theme from 'web/utils/theme';
 
 const ComputerDetails = ({
   node,
   details,
   feedback,
+  loading = false,
 }: {
   node: DirectoryComputer;
   details?: Pick<
@@ -26,18 +28,28 @@ const ComputerDetails = ({
     'operatingSystemVersion' | 'servicePrincipalNames'
   >;
   feedback?: ReactNode;
+  loading?: boolean;
 }) => {
   const [_] = useTranslation();
+  const loadingValue = (
+    <small style={{color: Theme.darkGray}}>{_('Loading...')}</small>
+  );
   const attributes: {label: string; value: ReactNode}[] = [
     {
       label: _('Operating system'),
       value: node.operatingSystem || _('Not provided'),
     },
-    ...(details
+    ...(details || loading
       ? [
           {
             label: _('OS version'),
-            value: details.operatingSystemVersion || _('Not provided'),
+            value: loading ? (
+              <output aria-label={_('Loading computer details...')}>
+                {loadingValue}
+              </output>
+            ) : (
+              details?.operatingSystemVersion || _('Not provided')
+            ),
           },
         ]
       : []),
@@ -53,10 +65,12 @@ const ComputerDetails = ({
     },
   ];
   const spns = details?.servicePrincipalNames;
-  if (spns !== undefined) {
-    attributes.push({
-      label: _('Service principal names (SPNs)'),
-      value: spns.length ? (
+  if (loading || spns !== undefined) {
+    let value: ReactNode = _('No SPNs registered');
+    if (loading) {
+      value = loadingValue;
+    } else if (spns?.length) {
+      value = (
         <Column gap="xxs" style={{overflowWrap: 'anywhere'}}>
           <ul
             style={{margin: 0, paddingInlineStart: 'var(--mantine-spacing-md)'}}
@@ -69,10 +83,9 @@ const ComputerDetails = ({
             {_('SPNs can indicate service roles, but may be incomplete.')}
           </small>
         </Column>
-      ) : (
-        _('No SPNs registered')
-      ),
-    });
+      );
+    }
+    attributes.push({label: _('Service principal names (SPNs)'), value});
   }
   return (
     <Column gap="md">
