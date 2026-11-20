@@ -302,33 +302,17 @@ test('keeps details available for computers without a hostname or optional Activ
       />
     </ul>,
   );
-  expect(screen.getByRole('checkbox', {name: 'missing'})).toBeDisabled();
+  const selection = screen.getByRole('checkbox', {name: 'missing'});
+  expect(selection).toBeDisabled();
+  expect(screen.getByTitle('No DNS hostname')).toContainElement(selection);
   const badge = screen.getByText('No DNS hostname', {exact: true});
   expect(badge).toBeVisible();
   const hostnameHelp = 'This computer cannot be transferred to a target.';
-  expect(
-    screen.queryByRole('button', {name: hostnameHelp}),
-  ).not.toBeInTheDocument();
+  expect(screen.getByTitle(hostnameHelp)).toContainElement(badge);
   const disclosure = screen.getByRole('button', {
     name: 'Computer details for missing',
   });
-  expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
-  disclosure.focus();
-  await userEvent.tab();
-  expect(badge.closest('[tabindex="0"]')).toHaveFocus();
-  expect(await screen.findByRole('tooltip')).toHaveTextContent(hostnameHelp);
-  await userEvent.keyboard('{Escape}');
-  await waitFor(() =>
-    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument(),
-  );
-  expect(badge.closest('[tabindex="0"]')).toHaveFocus();
-  await userEvent.tab();
-  await userEvent.hover(badge);
-  expect(await screen.findByRole('tooltip')).toHaveTextContent(hostnameHelp);
-  await userEvent.unhover(badge);
-  await waitFor(() =>
-    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument(),
-  );
+  await userEvent.click(badge);
   expect(disclosure).toHaveAttribute('aria-expanded', 'false');
   await userEvent.click(disclosure);
   const panel = screen.getByRole('region', {
@@ -405,14 +389,14 @@ test('keeps selection and target links usable during a details failure and retri
   const panel = within(
     screen.getByRole('region', {name: 'Computer details for workstation'}),
   );
-  const versionRow = within(panel.getByRole('row', {name: /OS version/}));
+  const spnRow = panel.getByRole('row', {name: /Service principal names/});
   expect(
-    versionRow.getByRole('status', {name: 'Loading computer details...'}),
+    within(spnRow).getByRole('status', {name: 'Loading computer details...'}),
   ).toHaveTextContent('Loading...');
+  expect(panel.queryByTestId('spinner')).not.toBeInTheDocument();
   expect(
-    panel.getByRole('row', {name: /Service principal names/}),
-  ).toHaveTextContent('Loading...');
-  expect(panel.queryByTestId('loading')).not.toBeInTheDocument();
+    panel.queryByRole('row', {name: /OS version/}),
+  ).not.toBeInTheDocument();
   expect(panel.getByText('Windows 11')).toBeVisible();
   expect(panel.getByRole('link', {name: 'Office network'})).toBeVisible();
   expect(getComputerDetails).toHaveBeenCalledTimes(1);

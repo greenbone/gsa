@@ -4,6 +4,7 @@
  */
 
 import {useCallback, useEffect, useRef, useState} from 'react';
+import {Alert, EStatus} from '@greenbone/ui-lib';
 import {
   type DirectoryComputer,
   type DirectoryNode,
@@ -17,14 +18,13 @@ import {
   getDirectoryMembers,
   getDirectoryComputerPaths,
 } from 'gmp/models/directory-graph';
+import ErrorPanel from 'web/components/error/ErrorPanel';
 import Button from 'web/components/form/Button';
 import Checkbox from 'web/components/form/Checkbox';
-import HighlightBox from 'web/components/highlight-box';
 import InfoTip from 'web/components/info-tip/InfoTip';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
 import Loading from 'web/components/loading/Loading';
-import InlineNotification from 'web/components/notification/InlineNotification';
 import {
   useGetActiveDirectoryOverview,
   useResolveActiveDirectorySubtree,
@@ -229,30 +229,6 @@ export const DirectoryBrowser = ({
 
   return (
     <Column flex={1} gap="md" mih={0} miw={0}>
-      {loading && (
-        <HighlightBox>
-          <output
-            aria-busy="true"
-            aria-label={_('Loading Active Directory...')}
-          >
-            <Loading />
-          </output>
-        </HighlightBox>
-      )}
-      {loadError && (
-        <InlineNotification
-          action={{
-            label: _('Retry'),
-            onClick: () => void reloadOverview(),
-            isLoading: loading,
-          }}
-          details={
-            overviewError instanceof Error ? overviewError.message : undefined
-          }
-          message={_('Could not load Active Directory.')}
-          severity="error"
-        />
-      )}
       {overview && (
         <DiscoverySummary
           counts={counts}
@@ -315,12 +291,31 @@ export const DirectoryBrowser = ({
           px="xxs"
           role="region"
         >
+          {loadError ? (
+            <ErrorPanel
+              action={{
+                label: _('Retry'),
+                onClick: () => void reloadOverview(),
+                isLoading: loading,
+              }}
+              details={
+                overviewError instanceof Error
+                  ? overviewError.message
+                  : undefined
+              }
+              message={_('Could not load Active Directory.')}
+            />
+          ) : (
+            loading && <Loading label={_('Loading Active Directory...')} />
+          )}
           {overview?.truncated && (
-            <InlineNotification
-              message={_(
+            <Alert
+              dismissible={false}
+              role="status"
+              title={_(
                 'Directory root: some objects were not returned. You can select the loaded computers.',
               )}
-              severity="warning"
+              type={EStatus.WARNING}
             />
           )}
           {overview && (
@@ -342,7 +337,7 @@ export const DirectoryBrowser = ({
           )}
         </DirectoryScrollArea>
         {selectionError && (
-          <InlineNotification
+          <ErrorPanel
             action={{
               label: _('Retry selection'),
               onClick: () => void select(selectionError, true),
@@ -352,7 +347,6 @@ export const DirectoryBrowser = ({
             message={_(
               'Could not resolve the selected OU/group. Your selection has been preserved.',
             )}
-            severity="error"
           />
         )}
         <DirectoryFooter

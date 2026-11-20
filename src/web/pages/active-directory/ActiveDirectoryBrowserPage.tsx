@@ -8,13 +8,13 @@ import {showSuccessNotification} from '@greenbone/ui-lib';
 import {useParams} from 'react-router';
 import styled from 'styled-components';
 import ErrorMessage from 'web/components/error/ErrorMessage';
+import ErrorPanel from 'web/components/error/ErrorPanel';
 import Button from 'web/components/form/Button';
 import {ActiveDirectoryIcon} from 'web/components/icon';
 import Column from 'web/components/layout/Column';
 import PageTitle from 'web/components/layout/PageTitle';
 import Row from 'web/components/layout/Row';
 import Loading from 'web/components/loading/Loading';
-import InlineNotification from 'web/components/notification/InlineNotification';
 import {EntityInfoTable} from 'web/entity/EntityInfo';
 import {useGetActiveDirectoryCredential} from 'web/hooks/use-query/active-directory';
 import useCapabilities from 'web/hooks/useCapabilities';
@@ -129,9 +129,7 @@ const BrowserContent = ({credentialId}: {credentialId: string}) => {
               </tbody>
             </ConnectionMetadata>
           </ConnectionHeader>
-          {targetError && (
-            <InlineNotification message={targetError} severity="error" />
-          )}
+          {targetError && <ErrorPanel message={targetError} />}
           <TargetComponent
             onCreateError={error => setTargetError(error.message)}
             onCreated={() =>

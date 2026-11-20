@@ -360,10 +360,7 @@ describe('Active Directory selection UI', () => {
     expect(disclosure).toHaveFocus();
     expect(
       await screen.findByRole('status', {name: 'Loading Clients'}),
-    ).toBeVisible();
-    expect(
-      screen.queryByText('Loading directory objects...'),
-    ).not.toBeInTheDocument();
+    ).toHaveAttribute('data-testid', 'loading');
     await userEvent.keyboard(' ');
     expect(disclosure).toHaveFocus();
     expect(disclosure).toHaveAttribute('aria-expanded', 'false');
@@ -685,9 +682,11 @@ describe('Active Directory selection UI', () => {
     const region = await screen.findByRole('region', {
       name: 'Directory objects',
     });
-    expect(await within(region).findByRole('status')).toHaveTextContent(
-      'Directory root: some objects were not returned.',
-    );
+    expect(
+      await within(region).findByRole('status', {
+        name: /Directory root: some objects were not returned/,
+      }),
+    ).toBeVisible();
     expect(screen.getByText('Loaded computers')).toBeVisible();
     const summary = screen.getByRole('group', {name: 'Discovery summary'});
     expect(within(summary).getAllByRole('definition')[0]).toHaveTextContent(

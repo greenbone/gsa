@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {describe, test, expect} from '@gsa/testing';
+import {describe, test, expect, testing} from '@gsa/testing';
 import {screen, render, fireEvent} from 'web/testing';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 
@@ -33,6 +33,31 @@ describe('ErrorPanel tests', () => {
     expect(
       screen.queryByTestId('errorpanel-component-stack'),
     ).not.toBeInTheDocument();
+  });
+
+  test('shows request details and keeps a pending retry disabled', () => {
+    const retry = testing.fn();
+    const {rerender} = render(
+      <ErrorPanel
+        action={{label: 'Retry', onClick: retry}}
+        details="The previous selection has been preserved."
+        message="Could not load the selected group."
+      />,
+    );
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'The previous selection has been preserved.',
+    );
+    fireEvent.click(screen.getByRole('button', {name: 'Retry'}));
+    expect(retry).toHaveBeenCalledOnce();
+    rerender(
+      <ErrorPanel
+        action={{label: 'Retry', onClick: retry, isLoading: true}}
+        message="Could not load the selected group."
+      />,
+    );
+    const button = screen.getByRole('button', {name: 'Retry'});
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute('data-loading', 'true');
   });
 
   test('should allow to display component stack details', () => {

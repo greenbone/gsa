@@ -14,7 +14,6 @@ import {
   DatabaseIcon,
   SearchIcon,
 } from 'web/components/icon';
-import InfoTip from 'web/components/info-tip/InfoTip';
 import useTranslation from 'web/hooks/useTranslation';
 
 type SummaryColor = 'blue' | 'yellow' | 'gray' | 'violet' | 'green';
@@ -111,6 +110,9 @@ const DiscoverySummary = ({
   isPartial = false,
 }: DiscoverySummaryProps) => {
   const [_] = useTranslation();
+  const countsHelp = _(
+    'Counts describe distinct computers in currently loaded results. Results may be partial and indicators can overlap. Target matches reflect readable scan targets. Unavailable information is not counted as zero.',
+  );
   const metrics = [
     {
       id: 'found',
@@ -163,20 +165,17 @@ const DiscoverySummary = ({
             </MetricIconTile>
             <dl>
               <dt>
-                <span>{label}</span>
-                {id === 'found' && (
-                  <>
-                    {isPartial && (
-                      <Badge color={EThemeColors.Orange} size="sm">
-                        {_('Partial')}
-                      </Badge>
-                    )}
-                    <InfoTip ariaLabel={_('About discovery counts')}>
-                      {_(
-                        'Counts describe distinct computers in currently loaded results. Results may be partial and indicators can overlap. Target matches reflect readable scan targets. Unavailable information is not counted as zero.',
-                      )}
-                    </InfoTip>
-                  </>
+                <span
+                  title={id === 'found' && !isPartial ? countsHelp : undefined}
+                >
+                  {label}
+                </span>
+                {id === 'found' && isPartial && (
+                  <span title={countsHelp}>
+                    <Badge color={EThemeColors.Orange} size="sm">
+                      {_('Partial')}
+                    </Badge>
+                  </span>
                 )}
               </dt>
               <dd data-unavailable={count === undefined ? '' : undefined}>
