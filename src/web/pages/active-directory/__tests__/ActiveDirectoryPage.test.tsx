@@ -478,7 +478,11 @@ describe('Active Directory selection UI', () => {
       gmp: createGmp(command),
     });
     render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
-    await screen.findByText('No visible directory objects.');
+    expect(
+      (await screen.findByText('No visible directory objects.')).closest(
+        'output',
+      ),
+    ).toHaveRole('status');
     expect(
       screen.getByRole('button', {name: 'Add 0 hosts to new target'}),
     ).toBeDisabled();

@@ -11,6 +11,8 @@ import {
   activeDirectoryMockResponse,
 } from '../../src/gmp/commands/fixtures/active-directory';
 
+test.use({viewport: {width: 1280, height: 900}});
+
 test('selects AD computers and transfers them to a new target without saving', async ({
   page,
 }, testInfo) => {
@@ -170,7 +172,29 @@ test('selects AD computers and transfers them to a new target without saving', a
     Math.max(...boxes.flatMap(box => (box ? [box.x] : []))) -
       Math.min(...boxes.flatMap(box => (box ? [box.x] : []))),
   ).toBeLessThanOrEqual(1);
+  const directory = page.getByRole('region', {
+    name: 'Directory objects',
+    exact: true,
+  });
+  const selectionBar = page.getByRole('group', {name: 'Selected hosts'});
+  const siteFooter = page.locator('main > footer');
+  const expectDiscoveryRegionsInOrder = async () => {
+    const [tree, action, footer] = await Promise.all([
+      directory.boundingBox(),
+      selectionBar.boundingBox(),
+      siteFooter.boundingBox(),
+    ]);
+    if (!tree || !action || !footer) {
+      throw new Error(
+        'The directory, selection bar, and site footer must render',
+      );
+    }
+    expect(tree.y + tree.height).toBeLessThanOrEqual(action.y + 1);
+    expect(action.y + action.height).toBeLessThanOrEqual(footer.y + 1);
+  };
   await assignments.scrollIntoViewIfNeeded();
+  await expectDiscoveryRegionsInOrder();
+  await expect(apply).toBeInViewport();
   await page.screenshot({path: testInfo.outputPath('accordion-details.png')});
   const viewport = page.viewportSize();
   await page.setViewportSize({width: 1000, height: 900});
@@ -189,6 +213,26 @@ test('selects AD computers and transfers them to a new target without saving', a
   ).toBe(true);
   await page.screenshot({
     path: testInfo.outputPath('standard-details-narrow.png'),
+  });
+  await expectDiscoveryRegionsInOrder();
+  await page.setViewportSize({width: 640, height: 900});
+  await apply.scrollIntoViewIfNeeded();
+  await expectDiscoveryRegionsInOrder();
+  await expect(apply).toBeInViewport();
+  expect(
+    await apply.evaluate(button => {
+      const bar = button.parentElement;
+      if (!bar) return false;
+      const style = getComputedStyle(bar);
+      const available =
+        bar.clientWidth -
+        parseFloat(style.paddingLeft) -
+        parseFloat(style.paddingRight);
+      return Math.abs(button.getBoundingClientRect().width - available) <= 1;
+    }),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath('discovery-action-640.png'),
   });
   if (viewport) await page.setViewportSize(viewport);
   await computerToggle.press('Space');

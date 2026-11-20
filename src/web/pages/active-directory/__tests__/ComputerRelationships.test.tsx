@@ -303,12 +303,38 @@ test('keeps details available for computers without a hostname or optional Activ
     </ul>,
   );
   expect(screen.getByRole('checkbox', {name: 'missing'})).toBeDisabled();
-  await userEvent.click(
-    screen.getByRole('button', {name: 'Computer details for missing'}),
+  const badge = screen.getByText('No DNS hostname', {exact: true});
+  expect(badge).toBeVisible();
+  const hostnameHelp = 'This computer cannot be transferred to a target.';
+  expect(
+    screen.queryByRole('button', {name: hostnameHelp}),
+  ).not.toBeInTheDocument();
+  const disclosure = screen.getByRole('button', {
+    name: 'Computer details for missing',
+  });
+  expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+  disclosure.focus();
+  await userEvent.tab();
+  expect(badge.closest('[tabindex="0"]')).toHaveFocus();
+  expect(await screen.findByRole('tooltip')).toHaveTextContent(hostnameHelp);
+  await userEvent.keyboard('{Escape}');
+  await waitFor(() =>
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument(),
   );
+  expect(badge.closest('[tabindex="0"]')).toHaveFocus();
+  await userEvent.tab();
+  await userEvent.hover(badge);
+  expect(await screen.findByRole('tooltip')).toHaveTextContent(hostnameHelp);
+  await userEvent.unhover(badge);
+  await waitFor(() =>
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument(),
+  );
+  expect(disclosure).toHaveAttribute('aria-expanded', 'false');
+  await userEvent.click(disclosure);
   const panel = screen.getByRole('region', {
     name: 'Computer details for missing',
   });
+  expect(within(panel).queryByText(hostnameHelp)).not.toBeInTheDocument();
   const versionRow = within(panel).getByRole('row', {name: /OS version/});
   expect(await within(versionRow).findByText('Not provided')).toBeVisible();
   expect(within(panel).getAllByText('Not provided')).toHaveLength(3);

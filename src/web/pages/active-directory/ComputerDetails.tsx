@@ -4,6 +4,7 @@
  */
 
 import {type ReactNode} from 'react';
+import styled from 'styled-components';
 import {type DirectoryComputer} from 'gmp/models/active-directory';
 import Column from 'web/components/layout/Column';
 import InfoTable from 'web/components/table/InfoTable';
@@ -11,10 +12,40 @@ import TableBody from 'web/components/table/TableBody';
 import TableCol from 'web/components/table/TableCol';
 import {TableDataAlignTop} from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import DetailsBlock from 'web/entity/DetailsBlock';
 import useTranslation from 'web/hooks/useTranslation';
 import ComputerRelationships from 'web/pages/active-directory/ComputerRelationships';
-import Theme from 'web/utils/theme';
+import {DirectoryDetailsSection} from 'web/pages/active-directory/DirectoryLayout';
+
+const AttributesTable = styled(InfoTable)`
+  table-layout: fixed;
+
+  td {
+    overflow-wrap: anywhere;
+  }
+
+  td:first-child {
+    padding-inline-end: var(--mantine-spacing-sm);
+  }
+
+  td > div {
+    padding-block: var(--mantine-spacing-xxs);
+  }
+
+  tr + tr > td {
+    border-top: 1px solid var(--mantine-color-default-border);
+  }
+
+  pre {
+    margin: 0;
+  }
+`;
+
+const DetailsSeparator = styled.hr`
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-block-start: 1px solid var(--mantine-color-default-border);
+`;
 
 const ComputerDetails = ({
   node,
@@ -31,9 +62,7 @@ const ComputerDetails = ({
   loading?: boolean;
 }) => {
   const [_] = useTranslation();
-  const loadingValue = (
-    <small style={{color: Theme.darkGray}}>{_('Loading...')}</small>
-  );
+  const loadingValue = <small>{_('Loading...')}</small>;
   const attributes: {label: string; value: ReactNode}[] = [
     {
       label: _('Operating system'),
@@ -55,13 +84,11 @@ const ComputerDetails = ({
       : []),
     {
       label: _('Distinguished name'),
-      value: <pre style={{margin: 0}}>{node.id}</pre>,
+      value: <pre>{node.id}</pre>,
     },
     {
       label: _('Description'),
-      value: (
-        <pre style={{margin: 0}}>{node.description || _('Not provided')}</pre>
-      ),
+      value: <pre>{node.description || _('Not provided')}</pre>,
     },
   ];
   const spns = details?.servicePrincipalNames;
@@ -71,7 +98,7 @@ const ComputerDetails = ({
       value = loadingValue;
     } else if (spns?.length) {
       value = (
-        <Column gap="xxs" style={{overflowWrap: 'anywhere'}}>
+        <Column gap="xxs">
           <ul
             style={{margin: 0, paddingInlineStart: 'var(--mantine-spacing-md)'}}
           >
@@ -88,50 +115,37 @@ const ComputerDetails = ({
     attributes.push({label: _('Service principal names (SPNs)'), value});
   }
   return (
-    <Column gap="md">
-      <DetailsBlock title={_('Active Directory information')}>
-        <Column gap={0} miw={0} style={{overflowX: 'auto'}}>
-          <InfoTable aria-label={_('Active Directory information')} size="full">
+    <Column gap="sm">
+      <DirectoryDetailsSection title={_('Active Directory information')}>
+        <Column gap="xs">
+          <AttributesTable
+            aria-label={_('Active Directory information')}
+            size="full"
+          >
             <colgroup>
-              <TableCol width="25%" />
-              <TableCol width="75%" />
+              <TableCol width="34%" />
+              <TableCol width="66%" />
             </colgroup>
             <TableBody>
-              {attributes.map(({label, value}, index) => (
-                <TableRow
-                  key={label}
-                  style={{
-                    borderBottom:
-                      index < attributes.length - 1
-                        ? '1px solid var(--mantine-color-default-border)'
-                        : undefined,
-                  }}
-                >
-                  <TableDataAlignTop style={{paddingBlock: '2px'}}>
+              {attributes.map(({label, value}) => (
+                <TableRow key={label}>
+                  <TableDataAlignTop>
                     <strong>{label}</strong>
                   </TableDataAlignTop>
-                  <TableDataAlignTop style={{paddingBlock: '2px'}}>
-                    {value}
-                  </TableDataAlignTop>
+                  <TableDataAlignTop>{value}</TableDataAlignTop>
                 </TableRow>
               ))}
             </TableBody>
-          </InfoTable>
+          </AttributesTable>
+          {feedback}
+          <small>
+            {_(
+              'Descriptions are maintained by Active Directory administrators and may contain personal data.',
+            )}
+          </small>
         </Column>
-        {feedback}
-        <p>
-          {_(
-            'Descriptions are maintained by Active Directory administrators and may contain personal data.',
-          )}
-        </p>
-      </DetailsBlock>
-      <hr
-        style={{
-          border: 0,
-          borderTop: '1px solid var(--mantine-color-default-border)',
-          margin: 'var(--mantine-spacing-sm) 0',
-        }}
-      />
+      </DirectoryDetailsSection>
+      <DetailsSeparator />
       <ComputerRelationships node={node} />
     </Column>
   );

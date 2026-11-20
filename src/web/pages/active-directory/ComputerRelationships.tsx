@@ -16,11 +16,24 @@ import {TableDataAlignTop as TableData} from 'web/components/table/TableData';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
-import DetailsBlock from 'web/entity/DetailsBlock';
 import useTranslation from 'web/hooks/useTranslation';
+import {DirectoryDetailsSection} from 'web/pages/active-directory/DirectoryLayout';
 
 const RelationshipTable = styled(InfoTable)`
-  tbody + tbody > tr > td {
+  th,
+  td {
+    overflow-wrap: anywhere;
+  }
+
+  && th {
+    color: var(--mantine-color-text);
+  }
+
+  [data-mantine-color-scheme='dark'] & a {
+    color: var(--mantine-color-anchor);
+  }
+
+  tbody + tbody > tr:first-child > td {
     border-top: 1px solid var(--mantine-color-default-border);
   }
 `;
@@ -89,7 +102,7 @@ const ComputerRelationships = ({node}: {node: DirectoryComputer}) => {
   const [_] = useTranslation();
   const title = _('Existing scan-target assignments');
   return (
-    <DetailsBlock title={title}>
+    <DirectoryDetailsSection title={title}>
       {!node.matchedTargets?.length ? (
         <span>
           {node.matchedTargets === undefined
@@ -132,7 +145,7 @@ const ComputerRelationships = ({node}: {node: DirectoryComputer}) => {
           </RelationshipTable>
         </Column>
       )}
-    </DetailsBlock>
+    </DirectoryDetailsSection>
   );
 };
 
