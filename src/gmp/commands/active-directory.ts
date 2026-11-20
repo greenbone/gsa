@@ -10,14 +10,9 @@ import {
   type DirectoryComputer,
   type DirectoryNode,
   type DirectoryOverview,
-  type DirectoryResolution,
   type DirectoryTarget,
 } from 'gmp/models/active-directory';
-import {
-  emptyDirectoryGraph,
-  replaceDirectorySnapshot,
-  getDirectoryMembers,
-} from 'gmp/models/directory-graph';
+import {resolveDirectorySubtree} from 'gmp/models/directory-resolution';
 
 export interface DirectorySourceParams {
   sourceId: string;
@@ -254,83 +249,29 @@ class ActiveDirectoryCommand extends HttpCommand {
     kind,
     showContainers,
   }: DirectoryBranchParams) {
-    const requireComplete = (listing: DirectoryOverview) => {
-      if (listing.truncated)
-        throw new Error(
-          'Directory results are incomplete. Your selection has been preserved.',
-        );
-    };
-    let graph = emptyDirectoryGraph();
-    const visitBranch = async (
-      id: string,
-      branchKind: DirectoryBranch['kind'],
-      path: Set<string>,
-    ) => {
-      if (path.has(id) || graph.branches[id]) return;
-      if (path.size >= 32)
-        throw new Error(
-          'Maximum nesting depth reached – some members may not have been captured. Your selection has been preserved.',
-        );
-      const nextPath = new Set([...path, id]);
-
-      if (branchKind === 'group') {
-        const {data: listing} = await this.getChildren({
-          sourceId,
-          branchId: id,
-          kind: branchKind,
-          showContainers,
-        });
-        requireComplete(listing);
-        graph = replaceDirectorySnapshot(
-          graph,
-          id,
-          'resolution',
-          listing.roots,
-          true,
-        );
-        for (const node of listing.roots)
-          if (node.kind !== 'computer')
-            await visitBranch(node.id, node.kind, nextPath);
-        return;
-      }
-
-      const {data: listing} = await this.getObjects({
-        sourceId,
-        baseDn: id,
-        scope: 'subtree',
-        showContainers,
-        tasks: true,
-      });
-      requireComplete(listing);
-      const branchIds = [
-        id,
-        ...listing.roots
-          .filter(node => node.kind === 'ou' || node.kind === 'container')
-          .map(node => node.id),
-      ];
-      for (const parentId of branchIds)
-        graph = replaceDirectorySnapshot(
-          graph,
-          parentId,
-          'resolution',
-          listing.roots.filter(node => node.parentDn === parentId),
-          true,
-        );
-      for (const node of listing.roots)
-        if (node.kind === 'group')
-          await visitBranch(node.id, node.kind, nextPath);
-    };
-
-    await visitBranch(branchId, kind, new Set());
-    const members = getDirectoryMembers(graph, branchId);
-    if (!members.complete)
-      throw new Error(
-        'Directory results are incomplete. Your selection has been preserved.',
-      );
-    return new Response<DirectoryResolution>({
-      computers: members.computers,
-      graph,
-    });
+    const resolution = await resolveDirectorySubtree(
+      branchId,
+      kind,
+      async (id, branchKind) => {
+        const response =
+          branchKind === 'group'
+            ? await this.getChildren({
+                sourceId,
+                branchId: id,
+                kind: branchKind,
+                showContainers,
+              })
+            : await this.getObjects({
+                sourceId,
+                baseDn: id,
+                scope: 'subtree',
+                showContainers,
+                tasks: true,
+              });
+        return response.data;
+      },
+    );
+    return new Response(resolution);
   }
 }
 
