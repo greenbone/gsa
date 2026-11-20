@@ -6,7 +6,6 @@
 import {useQuery} from '@tanstack/react-query';
 import type Response from 'gmp/http/response';
 import {type XmlMeta} from 'gmp/http/transform/fast-xml';
-import type Model from 'gmp/models/model';
 import {isDefined} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useSessionToken from 'web/hooks/useSessionToken';
@@ -16,7 +15,7 @@ import {
   type RefetchIntervalFn,
 } from 'web/queries/helpers';
 
-interface UseGetEntityParams<TModel extends Model> {
+interface UseGetEntityParams<TModel> {
   gmpMethod: (params: {id: string}) => Promise<Response<TModel, XmlMeta>>;
   queryId: string;
   id: string | undefined;
@@ -25,9 +24,13 @@ interface UseGetEntityParams<TModel extends Model> {
   staleTime?: number | ((query: {state: {data: TModel | undefined}}) => number);
   keepPreviousData?: boolean;
   gcTime?: number;
+  enabled?: boolean;
+  retry?: boolean;
+  refetchOnWindowFocus?: boolean;
+  refetchOnReconnect?: boolean;
 }
 
-const useGetEntity = <TModel extends Model>({
+const useGetEntity = <TModel>({
   gmpMethod,
   queryId,
   id,
@@ -36,6 +39,10 @@ const useGetEntity = <TModel extends Model>({
   staleTime,
   keepPreviousData = false,
   gcTime,
+  enabled = true,
+  retry,
+  refetchOnWindowFocus,
+  refetchOnReconnect,
 }: UseGetEntityParams<TModel>) => {
   const gmp = useGmp();
   const token = useSessionToken();
@@ -47,7 +54,7 @@ const useGetEntity = <TModel extends Model>({
       : resolveRefetchInterval(refetchInterval, settings);
 
   return useQuery<TModel>({
-    enabled: isDefined(token) && isDefined(id),
+    enabled: enabled && isDefined(token) && isDefined(id),
     queryKey: [queryId, token, id, ...(queryKeyParts ?? [])],
     queryFn: async () => {
       const response = await gmpMethod({id: id as string});
@@ -56,6 +63,9 @@ const useGetEntity = <TModel extends Model>({
     refetchInterval: resolvedRefetchInterval,
     staleTime,
     gcTime,
+    ...(retry === undefined ? {} : {retry}),
+    ...(refetchOnWindowFocus === undefined ? {} : {refetchOnWindowFocus}),
+    ...(refetchOnReconnect === undefined ? {} : {refetchOnReconnect}),
     placeholderData: keepPreviousData
       ? (previousData, previousQuery) =>
           previousQuery?.queryKey[2] === id ? previousData : undefined

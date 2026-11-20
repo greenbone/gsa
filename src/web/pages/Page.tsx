@@ -33,6 +33,20 @@ const StyledLayout = styled(Layout)`
 
 const Container = styled.div`
   flex: 1;
+
+  @media (min-width: 64rem) and (min-height: 48rem) {
+    &:has(> .active-directory-discovery) {
+      display: flex;
+      flex: 1 0 auto;
+      flex-direction: column;
+    }
+  }
+`;
+
+const PageMain = styled(Main)`
+  &:has(.active-directory-discovery) {
+    min-inline-size: 0;
+  }
 `;
 
 const ScrollableMenuContainer = styled.div`
@@ -84,7 +98,7 @@ const Page = ({children}: PageProps) => {
                 </Text>
               </MenuWrapper>
             </ScrollableMenuContainer>
-            <Main>
+            <PageMain>
               <Container>
                 <FeedSyncNotification />
                 <ErrorBoundary
@@ -95,7 +109,7 @@ const Page = ({children}: PageProps) => {
                 </ErrorBoundary>
               </Container>
               <Footer />
-            </Main>
+            </PageMain>
           </StyledLayout>
         </ReportExportManager>
       </FeaturesContext.Provider>

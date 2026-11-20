@@ -21,6 +21,20 @@ describe('buildUrlParams', () => {
     expect(String(buildUrlParams(params))).toEqual('foo=bar&baz=42&qux=true');
   });
 
+  test('encodes array values as repeated parameters', () => {
+    const query = new URLSearchParams(
+      buildUrlParams({
+        'object_types:': ['ou', 'computer', 'group', 'container'],
+      }),
+    );
+    expect(query.getAll('object_types:')).toEqual([
+      'ou',
+      'computer',
+      'group',
+      'container',
+    ]);
+  });
+
   test('should skip undefined values in the params object', () => {
     const params = {foo: 'bar', baz: undefined, qux: false};
     expect(String(buildUrlParams(params))).toEqual('foo=bar&qux=false');

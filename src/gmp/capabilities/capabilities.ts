@@ -75,6 +75,7 @@ const CAPABILITY_NAMES = [
   'delete_user',
   'describe_auth',
   'empty_trashcan',
+  'get_active_directory_objects',
   'get_agent_groups',
   'get_agent_installer_instruction',
   'get_agent_installers',

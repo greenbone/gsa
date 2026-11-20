@@ -15,6 +15,7 @@ import {UNSET_VALUE} from 'web/utils/Render';
 
 export type TargetSource = 'manual' | 'file' | 'asset_hosts';
 export type TargetExcludeSource = 'manual' | 'file';
+export type TargetOrigin = 'manual' | 'active_directory';
 
 export interface TargetCommandCreateParams {
   aliveTests?: AliveTest[];
@@ -34,13 +35,17 @@ export interface TargetCommandCreateParams {
   reverseLookupUnify?: boolean;
   smbCredentialId?: string;
   snmpCredentialId?: string;
+  source?: TargetOrigin;
   sshCredentialId?: string;
   sshElevateCredentialId?: string;
   targetExcludeSource?: TargetExcludeSource;
   targetSource?: TargetSource;
 }
 
-export interface TargetCommandSaveParams extends TargetCommandCreateParams {
+export interface TargetCommandSaveParams extends Omit<
+  TargetCommandCreateParams,
+  'source'
+> {
   id: string;
 }
 
@@ -52,6 +57,7 @@ class TargetCommand extends EntityCommand<Target> {
   async create({
     name,
     comment = '',
+    source,
     targetSource,
     targetExcludeSource,
     hosts = [],
@@ -77,6 +83,7 @@ class TargetCommand extends EntityCommand<Target> {
         cmd: 'create_target',
         name,
         comment,
+        ...(isDefined(source) ? {source} : {}),
         allow_simultaneous_ips: isDefined(allowSimultaneousIPs)
           ? parseYesNo(allowSimultaneousIPs)
           : undefined,

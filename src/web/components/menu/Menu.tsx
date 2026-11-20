@@ -27,6 +27,7 @@ import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import {routeMatch, ROUTES} from 'web/route-paths';
+import {mayAccessActiveDirectory} from 'web/utils/active-directory-access';
 
 const Menu = () => {
   const [_, i18n] = useTranslation();
@@ -128,6 +129,13 @@ const Menu = () => {
   const targetsMatch = useMatch(routeMatch(ROUTES.targets.path));
   const targetMatch = useMatch(routeMatch(ROUTES.target.path));
   const isTargetsActive = Boolean(targetsMatch || targetMatch);
+  const activeDirectoryMatch = useMatch(
+    `${ROUTES.activeDirectory.url}/discovery/*`,
+  );
+  const activeDirectoryListMatch = useMatch(ROUTES.activeDirectory.url);
+  const isActiveDirectoryActive = Boolean(
+    activeDirectoryMatch || activeDirectoryListMatch,
+  );
 
   const portlistsMatch = useMatch(routeMatch(ROUTES.portLists.path));
   const portlistMatch = useMatch(routeMatch(ROUTES.portList.path));
@@ -472,6 +480,7 @@ const Menu = () => {
         key: 'configuration',
         defaultOpened: [
           isTargetsActive,
+          isActiveDirectoryActive,
           isContainerImageTargetsActive,
           isPortlistsActive,
           isCredentialsActive,
@@ -488,6 +497,14 @@ const Menu = () => {
           isAgentInstallersActive,
         ].some(Boolean),
         subNav: [
+          mayAccessActiveDirectory(capabilities, features) && {
+            label: _('Active Directory'),
+            to: ROUTES.activeDirectory.url,
+            // Keep this as a link while the discovery route is active so
+            // clicking it can return to the connections table.
+            isPathMatch: false,
+            active: isActiveDirectoryActive,
+          },
           capabilities.mayAccess('target') && {
             label: _('Targets'),
             to: ROUTES.targets.url,

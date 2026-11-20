@@ -13,16 +13,25 @@ export interface Entity {
 
 interface EntitySelectionProps<TEntity> {
   entity: TEntity;
+  selected?: boolean;
+  disabled?: boolean;
+  indeterminate?: boolean;
+  'aria-label'?: string;
   onDeselected?: (entity: TEntity) => void;
   onSelected?: (entity: TEntity) => void;
 }
 
 const EntitySelection = <TEntity extends Entity>({
   entity,
+  selected: controlledSelected,
+  disabled,
+  indeterminate,
+  'aria-label': ariaLabel,
   onDeselected,
   onSelected,
 }: EntitySelectionProps<TEntity>) => {
-  const [selected, setSelected] = useState(false);
+  const [internalSelected, setSelected] = useState(false);
+  const selected = controlledSelected ?? internalSelected;
 
   const handleSelection = (value: boolean) => {
     if (value) {
@@ -32,12 +41,15 @@ const EntitySelection = <TEntity extends Entity>({
     } else if (onDeselected) {
       onDeselected(entity);
     }
-    setSelected(value);
+    if (controlledSelected === undefined) setSelected(value);
   };
   return (
     <Checkbox
+      aria-label={ariaLabel}
       checked={selected}
       data-testid={`entity-selection-${entity.id}`}
+      disabled={disabled}
+      indeterminate={indeterminate}
       onChange={handleSelection}
     />
   );
