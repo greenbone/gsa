@@ -5,6 +5,7 @@
 
 import {useEffect, useId, useState} from 'react';
 import {Accordion} from '@mantine/core';
+import {Alert, EStatus} from '@greenbone/ui-lib';
 import {
   type DirectoryBranch,
   type DirectoryComputer,
@@ -12,9 +13,9 @@ import {
   type DirectoryOverview,
 } from 'gmp/models/active-directory';
 import Badge, {EThemeColors} from 'web/components/badge/StatusBadge';
+import ErrorPanel from 'web/components/error/ErrorPanel';
 import Column from 'web/components/layout/Column';
 import Loading from 'web/components/loading/Loading';
-import InlineNotification from 'web/components/notification/InlineNotification';
 import EntitySelection from 'web/entities/EntitySelection';
 import {useGetActiveDirectoryChildren} from 'web/hooks/use-query/active-directory';
 import useTranslation from 'web/hooks/useTranslation';
@@ -98,13 +99,11 @@ const ExpandedBranch = ({
       miw={0}
       pb="xs"
     >
-      {isFetching && (
-        <output aria-label={_('Loading {{- name}}', {name: node.name})}>
-          <Loading />
-        </output>
+      {isFetching && !isError && (
+        <Loading label={_('Loading {{- name}}', {name: node.name})} />
       )}
       {isError && (
-        <InlineNotification
+        <ErrorPanel
           action={{
             label: _('Retry {{- name}}', {name: node.name}),
             onClick: () => void refetch(),
@@ -112,16 +111,17 @@ const ExpandedBranch = ({
           }}
           details={error instanceof Error ? error.message : undefined}
           message={_('Could not load this branch.')}
-          severity="error"
         />
       )}
       {listing?.truncated && (
-        <InlineNotification
-          message={_(
+        <Alert
+          dismissible={false}
+          role="status"
+          title={_(
             '{{name}}: some objects were not returned. You can select the loaded computers.',
             {name: node.name},
           )}
-          severity="warning"
+          type={EStatus.WARNING}
         />
       )}
       {listing && (

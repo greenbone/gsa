@@ -12,6 +12,7 @@ import {
 } from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import ErrorMessage from 'web/components/error/ErrorMessage';
+import ErrorPanel from 'web/components/error/ErrorPanel';
 import Message from 'web/components/error/Message';
 import Button from 'web/components/form/Button';
 import {ActiveDirectoryIcon} from 'web/components/icon';
@@ -20,7 +21,6 @@ import PageTitle from 'web/components/layout/PageTitle';
 import Row from 'web/components/layout/Row';
 import Link from 'web/components/link/Link';
 import Loading from 'web/components/loading/Loading';
-import InlineNotification from 'web/components/notification/InlineNotification';
 import EntitiesPage from 'web/entities/EntitiesPage';
 import {useGetActiveDirectoryCredentials} from 'web/hooks/use-query/active-directory';
 import useCapabilities from 'web/hooks/useCapabilities';
@@ -163,9 +163,7 @@ const ActiveDirectoryConnections = () => {
         sectionIcon={<ActiveDirectoryIcon size="large" />}
         table={
           <>
-            {toolbarError && (
-              <InlineNotification message={toolbarError} severity="error" />
-            )}
+            {toolbarError && <ErrorPanel message={toolbarError} />}
             {connectionContent}
           </>
         }

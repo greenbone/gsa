@@ -8,11 +8,18 @@ import {Button as OpenSightButton} from '@greenbone/ui-lib';
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorMessage from 'web/components/error/ErrorMessage';
+import Button from 'web/components/form/Button';
 import Divider from 'web/components/layout/Divider';
 import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/theme';
 
 interface ErrorPanelProps {
+  details?: string;
+  action?: {
+    label: string;
+    onClick: () => void;
+    isLoading?: boolean;
+  };
   error?: Error;
   info?: {
     componentStack: string;
@@ -33,7 +40,13 @@ const StyledPre = styled.pre`
   word-break: break-word;
 `;
 
-const ErrorPanel = ({error, message, info}: ErrorPanelProps) => {
+const ErrorPanel = ({
+  action,
+  details,
+  error,
+  message,
+  info,
+}: ErrorPanelProps) => {
   const [_] = useTranslation();
   const [showDetails, setShowDetails] = useState(false);
 
@@ -42,10 +55,21 @@ const ErrorPanel = ({error, message, info}: ErrorPanelProps) => {
   };
   return (
     <ErrorMessage
-      details={_('Please try again.')}
+      details={details ?? _('Please try again.')}
       flex="column"
       message={message}
+      role="alert"
     >
+      {action && (
+        <Button
+          disabled={action.isLoading}
+          isLoading={action.isLoading}
+          size="sm"
+          title={action.label}
+          variant="default"
+          onClick={action.onClick}
+        />
+      )}
       {isDefined(error) && (
         <OpenSightButton
           data-testid="errorpanel-toggle"

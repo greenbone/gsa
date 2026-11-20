@@ -6,6 +6,7 @@
 import {type ReactNode} from 'react';
 import styled from 'styled-components';
 import {type DirectoryComputer} from 'gmp/models/active-directory';
+import Badge, {EThemeColors} from 'web/components/badge/StatusBadge';
 import Column from 'web/components/layout/Column';
 import InfoTable from 'web/components/table/InfoTable';
 import TableBody from 'web/components/table/TableBody';
@@ -62,23 +63,16 @@ const ComputerDetails = ({
   loading?: boolean;
 }) => {
   const [_] = useTranslation();
-  const loadingValue = <small>{_('Loading...')}</small>;
   const attributes: {label: string; value: ReactNode}[] = [
     {
       label: _('Operating system'),
       value: node.operatingSystem || _('Not provided'),
     },
-    ...(details || loading
+    ...(details
       ? [
           {
             label: _('OS version'),
-            value: loading ? (
-              <output aria-label={_('Loading computer details...')}>
-                {loadingValue}
-              </output>
-            ) : (
-              details?.operatingSystemVersion || _('Not provided')
-            ),
+            value: details.operatingSystemVersion || _('Not provided'),
           },
         ]
       : []),
@@ -92,11 +86,20 @@ const ComputerDetails = ({
     },
   ];
   const spns = details?.servicePrincipalNames;
-  if (loading || spns !== undefined) {
+  if (loading) {
+    attributes.push({
+      label: _('Service principal names (SPNs)'),
+      value: (
+        <output aria-label={_('Loading computer details...')}>
+          <Badge color={EThemeColors.NeutralLight} size="sm">
+            {_('Loading...')}
+          </Badge>
+        </output>
+      ),
+    });
+  } else if (spns !== undefined) {
     let value: ReactNode = _('No SPNs registered');
-    if (loading) {
-      value = loadingValue;
-    } else if (spns?.length) {
+    if (spns.length > 0) {
       value = (
         <Column gap="xxs">
           <ul
@@ -118,6 +121,7 @@ const ComputerDetails = ({
     <Column gap="sm">
       <DirectoryDetailsSection title={_('Active Directory information')}>
         <Column gap="xs">
+          {feedback}
           <AttributesTable
             aria-label={_('Active Directory information')}
             size="full"
@@ -137,7 +141,6 @@ const ComputerDetails = ({
               ))}
             </TableBody>
           </AttributesTable>
-          {feedback}
           <small>
             {_(
               'Descriptions are maintained by Active Directory administrators and may contain personal data.',
