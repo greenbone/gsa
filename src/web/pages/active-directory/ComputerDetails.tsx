@@ -63,16 +63,23 @@ const ComputerDetails = ({
   loading?: boolean;
 }) => {
   const [_] = useTranslation();
+  const loadingBadge = (
+    <Badge color={EThemeColors.NeutralLight} size="sm">
+      {_('Loading...')}
+    </Badge>
+  );
   const attributes: {label: string; value: ReactNode}[] = [
     {
       label: _('Operating system'),
       value: node.operatingSystem || _('Not provided'),
     },
-    ...(details
+    ...(details || loading
       ? [
           {
             label: _('OS version'),
-            value: details.operatingSystemVersion || _('Not provided'),
+            value: loading
+              ? loadingBadge
+              : details?.operatingSystemVersion || _('Not provided'),
           },
         ]
       : []),
@@ -91,9 +98,7 @@ const ComputerDetails = ({
       label: _('Service principal names (SPNs)'),
       value: (
         <output aria-label={_('Loading computer details...')}>
-          <Badge color={EThemeColors.NeutralLight} size="sm">
-            {_('Loading...')}
-          </Badge>
+          {loadingBadge}
         </output>
       ),
     });

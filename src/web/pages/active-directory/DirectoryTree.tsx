@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect, useId, useState} from 'react';
+import {useEffect, useId, useMemo, useState} from 'react';
 import {Accordion} from '@mantine/core';
 import {Alert, EStatus} from '@greenbone/ui-lib';
 import {
@@ -19,7 +19,7 @@ import Loading from 'web/components/loading/Loading';
 import EntitySelection from 'web/entities/EntitySelection';
 import {useGetActiveDirectoryChildren} from 'web/hooks/use-query/active-directory';
 import useTranslation from 'web/hooks/useTranslation';
-import ComputerRow from 'web/pages/active-directory/ComputerRow';
+import ComputerList from 'web/pages/active-directory/ComputerList';
 import {getBranchSelectionSummary} from 'web/pages/active-directory/directory-selection';
 import DirectoryAccordion from 'web/pages/active-directory/DirectoryAccordion';
 import {
@@ -280,13 +280,18 @@ const DirectoryTree = ({
 }: DirectoryTreeProps) => {
   const [_] = useTranslation();
   const pathKey = JSON.stringify(path ?? []);
-  const visible = nodes.filter(
-    node =>
-      node.kind !== 'computer' ||
-      ((showDisabled || !node.disabled) &&
-        (!computerPaths || computerPaths[node.id] === pathKey)),
+  const computers = useMemo(
+    () =>
+      nodes.filter(
+        (node): node is DirectoryComputer =>
+          node.kind === 'computer' &&
+          (showDisabled || !node.disabled) &&
+          (!computerPaths || computerPaths[node.id] === pathKey),
+      ),
+    [computerPaths, nodes, pathKey, showDisabled],
   );
-  return visible.length === 0 ? (
+  const branches = nodes.filter(node => node.kind !== 'computer');
+  return branches.length === 0 && computers.length === 0 ? (
     <DirectoryEmptyNotice
       $ownerDepth={path?.length ? path.length - 1 : undefined}
     >
@@ -301,31 +306,29 @@ const DirectoryTree = ({
     </DirectoryEmptyNotice>
   ) : (
     <Column gap="xs" miw={0}>
-      {visible.some(node => node.kind !== 'computer') && (
+      {branches.length > 0 && (
         <DirectoryList $spacing={path?.length ? 'xs' : 'sm'}>
-          {visible
-            .filter(node => node.kind !== 'computer')
-            .map(node => (
-              <DirectoryTreeNode
-                key={node.id}
-                computerPaths={computerPaths}
-                knownMembers={knownMembers}
-                memberships={memberships}
-                node={node}
-                path={path}
-                redundantBranchSummaries={redundantBranchSummaries}
-                selectedIds={selectedIds}
-                selectionPending={selectionPending}
-                showContainers={showContainers}
-                showDisabled={showDisabled}
-                sourceId={sourceId}
-                onLoaded={onLoaded}
-                onSelect={onSelect}
-              />
-            ))}
+          {branches.map(node => (
+            <DirectoryTreeNode
+              key={node.id}
+              computerPaths={computerPaths}
+              knownMembers={knownMembers}
+              memberships={memberships}
+              node={node}
+              path={path}
+              redundantBranchSummaries={redundantBranchSummaries}
+              selectedIds={selectedIds}
+              selectionPending={selectionPending}
+              showContainers={showContainers}
+              showDisabled={showDisabled}
+              sourceId={sourceId}
+              onLoaded={onLoaded}
+              onSelect={onSelect}
+            />
+          ))}
         </DirectoryList>
       )}
-      {visible.some(node => node.kind === 'computer') && (
+      {computers.length > 0 && (
         <div>
           <DirectoryHeader $depth={path?.length ?? 0}>
             <span>{_('Computer')}</span>
@@ -333,23 +336,14 @@ const DirectoryTree = ({
             <span>{_('Scan targets')}</span>
             <span aria-hidden="true" />
           </DirectoryHeader>
-          <DirectoryList $spacing="xs">
-            {visible.flatMap(node =>
-              node.kind === 'computer'
-                ? [
-                    <ComputerRow
-                      key={node.id}
-                      checked={selectedIds.has(node.id)}
-                      depth={path?.length ?? 0}
-                      node={node}
-                      selectionPending={selectionPending}
-                      sourceId={sourceId}
-                      onSelect={checked => onSelect(node, checked, path)}
-                    />,
-                  ]
-                : [],
-            )}
-          </DirectoryList>
+          <ComputerList
+            computers={computers}
+            depth={path?.length ?? 0}
+            selectedIds={selectedIds}
+            selectionPending={selectionPending}
+            sourceId={sourceId}
+            onSelect={(node, checked) => onSelect(node, checked, path)}
+          />
         </div>
       )}
     </Column>

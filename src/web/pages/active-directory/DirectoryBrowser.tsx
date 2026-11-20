@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useCallback, useEffect, useRef, useState} from 'react';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Alert, EStatus} from '@greenbone/ui-lib';
 import {
   type DirectoryComputer,
@@ -68,15 +68,19 @@ export const DirectoryBrowser = ({
   } = useGetActiveDirectoryOverview(sourceId, showContainers, listingVersion);
   const [graph, setGraph] = useState(emptyDirectoryGraph);
   const graphRevision = useRef(0);
-  const currentGraph = overview
-    ? replaceDirectorySnapshot(
-        graph,
-        'directory-root',
-        'overview',
-        overview.roots,
-        !overview.truncated,
-      )
-    : graph;
+  const currentGraph = useMemo(
+    () =>
+      overview
+        ? replaceDirectorySnapshot(
+            graph,
+            'directory-root',
+            'overview',
+            overview.roots,
+            !overview.truncated,
+          )
+        : graph,
+    [graph, overview],
+  );
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const selected = selectedIds.flatMap(id => {
     const node = currentGraph.nodes[id];
@@ -202,7 +206,10 @@ export const DirectoryBrowser = ({
     const childIds = new Set(childMembers.map(child => child.id));
     return parentMembers.every(parent => childIds.has(parent.id)) ? [id] : [];
   });
-  const computerPaths = getDirectoryComputerPaths(currentGraph);
+  const computerPaths = useMemo(
+    () => getDirectoryComputerPaths(currentGraph),
+    [currentGraph],
+  );
   const hosts = selectedHostnames(selected);
   const computers = knownMembers['directory-root'] ?? [];
   const isPartial = Object.values(currentGraph.branches).some(
@@ -284,6 +291,7 @@ export const DirectoryBrowser = ({
         </DirectoryToolbar>
         <DirectoryScrollArea
           aria-label={_('Directory objects')}
+          data-directory-scroll-area=""
           flex={1}
           gap="xs"
           pb="sm"

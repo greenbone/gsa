@@ -5,7 +5,7 @@
 
 import {type DirectoryTarget} from 'gmp/models/active-directory';
 
-export type DirectoryFixtureScenario = 'base' | 'relationships';
+export type DirectoryFixtureScenario = 'base' | 'relationships' | 'large-level';
 
 interface MockObject {
   kind: 'ou' | 'group' | 'container' | 'computer';
@@ -31,6 +31,12 @@ export const AD_ACCOUNTING = `OU=Accounting,${AD_CLIENTS}`;
 export const AD_FILE_SERVERS = `CN=File servers,${AD_CLIENTS}`;
 export const AD_CRITICAL_SERVERS = `CN=Critical servers,${AD_CLIENTS}`;
 export const AD_ARCHIVE_SERVERS = `CN=Archive servers,${AD_CLIENTS}`;
+export const AD_LARGE_LEVEL_NAME = 'Performance lab';
+export const AD_LARGE_LEVEL = `OU=${AD_LARGE_LEVEL_NAME},${AD_BASE}`;
+export const AD_LARGE_LEVEL_SIZE = 10_000;
+
+export const largeLevelComputerName = (number: number) =>
+  `perf-pc-${String(number).padStart(5, '0')}`;
 
 export const AD_CREDENTIALS = [
   {
@@ -168,20 +174,31 @@ const containerObjects = [
 
 export const createDirectoryFixture = (
   scenario: DirectoryFixtureScenario = 'base',
-) => [
-  ...AD_OBJECTS.map(node =>
-    scenario === 'relationships' && node.name === 'pc-043.domain.local'
-      ? {...node, matchedTargets: relationshipTargets}
-      : node,
-  ),
-  ...(scenario === 'relationships'
-    ? [
-        branch(AD_ARCHIVE_SERVERS, AD_CLIENTS, 'Archive servers', 'group'),
-        computer('fs-archive-01', AD_BASE),
-        ...relationshipComputers(),
-      ]
-    : []),
-];
+): MockObject[] => {
+  if (scenario === 'large-level') {
+    return [
+      branch(AD_LARGE_LEVEL, AD_BASE, AD_LARGE_LEVEL_NAME, 'ou'),
+      ...Array.from({length: AD_LARGE_LEVEL_SIZE}, (_, index) =>
+        computer(largeLevelComputerName(index + 1), AD_LARGE_LEVEL),
+      ),
+    ];
+  }
+
+  return [
+    ...AD_OBJECTS.map(node =>
+      scenario === 'relationships' && node.name === 'pc-043.domain.local'
+        ? {...node, matchedTargets: relationshipTargets}
+        : node,
+    ),
+    ...(scenario === 'relationships'
+      ? [
+          branch(AD_ARCHIVE_SERVERS, AD_CLIENTS, 'Archive servers', 'group'),
+          computer('fs-archive-01', AD_BASE),
+          ...relationshipComputers(),
+        ]
+      : []),
+  ];
+};
 
 const groupMembers = (
   scenario: DirectoryFixtureScenario,
@@ -352,7 +369,8 @@ export const activeDirectoryMockResponse = (
     ? requestedTypes
     : ['ou', 'computer', 'group'];
   nodes = nodes.filter(node => types.includes(node.kind));
-  const limit = Number(params.get('max_results') ?? 200);
+  const defaultLimit = scenario === 'large-level' ? AD_LARGE_LEVEL_SIZE : 200;
+  const limit = Number(params.get('max_results') ?? defaultLimit);
   return directoryObjectsXml(
     nodes.slice(0, limit),
     params,

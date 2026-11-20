@@ -46,6 +46,7 @@
     "@mantine/notifications": "^9.6.1",
     "@reduxjs/toolkit": "^2.14.0",
     "@tanstack/react-query": "^5.107.1",
+    "@tanstack/react-virtual": "3.14.26",
     "@types/d3-transition": "3.0.9",
     "d3-axis": "^3.0.1",
     "d3-cloud": "^2.0.0",

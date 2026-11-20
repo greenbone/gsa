@@ -394,9 +394,9 @@ test('keeps selection and target links usable during a details failure and retri
     within(spnRow).getByRole('status', {name: 'Loading computer details...'}),
   ).toHaveTextContent('Loading...');
   expect(panel.queryByTestId('spinner')).not.toBeInTheDocument();
-  expect(
-    panel.queryByRole('row', {name: /OS version/}),
-  ).not.toBeInTheDocument();
+  expect(panel.getByRole('row', {name: /OS version/})).toHaveTextContent(
+    'Loading...',
+  );
   expect(panel.getByText('Windows 11')).toBeVisible();
   expect(panel.getByRole('link', {name: 'Office network'})).toBeVisible();
   expect(getComputerDetails).toHaveBeenCalledTimes(1);

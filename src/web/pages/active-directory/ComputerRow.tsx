@@ -22,6 +22,13 @@ import {
   ComputerMetadataLabel,
 } from 'web/pages/active-directory/DirectoryLayout';
 
+interface VirtualComputerRow {
+  index: number;
+  total: number;
+  spaceBefore?: number;
+  measure: (element: HTMLLIElement | null) => void;
+}
+
 const HostnameBadge = styled(Badge)`
   height: auto;
   min-height: 1.25rem;
@@ -79,6 +86,9 @@ const ComputerRow = ({
   checked,
   selectionPending,
   depth = 0,
+  virtualRow,
+  onExpandedChange,
+  onFocusChange,
   onSelect,
 }: {
   node: DirectoryComputer;
@@ -86,6 +96,9 @@ const ComputerRow = ({
   checked: boolean;
   selectionPending: boolean;
   depth?: number;
+  virtualRow?: VirtualComputerRow;
+  onExpandedChange?: (expanded: boolean) => void;
+  onFocusChange?: (focused: boolean) => void;
   onSelect: (checked: boolean) => void;
 }) => {
   const [_] = useTranslation();
@@ -121,10 +134,33 @@ const ComputerRow = ({
     );
   }
   return (
-    <li>
+    <li
+      ref={virtualRow?.measure}
+      aria-posinset={virtualRow ? virtualRow.index + 1 : undefined}
+      aria-setsize={virtualRow?.total}
+      data-index={virtualRow?.index}
+      style={
+        virtualRow?.spaceBefore === undefined
+          ? undefined
+          : {marginBlockStart: virtualRow.spaceBefore}
+      }
+      onBlurCapture={
+        onFocusChange
+          ? event => {
+              if (!event.currentTarget.contains(event.relatedTarget))
+                onFocusChange(false);
+            }
+          : undefined
+      }
+      onFocusCapture={onFocusChange ? () => onFocusChange(true) : undefined}
+    >
       <DirectoryAccordion
         value={expanded ? 'details' : null}
-        onChange={value => setExpanded(value !== null)}
+        onChange={value => {
+          const open = value !== null;
+          setExpanded(open);
+          onExpandedChange?.(open);
+        }}
       >
         <Accordion.Item value="details">
           <ComputerDirectoryRow $depth={depth}>
