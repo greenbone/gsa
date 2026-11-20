@@ -8,13 +8,15 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {act, fireEvent, render, screen} from 'web/testing';
 import useTiming from 'web/hooks/useTiming';
 
+const timeoutMs = 900;
+
 const TestComponent = ({doFunc}) => {
   const [value, setValue] = useState(0);
   const timingFunc = () => {
     setValue(value => value + 1);
     return doFunc();
   };
-  const [startTimer, clearTimer, isRunning] = useTiming(timingFunc, 900);
+  const [startTimer, clearTimer, isRunning] = useTiming(timingFunc, timeoutMs);
   return (
     <>
       <button data-testid="startTimer" onClick={startTimer}></button>
@@ -27,7 +29,7 @@ const TestComponent = ({doFunc}) => {
 
 const runTimers = async () => {
   await act(async () => {
-    await testing.advanceTimersToNextTimerAsync();
+    await testing.advanceTimersByTimeAsync(timeoutMs);
   });
 };
 

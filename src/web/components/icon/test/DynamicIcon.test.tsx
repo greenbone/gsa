@@ -192,8 +192,8 @@ describe('DynamicIcon', () => {
 
       const svg = actionIcon.querySelector('svg');
       expect(svg).toBeVisible();
-      expect(actionIcon).toHaveStyle(
-        '--ai-color: var(--mantine-color-red-light-color);',
+      expect(actionIcon.style.getPropertyValue('--ai-color')).toBe(
+        'var(--mantine-color-red-light-color)',
       );
     });
   });
@@ -243,7 +243,7 @@ describe('DynamicIcon', () => {
       expect(disabledNonLucideIcon.querySelector('svg')).toBeVisible();
       expect(disabledNonLucideIcon).toHaveAttribute('disabled');
       const svg = disabledNonLucideIcon.querySelector('svg');
-      expect(svg).toHaveStyle({fill: 'var(--mantine-color-gray-5)'});
+      expect(svg).toHaveStyle({fill: hexToRgb('#999999')});
     });
 
     test('renders custom action icon', () => {

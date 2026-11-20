@@ -127,10 +127,11 @@ describe('Link tests', () => {
     render(<Link to="foo">Foo</Link>);
 
     const element = screen.getByText('Foo');
+    element.style.setProperty('--mantine-font-size-md', '18px');
     const style = window.getComputedStyle(element);
 
     expect(style.display).toBe('inline-flex');
-    expect(style.fontSize).toBe('var(--mantine-font-size-md)');
+    expect(style.fontSize).toBe('18px');
     expect(element).toHaveTextContent('Foo');
   });
 
@@ -143,10 +144,11 @@ describe('Link tests', () => {
     );
 
     const element = screen.getByText('Foo');
+    element.style.setProperty('--mantine-font-size-md', '18px');
     const style = window.getComputedStyle(element);
 
     expect(style.display).toBe('inline-flex');
-    expect(style.fontSize).toBe('var(--mantine-font-size-md)');
+    expect(style.fontSize).toBe('18px');
     expect(element).toHaveTextContent('Foo');
   });
 });

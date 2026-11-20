@@ -31,9 +31,9 @@ const TestSessionTracker = ({onClick}: {onClick?: () => void}) => {
   return <button data-testid="session-btn">Session Button</button>;
 };
 
-const runTimers = async () => {
+const advanceCooldown = async () => {
   await act(async () => {
-    await testing.advanceTimersToNextTimerAsync();
+    await testing.runAllTimersAsync();
   });
 };
 
@@ -62,7 +62,7 @@ describe('useSessionTracker', () => {
     expect(gmp.user.renewSession).not.toHaveBeenCalled();
     gmp.user.renewSession.mockClear();
 
-    await runTimers();
+    await advanceCooldown();
     fireEvent.click(btn);
     expect(gmp.user.renewSession).toHaveBeenCalledOnce();
   });
@@ -123,13 +123,13 @@ describe('useSessionTracker', () => {
     fireEvent.keyPress(document, {key: 'Enter'});
     expect(gmp.user.renewSession).toHaveBeenCalledOnce();
 
-    await runTimers();
+    await advanceCooldown();
     gmp.user.renewSession.mockClear();
 
     fireEvent.wheel(document);
     expect(gmp.user.renewSession).toHaveBeenCalledOnce();
 
-    await runTimers();
+    await advanceCooldown();
     gmp.user.renewSession.mockClear();
 
     fireEvent.drag(document);

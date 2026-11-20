@@ -94,7 +94,7 @@ describe('ProgressBar tests', () => {
     const actualValue =
       getComputedStyle(progress).getPropertyValue('background');
     expect(actualValue).toContain('linear-gradient');
-    expect(actualValue).toContain('gray');
+    expect(actualValue).toBackgroundGradientContainColor(Theme.statusLogGray);
   });
 
   test('should render box background', () => {
