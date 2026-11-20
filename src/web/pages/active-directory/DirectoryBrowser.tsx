@@ -15,8 +15,6 @@ import {
   beginDirectorySnapshot,
   replaceDirectorySnapshot,
   mergeDirectoryGraph,
-  getDirectoryMembers,
-  getDirectoryComputerPaths,
 } from 'gmp/models/directory-graph';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Button from 'web/components/form/Button';
@@ -35,6 +33,7 @@ import {
   mergeSelection,
   selectedHostnames,
 } from 'web/pages/active-directory/directory-selection';
+import {summarizeDirectory} from 'web/pages/active-directory/directory-summary';
 import {
   DirectoryFooter,
   DirectoryHeading,
@@ -184,63 +183,26 @@ export const DirectoryBrowser = ({
     }
   };
 
-  // These maps are views of one graph, never independently retained state.
-  const completeMemberships: Record<string, DirectoryComputer[]> = {};
-  const knownMembers: Record<string, DirectoryComputer[]> = {};
-  for (const id of Object.keys(currentGraph.branches)) {
-    const members = getDirectoryMembers(currentGraph, id);
-    knownMembers[id] = members.computers;
-    if (members.complete) completeMemberships[id] = members.computers;
-  }
-  const redundantBranchSummaries = Object.entries(
-    currentGraph.branches,
-  ).flatMap(([id, snapshot]) => {
-    const branchChildren = snapshot.children
-      .map(childId => currentGraph.nodes[childId])
-      .filter(
-        (node): node is Exclude<DirectoryNode, DirectoryComputer> =>
-          node !== undefined && node.kind !== 'computer',
-      );
-    if (branchChildren.length !== 1) return [];
-    const parentMembers = knownMembers[id] ?? [];
-    const childMembers = knownMembers[branchChildren[0].id] ?? [];
-    if (parentMembers.length !== childMembers.length) return [];
-    const childIds = new Set(childMembers.map(child => child.id));
-    return parentMembers.every(parent => childIds.has(parent.id)) ? [id] : [];
-  });
-  const computerPaths = useMemo(
-    () => getDirectoryComputerPaths(currentGraph),
-    [currentGraph],
-  );
+  const {
+    availableIncludingDisabled,
+    completeMemberships,
+    computerPaths,
+    counts,
+    isPartial,
+    knownMembers,
+    redundantBranchSummaries,
+  } = useMemo(() => summarizeDirectory(currentGraph), [currentGraph]);
   const hosts = selectedHostnames(selected);
-  const computers = knownMembers['directory-root'] ?? [];
-  const isPartial = Object.values(currentGraph.branches).some(
-    branch => !branch.complete,
-  );
-  const matchingKnown = computers.every(
-    computer => computer.matchedTargets !== undefined,
-  );
-  const counts: DirectoryOverview['counts'] = {
-    found: computers.length,
-    disabled: computers.filter(computer => computer.disabled).length,
-    captured: matchingKnown
-      ? computers.filter(computer => (computer.matchedTargets?.length ?? 0) > 0)
-          .length
-      : undefined,
-    available: matchingKnown
-      ? computers.filter(
-          computer =>
-            (showDisabled || !computer.disabled) &&
-            computer.matchedTargets?.length === 0,
-        ).length
-      : undefined,
-  };
 
   return (
     <Column flex={1} gap="md" mih={0} miw={0}>
       {overview && (
         <DiscoverySummary
-          counts={counts}
+          counts={
+            showDisabled
+              ? {...counts, available: availableIncludingDisabled}
+              : counts
+          }
           isPartial={isPartial}
           showDisabled={showDisabled}
         />
