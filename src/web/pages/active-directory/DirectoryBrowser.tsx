@@ -19,6 +19,7 @@ import {
 } from 'gmp/models/directory-graph';
 import Button from 'web/components/form/Button';
 import Checkbox from 'web/components/form/Checkbox';
+import HighlightBox from 'web/components/highlight-box';
 import InfoTip from 'web/components/info-tip/InfoTip';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
@@ -38,8 +39,9 @@ import {
   DirectoryFooter,
   DirectoryHeading,
   DirectoryScrollArea,
+  DirectoryToolbar,
+  DirectoryWorkspace,
 } from 'web/pages/active-directory/DirectoryLayout';
-import DirectoryPanel from 'web/pages/active-directory/DirectoryPanel';
 import DirectoryTree from 'web/pages/active-directory/DirectoryTree';
 import DiscoverySummary from 'web/pages/active-directory/DiscoverySummary';
 
@@ -226,13 +228,16 @@ export const DirectoryBrowser = ({
   };
 
   return (
-    <Column flex={1} gap="xs" mih={0}>
+    <Column flex={1} gap="md" mih={0} miw={0}>
       {loading && (
-        <DirectoryPanel aria-busy="true">
-          <output aria-label={_('Loading Active Directory...')}>
+        <HighlightBox>
+          <output
+            aria-busy="true"
+            aria-label={_('Loading Active Directory...')}
+          >
             <Loading />
           </output>
-        </DirectoryPanel>
+        </HighlightBox>
       )}
       {loadError && (
         <InlineNotification
@@ -255,18 +260,18 @@ export const DirectoryBrowser = ({
           showDisabled={showDisabled}
         />
       )}
-      <Column flex={1} gap="xs" mih={0}>
-        <Row
+      <DirectoryWorkspace flex={1} gap={0} mih={0}>
+        <DirectoryToolbar
           aria-label={_('Directory controls')}
           flex="0 0 auto"
-          gap="xs"
+          gap="sm"
           justify="space-between"
-          p="xxs"
+          p="sm"
           role="group"
           wrap="wrap"
         >
           <DirectoryHeading>{_('Directory objects')}</DirectoryHeading>
-          <Row flex="0 0 auto" gap="xs" wrap="wrap">
+          <Row align="center" flex="0 1 auto" gap="xs" miw={0} wrap="wrap">
             <Checkbox
               checked={showDisabled}
               title={_('Show disabled Active Directory objects')}
@@ -300,14 +305,14 @@ export const DirectoryBrowser = ({
               )}
             </InfoTip>
           </Row>
-        </Row>
+        </DirectoryToolbar>
         <DirectoryScrollArea
           aria-label={_('Directory objects')}
           flex={1}
           gap="xs"
-          mih="8rem"
-          p="xxs"
-          pb="lg"
+          pb="sm"
+          pt="xxs"
+          px="xxs"
           role="region"
         >
           {overview?.truncated && (
@@ -336,51 +341,63 @@ export const DirectoryBrowser = ({
             />
           )}
         </DirectoryScrollArea>
-      </Column>
-      {selectionError && (
-        <InlineNotification
-          action={{
-            label: _('Retry selection'),
-            onClick: () => void select(selectionError, true),
-            isLoading: resolving,
-          }}
-          details={resolutionError}
-          message={_(
-            'Could not resolve the selected OU/group. Your selection has been preserved.',
-          )}
-          severity="error"
-        />
-      )}
-      <DirectoryFooter
-        aria-label={_('Selected hosts')}
-        bg="var(--mantine-color-body)"
-        flex="0 0 auto"
-        gap="sm"
-        justify="space-between"
-        py="sm"
-        role="group"
-        wrap="wrap"
-      >
-        <Row align="center" gap="xs">
-          <span aria-live="polite">
-            {_('{{count}} hosts selected', {count: hosts.length})}
-          </span>
-          <InfoTip ariaLabel={_('Selected hosts')}>
-            {_('Computers already in scan targets can still be selected.')}
-          </InfoTip>
-        </Row>
-        <Button
-          aria-busy={resolving}
-          disabled={
-            resolving || hosts.length === 0 || !capabilities.mayCreate('target')
-          }
-          isLoading={resolving}
-          title={_('Add {{count}} hosts to new target', {
-            count: hosts.length,
-          })}
-          onClick={() => onApply(hosts)}
-        />
-      </DirectoryFooter>
+        {selectionError && (
+          <InlineNotification
+            action={{
+              label: _('Retry selection'),
+              onClick: () => void select(selectionError, true),
+              isLoading: resolving,
+            }}
+            details={resolutionError}
+            message={_(
+              'Could not resolve the selected OU/group. Your selection has been preserved.',
+            )}
+            severity="error"
+          />
+        )}
+        <DirectoryFooter
+          aria-label={_('Selected hosts')}
+          flex="0 0 auto"
+          gap="sm"
+          justify="space-between"
+          px="sm"
+          py="xs"
+          role="group"
+          wrap="wrap"
+        >
+          <Row align="center" gap="xs" wrap="wrap">
+            <span aria-live="polite">
+              {_('{{count}} hosts selected', {count: hosts.length})}
+            </span>
+            <InfoTip ariaLabel={_('Selected hosts')}>
+              {_('Computers already in scan targets can still be selected.')}
+            </InfoTip>
+          </Row>
+          <Button
+            aria-busy={resolving}
+            disabled={
+              resolving ||
+              hosts.length === 0 ||
+              !capabilities.mayCreate('target')
+            }
+            isLoading={resolving}
+            styles={{
+              inner: {height: 'auto'},
+              label: {
+                display: 'block',
+                height: 'auto',
+                lineHeight: 1.25,
+                overflow: 'visible',
+                whiteSpace: 'normal',
+              },
+            }}
+            title={_('Add {{count}} hosts to new target', {
+              count: hosts.length,
+            })}
+            onClick={() => onApply(hosts)}
+          />
+        </DirectoryFooter>
+      </DirectoryWorkspace>
     </Column>
   );
 };

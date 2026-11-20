@@ -5,8 +5,12 @@
 
 import {type ReactNode, useState} from 'react';
 import {Accordion} from '@mantine/core';
+import {Tooltip} from '@greenbone/ui-lib';
+import styled from 'styled-components';
 import {type DirectoryComputer} from 'gmp/models/active-directory';
+import Badge, {EThemeColors} from 'web/components/badge/StatusBadge';
 import HighlightBox from 'web/components/highlight-box';
+import Row from 'web/components/layout/Row';
 import InlineNotification from 'web/components/notification/InlineNotification';
 import EntitySelection from 'web/entities/EntitySelection';
 import {useGetActiveDirectoryComputerDetails} from 'web/hooks/use-query/active-directory';
@@ -15,8 +19,36 @@ import ComputerDetails from 'web/pages/active-directory/ComputerDetails';
 import DirectoryAccordion from 'web/pages/active-directory/DirectoryAccordion';
 import {
   ComputerDetailsInset,
-  DirectoryRow,
+  ComputerDirectoryRow,
+  ComputerMetadataLabel,
 } from 'web/pages/active-directory/DirectoryLayout';
+
+const HostnameBadge = styled(Badge)`
+  height: auto;
+  min-height: 1.25rem;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+  white-space: normal;
+`;
+
+const HostnameTooltipTarget = styled.span`
+  display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
+  border-radius: var(--mantine-radius-xl);
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-anchor);
+    outline-offset: 2px;
+  }
+`;
+
+const ComputerDisclosure = styled(Row)`
+  > button {
+    min-width: 0;
+    width: auto;
+  }
+`;
 
 const ExpandedComputerDetails = ({
   node,
@@ -72,6 +104,14 @@ const ComputerRow = ({
 }) => {
   const [_] = useTranslation();
   const [expanded, setExpanded] = useState(false);
+  const disclosure = (
+    <Accordion.Control
+      aria-label={_('Computer details for {{name}}', {name: node.name})}
+      title={expanded ? _('Hide computer details') : _('Show computer details')}
+    >
+      {node.name}
+    </Accordion.Control>
+  );
   const targets = node.matchedTargets;
   let targetSummary: ReactNode;
   if (targets === undefined) {
@@ -95,33 +135,44 @@ const ComputerRow = ({
         onChange={value => setExpanded(value !== null)}
       >
         <Accordion.Item value="details">
-          <DirectoryRow $depth={depth}>
+          <ComputerDirectoryRow $depth={depth}>
             <div>
-              <Accordion.Control
-                aria-label={_('Computer details for {{name}}', {
-                  name: node.name,
-                })}
-                title={
-                  expanded
-                    ? _('Hide computer details')
-                    : _('Show computer details')
-                }
-              >
-                {node.name}
-              </Accordion.Control>
+              {node.hostname ? (
+                disclosure
+              ) : (
+                <ComputerDisclosure gap="xs" wrap="wrap">
+                  {disclosure}
+                  <Tooltip
+                    multiline
+                    events={{hover: true, focus: true, touch: true}}
+                    label={_(
+                      'This computer cannot be transferred to a target.',
+                    )}
+                    styles={{tooltip: {maxWidth: 'calc(100vw - 1rem)'}}}
+                    width={260}
+                  >
+                    <HostnameTooltipTarget tabIndex={0}>
+                      <HostnameBadge color={EThemeColors.Orange} size="sm">
+                        {_('No DNS hostname')}
+                      </HostnameBadge>
+                    </HostnameTooltipTarget>
+                  </Tooltip>
+                </ComputerDisclosure>
+              )}
               {node.disabled && (
                 <small>{_('Disabled Active Directory object')}</small>
               )}
-              {!node.hostname && (
-                <small>
-                  {_(
-                    'No DNS hostname available. This computer cannot be transferred to a target.',
-                  )}
-                </small>
-              )}
             </div>
-            <div>{node.operatingSystem || _('Not provided')}</div>
-            <div>{targetSummary}</div>
+            <div>
+              <ComputerMetadataLabel>
+                {_('Operating system')}
+              </ComputerMetadataLabel>
+              {node.operatingSystem || _('Not provided')}
+            </div>
+            <div>
+              <ComputerMetadataLabel>{_('Scan targets')}</ComputerMetadataLabel>
+              {targetSummary}
+            </div>
             <div>
               <EntitySelection
                 aria-label={node.name}
@@ -132,7 +183,7 @@ const ComputerRow = ({
                 onSelected={() => onSelect(true)}
               />
             </div>
-          </DirectoryRow>
+          </ComputerDirectoryRow>
           <Accordion.Panel>
             <ComputerDetailsInset $depth={depth}>
               <HighlightBox>

@@ -15,7 +15,6 @@ import {
   SearchIcon,
 } from 'web/components/icon';
 import InfoTip from 'web/components/info-tip/InfoTip';
-import Layout from 'web/components/layout/Layout';
 import useTranslation from 'web/hooks/useTranslation';
 
 type SummaryColor = 'blue' | 'yellow' | 'gray' | 'violet' | 'green';
@@ -26,58 +25,72 @@ interface DiscoverySummaryProps {
   isPartial?: boolean;
 }
 
+const Summary = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: var(--mantine-spacing-xs);
+
+  @container ad-discovery (max-width: 43rem) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @container ad-discovery (max-width: 17rem) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+`;
+
 const SummaryCard = styled.div<{$color: SummaryColor}>`
-  flex: 1 1 9rem;
-  min-width: 0;
-
-  &[data-metric='found'] {
-    flex-grow: 1.25;
-
-    dt {
-      font-weight: 600;
-    }
-    dd {
-      font-size: calc(var(--mantine-font-size-xl) * 1.3);
-    }
-  }
-
-  &[data-metric='unresolvable'] dd {
-    color: var(--mantine-color-yellow-9);
-  }
-
   > div {
-    display: flex;
-    align-items: center;
-    gap: var(--mantine-spacing-sm);
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: var(--mantine-spacing-xs);
     height: 100%;
     box-sizing: border-box;
-    background-color: ${({$color}) => `var(--mantine-color-${$color}-light)`};
-    box-shadow: var(--mantine-shadow-xs);
-    color: var(--mantine-color-text);
+    background-color: ${({$color}) =>
+      `color-mix(in srgb, var(--mantine-color-${$color}-light) 60%, var(--mantine-color-default))`};
+    border: 1px solid var(--mantine-color-default-border);
     padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
   }
 
   dl {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    align-self: stretch;
     gap: var(--mantine-spacing-xxs);
     margin: 0;
     min-width: 0;
+    overflow-wrap: anywhere;
   }
 
   dt {
     display: flex;
-    align-items: center;
-    gap: var(--mantine-spacing-xs);
-    font-size: var(--mantine-font-size-md);
-    line-height: 1.25;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--mantine-spacing-xxs);
+    font-size: var(--mantine-font-size-sm);
+    line-height: var(--mantine-line-height-sm);
   }
 
   dd {
     margin: 0;
-    font-size: calc(var(--mantine-font-size-xl) * 1.15);
+    font-size: var(--mantine-font-size-xl);
+    font-variant-numeric: tabular-nums;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: var(--mantine-h3-line-height);
+    min-block-size: var(--mantine-h3-line-height);
+  }
+
+  dd[data-unavailable] {
+    font-size: var(--mantine-font-size-sm);
+    font-weight: 600;
+  }
+
+  @container ad-discovery (max-width: 17rem) {
+    > div {
+      padding-inline: var(--mantine-spacing-xs);
+    }
   }
 `;
 
@@ -85,9 +98,8 @@ const MetricIconTile = styled.span<{$color: SummaryColor}>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 2rem;
-  width: 2rem;
-  height: 2rem;
+  width: var(--mantine-spacing-lg);
+  height: var(--mantine-spacing-lg);
   border-radius: 50%;
   background-color: var(--mantine-color-default);
   color: ${({$color}) => `var(--mantine-color-${$color}-light-color)`};
@@ -137,14 +149,11 @@ const DiscoverySummary = ({
     },
   ] as const;
   return (
-    <Layout
-      flex
-      wrap
+    <Summary
       aria-atomic="true"
       aria-label={_('Discovery summary')}
       aria-live="polite"
       role="group"
-      style={{gap: 'var(--mantine-spacing-sm)', flexShrink: 0}}
     >
       {metrics.map(({id, label, count, color, icon: MetricIcon}) => (
         <SummaryCard key={id} $color={color} data-metric={id}>
@@ -154,7 +163,7 @@ const DiscoverySummary = ({
             </MetricIconTile>
             <dl>
               <dt>
-                {label}
+                <span>{label}</span>
                 {id === 'found' && (
                   <>
                     {isPartial && (
@@ -170,12 +179,14 @@ const DiscoverySummary = ({
                   </>
                 )}
               </dt>
-              <dd>{count ?? _('Unavailable')}</dd>
+              <dd data-unavailable={count === undefined ? '' : undefined}>
+                {count ?? _('Unavailable')}
+              </dd>
             </dl>
           </HighlightBox>
         </SummaryCard>
       ))}
-    </Layout>
+    </Summary>
   );
 };
 

@@ -23,10 +23,11 @@ import {getBranchSelectionSummary} from 'web/pages/active-directory/directory-se
 import DirectoryAccordion from 'web/pages/active-directory/DirectoryAccordion';
 import {
   BranchRow,
+  DirectoryBranchContent,
+  DirectoryEmptyNotice,
   DirectoryHeader,
   DirectoryList,
 } from 'web/pages/active-directory/DirectoryLayout';
-import DirectoryPanel from 'web/pages/active-directory/DirectoryPanel';
 
 interface DirectoryTreeProps {
   nodes: DirectoryNode[];
@@ -90,7 +91,13 @@ const ExpandedBranch = ({
     if (listing) onLoaded(opening, node.id, listing);
   }, [listing, node.id, onLoaded, opening]);
   return (
-    <Column aria-busy={isFetching} gap="xs" miw={0} pb="xs">
+    <DirectoryBranchContent
+      $topLevel={!path?.length}
+      aria-busy={isFetching}
+      gap="xs"
+      miw={0}
+      pb="xs"
+    >
       {isFetching && (
         <output aria-label={_('Loading {{- name}}', {name: node.name})}>
           <Loading />
@@ -134,7 +141,7 @@ const ExpandedBranch = ({
           onSelect={onSelect}
         />
       )}
-    </Column>
+    </DirectoryBranchContent>
   );
 };
 
@@ -253,15 +260,7 @@ const DirectoryTreeNode = ({
     </DirectoryAccordion>
   );
 
-  return (
-    <li>
-      {path?.length ? (
-        accordion
-      ) : (
-        <DirectoryPanel paddingInline="0">{accordion}</DirectoryPanel>
-      )}
-    </li>
-  );
+  return <li>{accordion}</li>;
 };
 
 const DirectoryTree = ({
@@ -288,7 +287,9 @@ const DirectoryTree = ({
         (!computerPaths || computerPaths[node.id] === pathKey)),
   );
   return visible.length === 0 ? (
-    <p>
+    <DirectoryEmptyNotice
+      $ownerDepth={path?.length ? path.length - 1 : undefined}
+    >
       {nodes.some(
         node =>
           node.kind === 'computer' &&
@@ -297,9 +298,9 @@ const DirectoryTree = ({
       )
         ? _('These computers are shown in another directory group.')
         : _('No visible directory objects.')}
-    </p>
+    </DirectoryEmptyNotice>
   ) : (
-    <Column gap="xs" miw={path?.length ? 0 : '36rem'}>
+    <Column gap="xs" miw={0}>
       {visible.some(node => node.kind !== 'computer') && (
         <DirectoryList $spacing={path?.length ? 'xs' : 'sm'}>
           {visible
