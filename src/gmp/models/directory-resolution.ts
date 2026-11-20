@@ -5,12 +5,16 @@
 
 import {
   type DirectoryBranch,
+  type DirectoryNode,
   type DirectoryOverview,
   type DirectoryResolution,
 } from 'gmp/models/active-directory';
 import {
+  type DirectoryGraph,
+  type DirectorySnapshot,
   emptyDirectoryGraph,
   getDirectoryMembers,
+  mergeDirectoryGraph,
   replaceDirectorySnapshot,
 } from 'gmp/models/directory-graph';
 
@@ -21,6 +25,39 @@ type FetchListing = (
 
 const incompleteResults =
   'Directory results are incomplete. Your selection has been preserved.';
+
+const replaceSubtreeSnapshots = (
+  graph: DirectoryGraph,
+  rootId: string,
+  objects: DirectoryNode[],
+): DirectoryGraph => {
+  const branchIds = [rootId];
+  const childrenByParent = new Map<string, DirectoryNode[]>();
+  for (const node of objects) {
+    if (node.kind === 'ou' || node.kind === 'container')
+      branchIds.push(node.id);
+    const siblings = childrenByParent.get(node.parentDn);
+    if (siblings) siblings.push(node);
+    else childrenByParent.set(node.parentDn, [node]);
+  }
+
+  const nodes = new Map<string, DirectoryNode>();
+  const branches = new Map<string, DirectorySnapshot>();
+  for (const id of branchIds) {
+    const children = childrenByParent.get(id) ?? [];
+    // Preserve the original parent order when a node occurs in multiple snapshots.
+    for (const child of children) nodes.set(child.id, child);
+    branches.set(id, {
+      owner: 'resolution',
+      children: children.map(node => node.id),
+      complete: true,
+    });
+  }
+  return mergeDirectoryGraph(graph, {
+    nodes: Object.fromEntries(nodes),
+    branches: Object.fromEntries(branches),
+  });
+};
 
 export const resolveDirectorySubtree = async (
   branchId: string,
@@ -50,20 +87,7 @@ export const resolveDirectorySubtree = async (
       return;
     }
 
-    const branchIds = [
-      id,
-      ...roots
-        .filter(node => node.kind === 'ou' || node.kind === 'container')
-        .map(node => node.id),
-    ];
-    for (const parentId of branchIds)
-      graph = replaceDirectorySnapshot(
-        graph,
-        parentId,
-        'resolution',
-        roots.filter(node => node.parentDn === parentId),
-        true,
-      );
+    graph = replaceSubtreeSnapshots(graph, id, roots);
     for (const node of roots)
       if (node.kind === 'group')
         await visitBranch(node.id, node.kind, nextPath);
