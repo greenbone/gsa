@@ -20,12 +20,12 @@ import {useGetActiveDirectoryCredential} from 'web/hooks/use-query/active-direct
 import useCapabilities from 'web/hooks/useCapabilities';
 import useFeatures from 'web/hooks/useFeatures';
 import useTranslation from 'web/hooks/useTranslation';
+import DirectoryBrowser from 'web/pages/active-directory/DirectoryBrowser';
+import {BrowserViewport} from 'web/pages/active-directory/DirectoryLayout';
 import {
   connectionServer,
   useTlsModeLabel,
-} from 'web/pages/active-directory/ConnectionContext';
-import DirectoryBrowser from 'web/pages/active-directory/DirectoryBrowser';
-import {BrowserViewport} from 'web/pages/active-directory/DirectoryLayout';
+} from 'web/pages/active-directory/useConnectionFormat';
 import TargetComponent from 'web/pages/targets/TargetComponent';
 import {mayAccessActiveDirectory} from 'web/utils/active-directory-access';
 

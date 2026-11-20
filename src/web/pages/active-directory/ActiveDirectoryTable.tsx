@@ -23,7 +23,7 @@ import useTranslation from 'web/hooks/useTranslation';
 import {
   connectionServer,
   useTlsModeLabel,
-} from 'web/pages/active-directory/ConnectionContext';
+} from 'web/pages/active-directory/useConnectionFormat';
 import CredentialDetails from 'web/pages/credentials/CredentialDetails';
 import {ROUTES} from 'web/route-paths';
 
