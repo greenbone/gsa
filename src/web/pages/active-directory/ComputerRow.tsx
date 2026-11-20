@@ -7,7 +7,6 @@ import {type ReactNode, useState} from 'react';
 import {Accordion} from '@mantine/core';
 import {type DirectoryComputer} from 'gmp/models/active-directory';
 import HighlightBox from 'web/components/highlight-box';
-import Loading from 'web/components/loading/Loading';
 import InlineNotification from 'web/components/notification/InlineNotification';
 import EntitySelection from 'web/entities/EntitySelection';
 import {useGetActiveDirectoryComputerDetails} from 'web/hooks/use-query/active-directory';
@@ -27,32 +26,30 @@ const ExpandedComputerDetails = ({
   sourceId: string;
 }) => {
   const [_] = useTranslation();
-  const {data, isError, isFetching, refetch} =
+  const {data, isError, isFetched, isFetching, refetch} =
     useGetActiveDirectoryComputerDetails(sourceId, node.id);
+
+  const retrying = isFetching && isFetched && data === undefined;
+  let feedback: ReactNode;
+  if (isError || retrying) {
+    feedback = (
+      <InlineNotification
+        action={{
+          label: _('Retry'),
+          onClick: () => void refetch(),
+          isLoading: retrying,
+        }}
+        message={_('Could not load computer details.')}
+        severity="error"
+      />
+    );
+  }
 
   return (
     <ComputerDetails
       details={data}
-      feedback={
-        <>
-          {isFetching && (
-            <output aria-label={_('Loading computer details...')}>
-              <Loading />
-            </output>
-          )}
-          {isError && (
-            <InlineNotification
-              action={{
-                label: _('Retry'),
-                onClick: () => void refetch(),
-                isLoading: isFetching,
-              }}
-              message={_('Could not load computer details.')}
-              severity="error"
-            />
-          )}
-        </>
-      }
+      feedback={feedback}
+      loading={isFetching && !retrying}
       node={node}
     />
   );
