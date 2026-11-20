@@ -12,7 +12,6 @@ import {
   BarChart3,
   Calendar,
   Check,
-  ChevronDown,
   ChevronFirst,
   ChevronLast,
   ChevronLeft,
@@ -182,11 +181,6 @@ const getIcons = (): Record<string, IconComponent> => {
 
   _iconCache = {
     // Lucide icons
-    ChevronDown: createIcon(
-      ChevronDown,
-      'chevron-down-icon',
-      'Chevron Down Icon',
-    ),
     ActiveDirectory: createIcon(
       Network,
       'active-directory-icon',
@@ -485,8 +479,6 @@ export const FirstIcon = getIcons().ChevronFirst;
 export const LastIcon = getIcons().ChevronLast;
 export const PreviousIcon = getIcons().ChevronLeft;
 export const NextIcon = getIcons().ChevronRight;
-export const ChevronDownIcon = getIcons().ChevronDown;
-export const ChevronRightIcon = getIcons().ChevronRight;
 export const CircleMinusIcon = getIcons().CircleMinus;
 export const CirclePlusIcon = getIcons().CirclePlus;
 export const CircleXDeleteIcon = getIcons().CircleX;
