@@ -3,53 +3,86 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {type HTMLAttributes, type MouseEvent} from 'react';
+import {type ButtonHTMLAttributes} from 'react';
+import {ChevronDown} from 'lucide-react';
 import styled from 'styled-components';
-import useClickHandler from 'web/components/form/useClickHandler';
+import useTranslation from 'web/hooks/useTranslation';
 import Theme from 'web/utils/theme';
 
-interface RowDetailsToggleProps<TValue> extends Omit<
-  HTMLAttributes<HTMLSpanElement>,
-  'onClick'
+interface RowDetailsToggleProps extends Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  'onClick' | 'value' | 'children'
 > {
   'data-testid'?: string;
-  name?: string;
-  value?: TValue;
-  onClick?: (value: TValue, name?: string) => void;
+  detailsExpanded?: boolean;
+  detailsId?: string;
+  previewLabel?: string;
+  onClick?: () => void;
 }
 
-const StyledSpan = styled.span`
+const StyledButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
   cursor: pointer;
-  text-decoration: none;
-  color: ${Theme.blue};
-  :hover {
-    text-decoration: underline;
-    color: ${Theme.blue};
+  border-radius: 2px;
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
   }
   @media print {
     color: ${Theme.black};
   }
 `;
 
-const RowDetailsToggle = <TValue,>({
+const StyledChevron = styled(ChevronDown)<{$expanded: boolean}>`
+  transform: ${({$expanded}) => ($expanded ? 'rotate(180deg)' : 'rotate(0deg)')};
+  transition: transform 200ms ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+`;
+
+const RowDetailsToggle = ({
   'data-testid': dataTestId = 'row-details-toggle',
-  name,
-  value,
+  detailsExpanded = false,
+  detailsId,
+  previewLabel,
   onClick,
   ...props
-}: RowDetailsToggleProps<TValue>) => {
-  const handleClick = useClickHandler<
-    Pick<RowDetailsToggleProps<TValue>, 'name' | 'value'>,
-    TValue,
-    MouseEvent<HTMLSpanElement>
-  >({
-    onClick,
-    nameFunc: (event, props) => props.name,
-    valueFunc: (event, props) => props.value as TValue,
-    props: {name, value},
-  });
+}: RowDetailsToggleProps) => {
+  const [_] = useTranslation();
+  let label: string;
+  if (detailsExpanded) {
+    label = previewLabel
+      ? _('Hide preview for {{name}}', {name: previewLabel})
+      : _('Hide preview');
+  } else {
+    label = previewLabel
+      ? _('Show preview for {{name}}', {name: previewLabel})
+      : _('Show preview');
+  }
   return (
-    <StyledSpan {...props} data-testid={dataTestId} onClick={handleClick} />
+    <StyledButton
+      {...props}
+      aria-controls={detailsId}
+      aria-expanded={detailsExpanded}
+      aria-label={label}
+      data-testid={dataTestId}
+      title={label}
+      type="button"
+      onClick={() => onClick?.()}
+    >
+      <StyledChevron $expanded={detailsExpanded} aria-hidden="true" size={20} />
+    </StyledButton>
   );
 };
 

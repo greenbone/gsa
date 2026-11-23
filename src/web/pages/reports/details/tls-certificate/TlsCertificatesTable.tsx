@@ -18,8 +18,9 @@ import createEntitiesTable from 'web/entities/createEntitiesTable';
 import {
   type FooterComponentProps,
   type RowComponentProps,
+  type RowPreview,
 } from 'web/entities/EntitiesTable';
-import RowDetailsToggle from 'web/entities/RowDetailsToggle';
+import TableEntityName from 'web/entities/TableEntityName';
 import withRowDetails from 'web/entities/withRowDetails';
 import TlsCertificateDetails from 'web/pages/tlscertificates/Details';
 import {ROUTES} from 'web/route-paths';
@@ -37,17 +38,16 @@ interface RowProps extends RowComponentProps<Model> {
   actions?: boolean;
   links?: boolean;
   onTlsCertificateDownloadClick?: (entity: ReportTLSCertificate) => void;
-  onToggleDetailsClick?: (entity: Model, id?: string) => void;
 }
 
 interface ColumnsProps {
   actions?: boolean;
   links?: boolean;
   onTlsCertificateDownloadClick?: (entity: ReportTLSCertificate) => void;
-  onToggleDetailsClick?: (entity: ReportTLSCertificate, id?: string) => void;
+  preview?: RowPreview;
 }
 
-const Div = styled.div`
+const SubjectDn = styled.span`
   word-break: break-all;
 `;
 
@@ -59,7 +59,7 @@ const getColumns = ({
   actions = true,
   links = true,
   onTlsCertificateDownloadClick,
-  onToggleDetailsClick,
+  preview,
 }: ColumnsProps) =>
   [
     {
@@ -69,13 +69,9 @@ const getColumns = ({
       sortBy: 'dn',
       render: (entity: ReportTLSCertificate) => (
         <StyledSpan>
-          <RowDetailsToggle
-            name={entity.id}
-            value={entity}
-            onClick={onToggleDetailsClick}
-          >
-            <Div>{entity.subjectDn}</Div>
-          </RowDetailsToggle>
+          <TableEntityName preview={preview} previewLabel={entity.subjectDn}>
+            <SubjectDn>{entity.subjectDn}</SubjectDn>
+          </TableEntityName>
         </StyledSpan>
       ),
     },
@@ -185,16 +181,14 @@ const Row = ({
   entity,
   links = true,
   onTlsCertificateDownloadClick,
-  onToggleDetailsClick,
+  preview,
 }: RowProps) => {
   const tlsEntity = entity as unknown as ReportTLSCertificate;
   const columns = getColumns({
     actions,
     links,
     onTlsCertificateDownloadClick,
-    onToggleDetailsClick: onToggleDetailsClick as
-      | ((entity: ReportTLSCertificate, id?: string) => void)
-      | undefined,
+    preview,
   });
 
   return (

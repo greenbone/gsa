@@ -16,7 +16,7 @@ import Qod from 'web/components/qod/Qod';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntitiesActions from 'web/entities/EntitiesActions';
-import RowDetailsToggle from 'web/entities/RowDetailsToggle';
+import TableEntityName from 'web/entities/TableEntityName';
 import useGmp from 'web/hooks/useGmp';
 import {ROUTES} from 'web/route-paths';
 import PropTypes from 'web/utils/prop-types';
@@ -27,7 +27,7 @@ const Row = ({
   entity,
   links = true,
   onFilterChanged,
-  onToggleDetailsClick,
+  preview,
   ...props
 }) => {
   const gmp = useGmp();
@@ -42,9 +42,14 @@ const Row = ({
     <TableRow>
       <TableData>
         <span>
-          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+          <TableEntityName
+            id={entity.id}
+            links={links}
+            preview={preview}
+            type="nvt"
+          >
             {entity.name}
-          </RowDetailsToggle>
+          </TableEntityName>
         </span>
       </TableData>
       <TableData>
@@ -99,7 +104,11 @@ Row.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onFilterChanged: PropTypes.func.isRequired,
-  onToggleDetailsClick: PropTypes.func.isRequired,
+  preview: PropTypes.shape({
+    expanded: PropTypes.bool.isRequired,
+    id: PropTypes.string,
+    toggle: PropTypes.func.isRequired,
+  }),
 };
 
 export default Row;

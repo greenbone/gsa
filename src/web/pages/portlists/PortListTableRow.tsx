@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type PortList from 'gmp/models/port-list';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
+import {type RowPreview} from 'web/entities/EntitiesTable';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
 import useTranslation from 'web/hooks/useTranslation';
 import PortListActions, {
@@ -15,14 +15,14 @@ import PortListActions, {
 export interface PortListTableRowProps extends PortListActionsProps {
   actionsComponent?: React.ComponentType<PortListActionsProps>;
   links?: boolean;
-  onToggleDetailsClick?: (entity: PortList) => void;
+  preview?: RowPreview;
 }
 
 const PortListTableRow = ({
   actionsComponent: ActionsComponent = PortListActions,
   entity,
   links = true,
-  onToggleDetailsClick,
+  preview,
   onPortListCloneClick,
   onPortListDeleteClick,
   onPortListDownloadClick,
@@ -39,8 +39,8 @@ const PortListTableRow = ({
         displayName={_('Port List')}
         entity={entity}
         links={links}
+        preview={preview}
         type="portlist"
-        onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData align="start">{entity.portCount.all}</TableData>
       <TableData align="start">{entity.portCount.tcp}</TableData>

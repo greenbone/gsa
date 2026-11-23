@@ -12,7 +12,7 @@ import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import RowDetailsToggle from 'web/entities/RowDetailsToggle';
+import TableEntityName from 'web/entities/TableEntityName';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/prop-types';
@@ -66,16 +66,23 @@ Actions.propTypes = {
 const Row = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
-  onToggleDetailsClick,
+  links = true,
+  preview,
   ...props
 }) => {
   return (
     <TableRow data-testid={`tls-certificate-row-${entity.id}`}>
       <TableData>
         <span>
-          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+          <TableEntityName
+            id={entity.id}
+            links={links}
+            preview={preview}
+            previewLabel={entity.subjectDn}
+            type="tlscertificate"
+          >
             <Div>{entity.subjectDn}</Div>
-          </RowDetailsToggle>
+          </TableEntityName>
         </span>
       </TableData>
       <TableData>{entity.serial}</TableData>
@@ -94,9 +101,14 @@ const Row = ({
 };
 
 Row.propTypes = {
+  links: PropTypes.bool,
   actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
-  onToggleDetailsClick: PropTypes.func.isRequired,
+  preview: PropTypes.shape({
+    expanded: PropTypes.bool.isRequired,
+    id: PropTypes.string,
+    toggle: PropTypes.func.isRequired,
+  }),
 };
 
 export default Row;

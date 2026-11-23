@@ -12,6 +12,11 @@ interface TableDataProps extends LayoutProps {
   rowSpan?: number;
 }
 
+export const TableDataContent = styled(Layout)`
+  padding-top: 8px;
+  padding-bottom: 8px;
+`;
+
 const TableData = ({
   children,
   className,
@@ -26,16 +31,11 @@ const TableData = ({
     data-testid={dataTestId}
     rowSpan={rowSpan}
   >
-    <StyledLayout flex="column" {...other}>
+    <TableDataContent flex="column" {...other}>
       {children}
-    </StyledLayout>
+    </TableDataContent>
   </td>
 );
-
-const StyledLayout = styled(Layout)`
-  padding-top: 8px;
-  padding-bottom: 8px;
-`;
 
 export const TableDataAlignTop = styled(TableData)`
   vertical-align: top;

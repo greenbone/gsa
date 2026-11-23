@@ -15,7 +15,11 @@ const createGmp = () => ({
   },
   session: createSession(),
 });
-const {render} = rendererWithTableBody({gmp: createGmp()});
+const {render} = rendererWithTableBody({
+  capabilities: true,
+  router: true,
+  gmp: createGmp(),
+});
 
 describe('ResultsTableRow tests', () => {
   test('should render EPSS fields 1 columns', () => {

@@ -77,11 +77,10 @@ describe('TlsCertificates table tests', () => {
     expect(heads[5]).toHaveTextContent('Actions');
   });
 
-  test('should unfold all details', () => {
+  test('should unfold all details', async () => {
     const handleTlsCertificateDelete = testing.fn();
     const handleTlsCertificateDownload = testing.fn();
     const handleTlsCertificateExport = testing.fn();
-    const handleToggleDetailsClick = testing.fn();
 
     const {render} = rendererWith({
       gmp: createGmp(),
@@ -97,18 +96,18 @@ describe('TlsCertificates table tests', () => {
         onTlsCertificateDeleteClick={handleTlsCertificateDelete}
         onTlsCertificateDownloadClick={handleTlsCertificateDownload}
         onTlsCertificateExportClick={handleTlsCertificateExport}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
-    let details = screen.queryByTestId('tls-certificate-details-1234');
-    expect(details).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('tls-certificate-details-1234'),
+    ).not.toBeInTheDocument();
 
     const unfoldIcon = screen.getByTestId('fold-state-icon-unfold');
     expect(unfoldIcon).toHaveAttribute('title', 'Unfold all details');
     fireEvent.click(unfoldIcon);
 
-    details = screen.getByTestId('tls-certificate-details-1234');
+    const details = await screen.findByTestId('tls-certificate-details-1234');
     expect(details).toHaveTextContent('Valid');
     expect(details).toHaveTextContent('SHA-256 Fingerprint');
     expect(details).toHaveTextContent('MD5 Fingerprint');
@@ -118,7 +117,6 @@ describe('TlsCertificates table tests', () => {
     const handleTlsCertificateDelete = testing.fn();
     const handleTlsCertificateDownload = testing.fn();
     const handleTlsCertificateExport = testing.fn();
-    const handleToggleDetailsClick = testing.fn();
 
     const {render} = rendererWith({
       gmp: createGmp(),
@@ -134,7 +132,6 @@ describe('TlsCertificates table tests', () => {
         onTlsCertificateDeleteClick={handleTlsCertificateDelete}
         onTlsCertificateDownloadClick={handleTlsCertificateDownload}
         onTlsCertificateExportClick={handleTlsCertificateExport}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 

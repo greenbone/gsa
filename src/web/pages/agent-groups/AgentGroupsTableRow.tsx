@@ -23,13 +23,11 @@ export interface AgentGroupsRowActionsProps extends AgentGroupsActionsProps {
   onEntityRestore?: (entity: AgentGroup) => Promise<void>;
   onSelectionTypeChange?: (selectionType: SelectionTypeType) => void;
   onTagsBulk?: () => void;
-  onToggleDetailsClick?: (entity: AgentGroup, id: string) => void;
 }
 
 export interface AgentGroupsTableRowProps
   extends AgentGroupsRowActionsProps, RowComponentProps<AgentGroup> {
   actionsComponent?: React.ComponentType<AgentGroupsRowActionsProps>;
-  links?: boolean;
 }
 
 const AgentGroupsTableRow = ({
@@ -46,7 +44,7 @@ const AgentGroupsTableRow = ({
   onDeleteBulk,
   onSelectionTypeChange,
   onTagsBulk,
-  onToggleDetailsClick,
+  preview,
   onEntityDelete,
   onEntityRestore,
 }: AgentGroupsTableRowProps) => {
@@ -64,8 +62,8 @@ const AgentGroupsTableRow = ({
         displayName={_('Agent Group')}
         entity={entity}
         links={links}
+        preview={preview}
         type="agentgroup"
-        onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>{entity.scanner?.name ?? <i>{_('None')}</i>}</TableData>
       <TableData>{entity.getAgentCount()}</TableData>
@@ -83,7 +81,6 @@ const AgentGroupsTableRow = ({
         onEntitySelected={onEntitySelected}
         onSelectionTypeChange={onSelectionTypeChange}
         onTagsBulk={onTagsBulk}
-        onToggleDetailsClick={onToggleDetailsClick}
       />
     </TableRow>
   );

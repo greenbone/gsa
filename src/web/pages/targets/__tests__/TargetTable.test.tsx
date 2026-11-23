@@ -63,6 +63,14 @@ describe('TargetTable tests', () => {
     render(<TargetTable entities={targets} />);
     expect(screen.getByText('Target 1')).toBeInTheDocument();
     expect(screen.getByText('Target 2')).toBeInTheDocument();
+    const toggle = screen.getByRole('button', {name: /preview for Target 1/});
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.click(toggle);
+    expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    expect(
+      document.getElementById(toggle.getAttribute('aria-controls') ?? ''),
+    ).toHaveTextContent('Hosts');
+    fireEvent.click(toggle);
     const rows = screen.queryAllByRole('row');
     expect(rows).toHaveLength(targets.length + 2); // +2 for one header row and one footer row
     const headers = screen.queryAllByRole('columnheader');

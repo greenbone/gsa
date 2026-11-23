@@ -10,10 +10,10 @@ import CpeIcon from 'web/components/icon/CpeIcon';
 import DeleteIcon from 'web/components/icon/DeleteIcon';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
-import DetailsLink from 'web/components/link/DetailsLink';
 import Link from 'web/components/link/Link';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
+import TableEntityName from 'web/entities/TableEntityName';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import useTranslation from 'web/hooks/useTranslation';
 import PropTypes from 'web/utils/prop-types';
@@ -60,13 +60,13 @@ const Row = ({
       <TableData>
         <IconDivider align={['start', 'center']}>
           <CpeIcon name={entity.name} />
-          <DetailsLink
+          <TableEntityName
             id={entity.id}
-            textOnly={!links}
+            links={links}
             type={entity.entityType}
           >
             {entity.name}
-          </DetailsLink>
+          </TableEntityName>
         </IconDivider>
       </TableData>
       <TableData>{entity.title}</TableData>

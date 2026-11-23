@@ -14,6 +14,7 @@ import TableRow from 'web/components/table/TableRow';
 import EntitiesActions, {
   type EntitiesActionsProps,
 } from 'web/entities/EntitiesActions';
+import {type RowPreview} from 'web/entities/EntitiesTable';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
 import CloneIcon from 'web/entity/icon/CloneIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
@@ -36,7 +37,7 @@ export interface PermissionTableRowProps extends PermissionActionsProps {
   actionsComponent?: React.ComponentType<PermissionActionsProps>;
   links?: boolean;
   'data-testid'?: string;
-  onToggleDetailsClick: (entity: Permission) => void;
+  preview?: RowPreview;
 }
 
 const Actions = ({
@@ -95,7 +96,7 @@ const PermissionTableRow = ({
     ActionsComponent = Actions as unknown as React.ComponentType<PermissionActionsProps>,
   entity,
   links = true,
-  onToggleDetailsClick,
+  preview,
   ...props
 }: PermissionTableRowProps) => {
   const [_] = useTranslation();
@@ -106,8 +107,8 @@ const PermissionTableRow = ({
         displayName={_('Permission')}
         entity={entity}
         links={links}
+        preview={preview}
         type="permission"
-        onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>
         {permissionDescription(

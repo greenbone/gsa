@@ -10,7 +10,8 @@ import {shorten} from 'gmp/utils/string';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import RowDetailsToggle from 'web/entities/RowDetailsToggle';
+import {type RowPreview} from 'web/entities/EntitiesTable';
+import TableEntityName from 'web/entities/TableEntityName';
 import useTranslation from 'web/hooks/useTranslation';
 import OverrideTableActions, {
   type OverrideTableActionsProps,
@@ -22,14 +23,16 @@ import {
 } from 'web/utils/severity';
 
 export interface OverrideTableRowProps extends OverrideTableActionsProps {
+  links?: boolean;
   actionsComponent?: React.ComponentType<OverrideTableActionsProps>;
-  onToggleDetailsClick: () => void;
+  preview?: RowPreview;
 }
 
 const OverrideTableRow = ({
   actionsComponent: ActionsComponent = OverrideTableActions,
   entity,
-  onToggleDetailsClick,
+  links = true,
+  preview,
   ...props
 }: OverrideTableRowProps) => {
   const [_] = useTranslation();
@@ -49,9 +52,14 @@ const OverrideTableRow = ({
     <TableRow>
       <TableData>
         <span>
-          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+          <TableEntityName
+            id={entity.id}
+            links={links}
+            preview={preview}
+            type="override"
+          >
             {shorten(entity.text)}
-          </RowDetailsToggle>
+          </TableEntityName>
         </span>
       </TableData>
       <TableData>{entity.nvt ? entity.nvt.name : ''}</TableData>

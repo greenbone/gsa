@@ -39,6 +39,12 @@ describe('Audit report row', () => {
     const rows = baseElement.querySelectorAll('tr');
 
     expect(links[0]).toHaveAttribute('href', '/audit-report/1234');
+    expect(
+      links[0].querySelector('.lucide-arrow-right'),
+    ).not.toBeInTheDocument();
+    expect(
+      links[1].querySelector('.lucide-arrow-right'),
+    ).not.toBeInTheDocument();
     expect(rows[0]).toHaveTextContent('Mon, Jun 3, 2019 1:00 PM');
     expect(bars[0]).toHaveAttribute('title', 'Done');
     expect(bars[0]).toHaveTextContent('Done');

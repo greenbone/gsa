@@ -25,7 +25,8 @@ import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
-import RowDetailsToggle from 'web/entities/RowDetailsToggle';
+import {type RowPreview} from 'web/entities/EntitiesTable';
+import TableEntityName from 'web/entities/TableEntityName';
 import withRowDetails from 'web/entities/withRowDetails';
 import ResultDetails, {
   type ResultDetailsProps,
@@ -41,11 +42,16 @@ interface HeaderProps {
 }
 
 interface RowProps {
+  links?: boolean;
   entity: Result;
-  onToggleDetailsClick?: () => void;
+  preview?: RowPreview;
 }
 
-const getColumns = (enableEPSS = false, onToggleDetailsClick?: () => void) => [
+const getColumns = ({
+  enableEPSS = false,
+  links = true,
+  preview,
+}: {enableEPSS?: boolean; links?: boolean; preview?: RowPreview} = {}) => [
   {
     key: 'nvt',
     title: _('NVT'),
@@ -67,9 +73,14 @@ const getColumns = (enableEPSS = false, onToggleDetailsClick?: () => void) => [
 
       return (
         <Layout align="space-between">
-          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-            <span>{shownName}</span>
-          </RowDetailsToggle>
+          <TableEntityName
+            id={entity.id}
+            links={links}
+            preview={preview}
+            type="result"
+          >
+            {shownName}
+          </TableEntityName>
           <IconDivider>
             {hasActiveNotes && (
               <NoteIcon title={_('There are notes for this result')} />
@@ -194,7 +205,7 @@ const Header = ({
   sort = true,
   onSortChange,
 }: HeaderProps) => {
-  const columns = getColumns(false);
+  const columns = getColumns();
 
   const hasEPSS = columns.some(col => col.headerGroup === _('EPSS'));
   const hasNestedHeaders = hasEPSS;
@@ -259,8 +270,8 @@ const Header = ({
   );
 };
 
-const Row = ({entity, onToggleDetailsClick}: RowProps) => {
-  const columns = getColumns(false, onToggleDetailsClick);
+const Row = ({entity, links = true, preview}: RowProps) => {
+  const columns = getColumns({links, preview});
 
   return (
     <TableRow>

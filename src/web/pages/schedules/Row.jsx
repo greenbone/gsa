@@ -73,7 +73,7 @@ const Row = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
-  onToggleDetailsClick,
+  preview,
   ...props
 }) => {
   const [_] = useTranslation();
@@ -85,8 +85,8 @@ const Row = ({
         displayName={_('Schedule')}
         entity={entity}
         link={links}
+        preview={preview}
         type="schedule"
-        onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>
         {isDefined(startDate) ? (
@@ -113,7 +113,11 @@ Row.propTypes = {
   actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  onToggleDetailsClick: PropTypes.func.isRequired,
+  preview: PropTypes.shape({
+    expanded: PropTypes.bool.isRequired,
+    id: PropTypes.string,
+    toggle: PropTypes.func.isRequired,
+  }),
 };
 
 export default Row;

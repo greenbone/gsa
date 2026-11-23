@@ -48,7 +48,7 @@ describe('ContainerScanningResultsTab', () => {
 
     const gmp = createGmp();
 
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({capabilities: true, gmp});
 
     render(
       <ContainerScanningResultsTab
@@ -66,7 +66,7 @@ describe('ContainerScanningResultsTab', () => {
     const filter = QueryFilter.fromString('severity>5');
     const gmp = createGmp();
 
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({capabilities: true, gmp});
 
     render(
       <ContainerScanningResultsTab
@@ -118,7 +118,7 @@ describe('ContainerScanningResultsTab', () => {
 
     const gmp = createGmp({get: getMock});
 
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({capabilities: true, gmp});
 
     const {userEvent} = render(
       <ContainerScanningResultsTab
@@ -169,7 +169,7 @@ describe('ContainerScanningResultsTab', () => {
 
     const gmp = createGmp({get: getMock});
 
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({capabilities: true, gmp});
 
     const {userEvent} = render(
       <ContainerScanningResultsTab
@@ -221,7 +221,7 @@ describe('ContainerScanningResultsTab', () => {
 
     const gmp = createGmp({get: getMock});
 
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({capabilities: true, gmp});
 
     const {userEvent} = render(
       <ContainerScanningResultsTab
@@ -273,7 +273,7 @@ describe('ContainerScanningResultsTab', () => {
 
     const gmp = createGmp({get: getMock});
 
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({capabilities: true, gmp});
 
     const {userEvent} = render(
       <ContainerScanningResultsTab
@@ -325,7 +325,7 @@ describe('ContainerScanningResultsTab', () => {
 
     const gmp = createGmp({get: getMock});
 
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({capabilities: true, gmp});
 
     const {userEvent} = render(
       <ContainerScanningResultsTab
@@ -378,7 +378,7 @@ describe('ContainerScanningResultsTab', () => {
 
     const gmp = createGmp({get: getMock});
 
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({capabilities: true, gmp});
 
     const {rerender} = render(
       <ContainerScanningResultsTab
@@ -416,7 +416,7 @@ describe('ContainerScanningResultsTab', () => {
 
     const gmp = createGmp({get: getMock});
 
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({capabilities: true, gmp});
 
     render(
       <ContainerScanningResultsTab
@@ -465,7 +465,7 @@ describe('ContainerScanningResultsTab', () => {
 
     const gmp = createGmp({get: getMock});
 
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({capabilities: true, gmp});
 
     const {userEvent} = render(
       <ContainerScanningResultsTab
@@ -551,7 +551,7 @@ describe('ContainerScanningResultsTab', () => {
       });
 
       const gmp = createGmp({get: getMock});
-      const {render} = rendererWith({gmp});
+      const {render} = rendererWith({capabilities: true, gmp});
 
       render(
         <ContainerScanningResultsTab

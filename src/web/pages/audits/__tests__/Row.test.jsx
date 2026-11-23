@@ -65,6 +65,7 @@ describe('Audit Row tests', () => {
         entity={audit}
         gcrFormatDefined={true}
         links={true}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onAuditCloneClick={handleAuditClone}
         onAuditDeleteClick={handleAuditDelete}
         onAuditDownloadClick={handleAuditDownload}
@@ -73,7 +74,6 @@ describe('Audit Row tests', () => {
         onAuditStartClick={handleAuditStart}
         onAuditStopClick={handleAuditStop}
         onReportDownloadClick={handleReportDownload}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -89,7 +89,9 @@ describe('Audit Row tests', () => {
     expect(bars[0]).toHaveAttribute('title', AUDIT_STATUS.done);
     expect(bars[0]).toHaveTextContent(AUDIT_STATUS.done);
 
-    const detailsLinks = screen.getAllByTestId('details-link');
+    const detailsLinks = screen
+      .getAllByTestId('details-link')
+      .filter(link => link.getAttribute('href')?.startsWith('/audit-report/'));
 
     expect(detailsLinks[0]).toHaveTextContent('Done');
     expect(detailsLinks[0]).toHaveAttribute('href', '/audit-report/1234');
@@ -175,6 +177,7 @@ describe('Audit Row tests', () => {
         entity={audit}
         gcrFormatDefined={true}
         links={true}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onAuditCloneClick={handleAuditClone}
         onAuditDeleteClick={handleAuditDelete}
         onAuditDownloadClick={handleAuditDownload}
@@ -183,7 +186,6 @@ describe('Audit Row tests', () => {
         onAuditStartClick={handleAuditStart}
         onAuditStopClick={handleAuditStop}
         onReportDownloadClick={handleReportDownload}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
     expect(screen.getByTestId('alterable-icon')).toHaveAttribute(
@@ -233,6 +235,7 @@ describe('Audit Row tests', () => {
         entity={audit}
         gcrFormatDefined={true}
         links={true}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onAuditCloneClick={handleAuditClone}
         onAuditDeleteClick={handleAuditDelete}
         onAuditDownloadClick={handleAuditDownload}
@@ -241,12 +244,11 @@ describe('Audit Row tests', () => {
         onAuditStartClick={handleAuditStart}
         onAuditStopClick={handleAuditStop}
         onReportDownloadClick={handleReportDownload}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     // Status
     const bars = screen.getAllByTestId('progressbar-box');
@@ -254,7 +256,9 @@ describe('Audit Row tests', () => {
     expect(bars[0]).toHaveAttribute('title', AUDIT_STATUS.new);
     expect(bars[0]).toHaveTextContent(AUDIT_STATUS.new);
 
-    const detailsLinks = screen.queryAllByTestId('details-link');
+    const detailsLinks = screen
+      .queryAllByTestId('details-link')
+      .filter(link => link.getAttribute('href')?.startsWith('/audit-report/'));
     expect(detailsLinks.length).toBe(0);
     // because there are no reports yet
 
@@ -337,6 +341,7 @@ describe('Audit Row tests', () => {
         entity={audit}
         gcrFormatDefined={true}
         links={true}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onAuditCloneClick={handleAuditClone}
         onAuditDeleteClick={handleAuditDelete}
         onAuditDownloadClick={handleAuditDownload}
@@ -345,12 +350,11 @@ describe('Audit Row tests', () => {
         onAuditStartClick={handleAuditStart}
         onAuditStopClick={handleAuditStop}
         onReportDownloadClick={handleReportDownload}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     // Status
     const bars = screen.getAllByTestId('progressbar-box');
@@ -358,7 +362,9 @@ describe('Audit Row tests', () => {
     expect(bars[0]).toHaveAttribute('title', AUDIT_STATUS.running);
     expect(bars[0]).toHaveTextContent('0 %');
 
-    const detailsLinks = screen.getAllByTestId('details-link');
+    const detailsLinks = screen
+      .getAllByTestId('details-link')
+      .filter(link => link.getAttribute('href')?.startsWith('/audit-report/'));
 
     expect(detailsLinks[0]).toHaveTextContent('0 %');
     expect(detailsLinks[0]).toHaveAttribute('href', '/audit-report/5678');
@@ -446,6 +452,7 @@ describe('Audit Row tests', () => {
         entity={audit}
         gcrFormatDefined={true}
         links={true}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onAuditCloneClick={handleAuditClone}
         onAuditDeleteClick={handleAuditDelete}
         onAuditDownloadClick={handleAuditDownload}
@@ -454,12 +461,11 @@ describe('Audit Row tests', () => {
         onAuditStartClick={handleAuditStart}
         onAuditStopClick={handleAuditStop}
         onReportDownloadClick={handleReportDownload}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     // Status
     const bars = screen.getAllByTestId('progressbar-box');
@@ -467,7 +473,9 @@ describe('Audit Row tests', () => {
     expect(bars[0]).toHaveAttribute('title', AUDIT_STATUS.stopped);
     expect(bars[0]).toHaveTextContent(AUDIT_STATUS.stopped);
 
-    const detailsLinks = screen.getAllByTestId('details-link');
+    const detailsLinks = screen
+      .getAllByTestId('details-link')
+      .filter(link => link.getAttribute('href')?.startsWith('/audit-report/'));
 
     expect(detailsLinks[0]).toHaveTextContent('Stopped');
     expect(detailsLinks[0]).toHaveAttribute('href', '/audit-report/5678');
@@ -556,6 +564,7 @@ describe('Audit Row tests', () => {
         entity={audit}
         gcrFormatDefined={true}
         links={true}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onAuditCloneClick={handleAuditClone}
         onAuditDeleteClick={handleAuditDelete}
         onAuditDownloadClick={handleAuditDownload}
@@ -564,12 +573,11 @@ describe('Audit Row tests', () => {
         onAuditStartClick={handleAuditStart}
         onAuditStopClick={handleAuditStop}
         onReportDownloadClick={handleReportDownload}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     // Status
     const bars = screen.getAllByTestId('progressbar-box');
@@ -577,7 +585,9 @@ describe('Audit Row tests', () => {
     expect(bars[0]).toHaveAttribute('title', AUDIT_STATUS.done);
     expect(bars[0]).toHaveTextContent(AUDIT_STATUS.done);
 
-    const detailsLinks = screen.getAllByTestId('details-link');
+    const detailsLinks = screen
+      .getAllByTestId('details-link')
+      .filter(link => link.getAttribute('href')?.startsWith('/audit-report/'));
 
     expect(detailsLinks[0]).toHaveTextContent('Done');
     expect(detailsLinks[0]).toHaveAttribute('href', '/audit-report/1234');
@@ -666,6 +676,7 @@ describe('Audit Row tests', () => {
         entity={audit}
         gcrFormatDefined={true}
         links={true}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onAuditCloneClick={handleAuditClone}
         onAuditDeleteClick={handleAuditDelete}
         onAuditDownloadClick={handleAuditDownload}
@@ -674,13 +685,12 @@ describe('Audit Row tests', () => {
         onAuditStartClick={handleAuditStart}
         onAuditStopClick={handleAuditStop}
         onReportDownloadClick={handleReportDownload}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     // Name
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     expect(screen.getByTestId('observer-icon')).toHaveAttribute(
       'title',
@@ -693,7 +703,9 @@ describe('Audit Row tests', () => {
     expect(bars[0]).toHaveAttribute('title', AUDIT_STATUS.done);
     expect(bars[0]).toHaveTextContent(AUDIT_STATUS.done);
 
-    const detailsLinks = screen.getAllByTestId('details-link');
+    const detailsLinks = screen
+      .getAllByTestId('details-link')
+      .filter(link => link.getAttribute('href')?.startsWith('/audit-report/'));
 
     expect(detailsLinks[0]).toHaveTextContent('Done');
     expect(detailsLinks[0]).toHaveAttribute('href', '/audit-report/1234');

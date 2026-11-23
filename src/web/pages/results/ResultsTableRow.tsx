@@ -27,7 +27,8 @@ import TableRow from 'web/components/table/TableRow';
 import EntitiesActions, {
   type EntitiesActionsProps,
 } from 'web/entities/EntitiesActions';
-import RowDetailsToggle from 'web/entities/RowDetailsToggle';
+import {type RowPreview} from 'web/entities/EntitiesTable';
+import TableEntityName from 'web/entities/TableEntityName';
 import useGmp from 'web/hooks/useGmp';
 import useTranslation from 'web/hooks/useTranslation';
 import ResultDelta from 'web/pages/results/ResultDelta';
@@ -39,7 +40,7 @@ export interface ResultTableRowProps extends EntitiesActionsProps<Result> {
   delta?: boolean;
   entity: Result;
   links?: boolean;
-  onToggleDetailsClick?: () => void;
+  preview?: RowPreview;
 }
 
 const ResultTableRow = ({
@@ -49,7 +50,7 @@ const ResultTableRow = ({
   delta = false,
   entity,
   links = true,
-  onToggleDetailsClick,
+  preview,
   ...props
 }: ResultTableRowProps) => {
   const [_] = useTranslation();
@@ -82,9 +83,14 @@ const ResultTableRow = ({
       )}
       <TableData>
         <Layout align="space-between">
-          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-            <span>{shownName}</span>
-          </RowDetailsToggle>
+          <TableEntityName
+            id={entity.id}
+            links={links}
+            preview={preview}
+            type="result"
+          >
+            {shownName}
+          </TableEntityName>
           <IconDivider>
             {hasActiveNotes && (
               <NoteIcon title={_('There are notes for this result')} />

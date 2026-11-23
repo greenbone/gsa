@@ -12,7 +12,6 @@ import DateTime from 'web/components/date/DateTime';
 import {VerifyIcon, VerifyNoIcon} from 'web/components/icon';
 import OsIcon from 'web/components/icon/OsIcon';
 import IconDivider from 'web/components/layout/IconDivider';
-import DetailsLink from 'web/components/link/DetailsLink';
 import Link from 'web/components/link/Link';
 import {
   getComplianceColumnsConfig,
@@ -24,6 +23,7 @@ import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
+import TableEntityName from 'web/entities/TableEntityName';
 import useGmp from 'web/hooks/useGmp';
 import {ROUTES} from 'web/route-paths';
 import {type SortDirectionType} from 'web/utils/sort-direction';
@@ -87,9 +87,9 @@ const getColumns = (audit = false, useCVSSv3 = false) => [
       return (
         <span>
           {isDefined(asset.id) ? (
-            <DetailsLink id={asset.id} textOnly={!links} type="host">
+            <TableEntityName id={asset.id} links={links} type="host">
               {ip}
-            </DetailsLink>
+            </TableEntityName>
           ) : (
             <Link filter={'name=' + ip} textOnly={!links} to={ROUTES.hosts.url}>
               {ip}

@@ -118,7 +118,6 @@ const WebApplicationTargetRow = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
-  onToggleDetailsClick,
   'data-testid': dataTestId,
   ...props
 }: WebApplicationTargetTableRowProps) => {
@@ -129,7 +128,7 @@ const WebApplicationTargetRow = ({
       <EntityNameTableData
         displayName={_('Target')}
         entity={entity}
-        links={!links}
+        links={links}
         type="target"
       />
       <TableData>{entity.url ?? ''}</TableData>

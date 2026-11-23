@@ -79,6 +79,12 @@ describe('VulnerabilitiesTable tests', () => {
     const {render} = rendererWith({capabilities: true, gmp: createGmp()});
     render(<VulnerabilitiesTable entities={vulns} />);
     screen.getByText('CVE-2024-0001');
+    const primaryLink = screen.getByRole('link', {name: 'CVE-2024-0001'});
+    expect(primaryLink).toHaveAttribute('href', '/nvt/1');
+    expect(
+      primaryLink.querySelector('.lucide-arrow-right'),
+    ).not.toBeInTheDocument();
+    expect(primaryLink).not.toHaveAttribute('aria-expanded');
     screen.getByText('CVE-2024-0002');
     const rows = screen.queryAllByRole('row');
     expect(rows).toHaveLength(vulns.length + 2);

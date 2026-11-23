@@ -17,7 +17,7 @@ const createGmp = () => ({
 });
 
 describe('TLSCertificatesTable', () => {
-  test('should show row details when Subject DN is clicked', () => {
+  test('should show row details when the preview button is clicked', async () => {
     const reportTlsCertificates = getMockReport().tlsCertificates;
 
     if (!reportTlsCertificates) {
@@ -42,10 +42,15 @@ describe('TLSCertificatesTable', () => {
     );
 
     const toggles = screen.getAllByTestId('row-details-toggle');
+    expect(toggles[0]).toHaveAttribute('aria-expanded', 'false');
     fireEvent.click(toggles[0]);
+    expect(toggles[0]).toHaveAttribute('aria-expanded', 'true');
+    expect(
+      document.getElementById(toggles[0].getAttribute('aria-controls') ?? ''),
+    ).toBeInTheDocument();
 
     expect(
-      screen.getByTestId(
+      await screen.findByTestId(
         `tls-certificate-details-${reportTlsCertificates.entities[0].id}`,
       ),
     ).toBeInTheDocument();

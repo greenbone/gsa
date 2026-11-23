@@ -107,6 +107,14 @@ describe('ReportTableRow tests', () => {
       'href',
       '/report/1',
     );
+    const reportLink = screen.getAllByTestId('details-link')[0];
+    expect(
+      reportLink.querySelector('.lucide-arrow-right'),
+    ).not.toBeInTheDocument();
+    expect(reportLink).toHaveAttribute('title', 'Open details');
+    expect(
+      screen.getByRole('link', {name: 'Task Name'}).querySelector('svg'),
+    ).not.toBeInTheDocument();
     expect(screen.getByTestId('statusbar-text')).toHaveTextContent('Uploading');
     expect(screen.getByText('Task Name')).toHaveAttribute(
       'href',

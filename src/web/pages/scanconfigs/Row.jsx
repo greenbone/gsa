@@ -82,7 +82,7 @@ const ScanConfigRow = ({
   actionsComponent: ActionsComponent = ScanConfigActions,
   entity,
   links = true,
-  onToggleDetailsClick,
+  preview,
   openEditNvtDetailsDialog,
   ...props
 }) => {
@@ -94,8 +94,8 @@ const ScanConfigRow = ({
         displayName={_('Scan Config')}
         entity={entity}
         link={links}
+        preview={preview}
         type="scanconfig"
-        onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>{na(entity.families.count)}</TableData>
       <TableData>
@@ -139,7 +139,11 @@ ScanConfigRow.propTypes = {
   actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  onToggleDetailsClick: PropTypes.func,
+  preview: PropTypes.shape({
+    expanded: PropTypes.bool.isRequired,
+    id: PropTypes.string,
+    toggle: PropTypes.func.isRequired,
+  }),
   openEditNvtDetailsDialog: PropTypes.func,
 };
 

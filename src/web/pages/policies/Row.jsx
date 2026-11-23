@@ -83,7 +83,7 @@ const PoliciesRow = ({
   actionsComponent: ActionsComponent = PoliciesActions,
   entity,
   links = true,
-  onToggleDetailsClick,
+  preview,
   ...props
 }) => {
   const [_] = useTranslation();
@@ -94,8 +94,8 @@ const PoliciesRow = ({
         displayName={_('Policy')}
         entity={entity}
         link={links}
+        preview={preview}
         type="policy"
-        onToggleDetailsClick={onToggleDetailsClick}
       />
       <ActionsComponent {...props} entity={entity} />
     </TableRow>
@@ -106,7 +106,11 @@ PoliciesRow.propTypes = {
   actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  onToggleDetailsClick: PropTypes.func.isRequired,
+  preview: PropTypes.shape({
+    expanded: PropTypes.bool.isRequired,
+    id: PropTypes.string,
+    toggle: PropTypes.func.isRequired,
+  }),
 };
 
 export default PoliciesRow;

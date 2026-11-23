@@ -12,6 +12,7 @@ import {
 import {isDefined} from 'gmp/utils/identity';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
+import {type RowPreview} from 'web/entities/EntitiesTable';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
 import EntityLink from 'web/entity/Link';
 import useTranslation from 'web/hooks/useTranslation';
@@ -21,14 +22,14 @@ import ScannerActions, {
 
 export interface ScannerRowProps extends ScannerActionsProps {
   actionsComponent?: React.ComponentType<ScannerActionsProps>;
-  onToggleDetailsClick?: (entity: Scanner, id: string) => void;
+  preview?: RowPreview;
 }
 
 const ScannerRow = ({
   actionsComponent: ActionsComponent = ScannerActions,
   entity,
   links = true,
-  onToggleDetailsClick,
+  preview,
   ...actionProps
 }: ScannerRowProps) => {
   const [_] = useTranslation();
@@ -39,8 +40,8 @@ const ScannerRow = ({
           displayName={_('Scanner')}
           entity={entity}
           links={links}
+          preview={preview}
           type="scanner"
-          onToggleDetailsClick={onToggleDetailsClick}
         />
         <TableData>
           {entity.scannerType !== CVE_SCANNER_TYPE &&
