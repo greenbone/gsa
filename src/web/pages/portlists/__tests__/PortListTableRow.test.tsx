@@ -57,7 +57,7 @@ describe('PortListTableRow tests', () => {
     expect(screen.getByText('Test Port List')).toBeInTheDocument();
   });
 
-  test('should call onToggleDetailsClick when EntityNameTableData is clicked', async () => {
+  test('toggles the preview when clicking the preview button', async () => {
     const portList = new PortList({
       id: '1',
       name: 'Test Port List',
@@ -77,13 +77,13 @@ describe('PortListTableRow tests', () => {
     render(
       <PortListTableRow
         entity={portList}
-        onToggleDetailsClick={handleToggle}
+        preview={{expanded: false, toggle: handleToggle}}
       />,
     );
 
     const details = screen.getByTestId('row-details-toggle');
     fireEvent.click(details);
-    expect(handleToggle).toHaveBeenCalledWith(portList, '1');
+    expect(handleToggle).toHaveBeenCalledOnce();
   });
 
   test('should render default action', async () => {

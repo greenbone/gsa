@@ -45,14 +45,14 @@ describe('PermissionTableRow tests', () => {
     render(
       <PermissionTableRow
         entity={permission}
-        onToggleDetailsClick={() => {}}
+        preview={{expanded: false, toggle: () => {}}}
       />,
     );
 
     expect(screen.getByText('get_tasks')).toBeVisible();
   });
 
-  test('should call onToggleDetailsClick when EntityNameTableData is clicked', async () => {
+  test('toggles the preview when clicking the preview button', async () => {
     const {render} = rendererWithTableBody({
       capabilities: true,
       store: true,
@@ -62,13 +62,13 @@ describe('PermissionTableRow tests', () => {
     render(
       <PermissionTableRow
         entity={permission}
-        onToggleDetailsClick={handleToggle}
+        preview={{expanded: false, toggle: handleToggle}}
       />,
     );
 
     const details = screen.getByTestId('row-details-toggle');
     fireEvent.click(details);
-    expect(handleToggle).toHaveBeenCalledWith(permission, '1');
+    expect(handleToggle).toHaveBeenCalledOnce();
   });
 
   test('should render default actions', async () => {
@@ -80,11 +80,11 @@ describe('PermissionTableRow tests', () => {
     render(
       <PermissionTableRow
         entity={permission}
+        preview={{expanded: false, toggle: () => {}}}
         onPermissionCloneClick={handleClone}
         onPermissionDeleteClick={handleDelete}
         onPermissionDownloadClick={handleDownload}
         onPermissionEditClick={handleEdit}
-        onToggleDetailsClick={() => {}}
       />,
     );
 
@@ -103,7 +103,7 @@ describe('PermissionTableRow tests', () => {
     render(
       <PermissionTableRow
         entity={permission}
-        onToggleDetailsClick={() => {}}
+        preview={{expanded: false, toggle: () => {}}}
       />,
     );
 
@@ -119,7 +119,7 @@ describe('PermissionTableRow tests', () => {
     render(
       <PermissionTableRow
         entity={permission}
-        onToggleDetailsClick={() => {}}
+        preview={{expanded: false, toggle: () => {}}}
       />,
     );
 
@@ -146,7 +146,7 @@ describe('PermissionTableRow tests', () => {
     render(
       <PermissionTableRow
         entity={permission}
-        onToggleDetailsClick={() => {}}
+        preview={{expanded: false, toggle: () => {}}}
       />,
     );
 
@@ -166,11 +166,11 @@ describe('PermissionTableRow tests', () => {
     render(
       <PermissionTableRow
         entity={permission}
+        preview={{expanded: false, toggle: () => {}}}
         onPermissionCloneClick={handleClone}
         onPermissionDeleteClick={handleDelete}
         onPermissionDownloadClick={handleDownload}
         onPermissionEditClick={handleEdit}
-        onToggleDetailsClick={() => {}}
       />,
     );
 

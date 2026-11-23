@@ -10,6 +10,7 @@ import {typeName} from 'gmp/utils/entity-type';
 import DateTime from 'web/components/date/DateTime';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
+import {type RowPreview} from 'web/entities/EntitiesTable';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
 import TagTableActions, {
   type TagTableActionsProps,
@@ -24,8 +25,7 @@ interface ColumnConfig {
   align?: string;
   render: (
     entity: Tag,
-    onToggleDetailsClick?: (entity: Tag) => void,
-    links?: boolean,
+    options: {links: boolean; preview?: RowPreview},
   ) => React.ReactNode;
 }
 
@@ -33,7 +33,7 @@ export interface TagTableRowProps extends TagTableActionsProps {
   actionsComponent?: React.ComponentType<TagTableActionsProps>;
   'data-testid'?: string;
   links?: boolean;
-  onToggleDetailsClick?: (entity: Tag) => void;
+  preview?: RowPreview;
 }
 
 export const getCoreColumns = (): ColumnConfig[] => [
@@ -42,13 +42,13 @@ export const getCoreColumns = (): ColumnConfig[] => [
     title: _('Name'),
     width: '30%',
     sortBy: 'name',
-    render: (entity, onToggleDetailsClick, links = true) => (
+    render: (entity, {links, preview}) => (
       <EntityNameTableData
         displayName="Tag"
         entity={entity}
         links={links}
+        preview={preview}
         type="tag"
-        onToggleDetailsClick={onToggleDetailsClick}
       />
     ),
   },
@@ -92,7 +92,7 @@ const TagTableRow = ({
   actionsComponent: ActionsComponent = TagTableActions,
   entity,
   links = true,
-  onToggleDetailsClick,
+  preview,
   ...actionProps
 }: TagTableRowProps) => {
   const columns = getCoreColumns();
@@ -100,7 +100,7 @@ const TagTableRow = ({
     <TableRow data-testid={actionProps['data-testid']}>
       {columns.map(column => (
         <TableData key={column.key} align={column.align}>
-          {column.render(entity, onToggleDetailsClick, links)}
+          {column.render(entity, {links, preview})}
         </TableData>
       ))}
       <ActionsComponent entity={entity} {...actionProps} />

@@ -102,7 +102,7 @@ const Row = ({
   capabilities,
   entity,
   links = true,
-  onToggleDetailsClick,
+  preview,
   ...props
 }) => {
   const [_] = useTranslation();
@@ -113,8 +113,8 @@ const Row = ({
         displayName={_('Alert')}
         entity={entity}
         link={links}
+        preview={preview}
         type="alert"
-        onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>
         <Event event={entity.event} />
@@ -137,7 +137,11 @@ Row.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  onToggleDetailsClick: PropTypes.func.isRequired,
+  preview: PropTypes.shape({
+    expanded: PropTypes.bool.isRequired,
+    id: PropTypes.string,
+    toggle: PropTypes.func.isRequired,
+  }),
 };
 
 export default withCapabilities(Row);

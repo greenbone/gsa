@@ -13,6 +13,7 @@ import FootNote from 'web/components/footnote/Footnote';
 import Divider from 'web/components/layout/Divider';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
+import {type RowPreview} from 'web/entities/EntitiesTable';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
 import useTranslation from 'web/hooks/useTranslation';
 import CredentialActions, {
@@ -23,14 +24,14 @@ export interface CredentialTableRowProps extends CredentialActionsProps {
   actionsComponent?: React.ComponentType<CredentialActionsProps>;
   entity: Credential;
   links?: boolean;
-  onToggleDetailsClick?: () => void;
+  preview?: RowPreview;
 }
 
 const CredentialTableRow = ({
   actionsComponent: ActionsComponent = CredentialActions,
   entity,
   links = true,
-  onToggleDetailsClick,
+  preview,
   ...props
 }: CredentialTableRowProps) => {
   const [_] = useTranslation();
@@ -40,8 +41,8 @@ const CredentialTableRow = ({
         displayName={_('Credential')}
         entity={entity}
         links={links}
+        preview={preview}
         type="credential"
-        onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>
         <Divider>

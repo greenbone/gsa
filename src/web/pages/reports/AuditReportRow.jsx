@@ -18,6 +18,7 @@ import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
+import TableEntityName from 'web/entities/TableEntityName';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import useTranslation from 'web/hooks/useTranslation';
 import {AgentIdTableData} from 'web/pages/agents/components/AgentIdColumn';
@@ -100,9 +101,9 @@ const AuditReportRow = ({
     <TableRow>
       <TableData>
         <span>
-          <DetailsLink id={entity.id} textOnly={!links} type="auditreport">
+          <TableEntityName id={entity.id} links={links} type="auditreport">
             <DateTime date={report.timestamp} />
-          </DetailsLink>
+          </TableEntityName>
         </span>
       </TableData>
       <TableData>

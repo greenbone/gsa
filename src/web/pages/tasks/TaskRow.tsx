@@ -30,7 +30,8 @@ import DetailsLink from 'web/components/link/DetailsLink';
 import Link from 'web/components/link/Link';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import RowDetailsToggle from 'web/entities/RowDetailsToggle';
+import {type RowPreview} from 'web/entities/EntitiesTable';
+import TableEntityName from 'web/entities/TableEntityName';
 import ObserverIcon from 'web/entity/icon/ObserverIcon';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
@@ -50,7 +51,7 @@ interface TaskReportTotalProps {
 
 export interface TaskRowProps extends TaskActionsProps {
   actionsComponent?: React.ComponentType<TaskActionsProps>;
-  onToggleDetailsClick: (entity: Task, id: string) => void;
+  preview?: RowPreview;
 }
 
 const TaskReport = ({report, links}: TaskReportProps) => {
@@ -94,7 +95,7 @@ const TaskRow = ({
   actionsComponent: ActionsComponent = TaskActions,
   entity,
   links = true,
-  onToggleDetailsClick,
+  preview,
   ...props
 }: TaskRowProps) => {
   const [_] = useTranslation();
@@ -170,14 +171,14 @@ const TaskRow = ({
       <TableData>
         <Layout align="space-between">
           <div>
-            <RowDetailsToggle
-              name={entity.id}
-              onClick={
-                onToggleDetailsClick as (value: Task, name?: string) => void
-              }
+            <TableEntityName
+              id={entity.id}
+              links={links}
+              preview={preview}
+              type="task"
             >
               {entity.name}
-            </RowDetailsToggle>
+            </TableEntityName>
             {entity.comment && <Comment>({entity.comment})</Comment>}
           </div>
           <IconDivider>

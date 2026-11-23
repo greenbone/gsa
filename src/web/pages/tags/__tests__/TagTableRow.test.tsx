@@ -38,13 +38,13 @@ describe('TagTableRow tests', () => {
     render(
       <TagTableRow
         entity={tag}
+        preview={{expanded: false, toggle: testing.fn()}}
         onTagCloneClick={testing.fn()}
         onTagDeleteClick={testing.fn()}
         onTagDisableClick={testing.fn()}
         onTagDownloadClick={testing.fn()}
         onTagEditClick={testing.fn()}
         onTagEnableClick={testing.fn()}
-        onToggleDetailsClick={testing.fn()}
       />,
     );
 
@@ -71,13 +71,13 @@ describe('TagTableRow tests', () => {
     render(
       <TagTableRow
         entity={activeTag}
+        preview={{expanded: false, toggle: testing.fn()}}
         onTagCloneClick={testing.fn()}
         onTagDeleteClick={testing.fn()}
         onTagDisableClick={testing.fn()}
         onTagDownloadClick={testing.fn()}
         onTagEditClick={testing.fn()}
         onTagEnableClick={testing.fn()}
-        onToggleDetailsClick={testing.fn()}
       />,
     );
 
@@ -102,13 +102,13 @@ describe('TagTableRow tests', () => {
     render(
       <TagTableRow
         entity={disabledTag}
+        preview={{expanded: false, toggle: testing.fn()}}
         onTagCloneClick={testing.fn()}
         onTagDeleteClick={testing.fn()}
         onTagDisableClick={testing.fn()}
         onTagDownloadClick={testing.fn()}
         onTagEditClick={testing.fn()}
         onTagEnableClick={testing.fn()}
-        onToggleDetailsClick={testing.fn()}
       />,
     );
 
@@ -132,13 +132,13 @@ describe('TagTableRow tests', () => {
     render(
       <TagTableRow
         entity={tag}
+        preview={{expanded: false, toggle: testing.fn()}}
         onTagCloneClick={handleClone}
         onTagDeleteClick={handleDelete}
         onTagDisableClick={handleDisable}
         onTagDownloadClick={handleDownload}
         onTagEditClick={handleEdit}
         onTagEnableClick={handleEnable}
-        onToggleDetailsClick={testing.fn()}
       />,
     );
 
@@ -167,13 +167,13 @@ describe('TagTableRow tests', () => {
     render(
       <TagTableRow
         entity={tag}
+        preview={{expanded: false, toggle: testing.fn()}}
         onTagCloneClick={testing.fn()}
         onTagDeleteClick={testing.fn()}
         onTagDisableClick={testing.fn()}
         onTagDownloadClick={testing.fn()}
         onTagEditClick={testing.fn()}
         onTagEnableClick={testing.fn()}
-        onToggleDetailsClick={testing.fn()}
       />,
     );
 

@@ -43,7 +43,7 @@ describe('CVEv2 Row tests', () => {
     const {baseElement} = render(
       <CveRow
         entity={entity}
-        onToggleDetailsClick={handleToggleDetailsClick}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
       />,
     );
 
@@ -51,7 +51,7 @@ describe('CVEv2 Row tests', () => {
     expect(baseElement).toHaveTextContent('CVE-2020-9992');
 
     // CVSS Base Vector
-    const links = baseElement.querySelectorAll('a');
+    const links = baseElement.querySelectorAll('a[href^="/cvss-calculator"]');
 
     expect(links[0]).toHaveAttribute(
       'href',
@@ -83,19 +83,15 @@ describe('CVEv2 Row tests', () => {
       store: true,
     });
 
-    const {baseElement} = render(
+    render(
       <CveRow
         entity={entity}
-        onToggleDetailsClick={handleToggleDetailsClick}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
       />,
     );
 
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[1]);
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(
-      undefined,
-      'CVE-2020-9992',
-    );
+    fireEvent.click(screen.getByTestId('row-details-toggle'));
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
   });
 });
 
@@ -124,7 +120,7 @@ describe('CVEv3 Row tests', () => {
     const {baseElement} = render(
       <CveRow
         entity={entity_v3}
-        onToggleDetailsClick={handleToggleDetailsClick}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
       />,
     );
 
@@ -132,7 +128,7 @@ describe('CVEv3 Row tests', () => {
     expect(baseElement).toHaveTextContent('CVE-2020-9992');
 
     // CVSS Base Vector
-    const links = baseElement.querySelectorAll('a');
+    const links = baseElement.querySelectorAll('a[href^="/cvss-calculator"]');
 
     expect(links[0]).toHaveAttribute(
       'href',
@@ -165,18 +161,14 @@ describe('CVEv3 Row tests', () => {
       router: true,
     });
 
-    const {baseElement} = render(
+    render(
       <CveRow
         entity={entity}
-        onToggleDetailsClick={handleToggleDetailsClick}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
       />,
     );
 
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[1]);
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(
-      undefined,
-      'CVE-2020-9992',
-    );
+    fireEvent.click(screen.getByTestId('row-details-toggle'));
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
   });
 });

@@ -171,7 +171,13 @@ describe('TaskTable tests', () => {
     expect(element).not.toHaveTextContent('target2');
 
     const unfoldIcon = screen.getByTestId('fold-state-icon-unfold');
+    expect(
+      screen.getByRole('button', {name: /preview for foo/}),
+    ).toHaveAttribute('aria-expanded', 'false');
     fireEvent.click(unfoldIcon);
+    expect(
+      screen.getByRole('button', {name: /preview for foo/}),
+    ).toHaveAttribute('aria-expanded', 'true');
     expect(element).toHaveTextContent('target1');
     expect(element).toHaveTextContent('target2');
   });

@@ -63,7 +63,11 @@ describe('ContainerScanningResultsTable', () => {
     });
 
     const onSortChange = testing.fn();
-    const {render} = rendererWith({gmp: createGmp()});
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      gmp: createGmp(),
+    });
 
     render(
       <ContainerScanningResultsTable
@@ -118,7 +122,11 @@ describe('ContainerScanningResultsTable', () => {
       rows: 10,
     });
 
-    const {render} = rendererWith({gmp: createGmp()});
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      gmp: createGmp(),
+    });
 
     render(
       <ContainerScanningResultsTable
@@ -151,7 +159,11 @@ describe('ContainerScanningResultsTable', () => {
       rows: 10,
     });
 
-    const {render} = rendererWith({gmp: createGmp()});
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      gmp: createGmp(),
+    });
 
     render(
       <ContainerScanningResultsTable
@@ -203,7 +215,11 @@ describe('ContainerScanningResultsTable', () => {
       rows: 10,
     });
 
-    const {render} = rendererWith({gmp: createGmp()});
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      gmp: createGmp(),
+    });
 
     render(
       <ContainerScanningResultsTable
@@ -241,7 +257,11 @@ describe('ContainerScanningResultsTable', () => {
       rows: 10,
     });
 
-    const {render} = rendererWith({gmp: createGmp()});
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      gmp: createGmp(),
+    });
 
     render(
       <ContainerScanningResultsTable
@@ -272,7 +292,11 @@ describe('ContainerScanningResultsTable', () => {
       rows: 10,
     });
 
-    const {render} = rendererWith({gmp: createGmp()});
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      gmp: createGmp(),
+    });
 
     render(
       <ContainerScanningResultsTable
@@ -297,7 +321,11 @@ describe('ContainerScanningResultsTable', () => {
       rows: 10,
     });
 
-    const {render} = rendererWith({gmp: createGmp()});
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      gmp: createGmp(),
+    });
 
     render(
       <ContainerScanningResultsTable
@@ -343,7 +371,11 @@ describe('ContainerScanningResultsTable', () => {
       rows: 10,
     });
 
-    const {render} = rendererWith({gmp: createGmp({enableEPSS: true})});
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      gmp: createGmp({enableEPSS: true}),
+    });
 
     render(
       <ContainerScanningResultsTable
@@ -369,7 +401,11 @@ describe('ContainerScanningResultsTable', () => {
     });
 
     const onSortChange = testing.fn();
-    const {render} = rendererWith({gmp: createGmp()});
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      gmp: createGmp(),
+    });
 
     const {userEvent} = render(
       <ContainerScanningResultsTable
@@ -399,7 +435,11 @@ describe('ContainerScanningResultsTable', () => {
       rows: 10,
     });
 
-    const {render} = rendererWith({gmp: createGmp()});
+    const {render} = rendererWith({
+      capabilities: true,
+      router: true,
+      gmp: createGmp(),
+    });
 
     render(
       <ContainerScanningResultsTable

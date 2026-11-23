@@ -10,22 +10,28 @@ import DateTime from 'web/components/date/DateTime';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntitiesActions from 'web/entities/EntitiesActions';
-import RowDetailsToggle from 'web/entities/RowDetailsToggle';
+import TableEntityName from 'web/entities/TableEntityName';
 import PropTypes from 'web/utils/prop-types';
 import {na} from 'web/utils/Render';
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
   entity,
-  onToggleDetailsClick,
+  links = true,
+  preview,
   ...props
 }) => (
   <TableRow>
     <TableData>
       <span>
-        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+        <TableEntityName
+          id={entity.id}
+          links={links}
+          preview={preview}
+          type="dfncert"
+        >
           {entity.name}
-        </RowDetailsToggle>
+        </TableEntityName>
       </span>
       <Comment text={entity.comment} />
     </TableData>
@@ -42,9 +48,14 @@ const Row = ({
 );
 
 Row.propTypes = {
+  links: PropTypes.bool,
   actionsComponent: PropTypes.component,
   entity: PropTypes.model,
-  onToggleDetailsClick: PropTypes.func.isRequired,
+  preview: PropTypes.shape({
+    expanded: PropTypes.bool.isRequired,
+    id: PropTypes.string,
+    toggle: PropTypes.func.isRequired,
+  }),
 };
 
 export default Row;

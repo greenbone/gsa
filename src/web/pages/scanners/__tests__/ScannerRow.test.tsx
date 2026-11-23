@@ -38,7 +38,7 @@ describe('ScannerRow tests', () => {
     expect(screen.getByText('Test Credential')).toBeInTheDocument();
   });
 
-  test('should call onToggleDetailsClick when clicking on the entity name', () => {
+  test('toggles the preview when clicking the preview button', () => {
     const scanner = new Scanner({
       id: '1234',
       name: 'Test Scanner',
@@ -47,7 +47,7 @@ describe('ScannerRow tests', () => {
       scannerType: OPENVASD_SCANNER_TYPE,
       credential: new Credential({id: '5678', name: 'Test Credential'}),
     });
-    const onToggleDetailsClick = testing.fn();
+    const togglePreview = testing.fn();
     const {render} = rendererWithTableBody({
       capabilities: true,
       gmp: createGmp(),
@@ -55,13 +55,14 @@ describe('ScannerRow tests', () => {
     render(
       <ScannerRow
         entity={scanner}
-        onToggleDetailsClick={onToggleDetailsClick}
+        preview={{expanded: false, toggle: togglePreview}}
       />,
     );
 
-    const nameElement = screen.getByText('Test Scanner');
-    fireEvent.click(nameElement);
-    expect(onToggleDetailsClick).toHaveBeenCalledWith(scanner, '1234');
+    fireEvent.click(
+      screen.getByRole('button', {name: 'Show preview for Test Scanner'}),
+    );
+    expect(togglePreview).toHaveBeenCalledOnce();
   });
 
   test("should render default actions component if it's not provided", () => {

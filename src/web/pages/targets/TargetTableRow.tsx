@@ -4,13 +4,13 @@
  */
 
 import type Model from 'gmp/models/model';
-import type Target from 'gmp/models/target';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
+import {type RowPreview} from 'web/entities/EntitiesTable';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
 import useFeatures from 'web/hooks/useFeatures';
 import useGmp from 'web/hooks/useGmp';
@@ -22,7 +22,7 @@ import TargetTableActions, {
 export interface TargetTableRowProps extends TargetTableActionsProps {
   actionsComponent?: React.ComponentType<TargetTableActionsProps>;
   links?: boolean;
-  onToggleDetailsClick?: (entity: Target) => void;
+  preview?: RowPreview;
 }
 
 interface CredProps {
@@ -51,7 +51,7 @@ const TargetTableRow = ({
   actionsComponent: ActionsComponent = TargetTableActions,
   entity,
   links = true,
-  onToggleDetailsClick,
+  preview,
   'data-testid': dataTestId,
   ...props
 }: TargetTableRowProps) => {
@@ -65,8 +65,8 @@ const TargetTableRow = ({
         displayName={_('Target')}
         entity={entity}
         links={links}
+        preview={preview}
         type="target"
-        onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>{shorten(entity.hosts.join(', '), 500)}</TableData>
       <TableData>{entity.maxHosts}</TableData>

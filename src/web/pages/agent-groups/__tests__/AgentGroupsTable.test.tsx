@@ -4,7 +4,7 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
-import {fireEvent, rendererWith, screen} from 'web/testing';
+import {fireEvent, rendererWith, screen, waitFor} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import AgentGroup from 'gmp/models/agent-group';
 import {createSession} from 'gmp/testing';
@@ -60,7 +60,7 @@ describe('AgentGroupsTable tests', () => {
     expect(headers.length).toBeGreaterThan(0);
   });
 
-  test('should expand and collapse group details and link to the details page', () => {
+  test('should expand and collapse group details and link to the details page', async () => {
     const group = new AgentGroup({
       id: 'group-1',
       name: 'Office agents',
@@ -69,13 +69,19 @@ describe('AgentGroupsTable tests', () => {
       maxDelaySeconds: 300,
     });
     const {render} = rendererWith({capabilities: true, gmp: createGmp()});
-    render(<AgentGroupsTable entities={[group]} />);
+    const {userEvent} = render(<AgentGroupsTable entities={[group]} />);
 
     expect(screen.queryByText('Laptop')).not.toBeInTheDocument();
-    const toggle = screen.getByText('Office agents');
-    fireEvent.click(toggle);
+    expect(screen.getByRole('link', {name: 'Office agents'})).toHaveAttribute(
+      'href',
+      '/agent-group/group-1',
+    );
+    const toggle = screen.getByRole('button', {
+      name: 'Show preview for Office agents',
+    });
+    await userEvent.click(toggle);
 
-    expect(screen.getByText('Laptop')).toBeVisible();
+    expect(await screen.findByText('Laptop')).toBeVisible();
     expect(screen.getByText('0 */12 * * *')).toBeVisible();
     expect(screen.getByText('300')).toBeVisible();
     expect(screen.getByRole('link', {name: 'Details Icon'})).toHaveAttribute(
@@ -83,8 +89,10 @@ describe('AgentGroupsTable tests', () => {
       '/agent-group/group-1',
     );
 
-    fireEvent.click(toggle);
-    expect(screen.queryByText('Laptop')).not.toBeInTheDocument();
+    await userEvent.click(toggle);
+    await waitFor(() => {
+      expect(screen.queryByText('Laptop')).not.toBeInTheDocument();
+    });
   });
 
   test('should call action handlers when provided', () => {

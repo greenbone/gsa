@@ -100,7 +100,7 @@ const TicketsTableRow = ({
   onEntityDeselected,
   onEntityRestore,
   onEntitySelected,
-  onToggleDetailsClick,
+  preview,
   onTicketCloneClick,
   onTicketDeleteClick,
   onTicketEditClick,
@@ -128,7 +128,7 @@ const TicketsTableRow = ({
         displayName={_('Ticket')}
         entity={entity}
         links={links}
-        onToggleDetailsClick={onToggleDetailsClick}
+        preview={preview}
       />
       <TableData>
         <SeverityBar

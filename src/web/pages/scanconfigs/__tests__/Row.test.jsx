@@ -51,11 +51,11 @@ describe('Scan Config row tests', () => {
       <Row
         entity={entity}
         openEditNvtDetailsDialog={handleOpenEditNvtDetailsDialog}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -111,11 +111,11 @@ describe('Scan Config row tests', () => {
       <Row
         entity={config}
         openEditNvtDetailsDialog={handleOpenEditNvtDetailsDialog}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -159,11 +159,11 @@ describe('Scan Config row tests', () => {
       <Row
         entity={config}
         openEditNvtDetailsDialog={handleOpenEditNvtDetailsDialog}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -189,17 +189,17 @@ describe('Scan Config row tests', () => {
       <Row
         entity={entity}
         openEditNvtDetailsDialog={handleOpenEditNvtDetailsDialog}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
         onScanConfigSettingsClick={handleScanConfigSettings}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(entity, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     const settingsIcon = screen.getByTestId('settings-2-icon');
     fireEvent.click(settingsIcon);
@@ -264,17 +264,17 @@ describe('Scan Config row tests', () => {
       <Row
         entity={config}
         openEditNvtDetailsDialog={handleOpenEditNvtDetailsDialog}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
         onScanConfigSettingsClick={handleScanConfigSettings}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(config, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     const settingsIcon = screen.getByTestId('settings-2-icon');
     fireEvent.click(settingsIcon);
@@ -348,17 +348,17 @@ describe('Scan Config row tests', () => {
       <Row
         entity={config}
         openEditNvtDetailsDialog={handleOpenEditNvtDetailsDialog}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
         onScanConfigSettingsClick={handleScanConfigSettings}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(config, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     const settingsIcon = screen.getByTestId('settings-2-icon');
     fireEvent.click(settingsIcon);
@@ -424,16 +424,16 @@ describe('Scan Config row tests', () => {
       <Row
         entity={config}
         openEditNvtDetailsDialog={handleOpenEditNvtDetailsDialog}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onScanConfigCloneClick={handleScanConfigClone}
         onScanConfigDeleteClick={handleScanConfigDelete}
         onScanConfigDownloadClick={handleScanConfigDownload}
         onScanConfigEditClick={handleScanConfigEdit}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(config, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     const settingsIcon = screen.getByTestId('settings-2-icon');
     fireEvent.click(settingsIcon);
