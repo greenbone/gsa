@@ -30,6 +30,7 @@ import {
 import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import {
+  getSelectedMembersOfIncompleteBranches,
   mergeSelection,
   selectedHostnames,
 } from 'web/pages/active-directory/directory-selection';
@@ -82,22 +83,28 @@ export const DirectoryBrowser = ({
         : graph,
     [graph, overview],
   );
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const selected = selectedIds.flatMap(id => {
+  const [selectedPaths, setSelectedPaths] = useState(
+    () => new Map<string, readonly string[]>(),
+  );
+  const selected = [...selectedPaths.keys()].flatMap(id => {
     const node = currentGraph.nodes[id];
     return node?.kind === 'computer' ? [node] : [];
   });
   const selectedComputerIds = new Set(selected.map(computer => computer.id));
   const setSelected = (
     update: (previous: DirectoryComputer[]) => DirectoryComputer[],
+    path: readonly string[] = [],
   ) => {
-    setSelectedIds(previous =>
-      update(
-        previous.flatMap(id => {
-          const node = currentGraph.nodes[id];
-          return node?.kind === 'computer' ? [node] : [];
-        }),
-      ).map(node => node.id),
+    setSelectedPaths(
+      previous =>
+        new Map(
+          update(
+            [...previous.keys()].flatMap(id => {
+              const node = currentGraph.nodes[id];
+              return node?.kind === 'computer' ? [node] : [];
+            }),
+          ).map(({id}) => [id, previous.get(id) ?? path]),
+        ),
     );
   };
   const [showDisabled, setShowDisabled] = useState(false);
@@ -136,24 +143,53 @@ export const DirectoryBrowser = ({
     [resetResolution],
   );
 
-  const select = async (node: DirectoryNode, checked: boolean) => {
+  const summary = useMemo(
+    () => summarizeDirectory(currentGraph),
+    [currentGraph],
+  );
+  const {
+    availableIncludingDisabled,
+    completeMemberships,
+    computerPaths,
+    counts,
+    isPartial,
+    redundantBranchSummaries,
+  } = summary;
+  const selectedIncompleteMembers = useMemo(
+    () =>
+      getSelectedMembersOfIncompleteBranches(
+        selectedPaths,
+        summary.knownMembers,
+        summary.completeMemberships,
+      ),
+    [selectedPaths, summary],
+  );
+
+  const select = async (
+    node: DirectoryNode,
+    checked: boolean,
+    path?: string[],
+  ) => {
     const currentVersion = ++version.current;
     const revision = graphRevision.current;
     setSelectionError(undefined);
     setResolutionError(undefined);
     if (!checked) {
-      const memberIds = new Set(
+      const memberIds =
         node.kind === 'computer'
-          ? [node.id]
-          : (knownMembers[node.id] ?? []).map(member => member.id),
-      );
+          ? new Set([node.id])
+          : (selectedIncompleteMembers.get(node.id) ??
+            new Set(completeMemberships[node.id]?.map(member => member.id)));
       setSelected(previous =>
         previous.filter(computer => !memberIds.has(computer.id)),
       );
       return;
     }
     if (node.kind === 'computer') {
-      setSelected(previous => mergeSelection(previous, [node], showDisabled));
+      setSelected(
+        previous => mergeSelection(previous, [node], showDisabled),
+        path,
+      );
       return;
     }
     try {
@@ -183,15 +219,6 @@ export const DirectoryBrowser = ({
     }
   };
 
-  const {
-    availableIncludingDisabled,
-    completeMemberships,
-    computerPaths,
-    counts,
-    isPartial,
-    knownMembers,
-    redundantBranchSummaries,
-  } = useMemo(() => summarizeDirectory(currentGraph), [currentGraph]);
   const hosts = selectedHostnames(selected);
 
   return (
@@ -295,17 +322,19 @@ export const DirectoryBrowser = ({
             <DirectoryTree
               key={listingVersion}
               computerPaths={computerPaths}
-              knownMembers={knownMembers}
               memberships={completeMemberships}
               nodes={overview.roots}
               redundantBranchSummaries={redundantBranchSummaries}
               selectedIds={selectedComputerIds}
+              selectedIncompleteMembers={selectedIncompleteMembers}
               selectionPending={resolving}
               showContainers={showContainers}
               showDisabled={showDisabled}
               sourceId={sourceId}
               onLoaded={onLoaded}
-              onSelect={(node, checked) => void select(node, checked)}
+              onSelect={(node, checked, path) =>
+                void select(node, checked, path)
+              }
             />
           )}
         </DirectoryScrollArea>

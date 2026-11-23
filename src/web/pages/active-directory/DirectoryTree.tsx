@@ -38,7 +38,7 @@ interface DirectoryTreeProps {
   showContainers?: boolean;
   selectionPending: boolean;
   memberships: Record<string, DirectoryComputer[]>;
-  knownMembers: Record<string, DirectoryComputer[]>;
+  selectedIncompleteMembers: ReadonlyMap<string, ReadonlySet<string>>;
   redundantBranchSummaries?: string[];
   computerPaths?: Record<string, string>;
   onLoaded: (
@@ -64,7 +64,7 @@ const ExpandedBranch = ({
   showContainers,
   selectionPending,
   memberships,
-  knownMembers,
+  selectedIncompleteMembers,
   redundantBranchSummaries,
   computerPaths,
   onLoaded,
@@ -127,12 +127,12 @@ const ExpandedBranch = ({
       {listing && (
         <DirectoryTree
           computerPaths={computerPaths}
-          knownMembers={knownMembers}
           memberships={memberships}
           nodes={listing.roots}
           path={[...(path ?? []), node.id]}
           redundantBranchSummaries={redundantBranchSummaries}
           selectedIds={selectedIds}
+          selectedIncompleteMembers={selectedIncompleteMembers}
           selectionPending={selectionPending}
           showContainers={showContainers}
           showDisabled={showDisabled}
@@ -153,7 +153,7 @@ const DirectoryTreeNode = ({
   showContainers,
   selectionPending,
   memberships,
-  knownMembers,
+  selectedIncompleteMembers,
   redundantBranchSummaries,
   computerPaths,
   onLoaded,
@@ -168,19 +168,17 @@ const DirectoryTreeNode = ({
     selectedIds,
     showDisabled,
   );
-  if (memberships[node.id] === undefined) {
-    branchSelection.indeterminate = (knownMembers[node.id] ?? []).some(member =>
-      selectedIds.has(member.id),
-    );
-  }
+  // An unresolved mixed checkbox clears the known selection on activation.
+  const clearIncompleteSelection = selectedIncompleteMembers.has(node.id);
+  const indeterminate =
+    branchSelection.indeterminate || clearIncompleteSelection;
   const cycle = path?.includes(node.id) ?? false;
   let selectionBadgeColor = EThemeColors.NeutralLight;
   if (branchSelection.checked) {
     selectionBadgeColor = EThemeColors.Green;
-  } else if (branchSelection.indeterminate) {
+  } else if (indeterminate) {
     selectionBadgeColor = EThemeColors.Blue;
   }
-  const selection = branchSelection;
   const row = (
     <BranchRow $depth={path?.length ?? 0} data-directory-branch-header="">
       <div>
@@ -215,10 +213,10 @@ const DirectoryTreeNode = ({
           aria-label={node.name}
           disabled={selectionPending}
           entity={node}
-          indeterminate={selection.indeterminate}
-          selected={selection.checked}
+          indeterminate={indeterminate}
+          selected={branchSelection.checked}
           onDeselected={() => onSelect(node, false, path)}
-          onSelected={() => onSelect(node, true, path)}
+          onSelected={() => onSelect(node, !clearIncompleteSelection, path)}
         />
       </div>
     </BranchRow>
@@ -241,12 +239,12 @@ const DirectoryTreeNode = ({
           <Accordion.Panel>
             <ExpandedBranch
               computerPaths={computerPaths}
-              knownMembers={knownMembers}
               memberships={memberships}
               node={node}
               path={path}
               redundantBranchSummaries={redundantBranchSummaries}
               selectedIds={selectedIds}
+              selectedIncompleteMembers={selectedIncompleteMembers}
               selectionPending={selectionPending}
               showContainers={showContainers}
               showDisabled={showDisabled}
@@ -273,7 +271,7 @@ const DirectoryTree = ({
   showContainers,
   selectionPending,
   memberships,
-  knownMembers,
+  selectedIncompleteMembers,
   redundantBranchSummaries,
   computerPaths,
   onLoaded,
@@ -314,12 +312,12 @@ const DirectoryTree = ({
             <DirectoryTreeNode
               key={node.id}
               computerPaths={computerPaths}
-              knownMembers={knownMembers}
               memberships={memberships}
               node={node}
               path={path}
               redundantBranchSummaries={redundantBranchSummaries}
               selectedIds={selectedIds}
+              selectedIncompleteMembers={selectedIncompleteMembers}
               selectionPending={selectionPending}
               showContainers={showContainers}
               showDisabled={showDisabled}

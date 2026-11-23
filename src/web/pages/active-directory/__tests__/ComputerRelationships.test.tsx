@@ -50,10 +50,10 @@ describe('Computer relationship table', () => {
     });
     render(
       <DirectoryTree
-        knownMembers={{}}
         memberships={{}}
         nodes={result.data.roots}
         selectedIds={new Set()}
+        selectedIncompleteMembers={new Map()}
         selectionPending={false}
         showDisabled={false}
         sourceId={AD_SOURCE}
@@ -177,10 +177,10 @@ describe('Computer relationship table', () => {
     });
     render(
       <DirectoryTree
-        knownMembers={{}}
         memberships={{}}
         nodes={result.data.roots}
         selectedIds={new Set()}
+        selectedIncompleteMembers={new Map()}
         selectionPending={false}
         showDisabled={false}
         sourceId={AD_SOURCE}

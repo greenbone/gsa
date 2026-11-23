@@ -5,6 +5,32 @@
 
 import {type DirectoryComputer} from 'gmp/models/active-directory';
 
+export const getSelectedMembersOfIncompleteBranches = (
+  selectedPaths: ReadonlyMap<string, readonly string[]>,
+  knownMembers: Record<string, DirectoryComputer[]>,
+  completeMemberships: Record<string, DirectoryComputer[]>,
+) => {
+  const selectedMembers = new Map<string, Set<string>>();
+  const addMember = (branchId: string, computerId: string) => {
+    const members = selectedMembers.get(branchId) ?? new Set<string>();
+    members.add(computerId);
+    selectedMembers.set(branchId, members);
+  };
+
+  for (const [branchId, members] of Object.entries(knownMembers)) {
+    if (completeMemberships[branchId] !== undefined) continue;
+    for (const {id} of members) {
+      if (selectedPaths.has(id)) addMember(branchId, id);
+    }
+  }
+  for (const [id, path] of selectedPaths) {
+    for (const branchId of path) {
+      if (completeMemberships[branchId] === undefined) addMember(branchId, id);
+    }
+  }
+  return selectedMembers;
+};
+
 export const getBranchSelectionSummary = (
   members: DirectoryComputer[] | undefined,
   selectedIds: ReadonlySet<string>,
