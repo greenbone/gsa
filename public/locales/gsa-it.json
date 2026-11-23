@@ -568,6 +568,7 @@
   "Could not load this Active Directory credential. It may have been deleted, be inaccessible, or have a different type.": "Impossibile caricare queste credenziali Active Directory. Potrebbero essere state eliminate, essere inaccessibili o essere di un altro tipo.",
   "Could not load this branch.": "Impossibile caricare questo ramo.",
   "Could not resolve the selected OU/group. Your selection has been preserved.": "Impossibile risolvere l'unità organizzativa o il gruppo selezionato. La selezione è stata mantenuta.",
+  "Could not select all computers in {{name}}. Select the loaded computers individually.": "Impossibile selezionare tutti i computer in {{name}}. Seleziona singolarmente i computer caricati.",
   "Count": "Conteggio",
   "Counts describe distinct computers in currently loaded results. Results may be partial and indicators can overlap. Target matches reflect readable scan targets. Unavailable information is not counted as zero.": "I conteggi si riferiscono ai singoli computer nei risultati caricati finora. I risultati possono essere parziali e le categorie possono sovrapporsi. Le corrispondenze riguardano solo i target di scansione per cui si dispone dei permessi di lettura. Le informazioni non disponibili non vengono conteggiate come zero.",
   "CPE": "CPE",

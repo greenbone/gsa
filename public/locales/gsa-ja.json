@@ -568,6 +568,7 @@
   "Could not load this Active Directory credential. It may have been deleted, be inaccessible, or have a different type.": "",
   "Could not load this branch.": "",
   "Could not resolve the selected OU/group. Your selection has been preserved.": "",
+  "Could not select all computers in {{name}}. Select the loaded computers individually.": "",
   "Count": "件数",
   "Counts describe distinct computers in currently loaded results. Results may be partial and indicators can overlap. Target matches reflect readable scan targets. Unavailable information is not counted as zero.": "",
   "CPE": "CPE",

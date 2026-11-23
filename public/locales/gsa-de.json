@@ -568,6 +568,7 @@
   "Could not load this Active Directory credential. It may have been deleted, be inaccessible, or have a different type.": "Diese Active-Directory-Anmeldedaten konnten nicht geladen werden. Sie wurden möglicherweise gelöscht, sind nicht zugänglich oder haben einen anderen Typ.",
   "Could not load this branch.": "Dieser Zweig konnte nicht geladen werden.",
   "Could not resolve the selected OU/group. Your selection has been preserved.": "Die ausgewählte Organisationseinheit/Gruppe konnte nicht aufgelöst werden. Ihre Auswahl wurde beibehalten.",
+  "Could not select all computers in {{name}}. Select the loaded computers individually.": "Es konnten nicht alle Computer in {{name}} ausgewählt werden. Wählen Sie die geladenen Computer einzeln aus.",
   "Count": "Anzahl",
   "Counts describe distinct computers in currently loaded results. Results may be partial and indicators can overlap. Target matches reflect readable scan targets. Unavailable information is not counted as zero.": "Die Zahlen beziehen sich auf eindeutige Computer in den bisher geladenen Ergebnissen. Die Ergebnisse können unvollständig sein, und die Kategorien können sich überschneiden. Beim Abgleich werden nur Scan-Ziele mit Leseberechtigung berücksichtigt. Fehlende Angaben werden nicht als null gezählt.",
   "CPE": "CPE",

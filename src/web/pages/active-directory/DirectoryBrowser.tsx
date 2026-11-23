@@ -16,6 +16,7 @@ import {
   replaceDirectorySnapshot,
   mergeDirectoryGraph,
 } from 'gmp/models/directory-graph';
+import {IncompleteDirectoryResultsError} from 'gmp/models/directory-resolution';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Button from 'web/components/form/Button';
 import Checkbox from 'web/components/form/Checkbox';
@@ -108,8 +109,10 @@ export const DirectoryBrowser = ({
     );
   };
   const [showDisabled, setShowDisabled] = useState(false);
-  const [selectionError, setSelectionError] = useState<DirectoryNode>();
-  const [resolutionError, setResolutionError] = useState<string>();
+  const [selectionError, setSelectionError] = useState<{
+    node: DirectoryNode;
+    error?: Error;
+  }>();
   const onLoaded = useCallback(
     (owner: string, branchId: string, listing?: DirectoryOverview) => {
       if (listingVersion !== listingVersionRef.current) return;
@@ -173,7 +176,6 @@ export const DirectoryBrowser = ({
     const currentVersion = ++version.current;
     const revision = graphRevision.current;
     setSelectionError(undefined);
-    setResolutionError(undefined);
     if (!checked) {
       const memberIds =
         node.kind === 'computer'
@@ -211,8 +213,10 @@ export const DirectoryBrowser = ({
       }
     } catch (error) {
       if (currentVersion === version.current) {
-        setSelectionError(node);
-        setResolutionError(error instanceof Error ? error.message : undefined);
+        setSelectionError({
+          node,
+          error: error instanceof Error ? error : undefined,
+        });
       }
     } finally {
       if (currentVersion === version.current) resetResolution();
@@ -220,6 +224,34 @@ export const DirectoryBrowser = ({
   };
 
   const hosts = selectedHostnames(selected);
+  let selectionFeedback;
+  if (selectionError?.error instanceof IncompleteDirectoryResultsError) {
+    selectionFeedback = (
+      <Alert
+        dismissible={false}
+        role="status"
+        title={_(
+          'Could not select all computers in {{name}}. Select the loaded computers individually.',
+          {name: selectionError.node.name},
+        )}
+        type={EStatus.WARNING}
+      />
+    );
+  } else if (selectionError) {
+    selectionFeedback = (
+      <ErrorPanel
+        action={{
+          label: _('Retry selection'),
+          onClick: () => void select(selectionError.node, true),
+          isLoading: resolving,
+        }}
+        details={selectionError.error?.message}
+        message={_(
+          'Could not resolve the selected OU/group. Your selection has been preserved.',
+        )}
+      />
+    );
+  }
 
   return (
     <Column flex={1} gap="md" mih={0} miw={0}>
@@ -269,7 +301,6 @@ export const DirectoryBrowser = ({
                 setShowContainers(value);
                 setGraph({nodes: currentGraph.nodes, branches: {}});
                 setSelectionError(undefined);
-                setResolutionError(undefined);
                 resetResolution();
               }}
             />
@@ -338,19 +369,7 @@ export const DirectoryBrowser = ({
             />
           )}
         </DirectoryScrollArea>
-        {selectionError && (
-          <ErrorPanel
-            action={{
-              label: _('Retry selection'),
-              onClick: () => void select(selectionError, true),
-              isLoading: resolving,
-            }}
-            details={resolutionError}
-            message={_(
-              'Could not resolve the selected OU/group. Your selection has been preserved.',
-            )}
-          />
-        )}
+        {selectionFeedback}
         <DirectoryFooter
           aria-label={_('Selected hosts')}
           flex="0 0 auto"

@@ -23,8 +23,12 @@ type FetchListing = (
   kind: DirectoryBranch['kind'],
 ) => Promise<DirectoryOverview>;
 
-const incompleteResults =
-  'Directory results are incomplete. Your selection has been preserved.';
+export class IncompleteDirectoryResultsError extends Error {
+  constructor() {
+    super('Directory results are incomplete.');
+    this.name = 'IncompleteDirectoryResultsError';
+  }
+}
 
 const replaceSubtreeSnapshots = (
   graph: DirectoryGraph,
@@ -77,7 +81,7 @@ export const resolveDirectorySubtree = async (
       );
     const nextPath = new Set([...path, id]);
     const {roots, truncated} = await fetchListing(id, branchKind);
-    if (truncated) throw new Error(incompleteResults);
+    if (truncated) throw new IncompleteDirectoryResultsError();
 
     if (branchKind === 'group') {
       graph = replaceDirectorySnapshot(graph, id, 'resolution', roots, true);
@@ -95,6 +99,6 @@ export const resolveDirectorySubtree = async (
 
   await visitBranch(branchId, kind, new Set());
   const {computers, complete} = getDirectoryMembers(graph, branchId);
-  if (!complete) throw new Error(incompleteResults);
+  if (!complete) throw new IncompleteDirectoryResultsError();
   return {computers, graph};
 };

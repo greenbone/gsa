@@ -291,6 +291,41 @@ describe('Active Directory selection UI', () => {
     expect(command.resolveSubtree).toHaveBeenCalledTimes(2);
   });
 
+  test('guides the user to individual selection when bulk results are truncated', async () => {
+    const http = createDirectoryHttp();
+    http.request.mockResolvedValueOnce(
+      new Response(directoryObjectsXml([], new URLSearchParams(), true)),
+    );
+    const wireCommand = new ActiveDirectoryCommand(http);
+    const command = createCommand();
+    command.resolveSubtree.mockImplementationOnce(params =>
+      wireCommand.resolveSubtree(params),
+    );
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+    fireEvent.click(
+      await screen.findByRole('checkbox', {name: 'fs-01.domain.local'}),
+    );
+    fireEvent.click(screen.getByRole('checkbox', {name: 'Clients'}));
+
+    expect(
+      await screen.findByText(
+        'Could not select all computers in Clients. Select the loaded computers individually.',
+      ),
+    ).toBeVisible();
+    expect(
+      screen.getByRole('button', {name: 'Add 1 hosts to new target'}),
+    ).toBeEnabled();
+    expect(screen.getByRole('checkbox', {name: 'Clients'})).not.toBeChecked();
+    expect(
+      screen.queryByRole('button', {name: 'Retry selection'}),
+    ).not.toBeInTheDocument();
+    expect(command.resolveSubtree).toHaveBeenCalledTimes(1);
+  });
+
   test.each([false, true])(
     'clears selected descendants after reopening a truncated branch (nested branch omitted: %s)',
     async omitNestedBranch => {

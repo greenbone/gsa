@@ -15,11 +15,14 @@ import {
   AD_FILE_SERVERS,
   AD_CRITICAL_SERVERS,
   AD_OBJECTS,
+  AD_LARGE_LEVEL,
+  createDirectoryFixture,
   directoryObjectsXml,
 } from 'gmp/commands/fixtures/active-directory';
 import {createDirectoryHttp} from 'gmp/commands/fixtures/active-directory-http';
 import Response from 'gmp/http/response';
 import {getDirectoryMembers} from 'gmp/models/directory-graph';
+import {IncompleteDirectoryResultsError} from 'gmp/models/directory-resolution';
 
 const sourceId = AD_SOURCE;
 describe('ActiveDirectoryCommand wire contract', () => {
@@ -286,7 +289,34 @@ describe('ActiveDirectoryCommand wire contract', () => {
     );
     await expect(
       command.resolveSubtree({sourceId, branchId: AD_CLIENTS, kind: 'ou'}),
-    ).rejects.toThrow('incomplete');
+    ).rejects.toThrow(IncompleteDirectoryResultsError);
+  });
+
+  test('resolves more than the browse limit in one bulk selection request', async () => {
+    const http = createDirectoryHttp();
+    const computers = createDirectoryFixture('large-level').slice(1, 251);
+    http.request.mockImplementation(async (_method, {args}) => {
+      const limit = Number(args.max_results ?? 200);
+      return new Response(
+        directoryObjectsXml(
+          computers.slice(0, limit),
+          new URLSearchParams(),
+          computers.length > limit,
+        ),
+      );
+    });
+    const command = new ActiveDirectoryCommand(http);
+    const branch = {sourceId, branchId: AD_LARGE_LEVEL, kind: 'ou'} as const;
+    const listing = await command.getChildren(branch);
+    expect(listing.data.truncated).toBe(true);
+    expect(listing.data.roots).toHaveLength(200);
+
+    const resolution = await command.resolveSubtree(branch);
+    expect(resolution.data.computers).toHaveLength(250);
+    expect(http.request).toHaveBeenCalledTimes(2);
+    expect(http.request).toHaveBeenLastCalledWith('get', {
+      args: expect.objectContaining({scope: 'subtree', max_results: 1000}),
+    });
   });
 
   test('resolves nested groups sequentially with the credential search base', async () => {
@@ -311,6 +341,7 @@ describe('ActiveDirectoryCommand wire contract', () => {
       args: expect.objectContaining({
         scope: 'subtree',
         group_dn: AD_FILE_SERVERS,
+        max_results: 1000,
       }),
     });
     expect(http.request.mock.calls[1][1].args).not.toHaveProperty('base_dn');
