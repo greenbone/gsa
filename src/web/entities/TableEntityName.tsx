@@ -47,16 +47,16 @@ const TableEntityName = ({
     previewLabel ?? (typeof children === 'string' ? children : undefined);
   return (
     <NameLayout>
-      <PreviewSlot>
-        {preview && (
+      {preview && (
+        <PreviewSlot>
           <RowDetailsToggle
             detailsExpanded={preview.expanded}
             detailsId={preview.id}
             previewLabel={label}
             onClick={preview.toggle}
           />
-        )}
-      </PreviewSlot>
+        </PreviewSlot>
+      )}
       {type ? (
         <DetailsLink
           underline

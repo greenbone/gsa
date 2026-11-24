@@ -117,17 +117,16 @@ describe('TableEntityName', () => {
     },
   );
 
-  test('renders a navigation-only name without a preview control', () => {
+  test('renders a navigation-only name without a preview slot', () => {
     const {render} = rendererWith({capabilities: true, router: true});
     render(
       <TableEntityName id="1" type="report">
         Report date
       </TableEntityName>,
     );
-    expect(screen.getByRole('link', {name: 'Report date'})).toHaveAttribute(
-      'href',
-      '/report/1',
-    );
+    const link = screen.getByRole('link', {name: 'Report date'});
+    expect(link).toHaveAttribute('href', '/report/1');
+    expect(link.parentElement?.children).toHaveLength(1);
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
