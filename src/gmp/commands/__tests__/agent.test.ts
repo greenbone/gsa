@@ -104,6 +104,38 @@ describe('AgentCommand tests', () => {
     expect(result.data.id).toEqual('999');
   });
 
+  test.each([
+    {excludedPaths: [], fields: {}},
+    {
+      excludedPaths: [
+        String.raw`C:\ProgramData\Example\Cache`,
+        '/opt/private & cache',
+      ],
+      fields: {
+        'excluded_paths:0': String.raw`C:\ProgramData\Example\Cache`,
+        'excluded_paths:1': '/opt/private & cache',
+      },
+    },
+  ])(
+    'should submit the excluded paths $excludedPaths',
+    async ({excludedPaths, fields}) => {
+      const http = createHttp(createActionResultResponse());
+      const command = new AgentCommand(http);
+
+      await command.save({agentsIds: ['324'], authorized: true, excludedPaths});
+
+      expect(http.request).toHaveBeenCalledWith('post', {
+        data: {
+          cmd: 'modify_agent',
+          'agent_ids:': ['324'],
+          authorized: YES_VALUE,
+          set_excluded_paths: YES_VALUE,
+          ...fields,
+        },
+      });
+    },
+  );
+
   test('should allow to export an agent', async () => {
     const fakeFile = new ArrayBuffer(8);
     const http = createHttp(fakeFile);

@@ -91,6 +91,7 @@ const AgentComponent = ({
       updateToLatest: data?.updateToLatest,
       intervalInSeconds: data?.intervalInSeconds,
       comment: data.comment,
+      excludedPaths: data.excludedPaths,
     });
     closeEditDialog();
     setSelectedAgent(undefined);
@@ -107,6 +108,7 @@ const AgentComponent = ({
         <AgentDialog
           comment={selectedAgent.comment}
           configurationUpdated={selectedAgent.modificationTime}
+          excludedPaths={selectedAgent.config?.fileSearch?.excludedPaths}
           heartbeatReceived={selectedAgent.lastUpdaterHeartbeat}
           id={selectedAgent.id}
           intervalInSeconds={selectedAgent.config?.heartbeat?.intervalInSeconds}
