@@ -29,8 +29,12 @@ describe('RowDetailsToggle tests', () => {
 
   test('exposes expansion state and the mounted details target', () => {
     const {render} = rendererWith();
-    const {rerender} = render(<RowDetailsToggle previewLabel="Example" />);
-    const button = screen.getByRole('button', {name: /preview for Example/});
+    const previewLabel = 'Example < 5 & 10';
+    const {rerender} = render(<RowDetailsToggle previewLabel={previewLabel} />);
+    const button = screen.getByRole('button', {
+      name: `Show preview for ${previewLabel}`,
+    });
+    expect(button).toHaveAttribute('title', `Show preview for ${previewLabel}`);
     expect(button).toHaveAttribute('type', 'button');
     expect(button).toHaveAttribute('aria-expanded', 'false');
     expect(button).not.toHaveAttribute('aria-controls');
@@ -43,11 +47,12 @@ describe('RowDetailsToggle tests', () => {
       <RowDetailsToggle
         detailsExpanded
         detailsId="details-test"
-        previewLabel="Example"
+        previewLabel={previewLabel}
       />,
     );
     expect(button).toHaveAttribute('aria-expanded', 'true');
-    expect(button).toHaveAccessibleName('Hide preview for Example');
+    expect(button).toHaveAccessibleName(`Hide preview for ${previewLabel}`);
+    expect(button).toHaveAttribute('title', `Hide preview for ${previewLabel}`);
     expect(button).toHaveAttribute('aria-controls', 'details-test');
     expect(button.querySelector('.lucide-chevron-down')).toHaveAttribute(
       'aria-hidden',

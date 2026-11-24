@@ -63,11 +63,11 @@ const RowDetailsToggle = ({
   let label: string;
   if (detailsExpanded) {
     label = previewLabel
-      ? _('Hide preview for {{name}}', {name: previewLabel})
+      ? _('Hide preview for {{- name}}', {name: previewLabel})
       : _('Hide preview');
   } else {
     label = previewLabel
-      ? _('Show preview for {{name}}', {name: previewLabel})
+      ? _('Show preview for {{- name}}', {name: previewLabel})
       : _('Show preview');
   }
   return (
