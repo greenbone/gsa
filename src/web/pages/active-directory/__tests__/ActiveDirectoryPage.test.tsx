@@ -953,6 +953,9 @@ describe('Active Directory selection UI', () => {
       ).toEqual(['7', 'Unavailable', '1', '1', '5']),
     );
     expect(screen.queryByText('Unresolvable hostname')).not.toBeInTheDocument();
+    expect(
+      screen.getByText('0 of 3 selectable computers selected · 5 total'),
+    ).toBeVisible();
     fireEvent.click(
       screen.getByRole('checkbox', {
         name: 'Show disabled Active Directory objects',
@@ -963,7 +966,154 @@ describe('Active Directory selection UI', () => {
         .getAllByRole('definition')
         .map(value => value.textContent),
     ).toEqual(['7', 'Unavailable', '0', '1', '6']);
+    expect(
+      screen.getByText('0 of 4 selectable computers selected · 5 total'),
+    ).toBeVisible();
   });
+
+  test.each(['select', 'expand'])(
+    'disables a branch with only computers missing hostnames after %s',
+    async action => {
+      const command = createCommand();
+      const http = createDirectoryHttp();
+      const withoutHostname = AD_OBJECTS.filter(
+        node =>
+          node.parent === AD_ACCOUNTING &&
+          node.kind === 'computer' &&
+          !node.hostname,
+      );
+      http.request.mockResolvedValue(
+        new Response(
+          directoryObjectsXml(withoutHostname, new URLSearchParams()),
+        ),
+      );
+      const branchCommand = new ActiveDirectoryCommand(http);
+      const {render} = rendererWith({
+        capabilities: true,
+        gmp: createGmp(command),
+      });
+      render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+      await userEvent.click(
+        await screen.findByRole('button', {name: 'Expand Clients'}),
+      );
+      const checkbox = await screen.findByRole('checkbox', {
+        name: 'Accounting',
+      });
+      const expand = screen.getByRole('button', {name: 'Expand Accounting'});
+      command.resolveSubtree.mockImplementationOnce(params =>
+        branchCommand.resolveSubtree(params),
+      );
+      command.getChildren.mockImplementationOnce(params =>
+        branchCommand.getChildren(params),
+      );
+
+      expect(checkbox).toBeEnabled();
+      await userEvent.click(action === 'select' ? checkbox : expand);
+      expect(
+        await screen.findByText('No selectable computers · 1 total'),
+      ).toBeVisible();
+      expect(checkbox).toBeDisabled();
+      expect(checkbox).not.toBeChecked();
+      expect(screen.getByText('0 hosts selected')).toBeVisible();
+
+      if (action === 'select') await userEvent.click(expand);
+      expect(
+        await screen.findByRole('checkbox', {name: 'no-hostname.domain.local'}),
+      ).toBeDisabled();
+      expect(checkbox).toBeDisabled();
+    },
+  );
+
+  test.each(['complete', 'partial', 'retry'])(
+    'keeps the previous branch badge until a %s listing is applied',
+    async outcome => {
+      const command = createCommand();
+      const http = createDirectoryHttp();
+      const computers = AD_OBJECTS.filter(
+        node =>
+          node.parent === AD_ACCOUNTING &&
+          [
+            'pc-042.domain.local',
+            'pc-043.domain.local',
+            'no-hostname.domain.local',
+          ].includes(node.name),
+      );
+      http.request.mockResolvedValueOnce(
+        new Response(directoryObjectsXml(computers, new URLSearchParams())),
+      );
+      const branchCommand = new ActiveDirectoryCommand(http);
+      command.resolveSubtree.mockImplementationOnce(params =>
+        branchCommand.resolveSubtree(params),
+      );
+      const {render} = rendererWith({
+        capabilities: true,
+        gmp: createGmp(command),
+      });
+      render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+      await userEvent.click(
+        await screen.findByRole('button', {name: 'Expand Clients'}),
+      );
+      const checkbox = await screen.findByRole('checkbox', {
+        name: 'Accounting',
+      });
+      await userEvent.click(checkbox);
+      const previousBadge = '2 of 2 selectable computers selected · 3 total';
+      expect(await screen.findByText(previousBadge)).toBeVisible();
+      expect(checkbox).toBeChecked();
+
+      const noHostname = computers.filter(computer => !computer.hostname);
+      const params = new URLSearchParams();
+      http.request.mockResolvedValueOnce(
+        new Response(
+          directoryObjectsXml(noHostname, params, outcome === 'partial'),
+        ),
+      );
+      const listing = await branchCommand.getChildren({
+        sourceId: AD_SOURCE,
+        branchId: AD_ACCOUNTING,
+        kind: 'ou',
+      });
+      const first = Promise.withResolvers<typeof listing>();
+      command.getChildren.mockReturnValueOnce(first.promise);
+      const expand = screen.getByRole('button', {name: 'Expand Accounting'});
+      await userEvent.click(expand);
+      expect(
+        await screen.findByRole('status', {name: 'Loading Accounting'}),
+      ).toBeVisible();
+      expect(screen.getByText(previousBadge)).toBeVisible();
+
+      if (outcome === 'retry') {
+        await act(async () => first.reject(new Error('Directory unavailable')));
+        expect(screen.getByText(previousBadge)).toBeVisible();
+        const retryButton = await screen.findByRole('button', {
+          name: 'Retry Accounting',
+        });
+        expect(screen.getByText(previousBadge)).toBeVisible();
+        const retry = Promise.withResolvers<typeof listing>();
+        command.getChildren.mockReturnValueOnce(retry.promise);
+        await userEvent.click(retryButton);
+        expect(screen.getByText(previousBadge)).toBeVisible();
+        await act(async () => retry.resolve(listing));
+      } else {
+        await act(async () => first.resolve(listing));
+      }
+
+      if (outcome === 'partial') {
+        expect(
+          await screen.findByRole('status', {
+            name: 'Partial',
+            description: /Accounting: some objects were not returned/,
+          }),
+        ).toBeVisible();
+      } else {
+        expect(
+          await screen.findByText('No selectable computers · 1 total'),
+        ).toBeVisible();
+        expect(checkbox).toBeDisabled();
+      }
+      expect(screen.queryByText(previousBadge)).not.toBeInTheDocument();
+    },
+  );
 
   test('retains partial parent selection after collapsing an individually selected child', async () => {
     const command = createCommand();

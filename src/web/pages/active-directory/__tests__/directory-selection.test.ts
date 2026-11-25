@@ -28,7 +28,12 @@ describe('Directory selection', () => {
     expect(selected).toHaveLength(5);
     expect(
       getBranchSelectionSummary(computers, selectedIds, false),
-    ).toMatchObject({checked: true, indeterminate: false, total: 5});
+    ).toMatchObject({
+      checked: true,
+      indeterminate: false,
+      selectableCount: 5,
+      total: computers.length,
+    });
     expect(
       getBranchSelectionSummary(
         computers,

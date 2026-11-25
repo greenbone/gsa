@@ -215,20 +215,20 @@ export const BranchRow = styled(DirectoryRow)`
     > output:not(:last-child) {
       flex-shrink: 0;
     }
+    > span {
+      height: auto;
+      min-height: 1.25rem;
+      max-inline-size: 100%;
+      padding-block: var(--mantine-spacing-xxs);
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
   }
   @container ad-directory (max-width: ${theme.breakpoints.xs}) {
     > :nth-child(2) {
       grid-column: 1;
       &:has(> div:only-child > output:empty) {
         display: none;
-      }
-      > span {
-        height: auto;
-        min-height: 1.25rem;
-        max-inline-size: 100%;
-        padding-block: var(--mantine-spacing-xxs);
-        overflow-wrap: anywhere;
-        white-space: normal;
       }
     }
   }

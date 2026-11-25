@@ -66,7 +66,8 @@ export const getBranchSelectionSummary = (
     if (selectedIds.has(computer.id)) selectedCount++;
   }
   return {
-    total: members === undefined ? undefined : eligibleCount,
+    total: members?.length,
+    selectableCount: eligibleCount,
     selectedCount,
     checked: eligibleCount > 0 && selectedCount === eligibleCount,
     indeterminate: selectedCount > 0 && selectedCount < eligibleCount,
