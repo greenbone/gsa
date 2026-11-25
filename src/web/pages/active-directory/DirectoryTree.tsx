@@ -5,15 +5,17 @@
 
 import {useEffect, useId, useMemo, useState} from 'react';
 import {Accordion} from '@mantine/core';
-import {Alert, EStatus} from '@greenbone/ui-lib';
+import {EStatus, ICON_SIZES, StatusIcon} from '@greenbone/ui-lib';
 import {
   type DirectoryBranch,
   type DirectoryComputer,
   type DirectoryNode,
   type DirectoryOverview,
 } from 'gmp/models/active-directory';
+import {arraysEqual} from 'gmp/utils/array';
 import Badge, {EThemeColors} from 'web/components/badge/StatusBadge';
 import ErrorPanel from 'web/components/error/ErrorPanel';
+import Button from 'web/components/form/Button';
 import Column from 'web/components/layout/Column';
 import Loading from 'web/components/loading/Loading';
 import EntitySelection from 'web/entities/EntitySelection';
@@ -28,6 +30,7 @@ import {
   DirectoryEmptyNotice,
   DirectoryHeader,
   DirectoryList,
+  DirectorySelectionWarning,
 } from 'web/pages/active-directory/DirectoryLayout';
 
 interface DirectoryTreeProps {
@@ -37,6 +40,13 @@ interface DirectoryTreeProps {
   showDisabled: boolean;
   showContainers?: boolean;
   selectionPending: boolean;
+  selectionWarning?: {
+    id: string;
+    path?: string[];
+    count: number;
+    hasSelectableComputers: boolean;
+    onSelectLoaded: () => void;
+  };
   memberships: Record<string, DirectoryComputer[]>;
   selectedIncompleteMembers: ReadonlyMap<string, ReadonlySet<string>>;
   redundantBranchSummaries?: string[];
@@ -50,8 +60,12 @@ interface DirectoryTreeProps {
   onSelect: (node: DirectoryNode, checked: boolean, path?: string[]) => void;
 }
 
-interface ExpandedBranchProps extends Omit<DirectoryTreeProps, 'nodes'> {
+interface BranchProps extends Omit<DirectoryTreeProps, 'nodes'> {
   node: DirectoryBranch;
+}
+
+interface ExpandedBranchProps extends BranchProps {
+  onTruncationChange: (truncated: boolean) => void;
 }
 
 // This component unmounts on collapse, releasing its query observer and data.
@@ -63,11 +77,13 @@ const ExpandedBranch = ({
   showDisabled,
   showContainers,
   selectionPending,
+  selectionWarning,
   memberships,
   selectedIncompleteMembers,
   redundantBranchSummaries,
   computerPaths,
   onLoaded,
+  onTruncationChange,
   path,
   onSelect,
 }: ExpandedBranchProps) => {
@@ -91,6 +107,9 @@ const ExpandedBranch = ({
   useEffect(() => {
     if (listing) onLoaded(opening, node.id, listing);
   }, [listing, node.id, onLoaded, opening]);
+  useEffect(() => {
+    onTruncationChange(!isFetching && !isError && listing?.truncated === true);
+  }, [isError, isFetching, listing, onTruncationChange]);
   return (
     <DirectoryBranchContent
       $topLevel={!path?.length}
@@ -113,17 +132,6 @@ const ExpandedBranch = ({
           message={_('Could not load this branch.')}
         />
       )}
-      {listing?.truncated && (
-        <Alert
-          dismissible={false}
-          role="status"
-          title={_(
-            '{{name}}: some objects were not returned. You can select the loaded computers.',
-            {name: node.name},
-          )}
-          type={EStatus.WARNING}
-        />
-      )}
       {listing && (
         <DirectoryTree
           computerPaths={computerPaths}
@@ -134,6 +142,7 @@ const ExpandedBranch = ({
           selectedIds={selectedIds}
           selectedIncompleteMembers={selectedIncompleteMembers}
           selectionPending={selectionPending}
+          selectionWarning={selectionWarning}
           showContainers={showContainers}
           showDisabled={showDisabled}
           sourceId={sourceId}
@@ -152,6 +161,7 @@ const DirectoryTreeNode = ({
   showDisabled,
   showContainers,
   selectionPending,
+  selectionWarning,
   memberships,
   selectedIncompleteMembers,
   redundantBranchSummaries,
@@ -159,9 +169,11 @@ const DirectoryTreeNode = ({
   onLoaded,
   path,
   onSelect,
-}: ExpandedBranchProps) => {
+}: BranchProps) => {
   const [_] = useTranslation();
+  const warningId = useId();
   const [expanded, setExpanded] = useState(false);
+  const [listingTruncated, setListingTruncated] = useState(false);
 
   const branchSelection = getBranchSelectionSummary(
     memberships[node.id],
@@ -173,11 +185,64 @@ const DirectoryTreeNode = ({
   const indeterminate =
     branchSelection.indeterminate || clearIncompleteSelection;
   const cycle = path?.includes(node.id) ?? false;
+  const warning =
+    selectionWarning?.id === node.id &&
+    arraysEqual(selectionWarning.path ?? [], path ?? [])
+      ? selectionWarning
+      : undefined;
+  let warningHint;
+  let warningAction: {label: string; onClick: () => void} | undefined;
+  if (warning) {
+    if (warning.count > 0) {
+      const label =
+        warning.count === 1
+          ? _('Select 1 loaded computer')
+          : _('Select {{count}} loaded computers', {count: warning.count});
+      warningAction = {label, onClick: warning.onSelectLoaded};
+    } else if (warning.hasSelectableComputers) {
+      warningHint = _('All loaded selectable computers are already selected.');
+    } else if (expanded || cycle) {
+      warningHint = _('No selectable computers are loaded in this branch.');
+    } else {
+      warningHint = _('Expand the branch to load computers.');
+      warningAction = {
+        label: _('Expand branch'),
+        onClick: () => setExpanded(true),
+      };
+    }
+  }
   let selectionBadgeColor = EThemeColors.NeutralLight;
   if (branchSelection.checked) {
     selectionBadgeColor = EThemeColors.Green;
   } else if (indeterminate) {
     selectionBadgeColor = EThemeColors.Blue;
+  }
+  let branchBadge;
+  if (expanded && listingTruncated) {
+    branchBadge = (
+      <output
+        aria-label={_('Partial')}
+        title={_(
+          '{{name}}: some objects were not returned. You can select the loaded computers.',
+          {name: node.name},
+        )}
+      >
+        <Badge color={EThemeColors.Orange} size="sm">
+          {_('Partial')}
+        </Badge>
+      </output>
+    );
+  } else if (!redundantBranchSummaries?.includes(node.id)) {
+    branchBadge = (
+      <Badge color={selectionBadgeColor} size="sm">
+        {branchSelection.total === undefined
+          ? _('Membership not resolved')
+          : _('{{selected}} of {{total}} computers selected', {
+              selected: branchSelection.selectedCount,
+              total: branchSelection.total,
+            })}
+      </Badge>
+    );
   }
   const row = (
     <BranchRow $depth={path?.length ?? 0} data-directory-branch-header="">
@@ -197,19 +262,37 @@ const DirectoryTreeNode = ({
         )}
       </div>
       <div>
-        {!redundantBranchSummaries?.includes(node.id) && (
-          <Badge color={selectionBadgeColor} size="sm">
-            {branchSelection.total === undefined
-              ? _('Membership not resolved')
-              : _('{{selected}} of {{total}} computers selected', {
-                  selected: branchSelection.selectedCount,
-                  total: branchSelection.total,
-                })}
-          </Badge>
-        )}
+        {branchBadge}
+        <DirectorySelectionWarning>
+          <output>
+            {warning && (
+              <>
+                <StatusIcon
+                  aria-hidden="true"
+                  size={ICON_SIZES.SMALL}
+                  status={EStatus.WARNING}
+                />
+                <span id={warningId}>
+                  {_('Could not select the whole branch.')}
+                  {warningHint && <> {warningHint}</>}
+                </span>
+              </>
+            )}
+          </output>
+          {warningAction && (
+            <Button
+              size="sm"
+              styles={{label: {whiteSpace: 'normal', overflow: 'visible'}}}
+              title={warningAction.label}
+              variant="default"
+              onClick={warningAction.onClick}
+            />
+          )}
+        </DirectorySelectionWarning>
       </div>
       <div>
         <EntitySelection
+          aria-describedby={warning ? warningId : undefined}
           aria-label={node.name}
           disabled={selectionPending}
           entity={node}
@@ -225,7 +308,10 @@ const DirectoryTreeNode = ({
   const accordion = (
     <DirectoryAccordion
       value={expanded ? 'details' : null}
-      onChange={value => setExpanded(value !== null)}
+      onChange={value => {
+        setListingTruncated(false);
+        setExpanded(value !== null);
+      }}
     >
       <Accordion.Item value="details">
         {row}
@@ -246,11 +332,13 @@ const DirectoryTreeNode = ({
               selectedIds={selectedIds}
               selectedIncompleteMembers={selectedIncompleteMembers}
               selectionPending={selectionPending}
+              selectionWarning={selectionWarning}
               showContainers={showContainers}
               showDisabled={showDisabled}
               sourceId={sourceId}
               onLoaded={onLoaded}
               onSelect={onSelect}
+              onTruncationChange={setListingTruncated}
             />
           </Accordion.Panel>
         )}
@@ -270,6 +358,7 @@ const DirectoryTree = ({
   showDisabled,
   showContainers,
   selectionPending,
+  selectionWarning,
   memberships,
   selectedIncompleteMembers,
   redundantBranchSummaries,
@@ -319,6 +408,7 @@ const DirectoryTree = ({
               selectedIds={selectedIds}
               selectedIncompleteMembers={selectedIncompleteMembers}
               selectionPending={selectionPending}
+              selectionWarning={selectionWarning}
               showContainers={showContainers}
               showDisabled={showDisabled}
               sourceId={sourceId}

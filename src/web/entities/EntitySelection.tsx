@@ -16,6 +16,7 @@ interface EntitySelectionProps<TEntity> {
   selected?: boolean;
   disabled?: boolean;
   indeterminate?: boolean;
+  'aria-describedby'?: string;
   'aria-label'?: string;
   onDeselected?: (entity: TEntity) => void;
   onSelected?: (entity: TEntity) => void;
@@ -26,6 +27,7 @@ const EntitySelection = <TEntity extends Entity>({
   selected: controlledSelected,
   disabled,
   indeterminate,
+  'aria-describedby': ariaDescribedBy,
   'aria-label': ariaLabel,
   onDeselected,
   onSelected,
@@ -45,6 +47,7 @@ const EntitySelection = <TEntity extends Entity>({
   };
   return (
     <Checkbox
+      aria-describedby={ariaDescribedBy}
       aria-label={ariaLabel}
       checked={selected}
       data-testid={`entity-selection-${entity.id}`}

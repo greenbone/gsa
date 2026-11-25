@@ -72,6 +72,52 @@ export const DirectoryFooter = styled(Row)`
   }
 `;
 
+export const DirectorySelectionWarning = styled.div`
+  min-inline-size: 0;
+
+  &:has(> output:not(:empty)) {
+    display: flex;
+    inline-size: fit-content;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--mantine-spacing-xxs) var(--mantine-spacing-xs);
+    padding: var(--mantine-spacing-xxs) var(--mantine-spacing-xs);
+    border: 1px solid var(--border-color-warning);
+    border-radius: var(--mantine-radius-sm);
+    background-color: var(--background-color-warning);
+    color: var(--mantine-color-text);
+  }
+
+  &:not(:first-child):has(> output:not(:empty)) {
+    margin-inline-start: var(--mantine-spacing-xs);
+  }
+
+  > output:not(:empty) {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--mantine-spacing-xs);
+    min-inline-size: 0;
+  }
+
+  > output > svg {
+    flex-shrink: 0;
+    margin-block-start: 0.15em;
+  }
+
+  > output > span {
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  > button {
+    max-inline-size: 100%;
+    min-block-size: 1.5rem;
+    block-size: auto;
+    padding-inline: var(--mantine-spacing-xxs);
+    font-size: 0.875em;
+  }
+`;
+
 export const DirectoryList = styled.ul<{$spacing: 'xs' | 'sm'}>`
   display: flex;
   flex-direction: column;
@@ -162,12 +208,18 @@ export const BranchRow = styled(DirectoryRow)`
     font-weight: ${({$depth}) => ($depth === 0 ? 600 : 500)};
   }
   > :nth-child(2) {
+    display: flex;
+    align-items: center;
     grid-column: span 2;
+
+    > output:not(:last-child) {
+      flex-shrink: 0;
+    }
   }
   @container ad-directory (max-width: ${theme.breakpoints.xs}) {
     > :nth-child(2) {
       grid-column: 1;
-      &:empty {
+      &:has(> div:only-child > output:empty) {
         display: none;
       }
       > span {

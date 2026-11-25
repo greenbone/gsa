@@ -4,7 +4,6 @@
  */
 
 import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Alert, EStatus} from '@greenbone/ui-lib';
 import {
   type DirectoryComputer,
   type DirectoryNode,
@@ -112,6 +111,7 @@ export const DirectoryBrowser = ({
   const [selectionError, setSelectionError] = useState<{
     node: DirectoryNode;
     error?: Error;
+    path?: string[];
   }>();
   const onLoaded = useCallback(
     (owner: string, branchId: string, listing?: DirectoryOverview) => {
@@ -216,6 +216,7 @@ export const DirectoryBrowser = ({
         setSelectionError({
           node,
           error: error instanceof Error ? error : undefined,
+          path,
         });
       }
     } finally {
@@ -224,34 +225,35 @@ export const DirectoryBrowser = ({
   };
 
   const hosts = selectedHostnames(selected);
-  let selectionFeedback;
-  if (selectionError?.error instanceof IncompleteDirectoryResultsError) {
-    selectionFeedback = (
-      <Alert
-        dismissible={false}
-        role="status"
-        title={_(
-          'Could not select all computers in {{name}}. Select the loaded computers individually.',
-          {name: selectionError.node.name},
-        )}
-        type={EStatus.WARNING}
-      />
-    );
-  } else if (selectionError) {
-    selectionFeedback = (
-      <ErrorPanel
-        action={{
-          label: _('Retry selection'),
-          onClick: () => void select(selectionError.node, true),
-          isLoading: resolving,
-        }}
-        details={selectionError.error?.message}
-        message={_(
-          'Could not resolve the selected OU/group. Your selection has been preserved.',
-        )}
-      />
-    );
-  }
+  const incompleteSelection =
+    selectionError?.error instanceof IncompleteDirectoryResultsError;
+  const selectableLoaded = incompleteSelection
+    ? mergeSelection(
+        [],
+        summary.knownMembers[selectionError.node.id] ?? [],
+        showDisabled,
+      )
+    : [];
+  const unselectedLoaded = selectableLoaded.filter(
+    computer => !selectedComputerIds.has(computer.id),
+  );
+  const selectionWarning = incompleteSelection
+    ? {
+        id: selectionError.node.id,
+        path: selectionError.path,
+        count: unselectedLoaded.length,
+        hasSelectableComputers: selectableLoaded.length > 0,
+        onSelectLoaded: () => {
+          version.current += 1;
+          setSelectionError(undefined);
+          setSelected(
+            previous =>
+              mergeSelection(previous, unselectedLoaded, showDisabled),
+            [...(selectionError.path ?? []), selectionError.node.id],
+          );
+        },
+      }
+    : undefined;
 
   return (
     <Column flex={1} gap="md" mih={0} miw={0}>
@@ -263,6 +265,7 @@ export const DirectoryBrowser = ({
               : counts
           }
           isPartial={isPartial}
+          rootTruncated={overview.truncated}
           showDisabled={showDisabled}
         />
       )}
@@ -339,16 +342,6 @@ export const DirectoryBrowser = ({
           ) : (
             loading && <Loading label={_('Loading Active Directory...')} />
           )}
-          {overview?.truncated && (
-            <Alert
-              dismissible={false}
-              role="status"
-              title={_(
-                'Directory root: some objects were not returned. You can select the loaded computers.',
-              )}
-              type={EStatus.WARNING}
-            />
-          )}
           {overview && (
             <DirectoryTree
               key={listingVersion}
@@ -359,6 +352,7 @@ export const DirectoryBrowser = ({
               selectedIds={selectedComputerIds}
               selectedIncompleteMembers={selectedIncompleteMembers}
               selectionPending={resolving}
+              selectionWarning={selectionWarning}
               showContainers={showContainers}
               showDisabled={showDisabled}
               sourceId={sourceId}
@@ -369,7 +363,20 @@ export const DirectoryBrowser = ({
             />
           )}
         </DirectoryScrollArea>
-        {selectionFeedback}
+        {selectionError && !incompleteSelection && (
+          <ErrorPanel
+            action={{
+              label: _('Retry selection'),
+              onClick: () =>
+                void select(selectionError.node, true, selectionError.path),
+              isLoading: resolving,
+            }}
+            details={selectionError.error?.message}
+            message={_(
+              'Could not resolve the selected OU/group. Your selection has been preserved.',
+            )}
+          />
+        )}
         <DirectoryFooter
           aria-label={_('Selected hosts')}
           flex="0 0 auto"
@@ -380,7 +387,7 @@ export const DirectoryBrowser = ({
           role="group"
           wrap="wrap"
         >
-          <Row align="center" gap="xs" wrap="wrap">
+          <Row gap="xs" wrap="wrap">
             <span aria-live="polite">
               {_('{{count}} hosts selected', {count: hosts.length})}
             </span>

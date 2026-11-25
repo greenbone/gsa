@@ -22,6 +22,7 @@ interface DiscoverySummaryProps {
   counts: DirectoryOverview['counts'];
   showDisabled: boolean;
   isPartial?: boolean;
+  rootTruncated?: boolean;
 }
 
 const Summary = styled.div`
@@ -108,11 +109,17 @@ const DiscoverySummary = ({
   counts,
   showDisabled,
   isPartial = false,
+  rootTruncated = false,
 }: DiscoverySummaryProps) => {
   const [_] = useTranslation();
   const countsHelp = _(
     'Counts describe distinct computers in currently loaded results. Results may be partial and indicators can overlap. Target matches reflect readable scan targets. Unavailable information is not counted as zero.',
   );
+  const partialDetails = rootTruncated
+    ? _(
+        'Directory root: some objects were not returned. You can select the loaded computers.',
+      )
+    : countsHelp;
   const metrics = [
     {
       id: 'found',
@@ -171,11 +178,11 @@ const DiscoverySummary = ({
                   {label}
                 </span>
                 {id === 'found' && isPartial && (
-                  <span title={countsHelp}>
+                  <output aria-label={_('Partial')} title={partialDetails}>
                     <Badge color={EThemeColors.Orange} size="sm">
                       {_('Partial')}
                     </Badge>
-                  </span>
+                  </output>
                 )}
               </dt>
               <dd data-unavailable={count === undefined ? '' : undefined}>
