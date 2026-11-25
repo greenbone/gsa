@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {XMLParser} from 'fast-xml-parser';
 import HttpCommand from 'gmp/commands/http';
 import Response from 'gmp/http/response';
+import {success} from 'gmp/http/transform/xml';
 import {
   type DirectoryBranch,
   type DirectoryComputer,
@@ -13,6 +15,7 @@ import {
   type DirectoryTarget,
 } from 'gmp/models/active-directory';
 import {resolveDirectorySubtree} from 'gmp/models/directory-resolution';
+import {parseXmlEncodedString} from 'gmp/parser';
 
 export interface DirectorySourceParams {
   sourceId: string;
@@ -67,14 +70,46 @@ interface ObjectsResponse {
   objects?: {
     _truncated: string;
     count: {
-      ou: number;
-      container: number;
-      group: number;
-      computer: {total: number; disabled?: number};
+      computer: {total: string; disabled?: string};
     };
     object?: ObjectElement | ObjectElement[];
   };
 }
+
+interface DirectoryDocument {
+  envelope?: {
+    get_active_directory_objects?: {
+      get_active_directory_objects_response?: ObjectsResponse;
+    };
+  };
+}
+
+const directoryXmlParser = new XMLParser({
+  attributeNamePrefix: '_',
+  ignoreAttributes: false,
+  removeNSPrefix: true,
+  textNodeName: '__text',
+  parseTagValue: false,
+  trimValues: false,
+  attributeValueProcessor: (_name, value) => parseXmlEncodedString(value),
+  tagValueProcessor: (_name, value) => parseXmlEncodedString(value),
+});
+
+const parseDirectoryResponse = success(
+  (response: Response<string | ArrayBuffer | DirectoryDocument>) => {
+    const {data} = response;
+    const xml =
+      data instanceof ArrayBuffer ? new TextDecoder().decode(data) : data;
+    const {envelope} =
+      typeof xml === 'string'
+        ? (directoryXmlParser.parse(xml) as DirectoryDocument)
+        : xml;
+    if (envelope === undefined)
+      throw new Error('No envelope found in response');
+    return response.setData(envelope);
+  },
+);
+
 const array = <T>(value?: T | T[]): T[] => {
   if (value === undefined) return [];
   return Array.isArray(value) ? value : [value];
@@ -141,7 +176,7 @@ class ActiveDirectoryCommand extends HttpCommand {
     details = false,
     maxResults,
   }: DirectoryObjectsParams) {
-    const response = await this.httpGetWithTransform({
+    const args = this.getParams({
       cmd: 'get_active_directory_objects',
       credential_id: sourceId,
       scope,
@@ -154,9 +189,11 @@ class ActiveDirectoryCommand extends HttpCommand {
       ...(objectTypes === undefined ? {} : {'object_types:': objectTypes}),
       ...(maxResults === undefined ? {} : {max_results: maxResults}),
     });
-    const wrapper = response.data.get_active_directory_objects as
-      | {get_active_directory_objects_response?: ObjectsResponse}
-      | undefined;
+    const rawResponse = await this.httpRequestWithRejectionTransform('get', {
+      args,
+    });
+    const response = parseDirectoryResponse(rawResponse);
+    const wrapper = response.data.get_active_directory_objects;
     const result = wrapper?.get_active_directory_objects_response;
     if (!result || String(result._status) !== '200' || !result.objects) {
       throw new Error(

@@ -26,6 +26,42 @@ import {IncompleteDirectoryResultsError} from 'gmp/models/directory-resolution';
 
 const sourceId = AD_SOURCE;
 describe('ActiveDirectoryCommand wire contract', () => {
+  test('preserves literal text in object attributes from raw XML', async () => {
+    const http = createDirectoryHttp();
+    http.request.mockResolvedValueOnce(
+      new Response(`<envelope><get_active_directory_objects>
+        <get_active_directory_objects_response status="200" status_text="OK">
+          <objects truncated="0">
+            <count><computer><total>2</total><disabled>1</disabled></computer></count>
+            <object type="computer">
+              <distinguished_name>CN=first,${AD_BASE}</distinguished_name>
+              <name>001</name><description>false</description><disabled>1</disabled>
+              <operating_system_version>10.0</operating_system_version>
+            </object>
+            <object type="computer">
+              <distinguished_name>CN=second,${AD_BASE}</distinguished_name>
+              <name>second</name><description>  A &amp; B
+  </description><disabled>0</disabled>
+            </object>
+          </objects>
+        </get_active_directory_objects_response>
+      </get_active_directory_objects></envelope>`),
+    );
+    const {data} = await new ActiveDirectoryCommand(http).getOverview({
+      sourceId,
+    });
+    expect(data.roots).toMatchObject([
+      {
+        name: '001',
+        description: 'false',
+        disabled: true,
+        operatingSystemVersion: '10.0',
+      },
+      {description: '  A & B\n  ', disabled: false},
+    ]);
+    expect(data.counts).toMatchObject({found: 2, disabled: 1});
+  });
+
   test('retains task/config relationships during recursive selection', async () => {
     const http = createDirectoryHttp('relationships');
     const result = await new ActiveDirectoryCommand(http).resolveSubtree({
