@@ -107,6 +107,9 @@ describe('ActiveDirectoryCommand wire contract', () => {
     expect(root.data.roots.some(node => node.id === AD_CLIENTS)).toBe(true);
     expect(root.data.roots.some(node => node.id === AD_ACCOUNTING)).toBe(false);
     expect(http.request).toHaveBeenCalledTimes(1);
+    expect(http.request).toHaveBeenLastCalledWith('get', {
+      args: expect.objectContaining({scope: 'onelevel', max_results: 1000}),
+    });
     const branch = await command.getChildren({
       sourceId,
       branchId: AD_CLIENTS,
@@ -119,7 +122,11 @@ describe('ActiveDirectoryCommand wire contract', () => {
     ]);
     expect(http.request).toHaveBeenCalledTimes(2);
     expect(http.request).toHaveBeenLastCalledWith('get', {
-      args: expect.objectContaining({scope: 'onelevel', base_dn: AD_CLIENTS}),
+      args: expect.objectContaining({
+        scope: 'onelevel',
+        base_dn: AD_CLIENTS,
+        max_results: 1000,
+      }),
     });
     for (const [, {args}] of http.request.mock.calls)
       expect(args).not.toHaveProperty('details');
@@ -143,6 +150,9 @@ describe('ActiveDirectoryCommand wire contract', () => {
         tasks: 0,
       }),
     });
+    expect(http.request.mock.calls[0][1].args).not.toHaveProperty(
+      'max_results',
+    );
     expect(result.data).toMatchObject({
       id: computerDn,
       operatingSystemVersion: '10.0 (22631)',
@@ -292,9 +302,9 @@ describe('ActiveDirectoryCommand wire contract', () => {
     ).rejects.toThrow(IncompleteDirectoryResultsError);
   });
 
-  test('resolves more than the browse limit in one bulk selection request', async () => {
+  test('browses and bulk-selects a 333-computer branch in one request each', async () => {
     const http = createDirectoryHttp();
-    const computers = createDirectoryFixture('large-level').slice(1, 251);
+    const computers = createDirectoryFixture('large-level').slice(1, 334);
     http.request.mockImplementation(async (_method, {args}) => {
       const limit = Number(args.max_results ?? 200);
       return new Response(
@@ -308,15 +318,29 @@ describe('ActiveDirectoryCommand wire contract', () => {
     const command = new ActiveDirectoryCommand(http);
     const branch = {sourceId, branchId: AD_LARGE_LEVEL, kind: 'ou'} as const;
     const listing = await command.getChildren(branch);
-    expect(listing.data.truncated).toBe(true);
-    expect(listing.data.roots).toHaveLength(200);
+    expect(listing.data.truncated).toBe(false);
+    expect(listing.data.roots).toHaveLength(333);
+    expect(http.request).toHaveBeenCalledTimes(1);
 
     const resolution = await command.resolveSubtree(branch);
-    expect(resolution.data.computers).toHaveLength(250);
+    expect(resolution.data.computers).toHaveLength(333);
     expect(http.request).toHaveBeenCalledTimes(2);
     expect(http.request).toHaveBeenLastCalledWith('get', {
       args: expect.objectContaining({scope: 'subtree', max_results: 1000}),
     });
+  });
+
+  test('keeps the truncated flag when the browse limit is exceeded', async () => {
+    const http = createDirectoryHttp('large-level');
+    const command = new ActiveDirectoryCommand(http);
+    const {data} = await command.getChildren({
+      sourceId,
+      branchId: AD_LARGE_LEVEL,
+      kind: 'ou',
+    });
+    expect(data.truncated).toBe(true);
+    expect(data.roots).toHaveLength(1000);
+    expect(http.request).toHaveBeenCalledTimes(1);
   });
 
   test('resolves nested groups sequentially with the credential search base', async () => {

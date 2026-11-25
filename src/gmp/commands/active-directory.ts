@@ -80,7 +80,7 @@ const array = <T>(value?: T | T[]): T[] => {
   return Array.isArray(value) ? value : [value];
 };
 // GMP caps get_active_directory_objects at 1,000 results per request.
-const DIRECTORY_BULK_SELECTION_LIMIT = 1000;
+const DIRECTORY_RESULTS_LIMIT = 1000;
 
 const reference = (value: ReferenceElement) => ({
   id: value._id,
@@ -197,7 +197,11 @@ class ActiveDirectoryCommand extends HttpCommand {
   }
 
   getOverview(params: DirectorySourceParams) {
-    return this.getObjects({...params, tasks: true});
+    return this.getObjects({
+      ...params,
+      tasks: true,
+      maxResults: DIRECTORY_RESULTS_LIMIT,
+    });
   }
 
   async getComputerDetails({
@@ -233,7 +237,7 @@ class ActiveDirectoryCommand extends HttpCommand {
     branchId,
     kind,
     showContainers,
-    maxResults,
+    maxResults = DIRECTORY_RESULTS_LIMIT,
   }: DirectoryBranchParams) {
     return this.getObjects({
       sourceId,
@@ -251,7 +255,7 @@ class ActiveDirectoryCommand extends HttpCommand {
     branchId,
     kind,
     showContainers,
-    maxResults = DIRECTORY_BULK_SELECTION_LIMIT,
+    maxResults = DIRECTORY_RESULTS_LIMIT,
   }: DirectoryBranchParams) {
     const resolution = await resolveDirectorySubtree(
       branchId,
