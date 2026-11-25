@@ -11,7 +11,7 @@ export const hasCredentials = Boolean(username && password);
 export const credentialsRequiredMessage =
   'Set E2E_USERNAME and E2E_PASSWORD in .env.e2e.local or shell environment.';
 
-export const login = async (page: Page) => {
+export const login = async (page: Page, credentials = {username, password}) => {
   await page.goto('/login');
 
   const usernameInput = page.locator('input[name="username"]');
@@ -23,8 +23,8 @@ export const login = async (page: Page) => {
 
   let loggedIn = false;
   for (let attempt = 0; attempt < 2; attempt += 1) {
-    await usernameInput.fill(username as string);
-    await passwordInput.fill(password as string);
+    await usernameInput.fill(credentials.username as string);
+    await passwordInput.fill(credentials.password as string);
     await loginButton.click();
 
     try {

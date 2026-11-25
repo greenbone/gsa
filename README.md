@@ -195,9 +195,8 @@ type check.
 
 ### Local Playwright E2E
 
-The Playwright end-to-end tests run against a locally running container. Start
-the container and make sure the GSA web application is available before running
-the tests.
+For container-backed Playwright tests, start the local container and make sure
+the GSA web application is available.
 
 Install the Playwright browser once:
 
@@ -205,11 +204,21 @@ Install the Playwright browser once:
 npx playwright install chromium
 ```
 
-Run all end-to-end tests:
+Run the container-backed end-to-end tests:
 
 ```sh
 npm run test:e2e
 ```
+
+Run the fixture-backed Active Directory discovery tests:
+
+```sh
+npm run test:e2e:ad
+```
+
+Playwright starts GSA on port 4175 and serves the API responses from fixtures.
+The suite requires no GSAD or Active Directory server, live URL, or login
+credentials. Set `E2E_AD_PERFORMANCE=1` to include the 10,000-computer scenario.
 
 ## Translations
 

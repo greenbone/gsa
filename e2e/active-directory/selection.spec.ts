@@ -3,42 +3,24 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {login} from 'e2e/credentials';
-import {expect, test} from 'e2e/fixtures';
 import {
   AD_SOURCE,
   AD_OTHER_SOURCE,
-  activeDirectoryMockResponse,
 } from '../../src/gmp/commands/fixtures/active-directory';
+import {expect, loginWithDirectoryFixtures, test} from './directory-fixtures';
 
 test.use({viewport: {width: 1280, height: 900}});
 
 test('selects AD computers and transfers them to a new target without saving', async ({
   page,
 }, testInfo) => {
-  await page.route('**/gmp?**', async route => {
-    const xml = activeDirectoryMockResponse(
-      new URL(route.request().url()).searchParams,
-    );
-    if (xml === undefined) await route.continue();
-    else await route.fulfill({contentType: 'application/xml', body: xml});
-  });
   let discoveryCalls = 0;
   page.on('request', request => {
     if (request.url().includes('cmd=get_active_directory_objects'))
       discoveryCalls += 1;
   });
-  await login(page);
+  await loginWithDirectoryFixtures(page);
   await page.goto('/active-directory');
-  const unavailable = page.getByText('Active Directory is not available.');
-  await expect(
-    page.getByRole('heading', {name: 'Active Directory'}).or(unavailable),
-  ).toBeVisible();
-  test.skip(
-    await unavailable.isVisible(),
-    'Active Directory integration is unavailable',
-  );
-
   await expect(
     page.getByRole('table', {name: 'Active Directory connections'}),
   ).toBeVisible();

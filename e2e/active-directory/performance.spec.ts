@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {login} from 'e2e/credentials';
-import {expect, test} from 'e2e/fixtures';
 import {
   AD_LARGE_LEVEL,
   AD_LARGE_LEVEL_NAME,
@@ -13,6 +11,7 @@ import {
   activeDirectoryMockResponse,
   largeLevelComputerName,
 } from '../../src/gmp/commands/fixtures/active-directory';
+import {expect, loginWithDirectoryFixtures, test} from './directory-fixtures';
 
 test('measures Active Directory with 10,000 computers at one level', async ({
   page,
@@ -40,7 +39,7 @@ test('measures Active Directory with 10,000 computers at one level', async ({
     }
     const xml = activeDirectoryMockResponse(params, 'large-level');
     if (xml === undefined) {
-      await route.continue();
+      await route.fallback();
       return;
     }
 
@@ -57,7 +56,7 @@ test('measures Active Directory with 10,000 computers at one level', async ({
     await route.fulfill({contentType: 'application/xml', body: xml});
   });
 
-  await login(page);
+  await loginWithDirectoryFixtures(page);
   await page.goto(`/active-directory/discovery/${AD_SOURCE}`);
 
   const branch = page.getByRole('button', {
