@@ -126,11 +126,7 @@ const BrowserContent = ({credentialId}: {credentialId: string}) => {
               </tbody>
             </ConnectionMetadata>
           </ConnectionHeader>
-          <TargetComponent
-            onCreated={() =>
-              showSuccessNotification('', _('Target created successfully.'))
-            }
-          >
+          <TargetComponent>
             {({create}) => (
               <DirectoryBrowser
                 key={credentialId}

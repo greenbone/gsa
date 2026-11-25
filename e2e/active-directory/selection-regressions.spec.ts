@@ -714,7 +714,12 @@ test('cancels without saving and clears the error after a successful retry', asy
     );
     await save.click();
     await expect(dialog).toHaveCount(0);
-    await expect(page.getByText('Target created successfully.')).toBeVisible();
+    await expect(
+      page.getByText('Target Fixture AD target successfully created', {
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(page.getByText('Target created successfully.')).toHaveCount(0);
     await expect(page.getByText(failure)).toHaveCount(0);
     expect(requests).toHaveLength(2);
     for (const fields of requests) {
