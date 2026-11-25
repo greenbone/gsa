@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect, useId, useMemo, useState} from 'react';
+import {useEffect, useId, useMemo, useRef, useState} from 'react';
 import {Accordion} from '@mantine/core';
 import {EStatus, ICON_SIZES, StatusIcon} from '@greenbone/ui-lib';
 import {
@@ -51,6 +51,10 @@ interface DirectoryTreeProps {
   selectedIncompleteMembers: ReadonlyMap<string, ReadonlySet<string>>;
   redundantBranchSummaries?: string[];
   computerPaths?: Record<string, string>;
+  registerVisibleListing: (
+    pathKey: string,
+    nodes: DirectoryNode[],
+  ) => () => void;
   onLoaded: (
     key: string,
     branchId: string,
@@ -82,6 +86,7 @@ const ExpandedBranch = ({
   selectedIncompleteMembers,
   redundantBranchSummaries,
   computerPaths,
+  registerVisibleListing,
   onLoaded,
   onTruncationChange,
   path,
@@ -89,6 +94,8 @@ const ExpandedBranch = ({
 }: ExpandedBranchProps) => {
   const [_] = useTranslation();
   const opening = useId();
+  const branchPath = [...(path ?? []), node.id];
+  const pathKey = JSON.stringify(branchPath);
   const {
     data: listing,
     error,
@@ -107,6 +114,9 @@ const ExpandedBranch = ({
   useEffect(() => {
     if (listing) onLoaded(opening, node.id, listing);
   }, [listing, node.id, onLoaded, opening]);
+  useEffect(() => {
+    if (listing) return registerVisibleListing(pathKey, listing.roots);
+  }, [listing, pathKey, registerVisibleListing]);
   useEffect(() => {
     onTruncationChange(!isFetching && !isError && listing?.truncated === true);
   }, [isError, isFetching, listing, onTruncationChange]);
@@ -137,8 +147,9 @@ const ExpandedBranch = ({
           computerPaths={computerPaths}
           memberships={memberships}
           nodes={listing.roots}
-          path={[...(path ?? []), node.id]}
+          path={branchPath}
           redundantBranchSummaries={redundantBranchSummaries}
+          registerVisibleListing={registerVisibleListing}
           selectedIds={selectedIds}
           selectedIncompleteMembers={selectedIncompleteMembers}
           selectionPending={selectionPending}
@@ -166,12 +177,14 @@ const DirectoryTreeNode = ({
   selectedIncompleteMembers,
   redundantBranchSummaries,
   computerPaths,
+  registerVisibleListing,
   onLoaded,
   path,
   onSelect,
 }: BranchProps) => {
   const [_] = useTranslation();
   const warningId = useId();
+  const branchSelectionRef = useRef<HTMLDivElement>(null);
   const [expanded, setExpanded] = useState(false);
   const [listingTruncated, setListingTruncated] = useState(false);
 
@@ -285,12 +298,16 @@ const DirectoryTreeNode = ({
               styles={{label: {whiteSpace: 'normal', overflow: 'visible'}}}
               title={warningAction.label}
               variant="default"
-              onClick={warningAction.onClick}
+              onClick={() => {
+                if (warning && warning.count > 0)
+                  branchSelectionRef.current?.querySelector('input')?.focus();
+                warningAction.onClick();
+              }}
             />
           )}
         </DirectorySelectionWarning>
       </div>
-      <div>
+      <div ref={branchSelectionRef}>
         <EntitySelection
           aria-describedby={warning ? warningId : undefined}
           aria-label={node.name}
@@ -329,6 +346,7 @@ const DirectoryTreeNode = ({
               node={node}
               path={path}
               redundantBranchSummaries={redundantBranchSummaries}
+              registerVisibleListing={registerVisibleListing}
               selectedIds={selectedIds}
               selectedIncompleteMembers={selectedIncompleteMembers}
               selectionPending={selectionPending}
@@ -363,6 +381,7 @@ const DirectoryTree = ({
   selectedIncompleteMembers,
   redundantBranchSummaries,
   computerPaths,
+  registerVisibleListing,
   onLoaded,
   path,
   onSelect,
@@ -405,6 +424,7 @@ const DirectoryTree = ({
               node={node}
               path={path}
               redundantBranchSummaries={redundantBranchSummaries}
+              registerVisibleListing={registerVisibleListing}
               selectedIds={selectedIds}
               selectedIncompleteMembers={selectedIncompleteMembers}
               selectionPending={selectionPending}

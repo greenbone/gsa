@@ -52,6 +52,7 @@ describe('Computer relationship table', () => {
       <DirectoryTree
         memberships={{}}
         nodes={result.data.roots}
+        registerVisibleListing={testing.fn(() => testing.fn())}
         selectedIds={new Set()}
         selectedIncompleteMembers={new Map()}
         selectionPending={false}
@@ -179,6 +180,7 @@ describe('Computer relationship table', () => {
       <DirectoryTree
         memberships={{}}
         nodes={result.data.roots}
+        registerVisibleListing={testing.fn(() => testing.fn())}
         selectedIds={new Set()}
         selectedIncompleteMembers={new Map()}
         selectionPending={false}

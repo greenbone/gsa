@@ -12,6 +12,7 @@ import {
 import {
   emptyDirectoryGraph,
   beginDirectorySnapshot,
+  getDirectoryComputerPaths,
   replaceDirectorySnapshot,
   mergeDirectoryGraph,
 } from 'gmp/models/directory-graph';
@@ -31,6 +32,7 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import {
   getSelectedMembersOfIncompleteBranches,
+  getResolvedBranchesByComputer,
   mergeSelection,
   selectedHostnames,
 } from 'web/pages/active-directory/directory-selection';
@@ -69,7 +71,25 @@ export const DirectoryBrowser = ({
     refetch: reloadOverview,
   } = useGetActiveDirectoryOverview(sourceId, showContainers, listingVersion);
   const [graph, setGraph] = useState(emptyDirectoryGraph);
-  const graphRevision = useRef(0);
+  // Closed listings remain in the membership graph but cannot own a visible row.
+  const [expandedListings, setExpandedListings] = useState(
+    () => new Map<string, DirectoryNode[]>(),
+  );
+  const registerVisibleListing = useCallback(
+    (pathKey: string, nodes: DirectoryNode[]) => {
+      setExpandedListings(previous => new Map(previous).set(pathKey, nodes));
+      return () => {
+        setExpandedListings(previous => {
+          if (previous.get(pathKey) !== nodes) return previous;
+          const remaining = new Map(previous);
+          remaining.delete(pathKey);
+          return remaining;
+        });
+      };
+    },
+    [],
+  );
+  const listingRevisions = useRef(new Map<string, number>());
   const currentGraph = useMemo(
     () =>
       overview
@@ -86,28 +106,56 @@ export const DirectoryBrowser = ({
   const [selectedPaths, setSelectedPaths] = useState(
     () => new Map<string, readonly string[]>(),
   );
+  const [showDisabled, setShowDisabled] = useState(false);
+  if (!showDisabled) {
+    const remaining = [...selectedPaths].filter(([id]) => {
+      const node = currentGraph.nodes[id];
+      return node?.kind !== 'computer' || !node.disabled;
+    });
+    if (remaining.length !== selectedPaths.size) {
+      setSelectedPaths(new Map(remaining));
+    }
+  }
   const selected = [...selectedPaths.keys()].flatMap(id => {
     const node = currentGraph.nodes[id];
-    return node?.kind === 'computer' ? [node] : [];
+    return node?.kind === 'computer' && (showDisabled || !node.disabled)
+      ? [node]
+      : [];
   });
   const selectedComputerIds = new Set(selected.map(computer => computer.id));
-  const setSelected = (
-    update: (previous: DirectoryComputer[]) => DirectoryComputer[],
-    path: readonly string[] = [],
+  const computerPaths = useMemo(
+    () =>
+      getDirectoryComputerPaths(
+        overview?.roots ?? [],
+        expandedListings,
+        showDisabled,
+      ),
+    [overview, expandedListings, showDisabled],
+  );
+  const addSelected = (
+    computers: DirectoryComputer[],
+    path: string[],
+    resolvedBranches?: ReadonlyMap<string, string[]>,
   ) => {
+    const eligible = mergeSelection([], computers, showDisabled);
+    setSelectedPaths(previous => {
+      const next = new Map(previous);
+      for (const {id} of eligible) {
+        const branches = [
+          ...(previous.get(id) ?? []),
+          ...path,
+          ...(resolvedBranches?.get(id) ?? []),
+        ];
+        next.set(id, [...new Set(branches)]);
+      }
+      return next;
+    });
+  };
+  const removeSelected = (shouldRemove: (id: string) => boolean) => {
     setSelectedPaths(
-      previous =>
-        new Map(
-          update(
-            [...previous.keys()].flatMap(id => {
-              const node = currentGraph.nodes[id];
-              return node?.kind === 'computer' ? [node] : [];
-            }),
-          ).map(({id}) => [id, previous.get(id) ?? path]),
-        ),
+      previous => new Map([...previous].filter(([id]) => !shouldRemove(id))),
     );
   };
-  const [showDisabled, setShowDisabled] = useState(false);
   const [selectionError, setSelectionError] = useState<{
     node: DirectoryNode;
     error?: Error;
@@ -116,7 +164,13 @@ export const DirectoryBrowser = ({
   const onLoaded = useCallback(
     (owner: string, branchId: string, listing?: DirectoryOverview) => {
       if (listingVersion !== listingVersionRef.current) return;
-      graphRevision.current += 1;
+      const revisions = listingRevisions.current;
+      for (const id of [
+        branchId,
+        ...(listing?.roots.map(node => node.id) ?? []),
+      ]) {
+        revisions.set(id, (revisions.get(id) ?? 0) + 1);
+      }
       setGraph(previous => {
         if (!listing) return beginDirectorySnapshot(previous, branchId, owner);
         if (previous.branches[branchId]?.owner !== owner) return previous;
@@ -153,7 +207,6 @@ export const DirectoryBrowser = ({
   const {
     availableIncludingDisabled,
     completeMemberships,
-    computerPaths,
     counts,
     isPartial,
     redundantBranchSummaries,
@@ -174,7 +227,6 @@ export const DirectoryBrowser = ({
     path?: string[],
   ) => {
     const currentVersion = ++version.current;
-    const revision = graphRevision.current;
     setSelectionError(undefined);
     if (!checked) {
       const memberIds =
@@ -182,18 +234,15 @@ export const DirectoryBrowser = ({
           ? new Set([node.id])
           : (selectedIncompleteMembers.get(node.id) ??
             new Set(completeMemberships[node.id]?.map(member => member.id)));
-      setSelected(previous =>
-        previous.filter(computer => !memberIds.has(computer.id)),
-      );
+      removeSelected(id => memberIds.has(id));
       return;
     }
     if (node.kind === 'computer') {
-      setSelected(
-        previous => mergeSelection(previous, [node], showDisabled),
-        path,
-      );
+      addSelected([node], path ?? []);
       return;
     }
+    const branchPath = [...(path ?? []), node.id];
+    const revisions = new Map(listingRevisions.current);
     try {
       const result = await resolveSubtree({
         sourceId,
@@ -202,13 +251,24 @@ export const DirectoryBrowser = ({
         ...(showContainers ? {showContainers} : {}),
       });
       if (currentVersion === version.current) {
-        if (graphRevision.current !== revision)
+        const affectedIds = [
+          ...branchPath,
+          ...Object.keys(result.graph.branches),
+          ...Object.keys(result.graph.nodes),
+        ];
+        if (
+          affectedIds.some(
+            id => listingRevisions.current.get(id) !== revisions.get(id),
+          )
+        )
           throw new Error(
             'Directory results changed. Your selection has been preserved. Retry selection.',
           );
         setGraph(previous => mergeDirectoryGraph(previous, result.graph));
-        setSelected(previous =>
-          mergeSelection(previous, result.computers, showDisabled),
+        addSelected(
+          result.computers,
+          branchPath,
+          getResolvedBranchesByComputer(result.graph),
         );
       }
     } catch (error) {
@@ -246,11 +306,10 @@ export const DirectoryBrowser = ({
         onSelectLoaded: () => {
           version.current += 1;
           setSelectionError(undefined);
-          setSelected(
-            previous =>
-              mergeSelection(previous, unselectedLoaded, showDisabled),
-            [...(selectionError.path ?? []), selectionError.node.id],
-          );
+          addSelected(unselectedLoaded, [
+            ...(selectionError.path ?? []),
+            selectionError.node.id,
+          ]);
         },
       }
     : undefined;
@@ -288,10 +347,6 @@ export const DirectoryBrowser = ({
                 version.current += 1;
                 setShowDisabled(value);
                 setSelectionError(undefined);
-                if (!value)
-                  setSelected(previous =>
-                    previous.filter(computer => !computer.disabled),
-                  );
               }}
             />
             <Checkbox
@@ -349,6 +404,7 @@ export const DirectoryBrowser = ({
               memberships={completeMemberships}
               nodes={overview.roots}
               redundantBranchSummaries={redundantBranchSummaries}
+              registerVisibleListing={registerVisibleListing}
               selectedIds={selectedComputerIds}
               selectedIncompleteMembers={selectedIncompleteMembers}
               selectionPending={resolving}

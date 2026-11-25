@@ -787,6 +787,87 @@ describe('Active Directory selection UI', () => {
     ]);
   });
 
+  test('clears bulk-selected computers omitted from a truncated branch reload', async () => {
+    const command = createCommand();
+    const http = createDirectoryHttp();
+    http.request.mockResolvedValueOnce(
+      new Response(directoryObjectsXml([], new URLSearchParams(), true)),
+    );
+    const wire = new ActiveDirectoryCommand(http);
+    command.getChildren.mockImplementationOnce(params =>
+      wire.getChildren(params),
+    );
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+
+    const parent = await screen.findByRole('checkbox', {name: 'Clients'});
+    fireEvent.click(parent);
+    await screen.findByText('5 hosts selected');
+    fireEvent.click(screen.getByRole('button', {name: 'Expand Clients'}));
+    await screen.findByRole('status', {
+      name: 'Partial',
+      description: /Clients: some objects were not returned/,
+    });
+    expect(parent).toBePartiallyChecked();
+    fireEvent.click(parent);
+
+    expect(parent).not.toBePartiallyChecked();
+    expect(screen.getByText('0 hosts selected')).toBeVisible();
+    expect(
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
+    ).toBeDisabled();
+    expect(command.resolveSubtree).toHaveBeenCalledTimes(1);
+  });
+
+  test('shows shared computers in an open group after collapsing their previous group', async () => {
+    const command = createCommand();
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+
+    fireEvent.click(
+      await screen.findByRole('button', {name: 'Expand Clients'}),
+    );
+    fireEvent.click(
+      await screen.findByRole('button', {name: 'Expand File servers'}),
+    );
+    const nestedGroup = screen
+      .getByRole('button', {name: 'Collapse File servers'})
+      .closest('li');
+    if (!nestedGroup) throw new Error('Missing File servers branch');
+    fireEvent.click(
+      await within(nestedGroup).findByRole('button', {
+        name: 'Expand Critical servers',
+      }),
+    );
+    const nestedHost = await within(nestedGroup).findByRole('checkbox', {
+      name: 'fs-01.domain.local',
+    });
+    fireEvent.click(nestedHost);
+    fireEvent.click(
+      screen.getByRole('button', {name: 'Collapse File servers'}),
+    );
+
+    const directGroup = await screen.findByRole('button', {
+      name: 'Expand Critical servers',
+    });
+    fireEvent.click(directGroup);
+    const directBranch = directGroup.closest('li');
+    if (!directBranch) throw new Error('Missing Critical servers branch');
+    const directHost = await within(directBranch).findByRole('checkbox', {
+      name: 'fs-01.domain.local',
+    });
+    expect(directHost).toBeChecked();
+    expect(
+      screen.getAllByRole('checkbox', {name: 'fs-01.domain.local'}),
+    ).toHaveLength(1);
+  });
+
   test('allows deselecting captured and unresolved computers and shows partial parents', async () => {
     const command = createCommand();
     const {render} = rendererWith({

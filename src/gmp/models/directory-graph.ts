@@ -103,31 +103,37 @@ export const mergeDirectoryGraph = (
   branches: {...graph.branches, ...incoming.branches},
 });
 
-/** Give each computer one display location, visiting groups before loose hosts.
- * Membership edges remain intact for recursive selection and counts.
- */
+/** Give each visible computer one display location, preferring expanded groups. */
 export const getDirectoryComputerPaths = (
-  graph: DirectoryGraph,
+  roots: DirectoryNode[],
+  expandedListings: ReadonlyMap<string, DirectoryNode[]>,
+  showDisabled: boolean,
 ): Record<string, string> => {
   const paths: Record<string, string> = {};
-  const visited = new Set<string>();
-  const visit = (id: string, path: string[]) => {
-    if (visited.has(id)) return;
-    visited.add(id);
-    const children = (graph.branches[id]?.children ?? []).flatMap(childId =>
-      graph.nodes[childId] ? [graph.nodes[childId]] : [],
-    );
+  const visit = (
+    children: DirectoryNode[],
+    path: string[],
+    pathKey: string,
+  ) => {
     for (const kind of ['group', 'ou', 'container'] as const) {
       for (const child of children) {
-        if (child.kind === kind) visit(child.id, [...path, child.id]);
+        if (child.kind !== kind || path.includes(child.id)) continue;
+        const childPath = [...path, child.id];
+        const childKey = JSON.stringify(childPath);
+        const listing = expandedListings.get(childKey);
+        if (listing) visit(listing, childPath, childKey);
       }
     }
     for (const child of children) {
-      if (child.kind === 'computer' && paths[child.id] === undefined) {
-        paths[child.id] = JSON.stringify(path);
+      if (
+        child.kind === 'computer' &&
+        (showDisabled || !child.disabled) &&
+        paths[child.id] === undefined
+      ) {
+        paths[child.id] = pathKey;
       }
     }
   };
-  visit('directory-root', []);
+  visit(roots, [], '[]');
   return paths;
 };

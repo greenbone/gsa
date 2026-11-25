@@ -4,6 +4,22 @@
  */
 
 import {type DirectoryComputer} from 'gmp/models/active-directory';
+import {
+  type DirectoryGraph,
+  getDirectoryMembers,
+} from 'gmp/models/directory-graph';
+
+export const getResolvedBranchesByComputer = (graph: DirectoryGraph) => {
+  const branchesByComputer = new Map<string, string[]>();
+  for (const branchId of Object.keys(graph.branches)) {
+    for (const {id} of getDirectoryMembers(graph, branchId).computers) {
+      const branches = branchesByComputer.get(id);
+      if (branches) branches.push(branchId);
+      else branchesByComputer.set(id, [branchId]);
+    }
+  }
+  return branchesByComputer;
+};
 
 export const getSelectedMembersOfIncompleteBranches = (
   selectedPaths: ReadonlyMap<string, readonly string[]>,

@@ -142,8 +142,19 @@ test('shows a shared computer once inside its nested group, including cyclic mem
     [host, group],
     true,
   );
-  expect(getDirectoryComputerPaths(graph)).toEqual({
+  const roots = [host, group, nested];
+  const expanded = new Map([
+    [JSON.stringify(['group']), [nested]],
+    [JSON.stringify(['group', 'nested']), [host, group]],
+    [JSON.stringify(['nested']), [host, group]],
+  ]);
+  expect(getDirectoryComputerPaths(roots, expanded, false)).toEqual({
     host: JSON.stringify(['group', 'nested']),
+  });
+  expanded.delete(JSON.stringify(['group']));
+  expanded.delete(JSON.stringify(['group', 'nested']));
+  expect(getDirectoryComputerPaths(roots, expanded, false)).toEqual({
+    host: JSON.stringify(['nested']),
   });
   expect(
     getDirectoryMembers(graph, 'directory-root').computers.map(node => node.id),

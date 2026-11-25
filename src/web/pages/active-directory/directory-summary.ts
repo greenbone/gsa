@@ -10,7 +10,6 @@ import {
 } from 'gmp/models/active-directory';
 import {
   type DirectoryGraph,
-  getDirectoryComputerPaths,
   getDirectoryMembers,
 } from 'gmp/models/directory-graph';
 
@@ -69,7 +68,6 @@ export const summarizeDirectory = (graph: DirectoryGraph) => {
       ? availableIncludingDisabled
       : undefined,
     completeMemberships,
-    computerPaths: getDirectoryComputerPaths(graph),
     counts,
     isPartial: Object.values(graph.branches).some(branch => !branch.complete),
     knownMembers,
