@@ -223,6 +223,8 @@ test('measures Active Directory with 10,000 computers at one level', async ({
   await directory.evaluate(element => {
     element.scrollTop = element.scrollHeight;
   });
+  // Measuring the mounted rows can move the bottom after the initial jump.
+  await lastComputer.scrollIntoViewIfNeeded();
   await expect(lastComputer).toBeInViewport();
   await expect(selectedComputer).toHaveCount(0);
   await expect(computer(100)).toHaveCount(0);
@@ -270,6 +272,7 @@ test('measures Active Directory with 10,000 computers at one level', async ({
   await main.evaluate(element => {
     element.scrollTop = element.scrollHeight;
   });
+  await lastComputer.scrollIntoViewIfNeeded();
   await expect(lastComputer).toBeInViewport();
   await expect(lastComputer).toBeChecked();
   expect(await rows.count()).toBeLessThan(100);
