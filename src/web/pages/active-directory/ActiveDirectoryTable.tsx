@@ -54,7 +54,7 @@ const ActiveDirectoryTableHeader = ({
 
 const ActiveDirectoryTableRow = ({
   entity,
-  onToggleDetailsClick,
+  preview,
 }: RowComponentProps<Credential>) => {
   const [_] = useTranslation();
   const location = useLocation();
@@ -66,8 +66,8 @@ const ActiveDirectoryTableRow = ({
       <EntityNameTableData
         displayName={_('Active Directory connection')}
         entity={entity}
+        preview={preview}
         type="credential"
-        onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>{connectionServer(entity) ?? _('Unavailable')}</TableData>
       <TableData style={{overflowWrap: 'anywhere'}}>
