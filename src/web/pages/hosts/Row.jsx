@@ -87,6 +87,9 @@ const Row = ({
   ...props
 }) => {
   const {details = {}, os} = entity;
+  const agentId = entity.identifiers.find(
+    identifier => identifier.name === 'agentID',
+  )?.value;
   const os_cpe = os;
   const os_txt = isDefined(details.best_os_txt)
     ? details.best_os_txt.value
@@ -102,7 +105,7 @@ const Row = ({
         <Comment text={entity.comment} />
       </TableData>
       <TableData>{entity.hostname}</TableData>
-      <AgentIdTableData agentId={details.agentID?.value} />
+      <AgentIdTableData agentId={agentId} />
       <TableData>{entity.ip}</TableData>
       <TableData>
         <OsIcon osCpe={os_cpe} osTxt={os_txt} />
