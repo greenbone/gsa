@@ -57,12 +57,17 @@ const ComputerDetails = ({
   node: DirectoryComputer;
   details?: Pick<
     DirectoryComputer,
-    'matchedTargets' | 'operatingSystemVersion' | 'servicePrincipalNames'
+    | 'description'
+    | 'matchedTargets'
+    | 'operatingSystem'
+    | 'operatingSystemVersion'
+    | 'servicePrincipalNames'
   >;
   feedback?: ReactNode;
   loading?: boolean;
 }) => {
   const [_] = useTranslation();
+  const attributesSource = details ?? node;
   const loadingBadge = (
     <Badge color={EThemeColors.NeutralLight} size="sm">
       {_('Loading...')}
@@ -71,7 +76,7 @@ const ComputerDetails = ({
   const attributes: {label: string; value: ReactNode}[] = [
     {
       label: _('Operating system'),
-      value: node.operatingSystem || _('Not provided'),
+      value: attributesSource.operatingSystem || _('Not provided'),
     },
     ...(details || loading
       ? [
@@ -89,7 +94,7 @@ const ComputerDetails = ({
     },
     {
       label: _('Description'),
-      value: <pre>{node.description || _('Not provided')}</pre>,
+      value: <pre>{attributesSource.description || _('Not provided')}</pre>,
     },
   ];
   const spns = details?.servicePrincipalNames;

@@ -278,6 +278,51 @@ for (const ancestorSelection of [false, true]) {
   });
 }
 
+test('clears hosts picked through the fallback when a nested listing becomes partial', async ({
+  page,
+}) => {
+  let accountingOpenings = 0;
+  await page.route('**/gmp?**', async route => {
+    const params = new URL(route.request().url()).searchParams;
+    if (params.get('cmd') !== listingCommand) return route.fallback();
+    const scope = params.get('scope');
+    const base = params.get('base_dn');
+    const incompleteParent = base === AD_CLIENTS && scope === 'subtree';
+    const truncatedReopen =
+      base === AD_ACCOUNTING &&
+      scope === 'onelevel' &&
+      ++accountingOpenings > 1;
+    if (!incompleteParent && !truncatedReopen) return route.fallback();
+    await route.fulfill({
+      contentType: 'application/xml',
+      body: directoryObjectsXml(
+        incompleteParent ? [] : accountComputers.slice(0, 1),
+        params,
+        true,
+      ),
+    });
+  });
+
+  await openDiscovery(page);
+  await computer(page, 'fs-01').check();
+  await expand(page, 'Clients');
+  await expand(page, 'Accounting');
+  await expect(computer(page, 'pc-043')).toBeVisible();
+  await page.getByRole('checkbox', {name: 'Clients', exact: true}).click();
+  await page.getByRole('button', {name: 'Select 3 loaded computers'}).click();
+  await expect(count(page, 4)).toBeVisible();
+
+  await page.getByRole('button', {name: 'Collapse Accounting'}).click();
+  await expand(page, 'Accounting');
+  await expect(computer(page, 'pc-042')).toBeChecked();
+  await expect(computer(page, 'pc-043')).toHaveCount(0);
+  const child = page.getByRole('checkbox', {name: 'Accounting', exact: true});
+  await expect(child).toHaveJSProperty('indeterminate', true);
+  await child.click();
+  await expect(count(page, 1)).toBeVisible();
+  await expectTargetHosts(page, ['fs-01.domain.local']);
+});
+
 test('moves a selected shared host to the remaining open group', async ({
   page,
 }) => {

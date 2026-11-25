@@ -256,6 +256,26 @@ describe('Active Directory two-page flow', () => {
     ).toHaveAttribute('href', ROUTES.credentials.url);
   });
 
+  test('recovers an out-of-range credentials page with the current filter and sort', async () => {
+    const filter = 'name~AD rows=2 first=107 sort-reverse=name';
+    const params = new URLSearchParams({filter});
+    const {gmp, renderPages} = setup(`/active-directory?${params}`);
+    gmp.credentials.get.mockResolvedValueOnce(
+      new Response([], {
+        counts: new CollectionCounts({filtered: 52, first: 107, rows: 2}),
+        filter: QueryFilter.fromString(filter),
+      }),
+    );
+    renderPages();
+
+    expect(await openAdministration()).toBeVisible();
+    expect(gmp.credentials.get).toHaveBeenCalledTimes(2);
+    const recovered = gmp.credentials.get.mock.calls[1][0]?.filter;
+    expect(filterString(recovered)).toBe(
+      'type=ad and name~AD rows=2 first=51 sort-reverse=name',
+    );
+  });
+
   test('shows a clear-filter action when a search has no matches', async () => {
     const {renderPages} = setup('/active-directory?filter=name~missing');
     renderPages();

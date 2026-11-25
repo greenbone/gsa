@@ -344,6 +344,7 @@ test('keeps selection and target links usable during a details failure and retri
     hostname: 'pc-043.domain.local',
     disabled: false,
     operatingSystem: 'Windows 11',
+    description: 'Original workstation description',
     matchedTargets: [{id: 'office', name: 'Office network'}],
   };
   let failDetails!: (error: Error) => void;
@@ -365,7 +366,14 @@ test('keeps selection and target links usable during a details failure and retri
     .fn()
     .mockReturnValueOnce(pendingDetails)
     .mockReturnValueOnce(retryDetails)
-    .mockResolvedValue(details);
+    .mockResolvedValue(
+      new Response({
+        ...details.data,
+        operatingSystem: 'Windows 11 Enterprise',
+        operatingSystemVersion: '26100',
+        description: undefined,
+      }),
+    );
   const onSelect = testing.fn();
   const {render} = rendererWith({
     capabilities: true,
@@ -425,6 +433,16 @@ test('keeps selection and target links usable during a details failure and retri
   expect(getComputerDetails).toHaveBeenCalledTimes(2);
   fireEvent.click(disclosure);
   fireEvent.click(disclosure);
-  expect(await screen.findByText('22631')).toBeVisible();
+  expect(await screen.findByText('26100')).toBeVisible();
+  const reopened = within(
+    screen.getByRole('region', {name: 'Computer details for workstation'}),
+  );
+  expect(reopened.getByText('Windows 11 Enterprise')).toBeVisible();
+  expect(
+    reopened.getByRole('row', {name: 'Description Not provided'}),
+  ).toBeVisible();
+  expect(
+    reopened.queryByText('Original workstation description'),
+  ).not.toBeInTheDocument();
   expect(getComputerDetails).toHaveBeenCalledTimes(3);
 });

@@ -53,6 +53,7 @@ describe('directory graph snapshots', () => {
     expect(getDirectoryMembers(graph, AD_ACCOUNTING)).toEqual({
       computers: [],
       complete: false,
+      branchIds: [AD_ACCOUNTING],
     });
     graph = replaceDirectorySnapshot(
       graph,
@@ -103,6 +104,7 @@ describe('directory graph snapshots', () => {
     expect(getDirectoryMembers(graph, 'directory-root')).toEqual({
       computers: [first, second, third],
       complete: false,
+      branchIds: ['directory-root', left.id, shared.id, right.id],
     });
   });
 });

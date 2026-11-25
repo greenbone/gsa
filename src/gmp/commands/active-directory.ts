@@ -15,7 +15,6 @@ import {
   type DirectoryTarget,
 } from 'gmp/models/active-directory';
 import {resolveDirectorySubtree} from 'gmp/models/directory-resolution';
-import {parseXmlEncodedString} from 'gmp/parser';
 
 export interface DirectorySourceParams {
   sourceId: string;
@@ -89,10 +88,10 @@ const directoryXmlParser = new XMLParser({
   ignoreAttributes: false,
   removeNSPrefix: true,
   textNodeName: '__text',
+  // Fast XML Parser enables general numeric character references with this option.
+  htmlEntities: true,
   parseTagValue: false,
   trimValues: false,
-  attributeValueProcessor: (_name, value) => parseXmlEncodedString(value),
-  tagValueProcessor: (_name, value) => parseXmlEncodedString(value),
 });
 
 const parseDirectoryResponse = success(

@@ -40,7 +40,7 @@ describe('ActiveDirectoryCommand wire contract', () => {
             </object>
             <object type="computer">
               <distinguished_name>CN=second,${AD_BASE}</distinguished_name>
-              <name>second</name><description>  A &amp; B
+              <name>second</name><description>  A &amp; B &#x2F; &amp;#x2F;
   </description><disabled>0</disabled>
             </object>
           </objects>
@@ -57,9 +57,35 @@ describe('ActiveDirectoryCommand wire contract', () => {
         disabled: true,
         operatingSystemVersion: '10.0',
       },
-      {description: '  A & B\n  ', disabled: false},
+      {description: '  A & B / &#x2F;\n  ', disabled: false},
     ]);
     expect(data.counts).toMatchObject({found: 2, disabled: 1});
+  });
+
+  test('decodes XML entities once and sends the literal DN for child requests', async () => {
+    const http = createDirectoryHttp();
+    const dn = `OU=Sales &amp; Support,${AD_BASE}`;
+    const params = new URLSearchParams();
+    http.request.mockResolvedValueOnce(
+      new Response(
+        directoryObjectsXml(
+          [{id: dn, kind: 'ou', name: 'Sales &amp; Support', parent: AD_BASE}],
+          params,
+        ),
+      ),
+    );
+    const command = new ActiveDirectoryCommand(http);
+    const {data} = await command.getOverview({sourceId});
+    expect(data.roots[0]).toMatchObject({id: dn, name: 'Sales &amp; Support'});
+    http.request.mockResolvedValueOnce(
+      new Response(directoryObjectsXml([], params)),
+    );
+    await command.getChildren({
+      sourceId,
+      branchId: data.roots[0].id,
+      kind: 'ou',
+    });
+    expect(http.request.mock.calls[1][1].args).toHaveProperty('base_dn', dn);
   });
 
   test('reports a subtree with an omitted parent as incomplete', async () => {

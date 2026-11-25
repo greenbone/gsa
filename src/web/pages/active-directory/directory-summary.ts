@@ -16,10 +16,14 @@ import {
 export const summarizeDirectory = (graph: DirectoryGraph) => {
   const completeMemberships: Record<string, DirectoryComputer[]> = {};
   const knownMembers: Record<string, DirectoryComputer[]> = {};
+  let isPartial = false;
   for (const id of Object.keys(graph.branches)) {
     const members = getDirectoryMembers(graph, id);
     knownMembers[id] = members.computers;
     if (members.complete) completeMemberships[id] = members.computers;
+    if (id === 'directory-root') {
+      isPartial = members.branchIds.some(id => !graph.branches[id].complete);
+    }
   }
 
   const redundantBranchSummaries = Object.entries(graph.branches).flatMap(
@@ -69,7 +73,7 @@ export const summarizeDirectory = (graph: DirectoryGraph) => {
       : undefined,
     completeMemberships,
     counts,
-    isPartial: Object.values(graph.branches).some(branch => !branch.complete),
+    isPartial,
     knownMembers,
     redundantBranchSummaries,
   };

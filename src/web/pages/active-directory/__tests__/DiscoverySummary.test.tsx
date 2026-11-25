@@ -5,6 +5,11 @@
 
 import {describe, expect, test} from '@gsa/testing';
 import {render, screen, within} from 'web/testing';
+import {
+  emptyDirectoryGraph,
+  replaceDirectorySnapshot,
+} from 'gmp/models/directory-graph';
+import {summarizeDirectory} from 'web/pages/active-directory/directory-summary';
 import DiscoverySummary from 'web/pages/active-directory/DiscoverySummary';
 
 const counts = {
@@ -16,6 +21,27 @@ const counts = {
 };
 
 describe('DiscoverySummary', () => {
+  test('clears partial status when a refreshed parent drops the partial branch', () => {
+    let graph = replaceDirectorySnapshot(
+      emptyDirectoryGraph(),
+      'directory-root',
+      'root',
+      [{id: 'parent', kind: 'ou', name: 'Parent', parentDn: ''}],
+      true,
+    );
+    graph = replaceDirectorySnapshot(
+      graph,
+      'parent',
+      'first',
+      [{id: 'child', kind: 'ou', name: 'Child', parentDn: 'parent'}],
+      true,
+    );
+    graph = replaceDirectorySnapshot(graph, 'child', 'child', [], false);
+    expect(summarizeDirectory(graph).isPartial).toBe(true);
+
+    graph = replaceDirectorySnapshot(graph, 'parent', 'refresh', [], true);
+    expect(summarizeDirectory(graph).isPartial).toBe(false);
+  });
   test('labels loaded computers and preserves overlapping indicators', () => {
     render(<DiscoverySummary counts={counts} showDisabled={false} />);
     const summary = screen.getByRole('group', {name: 'Discovery summary'});

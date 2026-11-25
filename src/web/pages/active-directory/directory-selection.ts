@@ -9,10 +9,16 @@ import {
   getDirectoryMembers,
 } from 'gmp/models/directory-graph';
 
-export const getResolvedBranchesByComputer = (graph: DirectoryGraph) => {
+export const getBranchesByComputer = (
+  graph: DirectoryGraph,
+  rootId: string,
+) => {
   const branchesByComputer = new Map<string, string[]>();
-  for (const branchId of Object.keys(graph.branches)) {
-    for (const {id} of getDirectoryMembers(graph, branchId).computers) {
+  const root = getDirectoryMembers(graph, rootId);
+  for (const branchId of root.branchIds) {
+    const {computers} =
+      branchId === rootId ? root : getDirectoryMembers(graph, branchId);
+    for (const {id} of computers) {
       const branches = branchesByComputer.get(id);
       if (branches) branches.push(branchId);
       else branchesByComputer.set(id, [branchId]);

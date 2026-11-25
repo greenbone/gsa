@@ -55,14 +55,15 @@ export const replaceDirectorySnapshot = (
 export const getDirectoryMembers = (
   graph: DirectoryGraph,
   id: string,
-): {computers: DirectoryComputer[]; complete: boolean} => {
+): {computers: DirectoryComputer[]; complete: boolean; branchIds: string[]} => {
   const snapshot = graph.branches[id];
-  if (!snapshot) return {computers: [], complete: false};
+  if (!snapshot) return {computers: [], complete: false, branchIds: []};
 
   const visited = new Set([id]);
   const pending = [...snapshot.children].reverse();
   let complete = snapshot.complete;
   const computers: DirectoryComputer[] = [];
+  const branchIds = [id];
 
   while (pending.length > 0) {
     const childId = pending.pop();
@@ -84,6 +85,7 @@ export const getDirectoryMembers = (
       complete = false;
       continue;
     }
+    branchIds.push(childId);
     complete = complete && branch.complete;
     // The stack visits children in their original order.
     for (let index = branch.children.length - 1; index >= 0; index--) {
@@ -91,7 +93,7 @@ export const getDirectoryMembers = (
     }
   }
 
-  return {computers, complete};
+  return {computers, complete, branchIds};
 };
 
 /** Resolution snapshots replace branch edges; unrelated branch snapshots survive. */

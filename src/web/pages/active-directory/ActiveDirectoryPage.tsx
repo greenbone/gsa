@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useSearchParams} from 'react-router';
 import {
   CREDENTIALS_FILTER_FILTER,
@@ -56,6 +56,24 @@ const ActiveDirectoryConnections = () => {
     useGetActiveDirectoryCredentials(filter);
   const entities = data?.entities ?? [];
   const counts = data?.entitiesCounts;
+  const requestedFirst = Number(filter.get('first'));
+  const shouldRecoverPage =
+    !isFetching &&
+    !isError &&
+    entities.length === 0 &&
+    counts !== undefined &&
+    counts.filtered > 0 &&
+    requestedFirst > counts.filtered;
+  const lastPageFirst =
+    counts && counts.rows > 0 && counts.filtered > 0
+      ? Math.floor((counts.filtered - 1) / counts.rows) * counts.rows + 1
+      : 1;
+  useEffect(() => {
+    if (!shouldRecoverPage) return;
+    const query = new URLSearchParams(params);
+    query.set('filter', filter.first(lastPageFirst).toFilterString());
+    setParams(query, {replace: true});
+  }, [filter, lastPageFirst, params, setParams, shouldRecoverPage]);
   const update = (next: FilterType) => {
     setToolbarError(undefined);
     if (next.toFilterString() === filter.toFilterString()) {
@@ -74,7 +92,7 @@ const ActiveDirectoryConnections = () => {
   };
   const hasCriteria = filter.toFilterCriteriaString().length > 0;
   let connectionContent = <Loading />;
-  if (!isFetching) {
+  if (!isFetching && !shouldRecoverPage) {
     if (isError) {
       connectionContent = (
         <ErrorMessage
@@ -116,20 +134,7 @@ const ActiveDirectoryConnections = () => {
               : SortDirection.ASC
           }
           onFirstClick={() => update(filter.first(1))}
-          onLastClick={() =>
-            update(
-              filter.first(
-                counts && counts.rows > 0
-                  ? Math.max(
-                      1,
-                      Math.floor((counts.filtered - 1) / counts.rows) *
-                        counts.rows +
-                        1,
-                    )
-                  : 1,
-              ),
-            )
-          }
+          onLastClick={() => update(filter.first(lastPageFirst))}
           onNextClick={() => update(filter.next())}
           onPreviousClick={() => update(filter.previous())}
           onSortChange={() =>

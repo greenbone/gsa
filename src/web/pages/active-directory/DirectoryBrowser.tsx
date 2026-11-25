@@ -32,7 +32,7 @@ import useCapabilities from 'web/hooks/useCapabilities';
 import useTranslation from 'web/hooks/useTranslation';
 import {
   getSelectedMembersOfIncompleteBranches,
-  getResolvedBranchesByComputer,
+  getBranchesByComputer,
   mergeSelection,
   selectedHostnames,
 } from 'web/pages/active-directory/directory-selection';
@@ -268,7 +268,7 @@ export const DirectoryBrowser = ({
         addSelected(
           result.computers,
           branchPath,
-          getResolvedBranchesByComputer(result.graph),
+          getBranchesByComputer(result.graph, node.id),
         );
       }
     } catch (error) {
@@ -306,10 +306,11 @@ export const DirectoryBrowser = ({
         onSelectLoaded: () => {
           version.current += 1;
           setSelectionError(undefined);
-          addSelected(unselectedLoaded, [
-            ...(selectionError.path ?? []),
-            selectionError.node.id,
-          ]);
+          addSelected(
+            unselectedLoaded,
+            [...(selectionError.path ?? []), selectionError.node.id],
+            getBranchesByComputer(currentGraph, selectionError.node.id),
+          );
         },
       }
     : undefined;
