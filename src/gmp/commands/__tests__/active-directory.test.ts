@@ -188,7 +188,7 @@ describe('ActiveDirectoryCommand wire contract', () => {
       expect(args).not.toHaveProperty('details');
   });
 
-  test('requests extended attributes for only the selected computer', async () => {
+  test('requests extended attributes and scan assignments for only the selected computer', async () => {
     const http = createDirectoryHttp();
     const computerDn = `CN=pc-043,${AD_ACCOUNTING}`;
     const result = await new ActiveDirectoryCommand(http).getComputerDetails({
@@ -202,8 +202,8 @@ describe('ActiveDirectoryCommand wire contract', () => {
         scope: 'base',
         'object_types:': ['computer'],
         details: 1,
-        targets: 0,
-        tasks: 0,
+        targets: 1,
+        tasks: 1,
       }),
     });
     expect(http.request.mock.calls[0][1].args).not.toHaveProperty(
@@ -213,7 +213,14 @@ describe('ActiveDirectoryCommand wire contract', () => {
       id: computerDn,
       operatingSystemVersion: '10.0 (22631)',
       servicePrincipalNames: ['HOST/example.domain.local'],
-      matchedTargets: undefined,
+      matchedTargets: [
+        {
+          name: 'Office network',
+          tasks: [
+            {name: 'Weekly workstation scan', config: {name: 'Full and fast'}},
+          ],
+        },
+      ],
     });
   });
 

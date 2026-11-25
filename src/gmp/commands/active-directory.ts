@@ -254,7 +254,7 @@ class ActiveDirectoryCommand extends HttpCommand {
       scope: 'base',
       objectTypes: ['computer'],
       details: true,
-      targets: false,
+      tasks: true,
     });
     const {roots, truncated} = response.data;
     const [computer] = roots;

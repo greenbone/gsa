@@ -479,3 +479,108 @@ test('removes a selected host that becomes disabled on reload', async ({
   await expect(computer(page, 'pc-042')).not.toBeChecked();
   await expect(count(page, 1)).toBeVisible();
 });
+
+test('refreshes assignments on reopen and ignores an older detail response', async ({
+  page,
+}) => {
+  const release = Promise.withResolvers<void>();
+  const baseRequests: URLSearchParams[] = [];
+  let listings = 0;
+  const workstation = accountComputers.find(
+    node => node.name === 'pc-043.domain.local',
+  );
+  if (!workstation) throw new Error('Missing workstation fixture');
+  await page.route('**/gmp?**', async route => {
+    const params = new URL(route.request().url()).searchParams;
+    if (params.get('cmd') !== listingCommand) return route.fallback();
+    if (params.get('scope') === 'onelevel') listings++;
+    if (
+      params.get('scope') !== 'base' ||
+      params.get('base_dn') !== workstation.id
+    )
+      return route.fallback();
+
+    const opening = baseRequests.push(params);
+    if (opening === 2) await release.promise;
+    const updated = {
+      ...workstation,
+      matchedTargets:
+        opening === 4
+          ? []
+          : [
+              {
+                id: '1f28d970-17ef-4c69-ba8a-13827059f2b9',
+                name: 'Office network',
+                tasks: [
+                  {
+                    id: '8e12f1c0-d786-4f4c-82db-6ac77e596882',
+                    name:
+                      opening === 3
+                        ? 'Updated workstation scan'
+                        : 'Weekly workstation scan',
+                    config: {
+                      id: 'daba56c8-73ec-11df-a475-002264764cea',
+                      name: 'Full and fast',
+                    },
+                  },
+                ],
+              },
+            ],
+    };
+    await route.fulfill({
+      contentType: 'application/xml',
+      headers: {'x-detail-opening': String(opening)},
+      body: directoryObjectsXml([updated], params),
+    });
+  });
+
+  try {
+    await openDiscovery(page);
+    await expand(page, 'Clients');
+    await expand(page, 'Accounting');
+    await computer(page, 'pc-043').check();
+    const toggle = page.getByRole('button', {
+      name: 'Computer details for pc-043.domain.local',
+    });
+    const panel = page.getByRole('region', {
+      name: 'Computer details for pc-043.domain.local',
+    });
+    const original = panel.getByRole('link', {name: 'Weekly workstation scan'});
+    const updated = panel.getByRole('link', {name: 'Updated workstation scan'});
+    const initialListings = listings;
+
+    await toggle.click();
+    await expect(original).toBeVisible();
+    await expect(panel.getByText('10.0 (22631)')).toBeVisible();
+    await toggle.click();
+    await toggle.click();
+    await expect.poll(() => baseRequests.length).toBe(2);
+    await toggle.click();
+    await toggle.click();
+    await expect(updated).toBeVisible();
+    await expect(original).toHaveCount(0);
+
+    const stale = page.waitForResponse(
+      response => response.headers()['x-detail-opening'] === '2',
+    );
+    release.resolve();
+    await (await stale).finished();
+    await expect(updated).toBeVisible();
+    await expect(original).toHaveCount(0);
+
+    await toggle.click();
+    await toggle.click();
+    await expect(
+      panel.getByText('No matching readable scan targets'),
+    ).toBeVisible();
+    await expect(updated).toHaveCount(0);
+    await expect(original).toHaveCount(0);
+    await expect(count(page, 1)).toBeVisible();
+    expect(listings).toBe(initialListings);
+    expect(
+      baseRequests.map(params => [params.get('targets'), params.get('tasks')]),
+    ).toEqual(Array.from({length: 4}, () => ['1', '1']));
+  } finally {
+    release.resolve();
+  }
+});

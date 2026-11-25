@@ -57,7 +57,7 @@ const ComputerDetails = ({
   node: DirectoryComputer;
   details?: Pick<
     DirectoryComputer,
-    'operatingSystemVersion' | 'servicePrincipalNames'
+    'matchedTargets' | 'operatingSystemVersion' | 'servicePrincipalNames'
   >;
   feedback?: ReactNode;
   loading?: boolean;
@@ -154,7 +154,11 @@ const ComputerDetails = ({
         </Column>
       </DirectoryDetailsSection>
       <DetailsSeparator />
-      <ComputerRelationships node={node} />
+      <ComputerRelationships
+        node={
+          details ? {...node, matchedTargets: details.matchedTargets} : node
+        }
+      />
     </Column>
   );
 };
