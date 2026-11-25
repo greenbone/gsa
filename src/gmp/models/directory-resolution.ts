@@ -35,11 +35,9 @@ const replaceSubtreeSnapshots = (
   rootId: string,
   objects: DirectoryNode[],
 ): DirectoryGraph => {
-  const branchIds = [rootId];
   const childrenByParent = new Map<string, DirectoryNode[]>();
   for (const node of objects) {
-    if (node.kind === 'ou' || node.kind === 'container')
-      branchIds.push(node.id);
+    if (node.id === rootId) continue;
     const siblings = childrenByParent.get(node.parentDn);
     if (siblings) siblings.push(node);
     else childrenByParent.set(node.parentDn, [node]);
@@ -47,15 +45,23 @@ const replaceSubtreeSnapshots = (
 
   const nodes = new Map<string, DirectoryNode>();
   const branches = new Map<string, DirectorySnapshot>();
-  for (const id of branchIds) {
+  const pending = [rootId];
+  for (const id of pending) {
+    if (branches.has(id)) continue;
     const children = childrenByParent.get(id) ?? [];
-    // Preserve the original parent order when a node occurs in multiple snapshots.
-    for (const child of children) nodes.set(child.id, child);
+    for (const child of children) {
+      nodes.set(child.id, child);
+      if (child.kind === 'ou' || child.kind === 'container')
+        pending.push(child.id);
+    }
     branches.set(id, {
       owner: 'resolution',
       children: children.map(node => node.id),
       complete: true,
     });
+  }
+  if (objects.some(node => node.id !== rootId && !nodes.has(node.id))) {
+    throw new IncompleteDirectoryResultsError();
   }
   return mergeDirectoryGraph(graph, {
     nodes: Object.fromEntries(nodes),

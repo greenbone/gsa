@@ -62,6 +62,26 @@ describe('ActiveDirectoryCommand wire contract', () => {
     expect(data.counts).toMatchObject({found: 2, disabled: 1});
   });
 
+  test('reports a subtree with an omitted parent as incomplete', async () => {
+    const http = createDirectoryHttp();
+    const parent = `CN=Workstations,${AD_CLIENTS}`;
+    http.request.mockResolvedValueOnce(
+      new Response(
+        directoryObjectsXml(
+          [{id: `CN=pc,${parent}`, kind: 'computer', name: 'pc', parent}],
+          new URLSearchParams(),
+        ),
+      ),
+    );
+    await expect(
+      new ActiveDirectoryCommand(http).resolveSubtree({
+        sourceId,
+        branchId: AD_CLIENTS,
+        kind: 'ou',
+      }),
+    ).rejects.toBeInstanceOf(IncompleteDirectoryResultsError);
+  });
+
   test('retains task/config relationships during recursive selection', async () => {
     const http = createDirectoryHttp('relationships');
     const result = await new ActiveDirectoryCommand(http).resolveSubtree({

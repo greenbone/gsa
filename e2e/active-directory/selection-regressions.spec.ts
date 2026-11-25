@@ -310,6 +310,49 @@ test('moves a selected shared host to the remaining open group', async ({
   await expect(count(page, 0)).toBeVisible();
 });
 
+test('keeps the target selection when a complete response omits a parent', async ({
+  page,
+}) => {
+  let intercepted = false;
+  await page.route('**/gmp?**', async route => {
+    const params = new URL(route.request().url()).searchParams;
+    if (
+      params.get('cmd') !== listingCommand ||
+      params.get('scope') !== 'subtree' ||
+      params.get('base_dn') !== AD_ACCOUNTING
+    )
+      return route.fallback();
+    const parent = `CN=Workstations,${AD_ACCOUNTING}`;
+    intercepted = true;
+    await route.fulfill({
+      contentType: 'application/xml',
+      body: directoryObjectsXml(
+        [
+          accountComputers[0],
+          {
+            ...accountComputers[1],
+            id: `CN=pc-orphan,${parent}`,
+            parent,
+            hostname: 'pc-orphan.domain.local',
+          },
+        ],
+        params,
+        false,
+      ),
+    });
+  });
+  await openDiscovery(page);
+  await computer(page, 'fs-01').check();
+  await expand(page, 'Clients');
+  await page.getByRole('checkbox', {name: 'Accounting', exact: true}).click();
+  await expect(
+    page.getByText(/^Could not select the whole branch\./),
+  ).toBeVisible();
+  expect(intercepted).toBe(true);
+  await expect(count(page, 1)).toBeVisible();
+  await expectTargetHosts(page, ['fs-01.domain.local']);
+});
+
 for (const affected of [false, true]) {
   test(`handles a listing change during bulk selection (affected branch: ${affected})`, async ({
     page,
