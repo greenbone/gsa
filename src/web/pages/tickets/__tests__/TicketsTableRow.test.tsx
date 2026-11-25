@@ -52,7 +52,7 @@ describe('TicketsTableRow', () => {
       <TicketsTableRow
         entity={ticket}
         links={false}
-        onToggleDetailsClick={testing.fn()}
+        preview={{expanded: false, toggle: testing.fn()}}
       />,
     );
 
@@ -70,10 +70,10 @@ describe('TicketsTableRow', () => {
     render(
       <TicketsTableRow
         entity={ticket}
+        preview={{expanded: false, toggle: testing.fn()}}
         onTicketCloneClick={testing.fn()}
         onTicketDeleteClick={testing.fn()}
         onTicketEditClick={testing.fn()}
-        onToggleDetailsClick={testing.fn()}
       />,
     );
 
@@ -94,10 +94,10 @@ describe('TicketsTableRow', () => {
     render(
       <TicketsTableRow
         entity={ticket}
+        preview={{expanded: false, toggle: testing.fn()}}
         onTicketCloneClick={handleClone}
         onTicketDeleteClick={handleDelete}
         onTicketEditClick={handleEdit}
-        onToggleDetailsClick={testing.fn()}
       />,
     );
 
@@ -120,7 +120,7 @@ describe('TicketsTableRow', () => {
       <TicketsTableRow
         entity={orphanTicket}
         links={false}
-        onToggleDetailsClick={testing.fn()}
+        preview={{expanded: false, toggle: testing.fn()}}
       />,
     );
 

@@ -12,7 +12,7 @@ import Link from 'web/components/link/Link';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntitiesActions from 'web/entities/EntitiesActions';
-import RowDetailsToggle from 'web/entities/RowDetailsToggle';
+import TableEntityName from 'web/entities/TableEntityName';
 import useGmp from 'web/hooks/useGmp';
 import {ROUTES} from 'web/route-paths';
 import PropTypes from 'web/utils/prop-types';
@@ -21,7 +21,8 @@ import {renderPercentile, renderScore} from 'web/utils/severity';
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
   entity,
-  onToggleDetailsClick,
+  links = true,
+  preview,
   ...props
 }) => {
   const gmp = useGmp();
@@ -31,9 +32,14 @@ const Row = ({
     <TableRow>
       <TableData>
         <span>
-          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+          <TableEntityName
+            id={entity.id}
+            links={links}
+            preview={preview}
+            type="cve"
+          >
             {entity.name}
-          </RowDetailsToggle>
+          </TableEntityName>
         </span>
         <Comment text={entity.comment} />
       </TableData>
@@ -64,9 +70,14 @@ const Row = ({
 };
 
 Row.propTypes = {
+  links: PropTypes.bool,
   actionsComponent: PropTypes.component,
   entity: PropTypes.model,
-  onToggleDetailsClick: PropTypes.func.isRequired,
+  preview: PropTypes.shape({
+    expanded: PropTypes.bool.isRequired,
+    id: PropTypes.string,
+    toggle: PropTypes.func.isRequired,
+  }),
 };
 
 export default Row;

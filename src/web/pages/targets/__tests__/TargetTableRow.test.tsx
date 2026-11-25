@@ -171,11 +171,11 @@ describe('TargetRow tests', () => {
     render(
       <TargetTableRow
         entity={targetNoElevate}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onTargetCloneClick={handleTargetCloneClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
         onTargetEditClick={handleTargetEditClick}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -216,11 +216,11 @@ describe('TargetRow tests', () => {
     render(
       <TargetTableRow
         entity={targetNoElevate}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onTargetCloneClick={handleTargetCloneClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
         onTargetEditClick={handleTargetEditClick}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -244,11 +244,11 @@ describe('TargetRow tests', () => {
     render(
       <TargetTableRow
         entity={targetElevate}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onTargetCloneClick={handleTargetCloneClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
         onTargetEditClick={handleTargetEditClick}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -287,11 +287,11 @@ describe('TargetRow tests', () => {
     render(
       <TargetTableRow
         entity={targetNoPortlist}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onTargetCloneClick={handleTargetCloneClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
         onTargetEditClick={handleTargetEditClick}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -318,20 +318,19 @@ describe('TargetRow tests', () => {
     render(
       <TargetTableRow
         entity={targetNoElevate}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onTargetCloneClick={handleTargetCloneClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
         onTargetEditClick={handleTargetEditClick}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     // Name
-    fireEvent.click(screen.getByText('target'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(
-      targetNoElevate,
-      'foo',
+    fireEvent.click(
+      screen.getByRole('button', {name: 'Show preview for target'}),
     );
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     // Actions
     fireEvent.click(screen.getAllByTitle('Clone Target')[0]);

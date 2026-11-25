@@ -46,7 +46,7 @@ describe('WebApplicationScanningResultsTab', () => {
     const reportId = 'report-123';
     const filter = QueryFilter.fromString();
     const gmp = createGmp();
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({capabilities: true, gmp});
 
     render(
       <WebApplicationScanningResultsTab
@@ -63,7 +63,7 @@ describe('WebApplicationScanningResultsTab', () => {
     const reportId = 'report-123';
     const filter = QueryFilter.fromString('severity>5');
     const gmp = createGmp();
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({capabilities: true, gmp});
 
     render(
       <WebApplicationScanningResultsTab
@@ -109,7 +109,7 @@ describe('WebApplicationScanningResultsTab', () => {
     });
 
     const gmp = createGmp({get: getMock});
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({capabilities: true, gmp});
 
     const {userEvent} = render(
       <WebApplicationScanningResultsTab
@@ -139,7 +139,7 @@ describe('WebApplicationScanningResultsTab', () => {
     const filter = QueryFilter.fromString();
     const getMock = testing.fn().mockRejectedValue(new Error('API Error'));
     const gmp = createGmp({get: getMock});
-    const {render} = rendererWith({gmp});
+    const {render} = rendererWith({capabilities: true, gmp});
 
     render(
       <WebApplicationScanningResultsTab
@@ -193,7 +193,7 @@ describe('WebApplicationScanningResultsTab', () => {
         });
 
         const gmp = createGmp({get: getMock});
-        const {render} = rendererWith({gmp});
+        const {render} = rendererWith({capabilities: true, gmp});
 
         render(
           <WebApplicationScanningResultsTab

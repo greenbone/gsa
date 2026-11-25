@@ -15,7 +15,7 @@ import Layout from 'web/components/layout/Layout';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import RowDetailsToggle from 'web/entities/RowDetailsToggle';
+import TableEntityName from 'web/entities/TableEntityName';
 import ObserverIcon from 'web/entity/icon/ObserverIcon';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
@@ -62,7 +62,7 @@ const Row = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
-  onToggleDetailsClick,
+  preview,
   ...props
 }) => {
   const [_] = useTranslation();
@@ -90,9 +90,14 @@ const Row = ({
     <TableRow>
       <TableData>
         <Layout align="space-between">
-          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+          <TableEntityName
+            id={entity.id}
+            links={links}
+            preview={preview}
+            type="audit"
+          >
             {entity.name}
-          </RowDetailsToggle>
+          </TableEntityName>
           <IconDivider>
             {entity.alterable === 1 && (
               <AlterableIcon size="small" title={_('Audit is alterable')} />
@@ -148,7 +153,11 @@ Row.propTypes = {
   actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  onToggleDetailsClick: PropTypes.func.isRequired,
+  preview: PropTypes.shape({
+    expanded: PropTypes.bool.isRequired,
+    id: PropTypes.string,
+    toggle: PropTypes.func.isRequired,
+  }),
 };
 
 export default Row;

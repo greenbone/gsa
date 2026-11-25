@@ -30,7 +30,7 @@ describe('RoleTableRow tests', () => {
     expect(screen.getByText('Test Role')).toBeVisible();
   });
 
-  test('should call onToggleDetailsClick when EntityNameTableData is clicked', async () => {
+  test('toggles the preview when clicking the preview button', async () => {
     const role = new Role({
       id: '1',
       name: 'Test Role',
@@ -42,11 +42,16 @@ describe('RoleTableRow tests', () => {
       store: true,
       gmp: createGmp(),
     });
-    render(<RoleTableRow entity={role} onToggleDetailsClick={handleToggle} />);
+    render(
+      <RoleTableRow
+        entity={role}
+        preview={{expanded: false, toggle: handleToggle}}
+      />,
+    );
 
     const details = screen.getByTestId('row-details-toggle');
     fireEvent.click(details);
-    expect(handleToggle).toHaveBeenCalledWith(role, '1');
+    expect(handleToggle).toHaveBeenCalledOnce();
   });
 
   test('should render default actions', async () => {

@@ -69,13 +69,13 @@ describe('NVT row tests', () => {
     const {baseElement} = render(
       <Row
         entity={entity}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onFilterChanged={handleFilterChanged}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     const bars = screen.getAllByTestId('progressbar-box');
-    const links = baseElement.querySelectorAll('a');
+    const links = baseElement.querySelectorAll('a:not([href^="/nvt/"])');
 
     expect(baseElement).toHaveTextContent('foo');
 
@@ -116,19 +116,15 @@ describe('NVT row tests', () => {
     const {baseElement} = render(
       <Row
         entity={entity}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onFilterChanged={handleFilterChanged}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[1]);
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(
-      undefined,
-      '1.3.6.1.4.1.25623.1.0',
-    );
+    fireEvent.click(screen.getByTestId('row-details-toggle'));
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
-    const links = baseElement.querySelectorAll('a');
+    const links = baseElement.querySelectorAll('a:not([href^="/nvt/"])');
     fireEvent.click(links[0]);
     expect(handleFilterChanged).toHaveBeenCalledWith(filter);
   });

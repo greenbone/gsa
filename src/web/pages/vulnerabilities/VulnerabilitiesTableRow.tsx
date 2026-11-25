@@ -6,12 +6,12 @@
 import type Vulnerability from 'gmp/models/vulnerability';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import DateTime from 'web/components/date/DateTime';
-import DetailsLink from 'web/components/link/DetailsLink';
 import Link from 'web/components/link/Link';
 import Qod from 'web/components/qod/Qod';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
 import EntitiesActions from 'web/entities/EntitiesActions';
+import TableEntityName from 'web/entities/TableEntityName';
 import {ROUTES} from 'web/route-paths';
 import {type SelectionTypeType} from 'web/utils/selection-type';
 
@@ -35,9 +35,9 @@ const VulnerabilitiesTableRow = ({
     <TableRow>
       <TableData>
         <span>
-          <DetailsLink id={entity.id ?? ''} textOnly={!links} type="nvt">
+          <TableEntityName id={entity.id ?? ''} links={links} type="nvt">
             {entity.name ?? ''}
-          </DetailsLink>
+          </TableEntityName>
         </span>
       </TableData>
       <TableData>

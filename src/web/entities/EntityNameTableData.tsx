@@ -9,9 +9,9 @@ import {type EntityType, getEntityType} from 'gmp/utils/entity-type';
 import {isDefined} from 'gmp/utils/identity';
 import Comment from 'web/components/comment/Comment';
 import Layout from 'web/components/layout/Layout';
-import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/TableData';
-import RowDetailsToggle from 'web/entities/RowDetailsToggle';
+import {type RowPreview} from 'web/entities/EntitiesTable';
+import TableEntityName from 'web/entities/TableEntityName';
 import ObserverIcon from 'web/entity/icon/ObserverIcon';
 import useTranslation from 'web/hooks/useTranslation';
 import useUserName from 'web/hooks/useUserName';
@@ -23,7 +23,7 @@ interface EntityNameTableDataProps<TEntity extends Model> {
   displayName: string;
   type?: EntityType;
   children?: React.ReactNode;
-  onToggleDetailsClick?: (entity: TEntity, id: string) => void;
+  preview?: RowPreview;
 }
 
 const EntityNameTableData = <TEntity extends Model>({
@@ -33,7 +33,7 @@ const EntityNameTableData = <TEntity extends Model>({
   displayName,
   type = getEntityType(entity),
   children,
-  onToggleDetailsClick,
+  preview,
 }: EntityNameTableDataProps<TEntity>) => {
   const [_] = useTranslation();
   const username = useUserName() as string;
@@ -42,41 +42,21 @@ const EntityNameTableData = <TEntity extends Model>({
       <Layout align="space-between">
         <div>
           {entity.isOrphan() && <b>{_('Orphan')}</b>}
-          {isDefined(onToggleDetailsClick) ? (
-            <span>
-              <RowDetailsToggle<TEntity>
-                name={entity.id}
-                value={entity}
-                onClick={
-                  onToggleDetailsClick as (
-                    entity: TEntity,
-                    name?: string,
-                  ) => void
-                }
-              >
-                {entity.name}
-              </RowDetailsToggle>
-              {/* disabled is currently only supported for scanners. */}
-              {/* @ts-expect-error */}
-              {entity?.disabled && <b> ({_('Disabled')})</b>}
-              {/* @ts-expect-error */}
-              {entity?.deprecated && <b> ({_('Deprecated')})</b>}
-            </span>
-          ) : (
-            <span>
-              <DetailsLink
-                id={entity.id as string}
-                textOnly={!links}
-                type={type}
-              >
-                {entity.name}
-              </DetailsLink>
-              {/* @ts-expect-error */}
-              {entity?.disabled && <b> ({_('Disabled')})</b>}
-              {/* @ts-expect-error */}
-              {entity?.deprecated && <b> ({_('Deprecated')})</b>}
-            </span>
-          )}
+          <span>
+            <TableEntityName
+              id={entity.id}
+              links={links}
+              preview={preview}
+              type={type}
+            >
+              {entity.name}
+            </TableEntityName>
+            {/* disabled is currently only supported for scanners. */}
+            {/* @ts-expect-error */}
+            {entity?.disabled && <b> ({_('Disabled')})</b>}
+            {/* @ts-expect-error */}
+            {entity?.deprecated && <b> ({_('Deprecated')})</b>}
+          </span>
           {isDefined(entity.comment) && <Comment>({entity.comment})</Comment>}
           {children}
         </div>

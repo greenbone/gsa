@@ -55,11 +55,11 @@ describe('Report Config row tests', () => {
     const {baseElement} = render(
       <Row
         entity={entity}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onReportConfigCloneClick={handleReportConfigClone}
         onReportConfigDeleteClick={handleReportConfigDelete}
         onReportConfigDownloadClick={handleReportConfigDownload}
         onReportConfigEditClick={handleReportConfigEdit}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -85,11 +85,11 @@ describe('Report Config row tests', () => {
     const {baseElement} = render(
       <Row
         entity={orphanEntity}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onReportConfigCloneClick={handleReportConfigClone}
         onReportConfigDeleteClick={handleReportConfigDelete}
         onReportConfigDownloadClick={handleReportConfigDownload}
         onReportConfigEditClick={handleReportConfigEdit}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -133,11 +133,11 @@ describe('Report Config row tests', () => {
     render(
       <Row
         entity={config}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onReportConfigCloneClick={handleReportConfigClone}
         onReportConfigDeleteClick={handleReportConfigDelete}
         onReportConfigDownloadClick={handleReportConfigDownload}
         onReportConfigEditClick={handleReportConfigEdit}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -165,16 +165,16 @@ describe('Report Config row tests', () => {
     render(
       <Row
         entity={entity}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onReportConfigCloneClick={handleReportConfigClone}
         onReportConfigDeleteClick={handleReportConfigDelete}
         onReportConfigDownloadClick={handleReportConfigDownload}
         onReportConfigEditClick={handleReportConfigEdit}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(entity, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     const deleteIcon = screen.getByTestId('trashcan-icon');
     expect(deleteIcon).toHaveAttribute(
@@ -228,16 +228,16 @@ describe('Report Config row tests', () => {
     render(
       <Row
         entity={config}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onReportConfigCloneClick={handleReportConfigClone}
         onReportConfigDeleteClick={handleReportConfigDelete}
         onReportConfigDownloadClick={handleReportConfigDownload}
         onReportConfigEditClick={handleReportConfigEdit}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(config, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     const deleteIcon = screen.getByTestId('trashcan-icon');
     expect(deleteIcon).toHaveAttribute(
@@ -299,16 +299,16 @@ describe('Report Config row tests', () => {
     render(
       <Row
         entity={config}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onReportConfigCloneClick={handleReportConfigClone}
         onReportConfigDeleteClick={handleReportConfigDelete}
         onReportConfigDownloadClick={handleReportConfigDownload}
         onReportConfigEditClick={handleReportConfigEdit}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(config, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     const deleteIcon = screen.getByTestId('trashcan-icon');
     expect(deleteIcon).toHaveAttribute(
@@ -364,16 +364,16 @@ describe('Report Config row tests', () => {
     render(
       <Row
         entity={config}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onReportConfigCloneClick={handleReportConfigClone}
         onReportConfigDeleteClick={handleReportConfigDelete}
         onReportConfigDownloadClick={handleReportConfigDownload}
         onReportConfigEditClick={handleReportConfigEdit}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(config, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     const deleteIcon = screen.getByTestId('trashcan-icon');
     expect(deleteIcon).toHaveAttribute(

@@ -8,12 +8,12 @@ import type ReportApp from 'gmp/models/report/app';
 import SeverityBar from 'web/components/bar/SeverityBar';
 import CpeIcon from 'web/components/icon/CpeIcon';
 import IconDivider from 'web/components/layout/IconDivider';
-import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/TableData';
 import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
+import TableEntityName from 'web/entities/TableEntityName';
 import {type SortDirectionType} from 'web/utils/sort-direction';
 
 interface HeaderProps {
@@ -36,12 +36,12 @@ const getColumns = ({links = true}: ColumnsProps) => [
       const {id, name} = entity;
       return (
         <span>
-          <DetailsLink id={id || name || ''} textOnly={!links} type="cpe">
+          <TableEntityName id={id || name || ''} links={links} type="cpe">
             <IconDivider>
               <CpeIcon name={name || ''} />
               <span>{name}</span>
             </IconDivider>
-          </DetailsLink>
+          </TableEntityName>
         </span>
       );
     },

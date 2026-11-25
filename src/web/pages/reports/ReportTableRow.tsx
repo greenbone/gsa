@@ -19,6 +19,7 @@ import IconDivider from 'web/components/layout/IconDivider';
 import DetailsLink from 'web/components/link/DetailsLink';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
+import TableEntityName from 'web/entities/TableEntityName';
 import withEntitiesActions, {
   type WithEntitiesActionsProps,
   type WithEntitiesActionsComponentProps,
@@ -129,9 +130,9 @@ const ReportTableRow = ({
     <TableRow>
       <TableData>
         <span>
-          <DetailsLink id={entity.id as string} textOnly={!links} type="report">
+          <TableEntityName id={entity.id as string} links={links} type="report">
             <DateTime date={report?.timestamp} />
-          </DetailsLink>
+          </TableEntityName>
         </span>
       </TableData>
       <TableData>

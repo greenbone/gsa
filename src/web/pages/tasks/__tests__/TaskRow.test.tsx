@@ -66,6 +66,7 @@ describe('TaskRow tests', () => {
       <TaskRow
         entity={task}
         links={true}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
         onTaskDeleteClick={handleTaskDelete}
@@ -74,7 +75,6 @@ describe('TaskRow tests', () => {
         onTaskResumeClick={handleTaskResume}
         onTaskStartClick={handleTaskStart}
         onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -87,12 +87,14 @@ describe('TaskRow tests', () => {
     expect(bars[0]).toHaveAttribute('title', TASK_STATUS.done);
     expect(bars[0]).toHaveTextContent(TASK_STATUS.done);
 
-    const detailsLinks = screen.getAllByTestId('details-link');
+    const detailsLinks = screen
+      .getAllByTestId('details-link')
+      .filter(link => link.getAttribute('href')?.startsWith('/report/'));
     expect(detailsLinks[0]).toHaveTextContent('Done');
     expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
 
     // Reports
-    const links = baseElement.querySelectorAll('a');
+    const links = baseElement.querySelectorAll('a:not([href^="/task/"])');
     expect(links[1]).toHaveTextContent('3');
     expect(links[1]).toHaveAttribute(
       'title',
@@ -176,6 +178,7 @@ describe('TaskRow tests', () => {
       <TaskRow
         entity={task}
         links={true}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
         onTaskDeleteClick={handleTaskDelete}
@@ -184,7 +187,6 @@ describe('TaskRow tests', () => {
         onTaskResumeClick={handleTaskResume}
         onTaskStartClick={handleTaskStart}
         onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -237,6 +239,7 @@ describe('TaskRow tests', () => {
       <TaskRow
         entity={task}
         links={true}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
         onTaskDeleteClick={handleTaskDelete}
@@ -245,20 +248,21 @@ describe('TaskRow tests', () => {
         onTaskResumeClick={handleTaskResume}
         onTaskStartClick={handleTaskStart}
         onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     const rowDetails = screen.getByTestId('row-details-toggle');
     fireEvent.click(rowDetails);
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     // Status
     const bars = screen.getAllByTestId('progressbar-box');
     expect(bars[0]).toHaveAttribute('title', TASK_STATUS.new);
     expect(bars[0]).toHaveTextContent(TASK_STATUS.new);
 
-    const detailsLinks = screen.queryAllByTestId('details-link');
+    const detailsLinks = screen
+      .queryAllByTestId('details-link')
+      .filter(link => link.getAttribute('href')?.startsWith('/report/'));
     expect(detailsLinks.length).toBe(0);
     // because there are no reports yet
 
@@ -329,6 +333,7 @@ describe('TaskRow tests', () => {
       <TaskRow
         entity={task}
         links={true}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
         onTaskDeleteClick={handleTaskDelete}
@@ -337,25 +342,26 @@ describe('TaskRow tests', () => {
         onTaskResumeClick={handleTaskResume}
         onTaskStartClick={handleTaskStart}
         onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     const rowDetails = screen.getByTestId('row-details-toggle');
     fireEvent.click(rowDetails);
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     // Status
     const bars = screen.getAllByTestId('progressbar-box');
     expect(bars[0]).toHaveAttribute('title', TASK_STATUS.running);
     expect(bars[0]).toHaveTextContent('0 %');
 
-    const detailsLinks = screen.getAllByTestId('details-link');
+    const detailsLinks = screen
+      .getAllByTestId('details-link')
+      .filter(link => link.getAttribute('href')?.startsWith('/report/'));
     expect(detailsLinks[0]).toHaveTextContent('0 %');
     expect(detailsLinks[0]).toHaveAttribute('href', '/report/5678');
 
     // Reports
-    const links = baseElement.querySelectorAll('a');
+    const links = baseElement.querySelectorAll('a:not([href^="/task/"])');
     expect(links[1]).toHaveTextContent('1');
     expect(links[1]).toHaveAttribute(
       'title',
@@ -439,6 +445,7 @@ describe('TaskRow tests', () => {
       <TaskRow
         entity={task}
         links={true}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
         onTaskDeleteClick={handleTaskDelete}
@@ -447,25 +454,26 @@ describe('TaskRow tests', () => {
         onTaskResumeClick={handleTaskResume}
         onTaskStartClick={handleTaskStart}
         onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     const rowDetails = screen.getByTestId('row-details-toggle');
     fireEvent.click(rowDetails);
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     // Status
     const bars = screen.getAllByTestId('progressbar-box');
     expect(bars[0]).toHaveAttribute('title', TASK_STATUS.stopped);
     expect(bars[0]).toHaveTextContent(TASK_STATUS.stopped);
 
-    const detailsLinks = screen.getAllByTestId('details-link');
+    const detailsLinks = screen
+      .getAllByTestId('details-link')
+      .filter(link => link.getAttribute('href')?.startsWith('/report/'));
     expect(detailsLinks[0]).toHaveTextContent('Stopped');
     expect(detailsLinks[0]).toHaveAttribute('href', '/report/5678');
 
     // Reports
-    const links = baseElement.querySelectorAll('a');
+    const links = baseElement.querySelectorAll('a:not([href^="/task/"])');
     expect(links[1]).toHaveTextContent('2');
     expect(links[1]).toHaveAttribute(
       'title',
@@ -552,6 +560,7 @@ describe('TaskRow tests', () => {
       <TaskRow
         entity={task}
         links={true}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
         onTaskDeleteClick={handleTaskDelete}
@@ -560,25 +569,26 @@ describe('TaskRow tests', () => {
         onTaskResumeClick={handleTaskResume}
         onTaskStartClick={handleTaskStart}
         onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     const rowDetails = screen.getByTestId('row-details-toggle');
     fireEvent.click(rowDetails);
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     // Status
     const bars = screen.getAllByTestId('progressbar-box');
     expect(bars[0]).toHaveAttribute('title', TASK_STATUS.done);
     expect(bars[0]).toHaveTextContent(TASK_STATUS.done);
 
-    const detailsLinks = screen.getAllByTestId('details-link');
+    const detailsLinks = screen
+      .getAllByTestId('details-link')
+      .filter(link => link.getAttribute('href')?.startsWith('/report/'));
     expect(detailsLinks[0]).toHaveTextContent('Done');
     expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
 
     // Reports
-    const links = baseElement.querySelectorAll('a');
+    const links = baseElement.querySelectorAll('a:not([href^="/task/"])');
     expect(links[1]).toHaveTextContent('1');
     expect(links[1]).toHaveAttribute(
       'title',
@@ -665,6 +675,7 @@ describe('TaskRow tests', () => {
       <TaskRow
         entity={task}
         links={true}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
         onTaskDeleteClick={handleTaskDelete}
@@ -673,14 +684,13 @@ describe('TaskRow tests', () => {
         onTaskResumeClick={handleTaskResume}
         onTaskStartClick={handleTaskStart}
         onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     // Name
     const rowDetails = screen.getByTestId('row-details-toggle');
     fireEvent.click(rowDetails);
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     const observerIcon = screen.getByTestId('observer-icon');
     expect(observerIcon).toHaveAttribute('title', 'Task owned by user');
@@ -690,12 +700,14 @@ describe('TaskRow tests', () => {
     expect(bars[0]).toHaveAttribute('title', TASK_STATUS.done);
     expect(bars[0]).toHaveTextContent(TASK_STATUS.done);
 
-    const detailsLinks = screen.getAllByTestId('details-link');
+    const detailsLinks = screen
+      .getAllByTestId('details-link')
+      .filter(link => link.getAttribute('href')?.startsWith('/report/'));
     expect(detailsLinks[0]).toHaveTextContent('Done');
     expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
 
     // Reports
-    const links = baseElement.querySelectorAll('a');
+    const links = baseElement.querySelectorAll('a:not([href^="/task/"])');
     expect(links[1]).toHaveTextContent('1');
     expect(links[1]).toHaveAttribute(
       'title',
@@ -785,6 +797,7 @@ describe('TaskRow tests', () => {
       <TaskRow
         entity={task}
         links={true}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onReportImportClick={handleReportImport}
         onTaskCloneClick={handleTaskClone}
         onTaskDeleteClick={handleTaskDelete}
@@ -793,25 +806,26 @@ describe('TaskRow tests', () => {
         onTaskResumeClick={handleTaskResume}
         onTaskStartClick={handleTaskStart}
         onTaskStopClick={handleTaskStop}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     const rowDetails = screen.getByTestId('row-details-toggle');
     fireEvent.click(rowDetails);
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     // Status
     const bars = screen.getAllByTestId('progressbar-box');
     expect(bars[0]).toHaveAttribute('title', 'Import Task');
     expect(bars[0]).toHaveTextContent('Import Task');
 
-    const detailsLinks = screen.getAllByTestId('details-link');
+    const detailsLinks = screen
+      .getAllByTestId('details-link')
+      .filter(link => link.getAttribute('href')?.startsWith('/report/'));
     expect(detailsLinks[0]).toHaveTextContent('Import Task');
     expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
 
     // Reports
-    const links = baseElement.querySelectorAll('a');
+    const links = baseElement.querySelectorAll('a:not([href^="/task/"])');
     expect(links[1]).toHaveTextContent('1');
     expect(links[1]).toHaveAttribute(
       'title',
@@ -955,6 +969,7 @@ describe('TaskRow tests', () => {
         <TaskRow
           entity={task}
           links={true}
+          preview={{expanded: false, toggle: handleToggleDetailsClick}}
           onReportImportClick={handleReportImport}
           onTaskCloneClick={handleTaskClone}
           onTaskDeleteClick={handleTaskDelete}
@@ -963,7 +978,6 @@ describe('TaskRow tests', () => {
           onTaskResumeClick={handleTaskResume}
           onTaskStartClick={handleTaskStart}
           onTaskStopClick={handleTaskStop}
-          onToggleDetailsClick={handleToggleDetailsClick}
         />,
       );
 

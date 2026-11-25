@@ -120,4 +120,14 @@ describe('DetailsLink tests', () => {
     expect(element).toHaveAttribute('title', 'Foo');
     expect(element).not.toHaveAttribute('href');
   });
+  test('renders an empty ID as plain text', () => {
+    const {render} = rendererWith({capabilities: true, router: true});
+    render(
+      <DetailsLink id="" type="task">
+        Example
+      </DetailsLink>,
+    );
+    expect(screen.getByText('Example')).toBeVisible();
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
 });

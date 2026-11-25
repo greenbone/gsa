@@ -8,6 +8,7 @@ import type Role from 'gmp/models/role';
 import ExportIcon from 'web/components/icon/ExportIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableRow from 'web/components/table/TableRow';
+import {type RowPreview} from 'web/entities/EntitiesTable';
 import EntityNameTableData from 'web/entities/EntityNameTableData';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/CloneIcon';
@@ -31,7 +32,7 @@ export interface RoleTableRowProps extends RoleActionsProps {
   actionsComponent?: React.ComponentType<RoleActionsProps>;
   links?: boolean;
   'data-testid'?: string;
-  onToggleDetailsClick?: (entity: Role) => void;
+  preview?: RowPreview;
 }
 
 const Actions = withEntitiesActions(
@@ -80,7 +81,7 @@ const RoleTableRow = ({
     ActionsComponent = Actions as unknown as React.ComponentType<RoleActionsProps>,
   entity,
   links = true,
-  onToggleDetailsClick,
+  preview,
   selectionType,
   'data-testid': dataTestId,
   onEntityDeselected,
@@ -98,8 +99,8 @@ const RoleTableRow = ({
         displayName={_('Role')}
         entity={entity}
         links={links}
+        preview={preview}
         type="role"
-        onToggleDetailsClick={onToggleDetailsClick}
       />
       <ActionsComponent
         entity={entity}

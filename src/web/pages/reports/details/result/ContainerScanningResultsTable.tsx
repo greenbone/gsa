@@ -26,7 +26,8 @@ import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
-import RowDetailsToggle from 'web/entities/RowDetailsToggle';
+import {type RowPreview} from 'web/entities/EntitiesTable';
+import TableEntityName from 'web/entities/TableEntityName';
 import withRowDetails from 'web/entities/withRowDetails';
 import useGmp from 'web/hooks/useGmp';
 import ResultDetails, {
@@ -43,11 +44,16 @@ interface HeaderProps {
 }
 
 interface RowProps {
+  links?: boolean;
   entity: Result;
-  onToggleDetailsClick?: () => void;
+  preview?: RowPreview;
 }
 
-const getColumns = (enableEPSS = false, onToggleDetailsClick?: () => void) => [
+const getColumns = ({
+  enableEPSS = false,
+  links = true,
+  preview,
+}: {enableEPSS?: boolean; links?: boolean; preview?: RowPreview} = {}) => [
   {
     key: 'vulnerability',
     title: _('Vulnerability'),
@@ -69,9 +75,14 @@ const getColumns = (enableEPSS = false, onToggleDetailsClick?: () => void) => [
 
       return (
         <Layout align="space-between">
-          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-            <span>{shownName}</span>
-          </RowDetailsToggle>
+          <TableEntityName
+            id={entity.id}
+            links={links}
+            preview={preview}
+            type="result"
+          >
+            {shownName}
+          </TableEntityName>
           <IconDivider>
             {hasActiveNotes && (
               <NoteIcon title={_('There are notes for this result')} />
@@ -223,7 +234,7 @@ const Header = ({
 }: HeaderProps) => {
   const gmp = useGmp();
   const enableEPSS = gmp.settings.enableEPSS;
-  const columns = getColumns(enableEPSS);
+  const columns = getColumns({enableEPSS});
 
   const hasEPSS = columns.some(col => col.headerGroup === _('EPSS'));
   const hasOCIImage = columns.some(col => col.headerGroup === _('OCI Image'));
@@ -303,10 +314,10 @@ const Header = ({
   );
 };
 
-const Row = ({entity, onToggleDetailsClick}: RowProps) => {
+const Row = ({entity, links = true, preview}: RowProps) => {
   const gmp = useGmp();
   const enableEPSS = gmp.settings.enableEPSS;
-  const columns = getColumns(enableEPSS, onToggleDetailsClick);
+  const columns = getColumns({enableEPSS, links, preview});
 
   return (
     <TableRow>

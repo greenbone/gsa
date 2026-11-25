@@ -11,7 +11,7 @@ describe('RowDetailsToggle tests', () => {
   test('should render without crashing', () => {
     const {render} = rendererWith();
 
-    render(<RowDetailsToggle name="test" />);
+    render(<RowDetailsToggle />);
 
     expect(screen.getByTestId('row-details-toggle')).toBeInTheDocument();
   });
@@ -20,36 +20,63 @@ describe('RowDetailsToggle tests', () => {
     const handleClick = testing.fn();
     const {render} = rendererWith();
 
-    render(<RowDetailsToggle name="test" onClick={handleClick} />);
+    render(<RowDetailsToggle onClick={handleClick} />);
 
     const row = screen.getByTestId('row-details-toggle');
     fireEvent.click(row);
-    expect(handleClick).toHaveBeenCalledWith(undefined, 'test');
+    expect(handleClick).toHaveBeenCalledWith();
   });
 
-  test('should pass value to onClick handler when provided', () => {
-    const handleClick = testing.fn();
+  test('exposes expansion state and the mounted details target', () => {
     const {render} = rendererWith();
-
-    render(
-      <RowDetailsToggle name="test" value="value" onClick={handleClick} />,
+    const previewLabel = 'Example < 5 & 10';
+    const {rerender} = render(<RowDetailsToggle previewLabel={previewLabel} />);
+    const button = screen.getByRole('button', {
+      name: `Show preview for ${previewLabel}`,
+    });
+    expect(button).toHaveAttribute('title', `Show preview for ${previewLabel}`);
+    expect(button).toHaveAttribute('type', 'button');
+    expect(button).toHaveAttribute('aria-expanded', 'false');
+    expect(button).not.toHaveAttribute('aria-controls');
+    expect(button.querySelector('.lucide-chevron-down')).toHaveAttribute(
+      'aria-hidden',
+      'true',
     );
 
-    const row = screen.getByTestId('row-details-toggle');
-    fireEvent.click(row);
-    expect(handleClick).toHaveBeenCalledWith('value', 'test');
+    rerender(
+      <RowDetailsToggle
+        detailsExpanded
+        detailsId="details-test"
+        previewLabel={previewLabel}
+      />,
+    );
+    expect(button).toHaveAttribute('aria-expanded', 'true');
+    expect(button).toHaveAccessibleName(`Hide preview for ${previewLabel}`);
+    expect(button).toHaveAttribute('title', `Hide preview for ${previewLabel}`);
+    expect(button).toHaveAttribute('aria-controls', 'details-test');
+    expect(button.querySelector('.lucide-chevron-down')).toHaveAttribute(
+      'aria-hidden',
+      'true',
+    );
   });
 
-  test('should pass arbitrary value to onClick handler', () => {
-    const handleClick = testing.fn();
+  test('supports keyboard activation and does not submit its surrounding form', async () => {
+    const onClick = testing.fn();
+    const onSubmit = testing.fn(event => event.preventDefault());
     const {render} = rendererWith();
-
-    render(
-      <RowDetailsToggle name="test" value={{id: 1}} onClick={handleClick} />,
+    const {userEvent} = render(
+      <form onSubmit={onSubmit}>
+        <RowDetailsToggle previewLabel="Example" onClick={onClick} />
+      </form>,
     );
-
-    const row = screen.getByTestId('row-details-toggle');
-    fireEvent.click(row);
-    expect(handleClick).toHaveBeenCalledWith({id: 1}, 'test');
+    await userEvent.tab();
+    expect(
+      screen.getByRole('button', {name: /preview for Example/}),
+    ).toHaveFocus();
+    await userEvent.keyboard('{Enter}');
+    await userEvent.keyboard(' ');
+    expect(onClick).toHaveBeenCalledTimes(2);
+    expect(onClick).toHaveBeenLastCalledWith();
+    expect(onSubmit).not.toHaveBeenCalled();
   });
 });

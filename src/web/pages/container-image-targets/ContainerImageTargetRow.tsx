@@ -117,7 +117,6 @@ const ContainerImageTargetRow = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
-  onToggleDetailsClick,
   'data-testid': dataTestId,
   ...props
 }: ContainerImageTargetTableRowProps) => {
@@ -128,7 +127,7 @@ const ContainerImageTargetRow = ({
       <EntityNameTableData
         displayName={_('Target')}
         entity={entity}
-        links={!links}
+        links={links}
         type="target"
       />
       <TableData>

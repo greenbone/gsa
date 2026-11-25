@@ -52,7 +52,7 @@ describe('UsersTableRow', () => {
       <UsersTableRow
         entity={user}
         links={false}
-        onToggleDetailsClick={testing.fn()}
+        preview={{expanded: false, toggle: testing.fn()}}
       />,
     );
 
@@ -69,7 +69,7 @@ describe('UsersTableRow', () => {
     render(
       <UsersTableRow
         entity={user}
-        onToggleDetailsClick={testing.fn()}
+        preview={{expanded: false, toggle: testing.fn()}}
         onUserCloneClick={testing.fn()}
         onUserDeleteClick={testing.fn()}
         onUserDownloadClick={testing.fn()}
@@ -96,7 +96,7 @@ describe('UsersTableRow', () => {
     render(
       <UsersTableRow
         entity={user}
-        onToggleDetailsClick={testing.fn()}
+        preview={{expanded: false, toggle: testing.fn()}}
         onUserCloneClick={handleClone}
         onUserDeleteClick={handleDelete}
         onUserDownloadClick={handleDownload}
@@ -125,7 +125,7 @@ describe('UsersTableRow', () => {
     render(
       <UsersTableRow
         entity={superAdminUser}
-        onToggleDetailsClick={testing.fn()}
+        preview={{expanded: false, toggle: testing.fn()}}
         onUserCloneClick={testing.fn()}
         onUserDeleteClick={testing.fn()}
         onUserDownloadClick={testing.fn()}

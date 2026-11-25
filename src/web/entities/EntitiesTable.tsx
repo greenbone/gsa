@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React, {useState} from 'react';
+import React, {useCallback, useId, useState} from 'react';
 import styled from 'styled-components';
 import type CollectionCounts from 'gmp/collection/collection-counts';
 import {type FilterType} from 'gmp/models/filter';
@@ -41,14 +41,24 @@ export interface PaginationComponentProps {
   onPreviousClick: () => void;
 }
 
+export interface RowPreview {
+  expanded: boolean;
+  id?: string;
+  toggle: () => void;
+}
+
 export interface RowComponentProps<TEntity> {
   entity: TEntity;
-  onToggleDetailsClick?: (entity: TEntity, id: string) => void;
+  links?: boolean;
+  preview?: RowPreview;
 }
 
 interface RowDetailsComponentProps<TEntity> {
+  detailsExpanded?: boolean;
+  detailsId?: string;
   entity: TEntity;
   links?: boolean;
+  onPreviewExited?: (id: string) => void;
 }
 
 interface BodyComponentProps {
@@ -165,59 +175,71 @@ function EntitiesTable<
   TRowProps,
   TPaginationProps
 >) {
-  const [details, setDetails] = useState<Record<string, boolean>>({});
-  const [allToggled, setAllToggled] = useState<boolean>(false);
+  const [previews, setPreviews] = useState<Record<string, 'open' | 'closing'>>(
+    {},
+  );
+  const tableId = useId();
+  const allToggled = Boolean(
+    entities?.length &&
+    entities.every(({id}) => isDefined(id) && previews[id] === 'open'),
+  );
   const [_] = useTranslation();
 
-  const handleToggleShowDetails = (
-    entity: TEntity | undefined,
-    entityId: string,
-  ) => {
-    const rowId = entity?.id ?? entityId;
-    setDetails(details => ({...details, [rowId]: !details[rowId]}));
+  // Rows that leave the table cannot finish their closing transition.
+  const closingIds = Object.keys(previews).filter(
+    id => previews[id] === 'closing',
+  );
+  if (closingIds.length) {
+    const visibleIds = new Set(entities?.map(({id}) => id));
+    const staleIds = closingIds.filter(id => !visibleIds.has(id));
+    if (staleIds.length) {
+      const next = {...previews};
+      staleIds.forEach(id => delete next[id]);
+      setPreviews(next);
+    }
+  }
+
+  const togglePreview = (id: string) => {
+    setPreviews(current => ({
+      ...current,
+      [id]: current[id] === 'open' ? 'closing' : 'open',
+    }));
   };
 
-  const handleToggleAllDetails = (unToggle: boolean = false) => {
-    const currentEntities = entities || [];
-    const newToggled = unToggle ? false : !allToggled;
-    setDetails(oldDetails => {
-      return currentEntities.reduce(
-        (details, entity) => {
-          details[entity.id as string] = newToggled;
-          return details;
-        },
-        {...oldDetails},
-      );
+  const removeClosedPreview = useCallback((id: string) => {
+    setPreviews(current => {
+      if (current[id] !== 'closing') {
+        return current;
+      }
+      const next = {...current};
+      delete next[id];
+      return next;
     });
-    setAllToggled(newToggled);
+  }, []);
+
+  const handleToggleAllDetails = () => {
+    setPreviews(current => {
+      const next = {...current};
+      if (allToggled) {
+        for (const {id} of entities ?? []) {
+          if (isDefined(id) && current[id] === 'open') {
+            next[id] = 'closing';
+          }
+        }
+      } else {
+        for (const {id} of entities ?? []) {
+          if (isDefined(id)) {
+            next[id] = 'open';
+          }
+        }
+      }
+      return next;
+    });
   };
 
-  const handleFirst = () => {
-    if (isDefined(onFirstClick)) {
-      onFirstClick();
-    }
-    handleToggleAllDetails(true);
-  };
-
-  const handleLast = () => {
-    if (isDefined(onLastClick)) {
-      onLastClick();
-    }
-    handleToggleAllDetails(true);
-  };
-
-  const handleNext = () => {
-    if (isDefined(onNextClick)) {
-      onNextClick();
-    }
-    handleToggleAllDetails(true);
-  };
-
-  const handlePrevious = () => {
-    if (isDefined(onPreviousClick)) {
-      onPreviousClick();
-    }
-    handleToggleAllDetails(true);
+  const changePage = (onPageChange?: () => void) => {
+    onPageChange?.();
+    setPreviews({});
   };
 
   if (!isDefined(entities)) {
@@ -243,30 +265,42 @@ function EntitiesTable<
   const rows: React.ReactElement[] = [];
   if (isDefined(RowComponent)) {
     forEach(entities, entity => {
+      const id = entity.id;
+      const state = isDefined(id) ? previews[id] : undefined;
+      const detailsId = state ? `${tableId}-details-${id}` : undefined;
+      const expanded = state === 'open';
+      const preview =
+        RowDetailsComponent && isDefined(id)
+          ? {expanded, id: detailsId, toggle: () => togglePreview(id)}
+          : undefined;
       rows.push(
         <RowComponent
           {...(props as unknown as TRowProps)}
-          key={entity.id}
+          key={id}
           entity={entity}
-          onToggleDetailsClick={handleToggleShowDetails}
+          links={links}
+          preview={preview}
         />,
       );
-      if (isDefined(RowDetailsComponent) && details[entity.id as string]) {
-        if (doubleRow) {
-          rows.push(
-            <TableBody key={`details-${entity.id}`}>
-              <RowDetailsComponent entity={entity} links={links} />
-            </TableBody>,
-          );
-        } else {
-          rows.push(
-            <RowDetailsComponent
-              key={'details-' + entity.id}
-              entity={entity}
-              links={links}
-            />,
-          );
-        }
+      if (RowDetailsComponent && isDefined(id) && state) {
+        const key = `details-${id}`;
+        const detailsRow = (
+          <RowDetailsComponent
+            key={key}
+            detailsExpanded={expanded}
+            detailsId={detailsId}
+            entity={entity}
+            links={links}
+            onPreviewExited={removeClosedPreview}
+          />
+        );
+        rows.push(
+          doubleRow ? (
+            <TableBody key={key}>{detailsRow}</TableBody>
+          ) : (
+            detailsRow
+          ),
+        );
       }
     });
   }
@@ -275,10 +309,10 @@ function EntitiesTable<
       <PaginationComponent
         {...(props as unknown as TPaginationProps)}
         counts={entitiesCounts}
-        onFirstClick={handleFirst}
-        onLastClick={handleLast}
-        onNextClick={handleNext}
-        onPreviousClick={handlePrevious}
+        onFirstClick={() => changePage(onFirstClick)}
+        onLastClick={() => changePage(onLastClick)}
+        onNextClick={() => changePage(onNextClick)}
+        onPreviousClick={() => changePage(onPreviousClick)}
       />
     );
 
@@ -312,22 +346,24 @@ function EntitiesTable<
       flex="column"
       grow="1"
     >
-      {toggleDetailsIcon ? (
-        <Layout
-          align="space-between"
-          data-testid="entities-table-header"
-          grow="1"
-        >
-          <DetailsIcon
-            foldState={allToggled ? FoldState.UNFOLDED : FoldState.FOLDED}
-            title={allToggled ? _('Fold all details') : _('Unfold all details')}
-            onClick={handleToggleAllDetails}
-          />
-          {pagination}
+      <Layout
+        align="space-between"
+        data-testid={toggleDetailsIcon ? 'entities-table-header' : undefined}
+        grow="1"
+      >
+        <Layout align={['start', 'center']}>
+          {toggleDetailsIcon && (
+            <DetailsIcon
+              foldState={allToggled ? FoldState.UNFOLDED : FoldState.FOLDED}
+              title={
+                allToggled ? _('Fold all details') : _('Unfold all details')
+              }
+              onClick={handleToggleAllDetails}
+            />
+          )}
         </Layout>
-      ) : (
-        pagination
-      )}
+        <Layout align={['end', 'center']}>{pagination}</Layout>
+      </Layout>
       <TableWrapper>
         <UpdatingStripedTable
           $isUpdating={isUpdating}

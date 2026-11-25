@@ -45,6 +45,8 @@ describe('Tls Certificate Row tests', () => {
     const handleToggleDetailsClick = testing.fn();
 
     const {render} = rendererWith({
+      capabilities: true,
+      router: true,
       gmp: createGmp(),
       store: true,
     });
@@ -53,10 +55,10 @@ describe('Tls Certificate Row tests', () => {
       <Row
         entity={tlsCertificate}
         links={true}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onTlsCertificateDeleteClick={handleTlsCertificateDelete}
         onTlsCertificateDownloadClick={handleTlsCertificateDownload}
         onTlsCertificateExportClick={handleTlsCertificateExport}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -87,6 +89,8 @@ describe('Tls Certificate Row tests', () => {
     const handleToggleDetailsClick = testing.fn();
 
     const {render} = rendererWith({
+      capabilities: true,
+      router: true,
       gmp: createGmp(),
       store: true,
     });
@@ -94,11 +98,11 @@ describe('Tls Certificate Row tests', () => {
       <Row
         entity={tlsCertificate}
         links={true}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onReportImportClick={handleReportImport}
         onTlsCertificateDeleteClick={handleTlsCertificateDelete}
         onTlsCertificateDownloadClick={handleTlsCertificateDownload}
         onTlsCertificateExportClick={handleTlsCertificateExport}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
@@ -123,6 +127,8 @@ describe('Tls Certificate Row tests', () => {
     const handleToggleDetailsClick = testing.fn();
 
     const {render} = rendererWith({
+      capabilities: true,
+      router: true,
       gmp: createGmp(),
       store: true,
     });
@@ -131,16 +137,16 @@ describe('Tls Certificate Row tests', () => {
       <Row
         entity={tlsCertificate}
         links={true}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onTlsCertificateDeleteClick={handleTlsCertificateDelete}
         onTlsCertificateDownloadClick={handleTlsCertificateDownload}
         onTlsCertificateExportClick={handleTlsCertificateExport}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     // Name
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     // Actions
     const deleteIcon = screen.getAllByTestId('delete-icon')[0];

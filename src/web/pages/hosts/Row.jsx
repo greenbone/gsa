@@ -14,7 +14,7 @@ import OsIcon from 'web/components/icon/OsIcon';
 import IconDivider from 'web/components/layout/IconDivider';
 import TableData from 'web/components/table/TableData';
 import TableRow from 'web/components/table/TableRow';
-import RowDetailsToggle from 'web/entities/RowDetailsToggle';
+import TableEntityName from 'web/entities/TableEntityName';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 import DeleteIcon from 'web/entity/icon/DeleteIcon';
 import EditIcon from 'web/entity/icon/EditIcon';
@@ -83,7 +83,8 @@ Actions.propTypes = {
 const Row = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
-  onToggleDetailsClick,
+  links = true,
+  preview,
   ...props
 }) => {
   const {details = {}, os} = entity;
@@ -98,9 +99,14 @@ const Row = ({
     <TableRow>
       <TableData flex="column">
         <span>
-          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+          <TableEntityName
+            id={entity.id}
+            links={links}
+            preview={preview}
+            type="host"
+          >
             {entity.name}
-          </RowDetailsToggle>
+          </TableEntityName>
         </span>
         <Comment text={entity.comment} />
       </TableData>
@@ -122,9 +128,14 @@ const Row = ({
 };
 
 Row.propTypes = {
+  links: PropTypes.bool,
   actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
-  onToggleDetailsClick: PropTypes.func.isRequired,
+  preview: PropTypes.shape({
+    expanded: PropTypes.bool.isRequired,
+    id: PropTypes.string,
+    toggle: PropTypes.func.isRequired,
+  }),
 };
 
 export default Row;

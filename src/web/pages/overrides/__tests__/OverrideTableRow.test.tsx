@@ -79,11 +79,11 @@ describe('OverrideRow tests', () => {
     const {element} = render(
       <OverrideRow
         entity={override}
+        preview={{expanded: false, toggle: testing.fn()}}
         onOverrideCloneClick={testing.fn()}
         onOverrideDeleteClick={testing.fn()}
         onOverrideDownloadClick={testing.fn()}
         onOverrideEditClick={testing.fn()}
-        onToggleDetailsClick={testing.fn()}
       />,
     );
 
@@ -125,16 +125,16 @@ describe('OverrideRow tests', () => {
     render(
       <OverrideRow
         entity={override}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onOverrideCloneClick={handleOverrideClone}
         onOverrideDeleteClick={handleOverrideDelete}
         onOverrideDownloadClick={handleOverrideDownload}
         onOverrideEditClick={handleOverrideEdit}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     fireEvent.click(screen.getByTitle('Move Override to trashcan'));
     expect(handleOverrideDelete).toHaveBeenCalledWith(override);
@@ -158,12 +158,12 @@ describe('OverrideRow tests', () => {
     render(
       <OverrideRow
         entity={override}
+        preview={{expanded: false, toggle: testing.fn()}}
         selectionType={SelectionType.SELECTION_USER}
         onOverrideCloneClick={testing.fn()}
         onOverrideDeleteClick={testing.fn()}
         onOverrideDownloadClick={testing.fn()}
         onOverrideEditClick={testing.fn()}
-        onToggleDetailsClick={testing.fn()}
       />,
     );
 
@@ -190,11 +190,11 @@ describe('OverrideRow tests', () => {
     render(
       <OverrideRow
         entity={overrideInUse}
+        preview={{expanded: false, toggle: testing.fn()}}
         onOverrideCloneClick={handleOverrideClone}
         onOverrideDeleteClick={handleOverrideDelete}
         onOverrideDownloadClick={handleOverrideDownload}
         onOverrideEditClick={handleOverrideEdit}
-        onToggleDetailsClick={testing.fn()}
       />,
     );
 

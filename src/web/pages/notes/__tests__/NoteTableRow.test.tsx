@@ -47,11 +47,11 @@ describe('NoteRow tests', () => {
     render(
       <NoteTableRow
         entity={note}
+        preview={{expanded: false, toggle: testing.fn()}}
         onNoteCloneClick={testing.fn()}
         onNoteDeleteClick={testing.fn()}
         onNoteDownloadClick={testing.fn()}
         onNoteEditClick={testing.fn()}
-        onToggleDetailsClick={testing.fn()}
       />,
     );
 
@@ -88,16 +88,16 @@ describe('NoteRow tests', () => {
     render(
       <NoteTableRow
         entity={note}
+        preview={{expanded: false, toggle: handleToggleDetailsClick}}
         onNoteCloneClick={handleNoteClone}
         onNoteDeleteClick={handleNoteDelete}
         onNoteDownloadClick={handleNoteDownload}
         onNoteEditClick={handleNoteEdit}
-        onToggleDetailsClick={handleToggleDetailsClick}
       />,
     );
 
     fireEvent.click(screen.getByTestId('row-details-toggle'));
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
+    expect(handleToggleDetailsClick).toHaveBeenCalledOnce();
 
     fireEvent.click(screen.getByTitle('Move Note to trashcan'));
     expect(handleNoteDelete).toHaveBeenCalledWith(note);

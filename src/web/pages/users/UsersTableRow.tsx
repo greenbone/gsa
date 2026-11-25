@@ -101,7 +101,7 @@ const UsersTableRow = ({
   links = true,
   onEntityDeselected,
   onEntitySelected,
-  onToggleDetailsClick,
+  preview,
   onUserCloneClick,
   onUserDeleteClick,
   onUserDownloadClick,
@@ -137,8 +137,8 @@ const UsersTableRow = ({
         displayName={_('User')}
         entity={entity}
         links={links}
+        preview={preview}
         type="user"
-        onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>
         <HorizontalSeparator $wrap>{roles}</HorizontalSeparator>

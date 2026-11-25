@@ -7,7 +7,6 @@ import {_, _l} from 'gmp/locale/lang';
 import {type ReportActiveCve} from 'gmp/models/report/parser';
 import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/SeverityBar';
-import CveLink from 'web/components/link/CveLink';
 import DetailsLink from 'web/components/link/DetailsLink';
 import Link from 'web/components/link/Link';
 import TableData from 'web/components/table/TableData';
@@ -15,6 +14,7 @@ import TableHead from 'web/components/table/TableHead';
 import TableHeader from 'web/components/table/TableHeader';
 import TableRow from 'web/components/table/TableRow';
 import createEntitiesTable from 'web/entities/createEntitiesTable';
+import TableEntityName from 'web/entities/TableEntityName';
 import {ROUTES} from 'web/route-paths';
 import {type SortDirectionType} from 'web/utils/sort-direction';
 
@@ -32,7 +32,9 @@ const getColumns = () => [
     title: _('CVE'),
     render: (entity: ReportActiveCve) => (
       <span>
-        <CveLink id={entity.cveId} />
+        <TableEntityName id={entity.cveId} type="cve">
+          {entity.cveId}
+        </TableEntityName>
       </span>
     ),
   },
