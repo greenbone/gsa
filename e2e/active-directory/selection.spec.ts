@@ -58,14 +58,16 @@ test('selects AD computers and transfers them to a new target without saving', a
   ).toBeVisible();
 
   await page
-    .getByTestId('row-details-toggle')
-    .filter({hasText: 'AD Administration (dc01.domain.local)'})
+    .getByRole('button', {
+      name: 'Show preview for AD Administration (dc01.domain.local)',
+    })
     .click();
   await expect(page.getByText('Bind DN', {exact: true})).toBeVisible();
   await expect(page).toHaveURL(/\/active-directory$/);
   await page
-    .getByTestId('row-details-toggle')
-    .filter({hasText: 'AD Administration (dc01.domain.local)'})
+    .getByRole('button', {
+      name: 'Hide preview for AD Administration (dc01.domain.local)',
+    })
     .click();
   await expect(page.getByText('Bind DN', {exact: true})).toHaveCount(0);
   expect(discoveryCalls).toBe(0);

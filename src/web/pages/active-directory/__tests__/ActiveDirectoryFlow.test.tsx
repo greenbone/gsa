@@ -112,7 +112,7 @@ describe('Active Directory two-page flow', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('expands credential details from the name without browsing the directory', async () => {
+  test('expands the credential preview without browsing the directory', async () => {
     const {gmp, renderPages} = setup();
     renderPages();
     const action = await openAdministration();
@@ -122,7 +122,9 @@ describe('Active Directory two-page flow', () => {
     ).toBeInTheDocument();
     expect(action).toHaveTextContent('');
     fireEvent.click(
-      screen.getByText('AD Administration (dc01.domain.local)', {exact: true}),
+      screen.getByRole('button', {
+        name: 'Show preview for AD Administration (dc01.domain.local)',
+      }),
     );
     expect(await screen.findByText('Bind DN')).toBeVisible();
     expect(screen.getByText('Active Directory Host or Address')).toBeVisible();
@@ -134,7 +136,9 @@ describe('Active Directory two-page flow', () => {
     expect(gmp.activedirectory.getOverview).not.toHaveBeenCalled();
     expect(gmp.credential.get).not.toHaveBeenCalled();
     fireEvent.click(
-      screen.getByText('AD Administration (dc01.domain.local)', {exact: true}),
+      screen.getByRole('button', {
+        name: 'Hide preview for AD Administration (dc01.domain.local)',
+      }),
     );
     expect(screen.queryByText('Bind DN')).not.toBeInTheDocument();
   });
