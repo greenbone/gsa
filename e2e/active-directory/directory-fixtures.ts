@@ -13,7 +13,6 @@ const capabilities = [
   'get_filters',
   'get_settings',
   'get_targets',
-  'create_target',
   'get_port_lists',
   'get_tasks',
 ];
@@ -24,7 +23,6 @@ const emptyCollection = (command: string, collection: string, item: string) =>
 const responses: Record<string, string> = {
   get_aggregate:
     '<get_aggregate><get_aggregates_response status="200" status_text="OK"><aggregate/></get_aggregates_response></get_aggregate>',
-  get_capabilities: `<get_capabilities><help_response status="200" status_text="OK"><schema>${capabilities.map(name => `<command><name>${name}</name></command>`).join('')}</schema></help_response></get_capabilities>`,
   get_features:
     '<get_features><get_features_response status="200" status_text="OK"><feature enabled="1"><name>ENABLE_AD_INTEGRATION</name></feature></get_features_response></get_features>',
   get_settings:
@@ -43,10 +41,18 @@ const responses: Record<string, string> = {
   get_port_lists: emptyCollection('get_port_lists', 'port_lists', 'port_list'),
 };
 
-export const test = base.extend<{directoryBackend: void}>({
+export const test = base.extend<{
+  directoryBackend: void;
+  mayCreateTarget: boolean;
+}>({
+  mayCreateTarget: [true, {option: true}],
   directoryBackend: [
-    async ({page}, use) => {
+    async ({page, mayCreateTarget}, use) => {
       const unexpected: string[] = [];
+      const commands = mayCreateTarget
+        ? [...capabilities, 'create_target']
+        : capabilities;
+      const capabilitiesXml = `<envelope><get_capabilities><help_response status="200" status_text="OK"><schema>${commands.map(name => `<command><name>${name}</name></command>`).join('')}</schema></help_response></get_capabilities></envelope>`;
       await page.route('**/config.js', route =>
         route.fulfill({
           contentType: 'text/javascript',
@@ -66,7 +72,10 @@ export const test = base.extend<{directoryBackend: void}>({
           xml =
             '<envelope><token>directory-fixture-token</token><timezone>UTC</timezone><i18n>en</i18n><duration>3600</duration></envelope>';
         } else if (method === 'GET' && pathname === '/e2e-api/gmp') {
-          xml = activeDirectoryMockResponse(searchParams);
+          xml =
+            command === 'get_capabilities'
+              ? capabilitiesXml
+              : activeDirectoryMockResponse(searchParams);
           if (xml === undefined && Object.hasOwn(responses, command)) {
             xml = `<envelope>${responses[command]}</envelope>`;
           }

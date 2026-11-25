@@ -584,3 +584,104 @@ test('refreshes assignments on reopen and ignores an older detail response', asy
     release.resolve();
   }
 });
+
+test.describe('delegated directory browsing', () => {
+  test.use({mayCreateTarget: false});
+
+  test('can select hosts without access to target creation', async ({page}) => {
+    const writes: string[] = [];
+    page.on('request', request => {
+      if (
+        request.method() === 'POST' &&
+        request.postData()?.includes('create_target')
+      ) {
+        writes.push(request.url());
+      }
+    });
+    await openDiscovery(page);
+    await computer(page, 'fs-01').check();
+    await expect(count(page, 1)).toBeVisible();
+    await expect(
+      page.getByRole('button', {name: 'Add hosts to new target'}),
+    ).toBeDisabled();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    expect(writes).toEqual([]);
+  });
+});
+
+test('cancels without saving and clears the error after a successful retry', async ({
+  page,
+}) => {
+  const release = Promise.withResolvers<void>();
+  const requests: FormData[] = [];
+  const failure = 'Target exists already';
+  await page.route('**/e2e-api/gmp', async route => {
+    const request = route.request();
+    const body = request.postData();
+    if (request.method() !== 'POST' || !body?.includes('\r\ncreate_target\r\n'))
+      return route.fallback();
+    const fields = await new Response(body, {
+      headers: request.headers(),
+    }).formData();
+    const attempt = requests.push(fields);
+    if (attempt === 1) {
+      await release.promise;
+      return route.fulfill({
+        status: 400,
+        contentType: 'application/xml',
+        body: `<envelope><gsad_response><message>${failure}</message></gsad_response></envelope>`,
+      });
+    }
+    await route.fulfill({
+      contentType: 'application/xml',
+      body: '<envelope><action_result><id>42</id><action>create_target</action><message>OK</message></action_result></envelope>',
+    });
+  });
+
+  try {
+    await openDiscovery(page);
+    await computer(page, 'fs-02').check();
+    await computer(page, 'fs-01').check();
+    const openTarget = page.getByRole('button', {
+      name: 'Add hosts to new target',
+    });
+    const dialog = page.getByRole('dialog');
+    await openTarget.click();
+    await dialog.getByTestId('dialog-close-button').click();
+    await expect(dialog).toHaveCount(0);
+    await expect(count(page, 2)).toBeVisible();
+    expect(requests).toHaveLength(0);
+
+    await openTarget.click();
+    await dialog.locator('[name="name"]').fill('Fixture AD target');
+    const save = dialog.getByRole('button', {name: 'Save', exact: true});
+    await save.click();
+    await expect.poll(() => requests.length).toBe(1);
+    await expect(save).toBeDisabled();
+    await save.evaluate(button => (button as HTMLButtonElement).click());
+    expect(requests).toHaveLength(1);
+    release.resolve();
+    await expect(dialog.getByText(failure)).toBeVisible();
+    await expect(page.getByText(failure)).toHaveCount(1);
+    await expect(count(page, 2)).toBeVisible();
+    await expect(dialog.locator('[name="name"]')).toHaveValue(
+      'Fixture AD target',
+    );
+    await save.click();
+    await expect(dialog).toHaveCount(0);
+    await expect(page.getByText('Target created successfully.')).toBeVisible();
+    await expect(page.getByText(failure)).toHaveCount(0);
+    expect(requests).toHaveLength(2);
+    for (const fields of requests) {
+      const hosts = fields.get('hosts');
+      expect(
+        typeof hosts === 'string' ? hosts.split(',').sort() : hosts,
+      ).toEqual(['fs-01.domain.local', 'fs-02.domain.local']);
+      expect(fields.get('source')).toBe('active_directory');
+      expect(fields.get('target_source')).toBe('manual');
+      expect(fields.get('name')).toBe('Fixture AD target');
+    }
+  } finally {
+    release.resolve();
+  }
+});

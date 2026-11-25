@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useState} from 'react';
 import {showSuccessNotification} from '@greenbone/ui-lib';
 import {useParams} from 'react-router';
 import styled from 'styled-components';
 import ErrorMessage from 'web/components/error/ErrorMessage';
-import ErrorPanel from 'web/components/error/ErrorPanel';
 import Button from 'web/components/form/Button';
 import {ActiveDirectoryIcon} from 'web/components/icon';
 import Column from 'web/components/layout/Column';
@@ -74,7 +72,6 @@ const BrowserContent = ({credentialId}: {credentialId: string}) => {
     isError,
     refetch,
   } = useGetActiveDirectoryCredential(credentialId);
-  const [targetError, setTargetError] = useState<string>();
   return (
     <>
       <PageTitle title={credential?.name ?? _('Active Directory')} />
@@ -129,9 +126,7 @@ const BrowserContent = ({credentialId}: {credentialId: string}) => {
               </tbody>
             </ConnectionMetadata>
           </ConnectionHeader>
-          {targetError && <ErrorPanel message={targetError} />}
           <TargetComponent
-            onCreateError={error => setTargetError(error.message)}
             onCreated={() =>
               showSuccessNotification('', _('Target created successfully.'))
             }
@@ -141,7 +136,6 @@ const BrowserContent = ({credentialId}: {credentialId: string}) => {
                 key={credentialId}
                 sourceId={credentialId}
                 onApply={hosts => {
-                  setTargetError(undefined);
                   create({
                     hosts,
                     source: 'active_directory',
