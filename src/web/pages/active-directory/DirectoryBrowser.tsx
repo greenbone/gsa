@@ -391,7 +391,7 @@ export const DirectoryBrowser = ({
             <span aria-live="polite">
               {_('{{count}} hosts selected', {count: hosts.length})}
             </span>
-            <InfoTip ariaLabel={_('Selected hosts')}>
+            <InfoTip ariaLabel={_('Selecting hosts already in scan targets')}>
               {_('Computers already in scan targets can still be selected.')}
             </InfoTip>
           </Row>
@@ -413,9 +413,7 @@ export const DirectoryBrowser = ({
                 whiteSpace: 'normal',
               },
             }}
-            title={_('Add {{count}} hosts to new target', {
-              count: hosts.length,
-            })}
+            title={_('Add hosts to new target')}
             onClick={() => onApply(hosts)}
           />
         </DirectoryFooter>

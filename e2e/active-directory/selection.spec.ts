@@ -102,8 +102,9 @@ test('selects AD computers and transfers them to a new target without saving', a
   ).toBeVisible();
   // Subtree selection is committed only after the separate resolve call.
   await page.getByRole('checkbox', {name: 'Clients', exact: true}).click();
-  const apply = page.getByRole('button', {name: 'Add 5 hosts to new target'});
+  const apply = page.getByRole('button', {name: 'Add hosts to new target'});
   await expect(apply).toBeEnabled();
+  await expect(page.getByText('5 hosts selected', {exact: true})).toBeVisible();
   const clientsToggle = page.getByRole('button', {
     name: /^(Expand|Collapse) Clients$/,
   });
@@ -264,7 +265,7 @@ test('selects AD computers and transfers them to a new target without saving', a
     new RegExp(`/active-directory/discovery/${AD_OTHER_SOURCE}$`),
   );
   await expect(
-    page.getByRole('button', {name: 'Add 0 hosts to new target'}),
+    page.getByRole('button', {name: 'Add hosts to new target'}),
   ).toBeDisabled();
   await expect(
     page.getByRole('button', {name: 'Expand Clients'}),
@@ -274,7 +275,7 @@ test('selects AD computers and transfers them to a new target without saving', a
     page.getByRole('button', {name: 'Expand Clients'}),
   ).toBeVisible();
   await expect(
-    page.getByRole('button', {name: 'Add 0 hosts to new target'}),
+    page.getByRole('button', {name: 'Add hosts to new target'}),
   ).toBeDisabled();
   await page.goBack();
   await expect(
@@ -286,6 +287,6 @@ test('selects AD computers and transfers them to a new target without saving', a
     })
     .click();
   await expect(
-    page.getByRole('button', {name: 'Add 0 hosts to new target'}),
+    page.getByRole('button', {name: 'Add hosts to new target'}),
   ).toBeDisabled();
 });

@@ -156,18 +156,14 @@ describe('Active Directory two-page flow', () => {
     ).not.toBeInTheDocument();
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     fireEvent.click(await screen.findByRole('checkbox', {name: 'Clients'}));
-    await waitFor(() =>
-      expect(
-        screen.getByRole('button', {name: 'Add 5 hosts to new target'}),
-      ).toBeEnabled(),
-    );
+    await screen.findByText('5 hosts selected');
     fireEvent.click(screen.getByRole('button', {name: 'Browser back'}));
     fireEvent.click(
       await screen.findByRole('link', {name: 'Open directory: AD Site 01'}),
     );
     await screen.findByRole('checkbox', {name: 'Clients'});
     expect(
-      screen.getByRole('button', {name: 'Add 0 hosts to new target'}),
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
     ).toBeDisabled();
     expect(gmp.activedirectory.getOverview).toHaveBeenCalledTimes(2);
     expect(
@@ -314,8 +310,9 @@ describe('Active Directory two-page flow', () => {
     renderPages();
     fireEvent.click(await openAdministration());
     fireEvent.click(await screen.findByRole('checkbox', {name: 'Clients'}));
+    await screen.findByText('5 hosts selected');
     expect(
-      await screen.findByRole('button', {name: 'Add 5 hosts to new target'}),
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
     ).toBeDisabled();
     expect(gmp.credentials.get).toHaveBeenCalled();
     expect(gmp.credential.get).toHaveBeenCalledWith({id: AD_SOURCE});

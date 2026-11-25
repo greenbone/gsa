@@ -72,6 +72,20 @@ describe('Active Directory selection UI', () => {
     });
     render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={onApply} />);
     await screen.findByRole('button', {name: 'Expand Clients'});
+    const footer = within(screen.getByRole('group', {name: 'Selected hosts'}));
+    const addHosts = footer.getByRole('button', {
+      name: 'Add hosts to new target',
+    });
+    expect(addHosts).toBeDisabled();
+    expect(footer.getByText('0 hosts selected')).toHaveAttribute(
+      'aria-live',
+      'polite',
+    );
+    expect(
+      footer.getByRole('region', {
+        name: 'Selecting hosts already in scan targets',
+      }),
+    ).toBeVisible();
     const toggle = screen.getByRole('checkbox', {name: 'Show containers'});
     expect(toggle).not.toBeChecked();
     expect(
@@ -92,9 +106,9 @@ describe('Active Directory selection UI', () => {
     expect(
       screen.queryByRole('button', {name: 'Expand Computers'}),
     ).not.toBeInTheDocument();
-    fireEvent.click(
-      screen.getByRole('button', {name: 'Add 1 hosts to new target'}),
-    );
+    expect(footer.getByText('1 hosts selected')).toBeVisible();
+    expect(addHosts).toBeEnabled();
+    fireEvent.click(addHosts);
     expect(onApply).toHaveBeenCalledWith(['container-pc.domain.local']);
   });
   test('ignores recursive selection started before changing container visibility', async () => {
@@ -119,14 +133,14 @@ describe('Active Directory selection UI', () => {
     fireEvent.click(await screen.findByRole('checkbox', {name: 'Clients'}));
     await waitFor(() =>
       expect(
-        screen.getByRole('button', {name: 'Add 0 hosts to new target'}),
+        screen.getByRole('button', {name: 'Add hosts to new target'}),
       ).toHaveAttribute('aria-busy', 'true'),
     );
     fireEvent.click(screen.getByRole('checkbox', {name: 'Show containers'}));
     await screen.findByRole('button', {name: 'Expand Computers'});
     await act(async () => completeSelection(pendingResult));
     expect(
-      screen.getByRole('button', {name: 'Add 0 hosts to new target'}),
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
     ).toBeDisabled();
   });
 
@@ -158,7 +172,7 @@ describe('Active Directory selection UI', () => {
     });
     render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
     fireEvent.click(await screen.findByRole('checkbox', {name: 'Clients'}));
-    await screen.findByRole('button', {name: 'Add 5 hosts to new target'});
+    await screen.findByText('5 hosts selected');
     fireEvent.click(screen.getByRole('button', {name: 'Expand Clients'}));
     fireEvent.click(
       await screen.findByRole('button', {name: 'Expand Accounting'}),
@@ -172,9 +186,7 @@ describe('Active Directory selection UI', () => {
     expect(
       screen.getByRole('checkbox', {name: 'Clients'}),
     ).toBePartiallyChecked();
-    expect(
-      screen.getByRole('button', {name: 'Add 5 hosts to new target'}),
-    ).toBeEnabled();
+    expect(screen.getByText('5 hosts selected')).toBeVisible();
   });
   test('retries the connections list without starting discovery', async () => {
     const command = createCommand();
@@ -222,8 +234,9 @@ describe('Active Directory selection UI', () => {
     });
     render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
     fireEvent.click(await screen.findByRole('checkbox', {name: 'Clients'}));
+    await screen.findByText('5 hosts selected');
     expect(
-      await screen.findByRole('button', {name: 'Add 5 hosts to new target'}),
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
     ).toBeDisabled();
   });
 
@@ -267,26 +280,20 @@ describe('Active Directory selection UI', () => {
     await screen.findByText(
       'Could not resolve the selected OU/group. Your selection has been preserved.',
     );
+    expect(screen.getByText('1 hosts selected')).toBeVisible();
     expect(
-      screen.getByRole('button', {name: 'Add 1 hosts to new target'}),
-    ).toBeEnabled();
-    expect(
-      screen.getByRole('button', {name: 'Add 1 hosts to new target'}),
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
     ).not.toHaveAttribute('data-loading');
     expect(
       screen.getByRole('checkbox', {name: 'fs-01.domain.local'}),
     ).toBeChecked();
     fireEvent.click(screen.getByRole('button', {name: 'Retry selection'}));
-    await waitFor(() =>
-      expect(
-        screen.getByRole('button', {name: 'Add 5 hosts to new target'}),
-      ).toBeEnabled(),
-    );
+    await screen.findByText('5 hosts selected');
     expect(
-      screen.getByRole('button', {name: 'Add 5 hosts to new target'}),
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
     ).not.toHaveAttribute('data-loading');
     expect(
-      screen.getByRole('button', {name: 'Add 5 hosts to new target'}),
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
     ).toHaveAttribute('aria-busy', 'false');
     expect(command.resolveSubtree).toHaveBeenCalledTimes(2);
   });
@@ -352,9 +359,7 @@ describe('Active Directory selection UI', () => {
         description: /Clients: some objects were not returned/,
       }),
     ).toBeVisible();
-    expect(
-      screen.getByRole('button', {name: 'Add 1 hosts to new target'}),
-    ).toBeEnabled();
+    expect(screen.getByText('1 hosts selected')).toBeVisible();
     expect(parent).not.toBeChecked();
     expect(
       screen.queryByRole('button', {name: 'Retry selection'}),
@@ -376,9 +381,7 @@ describe('Active Directory selection UI', () => {
     expect(
       screen.getByRole('checkbox', {name: 'fs-01.domain.local'}),
     ).toBeChecked();
-    expect(
-      screen.getByRole('button', {name: 'Add 4 hosts to new target'}),
-    ).toBeEnabled();
+    expect(screen.getByText('4 hosts selected')).toBeVisible();
     expect(command.getChildren).toHaveBeenCalledTimes(2);
     expect(command.resolveSubtree).toHaveBeenCalledTimes(1);
     expect(warning).not.toBeInTheDocument();
@@ -496,9 +499,7 @@ describe('Active Directory selection UI', () => {
       await userEvent.click(
         await screen.findByRole('checkbox', {name: computerName}),
       );
-      expect(
-        screen.getByRole('button', {name: 'Add 2 hosts to new target'}),
-      ).toBeEnabled();
+      expect(screen.getByText('2 hosts selected')).toBeVisible();
       await userEvent.click(
         screen.getByRole('button', {name: 'Collapse Clients'}),
       );
@@ -546,7 +547,7 @@ describe('Active Directory selection UI', () => {
       ).not.toBeInTheDocument();
       expect(command.resolveSubtree).not.toHaveBeenCalled();
       await userEvent.click(
-        screen.getByRole('button', {name: 'Add 1 hosts to new target'}),
+        screen.getByRole('button', {name: 'Add hosts to new target'}),
       );
       expect(onApply).toHaveBeenCalledWith(['fs-01.domain.local']);
     },
@@ -573,11 +574,7 @@ describe('Active Directory selection UI', () => {
       </>,
     );
     fireEvent.click(await screen.findByRole('checkbox', {name: 'Clients'}));
-    await waitFor(() =>
-      expect(
-        screen.getByRole('button', {name: 'Add 5 hosts to new target'}),
-      ).toBeEnabled(),
-    );
+    await screen.findByText('5 hosts selected');
     expect(client?.getQueryCache().getAll()).toHaveLength(1);
     await waitFor(() =>
       expect(client?.getMutationCache().getAll()).toEqual([]),
@@ -659,7 +656,7 @@ describe('Active Directory selection UI', () => {
     );
     fireEvent.click(await screen.findByRole('checkbox', {name: 'Clients'}));
     const loadingButton = screen.getByRole('button', {
-      name: 'Add 0 hosts to new target',
+      name: 'Add hosts to new target',
     });
     await waitFor(() =>
       expect(loadingButton).toHaveAttribute('aria-busy', 'true'),
@@ -680,7 +677,7 @@ describe('Active Directory selection UI', () => {
     );
     await screen.findByRole('checkbox', {name: 'Clients'});
     expect(
-      screen.getByRole('button', {name: 'Add 0 hosts to new target'}),
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
     ).not.toHaveAttribute('data-loading');
     const computers = await new ActiveDirectoryCommand(
       createDirectoryHttp(),
@@ -691,7 +688,7 @@ describe('Active Directory selection UI', () => {
     });
     await act(async () => completeSelection(computers));
     expect(
-      screen.getByRole('button', {name: 'Add 0 hosts to new target'}),
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
     ).toBeDisabled();
     expect(command.getOverview).toHaveBeenLastCalledWith({
       sourceId: AD_OTHER_SOURCE,
@@ -709,7 +706,7 @@ describe('Active Directory selection UI', () => {
       sourceId: AD_SOURCE,
     });
     expect(
-      screen.getByRole('button', {name: 'Add 0 hosts to new target'}),
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
     ).toBeDisabled();
   });
 
@@ -738,7 +735,7 @@ describe('Active Directory selection UI', () => {
       ),
     ).toHaveRole('status');
     expect(
-      screen.getByRole('button', {name: 'Add 0 hosts to new target'}),
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
     ).toBeDisabled();
   });
 
@@ -772,18 +769,14 @@ describe('Active Directory selection UI', () => {
     render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={onApply} />);
     fireEvent.click(await screen.findByRole('checkbox', {name: 'Clients'}));
     expect(command.getChildren).not.toHaveBeenCalled();
-    await waitFor(() =>
-      expect(
-        screen.getByRole('button', {name: 'Add 5 hosts to new target'}),
-      ).toBeEnabled(),
-    );
+    await screen.findByText('5 hosts selected');
     expect(command.resolveSubtree).toHaveBeenCalledWith({
       sourceId: AD_SOURCE,
       branchId: AD_CLIENTS,
       kind: 'ou',
     });
     fireEvent.click(
-      screen.getByRole('button', {name: 'Add 5 hosts to new target'}),
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
     );
     expect(onApply).toHaveBeenCalledWith([
       'pc-042.domain.local',
@@ -802,11 +795,7 @@ describe('Active Directory selection UI', () => {
     });
     render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
     fireEvent.click(await screen.findByRole('checkbox', {name: 'Clients'}));
-    await waitFor(() =>
-      expect(
-        screen.getByRole('button', {name: 'Add 5 hosts to new target'}),
-      ).toBeEnabled(),
-    );
+    await screen.findByText('5 hosts selected');
     fireEvent.click(screen.getByRole('button', {name: 'Expand Clients'}));
     fireEvent.click(
       await screen.findByRole('button', {name: 'Expand Accounting'}),
@@ -827,9 +816,7 @@ describe('Active Directory selection UI', () => {
     expect(
       screen.getByRole('checkbox', {name: 'Clients'}),
     ).toBePartiallyChecked();
-    expect(
-      screen.getByRole('button', {name: 'Add 3 hosts to new target'}),
-    ).toBeEnabled();
+    expect(screen.getByText('3 hosts selected')).toBeVisible();
     expect(
       screen.queryByRole('checkbox', {name: 'pc-retired.domain.local'}),
     ).not.toBeInTheDocument();
@@ -841,25 +828,19 @@ describe('Active Directory selection UI', () => {
     fireEvent.click(
       screen.getByRole('checkbox', {name: 'pc-retired.domain.local'}),
     );
-    expect(
-      screen.getByRole('button', {name: 'Add 4 hosts to new target'}),
-    ).toBeEnabled();
+    expect(screen.getByText('4 hosts selected')).toBeVisible();
     fireEvent.click(
       screen.getByRole('checkbox', {
         name: 'Show disabled Active Directory objects',
       }),
     );
-    expect(
-      screen.getByRole('button', {name: 'Add 3 hosts to new target'}),
-    ).toBeEnabled();
+    expect(screen.getByText('3 hosts selected')).toBeVisible();
     const accounting = screen.getByRole('checkbox', {name: 'Accounting'});
     fireEvent.click(accounting);
     await waitFor(() => expect(accounting).toBeChecked());
     expect(command.resolveSubtree).toHaveBeenCalledTimes(2);
     fireEvent.click(accounting);
-    expect(
-      screen.getByRole('button', {name: 'Add 2 hosts to new target'}),
-    ).toBeEnabled();
+    expect(screen.getByText('2 hosts selected')).toBeVisible();
     expect(command.resolveSubtree).toHaveBeenCalledTimes(2);
   });
   test('updates all summary cards from loaded computers and keeps missing hostnames unselectable', async () => {
@@ -929,9 +910,7 @@ describe('Active Directory selection UI', () => {
     expect(
       screen.getByRole('checkbox', {name: 'Clients'}),
     ).toBePartiallyChecked();
-    expect(
-      screen.getByRole('button', {name: 'Add 1 hosts to new target'}),
-    ).toBeEnabled();
+    expect(screen.getByText('1 hosts selected')).toBeVisible();
   });
 
   test('identifies an incomplete root and allows selection of a loaded computer', async () => {
@@ -959,9 +938,7 @@ describe('Active Directory selection UI', () => {
       '1',
     );
     fireEvent.click(screen.getByRole('checkbox', {name: 'fs-01.domain.local'}));
-    expect(
-      screen.getByRole('button', {name: 'Add 1 hosts to new target'}),
-    ).toBeEnabled();
+    expect(screen.getByText('1 hosts selected')).toBeVisible();
     expect(command.getOverview).toHaveBeenCalledTimes(1);
     expect(command.getChildren).not.toHaveBeenCalled();
     expect(command.resolveSubtree).not.toHaveBeenCalled();

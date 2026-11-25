@@ -232,8 +232,9 @@ test('measures Active Directory with 10,000 computers at one level', async ({
 
   const selectStarted = performance.now();
   await lastComputer.check();
+  await expect(page.getByText('2 hosts selected', {exact: true})).toBeVisible();
   await expect(
-    page.getByRole('button', {name: 'Add 2 hosts to new target'}),
+    page.getByRole('button', {name: 'Add hosts to new target'}),
   ).toBeEnabled();
   const selectMs = Math.round(performance.now() - selectStarted);
 
