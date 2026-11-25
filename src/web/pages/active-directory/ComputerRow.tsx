@@ -126,12 +126,14 @@ const ComputerRow = memo(function ComputerRow({
     targetSummary = _('No matching readable scan targets');
   } else {
     targetSummary = (
-      <span>
-        {targets[0].name}
+      <Row gap="xs" wrap="wrap">
+        <span>{targets[0].name}</span>
         {targets.length > 1 && (
-          <> {_('+{{count}} more', {count: targets.length - 1})}</>
+          <Badge color={EThemeColors.NeutralLight} size="sm">
+            {_('+{{count}} more', {count: targets.length - 1})}
+          </Badge>
         )}
-      </span>
+      </Row>
     );
   }
   return (

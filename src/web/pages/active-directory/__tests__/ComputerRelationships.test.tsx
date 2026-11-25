@@ -335,6 +335,39 @@ test('keeps details available for computers without a hostname or optional Activ
   expect(onSelect).not.toHaveBeenCalled();
 });
 
+test('summarizes additional matching scan targets with a badge', () => {
+  const node: DirectoryComputer = {
+    id: 'CN=workstation,DC=domain,DC=local',
+    kind: 'computer',
+    name: 'workstation',
+    parentDn: 'DC=domain,DC=local',
+    hostname: 'workstation.domain.local',
+    disabled: false,
+    matchedTargets: [
+      {id: 'office', name: 'Office network'},
+      {id: 'servers', name: 'Server network'},
+      {id: 'lab', name: 'Lab network'},
+    ],
+  };
+  const {render} = rendererWith({capabilities: true, router: true});
+  render(
+    <ul>
+      <ComputerRow
+        checked={false}
+        node={node}
+        selectionPending={false}
+        sourceId={AD_SOURCE}
+        onSelect={testing.fn()}
+      />
+    </ul>,
+  );
+
+  expect(screen.getByText('Office network')).toBeVisible();
+  expect(screen.getByText('+2 more')).toBeVisible();
+  expect(screen.queryByText('Server network')).not.toBeInTheDocument();
+  expect(screen.queryByText('Lab network')).not.toBeInTheDocument();
+});
+
 test('keeps selection and target links usable during a details failure and retries on demand', async () => {
   const node: DirectoryComputer = {
     id: `CN=pc-043,${AD_ACCOUNTING}`,
