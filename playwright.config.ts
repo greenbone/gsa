@@ -1,6 +1,6 @@
+import {defineConfig, devices} from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
-import {defineConfig, devices} from '@playwright/test';
 
 const loadLocalEnv = (filePath: string) => {
   if (!fs.existsSync(filePath)) {
@@ -35,8 +35,12 @@ loadLocalEnv(path.resolve(process.cwd(), '.env.e2e.local'));
 
 const baseURL = process.env.E2E_BASE_URL ?? 'http://127.0.0.1:8080';
 
+export const directoryFixtureSpecs =
+  '**/active-directory/{selection,selection-regressions,performance}.spec.ts';
+
 export default defineConfig({
   testDir: './e2e',
+  testIgnore: directoryFixtureSpecs,
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 1,
