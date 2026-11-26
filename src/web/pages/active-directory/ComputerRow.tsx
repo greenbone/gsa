@@ -140,11 +140,11 @@ const ComputerRow = memo(function ComputerRow({
   return (
     <li
       ref={measure}
-      aria-posinset={virtualIndex === undefined ? undefined : virtualIndex + 1}
+      aria-posinset={!isDefined(virtualIndex) ? undefined : virtualIndex + 1}
       aria-setsize={virtualTotal}
       data-index={virtualIndex}
       style={
-        spaceBefore === undefined ? undefined : {marginBlockStart: spaceBefore}
+        !isDefined(spaceBefore) ? undefined : {marginBlockStart: spaceBefore}
       }
       onBlurCapture={
         onFocusChange

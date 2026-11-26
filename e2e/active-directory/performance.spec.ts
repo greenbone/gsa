@@ -11,6 +11,7 @@ import {
   activeDirectoryMockResponse,
   largeLevelComputerName,
 } from '../../src/gmp/commands/fixtures/active-directory';
+import {isDefined} from '../../src/gmp/utils/identity';
 import {expect, loginWithDirectoryFixtures, test} from './directory-fixtures';
 
 test('measures Active Directory with 10,000 computers at one level', async ({
@@ -38,7 +39,7 @@ test('measures Active Directory with 10,000 computers at one level', async ({
       params.set('max_results', String(AD_LARGE_LEVEL_SIZE));
     }
     const xml = activeDirectoryMockResponse(params, 'large-level');
-    if (xml === undefined) {
+    if (!isDefined(xml)) {
       await route.fallback();
       return;
     }
