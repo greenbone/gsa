@@ -30,7 +30,7 @@ import Loading from 'web/components/loading/Loading';
 import EntitySelection from 'web/entities/EntitySelection';
 import {useGetActiveDirectoryChildren} from 'web/hooks/use-query/active-directory';
 import useTranslation from 'web/hooks/useTranslation';
-import ComputerRow from 'web/pages/active-directory/ComputerRow';
+import ComputerList from 'web/pages/active-directory/ComputerList';
 import {getBranchSelectionSummary} from 'web/pages/active-directory/directory-selection';
 import DirectoryAccordion from 'web/pages/active-directory/DirectoryAccordion';
 import {
@@ -480,19 +480,14 @@ const DirectoryTree = ({
             <span>{_('Scan targets')}</span>
             <span aria-hidden="true" />
           </DirectoryHeader>
-          <DirectoryList $spacing="xs">
-            {computers.map(node => (
-              <ComputerRow
-                key={node.id}
-                checked={selectedIds.has(node.id)}
-                depth={path?.length}
-                node={node}
-                selectionPending={selectionPending}
-                sourceId={sourceId}
-                onSelect={(node, checked) => onSelect(node, checked, path)}
-              />
-            ))}
-          </DirectoryList>
+          <ComputerList
+            computers={computers}
+            depth={path?.length ?? 0}
+            selectedIds={selectedIds}
+            selectionPending={selectionPending}
+            sourceId={sourceId}
+            onSelect={(node, checked) => onSelect(node, checked, path)}
+          />
         </div>
       )}
     </Column>
