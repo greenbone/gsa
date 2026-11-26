@@ -86,16 +86,19 @@ describe('Computer relationship table', () => {
   });
 
   test.each([
-    {spns: ['HOST/workstation', 'HTTP/workstation'], empty: false},
-    {spns: [], empty: true},
-    {spns: undefined, empty: false},
+    {
+      servicePrincipalNames: ['HOST/workstation', 'HTTP/workstation'],
+      empty: false,
+    },
+    {servicePrincipalNames: [], empty: true},
+    {servicePrincipalNames: undefined, empty: false},
   ])(
-    'displays reported SPNs in the computer details ($spns)',
-    ({spns, empty}) => {
+    'displays reported service principal names in the computer details ($servicePrincipalNames)',
+    ({servicePrincipalNames, empty}) => {
       const {render} = rendererWith({capabilities: true, router: true});
       render(
         <ComputerDetails
-          details={{servicePrincipalNames: spns}}
+          details={{servicePrincipalNames}}
           node={{
             id: 'computer',
             kind: 'computer',
@@ -108,7 +111,7 @@ describe('Computer relationship table', () => {
       const details = within(
         screen.getByRole('table', {name: 'Active Directory information'}),
       );
-      if (!isDefined(spns)) {
+      if (!isDefined(servicePrincipalNames)) {
         expect(
           details.queryByText('Service principal names (SPNs)'),
         ).not.toBeInTheDocument();
@@ -120,7 +123,7 @@ describe('Computer relationship table', () => {
       } else {
         expect(
           details.getAllByRole('listitem').map(item => item.textContent),
-        ).toEqual(spns);
+        ).toEqual(servicePrincipalNames);
         expect(
           details.getByText(
             'SPNs can indicate service roles, but may be incomplete.',

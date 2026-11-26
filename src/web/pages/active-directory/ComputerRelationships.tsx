@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {type ReactNode} from 'react';
 import styled from 'styled-components';
 import {
   type DirectoryComputer,
@@ -55,6 +56,35 @@ const TargetStatusCell = ({
   );
 };
 
+const TaskRelationshipRow = ({
+  task,
+  targetCell,
+}: {
+  task: NonNullable<DirectoryTarget['tasks']>[number];
+  targetCell?: ReactNode;
+}) => {
+  const [_] = useTranslation();
+  return (
+    <TableRow>
+      {targetCell}
+      <TableData>
+        <DetailsLink id={task.id} type="task">
+          {task.name}
+        </DetailsLink>
+      </TableData>
+      <TableData>
+        {task.config ? (
+          <DetailsLink id={task.config.id} type="scanconfig">
+            {task.config.name}
+          </DetailsLink>
+        ) : (
+          _('Scan configuration unavailable')
+        )}
+      </TableData>
+    </TableRow>
+  );
+};
+
 const TargetRelationshipRows = ({target}: {target: DirectoryTarget}) => {
   const [_] = useTranslation();
   if (!isDefined(target.tasks)) {
@@ -77,75 +107,70 @@ const TargetRelationshipRows = ({target}: {target: DirectoryTarget}) => {
 
   const tasks = target.tasks;
   return tasks.map((task, index) => (
-    <TableRow key={task.id}>
-      {index === 0 && (
-        <TargetStatusCell rowSpan={tasks.length} target={target} />
-      )}
-      <TableData>
-        <DetailsLink id={task.id} type="task">
-          {task.name}
-        </DetailsLink>
-      </TableData>
-      <TableData>
-        {task.config ? (
-          <DetailsLink id={task.config.id} type="scanconfig">
-            {task.config.name}
-          </DetailsLink>
-        ) : (
-          _('Scan configuration unavailable')
-        )}
-      </TableData>
-    </TableRow>
+    <TaskRelationshipRow
+      key={task.id}
+      targetCell={
+        index === 0 && (
+          <TargetStatusCell rowSpan={tasks.length} target={target} />
+        )
+      }
+      task={task}
+    />
   ));
 };
 
 const ComputerRelationships = ({node}: {node: DirectoryComputer}) => {
   const [_] = useTranslation();
   const title = _('Existing scan-target assignments');
+  const {matchedTargets} = node;
+  if (!matchedTargets?.length) {
+    const emptyMessage = isDefined(matchedTargets)
+      ? _('No matching readable scan targets')
+      : _('Matching information unavailable');
+
+    return (
+      <DirectoryDetailsSection title={title}>
+        <span>{emptyMessage}</span>
+      </DirectoryDetailsSection>
+    );
+  }
+
   return (
     <DirectoryDetailsSection title={title}>
-      {!node.matchedTargets?.length ? (
-        <span>
-          {!isDefined(node.matchedTargets)
-            ? _('Matching information unavailable')
-            : _('No matching readable scan targets')}
-        </span>
-      ) : (
-        <Column gap={0} miw={0} style={{overflowX: 'auto'}}>
-          <RelationshipTable aria-label={title} size="full">
-            <TableHeader>
-              <TableRow>
-                <TableHead
-                  $backgroundColor="transparent"
-                  scope="col"
-                  sort={false}
-                >
-                  {_('Scan target')}
-                </TableHead>
-                <TableHead
-                  $backgroundColor="transparent"
-                  scope="col"
-                  sort={false}
-                >
-                  {_('Task')}
-                </TableHead>
-                <TableHead
-                  $backgroundColor="transparent"
-                  scope="col"
-                  sort={false}
-                >
-                  {_('Scan config')}
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            {node.matchedTargets.map(target => (
-              <TableBody key={target.id}>
-                <TargetRelationshipRows target={target} />
-              </TableBody>
-            ))}
-          </RelationshipTable>
-        </Column>
-      )}
+      <Column gap={0} miw={0} style={{overflowX: 'auto'}}>
+        <RelationshipTable aria-label={title} size="full">
+          <TableHeader>
+            <TableRow>
+              <TableHead
+                $backgroundColor="transparent"
+                scope="col"
+                sort={false}
+              >
+                {_('Scan target')}
+              </TableHead>
+              <TableHead
+                $backgroundColor="transparent"
+                scope="col"
+                sort={false}
+              >
+                {_('Task')}
+              </TableHead>
+              <TableHead
+                $backgroundColor="transparent"
+                scope="col"
+                sort={false}
+              >
+                {_('Scan config')}
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          {matchedTargets.map(target => (
+            <TableBody key={target.id}>
+              <TargetRelationshipRows target={target} />
+            </TableBody>
+          ))}
+        </RelationshipTable>
+      </Column>
     </DirectoryDetailsSection>
   );
 };
