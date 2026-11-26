@@ -11,6 +11,7 @@ import {
   type FilterType,
 } from 'gmp/models/filter';
 import QueryFilter from 'gmp/models/filter/query-filter';
+import {isDefined} from 'gmp/utils/identity';
 import ErrorMessage from 'web/components/error/ErrorMessage';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Message from 'web/components/error/Message';
@@ -61,7 +62,7 @@ const ActiveDirectoryConnections = () => {
     !isFetching &&
     !isError &&
     entities.length === 0 &&
-    counts !== undefined &&
+    isDefined(counts) &&
     counts.filtered > 0 &&
     requestedFirst > counts.filtered;
   const lastPageFirst =
