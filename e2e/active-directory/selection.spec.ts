@@ -1,0 +1,237 @@
+/* SPDX-FileCopyrightText: 2026 Greenbone AG
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+import {
+  AD_SOURCE,
+  AD_OTHER_SOURCE,
+} from '../../src/gmp/commands/fixtures/active-directory';
+import {expect, loginWithDirectoryFixtures, test} from './directory-fixtures';
+
+test.use({viewport: {width: 1280, height: 900}});
+
+test('selects AD computers and transfers them to a new target without saving', async ({
+  page,
+}, testInfo) => {
+  let discoveryCalls = 0;
+  page.on('request', request => {
+    if (request.url().includes('cmd=get_active_directory_objects'))
+      discoveryCalls += 1;
+  });
+  await loginWithDirectoryFixtures(page);
+  await page.goto('/active-directory');
+  await expect(
+    page.getByRole('table', {name: 'Active Directory connections'}),
+  ).toBeVisible();
+  const manualLink = page.locator(
+    'a[data-testid="manual-link"][href$="/scanning.html#managing-credentials"]',
+  );
+  await expect(manualLink).toHaveAttribute(
+    'href',
+    /\/scanning\.html#managing-credentials$/,
+  );
+  await expect(manualLink).toHaveAttribute('target', '_blank');
+  await expect(manualLink).toHaveAttribute('rel', 'noopener noreferrer');
+  await expect(manualLink.getByTestId('help-icon')).toHaveAttribute(
+    'title',
+    'Help: Active Directory',
+  );
+
+  await page.getByTestId('powerfilter-text').fill('site 01');
+  await page.getByTitle('Update Filter').click();
+  await expect(
+    page.getByRole('link', {
+      name: 'Open directory: AD Site 01',
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('link', {
+      name: 'Open directory: AD Administration (dc01.domain.local)',
+    }),
+  ).toHaveCount(0);
+  await page.getByTitle('Reset to Default Filter').click();
+  await expect(
+    page.getByRole('link', {
+      name: 'Open directory: AD Administration (dc01.domain.local)',
+    }),
+  ).toBeVisible();
+
+  await page
+    .getByRole('button', {
+      name: 'Show preview for AD Administration (dc01.domain.local)',
+    })
+    .click();
+  await expect(page.getByText('Bind DN', {exact: true})).toBeVisible();
+  await expect(page).toHaveURL(/\/active-directory$/);
+  await page
+    .getByRole('button', {
+      name: 'Hide preview for AD Administration (dc01.domain.local)',
+    })
+    .click();
+  await expect(page.getByText('Bind DN', {exact: true})).toHaveCount(0);
+  expect(discoveryCalls).toBe(0);
+  await page.screenshot({path: testInfo.outputPath('connections.png')});
+  await page
+    .getByRole('link', {
+      name: 'Open directory: AD Administration (dc01.domain.local)',
+    })
+    .click();
+  await expect(page).toHaveURL(
+    new RegExp(`/active-directory/discovery/${AD_SOURCE}$`),
+  );
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(
+    page.getByText('dc01.domain.local:636', {exact: false}),
+  ).toBeVisible();
+  // Subtree selection is committed only after the separate resolve call.
+  await page.getByRole('checkbox', {name: 'Clients', exact: true}).click();
+  const apply = page.getByRole('button', {name: 'Add hosts to new target'});
+  await expect(apply).toBeEnabled();
+  await expect(page.getByText('5 hosts selected', {exact: true})).toBeVisible();
+  const clientsToggle = page.getByRole('button', {
+    name: /^(Expand|Collapse) Clients$/,
+  });
+  const accountingToggle = page.getByRole('button', {
+    name: /^(Expand|Collapse) Accounting$/,
+  });
+  const clientsLeft = await clientsToggle.evaluate(
+    button => button.getBoundingClientRect().left,
+  );
+  await clientsToggle.click();
+  const accountingLeft = await accountingToggle.evaluate(
+    button => button.getBoundingClientRect().left,
+  );
+  expect(accountingLeft - clientsLeft).toBeGreaterThanOrEqual(20);
+  await accountingToggle.click();
+  await expect(
+    page.getByRole('checkbox', {name: 'pc-043.domain.local'}),
+  ).toBeChecked();
+  expect(
+    await clientsToggle.evaluate(button => button.getBoundingClientRect().left),
+  ).toBeCloseTo(clientsLeft);
+  expect(
+    await accountingToggle.evaluate(
+      button => button.getBoundingClientRect().left,
+    ),
+  ).toBeCloseTo(accountingLeft);
+  await clientsToggle.scrollIntoViewIfNeeded();
+  await page.screenshot({path: testInfo.outputPath('nested-groups.png')});
+  await expect(
+    page.getByRole('checkbox', {name: 'pc-legacy.domain.local'}),
+  ).toBeChecked();
+
+  const computerSelection = page.getByRole('checkbox', {
+    name: 'pc-043.domain.local',
+  });
+  await computerSelection.focus();
+  await computerSelection.press('Space');
+  await expect(computerSelection).not.toBeChecked();
+  await expect(
+    page.getByRole('button', {name: 'Collapse Accounting'}),
+  ).toHaveAttribute('aria-expanded', 'true');
+  await computerSelection.press('Space');
+  await expect(computerSelection).toBeChecked();
+  const boxes = await Promise.all(
+    ['Clients', 'Accounting', 'pc-043.domain.local'].map(name =>
+      page.getByRole('checkbox', {name, exact: true}).boundingBox(),
+    ),
+  );
+  expect(boxes.every(box => box !== null)).toBe(true);
+  expect(
+    Math.max(...boxes.flatMap(box => (box ? [box.x] : []))) -
+      Math.min(...boxes.flatMap(box => (box ? [box.x] : []))),
+  ).toBeLessThanOrEqual(1);
+  const directory = page.getByRole('region', {
+    name: 'Directory objects',
+    exact: true,
+  });
+  const selectionBar = page.getByRole('group', {name: 'Selected hosts'});
+  const siteFooter = page.locator('main > footer');
+  const expectDiscoveryRegionsInOrder = async () => {
+    const [tree, action, footer] = await Promise.all([
+      directory.boundingBox(),
+      selectionBar.boundingBox(),
+      siteFooter.boundingBox(),
+    ]);
+    if (!tree || !action || !footer) {
+      throw new Error(
+        'The directory, selection bar, and site footer must render',
+      );
+    }
+    expect(tree.y + tree.height).toBeLessThanOrEqual(action.y + 1);
+    expect(action.y + action.height).toBeLessThanOrEqual(footer.y + 1);
+  };
+  await expectDiscoveryRegionsInOrder();
+  await page.setViewportSize({width: 640, height: 900});
+  await apply.scrollIntoViewIfNeeded();
+  await expectDiscoveryRegionsInOrder();
+  await expect(apply).toBeInViewport();
+  expect(
+    await apply.evaluate(button => {
+      const bar = button.parentElement;
+      if (!bar) return false;
+      const style = getComputedStyle(bar);
+      const available =
+        bar.clientWidth -
+        parseFloat(style.paddingLeft) -
+        parseFloat(style.paddingRight);
+      return Math.abs(button.getBoundingClientRect().width - available) <= 1;
+    }),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath('discovery-action-640.png'),
+  });
+  await page.setViewportSize({width: 1280, height: 900});
+
+  await page.screenshot({path: testInfo.outputPath('directory-browser.png')});
+  await apply.click();
+  const target = page.getByRole('dialog');
+  await expect(target).toContainText('New Target');
+  expect(
+    (await target.locator('[name="hosts"]').inputValue()).split(',').sort(),
+  ).toEqual([
+    'fs-01.domain.local',
+    'fs-02.domain.local',
+    'pc-042.domain.local',
+    'pc-043.domain.local',
+    'pc-legacy.domain.local',
+  ]);
+  await target.getByTestId('dialog-close-button').click();
+  await expect(apply).toBeEnabled();
+
+  await page.goBack();
+  await page
+    .getByRole('link', {
+      name: 'Open directory: AD Engineering (dc02.domain.local)',
+    })
+    .click();
+  await expect(page).toHaveURL(
+    new RegExp(`/active-directory/discovery/${AD_OTHER_SOURCE}$`),
+  );
+  await expect(
+    page.getByRole('button', {name: 'Add hosts to new target'}),
+  ).toBeDisabled();
+  await expect(
+    page.getByRole('button', {name: 'Expand Clients'}),
+  ).toBeVisible();
+  await page.reload();
+  await expect(
+    page.getByRole('button', {name: 'Expand Clients'}),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('button', {name: 'Add hosts to new target'}),
+  ).toBeDisabled();
+  await page.goBack();
+  await expect(
+    page.getByRole('table', {name: 'Active Directory connections'}),
+  ).toBeVisible();
+  await page
+    .getByRole('link', {
+      name: 'Open directory: AD Administration (dc01.domain.local)',
+    })
+    .click();
+  await expect(
+    page.getByRole('button', {name: 'Add hosts to new target'}),
+  ).toBeDisabled();
+});
