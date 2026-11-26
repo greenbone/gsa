@@ -126,7 +126,7 @@ const ComputerList = ({
     });
   }, []);
 
-  // oxlint-disable-next-line react/incompatible-library -- TanStack Virtual exposes live scroll measurements.
+  // oxlint-disable-next-line react/incompatible-library -- Read the virtualizer's live scroll measurements on each render.
   const virtualizer = useVirtualizer({
     count: computers.length,
     enabled: virtual,
