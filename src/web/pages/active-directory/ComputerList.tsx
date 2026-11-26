@@ -7,6 +7,7 @@ import {useCallback, useLayoutEffect, useMemo, useRef, useState} from 'react';
 import {defaultRangeExtractor, useVirtualizer} from '@tanstack/react-virtual';
 import {type DirectoryComputer} from 'gmp/models/active-directory';
 import {DEFAULT_ROWS_PER_PAGE} from 'gmp/models/filter';
+import {isDefined} from 'gmp/utils/identity';
 import ComputerRow from 'web/pages/active-directory/ComputerRow';
 import {DirectoryList} from 'web/pages/active-directory/DirectoryLayout';
 
@@ -99,7 +100,7 @@ const ComputerList = ({
     () => new Map(computers.map((computer, index) => [computer.id, index])),
     [computers],
   );
-  if (focusedId !== undefined && !indexById.has(focusedId)) {
+  if (isDefined(focusedId) && !indexById.has(focusedId)) {
     setFocusedId(undefined);
   }
   if ([...expandedIds].some(id => !indexById.has(id))) {
@@ -148,11 +149,12 @@ const ComputerList = ({
       }
       for (const id of expandedIds) {
         const index = indexById.get(id);
-        if (index !== undefined) indexes.add(index);
+        if (isDefined(index)) indexes.add(index);
       }
-      const focusedIndex =
-        focusedId === undefined ? undefined : indexById.get(focusedId);
-      if (focusedIndex !== undefined) {
+      const focusedIndex = !isDefined(focusedId)
+        ? undefined
+        : indexById.get(focusedId);
+      if (isDefined(focusedIndex)) {
         // The native Tab order reaches the next logical row at a window boundary.
         for (const index of [
           focusedIndex - 1,
