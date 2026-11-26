@@ -49,7 +49,7 @@ const ExpandedComputerDetails = ({
   const {data, isError, isFetched, isFetching, refetch} =
     useGetActiveDirectoryComputerDetails(sourceId, node.id);
 
-  const retrying = isFetching && isFetched && data === undefined;
+  const retrying = isFetching && isFetched && !isDefined(data);
   let feedback: ReactNode;
   if (isError || retrying) {
     feedback = (
@@ -68,7 +68,7 @@ const ExpandedComputerDetails = ({
     <ComputerDetails
       details={data}
       feedback={feedback}
-      loading={isFetching && data === undefined && !retrying}
+      loading={isFetching && !isDefined(data) && !retrying}
       node={node}
     />
   );

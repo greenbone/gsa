@@ -6,6 +6,7 @@
 import {type ReactNode} from 'react';
 import styled from 'styled-components';
 import {type DirectoryComputer} from 'gmp/models/active-directory';
+import {isDefined} from 'gmp/utils/identity';
 import Badge, {EThemeColors} from 'web/components/badge/StatusBadge';
 import Column from 'web/components/layout/Column';
 import InfoTable from 'web/components/table/InfoTable';
@@ -107,7 +108,7 @@ const ComputerDetails = ({
         </output>
       ),
     });
-  } else if (spns !== undefined) {
+  } else if (isDefined(spns)) {
     let value: ReactNode = _('No SPNs registered');
     if (spns.length > 0) {
       value = (

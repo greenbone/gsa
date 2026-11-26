@@ -19,6 +19,7 @@ import {createDirectoryHttp} from 'gmp/commands/fixtures/active-directory-http';
 import Response from 'gmp/http/response';
 import {type DirectoryComputer} from 'gmp/models/active-directory';
 import {createSession} from 'gmp/testing';
+import {isDefined} from 'gmp/utils/identity';
 import ComputerDetails from 'web/pages/active-directory/ComputerDetails';
 import ComputerRelationships from 'web/pages/active-directory/ComputerRelationships';
 import ComputerRow from 'web/pages/active-directory/ComputerRow';
@@ -108,7 +109,7 @@ describe('Computer relationship table', () => {
       const details = within(
         screen.getByRole('table', {name: 'Active Directory information'}),
       );
-      if (spns === undefined) {
+      if (!isDefined(spns)) {
         expect(
           details.queryByText('Service principal names (SPNs)'),
         ).not.toBeInTheDocument();
