@@ -3,8 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect, useId, useMemo, useState} from 'react';
+import {
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {Accordion} from '@mantine/core';
+import {EStatus, ICON_SIZES, StatusIcon} from '@greenbone/ui-lib';
 import {
   type DirectoryBranch,
   type DirectoryComputer,
@@ -12,13 +21,17 @@ import {
   type DirectoryOverview,
 } from 'gmp/models/active-directory';
 import {isDefined} from 'gmp/utils/identity';
+import {arraysEqual} from 'gmp/utils/array';
 import Badge, {EThemeColors} from 'web/components/badge/StatusBadge';
 import ErrorPanel from 'web/components/error/ErrorPanel';
+import Button from 'web/components/form/Button';
 import Column from 'web/components/layout/Column';
 import Loading from 'web/components/loading/Loading';
+import EntitySelection from 'web/entities/EntitySelection';
 import {useGetActiveDirectoryChildren} from 'web/hooks/use-query/active-directory';
 import useTranslation from 'web/hooks/useTranslation';
 import ComputerRow from 'web/pages/active-directory/ComputerRow';
+import {getBranchSelectionSummary} from 'web/pages/active-directory/directory-selection';
 import DirectoryAccordion from 'web/pages/active-directory/DirectoryAccordion';
 import {
   BranchRow,
@@ -26,13 +39,26 @@ import {
   DirectoryEmptyNotice,
   DirectoryHeader,
   DirectoryList,
+  DirectorySelectionWarning,
 } from 'web/pages/active-directory/DirectoryLayout';
 
 interface DirectoryTreeProps {
   nodes: DirectoryNode[];
   sourceId: string;
+  selectedIds: ReadonlySet<string>;
   showDisabled: boolean;
   showContainers?: boolean;
+  selectionPending: boolean;
+  selectionWarning?: {
+    id: string;
+    path?: string[];
+    count: number;
+    hasSelectableComputers: boolean;
+    onSelectLoaded: () => void;
+  };
+  memberships: Record<string, DirectoryComputer[]>;
+  selectedIncompleteMembers: ReadonlyMap<string, ReadonlySet<string>>;
+  redundantBranchSummaries?: string[];
   computerPaths?: Record<string, string>;
   registerVisibleListing: (
     pathKey: string,
@@ -44,6 +70,7 @@ interface DirectoryTreeProps {
     listing?: DirectoryOverview,
   ) => void;
   path?: string[];
+  onSelect: (node: DirectoryNode, checked: boolean, path?: string[]) => void;
 }
 
 interface BranchProps extends Omit<DirectoryTreeProps, 'nodes'> {
@@ -59,13 +86,20 @@ interface ExpandedBranchProps extends BranchProps {
 const ExpandedBranch = ({
   node,
   sourceId,
+  selectedIds,
   showDisabled,
   showContainers,
+  selectionPending,
+  selectionWarning,
+  memberships,
+  selectedIncompleteMembers,
+  redundantBranchSummaries,
   computerPaths,
   registerVisibleListing,
   onLoaded,
   onListingApplied,
   path,
+  onSelect,
 }: ExpandedBranchProps) => {
   const [_] = useTranslation();
   const opening = useId();
@@ -127,13 +161,20 @@ const ExpandedBranch = ({
       {listing && (
         <DirectoryTree
           computerPaths={computerPaths}
+          memberships={memberships}
           nodes={listing.roots}
           path={branchPath}
+          redundantBranchSummaries={redundantBranchSummaries}
           registerVisibleListing={registerVisibleListing}
+          selectedIds={selectedIds}
+          selectedIncompleteMembers={selectedIncompleteMembers}
+          selectionPending={selectionPending}
+          selectionWarning={selectionWarning}
           showContainers={showContainers}
           showDisabled={showDisabled}
           sourceId={sourceId}
           onLoaded={onLoaded}
+          onSelect={onSelect}
         />
       )}
     </DirectoryBranchContent>
@@ -143,17 +184,116 @@ const ExpandedBranch = ({
 const DirectoryTreeNode = ({
   node,
   sourceId,
+  selectedIds,
   showDisabled,
   showContainers,
+  selectionPending,
+  selectionWarning,
+  memberships,
+  selectedIncompleteMembers,
+  redundantBranchSummaries,
   computerPaths,
   registerVisibleListing,
   onLoaded,
   path,
+  onSelect,
 }: BranchProps) => {
   const [_] = useTranslation();
+  const warningId = useId();
+  const branchSelectionRef = useRef<HTMLDivElement>(null);
   const [expanded, setExpanded] = useState(false);
   const [listingTruncated, setListingTruncated] = useState(false);
+  const [badgeBeforeLoading, setBadgeBeforeLoading] = useState<{
+    content: ReactNode;
+  }>();
+  const onListingApplied = useCallback((truncated: boolean) => {
+    setListingTruncated(truncated);
+    setBadgeBeforeLoading(undefined);
+  }, []);
+
+  const branchSelection = getBranchSelectionSummary(
+    memberships[node.id],
+    selectedIds,
+    showDisabled,
+  );
+  const {total, selectableCount, selectedCount} = branchSelection;
+  const noSelectableComputers = total !== undefined && selectableCount === 0;
+  // An unresolved mixed checkbox clears the known selection on activation.
+  const clearIncompleteSelection = selectedIncompleteMembers.has(node.id);
+  const indeterminate =
+    branchSelection.indeterminate || clearIncompleteSelection;
   const cycle = path?.includes(node.id) ?? false;
+  const warning =
+    selectionWarning?.id === node.id &&
+    arraysEqual(selectionWarning.path ?? [], path ?? [])
+      ? selectionWarning
+      : undefined;
+  let warningHint;
+  let warningAction: {label: string; onClick: () => void} | undefined;
+  if (warning) {
+    if (warning.count > 0) {
+      const label =
+        warning.count === 1
+          ? _('Select 1 loaded computer')
+          : _('Select {{count}} loaded computers', {count: warning.count});
+      warningAction = {label, onClick: warning.onSelectLoaded};
+    } else if (warning.hasSelectableComputers) {
+      warningHint = _('All loaded selectable computers are already selected.');
+    } else if (expanded || cycle) {
+      warningHint = _('No selectable computers are loaded in this branch.');
+    } else {
+      warningHint = _('Expand the branch to load computers.');
+      warningAction = {
+        label: _('Expand branch'),
+        onClick: () => changeExpanded(true),
+      };
+    }
+  }
+  let selectionBadgeColor = EThemeColors.NeutralLight;
+  if (branchSelection.checked) {
+    selectionBadgeColor = EThemeColors.Green;
+  } else if (indeterminate) {
+    selectionBadgeColor = EThemeColors.Blue;
+  }
+  let branchBadge;
+  if (expanded && listingTruncated) {
+    branchBadge = (
+      <output
+        aria-label={_('Partial')}
+        title={_(
+          '{{name}}: some objects were not returned. You can select the loaded computers.',
+          {name: node.name},
+        )}
+      >
+        <Badge color={EThemeColors.Orange} size="sm">
+          {_('Partial')}
+        </Badge>
+      </output>
+    );
+  } else if (
+    noSelectableComputers ||
+    !redundantBranchSummaries?.includes(node.id)
+  ) {
+    let selectionLabel = _('Membership not resolved');
+    if (noSelectableComputers) {
+      selectionLabel = _('No selectable computers · {{total}} total', {total});
+    } else if (total !== undefined) {
+      selectionLabel = _(
+        '{{selected}} of {{selectable}} selectable computers selected · {{total}} total',
+        {selected: selectedCount, selectable: selectableCount, total},
+      );
+    }
+    branchBadge = (
+      <Badge color={selectionBadgeColor} size="sm">
+        <span aria-live="polite">{selectionLabel}</span>
+      </Badge>
+    );
+  }
+  const changeExpanded = (nextExpanded: boolean) => {
+    setBadgeBeforeLoading(nextExpanded ? {content: branchBadge} : undefined);
+    setListingTruncated(false);
+    setExpanded(nextExpanded);
+  };
   const row = (
     <BranchRow $depth={path?.length ?? 0} data-directory-branch-header="">
       <div>
@@ -171,29 +311,58 @@ const DirectoryTreeNode = ({
           </Accordion.Control>
         )}
       </div>
-      {expanded && listingTruncated && (
-        <div>
-          <output
-            title={_('{{name}}: some objects were not returned.', {
-              name: node.name,
-            })}
-          >
-            <Badge color={EThemeColors.Orange} size="sm">
-              {_('Partial')}
-            </Badge>
+      <div>
+        {badgeBeforeLoading ? badgeBeforeLoading.content : branchBadge}
+        <DirectorySelectionWarning>
+          <output>
+            {warning && (
+              <>
+                <StatusIcon
+                  aria-hidden="true"
+                  size={ICON_SIZES.SMALL}
+                  status={EStatus.WARNING}
+                />
+                <span id={warningId}>
+                  {_('Could not select the whole branch.')}
+                  {warningHint && <> {warningHint}</>}
+                </span>
+              </>
+            )}
           </output>
-        </div>
-      )}
+          {warningAction && (
+            <Button
+              size="sm"
+              styles={{label: {whiteSpace: 'normal', overflow: 'visible'}}}
+              title={warningAction.label}
+              variant="default"
+              onClick={() => {
+                if (warning && warning.count > 0)
+                  branchSelectionRef.current?.querySelector('input')?.focus();
+                warningAction.onClick();
+              }}
+            />
+          )}
+        </DirectorySelectionWarning>
+      </div>
+      <div ref={branchSelectionRef}>
+        <EntitySelection
+          aria-describedby={warning ? warningId : undefined}
+          aria-label={node.name}
+          disabled={selectionPending || noSelectableComputers}
+          entity={node}
+          indeterminate={indeterminate}
+          selected={branchSelection.checked}
+          onDeselected={() => onSelect(node, false, path)}
+          onSelected={() => onSelect(node, !clearIncompleteSelection, path)}
+        />
+      </div>
     </BranchRow>
   );
 
   const accordion = (
     <DirectoryAccordion
       value={expanded ? 'details' : null}
-      onChange={value => {
-        setListingTruncated(false);
-        setExpanded(value !== null);
-      }}
+      onChange={value => changeExpanded(value !== null)}
     >
       <Accordion.Item value="details">
         {row}
@@ -207,14 +376,21 @@ const DirectoryTreeNode = ({
           <Accordion.Panel>
             <ExpandedBranch
               computerPaths={computerPaths}
+              memberships={memberships}
               node={node}
               path={path}
+              redundantBranchSummaries={redundantBranchSummaries}
               registerVisibleListing={registerVisibleListing}
+              selectedIds={selectedIds}
+              selectedIncompleteMembers={selectedIncompleteMembers}
+              selectionPending={selectionPending}
+              selectionWarning={selectionWarning}
               showContainers={showContainers}
               showDisabled={showDisabled}
               sourceId={sourceId}
-              onListingApplied={setListingTruncated}
+              onListingApplied={onListingApplied}
               onLoaded={onLoaded}
+              onSelect={onSelect}
             />
           </Accordion.Panel>
         )}
@@ -230,12 +406,19 @@ const DirectoryTreeNode = ({
 const DirectoryTree = ({
   nodes,
   sourceId,
+  selectedIds,
   showDisabled,
   showContainers,
+  selectionPending,
+  selectionWarning,
+  memberships,
+  selectedIncompleteMembers,
+  redundantBranchSummaries,
   computerPaths,
   registerVisibleListing,
   onLoaded,
   path,
+  onSelect,
 }: DirectoryTreeProps) => {
   const [_] = useTranslation();
   const pathKey = JSON.stringify(path ?? []);
@@ -271,13 +454,20 @@ const DirectoryTree = ({
             <DirectoryTreeNode
               key={node.id}
               computerPaths={computerPaths}
+              memberships={memberships}
               node={node}
               path={path}
+              redundantBranchSummaries={redundantBranchSummaries}
               registerVisibleListing={registerVisibleListing}
+              selectedIds={selectedIds}
+              selectedIncompleteMembers={selectedIncompleteMembers}
+              selectionPending={selectionPending}
+              selectionWarning={selectionWarning}
               showContainers={showContainers}
               showDisabled={showDisabled}
               sourceId={sourceId}
               onLoaded={onLoaded}
+              onSelect={onSelect}
             />
           ))}
         </DirectoryList>
@@ -288,10 +478,18 @@ const DirectoryTree = ({
             <span>{_('Computer')}</span>
             <span>{_('Operating system')}</span>
             <span>{_('Scan targets')}</span>
+            <span aria-hidden="true" />
           </DirectoryHeader>
           <DirectoryList $spacing="xs">
             {computers.map(node => (
-              <ComputerRow key={node.id} depth={path?.length} node={node} />
+              <ComputerRow
+                key={node.id}
+                checked={selectedIds.has(node.id)}
+                depth={path?.length}
+                node={node}
+                selectionPending={selectionPending}
+                onSelect={(node, checked) => onSelect(node, checked, path)}
+              />
             ))}
           </DirectoryList>
         </div>

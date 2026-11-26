@@ -23,6 +23,7 @@ import {
   activeDirectoryCredentialFilter,
   useGetActiveDirectoryOverview,
   useGetActiveDirectoryChildren,
+  useResolveActiveDirectorySubtree,
 } from 'web/hooks/use-query/active-directory';
 
 const createGmp = (token?: string) => {
@@ -173,5 +174,29 @@ describe('Active Directory GMP hooks', () => {
       expect.any(String),
     ]);
     expect(gmp.activedirectory.resolveSubtree).not.toHaveBeenCalled();
+  });
+
+  test('resolves a selection through the shared GMP mutation and releases consumed results', async () => {
+    const gmp = createGmp('token');
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() => ({
+      mutation: useResolveActiveDirectorySubtree(),
+      client: useQueryClient(),
+    }));
+    const params = {
+      sourceId: AD_SOURCE,
+      branchId: AD_CLIENTS,
+      kind: 'ou' as const,
+    };
+    await act(async () => {
+      const computers = await result.current.mutation.mutateAsync(params);
+      expect(computers.computers).toHaveLength(7);
+      result.current.mutation.reset();
+    });
+    expect(gmp.activedirectory.resolveSubtree).toHaveBeenCalledWith(params);
+    expect(result.current.client.getQueryCache().getAll()).toEqual([]);
+    await waitFor(() =>
+      expect(result.current.client.getMutationCache().getAll()).toEqual([]),
+    );
   });
 });
