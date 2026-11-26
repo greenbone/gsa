@@ -4,6 +4,7 @@
  */
 
 import {type DirectoryTarget} from 'gmp/models/active-directory';
+import {isDefined} from 'gmp/utils/identity';
 
 export type DirectoryFixtureScenario = 'base' | 'relationships' | 'large-level';
 
@@ -225,7 +226,7 @@ const reference = (type: string, id: string, name: string, children = '') =>
 
 const targetXml = (target: DirectoryTarget, includeTasks: boolean) => {
   let children = '';
-  if (includeTasks && target.tasks !== undefined) {
+  if (includeTasks && isDefined(target.tasks)) {
     children = `<tasks>${target.tasks
       .map(task =>
         reference(

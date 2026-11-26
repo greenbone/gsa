@@ -15,6 +15,7 @@ import {
   type DirectoryTarget,
 } from 'gmp/models/active-directory';
 import {resolveDirectorySubtree} from 'gmp/models/directory-resolution';
+import {isDefined} from 'gmp/utils/identity';
 
 export interface DirectorySourceParams {
   sourceId: string;
@@ -103,14 +104,13 @@ const parseDirectoryResponse = success(
       typeof xml === 'string'
         ? (directoryXmlParser.parse(xml) as DirectoryDocument)
         : xml;
-    if (envelope === undefined)
-      throw new Error('No envelope found in response');
+    if (!isDefined(envelope)) throw new Error('No envelope found in response');
     return response.setData(envelope);
   },
 );
 
 const array = <T>(value?: T | T[]): T[] => {
-  if (value === undefined) return [];
+  if (!isDefined(value)) return [];
   return Array.isArray(value) ? value : [value];
 };
 // GMP caps get_active_directory_objects at 1,000 results per request.
@@ -123,7 +123,7 @@ const reference = (value: ReferenceElement) => ({
 
 const parseTarget = (target: TargetElement): DirectoryTarget => {
   const result: DirectoryTarget = reference(target);
-  if (target.tasks !== undefined) {
+  if (isDefined(target.tasks)) {
     result.tasks = array(target.tasks.task).map(task => ({
       ...reference(task),
       ...(task.config ? {config: reference(task.config)} : {}),
@@ -140,10 +140,11 @@ const parseObject = (object: ObjectElement): DirectoryNode => {
     description: object.description || undefined,
   };
   if (object._type !== 'computer') return {...common, kind: object._type};
-  const matchedTargets: DirectoryTarget[] | undefined =
-    object.targets === undefined
-      ? undefined
-      : array(object.targets.target).map(parseTarget);
+  const matchedTargets: DirectoryTarget[] | undefined = !isDefined(
+    object.targets,
+  )
+    ? undefined
+    : array(object.targets.target).map(parseTarget);
   return {
     ...common,
     kind: 'computer',
@@ -151,10 +152,9 @@ const parseObject = (object: ObjectElement): DirectoryNode => {
     disabled: String(object.disabled) === '1',
     operatingSystem: object.operating_system || undefined,
     operatingSystemVersion: object.operating_system_version || undefined,
-    servicePrincipalNames:
-      object.service_principal_names === undefined
-        ? undefined
-        : array(object.service_principal_names.service_principal_name),
+    servicePrincipalNames: !isDefined(object.service_principal_names)
+      ? undefined
+      : array(object.service_principal_names.service_principal_name),
     matchedTargets,
   };
 };
@@ -183,10 +183,10 @@ class ActiveDirectoryCommand extends HttpCommand {
       targets: Number(targets || tasks),
       tasks: Number(tasks),
       ...(details ? {details: 1} : {}),
-      ...(baseDn === undefined ? {} : {base_dn: baseDn}),
-      ...(groupDn === undefined ? {} : {group_dn: groupDn}),
-      ...(objectTypes === undefined ? {} : {'object_types:': objectTypes}),
-      ...(maxResults === undefined ? {} : {max_results: maxResults}),
+      ...(!isDefined(baseDn) ? {} : {base_dn: baseDn}),
+      ...(!isDefined(groupDn) ? {} : {group_dn: groupDn}),
+      ...(!isDefined(objectTypes) ? {} : {'object_types:': objectTypes}),
+      ...(!isDefined(maxResults) ? {} : {max_results: maxResults}),
     });
     const rawResponse = await this.httpRequestWithRejectionTransform('get', {
       args,
@@ -204,18 +204,17 @@ class ActiveDirectoryCommand extends HttpCommand {
     const computers = roots.filter(
       (node): node is DirectoryComputer => node.kind === 'computer',
     );
-    const matched = computers.every(
-      computer => computer.matchedTargets !== undefined,
+    const matched = computers.every(computer =>
+      isDefined(computer.matchedTargets),
     );
     const overview: DirectoryOverview = {
       roots,
       truncated: String(objects._truncated) === '1',
       counts: {
         found: Number(objects.count.computer.total),
-        disabled:
-          objects.count.computer.disabled === undefined
-            ? undefined
-            : Number(objects.count.computer.disabled),
+        disabled: !isDefined(objects.count.computer.disabled)
+          ? undefined
+          : Number(objects.count.computer.disabled),
         captured: matched
           ? computers.filter(
               computer => (computer.matchedTargets?.length ?? 0) > 0,

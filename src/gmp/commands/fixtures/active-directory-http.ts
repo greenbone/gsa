@@ -10,6 +10,7 @@ import {
 import {createHttp} from 'gmp/commands/testing';
 import Response from 'gmp/http/response';
 import {buildUrlParams} from 'gmp/http/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 /** Test HTTP transport: use real XML parsing instead of mocking command data. */
 export const createDirectoryHttp = (
@@ -19,7 +20,7 @@ export const createDirectoryHttp = (
   http.request.mockImplementation(async (_method, options) => {
     const params = new URLSearchParams(buildUrlParams(options.args ?? {}));
     const xml = activeDirectoryMockResponse(params, scenario);
-    if (xml === undefined)
+    if (!isDefined(xml))
       throw new Error(`Unexpected mocked command: ${params.get('cmd')}`);
     return new Response(xml);
   });

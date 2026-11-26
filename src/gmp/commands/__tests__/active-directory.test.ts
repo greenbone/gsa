@@ -23,6 +23,7 @@ import {createDirectoryHttp} from 'gmp/commands/fixtures/active-directory-http';
 import Response from 'gmp/http/response';
 import {getDirectoryMembers} from 'gmp/models/directory-graph';
 import {IncompleteDirectoryResultsError} from 'gmp/models/directory-resolution';
+import {isDefined} from 'gmp/utils/identity';
 
 const sourceId = AD_SOURCE;
 describe('ActiveDirectoryCommand wire contract', () => {
@@ -293,7 +294,7 @@ describe('ActiveDirectoryCommand wire contract', () => {
     expect(
       result.data.roots
         .filter(node => node.kind === 'computer')
-        .every(node => node.description === undefined),
+        .every(node => !isDefined(node.description)),
     ).toBe(true);
     const plain = await new ActiveDirectoryCommand(http).getObjects({
       sourceId,
