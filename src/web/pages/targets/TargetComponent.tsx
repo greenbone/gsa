@@ -6,8 +6,10 @@
 import {useState, useRef} from 'react';
 import {type EntityActionData} from 'gmp/commands/entity';
 import {
+  type TargetCommandCreateParams,
   type TargetCommandSaveParams,
   type TargetExcludeSource,
+  type TargetOrigin,
   type TargetSource,
 } from 'gmp/commands/target';
 import {type CredentialType} from 'gmp/models/credential';
@@ -48,8 +50,10 @@ import TargetDialog, {
 import {UNSET_VALUE} from 'web/utils/Render';
 
 interface OpenTargetDialogData {
+  hosts?: string[];
   hostsCount?: number;
   hostsFilter?: Filter;
+  source?: TargetOrigin;
   targetSource?: TargetSource;
   name?: string;
 }
@@ -153,6 +157,7 @@ const TargetComponent = ({
   const [targetSource, setTargetSource] = useState<TargetSource | undefined>(
     undefined,
   );
+  const [targetOrigin, setTargetOrigin] = useState<TargetOrigin>();
   const [targetId, setTargetId] = useState<string | undefined>(undefined);
   const [hostsCount, setHostsCount] = useState<number | undefined>(undefined);
   const [hostsFilter, setHostsFilter] = useState<Filter | undefined>(undefined);
@@ -194,7 +199,14 @@ const TargetComponent = ({
 
   const openTargetDialog = async (
     entity?: Target,
-    {hostsCount, hostsFilter, targetSource, name}: OpenTargetDialogData = {},
+    {
+      hosts: initialHosts,
+      hostsCount,
+      hostsFilter,
+      source,
+      targetSource,
+      name,
+    }: OpenTargetDialogData = {},
   ) => {
     if (isDefined(entity)) {
       setPort(entity?.sshCredential?.port);
@@ -236,7 +248,7 @@ const TargetComponent = ({
       setPortListId(DEFAULT_PORT_LIST_ID);
       setInUse(false);
       setExcludeHosts([]);
-      setHosts([]);
+      setHosts(initialHosts ?? []);
       setReverseLookupOnly(undefined);
       setReverseLookupUnify(undefined);
       setTargetSource(targetSource);
@@ -245,6 +257,7 @@ const TargetComponent = ({
     }
     setHostsCount(hostsCount);
     setHostsFilter(hostsFilter);
+    setTargetOrigin(isDefined(entity) ? undefined : source);
     setTargetDialogVisible(true);
   };
 
@@ -344,7 +357,7 @@ const TargetComponent = ({
     onSuccess: onCreated,
     onError: onCreateError,
   });
-  const createTarget = async (data: TargetDialogData) => {
+  const createTarget = async (data: TargetCommandCreateParams) => {
     await createTargetMutation.mutateAsync(data);
   };
 
@@ -372,7 +385,12 @@ const TargetComponent = ({
                 id: data.id as string,
               },
         )
-      : createTarget(data);
+      : createTarget({
+          ...data,
+          ...(data.targetSource === 'manual' && isDefined(targetOrigin)
+            ? {source: targetOrigin}
+            : {}),
+        });
     await promise;
     closeTargetDialog();
   };

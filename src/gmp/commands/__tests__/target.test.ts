@@ -71,6 +71,24 @@ describe('TargetCommand tests', () => {
     expect(resp.data.id).toEqual('foo');
   });
 
+  test('sends the Active Directory origin separately from the host input mode', async () => {
+    const http = createHttp(createActionResultResponse());
+    await new TargetCommand(http).create({
+      name: 'Directory hosts',
+      hosts: ['pc-042.domain.local'],
+      source: 'active_directory',
+      targetSource: 'manual',
+    });
+    expect(http.request).toHaveBeenCalledWith('post', {
+      data: expect.objectContaining({
+        cmd: 'create_target',
+        hosts: 'pc-042.domain.local',
+        source: 'active_directory',
+        target_source: 'manual',
+      }),
+    });
+  });
+
   test.each([
     {
       name: 'resource restricted',
