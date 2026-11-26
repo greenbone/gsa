@@ -309,7 +309,8 @@ class ActiveDirectoryCommand extends HttpCommand {
                 sourceId,
                 baseDn: id,
                 scope: 'subtree',
-                showContainers,
+                // Hidden containers are still needed to link subtree members.
+                showContainers: true,
                 tasks: true,
                 maxResults,
               });

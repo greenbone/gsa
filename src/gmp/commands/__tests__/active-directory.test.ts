@@ -89,6 +89,48 @@ describe('ActiveDirectoryCommand wire contract', () => {
     expect(http.request.mock.calls[1][1].args).toHaveProperty('base_dn', dn);
   });
 
+  test('resolves OU members below containers hidden from browsing', async () => {
+    const http = createDirectoryHttp();
+    const command = new ActiveDirectoryCommand(http);
+    const branch = {sourceId, branchId: AD_CLIENTS, kind: 'ou'} as const;
+    const containerDn = `CN=Workstations,${AD_CLIENTS}`;
+    const computerDn = `CN=pc,${containerDn}`;
+    http.request.mockResolvedValueOnce(
+      new Response(
+        directoryObjectsXml(
+          [
+            {
+              id: containerDn,
+              kind: 'container',
+              name: 'Workstations',
+              parent: AD_CLIENTS,
+            },
+            {
+              id: computerDn,
+              kind: 'computer',
+              name: 'pc',
+              parent: containerDn,
+            },
+          ],
+          new URLSearchParams(),
+        ),
+      ),
+    );
+
+    const {data} = await command.resolveSubtree(branch);
+    expect(data.computers.map(node => node.id)).toEqual([computerDn]);
+    expect(http.request.mock.calls[0][1].args).toMatchObject({
+      base_dn: AD_CLIENTS,
+      scope: 'subtree',
+      'object_types:': ['ou', 'computer', 'group', 'container'],
+    });
+
+    await command.getChildren(branch);
+    expect(http.request.mock.calls[1][1].args).not.toHaveProperty(
+      'object_types:',
+    );
+  });
+
   test('reports a subtree with an omitted parent as incomplete', async () => {
     const http = createDirectoryHttp();
     const parent = `CN=Workstations,${AD_CLIENTS}`;
