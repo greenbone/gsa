@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {showSuccessNotification} from '@greenbone/ui-lib';
 import {useParams} from 'react-router';
 import styled from 'styled-components';
 import ErrorMessage from 'web/components/error/ErrorMessage';
@@ -23,6 +24,7 @@ import {
   connectionServer,
   useTlsModeLabel,
 } from 'web/pages/active-directory/useConnectionFormat';
+import TargetComponent from 'web/pages/targets/TargetComponent';
 import {mayAccessActiveDirectory} from 'web/utils/active-directory-access';
 
 export const handle = {contentLayout: 'fill'} as const;
@@ -125,7 +127,27 @@ const BrowserContent = ({credentialId}: {credentialId: string}) => {
               </tbody>
             </ConnectionMetadata>
           </ConnectionHeader>
-          <DirectoryBrowser key={credentialId} sourceId={credentialId} />
+          <TargetComponent>
+            {({create}) => (
+              <DirectoryBrowser
+                key={credentialId}
+                sourceId={credentialId}
+                onApply={hosts => {
+                  create({
+                    hosts,
+                    source: 'active_directory',
+                    targetSource: 'manual',
+                  });
+                  showSuccessNotification(
+                    '',
+                    _('{{count}} hosts transferred to New Target.', {
+                      count: hosts.length,
+                    }),
+                  );
+                }}
+              />
+            )}
+          </TargetComponent>
         </BrowserViewport>
       )}
     </>

@@ -3,20 +3,41 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {useEffect} from 'react';
 import {describe, expect, test, testing} from '@gsa/testing';
-import {act, fireEvent, rendererWith, screen, userEvent} from 'web/testing';
+import {
+  act,
+  fireEvent,
+  rendererWith,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from 'web/testing';
+import {type QueryClient, useQueryClient} from '@tanstack/react-query';
+import Capabilities from 'gmp/capabilities/capabilities';
+import Features from 'gmp/capabilities/features';
 import ActiveDirectoryCommand from 'gmp/commands/active-directory';
 import CredentialCommand from 'gmp/commands/credential';
 import CredentialsCommand from 'gmp/commands/credentials';
 import FiltersCommand from 'gmp/commands/filters';
 import {
   AD_SOURCE,
+  AD_OTHER_SOURCE,
+  AD_CLIENTS,
+  AD_ACCOUNTING,
+  AD_OBJECTS,
+  directoryObjectsXml,
   type DirectoryFixtureScenario,
 } from 'gmp/commands/fixtures/active-directory';
 import {createDirectoryHttp} from 'gmp/commands/fixtures/active-directory-http';
 import Response from 'gmp/http/response';
-import {type DirectoryOverview} from 'gmp/models/active-directory';
+import {
+  type DirectoryResolution,
+  type DirectoryOverview,
+} from 'gmp/models/active-directory';
 import {createSession} from 'gmp/testing';
+import ActiveDirectoryPage from 'web/pages/active-directory/ActiveDirectoryPage';
 import DirectoryBrowser from 'web/pages/active-directory/DirectoryBrowser';
 
 const createCommand = (scenario: DirectoryFixtureScenario = 'base') => {
@@ -42,6 +63,183 @@ const createGmp = (activedirectory: ReturnType<typeof createCommand>) => {
 };
 
 describe('Active Directory selection UI', () => {
+  test('browses containers only when enabled and keeps selected hosts when hidden', async () => {
+    const command = createCommand();
+    const onApply = testing.fn();
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={onApply} />);
+    await screen.findByRole('button', {name: 'Expand Clients'});
+    const footer = within(screen.getByRole('group', {name: 'Selected hosts'}));
+    const addHosts = footer.getByRole('button', {
+      name: 'Add hosts to new target',
+    });
+    expect(addHosts).toBeDisabled();
+    expect(footer.getByText('0 hosts selected')).toHaveAttribute(
+      'aria-live',
+      'polite',
+    );
+    expect(
+      footer.getByRole('region', {
+        name: 'Selecting hosts already in scan targets',
+      }),
+    ).toBeVisible();
+    const toggle = screen.getByRole('checkbox', {name: 'Show containers'});
+    expect(toggle).not.toBeChecked();
+    expect(
+      screen.queryByRole('button', {name: 'Expand Computers'}),
+    ).not.toBeInTheDocument();
+    fireEvent.click(toggle);
+    fireEvent.click(
+      await screen.findByRole('button', {name: 'Expand Computers'}),
+    );
+    fireEvent.click(
+      await screen.findByRole('button', {name: 'Expand Workstations'}),
+    );
+    fireEvent.click(
+      await screen.findByRole('checkbox', {name: 'container-pc.domain.local'}),
+    );
+    fireEvent.click(toggle);
+    await screen.findByRole('button', {name: 'Expand Clients'});
+    expect(
+      screen.queryByRole('button', {name: 'Expand Computers'}),
+    ).not.toBeInTheDocument();
+    expect(footer.getByText('1 hosts selected')).toBeVisible();
+    expect(addHosts).toBeEnabled();
+    fireEvent.click(addHosts);
+    expect(onApply).toHaveBeenCalledWith(['container-pc.domain.local']);
+  });
+  test('ignores recursive selection started before changing container visibility', async () => {
+    const command = createCommand();
+    const pendingResult = await command.resolveSubtree({
+      sourceId: AD_SOURCE,
+      branchId: AD_CLIENTS,
+      kind: 'ou',
+    });
+    let completeSelection: (result: typeof pendingResult) => void = () => {};
+    command.resolveSubtree.mockImplementationOnce(
+      () =>
+        new Promise(resolve => {
+          completeSelection = resolve;
+        }),
+    );
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+    fireEvent.click(await screen.findByRole('checkbox', {name: 'Clients'}));
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', {name: 'Add hosts to new target'}),
+      ).toHaveAttribute('aria-busy', 'true'),
+    );
+    fireEvent.click(screen.getByRole('checkbox', {name: 'Show containers'}));
+    await screen.findByRole('button', {name: 'Expand Computers'});
+    await act(async () => completeSelection(pendingResult));
+    expect(
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
+    ).toBeDisabled();
+  });
+
+  test('uses fresh branch edges after a recursive selection', async () => {
+    const command = createCommand();
+    const wire = new ActiveDirectoryCommand(createDirectoryHttp());
+    command.getChildren.mockImplementation(async params => {
+      const response = await wire.getChildren(params);
+      if (params.branchId !== AD_ACCOUNTING) return response;
+      const original = response.data.roots.find(
+        node => node.kind === 'computer',
+      );
+      if (!original) throw new Error('Missing fixture computer');
+      return response.setData({
+        ...response.data,
+        roots: [
+          {
+            ...original,
+            id: 'CN=new-computer,' + AD_ACCOUNTING,
+            name: 'new-computer.domain.local',
+            hostname: 'new-computer.domain.local',
+          },
+        ],
+      });
+    });
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+    fireEvent.click(await screen.findByRole('checkbox', {name: 'Clients'}));
+    await screen.findByText('5 hosts selected');
+    fireEvent.click(screen.getByRole('button', {name: 'Expand Clients'}));
+    fireEvent.click(
+      await screen.findByRole('button', {name: 'Expand Accounting'}),
+    );
+    expect(
+      await screen.findByRole('checkbox', {name: 'new-computer.domain.local'}),
+    ).not.toBeChecked();
+    expect(
+      screen.getByRole('checkbox', {name: 'Accounting'}),
+    ).not.toBeChecked();
+    expect(
+      screen.getByRole('checkbox', {name: 'Clients'}),
+    ).toBePartiallyChecked();
+    expect(screen.getByText('5 hosts selected')).toBeVisible();
+  });
+  test('retries the connections list without starting discovery', async () => {
+    const command = createCommand();
+    const gmp = createGmp(command);
+    gmp.credentials.get.mockRejectedValueOnce(new Error('Sources unavailable'));
+    const {render} = rendererWith({
+      gmp,
+      capabilities: true,
+      features: new Features(['ENABLE_AD_INTEGRATION']),
+    });
+    render(<ActiveDirectoryPage />);
+    fireEvent.click(
+      await screen.findByRole('button', {
+        name: 'Retry Active Directory credentials',
+      }),
+    );
+    await screen.findByRole('link', {
+      name: 'Open directory: AD Administration (dc01.domain.local)',
+    });
+    expect(gmp.credentials.get).toHaveBeenCalledTimes(2);
+    expect(command.getOverview).not.toHaveBeenCalled();
+  });
+
+  test.each([
+    {capabilities: true, features: new Features()},
+    {capabilities: false, features: new Features(['ENABLE_AD_INTEGRATION'])},
+  ])(
+    'blocks direct page access when disabled or unauthorized: %j',
+    async options => {
+      const command = createCommand();
+      const {render} = rendererWith({...options, gmp: createGmp(command)});
+      render(<ActiveDirectoryPage />);
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'Active Directory is not available.',
+      );
+      expect(command.getOverview).not.toHaveBeenCalled();
+    },
+  );
+
+  test('requires target creation permission to apply a selection', async () => {
+    const command = createCommand();
+    const {render} = rendererWith({
+      capabilities: new Capabilities(['get_targets']),
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+    fireEvent.click(await screen.findByRole('checkbox', {name: 'Clients'}));
+    await screen.findByText('5 hosts selected');
+    expect(
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
+    ).toBeDisabled();
+  });
+
   test('retries failed root and branch requests', async () => {
     const command = createCommand();
     command.getOverview.mockRejectedValueOnce(
@@ -54,15 +252,342 @@ describe('Active Directory selection UI', () => {
       capabilities: true,
       gmp: createGmp(command),
     });
-    render(<DirectoryBrowser sourceId={AD_SOURCE} />);
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
     fireEvent.click(await screen.findByRole('button', {name: 'Retry'}));
     fireEvent.click(
       await screen.findByRole('button', {name: 'Expand Clients'}),
     );
     fireEvent.click(await screen.findByRole('button', {name: 'Retry Clients'}));
-    await screen.findByRole('button', {name: 'Expand Accounting'});
+    await screen.findByRole('checkbox', {name: 'Accounting'});
     expect(command.getOverview).toHaveBeenCalledTimes(2);
     expect(command.getChildren).toHaveBeenCalledTimes(2);
+  });
+
+  test('preserves the previous selection on recursive failure and supports retry', async () => {
+    const command = createCommand();
+    command.resolveSubtree.mockRejectedValueOnce(
+      new Error('Active Directory unavailable'),
+    );
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+    fireEvent.click(
+      await screen.findByRole('checkbox', {name: 'fs-01.domain.local'}),
+    );
+    fireEvent.click(screen.getByRole('checkbox', {name: 'Clients'}));
+    await screen.findByText(
+      'Could not resolve the selected OU/group. Your selection has been preserved.',
+    );
+    expect(screen.getByText('1 hosts selected')).toBeVisible();
+    expect(
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
+    ).not.toHaveAttribute('data-loading');
+    expect(
+      screen.getByRole('checkbox', {name: 'fs-01.domain.local'}),
+    ).toBeChecked();
+    fireEvent.click(screen.getByRole('button', {name: 'Retry selection'}));
+    await screen.findByText('5 hosts selected');
+    expect(
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
+    ).not.toHaveAttribute('data-loading');
+    expect(
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
+    ).toHaveAttribute('aria-busy', 'false');
+    expect(command.resolveSubtree).toHaveBeenCalledTimes(2);
+  });
+
+  test('shows partial browsing badges and bulk guidance at the expanded branch', async () => {
+    const http = createDirectoryHttp();
+    http.request.mockResolvedValueOnce(
+      new Response(directoryObjectsXml([], new URLSearchParams(), true)),
+    );
+    const wireCommand = new ActiveDirectoryCommand(http);
+    const command = createCommand();
+    const browseCommand = new ActiveDirectoryCommand(createDirectoryHttp());
+    command.getOverview.mockResolvedValueOnce(
+      await browseCommand.getObjects({sourceId: AD_SOURCE, maxResults: 2}),
+    );
+    command.getChildren.mockResolvedValueOnce(
+      await browseCommand.getChildren({
+        sourceId: AD_SOURCE,
+        branchId: AD_CLIENTS,
+        kind: 'ou',
+        maxResults: 1,
+      }),
+    );
+    command.resolveSubtree.mockImplementationOnce(params =>
+      wireCommand.resolveSubtree(params),
+    );
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+    fireEvent.click(
+      await screen.findByRole('checkbox', {name: 'fs-01.domain.local'}),
+    );
+    fireEvent.click(screen.getByRole('button', {name: 'Expand Clients'}));
+    fireEvent.click(
+      await screen.findByRole('button', {name: 'Expand Accounting'}),
+    );
+    const computer = await screen.findByRole('checkbox', {
+      name: 'pc-042.domain.local',
+    });
+    const parent = screen.getByRole('checkbox', {name: 'Clients'});
+    fireEvent.click(parent);
+
+    const footer = screen.getByRole('group', {name: 'Selected hosts'});
+    const guidance = 'Could not select the whole branch.';
+    const warning = await screen.findByText(guidance);
+    expect(warning.parentElement).toHaveRole('status');
+    expect(parent).toHaveAccessibleDescription(guidance);
+    expect(parent.closest('[data-directory-branch-header]')).toContainElement(
+      warning,
+    );
+    expect(within(footer).queryByText(guidance)).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('status', {
+        name: 'Partial',
+        description: /Directory root: some objects were not returned/,
+      }),
+    ).toBeVisible();
+    expect(
+      screen.getByRole('status', {
+        name: 'Partial',
+        description: /Clients: some objects were not returned/,
+      }),
+    ).toBeVisible();
+    expect(screen.getByText('1 hosts selected')).toBeVisible();
+    expect(parent).not.toBeChecked();
+    expect(
+      screen.queryByRole('button', {name: 'Retry selection'}),
+    ).not.toBeInTheDocument();
+    expect(command.resolveSubtree).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+
+    const selectLoaded = screen.getByRole('button', {
+      name: 'Select 3 loaded computers',
+    });
+    expect(parent.closest('[data-directory-branch-header]')).toContainElement(
+      selectLoaded,
+    );
+    fireEvent.click(selectLoaded);
+    expect(computer).toBeChecked();
+    expect(
+      screen.getByRole('checkbox', {name: 'pc-043.domain.local'}),
+    ).toBeChecked();
+    expect(
+      screen.getByRole('checkbox', {name: 'fs-01.domain.local'}),
+    ).toBeChecked();
+    expect(screen.getByText('4 hosts selected')).toBeVisible();
+    expect(command.getChildren).toHaveBeenCalledTimes(2);
+    expect(command.resolveSubtree).toHaveBeenCalledTimes(1);
+    expect(warning).not.toBeInTheDocument();
+    expect(parent).not.toHaveAttribute('aria-describedby');
+  });
+
+  test('shows the warning under a collapsed branch before loading its computers', async () => {
+    const command = createCommand();
+    const browseCommand = new ActiveDirectoryCommand(createDirectoryHttp());
+    const incompleteHttp = createDirectoryHttp();
+    incompleteHttp.request.mockResolvedValueOnce(
+      new Response(directoryObjectsXml([], new URLSearchParams(), true)),
+    );
+    const resolveCommand = new ActiveDirectoryCommand(incompleteHttp);
+    command.resolveSubtree.mockImplementationOnce(params =>
+      resolveCommand.resolveSubtree(params),
+    );
+    command.getOverview.mockResolvedValueOnce(
+      await browseCommand.getObjects({sourceId: AD_SOURCE, maxResults: 2}),
+    );
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+
+    await userEvent.click(
+      await screen.findByRole('button', {name: 'Expand Clients'}),
+    );
+    const parent = await screen.findByRole('checkbox', {
+      name: 'Accounting',
+    });
+    const expand = screen.getByRole('button', {
+      name: 'Expand Accounting',
+    });
+    await userEvent.click(parent);
+    const guidance =
+      'Could not select the whole branch. Expand the branch to load computers.';
+    expect(await screen.findByText(guidance)).toBeVisible();
+    expect(parent).toHaveAccessibleDescription(guidance);
+    expect(expand).toHaveAttribute('aria-expanded', 'false');
+    expect(command.getChildren).toHaveBeenCalledTimes(1);
+    expect(
+      screen.queryByRole('button', {name: /Select .* loaded computer/}),
+    ).not.toBeInTheDocument();
+
+    const expandBranch = screen.getByRole('button', {name: 'Expand branch'});
+    expect(parent.closest('[data-directory-branch-header]')).toContainElement(
+      expandBranch,
+    );
+    command.getChildren.mockResolvedValueOnce(
+      await browseCommand.getChildren({
+        sourceId: AD_SOURCE,
+        branchId: AD_ACCOUNTING,
+        kind: 'ou',
+        maxResults: 2,
+      }),
+    );
+    await userEvent.click(expandBranch);
+    expect(expandBranch).not.toBeInTheDocument();
+    const computer = await screen.findByRole('checkbox', {
+      name: 'pc-042.domain.local',
+    });
+    const warning = screen.getByText('Could not select the whole branch.');
+    expect(warning).toBeVisible();
+    expect(
+      screen.getByRole('status', {
+        name: 'Partial',
+        description: /Directory root: some objects were not returned/,
+      }),
+    ).toBeVisible();
+    expect(
+      screen.getByRole('status', {
+        name: 'Partial',
+        description: /Accounting: some objects were not returned/,
+      }),
+    ).toBeVisible();
+    expect(screen.getByText('0 hosts selected')).toBeVisible();
+    expect(command.resolveSubtree).toHaveBeenCalledTimes(1);
+
+    await userEvent.click(
+      screen.getByRole('button', {name: 'Select 2 loaded computers'}),
+    );
+    expect(computer).toBeChecked();
+    expect(
+      screen.getByRole('checkbox', {name: 'pc-043.domain.local'}),
+    ).toBeChecked();
+    expect(warning).not.toBeInTheDocument();
+    expect(screen.getByText('2 hosts selected')).toBeVisible();
+    expect(command.getChildren).toHaveBeenCalledTimes(2);
+    expect(command.resolveSubtree).toHaveBeenCalledTimes(1);
+  });
+
+  test.each([false, true])(
+    'clears selected descendants after reopening a truncated branch (nested branch omitted: %s)',
+    async omitNestedBranch => {
+      const command = createCommand();
+      const onApply = testing.fn();
+      const {render} = rendererWith({
+        capabilities: true,
+        gmp: createGmp(command),
+      });
+      render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={onApply} />);
+
+      await userEvent.click(
+        await screen.findByRole('checkbox', {name: 'fs-01.domain.local'}),
+      );
+      await userEvent.click(
+        screen.getByRole('button', {name: 'Expand Clients'}),
+      );
+      await userEvent.click(
+        await screen.findByRole('button', {name: 'Expand Accounting'}),
+      );
+      const computerName = 'pc-042.domain.local';
+      await userEvent.click(
+        await screen.findByRole('checkbox', {name: computerName}),
+      );
+      expect(screen.getByText('2 hosts selected')).toBeVisible();
+      await userEvent.click(
+        screen.getByRole('button', {name: 'Collapse Clients'}),
+      );
+
+      const http = createDirectoryHttp();
+      const reopenedNodes = AD_OBJECTS.filter(
+        node =>
+          node.parent === AD_CLIENTS &&
+          (!omitNestedBranch || node.id !== AD_ACCOUNTING),
+      );
+      http.request.mockResolvedValueOnce(
+        new Response(
+          directoryObjectsXml(reopenedNodes, new URLSearchParams(), true),
+        ),
+      );
+      const wireCommand = new ActiveDirectoryCommand(http);
+      command.getChildren.mockImplementationOnce(params =>
+        wireCommand.getChildren(params),
+      );
+      await userEvent.click(
+        screen.getByRole('button', {name: 'Expand Clients'}),
+      );
+      const partialBranch = {
+        name: 'Partial',
+        description: /Clients: some objects were not returned/,
+      };
+      expect(await screen.findByRole('status', partialBranch)).toBeVisible();
+      const parent = screen.getByRole('checkbox', {name: 'Clients'});
+      expect(parent).toBePartiallyChecked();
+      if (omitNestedBranch) {
+        expect(
+          screen.queryByRole('button', {name: 'Expand Accounting'}),
+        ).not.toBeInTheDocument();
+        parent.focus();
+        await userEvent.keyboard(' ');
+      } else {
+        await userEvent.click(parent);
+      }
+
+      expect(parent).not.toBePartiallyChecked();
+      expect(parent).not.toBeChecked();
+      expect(screen.getByRole('status', partialBranch)).toBeVisible();
+      expect(
+        screen.queryByRole('button', {name: 'Retry selection'}),
+      ).not.toBeInTheDocument();
+      expect(command.resolveSubtree).not.toHaveBeenCalled();
+      await userEvent.click(
+        screen.getByRole('button', {name: 'Add hosts to new target'}),
+      );
+      expect(onApply).toHaveBeenCalledWith(['fs-01.domain.local']);
+    },
+  );
+
+  test('holds only active query data and clears inactive results and mutations', async () => {
+    const command = createCommand();
+    let client: QueryClient | undefined;
+    const Probe = () => {
+      const queryClient = useQueryClient();
+      useEffect(() => {
+        client = queryClient;
+      }, [queryClient]);
+      return null;
+    };
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    const {unmount} = render(
+      <>
+        <Probe />
+        <DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />
+      </>,
+    );
+    fireEvent.click(await screen.findByRole('checkbox', {name: 'Clients'}));
+    await screen.findByText('5 hosts selected');
+    expect(client?.getQueryCache().getAll()).toHaveLength(1);
+    await waitFor(() =>
+      expect(client?.getMutationCache().getAll()).toEqual([]),
+    );
+    fireEvent.click(screen.getByRole('button', {name: 'Expand Clients'}));
+    await screen.findByRole('checkbox', {name: 'Accounting'});
+    expect(client?.getQueryCache().getAll()).toHaveLength(2);
+    fireEvent.click(screen.getByRole('button', {name: 'Collapse Clients'}));
+    await waitFor(() =>
+      expect(client?.getQueryCache().getAll()).toHaveLength(1),
+    );
+    unmount();
+    await waitFor(() => expect(client?.getQueryCache().getAll()).toEqual([]));
   });
 
   test('discards late branch responses after collapse and loads the latest response on reopen', async () => {
@@ -80,7 +605,7 @@ describe('Active Directory selection UI', () => {
       capabilities: true,
       gmp: createGmp(command),
     });
-    render(<DirectoryBrowser sourceId={AD_SOURCE} />);
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
     const disclosure = await screen.findByRole('button', {
       name: 'Expand Clients',
     });
@@ -95,15 +620,123 @@ describe('Active Directory selection UI', () => {
     expect(disclosure).toHaveAttribute('aria-expanded', 'false');
     await userEvent.keyboard('{Enter}');
     expect(disclosure).toHaveFocus();
-    await screen.findByRole('button', {name: 'Expand Accounting'});
+    await screen.findByRole('checkbox', {name: 'Accounting'});
     await act(async () =>
       completeOldRequest(
         new Response({roots: [], counts: {found: 0}, truncated: false}),
       ),
     );
     expect(
-      screen.getByRole('button', {name: 'Expand Accounting'}),
+      screen.getByRole('checkbox', {name: 'Accounting'}),
     ).toBeInTheDocument();
+  });
+
+  test('clears selection on source changes and ignores a late recursive response', async () => {
+    const command = createCommand();
+    let completeSelection: (
+      response: Response<DirectoryResolution>,
+    ) => void = () => {};
+    command.resolveSubtree.mockImplementationOnce(
+      () =>
+        new Promise(resolve => {
+          completeSelection = resolve;
+        }),
+    );
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    const {rerender} = render(
+      <DirectoryBrowser
+        key="administration"
+
+        sourceId={AD_SOURCE}
+        onApply={testing.fn()}
+      />,
+    );
+    fireEvent.click(await screen.findByRole('checkbox', {name: 'Clients'}));
+    const loadingButton = screen.getByRole('button', {
+      name: 'Add hosts to new target',
+    });
+    await waitFor(() =>
+      expect(loadingButton).toHaveAttribute('aria-busy', 'true'),
+    );
+    expect(loadingButton).toHaveAttribute('data-loading', 'true');
+    expect(loadingButton).toBeDisabled();
+    expect(
+      loadingButton.querySelector('.mantine-Button-loader'),
+    ).toBeInTheDocument();
+
+    rerender(
+      <DirectoryBrowser
+        key="engineering"
+
+        sourceId={AD_OTHER_SOURCE}
+        onApply={testing.fn()}
+      />,
+    );
+    await screen.findByRole('checkbox', {name: 'Clients'});
+    expect(
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
+    ).not.toHaveAttribute('data-loading');
+    const computers = await new ActiveDirectoryCommand(
+      createDirectoryHttp(),
+    ).resolveSubtree({
+      sourceId: AD_SOURCE,
+      branchId: AD_CLIENTS,
+      kind: 'ou' as const,
+    });
+    await act(async () => completeSelection(computers));
+    expect(
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
+    ).toBeDisabled();
+    expect(command.getOverview).toHaveBeenLastCalledWith({
+      sourceId: AD_OTHER_SOURCE,
+    });
+    rerender(
+      <DirectoryBrowser
+        key="administration"
+        sourceId={AD_SOURCE}
+        onApply={testing.fn()}
+      />,
+    );
+    await screen.findByRole('checkbox', {name: 'Clients'});
+    expect(command.getOverview).toHaveBeenCalledTimes(3);
+    expect(command.getOverview).toHaveBeenLastCalledWith({
+      sourceId: AD_SOURCE,
+    });
+    expect(
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
+    ).toBeDisabled();
+  });
+
+  test('shows an empty directory without enabling apply', async () => {
+    const command = createCommand();
+    const overview: DirectoryOverview = {
+      roots: [],
+      counts: {
+        found: 0,
+        unresolvable: 0,
+        disabled: 0,
+        captured: 0,
+        available: 0,
+      },
+      truncated: false,
+    };
+    command.getOverview.mockResolvedValue(new Response(overview));
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+    expect(
+      (await screen.findByText('No visible directory objects.')).closest(
+        'output',
+      ),
+    ).toHaveRole('status');
+    expect(
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
+    ).toBeDisabled();
   });
 
   test('fetches children afresh on every expansion without recursive discovery', async () => {
@@ -112,17 +745,468 @@ describe('Active Directory selection UI', () => {
       capabilities: true,
       gmp: createGmp(command),
     });
-    render(<DirectoryBrowser sourceId={AD_SOURCE} />);
-    await screen.findByRole('button', {name: 'Expand Clients'});
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+    await screen.findByRole('checkbox', {name: 'Clients'});
     fireEvent.click(screen.getByRole('button', {name: 'Expand Clients'}));
-    await screen.findByRole('button', {name: 'Expand Accounting'});
+    await screen.findByRole('checkbox', {name: 'Accounting'});
     expect(command.resolveSubtree).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole('button', {name: 'Collapse Clients'}));
     expect(
-      screen.queryByRole('button', {name: 'Expand Accounting'}),
+      screen.queryByRole('checkbox', {name: 'Accounting'}),
     ).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', {name: 'Expand Clients'}));
-    await screen.findByRole('button', {name: 'Expand Accounting'});
+    await screen.findByRole('checkbox', {name: 'Accounting'});
     expect(command.getChildren).toHaveBeenCalledTimes(2);
+  });
+
+  test('resolves an unloaded subtree and applies without inventing a quota check', async () => {
+    const command = createCommand();
+    const onApply = testing.fn();
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={onApply} />);
+    fireEvent.click(await screen.findByRole('checkbox', {name: 'Clients'}));
+    expect(command.getChildren).not.toHaveBeenCalled();
+    await screen.findByText('5 hosts selected');
+    expect(command.resolveSubtree).toHaveBeenCalledWith({
+      sourceId: AD_SOURCE,
+      branchId: AD_CLIENTS,
+      kind: 'ou',
+    });
+    fireEvent.click(
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
+    );
+    expect(onApply).toHaveBeenCalledWith([
+      'pc-042.domain.local',
+      'pc-043.domain.local',
+      'pc-legacy.domain.local',
+      'fs-01.domain.local',
+      'fs-02.domain.local',
+    ]);
+  });
+
+  test('clears bulk-selected computers omitted from a truncated branch reload', async () => {
+    const command = createCommand();
+    const http = createDirectoryHttp();
+    http.request.mockResolvedValueOnce(
+      new Response(directoryObjectsXml([], new URLSearchParams(), true)),
+    );
+    const wire = new ActiveDirectoryCommand(http);
+    command.getChildren.mockImplementationOnce(params =>
+      wire.getChildren(params),
+    );
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+
+    const parent = await screen.findByRole('checkbox', {name: 'Clients'});
+    fireEvent.click(parent);
+    await screen.findByText('5 hosts selected');
+    fireEvent.click(screen.getByRole('button', {name: 'Expand Clients'}));
+    await screen.findByRole('status', {
+      name: 'Partial',
+      description: /Clients: some objects were not returned/,
+    });
+    expect(parent).toBePartiallyChecked();
+    fireEvent.click(parent);
+
+    expect(parent).not.toBePartiallyChecked();
+    expect(screen.getByText('0 hosts selected')).toBeVisible();
+    expect(
+      screen.getByRole('button', {name: 'Add hosts to new target'}),
+    ).toBeDisabled();
+    expect(command.resolveSubtree).toHaveBeenCalledTimes(1);
+  });
+
+  test('shows shared computers in an open group after collapsing their previous group', async () => {
+    const command = createCommand();
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+
+    fireEvent.click(
+      await screen.findByRole('button', {name: 'Expand Clients'}),
+    );
+    fireEvent.click(
+      await screen.findByRole('button', {name: 'Expand File servers'}),
+    );
+    const nestedGroup = screen
+      .getByRole('button', {name: 'Collapse File servers'})
+      .closest('li');
+    if (!nestedGroup) throw new Error('Missing File servers branch');
+    fireEvent.click(
+      await within(nestedGroup).findByRole('button', {
+        name: 'Expand Critical servers',
+      }),
+    );
+    const nestedHost = await within(nestedGroup).findByRole('checkbox', {
+      name: 'fs-01.domain.local',
+    });
+    fireEvent.click(nestedHost);
+    fireEvent.click(
+      screen.getByRole('button', {name: 'Collapse File servers'}),
+    );
+
+    const directGroup = await screen.findByRole('button', {
+      name: 'Expand Critical servers',
+    });
+    fireEvent.click(directGroup);
+    const directBranch = directGroup.closest('li');
+    if (!directBranch) throw new Error('Missing Critical servers branch');
+    const directHost = await within(directBranch).findByRole('checkbox', {
+      name: 'fs-01.domain.local',
+    });
+    expect(directHost).toBeChecked();
+    expect(
+      screen.getAllByRole('checkbox', {name: 'fs-01.domain.local'}),
+    ).toHaveLength(1);
+  });
+
+  test('allows deselecting captured and unresolved computers and shows partial parents', async () => {
+    const command = createCommand();
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+    fireEvent.click(await screen.findByRole('checkbox', {name: 'Clients'}));
+    await screen.findByText('5 hosts selected');
+    fireEvent.click(screen.getByRole('button', {name: 'Expand Clients'}));
+    fireEvent.click(
+      await screen.findByRole('button', {name: 'Expand Accounting'}),
+    );
+    const captured = await screen.findByRole('checkbox', {
+      name: 'pc-043.domain.local',
+    });
+    const unresolved = screen.getByRole('checkbox', {
+      name: 'pc-legacy.domain.local',
+    });
+    expect(captured).toBeChecked();
+    expect(unresolved).toBeChecked();
+    fireEvent.click(captured);
+    fireEvent.click(unresolved);
+    expect(
+      screen.getByRole('checkbox', {name: 'Accounting'}),
+    ).toBePartiallyChecked();
+    expect(
+      screen.getByRole('checkbox', {name: 'Clients'}),
+    ).toBePartiallyChecked();
+    expect(screen.getByText('3 hosts selected')).toBeVisible();
+    expect(
+      screen.queryByRole('checkbox', {name: 'pc-retired.domain.local'}),
+    ).not.toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole('checkbox', {
+        name: 'Show disabled Active Directory objects',
+      }),
+    );
+    fireEvent.click(
+      screen.getByRole('checkbox', {name: 'pc-retired.domain.local'}),
+    );
+    expect(screen.getByText('4 hosts selected')).toBeVisible();
+    fireEvent.click(
+      screen.getByRole('checkbox', {
+        name: 'Show disabled Active Directory objects',
+      }),
+    );
+    expect(screen.getByText('3 hosts selected')).toBeVisible();
+    const accounting = screen.getByRole('checkbox', {name: 'Accounting'});
+    fireEvent.click(accounting);
+    await waitFor(() => expect(accounting).toBeChecked());
+    expect(command.resolveSubtree).toHaveBeenCalledTimes(2);
+    fireEvent.click(accounting);
+    expect(screen.getByText('2 hosts selected')).toBeVisible();
+    expect(command.resolveSubtree).toHaveBeenCalledTimes(2);
+  });
+  test('updates all summary cards from loaded computers and keeps missing hostnames unselectable', async () => {
+    const command = createCommand();
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+    await screen.findByRole('checkbox', {name: 'Clients'});
+    const summary = screen.getByRole('group', {name: 'Discovery summary'});
+    expect(
+      within(summary)
+        .getAllByRole('definition')
+        .map(value => value.textContent),
+    ).toEqual(['2', 'Unavailable', '0', '0', '2']);
+    fireEvent.click(screen.getByRole('button', {name: 'Expand Clients'}));
+    fireEvent.click(
+      await screen.findByRole('button', {name: 'Expand Accounting'}),
+    );
+    expect(
+      await screen.findByRole('checkbox', {name: 'no-hostname.domain.local'}),
+    ).toBeDisabled();
+    await waitFor(() =>
+      expect(
+        within(summary)
+          .getAllByRole('definition')
+          .map(value => value.textContent),
+      ).toEqual(['7', 'Unavailable', '1', '1', '5']),
+    );
+    expect(screen.queryByText('Unresolvable hostname')).not.toBeInTheDocument();
+    expect(
+      screen.getByText('0 of 3 selectable computers selected · 5 total'),
+    ).toBeVisible();
+    fireEvent.click(
+      screen.getByRole('checkbox', {
+        name: 'Show disabled Active Directory objects',
+      }),
+    );
+    expect(
+      within(summary)
+        .getAllByRole('definition')
+        .map(value => value.textContent),
+    ).toEqual(['7', 'Unavailable', '0', '1', '6']);
+    expect(
+      screen.getByText('0 of 4 selectable computers selected · 5 total'),
+    ).toBeVisible();
+  });
+
+  test.each(['select', 'expand'])(
+    'disables a branch with only computers missing hostnames after %s',
+    async action => {
+      const command = createCommand();
+      const http = createDirectoryHttp();
+      const withoutHostname = AD_OBJECTS.filter(
+        node =>
+          node.parent === AD_ACCOUNTING &&
+          node.kind === 'computer' &&
+          !node.hostname,
+      );
+      http.request.mockResolvedValue(
+        new Response(
+          directoryObjectsXml(withoutHostname, new URLSearchParams()),
+        ),
+      );
+      const branchCommand = new ActiveDirectoryCommand(http);
+      const {render} = rendererWith({
+        capabilities: true,
+        gmp: createGmp(command),
+      });
+      render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+      await userEvent.click(
+        await screen.findByRole('button', {name: 'Expand Clients'}),
+      );
+      const checkbox = await screen.findByRole('checkbox', {
+        name: 'Accounting',
+      });
+      const expand = screen.getByRole('button', {name: 'Expand Accounting'});
+      command.resolveSubtree.mockImplementationOnce(params =>
+        branchCommand.resolveSubtree(params),
+      );
+      command.getChildren.mockImplementationOnce(params =>
+        branchCommand.getChildren(params),
+      );
+
+      expect(checkbox).toBeEnabled();
+      await userEvent.click(action === 'select' ? checkbox : expand);
+      expect(
+        await screen.findByText('No selectable computers · 1 total'),
+      ).toBeVisible();
+      expect(checkbox).toBeDisabled();
+      expect(checkbox).not.toBeChecked();
+      expect(screen.getByText('0 hosts selected')).toBeVisible();
+
+      if (action === 'select') await userEvent.click(expand);
+      expect(
+        await screen.findByRole('checkbox', {name: 'no-hostname.domain.local'}),
+      ).toBeDisabled();
+      expect(checkbox).toBeDisabled();
+    },
+  );
+
+  test.each(['complete', 'partial', 'retry'])(
+    'keeps the previous branch badge until a %s listing is applied',
+    async outcome => {
+      const command = createCommand();
+      const http = createDirectoryHttp();
+      const computers = AD_OBJECTS.filter(
+        node =>
+          node.parent === AD_ACCOUNTING &&
+          [
+            'pc-042.domain.local',
+            'pc-043.domain.local',
+            'no-hostname.domain.local',
+          ].includes(node.name),
+      );
+      http.request.mockResolvedValueOnce(
+        new Response(directoryObjectsXml(computers, new URLSearchParams())),
+      );
+      const branchCommand = new ActiveDirectoryCommand(http);
+      command.resolveSubtree.mockImplementationOnce(params =>
+        branchCommand.resolveSubtree(params),
+      );
+      const {render} = rendererWith({
+        capabilities: true,
+        gmp: createGmp(command),
+      });
+      render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+      await userEvent.click(
+        await screen.findByRole('button', {name: 'Expand Clients'}),
+      );
+      const checkbox = await screen.findByRole('checkbox', {
+        name: 'Accounting',
+      });
+      await userEvent.click(checkbox);
+      const previousBadge = '2 of 2 selectable computers selected · 3 total';
+      expect(await screen.findByText(previousBadge)).toBeVisible();
+      expect(checkbox).toBeChecked();
+
+      const noHostname = computers.filter(computer => !computer.hostname);
+      const params = new URLSearchParams();
+      http.request.mockResolvedValueOnce(
+        new Response(
+          directoryObjectsXml(noHostname, params, outcome === 'partial'),
+        ),
+      );
+      const listing = await branchCommand.getChildren({
+        sourceId: AD_SOURCE,
+        branchId: AD_ACCOUNTING,
+        kind: 'ou',
+      });
+      const first = Promise.withResolvers<typeof listing>();
+      command.getChildren.mockReturnValueOnce(first.promise);
+      const expand = screen.getByRole('button', {name: 'Expand Accounting'});
+      await userEvent.click(expand);
+      expect(
+        await screen.findByRole('status', {name: 'Loading Accounting'}),
+      ).toBeVisible();
+      expect(screen.getByText(previousBadge)).toBeVisible();
+
+      if (outcome === 'retry') {
+        await act(async () => first.reject(new Error('Directory unavailable')));
+        expect(screen.getByText(previousBadge)).toBeVisible();
+        const retryButton = await screen.findByRole('button', {
+          name: 'Retry Accounting',
+        });
+        expect(screen.getByText(previousBadge)).toBeVisible();
+        const retry = Promise.withResolvers<typeof listing>();
+        command.getChildren.mockReturnValueOnce(retry.promise);
+        await userEvent.click(retryButton);
+        expect(screen.getByText(previousBadge)).toBeVisible();
+        await act(async () => retry.resolve(listing));
+      } else {
+        await act(async () => first.resolve(listing));
+      }
+
+      if (outcome === 'partial') {
+        expect(
+          await screen.findByRole('status', {
+            name: 'Partial',
+            description: /Accounting: some objects were not returned/,
+          }),
+        ).toBeVisible();
+      } else {
+        expect(
+          await screen.findByText('No selectable computers · 1 total'),
+        ).toBeVisible();
+        expect(checkbox).toBeDisabled();
+      }
+      expect(screen.queryByText(previousBadge)).not.toBeInTheDocument();
+    },
+  );
+
+  test('retains partial parent selection after collapsing an individually selected child', async () => {
+    const command = createCommand();
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+    fireEvent.click(
+      await screen.findByRole('button', {name: 'Expand Clients'}),
+    );
+    fireEvent.click(
+      await screen.findByRole('button', {name: 'Expand Accounting'}),
+    );
+    fireEvent.click(
+      await screen.findByRole('checkbox', {name: 'pc-042.domain.local'}),
+    );
+    expect(
+      screen.getByRole('checkbox', {name: 'Accounting'}),
+    ).toBePartiallyChecked();
+    expect(
+      screen.getByRole('checkbox', {name: 'Clients'}),
+    ).toBePartiallyChecked();
+    fireEvent.click(screen.getByRole('button', {name: 'Collapse Clients'}));
+    expect(
+      screen.getByRole('checkbox', {name: 'Clients'}),
+    ).toBePartiallyChecked();
+    expect(screen.getByText('1 hosts selected')).toBeVisible();
+  });
+
+  test('identifies an incomplete root and allows selection of a loaded computer', async () => {
+    const command = createCommand();
+    const wireCommand = new ActiveDirectoryCommand(createDirectoryHttp());
+    command.getOverview.mockResolvedValueOnce(
+      await wireCommand.getObjects({sourceId: AD_SOURCE, maxResults: 2}),
+    );
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+    const summary = await screen.findByRole('group', {
+      name: 'Discovery summary',
+    });
+    expect(
+      within(summary).getByRole('status', {
+        name: 'Partial',
+        description: /Directory root: some objects were not returned/,
+      }),
+    ).toBeVisible();
+    expect(screen.getByText('Loaded computers')).toBeVisible();
+    expect(within(summary).getAllByRole('definition')[0]).toHaveTextContent(
+      '1',
+    );
+    fireEvent.click(screen.getByRole('checkbox', {name: 'fs-01.domain.local'}));
+    expect(screen.getByText('1 hosts selected')).toBeVisible();
+    expect(command.getOverview).toHaveBeenCalledTimes(1);
+    expect(command.getChildren).not.toHaveBeenCalled();
+    expect(command.resolveSubtree).not.toHaveBeenCalled();
+  });
+
+  test('warns about truncated browsing without claiming a complete branch selection', async () => {
+    const command = createCommand();
+    const listing = (
+      await command.getChildren({
+        sourceId: AD_SOURCE,
+        branchId: AD_CLIENTS,
+        kind: 'ou',
+      })
+    ).data;
+    command.getChildren.mockClear();
+    command.getChildren.mockResolvedValueOnce(
+      new Response({...listing, truncated: true}),
+    );
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp: createGmp(command),
+    });
+    render(<DirectoryBrowser sourceId={AD_SOURCE} onApply={testing.fn()} />);
+    fireEvent.click(
+      await screen.findByRole('button', {name: 'Expand Clients'}),
+    );
+    const partialBranch = {
+      name: 'Partial',
+      description: /Clients: some objects were not returned/,
+    };
+    expect(await screen.findByRole('status', partialBranch)).toBeVisible();
+    expect(screen.getByRole('checkbox', {name: 'Clients'})).not.toBeChecked();
+    expect(command.resolveSubtree).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', {name: 'Collapse Clients'}));
+    expect(screen.queryByRole('status', partialBranch)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', {name: 'Expand Clients'}));
+    await screen.findByRole('button', {name: 'Expand Accounting'});
+    expect(screen.queryByRole('status', partialBranch)).not.toBeInTheDocument();
   });
 });

@@ -48,6 +48,76 @@ export const DirectoryScrollArea = styled(Column)`
   }
 `;
 
+export const DirectoryFooter = styled(Row)`
+  border-top: 1px solid var(--mantine-color-default-border);
+  background-color: var(--mantine-color-default-hover);
+  border-radius: 0 0 var(--mantine-radius-md) var(--mantine-radius-md);
+  overflow-wrap: anywhere;
+
+  button {
+    max-inline-size: 100%;
+  }
+
+  @container ad-discovery (max-width: ${theme.breakpoints.xs}) {
+    flex-direction: column;
+    align-items: stretch;
+
+    > button[data-size] {
+      inline-size: 100%;
+      min-block-size: 2.5rem;
+      height: auto;
+      padding-block: var(--mantine-spacing-xs);
+      padding-inline: var(--mantine-spacing-xs);
+    }
+  }
+`;
+
+export const DirectorySelectionWarning = styled.div`
+  min-inline-size: 0;
+
+  &:has(> output:not(:empty)) {
+    display: flex;
+    inline-size: fit-content;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--mantine-spacing-xxs) var(--mantine-spacing-xs);
+    padding: var(--mantine-spacing-xxs) var(--mantine-spacing-xs);
+    border: 1px solid var(--border-color-warning);
+    border-radius: var(--mantine-radius-sm);
+    background-color: var(--background-color-warning);
+    color: var(--mantine-color-text);
+  }
+
+  &:not(:first-child):has(> output:not(:empty)) {
+    margin-inline-start: var(--mantine-spacing-xs);
+  }
+
+  > output:not(:empty) {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--mantine-spacing-xs);
+    min-inline-size: 0;
+  }
+
+  > output > svg {
+    flex-shrink: 0;
+    margin-block-start: 0.15em;
+  }
+
+  > output > span {
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  > button {
+    max-inline-size: 100%;
+    min-block-size: 1.5rem;
+    block-size: auto;
+    padding-inline: var(--mantine-spacing-xxs);
+    font-size: 0.875em;
+  }
+`;
+
 export const DirectoryList = styled.ul<{$spacing: 'xs' | 'sm'}>`
   display: flex;
   flex-direction: column;
@@ -61,7 +131,7 @@ export const DirectoryList = styled.ul<{$spacing: 'xs' | 'sm'}>`
 export const DirectoryRow = styled.div<{$depth: number}>`
   --directory-row-indent: ${({$depth}) => `calc(${$depth} * ${directoryIndent})`};
   display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 4fr) minmax(0, 5fr);
+  grid-template-columns: minmax(0, 7fr) minmax(0, 4fr) minmax(0, 5fr) 3.25rem;
   align-items: center;
   padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
   > * {
@@ -72,7 +142,7 @@ export const DirectoryRow = styled.div<{$depth: number}>`
   > :first-child {
     padding-inline-start: min(var(--directory-row-indent), 40%);
   }
-  > :nth-child(4) {
+  > :last-child {
     display: flex;
     justify-content: center;
   }
@@ -89,7 +159,7 @@ export const DirectoryRow = styled.div<{$depth: number}>`
         max(0px, calc(100% - 7rem))
       );
     }
-    > :nth-child(4) {
+    > :last-child {
       grid-area: 1 / 2;
     }
   }
@@ -133,7 +203,7 @@ export const BranchRow = styled(DirectoryRow)`
   > :nth-child(2) {
     display: flex;
     align-items: center;
-    grid-column: 2 / -1;
+    grid-column: span 2;
 
     > output:not(:last-child) {
       flex-shrink: 0;

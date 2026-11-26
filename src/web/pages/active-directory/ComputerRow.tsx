@@ -9,6 +9,7 @@ import {type DirectoryComputer} from 'gmp/models/active-directory';
 import {isDefined} from 'gmp/utils/identity';
 import Badge, {EThemeColors} from 'web/components/badge/StatusBadge';
 import Row from 'web/components/layout/Row';
+import EntitySelection from 'web/entities/EntitySelection';
 import useTranslation from 'web/hooks/useTranslation';
 import {
   ComputerDirectoryRow,
@@ -32,13 +33,24 @@ const ComputerDisclosure = styled(Row)`
 
 const ComputerRow = memo(function ComputerRow({
   node,
+  checked,
+  selectionPending,
   depth = 0,
+  onSelect,
 }: {
   node: DirectoryComputer;
+  checked: boolean;
+  selectionPending: boolean;
   depth?: number;
+  onSelect: (computer: DirectoryComputer, checked: boolean) => void;
 }) {
   const [_] = useTranslation();
   const missingHostnameLabel = node.hostname ? undefined : _('No DNS hostname');
+  const selectionDisabledReason =
+    missingHostnameLabel ??
+    (selectionPending
+      ? _('Resolving selected OU/group recursively...')
+      : undefined);
   const disclosure = <span>{node.name}</span>;
   const targets = node.matchedTargets;
   let targetSummary: ReactNode;
@@ -85,6 +97,16 @@ const ComputerRow = memo(function ComputerRow({
         <div>
           <ComputerMetadataLabel>{_('Scan targets')}</ComputerMetadataLabel>
           {targetSummary}
+        </div>
+        <div title={selectionDisabledReason}>
+          <EntitySelection
+            aria-label={node.name}
+            disabled={selectionPending || !node.hostname}
+            entity={node}
+            selected={checked}
+            onDeselected={() => onSelect(node, false)}
+            onSelected={() => onSelect(node, true)}
+          />
         </div>
       </ComputerDirectoryRow>
     </li>

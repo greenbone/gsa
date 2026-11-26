@@ -5,7 +5,10 @@
 
 import {useId} from 'react';
 import {type DirectoryBranchParams} from 'gmp/commands/active-directory';
-import {type DirectoryOverview} from 'gmp/models/active-directory';
+import {
+  type DirectoryResolution,
+  type DirectoryOverview,
+} from 'gmp/models/active-directory';
 import {
   type default as Credential,
   ACTIVE_DIRECTORY_CREDENTIAL_TYPE,
@@ -15,6 +18,7 @@ import QueryFilter from 'gmp/models/filter/query-filter';
 import useGmp from 'web/hooks/useGmp';
 import useGetEntities from 'web/queries/useGetEntities';
 import useGetEntity from 'web/queries/useGetEntity';
+import useGmpMutation from 'web/queries/useGmpMutation';
 
 const freshQueryOptions = {
   staleTime: 0,
@@ -118,5 +122,15 @@ export const useGetActiveDirectoryChildren = ({
         kind,
         ...(showContainers ? {showContainers} : {}),
       }),
+  });
+};
+
+export const useResolveActiveDirectorySubtree = () => {
+  const gmp = useGmp();
+  return useGmpMutation<DirectoryBranchParams, DirectoryResolution>({
+    gcTime: 0,
+    retry: false,
+    gmpMethod: async params =>
+      (await gmp.activedirectory.resolveSubtree(params)).data,
   });
 };
