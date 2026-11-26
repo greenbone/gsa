@@ -305,16 +305,20 @@ describe('Active Directory selection UI', () => {
     );
     const wireCommand = new ActiveDirectoryCommand(http);
     const command = createCommand();
-    const browseCommand = new ActiveDirectoryCommand(createDirectoryHttp());
+    const browseCommand = new ActiveDirectoryCommand(
+      createDirectoryHttp('base', 2),
+    );
     command.getOverview.mockResolvedValueOnce(
-      await browseCommand.getObjects({sourceId: AD_SOURCE, maxResults: 2}),
+      await browseCommand.getOverview({sourceId: AD_SOURCE}),
+    );
+    const childCommand = new ActiveDirectoryCommand(
+      createDirectoryHttp('base', 1),
     );
     command.getChildren.mockResolvedValueOnce(
-      await browseCommand.getChildren({
+      await childCommand.getChildren({
         sourceId: AD_SOURCE,
         branchId: AD_CLIENTS,
         kind: 'ou',
-        maxResults: 1,
       }),
     );
     command.resolveSubtree.mockImplementationOnce(params =>
@@ -390,7 +394,9 @@ describe('Active Directory selection UI', () => {
 
   test('shows the warning under a collapsed branch before loading its computers', async () => {
     const command = createCommand();
-    const browseCommand = new ActiveDirectoryCommand(createDirectoryHttp());
+    const browseCommand = new ActiveDirectoryCommand(
+      createDirectoryHttp('base', 2),
+    );
     const incompleteHttp = createDirectoryHttp();
     incompleteHttp.request.mockResolvedValueOnce(
       new Response(directoryObjectsXml([], new URLSearchParams(), true)),
@@ -400,7 +406,7 @@ describe('Active Directory selection UI', () => {
       resolveCommand.resolveSubtree(params),
     );
     command.getOverview.mockResolvedValueOnce(
-      await browseCommand.getObjects({sourceId: AD_SOURCE, maxResults: 2}),
+      await browseCommand.getOverview({sourceId: AD_SOURCE}),
     );
     const {render} = rendererWith({
       capabilities: true,
@@ -437,7 +443,6 @@ describe('Active Directory selection UI', () => {
         sourceId: AD_SOURCE,
         branchId: AD_ACCOUNTING,
         kind: 'ou',
-        maxResults: 2,
       }),
     );
     await userEvent.click(expandBranch);
@@ -1146,9 +1151,11 @@ describe('Active Directory selection UI', () => {
 
   test('identifies an incomplete root and allows selection of a loaded computer', async () => {
     const command = createCommand();
-    const wireCommand = new ActiveDirectoryCommand(createDirectoryHttp());
+    const wireCommand = new ActiveDirectoryCommand(
+      createDirectoryHttp('base', 2),
+    );
     command.getOverview.mockResolvedValueOnce(
-      await wireCommand.getObjects({sourceId: AD_SOURCE, maxResults: 2}),
+      await wireCommand.getOverview({sourceId: AD_SOURCE}),
     );
     const {render} = rendererWith({
       capabilities: true,

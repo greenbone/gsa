@@ -47,7 +47,7 @@
   "{{hours}}:{{minutes}} h": "{{hours}}:{{minutes}} h",
   "{{name}} Start: {{date}}": "{{name}} Inizio: {{date}}",
   "{{name}} Start: {{startDate}} End: {{endDate}}": "{{name}} Inizio: {{startDate}} Fine: {{endDate}}",
-  "{{name}}: some objects were not returned. You can select the loaded computers.": "{{name}}: alcuni oggetti non sono stati restituiti. È possibile selezionare i computer caricati.",
+  "{{name}}: some objects were not returned. You can select the loaded computers.": "{{name}}: i risultati sono incompleti. Puoi comunque selezionare i computer visualizzati.",
   "{{nr}} more times": "{{nr}} volte in più",
   "{{nth}} {{weekday}} every {{interval}} months": "{{nth}} {{weekday}} ogni {{interval}} mesi",
   "{{nth}} {{weekday}} every month": "{{nth}} {{weekday}} ogni mese",
