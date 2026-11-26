@@ -6,6 +6,7 @@
 import {useId} from 'react';
 import {type DirectoryBranchParams} from 'gmp/commands/active-directory';
 import {
+  type DirectoryComputer,
   type DirectoryResolution,
   type DirectoryOverview,
 } from 'gmp/models/active-directory';
@@ -122,6 +123,22 @@ export const useGetActiveDirectoryChildren = ({
         kind,
         ...(showContainers ? {showContainers} : {}),
       }),
+  });
+};
+
+export const useGetActiveDirectoryComputerDetails = (
+  sourceId: string,
+  computerDn: string,
+) => {
+  const gmp = useGmp();
+  const opening = useId();
+  return useGetEntity<DirectoryComputer>({
+    ...freshQueryOptions,
+    id: sourceId,
+    queryId: 'get_active_directory_computer_details',
+    queryKeyParts: [computerDn, opening],
+    gmpMethod: ({id}) =>
+      gmp.activedirectory.getComputerDetails({sourceId: id, computerDn}),
   });
 };
 
