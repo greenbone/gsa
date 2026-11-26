@@ -212,6 +212,7 @@ export const ROUTES = {
   tags: {path: 'tags', url: '/tags'},
   tag: {path: 'tag/:id', url: (id: string) => appendEncodedId('/tag', id)},
   targets: {path: 'targets', url: '/targets'},
+  activeDirectory: {path: 'active-directory', url: '/active-directory'},
   target: {
     path: 'target/:id',
     url: (id: string) => appendEncodedId('/target', id),
