@@ -24,6 +24,7 @@ import {
   Clock3,
   Container,
   Copy,
+  Database,
   Diff,
   Download,
   Equal,
@@ -48,6 +49,7 @@ import {
   type LucideIcon,
   Megaphone,
   Minus,
+  Network,
   Pencil,
   Play,
   PlugZap,
@@ -179,6 +181,11 @@ const getIcons = (): Record<string, IconComponent> => {
 
   _iconCache = {
     // Lucide icons
+    ActiveDirectory: createIcon(
+      Network,
+      'active-directory-icon',
+      'Active Directory Icon',
+    ),
     AlertCircle: createIcon(
       AlertCircle,
       'alert-circle-icon',
@@ -215,6 +222,7 @@ const getIcons = (): Record<string, IconComponent> => {
     Check: createIcon(Check, 'check-icon', 'Check Icon'),
     Container: createIcon(Container, 'container-icon', 'Container Icon'),
     Copy: createIcon(Copy, 'copy-icon', 'Copy Icon'),
+    Database: createIcon(Database, 'database-icon', 'Database Icon'),
     KeyRound: createIcon(KeyRound, 'credential-icon', 'Credential Icon'),
     BarChart3: createIcon(BarChart3, 'dashboard-icon', 'Dashboard Icon'),
     Trash2: createIcon(Trash2, 'trashcan-icon', 'Delete Icon'),
@@ -465,6 +473,7 @@ export const DashboardIcon = getIcons().BarChart3;
 export const CalendarIcon = getIcons().Calendar;
 export const CheckIcon = getIcons().Check;
 export const CopyIcon = getIcons().Copy;
+export const DatabaseIcon = getIcons().Database;
 export const CertBundAdvIcon = getIcons().CertBundAdv;
 export const FirstIcon = getIcons().ChevronFirst;
 export const LastIcon = getIcons().ChevronLast;
@@ -511,6 +520,7 @@ export const InfoIcon = getIcons().Info;
 export const KeyIcon = getIcons().Key;
 export const CredentialIcon = getIcons().KeyRound;
 export const LdapIcon = getIcons().Ldap;
+export const ActiveDirectoryIcon = getIcons().ActiveDirectory;
 export const LegendIcon = getIcons().Legend;
 export const ListSvgIcon = getIcons().List;
 export const LogoutIcon = getIcons().LogOut;
