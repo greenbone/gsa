@@ -98,7 +98,7 @@ const ComputerDetails = ({
       value: <pre>{attributesSource.description || _('Not provided')}</pre>,
     },
   ];
-  const spns = details?.servicePrincipalNames;
+  const servicePrincipalNames = details?.servicePrincipalNames;
   if (loading) {
     attributes.push({
       label: _('Service principal names (SPNs)'),
@@ -108,16 +108,16 @@ const ComputerDetails = ({
         </output>
       ),
     });
-  } else if (isDefined(spns)) {
+  } else if (isDefined(servicePrincipalNames)) {
     let value: ReactNode = _('No SPNs registered');
-    if (spns.length > 0) {
+    if (servicePrincipalNames.length > 0) {
       value = (
         <Column gap="xxs">
           <ul
             style={{margin: 0, paddingInlineStart: 'var(--mantine-spacing-md)'}}
           >
-            {spns.map(spn => (
-              <li key={spn}>{spn}</li>
+            {servicePrincipalNames.map(servicePrincipalName => (
+              <li key={servicePrincipalName}>{servicePrincipalName}</li>
             ))}
           </ul>
           <small>
