@@ -113,8 +113,6 @@ const array = <T>(value?: T | T[]): T[] => {
   if (!isDefined(value)) return [];
   return Array.isArray(value) ? value : [value];
 };
-// GMP caps get_active_directory_objects at 1,000 results per request.
-const DIRECTORY_RESULTS_LIMIT = 1000;
 
 const reference = (value: ReferenceElement) => ({
   id: value._id,
@@ -235,7 +233,6 @@ class ActiveDirectoryCommand extends HttpCommand {
     return this.getObjects({
       ...params,
       tasks: true,
-      maxResults: DIRECTORY_RESULTS_LIMIT,
     });
   }
 
@@ -272,7 +269,7 @@ class ActiveDirectoryCommand extends HttpCommand {
     branchId,
     kind,
     showContainers,
-    maxResults = DIRECTORY_RESULTS_LIMIT,
+    maxResults,
   }: DirectoryBranchParams) {
     return this.getObjects({
       sourceId,
@@ -290,7 +287,7 @@ class ActiveDirectoryCommand extends HttpCommand {
     branchId,
     kind,
     showContainers,
-    maxResults = DIRECTORY_RESULTS_LIMIT,
+    maxResults,
   }: DirectoryBranchParams) {
     const resolution = await resolveDirectorySubtree(
       branchId,
