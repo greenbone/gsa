@@ -42,7 +42,6 @@ describe('Computer relationship table', () => {
       sourceId: AD_SOURCE,
       branchId: AD_ACCOUNTING,
       kind: 'ou',
-      maxResults: 100,
     });
     const {render} = rendererWith({
       capabilities: true,
@@ -169,7 +168,6 @@ describe('Computer relationship table', () => {
       sourceId: AD_SOURCE,
       branchId: AD_ACCOUNTING,
       kind: 'ou',
-      maxResults: 100,
     });
     const onSelect = testing.fn();
     const {render} = rendererWith({
