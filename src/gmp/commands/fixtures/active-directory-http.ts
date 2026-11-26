@@ -15,11 +15,12 @@ import {isDefined} from 'gmp/utils/identity';
 /** Test HTTP transport: use real XML parsing instead of mocking command data. */
 export const createDirectoryHttp = (
   scenario: DirectoryFixtureScenario = 'base',
+  limit?: number,
 ) => {
   const http = createHttp();
   http.request.mockImplementation(async (_method, options) => {
     const params = new URLSearchParams(buildUrlParams(options.args ?? {}));
-    const xml = activeDirectoryMockResponse(params, scenario);
+    const xml = activeDirectoryMockResponse(params, scenario, limit);
     if (!isDefined(xml))
       throw new Error(`Unexpected mocked command: ${params.get('cmd')}`);
     return new Response(xml);

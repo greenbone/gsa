@@ -282,6 +282,7 @@ export const directoryObjectsXml = (
 export const activeDirectoryMockResponse = (
   params: URLSearchParams,
   scenario: DirectoryFixtureScenario = 'base',
+  limit = scenario === 'large-level' ? AD_LARGE_LEVEL_SIZE : 200,
 ): string | undefined => {
   const cmd = params.get('cmd');
   const credentialXml = (credential: (typeof AD_CREDENTIALS)[number]) =>
@@ -370,8 +371,6 @@ export const activeDirectoryMockResponse = (
     ? requestedTypes
     : ['ou', 'computer', 'group'];
   nodes = nodes.filter(node => types.includes(node.kind));
-  const defaultLimit = scenario === 'large-level' ? AD_LARGE_LEVEL_SIZE : 200;
-  const limit = Number(params.get('max_results') ?? defaultLimit);
   return directoryObjectsXml(
     nodes.slice(0, limit),
     params,
