@@ -63,9 +63,9 @@ const useGetEntity = <TModel>({
     refetchInterval: resolvedRefetchInterval,
     staleTime,
     gcTime,
-    ...(retry === undefined ? {} : {retry}),
-    ...(refetchOnWindowFocus === undefined ? {} : {refetchOnWindowFocus}),
-    ...(refetchOnReconnect === undefined ? {} : {refetchOnReconnect}),
+    ...(!isDefined(retry) ? {} : {retry}),
+    ...(!isDefined(refetchOnWindowFocus) ? {} : {refetchOnWindowFocus}),
+    ...(!isDefined(refetchOnReconnect) ? {} : {refetchOnReconnect}),
     placeholderData: keepPreviousData
       ? (previousData, previousQuery) =>
           previousQuery?.queryKey[2] === id ? previousData : undefined

@@ -11,6 +11,7 @@ import {
   type DirectoryNode,
   type DirectoryOverview,
 } from 'gmp/models/active-directory';
+import {isDefined} from 'gmp/utils/identity';
 import Badge, {EThemeColors} from 'web/components/badge/StatusBadge';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Column from 'web/components/layout/Column';
@@ -256,7 +257,7 @@ const DirectoryTree = ({
       {nodes.some(
         node =>
           node.kind === 'computer' &&
-          computerPaths?.[node.id] !== undefined &&
+          isDefined(computerPaths?.[node.id]) &&
           computerPaths[node.id] !== pathKey,
       )
         ? _('These computers are shown in another directory group.')

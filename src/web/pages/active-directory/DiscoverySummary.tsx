@@ -5,6 +5,7 @@
 
 import styled from 'styled-components';
 import {type DirectoryOverview} from 'gmp/models/active-directory';
+import {isDefined} from 'gmp/utils/identity';
 import Badge, {EThemeColors} from 'web/components/badge/StatusBadge';
 import HighlightBox from 'web/components/highlight-box';
 import {
@@ -185,7 +186,7 @@ const DiscoverySummary = ({
                   </output>
                 )}
               </dt>
-              <dd data-unavailable={count === undefined ? '' : undefined}>
+              <dd data-unavailable={!isDefined(count) ? '' : undefined}>
                 {count ?? _('Unavailable')}
               </dd>
             </dl>

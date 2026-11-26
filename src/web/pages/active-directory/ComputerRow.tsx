@@ -6,6 +6,7 @@
 import {memo, type ReactNode} from 'react';
 import styled from 'styled-components';
 import {type DirectoryComputer} from 'gmp/models/active-directory';
+import {isDefined} from 'gmp/utils/identity';
 import Badge, {EThemeColors} from 'web/components/badge/StatusBadge';
 import Row from 'web/components/layout/Row';
 import useTranslation from 'web/hooks/useTranslation';
@@ -41,7 +42,7 @@ const ComputerRow = memo(function ComputerRow({
   const disclosure = <span>{node.name}</span>;
   const targets = node.matchedTargets;
   let targetSummary: ReactNode;
-  if (targets === undefined) {
+  if (!isDefined(targets)) {
     targetSummary = _('Matching information unavailable');
   } else if (targets.length === 0) {
     targetSummary = _('No matching readable scan targets');
@@ -59,7 +60,7 @@ const ComputerRow = memo(function ComputerRow({
     <li>
       <ComputerDirectoryRow $depth={depth}>
         <div>
-          {missingHostnameLabel !== undefined ? (
+          {isDefined(missingHostnameLabel) ? (
             <ComputerDisclosure gap="xs" wrap="wrap">
               {disclosure}
               <span

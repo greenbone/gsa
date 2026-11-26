@@ -5,6 +5,7 @@
 
 import {theme} from '@greenbone/ui-lib';
 import styled from 'styled-components';
+import {isDefined} from 'gmp/utils/identity';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
 
@@ -175,7 +176,7 @@ export const DirectoryEmptyNotice = styled.output<{$ownerDepth?: number}>`
   display: block;
   margin-inline: var(--mantine-spacing-sm);
   margin-inline-start: ${({$ownerDepth}) =>
-    $ownerDepth === undefined
+    !isDefined($ownerDepth)
       ? 'var(--mantine-spacing-sm)'
       : `calc(var(--mantine-spacing-sm) + ${disclosureWidth} + min(calc(${$ownerDepth} * ${directoryIndent}), 14%))`};
   padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
