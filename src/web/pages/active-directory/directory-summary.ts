@@ -12,6 +12,7 @@ import {
   type DirectoryGraph,
   getDirectoryMembers,
 } from 'gmp/models/directory-graph';
+import {isDefined} from 'gmp/utils/identity';
 
 export const summarizeDirectory = (graph: DirectoryGraph) => {
   const completeMemberships: Record<string, DirectoryComputer[]> = {};
@@ -32,7 +33,7 @@ export const summarizeDirectory = (graph: DirectoryGraph) => {
         .map(childId => graph.nodes[childId])
         .filter(
           (node): node is Exclude<DirectoryNode, DirectoryComputer> =>
-            node !== undefined && node.kind !== 'computer',
+            isDefined(node) && node.kind !== 'computer',
         );
       if (branchChildren.length !== 1) return [];
       const parentMembers = knownMembers[id] ?? [];
@@ -51,7 +52,7 @@ export const summarizeDirectory = (graph: DirectoryGraph) => {
   let matchingKnown = true;
   for (const computer of computers) {
     if (computer.disabled) disabled++;
-    if (computer.matchedTargets === undefined) {
+    if (!isDefined(computer.matchedTargets)) {
       matchingKnown = false;
     } else if (computer.matchedTargets.length > 0) {
       captured++;

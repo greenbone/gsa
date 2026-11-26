@@ -6,6 +6,7 @@
 import React from 'react';
 import {Spinner} from '@greenbone/ui-lib';
 import styled from 'styled-components';
+import {isDefined} from 'gmp/utils/identity';
 import Layout from 'web/components/layout/Layout';
 
 const StyledLayout = styled(Layout)`
@@ -17,7 +18,7 @@ const Loading = ({label}: {label?: string}) => (
     align={['center', 'center']}
     aria-label={label}
     data-testid="loading"
-    role={label === undefined ? undefined : 'status'}
+    role={!isDefined(label) ? undefined : 'status'}
   >
     <Spinner />
   </StyledLayout>

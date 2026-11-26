@@ -6,6 +6,7 @@
 import {expect, test as base, type Page} from '@playwright/test';
 import {login} from 'e2e/credentials';
 import {activeDirectoryMockResponse} from '../../src/gmp/commands/fixtures/active-directory';
+import {isDefined} from '../../src/gmp/utils/identity';
 
 const capabilities = [
   'get_active_directory_objects',
@@ -76,7 +77,7 @@ export const test = base.extend<{
             command === 'get_capabilities'
               ? capabilitiesXml
               : activeDirectoryMockResponse(searchParams);
-          if (xml === undefined && Object.hasOwn(responses, command)) {
+          if (!isDefined(xml) && Object.hasOwn(responses, command)) {
             xml = `<envelope>${responses[command]}</envelope>`;
           }
         } else if (method === 'POST' && pathname === '/e2e-api/gmp') {
@@ -88,7 +89,7 @@ export const test = base.extend<{
               '<envelope><action_result><action>save_setting</action><message>OK</message></action_result></envelope>';
           }
         }
-        if (xml === undefined) {
+        if (!isDefined(xml)) {
           unexpected.push(`${method} ${command || pathname}`);
           await route.abort();
           return;
