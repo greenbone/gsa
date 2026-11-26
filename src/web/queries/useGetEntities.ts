@@ -10,7 +10,7 @@ import {type EntitiesMeta} from 'gmp/commands/entities';
 import {type HttpCommandInputParams} from 'gmp/commands/http';
 import type Response from 'gmp/http/response';
 import {type FilterType} from 'gmp/models/filter';
-import {hasValue} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 import useGmp from 'web/hooks/useGmp';
 import useSessionToken from 'web/hooks/useSessionToken';
 import {
@@ -121,9 +121,9 @@ const useGetEntities = <
       };
     },
     refetchInterval: resolvedRefetchInterval,
-    ...(retry === undefined ? {} : {retry}),
-    ...(refetchOnWindowFocus === undefined ? {} : {refetchOnWindowFocus}),
-    ...(refetchOnReconnect === undefined ? {} : {refetchOnReconnect}),
+    ...(!isDefined(retry) ? {} : {retry}),
+    ...(!isDefined(refetchOnWindowFocus) ? {} : {refetchOnWindowFocus}),
+    ...(!isDefined(refetchOnReconnect) ? {} : {refetchOnReconnect}),
     staleTime:
       staleTime ?? (resolvedRefetchInterval === false ? Infinity : undefined),
     gcTime:
