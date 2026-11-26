@@ -7,6 +7,7 @@ import {
   type DirectoryComputer,
   type DirectoryNode,
 } from 'gmp/models/active-directory';
+import {isDefined} from 'gmp/utils/identity';
 
 export interface DirectorySnapshot {
   owner: string;
@@ -67,7 +68,7 @@ export const getDirectoryMembers = (
 
   while (pending.length > 0) {
     const childId = pending.pop();
-    if (childId === undefined || visited.has(childId)) continue;
+    if (!isDefined(childId) || visited.has(childId)) continue;
     visited.add(childId);
 
     const node = graph.nodes[childId];
@@ -130,7 +131,7 @@ export const getDirectoryComputerPaths = (
       if (
         child.kind === 'computer' &&
         (showDisabled || !child.disabled) &&
-        paths[child.id] === undefined
+        !isDefined(paths[child.id])
       ) {
         paths[child.id] = pathKey;
       }
