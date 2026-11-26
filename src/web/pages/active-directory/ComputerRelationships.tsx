@@ -8,6 +8,7 @@ import {
   type DirectoryComputer,
   type DirectoryTarget,
 } from 'gmp/models/active-directory';
+import {isDefined} from 'gmp/utils/identity';
 import Column from 'web/components/layout/Column';
 import DetailsLink from 'web/components/link/DetailsLink';
 import InfoTable from 'web/components/table/InfoTable';
@@ -56,7 +57,7 @@ const TargetStatusCell = ({
 
 const TargetRelationshipRows = ({target}: {target: DirectoryTarget}) => {
   const [_] = useTranslation();
-  if (target.tasks === undefined) {
+  if (!isDefined(target.tasks)) {
     return (
       <TableRow>
         <TargetStatusCell target={target} />
@@ -105,7 +106,7 @@ const ComputerRelationships = ({node}: {node: DirectoryComputer}) => {
     <DirectoryDetailsSection title={title}>
       {!node.matchedTargets?.length ? (
         <span>
-          {node.matchedTargets === undefined
+          {!isDefined(node.matchedTargets)
             ? _('Matching information unavailable')
             : _('No matching readable scan targets')}
         </span>
