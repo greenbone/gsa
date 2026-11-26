@@ -80,6 +80,12 @@ const ComputerRow = memo(function ComputerRow({
   checked,
   selectionPending,
   depth = 0,
+  measure,
+  spaceBefore,
+  virtualIndex,
+  virtualTotal,
+  onExpandedChange,
+  onFocusChange,
   onSelect,
 }: {
   node: DirectoryComputer;
@@ -87,6 +93,12 @@ const ComputerRow = memo(function ComputerRow({
   checked: boolean;
   selectionPending: boolean;
   depth?: number;
+  measure?: (element: HTMLLIElement | null) => void;
+  spaceBefore?: number;
+  virtualIndex?: number;
+  virtualTotal?: number;
+  onExpandedChange?: (id: string, expanded: boolean) => void;
+  onFocusChange?: (id: string, focused: boolean) => void;
   onSelect: (computer: DirectoryComputer, checked: boolean) => void;
 }) {
   const [_] = useTranslation();
@@ -126,7 +138,26 @@ const ComputerRow = memo(function ComputerRow({
     );
   }
   return (
-    <li>
+    <li
+      ref={measure}
+      aria-posinset={virtualIndex === undefined ? undefined : virtualIndex + 1}
+      aria-setsize={virtualTotal}
+      data-index={virtualIndex}
+      style={
+        spaceBefore === undefined ? undefined : {marginBlockStart: spaceBefore}
+      }
+      onBlurCapture={
+        onFocusChange
+          ? event => {
+              if (!event.currentTarget.contains(event.relatedTarget))
+                onFocusChange(node.id, false);
+            }
+          : undefined
+      }
+      onFocusCapture={
+        onFocusChange ? () => onFocusChange(node.id, true) : undefined
+      }
+    >
       <DirectoryAccordion
         transitionDuration={transitionDuration}
         value={expanded ? 'details' : null}
@@ -139,6 +170,7 @@ const ComputerRow = memo(function ComputerRow({
           // Reopening starts a fresh query even during the closing transition.
           if (open) setOpening(previous => previous + 1);
           setExpanded(open);
+          onExpandedChange?.(node.id, open);
         }}
       >
         <Accordion.Item value="details">
