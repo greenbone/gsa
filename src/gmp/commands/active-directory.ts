@@ -25,7 +25,6 @@ export interface DirectorySourceParams {
 export interface DirectoryBranchParams extends DirectorySourceParams {
   branchId: string;
   kind: DirectoryBranch['kind'];
-  maxResults?: number;
 }
 
 export interface DirectoryObjectsParams extends DirectorySourceParams {
@@ -37,7 +36,6 @@ export interface DirectoryObjectsParams extends DirectorySourceParams {
   targets?: boolean;
   tasks?: boolean;
   details?: boolean;
-  maxResults?: number;
 }
 
 interface ReferenceElement {
@@ -171,7 +169,6 @@ class ActiveDirectoryCommand extends HttpCommand {
     targets = true,
     tasks = false,
     details = false,
-    maxResults,
   }: DirectoryObjectsParams) {
     const args = this.getParams({
       cmd: 'get_active_directory_objects',
@@ -184,7 +181,6 @@ class ActiveDirectoryCommand extends HttpCommand {
       ...(!isDefined(baseDn) ? {} : {base_dn: baseDn}),
       ...(!isDefined(groupDn) ? {} : {group_dn: groupDn}),
       ...(!isDefined(objectTypes) ? {} : {'object_types:': objectTypes}),
-      ...(!isDefined(maxResults) ? {} : {max_results: maxResults}),
     });
     const rawResponse = await this.httpRequestWithRejectionTransform('get', {
       args,
@@ -269,7 +265,6 @@ class ActiveDirectoryCommand extends HttpCommand {
     branchId,
     kind,
     showContainers,
-    maxResults,
   }: DirectoryBranchParams) {
     return this.getObjects({
       sourceId,
@@ -278,7 +273,6 @@ class ActiveDirectoryCommand extends HttpCommand {
         ? {groupDn: branchId, scope: 'subtree' as const}
         : {baseDn: branchId}),
       tasks: true,
-      maxResults,
     });
   }
 
@@ -287,7 +281,6 @@ class ActiveDirectoryCommand extends HttpCommand {
     branchId,
     kind,
     showContainers,
-    maxResults,
   }: DirectoryBranchParams) {
     const resolution = await resolveDirectorySubtree(
       branchId,
@@ -300,7 +293,6 @@ class ActiveDirectoryCommand extends HttpCommand {
                 branchId: id,
                 kind: branchKind,
                 showContainers,
-                maxResults,
               })
             : await this.getObjects({
                 sourceId,
@@ -309,7 +301,6 @@ class ActiveDirectoryCommand extends HttpCommand {
                 // Hidden containers are still needed to link subtree members.
                 showContainers: true,
                 tasks: true,
-                maxResults,
               });
         return response.data;
       },

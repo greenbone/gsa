@@ -361,7 +361,6 @@ describe('ActiveDirectoryCommand wire contract', () => {
       targets: false,
       tasks: true,
       details: true,
-      maxResults: 200,
     });
     expect(http.request).toHaveBeenCalledWith('get', {
       args: {
@@ -374,7 +373,6 @@ describe('ActiveDirectoryCommand wire contract', () => {
         targets: 1,
         tasks: 1,
         details: 1,
-        max_results: 200,
       },
     });
     expect(result.data.counts.disabled).toBeUndefined();
@@ -412,13 +410,9 @@ describe('ActiveDirectoryCommand wire contract', () => {
   });
 
   test('preserves fetched counts and truncation and refuses incomplete recursive selection', async () => {
-    const http = createDirectoryHttp();
+    const http = createDirectoryHttp('base', 1);
     const command = new ActiveDirectoryCommand(http);
-    const result = await command.getObjects({
-      sourceId,
-      scope: 'subtree',
-      maxResults: 1,
-    });
+    const result = await command.getObjects({sourceId, scope: 'subtree'});
     expect(result.data.truncated).toBe(true);
     expect(result.data.roots).toHaveLength(1);
     http.request.mockResolvedValueOnce(
@@ -438,16 +432,9 @@ describe('ActiveDirectoryCommand wire contract', () => {
   test('browses and bulk-selects a 333-computer branch in one request each', async () => {
     const http = createDirectoryHttp();
     const computers = createDirectoryFixture('large-level').slice(1, 334);
-    http.request.mockImplementation(async (_method, {args}) => {
-      const limit = Number(args.max_results ?? 400);
-      return new Response(
-        directoryObjectsXml(
-          computers.slice(0, limit),
-          new URLSearchParams(),
-          computers.length > limit,
-        ),
-      );
-    });
+    http.request.mockResolvedValue(
+      new Response(directoryObjectsXml(computers, new URLSearchParams())),
+    );
     const command = new ActiveDirectoryCommand(http);
     const branch = {sourceId, branchId: AD_LARGE_LEVEL, kind: 'ou'} as const;
     const listing = await command.getChildren(branch);
@@ -466,18 +453,8 @@ describe('ActiveDirectoryCommand wire contract', () => {
   });
 
   test('honors truncation at a lower server limit', async () => {
-    const http = createDirectoryHttp();
-    const computers = createDirectoryFixture('large-level').slice(1, 334);
     const serverLimit = 100;
-    http.request.mockResolvedValue(
-      new Response(
-        directoryObjectsXml(
-          computers.slice(0, serverLimit),
-          new URLSearchParams(),
-          true,
-        ),
-      ),
-    );
+    const http = createDirectoryHttp('large-level', serverLimit);
     const command = new ActiveDirectoryCommand(http);
     const branch = {sourceId, branchId: AD_LARGE_LEVEL, kind: 'ou'} as const;
     const {data} = await command.getChildren(branch);
