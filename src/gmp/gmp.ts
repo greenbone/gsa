@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import ActiveDirectoryCommand from 'gmp/commands/active-directory';
 import AgentCommand from 'gmp/commands/agent';
 import AgentGroupCommand from 'gmp/commands/agent-group';
 import AgentGroupsCommand from 'gmp/commands/agent-groups';
@@ -125,6 +126,7 @@ class Gmp {
   private _isLoggingOut: boolean = false;
 
   public readonly agent: AgentCommand;
+  public readonly activedirectory: ActiveDirectoryCommand;
   public readonly agents: AgentsCommand;
   public readonly agentgroup: AgentGroupCommand;
   public readonly agentgroups: AgentGroupsCommand;
@@ -248,6 +250,7 @@ class Gmp {
     this._logoutListeners = [];
 
     this.agent = new AgentCommand(this.http);
+    this.activedirectory = new ActiveDirectoryCommand(this.http);
     this.agents = new AgentsCommand(this.http);
     this.agentgroup = new AgentGroupCommand(this.http);
     this.agentgroups = new AgentGroupsCommand(this.http);
