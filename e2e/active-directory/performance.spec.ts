@@ -34,10 +34,6 @@ test('measures Active Directory with 10,000 computers at one level', async ({
       params.get('cmd') === 'get_active_directory_objects' &&
       params.get('base_dn') === AD_LARGE_LEVEL &&
       params.get('scope') === 'onelevel';
-    if (isPerformanceListing) {
-      // Exercise the renderer beyond the live GMP limit.
-      params.set('max_results', String(AD_LARGE_LEVEL_SIZE));
-    }
     const xml = activeDirectoryMockResponse(params, 'large-level');
     if (!isDefined(xml)) {
       await route.fallback();
@@ -45,6 +41,7 @@ test('measures Active Directory with 10,000 computers at one level', async ({
     }
 
     if (isPerformanceListing) {
+      expect(params.has('max_results')).toBe(false);
       branchRequests += 1;
       responseBytes = Buffer.byteLength(xml);
     }
