@@ -9,6 +9,7 @@ import {
   Navigate,
   Outlet,
   redirect,
+  useMatches,
 } from 'react-router';
 import Authorized from 'web/Authorized';
 import Loading from 'web/components/loading/Loading';
@@ -24,6 +25,13 @@ const LoggedOutLayout = () => <Outlet />;
 
 const LoggedInLayout = () => {
   const isLoggedIn = useUserIsLoggedIn();
+  const fillContent = useMatches().some(
+    ({handle}) =>
+      typeof handle === 'object' &&
+      handle !== null &&
+      'contentLayout' in handle &&
+      handle.contentLayout === 'fill',
+  );
   if (!isLoggedIn) {
     return <Navigate replace to={ROUTES.login.url} />;
   }
@@ -31,7 +39,7 @@ const LoggedInLayout = () => {
     <Authorized>
       <SessionTracker />
       <SessionObserver />
-      <Page>
+      <Page contentLayout={fillContent ? 'fill' : undefined}>
         <Outlet />
       </Page>
     </Authorized>
@@ -688,11 +696,11 @@ const loggedInRoutes = [
       // Target routes
       {
         path: ROUTES.activeDirectoryBrowser.path,
-        lazy: async () => ({
-          Component: (
-            await import('web/pages/active-directory/ActiveDirectoryBrowserPage')
-          ).default,
-        }),
+        lazy: async () => {
+          const {default: Component, handle} =
+            await import('web/pages/active-directory/ActiveDirectoryBrowserPage');
+          return {Component, handle};
+        },
       },
       {
         path: ROUTES.activeDirectory.path,

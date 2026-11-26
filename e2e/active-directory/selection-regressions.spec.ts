@@ -4,6 +4,7 @@
  */
 
 import {
+  AD_BASE,
   AD_CLIENTS,
   AD_SOURCE,
   directoryObjectsXml,
@@ -23,6 +24,59 @@ const openDiscovery = async (page: Page) => {
 };
 
 test.use({viewport: {width: 1280, height: 900}});
+
+test('applies the fill layout only on the desktop discovery route', async ({
+  page,
+}) => {
+  let computerCount = 1;
+  await page.route('**/gmp?**', async route => {
+    const params = new URL(route.request().url()).searchParams;
+    if (params.get('cmd') !== listingCommand) {
+      await route.fallback();
+      return;
+    }
+    const computers = Array.from({length: computerCount}, (_, index) => ({
+      kind: 'computer' as const,
+      id: `CN=Computer ${index},${AD_BASE}`,
+      parent: AD_BASE,
+      name: `Computer ${index}`,
+      hostname: `computer-${index}.domain.local`,
+    }));
+    await route.fulfill({
+      contentType: 'application/xml',
+      body: directoryObjectsXml(computers, params),
+    });
+  });
+
+  const results = page.getByRole('region', {name: 'Directory objects'});
+  const isResultsScrollable = () =>
+    results.evaluate(node => node.scrollHeight > node.clientHeight);
+  const footer = page.getByText(/Copyright ©/);
+
+  await openDiscovery(page);
+  await expect(results.getByText('Computer 0', {exact: true})).toBeVisible();
+  await expect.poll(isResultsScrollable).toBe(false);
+  await expect(footer).toBeInViewport();
+
+  computerCount = 40;
+  await page.reload();
+  await expect(results.getByRole('listitem')).toHaveCount(40);
+  await expect.poll(isResultsScrollable).toBe(true);
+  await expect(footer).toBeInViewport();
+
+  await page.setViewportSize({width: 1024, height: 768});
+  await expect(results).toHaveCSS('overflow-y', 'auto');
+  await expect.poll(isResultsScrollable).toBe(true);
+  await page.setViewportSize({width: 1024, height: 720});
+  await expect(results).toHaveCSS('overflow-y', 'visible');
+  await expect.poll(isResultsScrollable).toBe(false);
+
+  await page.setViewportSize({width: 1280, height: 900});
+  await page.getByRole('link', {exact: true, name: 'Active Directory'}).click();
+  await expect(page).toHaveURL(/\/active-directory\/?$/);
+  await expect(results).toHaveCount(0);
+  await expect(page.getByRole('main')).toHaveCSS('min-inline-size', 'auto');
+});
 
 test('keeps the new listing when a closed branch responds after reopening', async ({
   page,
