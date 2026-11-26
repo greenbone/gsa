@@ -4,6 +4,7 @@
  */
 
 import {useState} from 'react';
+import {isDefined} from 'gmp/utils/identity';
 import Checkbox from 'web/components/form/Checkbox';
 
 export interface Entity {
@@ -43,7 +44,7 @@ const EntitySelection = <TEntity extends Entity>({
     } else if (onDeselected) {
       onDeselected(entity);
     }
-    if (controlledSelected === undefined) setSelected(value);
+    if (!isDefined(controlledSelected)) setSelected(value);
   };
   return (
     <Checkbox
