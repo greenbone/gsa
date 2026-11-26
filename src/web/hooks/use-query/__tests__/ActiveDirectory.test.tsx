@@ -4,17 +4,25 @@
  */
 
 import {describe, expect, test, testing} from '@gsa/testing';
-import {rendererWith, waitFor} from 'web/testing';
-import {useQueryClient} from '@tanstack/react-query';
+import {act, rendererWith, waitFor} from 'web/testing';
+import {
+  focusManager,
+  onlineManager,
+  useQueryClient,
+} from '@tanstack/react-query';
 import ActiveDirectoryCommand from 'gmp/commands/active-directory';
 import CredentialCommand from 'gmp/commands/credential';
 import CredentialsCommand from 'gmp/commands/credentials';
+import {AD_SOURCE, AD_CLIENTS} from 'gmp/commands/fixtures/active-directory';
 import {createDirectoryHttp} from 'gmp/commands/fixtures/active-directory-http';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {createSession} from 'gmp/testing';
 import {
   useGetActiveDirectoryCredentials,
+  useGetActiveDirectoryCredential,
   activeDirectoryCredentialFilter,
+  useGetActiveDirectoryOverview,
+  useGetActiveDirectoryChildren,
 } from 'web/hooks/use-query/active-directory';
 
 const createGmp = (token?: string) => {
@@ -85,5 +93,85 @@ describe('Active Directory GMP hooks', () => {
         QueryFilter.fromString('type=ssh'),
       ).toFilterString(),
     ).toBe('type=ad and type=ssh');
+  });
+
+  test('loads a single credential by ID before directory discovery', async () => {
+    const gmp = createGmp('token');
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() =>
+      useGetActiveDirectoryCredential(AD_SOURCE),
+    );
+    await waitFor(() =>
+      expect(result.current.data?.adHost).toBe('dc01.domain.local'),
+    );
+    expect(gmp.credential.get).toHaveBeenCalledWith({id: AD_SOURCE});
+    expect(gmp.activedirectory.getOverview).not.toHaveBeenCalled();
+  });
+
+  test('browses plain typed responses without polling, focus, or reconnect refetches', async () => {
+    const gmp = createGmp('token');
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() => ({
+      query: useGetActiveDirectoryOverview(AD_SOURCE),
+      client: useQueryClient(),
+    }));
+    await waitFor(() =>
+      expect(result.current.query.data?.counts.found).toBe(2),
+    );
+    expect(gmp.activedirectory.getOverview).toHaveBeenCalledWith({
+      sourceId: AD_SOURCE,
+    });
+    expect(
+      result.current.client.getQueryCache().getAll()[0].options,
+    ).toMatchObject({
+      staleTime: 0,
+      gcTime: 0,
+      refetchInterval: false,
+      retry: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    });
+    try {
+      await act(async () => {
+        focusManager.setFocused(false);
+        onlineManager.setOnline(false);
+        focusManager.setFocused(true);
+        onlineManager.setOnline(true);
+      });
+      expect(gmp.activedirectory.getOverview).toHaveBeenCalledTimes(1);
+    } finally {
+      focusManager.setFocused(undefined);
+      onlineManager.setOnline(true);
+    }
+  });
+
+  test('scopes branch queries by source, branch, session, and opening', async () => {
+    const gmp = createGmp('token');
+    const {renderHook} = rendererWith({gmp});
+    const {result} = renderHook(() => ({
+      query: useGetActiveDirectoryChildren({
+        sourceId: AD_SOURCE,
+        branchId: AD_CLIENTS,
+        kind: 'ou',
+      }),
+      client: useQueryClient(),
+    }));
+    await waitFor(() =>
+      expect(result.current.query.data?.roots).toHaveLength(3),
+    );
+    expect(gmp.activedirectory.getChildren).toHaveBeenCalledWith({
+      sourceId: AD_SOURCE,
+      branchId: AD_CLIENTS,
+      kind: 'ou',
+    });
+    expect(result.current.client.getQueryCache().getAll()[0].queryKey).toEqual([
+      'get_active_directory_children',
+      'token',
+      AD_SOURCE,
+      AD_CLIENTS,
+      'ou',
+      expect.any(String),
+    ]);
+    expect(gmp.activedirectory.resolveSubtree).not.toHaveBeenCalled();
   });
 });
