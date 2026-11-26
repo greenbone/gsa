@@ -25,6 +25,8 @@ import {
 } from 'web/pages/active-directory/useConnectionFormat';
 import {mayAccessActiveDirectory} from 'web/utils/active-directory-access';
 
+export const handle = {contentLayout: 'fill'} as const;
+
 const ConnectionHeading = styled.h2`
   margin: 0;
   min-inline-size: 0;
@@ -91,7 +93,6 @@ const BrowserContent = ({credentialId}: {credentialId: string}) => {
       {!isFetching && !isError && credential && (
         <BrowserViewport
           aria-labelledby="active-directory-connection-heading"
-          className="active-directory-discovery"
           gap="md"
           role="region"
         >

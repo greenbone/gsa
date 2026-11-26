@@ -4,7 +4,7 @@
  */
 
 import {useLocation} from 'react-router';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import GSA_VERSION from 'version';
 import {isDefined} from 'gmp/utils/identity';
 import ErrorBoundary from 'web/components/error/ErrorBoundary';
@@ -25,28 +25,29 @@ import Theme from 'web/utils/theme';
 
 interface PageProps {
   children: React.ReactNode;
+  contentLayout?: 'fill';
 }
 
 const StyledLayout = styled(Layout)`
   height: calc(-48px + 100vh);
 `;
 
-const Container = styled.div`
+const Container = styled.div<{$fillContent: boolean}>`
   flex: 1;
 
-  @media (min-width: 64rem) and (min-height: 48rem) {
-    &:has(> .active-directory-discovery) {
-      display: flex;
-      flex: 1 0 auto;
-      flex-direction: column;
-    }
-  }
+  ${({$fillContent}) =>
+    $fillContent &&
+    css`
+      @media (min-width: 64rem) and (min-height: 48rem) {
+        display: flex;
+        flex: 1 0 auto;
+        flex-direction: column;
+      }
+    `}
 `;
 
-const PageMain = styled(Main)`
-  &:has(.active-directory-discovery) {
-    min-inline-size: 0;
-  }
+const PageMain = styled(Main)<{$fillContent: boolean}>`
+  ${({$fillContent}) => $fillContent && 'min-inline-size: 0;'}
 `;
 
 const ScrollableMenuContainer = styled.div`
@@ -69,12 +70,13 @@ const Text = styled.div`
   margin-top: auto;
 `;
 
-const Page = ({children}: PageProps) => {
+const Page = ({children, contentLayout}: PageProps) => {
   const capabilities = useLoadCapabilities();
   const features = useLoadFeatures();
   const location = useLocation();
   const gmp = useGmp();
   const [_] = useTranslation();
+  const fillContent = contentLayout === 'fill';
 
   if (!isDefined(capabilities) || !isDefined(features)) {
     // only show content after caps and features have been loaded
@@ -98,8 +100,8 @@ const Page = ({children}: PageProps) => {
                 </Text>
               </MenuWrapper>
             </ScrollableMenuContainer>
-            <PageMain>
-              <Container>
+            <PageMain $fillContent={fillContent}>
+              <Container $fillContent={fillContent}>
                 <FeedSyncNotification />
                 <ErrorBoundary
                   key={location.pathname}
