@@ -121,17 +121,32 @@ test('selects AD computers and transfers them to a new target without saving', a
     page.getByRole('checkbox', {name: 'pc-legacy.domain.local'}),
   ).toBeChecked();
 
+  const computerToggle = page.getByRole('button', {
+    name: 'Computer details for pc-043.domain.local',
+  });
   const computerSelection = page.getByRole('checkbox', {
     name: 'pc-043.domain.local',
   });
   await computerSelection.focus();
   await computerSelection.press('Space');
   await expect(computerSelection).not.toBeChecked();
+  await expect(computerToggle).toHaveAttribute('aria-expanded', 'false');
   await expect(
     page.getByRole('button', {name: 'Collapse Accounting'}),
   ).toHaveAttribute('aria-expanded', 'true');
   await computerSelection.press('Space');
   await expect(computerSelection).toBeChecked();
+  await computerToggle.focus();
+  await computerToggle.press('Enter');
+  await expect(computerToggle).toHaveAttribute('aria-expanded', 'true');
+  const assignments = page.getByRole('table', {
+    name: 'Existing scan-target assignments',
+  });
+  await expect(assignments).toBeVisible();
+  await expect(assignments.getByRole('columnheader').first()).toHaveCSS(
+    'background-color',
+    'rgba(0, 0, 0, 0)',
+  );
   const boxes = await Promise.all(
     ['Clients', 'Accounting', 'pc-043.domain.local'].map(name =>
       page.getByRole('checkbox', {name, exact: true}).boundingBox(),
@@ -162,6 +177,28 @@ test('selects AD computers and transfers them to a new target without saving', a
     expect(tree.y + tree.height).toBeLessThanOrEqual(action.y + 1);
     expect(action.y + action.height).toBeLessThanOrEqual(footer.y + 1);
   };
+  await assignments.scrollIntoViewIfNeeded();
+  await expectDiscoveryRegionsInOrder();
+  await expect(apply).toBeInViewport();
+  await page.screenshot({path: testInfo.outputPath('accordion-details.png')});
+  const viewport = page.viewportSize();
+  await page.setViewportSize({width: 1000, height: 900});
+  await assignments.scrollIntoViewIfNeeded();
+  await expect(
+    assignments.getByRole('columnheader', {name: 'Scan config'}),
+  ).toBeVisible();
+  expect(
+    await assignments.evaluate(table => {
+      const container = table.parentElement;
+      if (!container)
+        throw new Error('Assignment table must have a scroll container');
+      const bounds = container.getBoundingClientRect();
+      return bounds.left >= 0 && bounds.right <= window.innerWidth;
+    }),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath('standard-details-narrow.png'),
+  });
   await expectDiscoveryRegionsInOrder();
   await page.setViewportSize({width: 640, height: 900});
   await apply.scrollIntoViewIfNeeded();
@@ -182,7 +219,9 @@ test('selects AD computers and transfers them to a new target without saving', a
   await page.screenshot({
     path: testInfo.outputPath('discovery-action-640.png'),
   });
-  await page.setViewportSize({width: 1280, height: 900});
+  if (viewport) await page.setViewportSize(viewport);
+  await computerToggle.press('Space');
+  await expect(assignments).toHaveCount(0);
 
   await page.screenshot({path: testInfo.outputPath('directory-browser.png')});
   await apply.click();

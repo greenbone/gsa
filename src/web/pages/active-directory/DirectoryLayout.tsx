@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import Column from 'web/components/layout/Column';
 import Row from 'web/components/layout/Row';
+import DetailsBlock from 'web/entity/DetailsBlock';
 
 export const disclosureWidth = 'var(--mantine-spacing-xl)';
 const directoryIndent = 'var(--mantine-spacing-lg)';
@@ -272,8 +273,27 @@ export const DirectoryHeader = styled(DirectoryRow)`
   }
 `;
 
+export const ComputerDetailsInset = styled.div<{$depth: number}>`
+  margin-block-start: var(--mantine-spacing-xs);
+  margin-block-end: var(--mantine-spacing-xs);
+  margin-inline-end: var(--mantine-spacing-sm);
+  margin-inline-start: ${({$depth}) =>
+    `min(calc(${disclosureWidth} + var(--mantine-spacing-sm) + ${$depth} * ${directoryIndent}), 25%)`};
+
+  @container ad-directory (max-width: ${theme.breakpoints.xs}) {
+    margin-inline-start: var(--mantine-spacing-xs);
+    margin-inline-end: var(--mantine-spacing-xs);
+  }
+`;
+
 export const DirectoryHeading = styled.h3`
   margin: 0;
   font-weight: 600;
   overflow-wrap: anywhere;
+`;
+
+export const DirectoryDetailsSection = styled(DetailsBlock)`
+  h2 {
+    margin: 0 0 var(--mantine-spacing-xs);
+  }
 `;
