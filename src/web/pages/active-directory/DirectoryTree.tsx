@@ -20,8 +20,8 @@ import {
   type DirectoryNode,
   type DirectoryOverview,
 } from 'gmp/models/active-directory';
-import {isDefined} from 'gmp/utils/identity';
 import {arraysEqual} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 import Badge, {EThemeColors} from 'web/components/badge/StatusBadge';
 import ErrorPanel from 'web/components/error/ErrorPanel';
 import Button from 'web/components/form/Button';
@@ -217,7 +217,7 @@ const DirectoryTreeNode = ({
     showDisabled,
   );
   const {total, selectableCount, selectedCount} = branchSelection;
-  const noSelectableComputers = total !== undefined && selectableCount === 0;
+  const noSelectableComputers = isDefined(total) && selectableCount === 0;
   // An unresolved mixed checkbox clears the known selection on activation.
   const clearIncompleteSelection = selectedIncompleteMembers.has(node.id);
   const indeterminate =
@@ -277,7 +277,7 @@ const DirectoryTreeNode = ({
     let selectionLabel = _('Membership not resolved');
     if (noSelectableComputers) {
       selectionLabel = _('No selectable computers · {{total}} total', {total});
-    } else if (total !== undefined) {
+    } else if (isDefined(total)) {
       selectionLabel = _(
         '{{selected}} of {{selectable}} selectable computers selected · {{total}} total',
         {selected: selectedCount, selectable: selectableCount, total},

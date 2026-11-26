@@ -12,6 +12,7 @@ import {
   AD_SOURCE,
   directoryObjectsXml,
 } from '../../src/gmp/commands/fixtures/active-directory';
+import {isDefined} from '../../src/gmp/utils/identity';
 import {
   expect,
   loginWithDirectoryFixtures,
@@ -193,7 +194,7 @@ for (const width of [1280, 640]) {
           xml = directoryObjectsXml(rows, params, true);
         }
       }
-      if (xml === undefined) await route.fallback();
+      if (!isDefined(xml)) await route.fallback();
       else await route.fulfill({contentType: 'application/xml', body: xml});
     });
 

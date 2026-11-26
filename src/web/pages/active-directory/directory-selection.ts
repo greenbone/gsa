@@ -8,6 +8,7 @@ import {
   type DirectoryGraph,
   getDirectoryMembers,
 } from 'gmp/models/directory-graph';
+import {isDefined} from 'gmp/utils/identity';
 
 export const getBranchesByComputer = (
   graph: DirectoryGraph,
@@ -40,14 +41,14 @@ export const getSelectedMembersOfIncompleteBranches = (
   };
 
   for (const [branchId, members] of Object.entries(knownMembers)) {
-    if (completeMemberships[branchId] !== undefined) continue;
+    if (isDefined(completeMemberships[branchId])) continue;
     for (const {id} of members) {
       if (selectedPaths.has(id)) addMember(branchId, id);
     }
   }
   for (const [id, path] of selectedPaths) {
     for (const branchId of path) {
-      if (completeMemberships[branchId] === undefined) addMember(branchId, id);
+      if (!isDefined(completeMemberships[branchId])) addMember(branchId, id);
     }
   }
   return selectedMembers;

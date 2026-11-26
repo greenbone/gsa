@@ -33,8 +33,8 @@ export function useGmpMutation<
   const queryClient = useQueryClient();
   return useMutation<TOutput, TError, TInput>({
     mutationFn: gmpMethod,
-    ...(gcTime === undefined ? {} : {gcTime}),
-    ...(retry === undefined ? {} : {retry}),
+    ...(!isDefined(gcTime) ? {} : {gcTime}),
+    ...(!isDefined(retry) ? {} : {retry}),
     onSuccess: (data, variables) => {
       if (isDefined(invalidateQueryIds)) {
         /*
