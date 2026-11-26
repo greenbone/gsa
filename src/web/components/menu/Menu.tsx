@@ -129,7 +129,13 @@ const Menu = () => {
   const targetsMatch = useMatch(routeMatch(ROUTES.targets.path));
   const targetMatch = useMatch(routeMatch(ROUTES.target.path));
   const isTargetsActive = Boolean(targetsMatch || targetMatch);
-  const isActiveDirectoryActive = Boolean(useMatch(ROUTES.activeDirectory.url));
+  const activeDirectoryMatch = useMatch(
+    `${ROUTES.activeDirectory.url}/discovery/*`,
+  );
+  const activeDirectoryListMatch = useMatch(ROUTES.activeDirectory.url);
+  const isActiveDirectoryActive = Boolean(
+    activeDirectoryMatch || activeDirectoryListMatch,
+  );
 
   const portlistsMatch = useMatch(routeMatch(ROUTES.portLists.path));
   const portlistMatch = useMatch(routeMatch(ROUTES.portList.path));

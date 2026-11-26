@@ -12,8 +12,13 @@ const StyledLayout = styled(Layout)`
   width: 100%;
 `;
 
-const Loading = () => (
-  <StyledLayout align={['center', 'center']} data-testid="loading">
+const Loading = ({label}: {label?: string}) => (
+  <StyledLayout
+    align={['center', 'center']}
+    aria-label={label}
+    data-testid="loading"
+    role={label === undefined ? undefined : 'status'}
+  >
     <Spinner />
   </StyledLayout>
 );

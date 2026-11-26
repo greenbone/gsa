@@ -37,7 +37,7 @@ const renderMenuWith = ({
 };
 
 describe('Menu rendering', () => {
-  test.each(['/active-directory'])(
+  test.each(['/active-directory', '/active-directory/discovery/credential-id'])(
     'shows Active Directory under Configuration on %s',
     route => {
       renderMenuWith({
@@ -64,6 +64,18 @@ describe('Menu rendering', () => {
       features: ['ENABLE_AD_INTEGRATION'],
     });
     fireEvent.click(screen.getByText('Configuration'));
+    expect(
+      screen.getByRole('link', {name: 'Active Directory'}),
+    ).toHaveAttribute('href', '/active-directory');
+  });
+
+  test('keeps Active Directory clickable from its discovery page', () => {
+    renderMenuWith({
+      capabilities: true,
+      gmpSettings: {},
+      features: ['ENABLE_AD_INTEGRATION'],
+      route: '/active-directory/discovery/credential-id',
+    });
     expect(
       screen.getByRole('link', {name: 'Active Directory'}),
     ).toHaveAttribute('href', '/active-directory');

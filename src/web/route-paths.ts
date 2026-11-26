@@ -213,6 +213,10 @@ export const ROUTES = {
   tag: {path: 'tag/:id', url: (id: string) => appendEncodedId('/tag', id)},
   targets: {path: 'targets', url: '/targets'},
   activeDirectory: {path: 'active-directory', url: '/active-directory'},
+  activeDirectoryBrowser: {
+    path: 'active-directory/discovery/:credentialId',
+    url: (id: string) => appendEncodedId('/active-directory/discovery', id),
+  },
   target: {
     path: 'target/:id',
     url: (id: string) => appendEncodedId('/target', id),

@@ -13,12 +13,18 @@ import ActiveDirectoryCommand from 'gmp/commands/active-directory';
 import CredentialCommand from 'gmp/commands/credential';
 import CredentialsCommand from 'gmp/commands/credentials';
 import FiltersCommand from 'gmp/commands/filters';
-import {AD_SOURCE, AD_BASE} from 'gmp/commands/fixtures/active-directory';
+import {
+  AD_SOURCE,
+  AD_OTHER_SOURCE,
+  AD_BASE,
+} from 'gmp/commands/fixtures/active-directory';
 import {createDirectoryHttp} from 'gmp/commands/fixtures/active-directory-http';
 import Response from 'gmp/http/response';
+import Credential from 'gmp/models/credential';
 import QueryFilter from 'gmp/models/filter/query-filter';
 import {filterString} from 'gmp/models/filter/utils';
 import {createSession} from 'gmp/testing';
+import ActiveDirectoryBrowserPage from 'web/pages/active-directory/ActiveDirectoryBrowserPage';
 import ActiveDirectoryPage from 'web/pages/active-directory/ActiveDirectoryPage';
 import {ROUTES} from 'web/route-paths';
 
@@ -57,6 +63,10 @@ const setup = (
             element={<ActiveDirectoryPage />}
             path={ROUTES.activeDirectory.path}
           />
+          <Route
+            element={<ActiveDirectoryBrowserPage />}
+            path={ROUTES.activeDirectoryBrowser.path}
+          />
         </Routes>
       </>,
     );
@@ -65,7 +75,7 @@ const setup = (
 
 const openAdministration = () =>
   screen.findByRole('link', {
-    name: /AD Administration/,
+    name: 'Open directory: AD Administration (dc01.domain.local)',
   });
 
 describe('Active Directory two-page flow', () => {
@@ -82,7 +92,7 @@ describe('Active Directory two-page flow', () => {
     expect(within(table).getByText('StartTLS')).toBeVisible();
     expect(gmp.activedirectory.getOverview).not.toHaveBeenCalled();
     fireEvent.click(screen.getAllByTitle('Next')[0]);
-    await screen.findByRole('link', {name: 'AD Site 50'});
+    await screen.findByRole('link', {name: 'Open directory: AD Site 50'});
     expect(
       filterString(gmp.credentials.get.mock.lastCall?.[0]?.filter),
     ).toContain('first=51');
@@ -91,7 +101,7 @@ describe('Active Directory two-page flow', () => {
     ).toContain('type=ad');
     expect(
       screen.queryByRole('link', {
-        name: /AD Administration/,
+        name: 'Open directory: AD Administration (dc01.domain.local)',
       }),
     ).not.toBeInTheDocument();
   });
@@ -99,8 +109,14 @@ describe('Active Directory two-page flow', () => {
   test('expands the credential preview without browsing the directory', async () => {
     const {gmp, renderPages} = setup();
     renderPages();
+    const action = await openAdministration();
+    expect(action).toHaveAttribute('title', 'Open directory');
+    expect(
+      within(action).getByTestId('active-directory-icon'),
+    ).toBeInTheDocument();
+    expect(action).toHaveTextContent('');
     fireEvent.click(
-      await screen.findByRole('button', {
+      screen.getByRole('button', {
         name: 'Show preview for AD Administration (dc01.domain.local)',
       }),
     );
@@ -121,6 +137,19 @@ describe('Active Directory two-page flow', () => {
     expect(screen.queryByText('Bind DN')).not.toBeInTheDocument();
   });
 
+  test('opens a direct link without fetching the connections list', async () => {
+    const {gmp, renderPages} = setup(
+      ROUTES.activeDirectoryBrowser.url(AD_OTHER_SOURCE),
+    );
+    renderPages();
+    await screen.findByRole('button', {name: 'Expand Clients'});
+    expect(gmp.credential.get).toHaveBeenCalledWith({id: AD_OTHER_SOURCE});
+    expect(gmp.credentials.get).not.toHaveBeenCalled();
+    expect(
+      screen.queryByRole('link', {name: 'Back to connections'}),
+    ).not.toBeInTheDocument();
+  });
+
   test('filters through the standard toolbar and keeps the AD scope on reset', async () => {
     const {gmp, renderPages} = setup();
     renderPages();
@@ -129,12 +158,12 @@ describe('Active Directory two-page flow', () => {
     fireEvent.change(input, {target: {value: 'name~Engineering'}});
     fireEvent.click(screen.getByTitle('Update Filter'));
     await screen.findByRole('link', {
-      name: 'AD Engineering (dc02.domain.local)',
+      name: 'Open directory: AD Engineering (dc02.domain.local)',
     });
     await waitFor(() =>
       expect(
         screen.queryByRole('link', {
-          name: /AD Administration/,
+          name: 'Open directory: AD Administration (dc01.domain.local)',
         }),
       ).not.toBeInTheDocument(),
     );
@@ -157,14 +186,14 @@ describe('Active Directory two-page flow', () => {
       target: {value: 'site 01'},
     });
     fireEvent.click(screen.getByTitle('Update Filter'));
-    await screen.findByRole('link', {name: 'AD Site 01'});
+    await screen.findByRole('link', {name: 'Open directory: AD Site 01'});
     expect(
       screen.queryByRole('link', {
-        name: /AD Administration/,
+        name: 'Open directory: AD Administration (dc01.domain.local)',
       }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('link', {name: 'AD Site 02'}),
+      screen.queryByRole('link', {name: 'Open directory: AD Site 02'}),
     ).not.toBeInTheDocument();
   });
 
@@ -213,34 +242,72 @@ describe('Active Directory two-page flow', () => {
     await openAdministration();
   });
 
-  describe.each([ROUTES.activeDirectory.url])(
-    'direct Active Directory access at %s',
-    route => {
-      test.each([
-        ['target access only', new Capabilities(['get_targets']), true],
-        ['credential access only', new Capabilities(['get_credentials']), true],
-        [
-          'discovery access only',
-          new Capabilities(['get_active_directory_objects']),
-          true,
-        ],
-        ['feature disabled', true, false],
-      ] as const)(
-        'blocks %s before making any Active Directory requests',
-        (_scenario, capabilities, enabled) => {
-          const features = new Features(
-            enabled ? ['ENABLE_AD_INTEGRATION'] : [],
-          );
-          const {gmp, renderPages} = setup(route, capabilities, features);
-          renderPages();
-          expect(screen.getByRole('alert')).toHaveTextContent(
-            'Active Directory is not available.',
-          );
-          expect(gmp.credentials.get).not.toHaveBeenCalled();
-          expect(gmp.credential.get).not.toHaveBeenCalled();
-          expect(gmp.activedirectory.getOverview).not.toHaveBeenCalled();
-        },
+  test.each(['missing', 'non-ad'])(
+    'blocks discovery for an unavailable credential (%s)',
+    async kind => {
+      const {gmp, renderPages} = setup(
+        ROUTES.activeDirectoryBrowser.url(AD_SOURCE),
       );
+      if (kind === 'missing')
+        gmp.credential.get.mockRejectedValue(new Error('Not found'));
+      else
+        gmp.credential.get.mockResolvedValue(
+          new Response(
+            new Credential({id: AD_SOURCE, credentialType: 'up', name: 'SSH'}),
+          ),
+        );
+      renderPages();
+      await screen.findByRole('button', {name: 'Retry credential'});
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'Could not load this Active Directory credential.',
+      );
+      expect(gmp.activedirectory.getOverview).not.toHaveBeenCalled();
+      expect(
+        screen.queryByRole('link', {name: 'Back to connections'}),
+      ).not.toBeInTheDocument();
     },
   );
+
+  test('retries loading a credential before querying the directory', async () => {
+    const {gmp, renderPages} = setup(
+      ROUTES.activeDirectoryBrowser.url(AD_SOURCE),
+    );
+    gmp.credential.get.mockRejectedValueOnce(new Error('Unavailable'));
+    renderPages();
+    fireEvent.click(
+      await screen.findByRole('button', {name: 'Retry credential'}),
+    );
+    await screen.findByRole('button', {name: 'Expand Clients'});
+    expect(gmp.credential.get).toHaveBeenCalledTimes(2);
+    expect(gmp.activedirectory.getOverview).toHaveBeenCalledTimes(1);
+  });
+
+  describe.each([
+    ROUTES.activeDirectory.url,
+    ROUTES.activeDirectoryBrowser.url(AD_SOURCE),
+  ])('direct Active Directory access at %s', route => {
+    test.each([
+      ['target access only', new Capabilities(['get_targets']), true],
+      ['credential access only', new Capabilities(['get_credentials']), true],
+      [
+        'discovery access only',
+        new Capabilities(['get_active_directory_objects']),
+        true,
+      ],
+      ['feature disabled', true, false],
+    ] as const)(
+      'blocks %s before making any Active Directory requests',
+      (_scenario, capabilities, enabled) => {
+        const features = new Features(enabled ? ['ENABLE_AD_INTEGRATION'] : []);
+        const {gmp, renderPages} = setup(route, capabilities, features);
+        renderPages();
+        expect(screen.getByRole('alert')).toHaveTextContent(
+          'Active Directory is not available.',
+        );
+        expect(gmp.credentials.get).not.toHaveBeenCalled();
+        expect(gmp.credential.get).not.toHaveBeenCalled();
+        expect(gmp.activedirectory.getOverview).not.toHaveBeenCalled();
+      },
+    );
+  });
 });
