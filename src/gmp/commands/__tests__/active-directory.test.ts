@@ -233,7 +233,7 @@ describe('ActiveDirectoryCommand wire contract', () => {
     expect(root.data.roots.some(node => node.id === AD_ACCOUNTING)).toBe(false);
     expect(http.request).toHaveBeenCalledTimes(1);
     expect(http.request).toHaveBeenLastCalledWith('get', {
-      args: expect.objectContaining({scope: 'onelevel', max_results: 1000}),
+      args: expect.objectContaining({scope: 'onelevel'}),
     });
     const branch = await command.getChildren({
       sourceId,
@@ -250,11 +250,12 @@ describe('ActiveDirectoryCommand wire contract', () => {
       args: expect.objectContaining({
         scope: 'onelevel',
         base_dn: AD_CLIENTS,
-        max_results: 1000,
       }),
     });
-    for (const [, {args}] of http.request.mock.calls)
+    for (const [, {args}] of http.request.mock.calls) {
       expect(args).not.toHaveProperty('details');
+      expect(args).not.toHaveProperty('max_results');
+    }
   });
 
   test('requests extended attributes and scan assignments for only the selected computer', async () => {
@@ -438,7 +439,7 @@ describe('ActiveDirectoryCommand wire contract', () => {
     const http = createDirectoryHttp();
     const computers = createDirectoryFixture('large-level').slice(1, 334);
     http.request.mockImplementation(async (_method, {args}) => {
-      const limit = Number(args.max_results ?? 200);
+      const limit = Number(args.max_results ?? 400);
       return new Response(
         directoryObjectsXml(
           computers.slice(0, limit),
@@ -458,21 +459,36 @@ describe('ActiveDirectoryCommand wire contract', () => {
     expect(resolution.data.computers).toHaveLength(333);
     expect(http.request).toHaveBeenCalledTimes(2);
     expect(http.request).toHaveBeenLastCalledWith('get', {
-      args: expect.objectContaining({scope: 'subtree', max_results: 1000}),
+      args: expect.objectContaining({scope: 'subtree'}),
     });
+    for (const [, {args}] of http.request.mock.calls)
+      expect(args).not.toHaveProperty('max_results');
   });
 
-  test('keeps the truncated flag when the browse limit is exceeded', async () => {
-    const http = createDirectoryHttp('large-level');
+  test('honors truncation at a lower server limit', async () => {
+    const http = createDirectoryHttp();
+    const computers = createDirectoryFixture('large-level').slice(1, 334);
+    const serverLimit = 100;
+    http.request.mockResolvedValue(
+      new Response(
+        directoryObjectsXml(
+          computers.slice(0, serverLimit),
+          new URLSearchParams(),
+          true,
+        ),
+      ),
+    );
     const command = new ActiveDirectoryCommand(http);
-    const {data} = await command.getChildren({
-      sourceId,
-      branchId: AD_LARGE_LEVEL,
-      kind: 'ou',
-    });
+    const branch = {sourceId, branchId: AD_LARGE_LEVEL, kind: 'ou'} as const;
+    const {data} = await command.getChildren(branch);
     expect(data.truncated).toBe(true);
-    expect(data.roots).toHaveLength(1000);
-    expect(http.request).toHaveBeenCalledTimes(1);
+    expect(data.roots).toHaveLength(serverLimit);
+    await expect(command.resolveSubtree(branch)).rejects.toBeInstanceOf(
+      IncompleteDirectoryResultsError,
+    );
+    expect(http.request).toHaveBeenCalledTimes(2);
+    for (const [, {args}] of http.request.mock.calls)
+      expect(args).not.toHaveProperty('max_results');
   });
 
   test('resolves nested groups sequentially with the credential search base', async () => {
@@ -497,10 +513,11 @@ describe('ActiveDirectoryCommand wire contract', () => {
       args: expect.objectContaining({
         scope: 'subtree',
         group_dn: AD_FILE_SERVERS,
-        max_results: 1000,
       }),
     });
     expect(http.request.mock.calls[1][1].args).not.toHaveProperty('base_dn');
+    for (const [, {args}] of http.request.mock.calls)
+      expect(args).not.toHaveProperty('max_results');
   });
 
   test('terminates cycles and computes membership for overlapping cyclic groups', async () => {
