@@ -11,6 +11,7 @@ import {
   afterAll,
   testing,
 } from '@gsa/testing';
+import ActiveDirectoryCommand from 'gmp/commands/active-directory';
 import HttpCommand from 'gmp/commands/http';
 import {
   createHttp,
@@ -24,6 +25,14 @@ import {createSession, createStorage} from 'gmp/testing';
 let origLocation: Location;
 
 describe('Gmp tests', () => {
+  test('should expose the Active Directory command', () => {
+    const gmp = new Gmp({
+      settings: new Settings(createStorage()),
+      session: createSession(),
+      http: createHttp(),
+    });
+    expect(gmp.activedirectory).toBeInstanceOf(ActiveDirectoryCommand);
+  });
   beforeAll(() => {
     origLocation = globalThis.location;
     // @ts-expect-error
