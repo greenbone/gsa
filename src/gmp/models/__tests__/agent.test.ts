@@ -76,6 +76,25 @@ describe('Agent model tests', () => {
     expect(agent.hostname).toEqual('agent-hostname');
   });
 
+  test('should distinguish missing, empty, and populated excluded paths', () => {
+    const windowsPath = String.raw`C:\ProgramData\Example\Cache`;
+    const linuxPath = '/opt/private & cache';
+    const fromFileSearch = (excludedPaths?: {item?: string | string[]} | '') =>
+      Agent.fromElement({
+        _id: 'test-id',
+        config: {file_search: {excluded_paths: excludedPaths}},
+      }).config?.fileSearch?.excludedPaths;
+
+    expect(fromFileSearch()).toBeUndefined();
+    expect(fromFileSearch('')).toEqual([]);
+    expect(fromFileSearch({})).toEqual([]);
+    expect(fromFileSearch({item: windowsPath})).toEqual([windowsPath]);
+    expect(fromFileSearch({item: [windowsPath, linuxPath]})).toEqual([
+      windowsPath,
+      linuxPath,
+    ]);
+  });
+
   test('should parse ipAddresses', () => {
     const agent = Agent.fromElement({
       _id: 'test-id',

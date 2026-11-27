@@ -4,7 +4,14 @@
  */
 
 import {describe, test, expect, testing} from '@gsa/testing';
-import {fireEvent, rendererWith, screen, wait, within} from 'web/testing';
+import {
+  fireEvent,
+  rendererWith,
+  screen,
+  userEvent,
+  wait,
+  within,
+} from 'web/testing';
 import Scanner, {AGENT_CONTROLLER_SCANNER_TYPE} from 'gmp/models/scanner';
 import {YES_VALUE} from 'gmp/parser';
 import {createSession} from 'gmp/testing';
@@ -77,6 +84,7 @@ describe('ScannerAgentConfigSettings tests', () => {
     expect(screen.getByText('Agent Script Executor')).toBeInTheDocument();
     expect(screen.getByText('Heartbeat')).toBeInTheDocument();
     expect(screen.getByText('Agent Control Defaults')).toBeInTheDocument();
+    expect(screen.queryByText('File Search')).not.toBeInTheDocument();
   });
 
   test('should display retry settings with correct values', () => {
@@ -704,6 +712,80 @@ describe('ScannerAgentConfigSettings multiple schedules', () => {
 });
 
 describe('ScannerAgentConfigSettings saved and refreshed values', () => {
+  test('saves, preserves and clears default exclusions', async () => {
+    const gmp = createGmp();
+    const onError = testing.fn();
+    const {render} = rendererWith({gmp, capabilities: true});
+    const scannerWithPaths = (paths: string[]) => {
+      const scanner = createMockScanner();
+      const defaults = scanner.agentControlConfig?.agentDefaults;
+      if (defaults) {
+        defaults.fileSearch = {excludedPaths: paths};
+      }
+      return scanner;
+    };
+    const windowsPath = 'C:\\ProgramData\\Cache';
+    const linuxPath = '/opt/private,cache';
+    const {rerender} = render(
+      <ScannerAgentConfigSettings
+        scanner={scannerWithPaths([windowsPath])}
+        onError={onError}
+      />,
+    );
+    const pathRow = () =>
+      within(screen.getByRole('row', {name: /Excluded paths/}));
+
+    expect(pathRow().getByText(windowsPath)).toBeVisible();
+    fireEvent.click(pathRow().getByTestId('edit-icon'));
+    await userEvent.type(
+      pathRow().getByRole('combobox', {name: 'Excluded paths'}),
+      linuxPath + '{enter}',
+    );
+    fireEvent.click(pathRow().getByTitle('Save'));
+    await wait();
+    expect(gmp.scanner.modifyAgentControlConfig).toHaveBeenLastCalledWith(
+      expect.objectContaining({excludedPaths: [windowsPath, linuxPath]}),
+    );
+
+    const heartbeatRow = within(
+      screen.getByRole('row', {name: /^Interval \(seconds\)/}),
+    );
+    fireEvent.click(heartbeatRow.getByTestId('edit-icon'));
+    fireEvent.change(heartbeatRow.getByDisplayValue('300'), {
+      target: {value: '400'},
+    });
+    fireEvent.click(heartbeatRow.getByTitle('Save'));
+    await wait();
+    expect(gmp.scanner.modifyAgentControlConfig).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        intervalInSeconds: 400,
+        excludedPaths: [windowsPath, linuxPath],
+      }),
+    );
+
+    rerender(
+      <ScannerAgentConfigSettings
+        scanner={scannerWithPaths([windowsPath, linuxPath])}
+        onError={onError}
+      />,
+    );
+    expect(pathRow().getByText(linuxPath)).toBeVisible();
+    fireEvent.click(pathRow().getByTestId('edit-icon'));
+    fireEvent.click(pathRow().getByTitle('Clear'));
+    await wait();
+    expect(gmp.scanner.modifyAgentControlConfig).toHaveBeenLastCalledWith(
+      expect.objectContaining({excludedPaths: []}),
+    );
+    rerender(
+      <ScannerAgentConfigSettings
+        scanner={scannerWithPaths([])}
+        onError={onError}
+      />,
+    );
+    expect(pathRow().getByText('Not set')).toBeVisible();
+    expect(onError).not.toHaveBeenCalled();
+  });
+
   test('preserves saved schedules in subsequent saves and uses refreshed server values', async () => {
     const gmp = createGmp();
     const scanner = createMockScanner();

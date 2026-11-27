@@ -37,6 +37,9 @@ interface AgentConfigElement {
     };
   };
   agent_script_executor?: AgentScriptExecutorElement;
+  file_search?: {
+    excluded_paths?: {item?: string | string[]} | '';
+  };
   heartbeat?: {
     interval_in_seconds?: number;
     miss_until_inactive?: number;
@@ -100,6 +103,7 @@ interface AgentControlConfig {
 export interface AgentConfig {
   agentControl: AgentControlConfig;
   agentScriptExecutor: AgentScriptExecutorConfig;
+  fileSearch?: {excludedPaths: string[]};
   heartbeat: HeartbeatConfig;
 }
 
@@ -284,6 +288,7 @@ class Agent extends Model {
         heartbeat,
         agent_control: agentControl,
         agent_script_executor: agentScriptExecutor,
+        file_search: fileSearch,
       } = config;
 
       copy.config = {
@@ -301,6 +306,16 @@ class Agent extends Model {
           missUntilInactive: heartbeat?.miss_until_inactive ?? 0,
         },
       };
+
+      const excludedPaths = fileSearch?.excluded_paths;
+      if (isDefined(excludedPaths)) {
+        copy.config.fileSearch = {
+          excludedPaths: map(
+            excludedPaths === '' ? undefined : excludedPaths.item,
+            path => path,
+          ),
+        };
+      }
     }
 
     return copy;

@@ -93,6 +93,45 @@ describe('AgentDialog tests', () => {
     ).not.toBeInTheDocument();
   });
 
+  test('should submit excluded paths as tags and clear removed paths', async () => {
+    const {render} = rendererWith({gmp: createGmp()});
+    const windowsPath = String.raw`C:\ProgramData\Example\Cache`;
+
+    render(
+      <AgentDialog
+        excludedPaths={[windowsPath]}
+        onClose={onClose}
+        onSave={onSave}
+      />,
+    );
+
+    expect(screen.getByText(windowsPath)).toBeVisible();
+    expect(
+      screen.getByRole('region', {
+        name: 'More information about excluded paths',
+      }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getDialogSaveButton());
+    await wait();
+    expect(onSave).toHaveBeenLastCalledWith(
+      expect.objectContaining({excludedPaths: [windowsPath]}),
+    );
+
+    const tag = screen.getByText(windowsPath).parentElement;
+    const removeButton = tag?.querySelector('button');
+    expect(removeButton).toBeTruthy();
+    if (!removeButton) {
+      throw new Error('Remove button not found');
+    }
+    fireEvent.click(removeButton);
+    fireEvent.click(screen.getDialogSaveButton());
+    await wait();
+    expect(onSave).toHaveBeenLastCalledWith(
+      expect.objectContaining({excludedPaths: []}),
+    );
+  });
+
   test('should handle form field changes', async () => {
     const {render} = rendererWith({gmp: createGmp()});
 

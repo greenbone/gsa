@@ -332,6 +332,27 @@ describe('Scanner model function tests', () => {
     expect(res.length).toBeGreaterThan(0);
   });
 
+  test.each([
+    {list: undefined, expected: undefined},
+    {list: {_is_list: 0}, expected: []},
+    {list: {_is_list: 1, item: '/opt/private'}, expected: ['/opt/private']},
+    {
+      list: {_is_list: 1, item: ['C:\\ProgramData\\Cache', '/opt/private']},
+      expected: ['C:\\ProgramData\\Cache', '/opt/private'],
+    },
+  ])('should parse excluded path defaults from $list', ({list, expected}) => {
+    const scanner = Scanner.fromElement({
+      _id: 'test-id',
+      agent_control_config_defaults: {
+        agent_defaults: {file_search: {excluded_paths: list}},
+      },
+    });
+
+    expect(
+      scanner.agentControlConfig?.agentDefaults.fileSearch?.excludedPaths,
+    ).toEqual(expected);
+  });
+
   test('should parse agent_control_config_defaults with all fields', () => {
     const scanner = Scanner.fromElement({
       _id: 'test-id',

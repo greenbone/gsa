@@ -11,6 +11,7 @@ import useTranslation from 'web/hooks/useTranslation';
 
 interface AgentConfigurationSectionProps {
   activeCronExpression: string;
+  children?: React.ReactNode;
   hidePort?: boolean;
   isEdit?: boolean;
   port?: number;
@@ -26,6 +27,7 @@ export const DEFAULT_CRON_EXPRESSION = '0 */12 * * *';
 
 const AgentConfigurationSection = ({
   activeCronExpression,
+  children,
   hidePort = false,
   isEdit = false,
   intervalInSeconds = DEFAULT_HEARTBEAT_INTERVAL,
@@ -84,6 +86,7 @@ const AgentConfigurationSection = ({
             onChange={onValueChange}
           />
         )}
+        {children}
       </Column>
     </Section>
   );

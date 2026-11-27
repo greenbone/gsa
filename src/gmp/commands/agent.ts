@@ -5,10 +5,11 @@
 
 import EntityCommand from 'gmp/commands/entity';
 import type Http from 'gmp/http/http';
+import {type Data} from 'gmp/http/utils';
 import logger from 'gmp/log';
 import Agent, {type AgentElement} from 'gmp/models/agent';
 import {type Element} from 'gmp/models/model';
-import {parseYesNo} from 'gmp/parser';
+import {parseYesNo, YES_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
 export interface AgentModifyParams {
@@ -16,6 +17,7 @@ export interface AgentModifyParams {
   authorized?: boolean;
   updateToLatest?: boolean;
   comment?: string;
+  excludedPaths?: string[];
   intervalInSeconds?: number;
 }
 
@@ -45,9 +47,10 @@ class AgentCommand extends EntityCommand<Agent, AgentElement> {
     authorized,
     updateToLatest,
     comment,
+    excludedPaths,
     intervalInSeconds,
   }: AgentModifyParams) {
-    const data = {
+    const data: Data = {
       cmd: 'modify_agent',
       'agent_ids:': agentsIds,
       authorized: parseYesNo(authorized),
@@ -57,6 +60,13 @@ class AgentCommand extends EntityCommand<Agent, AgentElement> {
       comment,
       interval_in_seconds: intervalInSeconds,
     };
+
+    if (isDefined(excludedPaths)) {
+      data.set_excluded_paths = YES_VALUE;
+      excludedPaths.forEach((path, index) => {
+        data[`excluded_paths:${index}`] = path;
+      });
+    }
 
     log.debug('Final data being sent to modify_agents:', data);
 

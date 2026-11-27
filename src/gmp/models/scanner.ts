@@ -66,6 +66,11 @@ interface HeartbeatElement {
 interface AgentDefaultsElement {
   agent_control?: AgentControlElement;
   agent_script_executor?: AgentScriptExecutorElement;
+  file_search?: {
+    excluded_paths?:
+      | {item?: string | string[]; _is_list?: number | string}
+      | '';
+  };
   heartbeat?: HeartbeatElement;
 }
 
@@ -182,6 +187,7 @@ export interface Heartbeat {
 interface AgentDefaults {
   agentControl: AgentControl;
   agentScriptExecutor: AgentScriptExecutor;
+  fileSearch?: {excludedPaths: string[]};
   heartbeat: Heartbeat;
 }
 
@@ -395,6 +401,7 @@ class Scanner extends Model {
       if (isDefined(agentDefaults) || isDefined(agentControlDefaults)) {
         const cronTimes =
           agentDefaults?.agent_script_executor?.scheduler_cron_time?.item;
+        const excludedPaths = agentDefaults?.file_search?.excluded_paths;
         let schedulerCronTimes: SchedulerCronEntry[] = [];
         if (isDefined(cronTimes)) {
           const items = Array.isArray(cronTimes) ? cronTimes : [cronTimes];
@@ -438,6 +445,14 @@ class Scanner extends Model {
                 agentDefaults?.agent_script_executor?.indexer_dir_depth ?? 0,
               schedulerCronTimes,
             },
+            ...(isDefined(excludedPaths) && {
+              fileSearch: {
+                excludedPaths: map(
+                  excludedPaths === '' ? undefined : excludedPaths.item,
+                  path => path,
+                ),
+              },
+            }),
             heartbeat: {
               intervalInSeconds:
                 agentDefaults?.heartbeat?.interval_in_seconds ?? 0,
