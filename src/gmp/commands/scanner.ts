@@ -42,6 +42,7 @@ export interface ScannerAgentControlConfigParams {
   bulkSize?: number;
   bulkThrottleTimeInMs?: number;
   indexerDirDepth?: number;
+  excludedPaths?: string[];
   schedulerCronTimes?: Array<SchedulerCronEntry | string>;
   intervalInSeconds?: number;
   missUntilInactive?: number;
@@ -138,6 +139,7 @@ class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
     bulkSize,
     bulkThrottleTimeInMs,
     indexerDirDepth,
+    excludedPaths,
     schedulerCronTimes,
     intervalInSeconds,
     missUntilInactive,
@@ -166,6 +168,10 @@ class ScannerCommand extends EntityCommand<Scanner, ScannerElement> {
     if (indexerDirDepth !== undefined) {
       data.indexer_dir_depth = indexerDirDepth;
     }
+    excludedPaths?.forEach((path, index) => {
+      // gvmd decodes backslash pairs in GMP path items.
+      data[`excluded_paths:${index}`] = path.replaceAll('\\', '\\\\');
+    });
     if (schedulerCronTimes !== undefined && schedulerCronTimes.length > 0) {
       data['scheduler_cron_times:'] = schedulerCronTimes.map(entry =>
         typeof entry === 'string'

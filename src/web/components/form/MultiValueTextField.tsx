@@ -8,11 +8,13 @@ import tagStyles, {type TagStyleName} from 'web/components/form/tag-styles';
 import Theme from 'web/utils/theme';
 
 interface MultiValueTextFieldProps {
+  'aria-label'?: string;
   color?: TagStyleName;
   grow?: number | string;
   name?: string;
   title?: string;
   placeholder?: string;
+  splitChars?: string[];
   value?: string[];
   disabled?: boolean;
   onChange?: (value: string[], name?: string) => void;
@@ -20,10 +22,12 @@ interface MultiValueTextFieldProps {
 }
 
 const MultiValueTextField = ({
+  'aria-label': ariaLabel,
   color = 'green',
   name,
   title,
   placeholder,
+  splitChars,
   value = [],
   disabled,
   grow,
@@ -34,11 +38,13 @@ const MultiValueTextField = ({
 
   return (
     <TagsInput
+      aria-label={ariaLabel}
       data-testid="form-multi-input"
       disabled={disabled}
       label={title}
       name={name}
       placeholder={placeholder}
+      splitChars={splitChars}
       styles={{
         label: {
           fontWeight: 500,

@@ -13,10 +13,12 @@ import {
   type Heartbeat,
   type SchedulerCronEntry,
 } from 'gmp/models/scanner';
+import MultiValueTextField from 'web/components/form/MultiValueTextField';
 import NumberField from 'web/components/form/NumberField';
 import Radio from 'web/components/form/Radio';
 import SchedulerCronFields from 'web/components/form/SchedulerCronFields';
 import SchedulerCronLabel from 'web/components/form/SchedulerCronLabel';
+import TagListDisplay from 'web/components/form/TagListDisplay';
 import HighlightBox from 'web/components/highlight-box';
 import Column from 'web/components/layout/Column';
 import Layout from 'web/components/layout/Layout';
@@ -43,7 +45,9 @@ interface ScannerConfigValues
     AgentControlRetry,
     AgentScriptExecutor,
     Heartbeat,
-    AgentControlDefaults {}
+    AgentControlDefaults {
+  excludedPaths?: string[];
+}
 
 type ConfigFieldKey = keyof ScannerConfigValues;
 
@@ -53,6 +57,8 @@ interface ConfigFieldDefinition {
   key: ConfigFieldKey;
   label: string;
   title: string;
+  infoMessage?: string;
+  clearValue?: FormValue;
   renderEdit: (
     values: ScannerConfigValues,
     onChange: (value: FormValue) => void,
@@ -86,11 +92,7 @@ const SchedulerSummaryDelay = styled.div`
 `;
 
 const renderConfigValue = (value: FormValue): ReactNode => {
-  if (Array.isArray(value)) {
-    return <Layout>{value.map(entry => entry.cron).join(', ')}</Layout>;
-  }
-
-  return <Layout>{value}</Layout>;
+  return <Layout>{typeof value === 'number' ? value : undefined}</Layout>;
 };
 
 const getScannerPayload = (scanner: Scanner): ScannerConfigValues => {
@@ -107,6 +109,7 @@ const getScannerPayload = (scanner: Scanner): ScannerConfigValues => {
     bulkThrottleTimeInMs:
       agentDefaults?.agentScriptExecutor.bulkThrottleTimeInMs ?? 0,
     indexerDirDepth: agentDefaults?.agentScriptExecutor.indexerDirDepth ?? 0,
+    excludedPaths: agentDefaults?.fileSearch?.excludedPaths,
     schedulerCronTimes: cronTimes ?? [],
     intervalInSeconds: agentDefaults?.heartbeat.intervalInSeconds ?? 0,
     missUntilInactive: agentDefaults?.heartbeat.missUntilInactive ?? 0,
@@ -192,6 +195,7 @@ const EditableConfigField = ({
     <EditableSettingRow
       editComponent={editComponent}
       errorMessage={errorMessage}
+      infoMessage={field.infoMessage}
       isEditMode={isEditMode}
       label={field.label}
       title={field.title}
@@ -316,6 +320,7 @@ const ScannerAgentConfigSettings = ({
   const sections: Array<{
     title: string;
     fields: ConfigFieldDefinition[];
+    visible?: boolean;
   }> = [
     {
       title: _('Agent Control - Retry Settings'),
@@ -396,17 +401,19 @@ const ScannerAgentConfigSettings = ({
 
             return (
               <Column gap="xs">
-                {val.map(({cron, maxDelaySeconds}, index) => (
-                  <HighlightBox key={`${cron}-${index}`}>
-                    <SchedulerCronLabel number={index + 1} />
-                    <SchedulerSummaryCron>{cron}</SchedulerSummaryCron>
-                    <SchedulerSummaryDelay>
-                      {_('Max delay: {{delay}} seconds', {
-                        delay: maxDelaySeconds,
-                      })}
-                    </SchedulerSummaryDelay>
-                  </HighlightBox>
-                ))}
+                {val
+                  .filter(entry => typeof entry !== 'string')
+                  .map(({cron, maxDelaySeconds}, index) => (
+                    <HighlightBox key={`${cron}-${index}`}>
+                      <SchedulerCronLabel number={index + 1} />
+                      <SchedulerSummaryCron>{cron}</SchedulerSummaryCron>
+                      <SchedulerSummaryDelay>
+                        {_('Max delay: {{delay}} seconds', {
+                          delay: maxDelaySeconds,
+                        })}
+                      </SchedulerSummaryDelay>
+                    </HighlightBox>
+                  ))}
               </Column>
             );
           },
@@ -445,6 +452,40 @@ const ScannerAgentConfigSettings = ({
       ],
     },
     {
+      title: _('File Search'),
+      visible: fieldValues.excludedPaths !== undefined,
+      fields: [
+        {
+          key: 'excludedPaths',
+          clearValue: [],
+          label: _('Excluded paths'),
+          title: _('Excluded paths'),
+          infoMessage: _(
+            'Paths must be absolute. Files and directories are supported. Excluding a directory also excludes its descendants. Nonexistent absolute paths are allowed. Invalid paths are rejected. Wildcards are not supported.',
+          ),
+          renderEdit: ({excludedPaths}, onChange) => (
+            <MultiValueTextField
+              aria-label={_('Excluded paths')}
+              name="excludedPaths"
+              splitChars={[]}
+              value={excludedPaths}
+              onChange={onChange}
+            />
+          ),
+          renderView: value => {
+            const paths = Array.isArray(value)
+              ? value.filter(path => typeof path === 'string')
+              : [];
+            return paths.length > 0 ? (
+              <TagListDisplay values={paths} />
+            ) : (
+              <Layout>{_('Not set')}</Layout>
+            );
+          },
+        },
+      ],
+    },
+    {
       title: _('Agent Control Defaults'),
       fields: [
         {
@@ -461,9 +502,11 @@ const ScannerAgentConfigSettings = ({
     },
   ];
 
+  const visibleSections = sections.filter(section => section.visible !== false);
+
   return (
     <Column gap="lg">
-      {sections.map(section => (
+      {visibleSections.map(section => (
         <StripedTable key={section.title}>
           <colgroup>
             <col width="30%" />
@@ -495,7 +538,8 @@ const ScannerAgentConfigSettings = ({
                     : () =>
                         handleSave(
                           field.key,
-                          field.key === 'updateToLatest' ? false : 0,
+                          field.clearValue ??
+                            (field.key === 'updateToLatest' ? false : 0),
                         )
                 }
                 onEdit={value => handleEdit(field.key, value)}

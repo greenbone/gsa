@@ -334,6 +334,36 @@ describe('ScannerCommand tests', () => {
     });
   });
 
+  test.each([
+    {paths: undefined, fields: {}},
+    {paths: [], fields: {}},
+    {
+      paths: [
+        '/opt/private,cache',
+        'C:\\ProgramData\\Cache',
+        '\\\\server\\share\\cache',
+      ],
+      fields: {
+        'excluded_paths:0': '/opt/private,cache',
+        'excluded_paths:1': 'C:\\\\ProgramData\\\\Cache',
+        'excluded_paths:2': '\\\\\\\\server\\\\share\\\\cache',
+      },
+    },
+  ])('should encode scanner excluded paths $paths', async ({paths, fields}) => {
+    const http = createHttp(createActionResultResponse());
+    const command = new ScannerCommand(http);
+
+    await command.modifyAgentControlConfig({id: '123', excludedPaths: paths});
+
+    expect(http.request).toHaveBeenCalledWith('post', {
+      data: {
+        cmd: 'modify_agent_control_scan_config',
+        agent_control_id: '123',
+        ...fields,
+      },
+    });
+  });
+
   test('should modify agent control config with partial parameters', async () => {
     const response = createActionResultResponse({
       action: 'modify_agent_control_scan_config',
