@@ -7,6 +7,7 @@ import {describe, expect, test, testing} from '@gsa/testing';
 import {rendererWithTableRow, screen, fireEvent} from 'web/testing';
 import EverythingCapabilities from 'gmp/capabilities/everything';
 import PortList from 'gmp/models/port-list';
+import {NO_VALUE} from 'gmp/parser';
 import PortListActions from 'web/pages/portlists/PortListActions';
 import SelectionType from 'web/utils/selection-type';
 
@@ -122,6 +123,27 @@ describe('PortListActions tests', () => {
     expect(editButton).toBeDisabled();
     fireEvent.click(editButton);
     expect(handleEdit).not.toHaveBeenCalled();
+  });
+
+  test('should allow editing an in-use port list reported as not writable', () => {
+    const {render} = rendererWithTableRow({capabilities: true});
+    const portList = new PortList({
+      id: '1',
+      inUse: true,
+      name: 'Test Port List',
+      userCapabilities: new EverythingCapabilities(),
+      writable: NO_VALUE,
+    });
+    const handleEdit = testing.fn();
+
+    render(
+      <PortListActions entity={portList} onPortListEditClick={handleEdit} />,
+    );
+
+    const editButton = screen.getByRole('button', {name: /edit/i});
+    expect(editButton).toBeEnabled();
+    fireEvent.click(editButton);
+    expect(handleEdit).toHaveBeenCalledWith(portList);
   });
 
   test('should call onPortListCloneClick when clone icon is clicked', () => {
